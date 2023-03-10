@@ -5,6 +5,7 @@ import {HttpError, HttpErrorsNames} from "../../data/httpErrors";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import {PayloadAction} from "@reduxjs/toolkit";
 import store from "../store";
+import {updateAuthentication} from "../../data/pureFunctions";
 
 const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
 
@@ -32,15 +33,9 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
         case `${AuthActions.REFRESH_AUTH}/fulfilled`: {
 
             const accessToken = action.payload.accessToken!;
-            const refreshTime = jwtDecode<JwtPayload>(accessToken).exp! - (Date.now()/1000)
 
-            let timerId: NodeJS.Timeout | null = null;
-            if (refreshTime) {
-                // this callback will fire when it will 1 minute before jwt expiring
-                timerId = setTimeout(()=>{
-                    store.dispatch(refreshAccessToken(action.payload.refreshToken!))
-                }, (refreshTime-60)*1000)
-            }
+            let timerId: NodeJS.Timeout | null = updateAuthentication(accessToken, action.payload.refreshToken!);
+
             return {...action.payload, refreshTimerId: timerId};
         }
 

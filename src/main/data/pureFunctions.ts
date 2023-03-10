@@ -1,5 +1,5 @@
 import {Permissions} from "../types/Role";
-import {AppDispatch} from "../redux/store";
+import store, {AppDispatch} from "../redux/store";
 import {clearAuthentication, refreshAccessToken} from "../redux/actions/AuthActions";
 import Authentication, {AuthenticationReducible} from "../types/Authentication";
 import jwtDecode, {JwtPayload} from "jwt-decode";
@@ -59,5 +59,18 @@ export function isInvalid(token: string | null | undefined): boolean {
         }
         return true;
 }
+
+export const updateAuthentication = (accessToken: string, refreshToken: string): NodeJS.Timer => {
+    const refreshTime = jwtDecode<JwtPayload>(accessToken).exp! - (Date.now()/1000)
+
+    console.log(`auth update planned in ${refreshTime} seconds`)
+
+    // this callback will fire when it will 1 minute before jwt expiring
+    return setTimeout(()=>{
+        console.log("updating auth")
+        store.dispatch(refreshAccessToken(refreshToken))
+    }, (refreshTime-30)*1000)
+}
+
 
 export {checkAuthorization, logOut,}
