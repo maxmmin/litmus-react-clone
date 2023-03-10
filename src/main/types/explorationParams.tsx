@@ -76,6 +76,6 @@ export type ExplorationParams = Partial<{
     input: Input
 }>
 
-export type ExplorationParamsReducible = ExplorationParams | undefined | null
+export type ExplorationParamsReducible = ExplorationParams | undefined
 
 export {Tables, Modes, modesDataSource}

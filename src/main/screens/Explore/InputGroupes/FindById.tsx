@@ -23,16 +23,13 @@ const FindById = () => {
 
     useEffect(()=>{
         if (isNaN(+id!)) {
-            dispatch(updateExplorationParams({isInvalid: true}))
-        } else {
+            if (!isInvalid) {
+                dispatch(updateExplorationParams({isInvalid: true}))
+            }
+        } else if (isInvalid) {
             dispatch(updateExplorationParams({isInvalid: false}))
         }
     },[id])
-
-
-    useEffect(()=>{
-        return ()=>{dispatch(updateExplorationParams({isInvalid: false}))}
-    }, [])
 
     return (
         <>

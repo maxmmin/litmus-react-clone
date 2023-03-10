@@ -13,7 +13,7 @@ import {AuthActions} from "../actions/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: ExplorationParamsReducible = {
-    table: Tables.USERS,
+    table: Tables.PERSONS,
     sectionsSettings: {
         PERSONS: Modes.FIND_BY_FULL_NAME,
         JUR_PERSONS: Modes.FIND_BY_ID,
@@ -34,7 +34,7 @@ const explorationParamsReducer: Reducer<ExplorationParamsReducible, PayloadActio
             return {...prev, sectionsSettings: {...(prev!.sectionsSettings as SectionsSettings), ...action.payload}};
 
         case ExplorationActions.CLEAR_EXPLORATION_PARAMS:
-            return null;
+            return initialState;
 
         case ExplorationActions.SET_CURRENT_INPUT_DATA: {
             const input = action.payload as BasicHumanSearchPayload;

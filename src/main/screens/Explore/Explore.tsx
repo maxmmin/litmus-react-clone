@@ -20,6 +20,7 @@ const Explore = () => {
     const table = useAppSelector(state => state.explorationParams?.table)
     const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![table!])
     const isInputInvalid = useAppSelector(state => state.explorationParams?.isInvalid)
+
     const search = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
@@ -32,12 +33,6 @@ const Explore = () => {
         const table: Tables = event.currentTarget.value as Tables;
         dispatch(updateExplorationParams({table: table}))
     }
-
-    useEffect(()=>{
-        if (!table) {
-            dispatch(updateExplorationParams({table: Tables.PERSONS}))
-        }
-    }, [table])
 
     return (
         <div className={"explore-page"}>
