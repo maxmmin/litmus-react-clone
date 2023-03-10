@@ -1,15 +1,26 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import App from './main/App';
 import reportWebVitals from './reportWebVitals';
+import {Provider} from "react-redux";
+import store, {persistor} from "./main/redux/store";
+import {PersistGate } from "reduxjs-toolkit-persist/es/integration/react";
+import {useAppDispatch, useAppSelector} from "./main/redux/hooks";
+import Loader from "./main/screens/components/Loader";
+
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
+
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+        <PersistGate loading={<Loader/>} persistor={persistor}>
+            <App/>
+        </PersistGate>
+    </Provider>
   </React.StrictMode>
 );
 

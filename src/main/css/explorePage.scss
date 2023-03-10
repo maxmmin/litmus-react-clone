@@ -1,0 +1,63 @@
+@import 'colors';
+
+.explore-page__search {
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 40px 0px;
+}
+
+.explore__select {
+  margin-bottom: 10px;
+}
+
+.explore-page__input-group-container {
+  background: $light-pink;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 40px;
+}
+
+.results-container {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  justify-items: center;
+  align-items: start;
+  padding: 15px 0px;
+}
+
+.entity-container {
+  display: grid;
+  column-gap: 40px;
+  row-gap: 20px;
+  padding: 30px;
+  border-radius: 15px;
+  background: $light-pink;
+  margin: 30px 0px;
+}
+
+.explore-page__main {
+  padding: 0px 50px;
+}
+
+.person-container {
+  grid-template-columns: repeat(9, auto);
+}
+
+.jur-person-container {
+  grid-template-columns: repeat(6, auto);
+}
+
+.entity-container__column-title  {
+  font-size: 18px;
+}
+
+.entity-container__value {
+  font-size: 16px;
+}
+
+.entity-container__column-title , .entity-container__value {
+  text-align: center;
+  margin: 0;
+}

@@ -1,0 +1,14 @@
+.loading-page {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 7%;
+}
+
+.loading_spinner {
+  background: $md-sys-color-primary-light;
+  width: 100px;
+  height: 100px;
+}
