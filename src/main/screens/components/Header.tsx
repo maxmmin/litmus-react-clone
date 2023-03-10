@@ -7,10 +7,10 @@ import {appStateAction, AppStateActions} from "../../redux/actions/AppStateActio
 import BackButton from "./BackButton";
 
 type PropsType = {
-    backButton?: boolean;
+    backButtonPath?: string
 }
 
-const Header = ({backButton = false}: PropsType) => {
+const Header = ({backButtonPath}: PropsType) => {
     const dispatch = useAppDispatch();
     const userIdentity = useAppSelector<UserIdentityType>(state => state.userIdentity);
     return (
@@ -19,7 +19,7 @@ const Header = ({backButton = false}: PropsType) => {
                 margin: 0
             }}>LITMUS</h2>
                 <div className="header__interact">
-                    {backButton?<BackButton/>:null}
+                    {backButtonPath?<BackButton path={backButtonPath}/>:null}
                     <div className="header__avatar-container" onClick={e=>{
                         e.stopPropagation();
                         dispatch(appStateAction(AppStateActions.HEADER_MENU_TOGGLE))

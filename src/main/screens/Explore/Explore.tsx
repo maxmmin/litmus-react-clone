@@ -44,7 +44,7 @@ const Explore = () => {
 
     return (
         <div className={"explore-page"}>
-            <Header backButton={true}/>
+            <Header backButtonPath={"/"}/>
             <main className={"explore-page__main"}>
                 <div className="explore-page__search">
                     <p style={{marginBottom: '10px'}}>Знайти</p>
