@@ -68,7 +68,7 @@ function SignIn() {
                     Sign In
                 </Button>
 
-                {(error?.status===401)?<p className="error-text sign-in-page__error-text">Недійсна email адреса чи пароль</p>:null}
+                {(error?.status===401)?<p className="error-text text-center sign-in-page__error-text">Недійсна email адреса чи пароль</p>:null}
             </Form>
         </div>
 
