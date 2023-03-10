@@ -5,11 +5,7 @@ import {HttpError, HttpErrorsNames} from "../../data/httpErrors";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import {PayloadAction} from "@reduxjs/toolkit";
 import store from "../store";
-<<<<<<< HEAD
 import {updateAuthentication} from "../../data/pureFunctions";
-=======
-import {setRefreshAuthTimer} from "../../data/pureFunctions";
->>>>>>> 4ea8153 (auth fix)
 
 const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
 
@@ -17,7 +13,6 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
     // ! one more check is placed inside handleError function
     if (action.type.indexOf(AuthActions.REFRESH_AUTH)>-1||action.type===AuthActions.CLEAR_AUTH) {
         if (prevState?.refreshTimerId) {
-            console.log("timer cleared")
             clearTimeout(prevState.refreshTimerId)
         }
     }
@@ -38,19 +33,10 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
         case `${AuthActions.REFRESH_AUTH}/fulfilled`: {
 
             const accessToken = action.payload.accessToken!;
-<<<<<<< HEAD
 
             let timerId: NodeJS.Timeout | null = updateAuthentication(accessToken, action.payload.refreshToken!);
 
-=======
-            const refreshToken = action.payload.refreshToken!;
-
-
-            const timerId: NodeJS.Timer = setRefreshAuthTimer(accessToken, refreshToken, store.dispatch)
-
->>>>>>> 4ea8153 (auth fix)
             return {...action.payload, refreshTimerId: timerId};
-
         }
 
         default: {

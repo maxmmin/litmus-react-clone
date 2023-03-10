@@ -12,6 +12,8 @@ import UserInfoTable from "./EntityTables/UserInfoTable";
 const getParsedResults = (results: Results) => {
     const table = results.table;
 
+    console.log(table)
+
     switch (table) {
         case Tables.PERSONS: {
             return results.map(entity=>{
