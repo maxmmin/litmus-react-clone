@@ -1,16 +1,16 @@
 import {Action, Middleware} from "redux";
 import AppState from "../types/AppState";
-import AuthenticationType from "../types/AuthenticationType";
+import Authentication, {AuthenticationReducible} from "../types/Authentication";
 import {checkAndRefreshAuth} from "../data/pureFunctions";
 import {AuthActions} from "./actions/AuthActions";
 
 
-type AppStatePath = {
-    appState: AppState,
-    authentication: AuthenticationType
+type PartedStoreType = {
+    appState: AppState | undefined,
+    authentication: AuthenticationReducible
 }
 
-const authenticationCheckMiddleware: Middleware<{}, AppStatePath> = ({ getState, dispatch }) => (
+const authenticationCheckMiddleware: Middleware<{}, PartedStoreType> = ({ getState, dispatch }) => (
     next
 ) => (action: Action) => {
     const auth = getState().authentication

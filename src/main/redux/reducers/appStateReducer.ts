@@ -1,4 +1,4 @@
-import AppState from "../../types/AppState";
+import AppState, {AppStateReducible} from "../../types/AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
 import {AppStateActions} from "../actions/AppStateActions";
@@ -10,7 +10,7 @@ import apiSearchActions from "../actions/ApiSearchActions";
 const initialState: AppState = {refreshing: false, isHeaderMenuOpened: false}
 
 
-const appStateReducer: Reducer<AppState, Action<String>> = (prevState = initialState, action) => {
+const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState = initialState, action) => {
     switch (action.type) {
         case AppStateActions.REFRESH_ON: {
             return {...prevState, refreshing: true}

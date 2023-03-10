@@ -37,6 +37,6 @@ class UserIdentity implements User{
     }
 }
 
-export type UserIdentityType = UserIdentity | null | undefined
+export type UserIdentityReducible = UserIdentity | null | undefined
 
 export default UserIdentity;

@@ -5,6 +5,12 @@ export type LoginPageState = {
     email: string,
     password: string,
     error: HttpError | null
+}
+
+export type LoginPageStateReducible = {
+    email: string,
+    password: string,
+    error: HttpError | null
 } | null | undefined
 
 enum LoginPageStateActions {

@@ -67,12 +67,15 @@ type Input = Partial<{
     }
 }>
 
+export type SectionsSettings = Record<Tables, Modes>
 
 export type ExplorationParams = Partial<{
     table: Tables,
-    mode: Modes,
+    sectionsSettings: SectionsSettings
     isInvalid: boolean
     input: Input
-}> | undefined | null
+}>
+
+export type ExplorationParamsReducible = ExplorationParams | undefined | null
 
 export {Tables, Modes, modesDataSource}

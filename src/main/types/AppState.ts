@@ -6,6 +6,8 @@ type AppState = {
     refreshing: boolean,
     isHeaderMenuOpened: boolean,
     error?: AppStateError | null
-} | undefined
+}
+
+export type AppStateReducible = AppState | undefined
 
 export default AppState;

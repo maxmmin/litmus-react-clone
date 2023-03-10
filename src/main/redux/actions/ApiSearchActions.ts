@@ -9,12 +9,9 @@ export enum ApiSearchActions {
     REFRESH_RESULTS="REFRESH_RESULTS"
 }
 
-export type Results = (Array<Object>&{table?: Tables})|null|undefined
+export type Results = (Array<Object>&{table?: Tables})
 
-export type ApiSearchAction = {
-    type: string,
-    payload: Results
-}
+export type ResultsReducible = (Array<Object>&{table?: Tables}) | null | undefined
 
 const refreshResultsThunk = createAsyncThunk<Results, Tables>(ApiSearchActions.REFRESH_RESULTS,
     async (table,{getState, rejectWithValue})=>{
@@ -29,7 +26,7 @@ const refreshResultsThunk = createAsyncThunk<Results, Tables>(ApiSearchActions.R
 
         const store = getState() as RootState;
 
-        switch (store.explorationParams?.mode) {
+        switch (store.explorationParams?.sectionsSettings![table]) {
             case Modes.FIND_BY_ID: {
                 const id = (store.explorationParams.input![table] as {id: string}).id;
 

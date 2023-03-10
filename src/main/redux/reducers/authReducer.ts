@@ -1,9 +1,9 @@
 import {AuthActions, AuthAction} from "../actions/AuthActions";
-import Authentication from "../../types/AuthenticationType";
+import Authentication, {AuthenticationReducible} from "../../types/Authentication";
 import {Reducer} from "react";
 import {HttpError, HttpErrorsNames} from "../../data/httpErrors";
 
-const authReducer: Reducer<Authentication, AuthAction> = (prevState=null, action): Authentication => {
+const authReducer: Reducer<AuthenticationReducible, AuthAction> = (prevState=null, action): AuthenticationReducible => {
 
     switch (action.type) {
         case AuthActions.CLEAR_AUTH: {
@@ -35,7 +35,7 @@ const authReducer: Reducer<Authentication, AuthAction> = (prevState=null, action
     }
 }
 
-const errorHandle = (prevState: Authentication, error: HttpError): Authentication => {
+const errorHandle = (prevState: AuthenticationReducible, error: HttpError): AuthenticationReducible => {
     if (error&&Object.hasOwn(error,'type')) {
         switch (error.type) {
             case HttpErrorsNames.UNAUTHENTICATED: {

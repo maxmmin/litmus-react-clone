@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import {roles} from "./types/Role";
 import Explore from "./screens/Explore/Explore";
-import {appStateAction, AppStateActions} from "./redux/actions/AppStateActions";
+import {getAppStateAction, AppStateActions} from "./redux/actions/AppStateActions";
 import ApplicationStateManager from "./screens/components/ApplicationStateManager";
 import ConditionalAlert from "./screens/components/ConditionalAlert";
 
@@ -26,7 +26,7 @@ function App() {
                           const isMenuOpened = appStore.appState?.isHeaderMenuOpened;
 
                           if (isMenuOpened) {
-                              dispatch(appStateAction(AppStateActions.HEADER_MENU_CLOSE))
+                              dispatch(getAppStateAction(AppStateActions.HEADER_MENU_CLOSE))
                           }
                       }}>
                           <ConditionalAlert/>

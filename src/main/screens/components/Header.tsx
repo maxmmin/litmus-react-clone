@@ -1,9 +1,9 @@
 import {PersonIcon} from "../../data/icons";
 import HeaderMenu from "./HeaderMenu";
 import React from "react";
-import {UserIdentityType} from "../../types/UserIdentity";
+import {UserIdentityReducible} from "../../types/UserIdentity";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {appStateAction, AppStateActions} from "../../redux/actions/AppStateActions";
+import {getAppStateAction, AppStateActions} from "../../redux/actions/AppStateActions";
 import BackButton from "./BackButton";
 
 type PropsType = {
@@ -12,7 +12,7 @@ type PropsType = {
 
 const Header = ({backButtonPath}: PropsType) => {
     const dispatch = useAppDispatch();
-    const userIdentity = useAppSelector<UserIdentityType>(state => state.userIdentity);
+    const userIdentity = useAppSelector<UserIdentityReducible>(state => state.userIdentity);
     return (
         <header className="header">
             <h2 style={{
@@ -22,7 +22,7 @@ const Header = ({backButtonPath}: PropsType) => {
                     {backButtonPath?<BackButton path={backButtonPath}/>:null}
                     <div className="header__avatar-container" onClick={e=>{
                         e.stopPropagation();
-                        dispatch(appStateAction(AppStateActions.HEADER_MENU_TOGGLE))
+                        dispatch(getAppStateAction(AppStateActions.HEADER_MENU_TOGGLE))
                     }}>
                         {userIdentity?<span className="header__avatar-letter">{userIdentity!.firstName[0]}</span>:<PersonIcon className="header__avatar-icon" />}
 

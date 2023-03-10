@@ -4,7 +4,7 @@ import {useMemo} from "react";
 
 function InputGroup (): JSX.Element|null {
     const table = useAppSelector(state => state.explorationParams?.table)
-    const explorationMode = useAppSelector(state => state.explorationParams?.mode)
+    const explorationMode = useAppSelector(state => state.explorationParams?.sectionsSettings![table!])
 
     return useMemo(()=>{
         if (table&&explorationMode&&Object.hasOwn(modesDataSource[table!], explorationMode)) {

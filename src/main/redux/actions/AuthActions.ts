@@ -1,12 +1,12 @@
-import {Authentication} from "../../types/AuthenticationType";
+import {AuthenticationReducible} from "../../types/Authentication";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import JwtInfoType from "../../types/JwtInfoType";
 import requestsUrls from "../../data/requestsUrls";
 import { HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import {Action} from "redux";
-import AuthenticationType from "../../types/AuthenticationType";
+import Authentication from "../../types/Authentication";
 
-export type AuthAction = Action<String> & {payload: AuthenticationType}
+export type AuthAction = Action<String> & {payload: Authentication}
 
 export enum AuthActions {
     REFRESH_AUTH="REFRESH_AUTH",

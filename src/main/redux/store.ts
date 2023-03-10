@@ -19,6 +19,7 @@ import userIdentityReducer from "./reducers/userIdentityReducer";
 import explorationParamsReducer from "./reducers/explorationParamsReducer";
 import authenticationCheckMiddleware from "./authenticationCheckMiddleware";
 import loginPageStateReducer from "./reducers/loginPageStateReducer";
+import creationParamsReducer from "./reducers/creationParamsReducer";
 
 const persistConfig: PersistConfig<any> = {
     storage,
@@ -32,7 +33,8 @@ const RootReducer = combineReducers({
     userIdentity: userIdentityReducer,
     searchResults: apiSearchReducer,
     explorationParams: explorationParamsReducer,
-    loginPageState: loginPageStateReducer
+    loginPageState: loginPageStateReducer,
+    creationParams: creationParamsReducer
 } )
 
 const persistedReducer = persistReducer(persistConfig, RootReducer) as typeof RootReducer

@@ -8,7 +8,7 @@ export enum AppStateActions {
     "CLEAR_ERROR"="CLEAR_ERROR"
 }
 
-export const appStateAction = (action: AppStateActions): Action => {
+export const getAppStateAction = (action: AppStateActions): Action => {
     return {
         type: action.toString()
     }

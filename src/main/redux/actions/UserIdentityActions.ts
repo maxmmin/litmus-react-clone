@@ -1,4 +1,4 @@
-import UserIdentity, {UserIdentityType} from "../../types/UserIdentity";
+import UserIdentity, {UserIdentityReducible} from "../../types/UserIdentity";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import requestsUrls, {createAuthHeader} from "../../data/requestsUrls";
 import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
@@ -12,7 +12,7 @@ enum UserIdentityActions {
 
 export {UserIdentityActions}
 
-const setIdentity = (identity: UserIdentity): PayloadAction<UserIdentityType> => {
+const setIdentity = (identity: UserIdentity): PayloadAction<UserIdentityReducible> => {
     return {
         type: UserIdentityActions.GET_IDENTITY,
         payload: identity

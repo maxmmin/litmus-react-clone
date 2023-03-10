@@ -1,12 +1,13 @@
-import  {ApiSearchAction, ApiSearchActions, Results} from "../actions/ApiSearchActions";
+import {ApiSearchActions, Results, ResultsReducible} from "../actions/ApiSearchActions";
 import {Reducer} from "react";
 import {HttpError} from "../../data/httpErrors";
 import {AuthActions} from "../actions/AuthActions";
+import {PayloadAction} from "@reduxjs/toolkit";
+import store from "../store";
 
 const initialState = null;
 
-const apiSearchReducer: Reducer<Results, ApiSearchAction> = (
-    prevState=initialState, action) => {
+const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (prevState=initialState, action) => {
     switch (action.type) {
         case (ApiSearchActions.REFRESH_RESULTS): {
             return action.payload;
@@ -20,9 +21,7 @@ const apiSearchReducer: Reducer<Results, ApiSearchAction> = (
             if (error?.status) {
                 if (error.status===400) {
                     const results: Results = []
-                    if (prevState?.table) {
-                        results.table = prevState.table;
-                    }
+                    results.table = store.getState().explorationParams?.table;
                     return results;
                 }
 

@@ -1,7 +1,7 @@
 import {Permissions} from "../types/Role";
 import {AppDispatch} from "../redux/store";
 import {clearAuthentication, refreshAccessKey} from "../redux/actions/AuthActions";
-import AuthenticationType from "../types/AuthenticationType";
+import Authentication, {AuthenticationReducible} from "../types/Authentication";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
 
@@ -34,7 +34,7 @@ export const searchInputGroupsKeyPressHandler = (e: React.KeyboardEvent) => {
     }
 }
 
-export const checkAndRefreshAuth = (auth: AuthenticationType, dispatch: AppDispatch) => {
+export const checkAndRefreshAuth = (auth: AuthenticationReducible, dispatch: AppDispatch) => {
             if (auth) {
                 if (isInvalid(auth.accessToken!)) {
                     if (auth.refreshToken&&!isInvalid(auth.refreshToken)) {

@@ -1,27 +1,24 @@
 import Header from "../components/Header";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useEffect} from "react";
 import {Tables} from "../../types/explorationParams";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
 import Button from "react-bootstrap/Button";
 import InputGroup from "./InputGroup";
-import {ApiSearchActions, refreshResultsThunk, Results} from "../../redux/actions/ApiSearchActions";
+import { refreshResultsThunk } from "../../redux/actions/ApiSearchActions";
 import ResultsContainer from "./ResultsContainer";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
-import ConditionalAlert from "../components/ConditionalAlert";
-
-const clearResultsErrorAction = (): {type: ApiSearchActions, payload: Results} => ({type: ApiSearchActions.REFRESH_RESULTS, payload: null})
 
 const Explore = () => {
 
     const dispatch = useAppDispatch();
 
     const table = useAppSelector(state => state.explorationParams?.table)
-    const mode = useAppSelector(state => state.explorationParams?.mode)
+    const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![table!])
     const isInputInvalid = useAppSelector(state => state.explorationParams?.isInvalid)
     const search = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -62,16 +59,16 @@ const Explore = () => {
 
                     {table&&mode?
                         <>
-                        <div className="explore-page__input-group-container">
-                            <Form className={"explore-input-group"}>
+                            <div className="explore-page__input-group-container">
+                                <Form className={"explore-input-group"}>
 
-                                <InputGroup/>
+                                    <InputGroup/>
 
-                                <Button onClick={search} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn ${isInputInvalid?'disabled':''}`}>
-                                    Пошук
-                                </Button>
-                            </Form>
-                        </div>
+                                    <Button onClick={search} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn ${isInputInvalid?'disabled':''}`}>
+                                        Пошук
+                                    </Button>
+                                </Form>
+                            </div>
                         </>
                         : null
                     }

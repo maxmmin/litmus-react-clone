@@ -1,25 +1,37 @@
 import {Reducer} from "react";
 import {
-    ExplorationParams,
+    BasicHumanSearchInputInit,
     BasicHumanSearchPayload,
-    Tables,
-    BasicHumanSearchInputInit
+    ExplorationParams,
+    ExplorationParamsReducible,
+    Modes, SectionsSettings,
+    Tables
 } from "../../types/explorationParams";
 
-import ExplorationActions,{ExplorationAction} from "../actions/ExplorationParamsActions";
+import ExplorationActions from "../actions/ExplorationParamsActions";
 import {AuthActions} from "../actions/AuthActions";
+import {PayloadAction} from "@reduxjs/toolkit";
 
-const initialState: ExplorationParams = {
+const initialState: ExplorationParamsReducible = {
+    table: Tables.USERS,
+    sectionsSettings: {
+        PERSONS: Modes.FIND_BY_FULL_NAME,
+        JUR_PERSONS: Modes.FIND_BY_ID,
+        USERS: Modes.FIND_BY_FULL_NAME
+    },
     input: {
         [Tables.PERSONS]: {...new BasicHumanSearchInputInit()},
         [Tables.USERS]: {...new BasicHumanSearchInputInit()}
     }
 }
 
-const explorationParamsReducer: Reducer<ExplorationParams, ExplorationAction> = (prev=initialState, action) => {
+const explorationParamsReducer: Reducer<ExplorationParamsReducible, PayloadAction<ExplorationParams>> = (prev=initialState, action) => {
     switch (action.type) {
         case ExplorationActions.UPDATE_EXPLORATION_PARAMS:
             return {...prev,...action.payload};
+
+        case ExplorationActions.UPDATE_SECTION_PARAMS:
+            return {...prev, sectionsSettings: {...(prev!.sectionsSettings as SectionsSettings), ...action.payload}};
 
         case ExplorationActions.CLEAR_EXPLORATION_PARAMS:
             return null;
