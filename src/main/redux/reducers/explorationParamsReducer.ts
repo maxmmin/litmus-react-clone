@@ -12,8 +12,6 @@ import ExplorationActions from "../actions/ExplorationParamsActions";
 import {AuthActions} from "../actions/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 
-console.log(Tables)
-
 const initialState: ExplorationParamsReducible = {
     table: Tables.PERSONS,
     sectionsSettings: {
