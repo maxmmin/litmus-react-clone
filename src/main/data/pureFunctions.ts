@@ -60,16 +60,19 @@ export function isInvalid(token: string | null | undefined): boolean {
         return true;
 }
 
-export const updateAuthentication = (accessToken: string, refreshToken: string): NodeJS.Timer => {
-    const refreshTime = jwtDecode<JwtPayload>(accessToken).exp! - (Date.now()/1000)
+export const updateAuthentication = (accessToken: string, refreshToken: string, dispatch: AppDispatch): NodeJS.Timer => {
+    const expirationTimeInMs = jwtDecode<JwtPayload>(accessToken).exp! * 1000;
+    const refreshCallbackDelayInMs = expirationTimeInMs - Date.now()/1000 - 500
 
-    console.log(`auth update planned in ${refreshTime} seconds`)
+    const expDate = new Date(expirationTimeInMs);
+
+    console.log(`auth update planned in ${expDate.getHours()}:${expDate.getMinutes()}`)
 
     // this callback will fire when it will 1 minute before jwt expiring
     return setTimeout(()=>{
         console.log("updating auth")
-        store.dispatch(refreshAccessToken(refreshToken))
-    }, (refreshTime-30)*1000)
+        dispatch(refreshAccessToken(refreshToken))
+    }, refreshCallbackDelayInMs)
 }
 
 

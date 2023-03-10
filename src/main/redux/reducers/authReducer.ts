@@ -34,7 +34,7 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
 
             const accessToken = action.payload.accessToken!;
 
-            let timerId: NodeJS.Timeout | null = updateAuthentication(accessToken, action.payload.refreshToken!);
+            let timerId: NodeJS.Timeout | null = updateAuthentication(accessToken, action.payload.refreshToken!, store.dispatch);
 
             return {...action.payload, refreshTimerId: timerId};
         }
