@@ -25,8 +25,8 @@ function ConditionalAlert () {
                 setAlertState(AlertStates.INACTIVE)
                 timers.push(setTimeout(()=>{
                     dispatch({type: AppStateActions.CLEAR_ERROR})
-                },500)) // time of end animation
-            },2000)) // time alert is staying on the screen
+                },500))
+            },1500))
 
             return ()=>{
                 timers.forEach(timer=>window.clearTimeout(timer))
@@ -39,7 +39,7 @@ function ConditionalAlert () {
             { error?
                 <div className={`alert-container ${alertState}`}>
                     <Alert className={"bs-alert"} variant={'danger'}>
-                        <h4 className={"text-center"}>{(error.message)?error.message:"Трапилася помилка, спробуйте ще раз."}</h4>
+                        <h4>{(error.message)?error.message:"Трапилася помилка, спробуйте ще раз."}</h4>
                     </Alert>
                 </div>
                 :
