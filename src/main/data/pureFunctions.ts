@@ -60,6 +60,7 @@ export function isInvalid(token: string | null | undefined): boolean {
         return true;
 }
 
+<<<<<<< HEAD
 export const updateAuthentication = (accessToken: string, refreshToken: string): NodeJS.Timer => {
     const refreshTime = jwtDecode<JwtPayload>(accessToken).exp! - (Date.now()/1000)
 
@@ -73,4 +74,18 @@ export const updateAuthentication = (accessToken: string, refreshToken: string):
 }
 
 
+=======
+export const setRefreshAuthTimer = (accessToken: string, refreshToken: string, dispatch: AppDispatch) => {
+    const expirationTimeInMs = jwtDecode<JwtPayload>(accessToken).exp!*1000;
+    const refreshWaitInMs = expirationTimeInMs - Date.now()
+
+    const expDate = new Date(expirationTimeInMs)
+
+    console.log(`auth will be updated at ${expDate.getHours()}:${expDate.getMinutes()}`)
+    return setTimeout(()=>{
+        dispatch(refreshAccessToken(refreshToken))
+    }, refreshWaitInMs-500)
+}
+// @todo write setup this timeout on web application load
+>>>>>>> 4ea8153 (auth fix)
 export {checkAuthorization, logOut,}
