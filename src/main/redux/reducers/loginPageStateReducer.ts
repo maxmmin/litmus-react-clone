@@ -32,10 +32,12 @@ const loginPageStateReducer: Reducer<LoginPageStateReducible, PayloadAction<Logi
                 const actionType = action.type.slice(0,-9)
 
                 const error: HttpError = action.payload as unknown as HttpError;
-                switch (actionType) {
-                    case AuthActions.REFRESH_AUTH: {
-                        if (error.status===401) {
-                            return {...prev, error: error}
+                if (error instanceof HttpError) {
+                    switch (actionType) {
+                        case AuthActions.REFRESH_AUTH: {
+                            if (error.status===401) {
+                                return {...prev, error: error}
+                            }
                         }
                     }
                 }

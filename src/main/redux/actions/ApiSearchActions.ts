@@ -57,7 +57,7 @@ const refreshResultsThunk = createAsyncThunk<Results, Tables>(ApiSearchActions.R
         const response = await fetch(fetchUrl,{
             method: 'GET',
             headers: {
-                ...createAuthHeader(accessToken)
+                // ...createAuthHeader(accessToken)
             }
         })
 

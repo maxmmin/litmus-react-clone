@@ -21,10 +21,8 @@ const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (pre
             if (error?.status) {
                 if (error.status===400) {
                     const results: Results = []
-                    results.table = store.getState().explorationParams?.table;
                     return results;
                 }
-
             }
             return null;
         }

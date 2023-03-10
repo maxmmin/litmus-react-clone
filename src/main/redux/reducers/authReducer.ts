@@ -1,9 +1,20 @@
-import {AuthActions, AuthAction} from "../actions/AuthActions";
+import {AuthActions, refreshAccessToken} from "../actions/AuthActions";
 import Authentication, {AuthenticationReducible} from "../../types/Authentication";
 import {Reducer} from "react";
 import {HttpError, HttpErrorsNames} from "../../data/httpErrors";
+import jwtDecode, {JwtPayload} from "jwt-decode";
+import {PayloadAction} from "@reduxjs/toolkit";
+import store from "../store";
 
-const authReducer: Reducer<AuthenticationReducible, AuthAction> = (prevState=null, action): AuthenticationReducible => {
+const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
+
+    // check and clear timer before this.
+    // ! one more check is placed inside handleError function
+    if (action.type.indexOf(AuthActions.REFRESH_AUTH)>-1||action.type===AuthActions.CLEAR_AUTH) {
+        if (prevState?.refreshTimerId) {
+            clearTimeout(prevState.refreshTimerId)
+        }
+    }
 
     switch (action.type) {
         case AuthActions.CLEAR_AUTH: {
@@ -19,7 +30,18 @@ const authReducer: Reducer<AuthenticationReducible, AuthAction> = (prevState=nul
         }
 
         case `${AuthActions.REFRESH_AUTH}/fulfilled`: {
-            return action.payload;
+
+            const accessToken = action.payload.accessToken!;
+            const refreshTime = jwtDecode<JwtPayload>(accessToken).exp! - (Date.now()/1000)
+
+            let timerId: NodeJS.Timeout | null = null;
+            if (refreshTime) {
+                // this callback will fire when it will 1 minute before jwt expiring
+                timerId = setTimeout(()=>{
+                    store.dispatch(refreshAccessToken(action.payload.refreshToken!))
+                }, (refreshTime-60)*1000)
+            }
+            return {...action.payload, refreshTimerId: timerId};
         }
 
         default: {
@@ -31,16 +53,26 @@ const authReducer: Reducer<AuthenticationReducible, AuthAction> = (prevState=nul
                 }
             }
             return prevState;
-        };
+        }
     }
 }
 
 const errorHandle = (prevState: AuthenticationReducible, error: HttpError): AuthenticationReducible => {
+    console.log(error)
     if (error&&Object.hasOwn(error,'type')) {
         switch (error.type) {
             case HttpErrorsNames.UNAUTHENTICATED: {
-                if (!prevState) return {accessToken: null, refreshToken: null};
-                return {...prevState};
+                if (prevState?.refreshTimerId) {
+                    clearTimeout(prevState.refreshTimerId)
+                }
+
+                if (prevState?.accessToken) {
+                    return {accessToken: null, refreshToken: prevState.refreshToken, refreshTimerId: null}
+                }
+
+                return  {
+                    accessToken: null, refreshToken: null, refreshTimerId: null
+                }
             }
 
             default: return prevState;

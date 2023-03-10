@@ -1,6 +1,6 @@
 import {Action, Middleware} from "redux";
 import AppState from "../types/AppState";
-import Authentication, {AuthenticationReducible} from "../types/Authentication";
+import {AuthenticationReducible} from "../types/Authentication";
 import {checkAndRefreshAuth} from "../data/pureFunctions";
 import {AuthActions} from "./actions/AuthActions";
 
@@ -14,8 +14,9 @@ const authenticationCheckMiddleware: Middleware<{}, PartedStoreType> = ({ getSta
     next
 ) => (action: Action) => {
     const auth = getState().authentication
-
-    if (action.type===AuthActions.CHECK_AUTH||action.type.indexOf("AUTH")===-1) {
+    // check if there is auth check action or auth was applied
+    // we should listen to auth check cause user can crash application by self auth state modifying
+    if (action.type===AuthActions.CHECK_AUTH) {
         checkAndRefreshAuth(auth, dispatch);
     }
 

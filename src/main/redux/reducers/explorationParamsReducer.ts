@@ -21,7 +21,8 @@ const initialState: ExplorationParamsReducible = {
     },
     input: {
         [Tables.PERSONS]: {...new BasicHumanSearchInputInit()},
-        [Tables.USERS]: {...new BasicHumanSearchInputInit()}
+        [Tables.USERS]: {...new BasicHumanSearchInputInit()},
+        [Tables.JUR_PERSONS]: {id: ""}
     }
 }
 

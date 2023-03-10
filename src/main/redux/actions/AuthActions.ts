@@ -1,12 +1,10 @@
 import {AuthenticationReducible} from "../../types/Authentication";
-import {createAsyncThunk} from "@reduxjs/toolkit";
+import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import JwtInfoType from "../../types/JwtInfoType";
 import requestsUrls from "../../data/requestsUrls";
 import { HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import {Action} from "redux";
 import Authentication from "../../types/Authentication";
-
-export type AuthAction = Action<String> & {payload: Authentication}
 
 export enum AuthActions {
     REFRESH_AUTH="REFRESH_AUTH",
@@ -15,7 +13,7 @@ export enum AuthActions {
 }
 
 
-export const refreshAccessKey = createAsyncThunk(AuthActions.REFRESH_AUTH,
+export const refreshAccessToken = createAsyncThunk(AuthActions.REFRESH_AUTH,
     async (refreshToken: string, {rejectWithValue}) => {
         const response =  await fetch(requestsUrls.refreshAccessKey, {
             method: 'POST',
@@ -35,7 +33,7 @@ export const refreshAccessKey = createAsyncThunk(AuthActions.REFRESH_AUTH,
     })
 
 
-export const setAuthentication = (auth: Authentication) : AuthAction => {
+export const setAuthentication = (auth: Authentication) : PayloadAction<AuthenticationReducible> => {
     return {
         type: AuthActions.REFRESH_AUTH,
         payload: auth

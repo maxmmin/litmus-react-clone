@@ -1,6 +1,6 @@
 import {Permissions} from "../types/Role";
 import {AppDispatch} from "../redux/store";
-import {clearAuthentication, refreshAccessKey} from "../redux/actions/AuthActions";
+import {clearAuthentication, refreshAccessToken} from "../redux/actions/AuthActions";
 import Authentication, {AuthenticationReducible} from "../types/Authentication";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
@@ -39,7 +39,7 @@ export const checkAndRefreshAuth = (auth: AuthenticationReducible, dispatch: App
                 if (isInvalid(auth.accessToken!)) {
                     if (auth.refreshToken&&!isInvalid(auth.refreshToken)) {
                         return dispatch(
-                             refreshAccessKey(auth.refreshToken)
+                             refreshAccessToken(auth.refreshToken)
                         )
                     } else {
                         return logOut(dispatch)
