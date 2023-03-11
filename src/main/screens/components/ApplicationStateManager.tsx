@@ -25,7 +25,9 @@ const ApplicationStateManager = ({children}: Props) => {
     },[authentication])
 
     useEffect(()=>{
-        dispatch(setAuthentication({...authentication!, refreshTimerId: null}))
+        if (authentication) {
+            dispatch(setAuthentication({...authentication!, refreshTimerId: null}))
+        }
     }, [])
 
     if (isRefreshing) return <Loader/>

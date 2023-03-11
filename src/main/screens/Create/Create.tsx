@@ -8,6 +8,7 @@ import React, {ChangeEvent, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
 import {updateCreationParams} from "../../redux/actions/CreationParamsActions";
+import CreateInputSection from "./CreateInputSection";
 
 const Create = () => {
     const dispatch = useAppDispatch();
@@ -37,6 +38,8 @@ const Create = () => {
                         <option value={Tables.USERS}>Користувача</option>
                     </PrivateComponentWrapper>
                 </Form.Select>
+
+                <CreateInputSection table={table!}/>
             </main>
         </div>
     )
