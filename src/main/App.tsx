@@ -1,6 +1,6 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
-import React from 'react';
+import React, {useEffect} from 'react';
 import SignIn from "./screens/SignIn/SignIn";
 import Home from "./screens/Home/Home";
 import PrivateComponent, {ForbiddenOutputCallbackModesEnum} from "./screens/components/PrivateComponent";
@@ -17,7 +17,6 @@ import ConditionalAlert from "./screens/components/ConditionalAlert";
 
 function App() {
     const dispatch = useAppDispatch();
-
   return (
               <BrowserRouter basename={"/"}>
                   <ApplicationStateManager>

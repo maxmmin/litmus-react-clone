@@ -3,7 +3,7 @@ import {isInvalid} from "../../data/pureFunctions";
 import React, {ReactNode, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {refreshUserIdentity} from "../../redux/actions/UserIdentityActions";
-import {AuthActions} from "../../redux/actions/AuthActions";
+import {AuthActions, setAuthentication} from "../../redux/actions/AuthActions";
 
 type Props = {
     children: ReactNode
@@ -11,11 +11,11 @@ type Props = {
 
 const ApplicationStateManager = ({children}: Props) => {
 
+    const dispatch = useAppDispatch();
+
     const authentication = useAppSelector(state => state.authentication)
 
     const isRefreshing = useAppSelector(state => state.appState?.refreshing)
-
-    const dispatch = useAppDispatch();
 
     useEffect(()=>{
         dispatch({type: AuthActions.CHECK_AUTH})
@@ -23,6 +23,10 @@ const ApplicationStateManager = ({children}: Props) => {
             dispatch(refreshUserIdentity(authentication!.accessToken))
         }
     },[authentication])
+
+    useEffect(()=>{
+        dispatch(setAuthentication({...authentication!, refreshTimerId: null}))
+    }, [])
 
     if (isRefreshing) return <Loader/>
 

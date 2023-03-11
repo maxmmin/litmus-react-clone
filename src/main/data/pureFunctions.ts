@@ -1,9 +1,10 @@
 import {Permissions} from "../types/Role";
-import store, {AppDispatch} from "../redux/store";
-import {clearAuthentication, refreshAccessToken} from "../redux/actions/AuthActions";
-import Authentication, {AuthenticationReducible} from "../types/Authentication";
+import {AppDispatch} from "../redux/store";
+import {clearAuthentication, refreshAccessToken, setAuthentication} from "../redux/actions/AuthActions";
+import {AuthenticationReducible} from "../types/Authentication";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
+import {clearTimeout} from "timers";
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)
@@ -37,6 +38,9 @@ export const searchInputGroupsKeyPressHandler = (e: React.KeyboardEvent) => {
 export const checkAndRefreshAuth = (auth: AuthenticationReducible, dispatch: AppDispatch) => {
             if (auth) {
                 if (isInvalid(auth.accessToken!)) {
+                    if (auth.refreshTimerId) {
+                        window.clearTimeout(auth.refreshTimerId)
+                    }
                     if (auth.refreshToken&&!isInvalid(auth.refreshToken)) {
                         return dispatch(
                              refreshAccessToken(auth.refreshToken)
@@ -44,6 +48,10 @@ export const checkAndRefreshAuth = (auth: AuthenticationReducible, dispatch: App
                     } else {
                         return logOut(dispatch)
                     }
+                }
+
+                if (!auth.refreshTimerId&&auth.accessToken&&auth.refreshToken) {
+                    return dispatch(setAuthentication({...auth, refreshTimerId: setAuthRefreshingTimer(auth.accessToken!, auth.refreshToken!, dispatch)}))
                 }
                 return;
             }
@@ -60,7 +68,7 @@ export function isInvalid(token: string | null | undefined): boolean {
         return true;
 }
 
-export const updateAuthentication = (accessToken: string, refreshToken: string, dispatch: AppDispatch): NodeJS.Timer => {
+export const setAuthRefreshingTimer = (accessToken: string, refreshToken: string, dispatch: AppDispatch): NodeJS.Timer => {
     const expirationTimeInMs = jwtDecode<JwtPayload>(accessToken).exp! * 1000;
     const refreshCallbackDelayInMs = expirationTimeInMs - Date.now() - 1000*60;
 
@@ -74,6 +82,7 @@ export const updateAuthentication = (accessToken: string, refreshToken: string, 
         dispatch(refreshAccessToken(refreshToken))
     }, refreshCallbackDelayInMs)
 }
+
 
 
 export {checkAuthorization, logOut,}

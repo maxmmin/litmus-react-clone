@@ -5,7 +5,7 @@ import {HttpError, HttpErrorsNames} from "../../data/httpErrors";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import {PayloadAction} from "@reduxjs/toolkit";
 import store from "../store";
-import {updateAuthentication} from "../../data/pureFunctions";
+import {setAuthRefreshingTimer} from "../../data/pureFunctions";
 
 const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
 
@@ -34,7 +34,7 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
 
             const accessToken = action.payload.accessToken!;
 
-            let timerId: NodeJS.Timeout | null = updateAuthentication(accessToken, action.payload.refreshToken!, store.dispatch);
+            let timerId: NodeJS.Timeout | null = setAuthRefreshingTimer(accessToken, action.payload.refreshToken!, store.dispatch);
 
             return {...action.payload, refreshTimerId: timerId};
         }

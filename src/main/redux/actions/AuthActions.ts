@@ -35,7 +35,7 @@ export const refreshAccessToken = createAsyncThunk(AuthActions.REFRESH_AUTH,
 
 export const setAuthentication = (auth: Authentication) : PayloadAction<AuthenticationReducible> => {
     return {
-        type: AuthActions.REFRESH_AUTH,
+        type: `${AuthActions.REFRESH_AUTH}/fulfilled`,
         payload: auth
     }
 }
