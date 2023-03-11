@@ -9,7 +9,7 @@ export enum CreationParamsActions {
     UPDATE_CREATION_PARAMS="UPDATE_CREATION_PARAMS"
 }
 
-const updateCreationParams = (payload: CreationParams): PayloadAction<CreationParams> => {
+export const updateCreationParams = (payload: CreationParams): PayloadAction<CreationParams> => {
     return {
         type: CreationParamsActions.UPDATE_CREATION_PARAMS,
         payload: payload

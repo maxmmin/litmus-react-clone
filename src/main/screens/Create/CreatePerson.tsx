@@ -1,0 +1,73 @@
+import Form from "react-bootstrap/Form";
+import {setLocalInput} from "../../redux/actions/ExplorationParamsActions";
+import {searchInputGroupsKeyPressHandler as keyPressHandler} from "../../data/pureFunctions";
+import React from "react";
+
+const CreatePerson = () => {
+    return (
+        <>
+            <Form.Group className="mb-3">
+                    <Form.Label>Прізвище</Form.Label>
+                    <input autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
+            onKeyDown={keyPressHandler}
+            />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Ім'я</Form.Label>
+            <input autoComplete={"new-password"} className={`firstName form-control`} type="text" placeholder="Введіть ім'я"
+            onKeyDown={keyPressHandler}
+            />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Ім'я по-батькові</Form.Label>
+            <input autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+            onKeyDown={keyPressHandler}
+            />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Номер паспорта</Form.Label>
+                <input autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+                       onKeyDown={keyPressHandler}
+                />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Серія паспорта</Form.Label>
+                <input autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+                       onKeyDown={keyPressHandler}
+                />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>РНОКПП</Form.Label>
+                <input autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+                       onKeyDown={keyPressHandler}
+                />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+                <Form.Label>Дата народження</Form.Label>
+
+                <div className="date-of-birth">
+                    <input autoComplete={"new-password"} className={`date-of-birth__input date-of-birth__input_year form-control`} type="text" placeholder="YYYY"
+                           onKeyDown={keyPressHandler}
+                    />
+
+                    <input autoComplete={"new-password"} className={`date-of-birth__input date-of-birth__input_month form-control`} type="text" placeholder="MM"
+                           onKeyDown={keyPressHandler}
+                    />
+
+                    <input autoComplete={"new-password"} className={`date-of-birth__input date-of-birth__input_day form-control`} type="text" placeholder="DD"
+                           onKeyDown={keyPressHandler}
+                    />
+                </div>
+
+            </Form.Group>
+
+            //@todo place
+    </>
+    )
+}

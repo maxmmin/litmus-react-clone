@@ -27,7 +27,7 @@ const FindByFullName = () => {
                 <Form.Label>Прізвище</Form.Label>
                 <input autoComplete={"new-password"} value={lastName} onChange={e=>{
                     dispatch(setLocalInput({...localInput, lastName: e.currentTarget.value}))
-                }} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
+                }} className={`last-name form-control`}  type="text" placeholder="Введіть прізвище"
                 onKeyDown={keyPressHandler}
                 />
             </Form.Group>
@@ -36,7 +36,7 @@ const FindByFullName = () => {
                 <Form.Label>Ім'я</Form.Label>
                 <input autoComplete={"new-password"} value={firstName}  onChange={e=>{
                     dispatch(setLocalInput({...localInput, firstName: e.currentTarget.value}))
-                }} className={`firstName form-control`} type="text" placeholder="Введіть ім'я"
+                }} className={`first-name form-control`} type="text" placeholder="Введіть ім'я"
                        onKeyDown={keyPressHandler}
                 />
             </Form.Group>
@@ -45,7 +45,7 @@ const FindByFullName = () => {
                 <Form.Label>Ім'я по-батькові</Form.Label>
                 <input autoComplete={"new-password"} value={middleName}  onChange={e=>{
                     dispatch(setLocalInput({...localInput, middleName: e.currentTarget.value}))
-                }} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+                }} className={`middle-name form-control`} type="text" placeholder="Введіть ім'я по-батькові"
                 onKeyDown={keyPressHandler}
                 />
             </Form.Group>
