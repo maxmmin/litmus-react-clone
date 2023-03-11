@@ -62,7 +62,7 @@ export function isInvalid(token: string | null | undefined): boolean {
 
 export const updateAuthentication = (accessToken: string, refreshToken: string, dispatch: AppDispatch): NodeJS.Timer => {
     const expirationTimeInMs = jwtDecode<JwtPayload>(accessToken).exp! * 1000;
-    const refreshCallbackDelayInMs = expirationTimeInMs - Date.now()/1000 - 500
+    const refreshCallbackDelayInMs = expirationTimeInMs - Date.now() - 1000*60;
 
     const expDate = new Date(expirationTimeInMs);
 
