@@ -1,4 +1,4 @@
-import jurPerson from "../../../types/JurPerson";
+import jurPerson from "../../../types/GetJurPersonDto";
 import {noInfoMessage} from "../../../data/httpErrors";
 
 type Props = {

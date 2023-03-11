@@ -14,7 +14,16 @@ const updateCreationParams = (payload: CreationParams): PayloadAction<CreationPa
 }
 
 export type CreationParams = {
-    table: Tables
+    table: Tables,
+    personCreationData: {
+        lastName: string,
+        middleName: string,
+        firstName: string,
+        passportNumber: number,
+        passportSerial: number,
+        rnokppCode: number,
+
+    }
 }
 
 export type CreationParamsReducible = CreationParams | null | undefined

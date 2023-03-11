@@ -1,6 +1,6 @@
-type JwtInfoType = {
+type JwtInfo = {
     accessToken: string,
     refreshToken: string
 }
 
-export default JwtInfoType;
+export default JwtInfo;

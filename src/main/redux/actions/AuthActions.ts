@@ -1,6 +1,6 @@
 import {AuthenticationReducible} from "../../types/Authentication";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import JwtInfoType from "../../types/JwtInfoType";
+import JwtInfo from "../../types/JwtInfo";
 import requestsUrls from "../../data/requestsUrls";
 import { HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import {Action} from "redux";
@@ -51,7 +51,7 @@ type UserCredentialsType = {
     password: string
 }
 
-export const signIn = createAsyncThunk<JwtInfoType,UserCredentialsType>(AuthActions.REFRESH_AUTH,
+export const signIn = createAsyncThunk<JwtInfo,UserCredentialsType>(AuthActions.REFRESH_AUTH,
     async (credentials,{rejectWithValue}) => {
         const response = await fetch(requestsUrls.signIn, {
             method: 'POST',

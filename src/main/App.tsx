@@ -13,6 +13,7 @@ import Explore from "./screens/Explore/Explore";
 import {getAppStateAction, AppStateActions} from "./redux/actions/AppStateActions";
 import ApplicationStateManager from "./screens/components/ApplicationStateManager";
 import ConditionalAlert from "./screens/components/ConditionalAlert";
+import Create from "./screens/Create/Create";
 
 
 function App() {
@@ -36,6 +37,10 @@ function App() {
 
                               <Route path={"/explore"} element={
                                   <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} neededPermissions={roles.USER.permissions}/>
+                              }/>
+
+                              <Route path={"/create"} element={
+                                  <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Create/>} neededPermissions={roles.USER.permissions}/>
                               }/>
 
                               <Route path="/sign-in" element={<SignIn/>}/>
