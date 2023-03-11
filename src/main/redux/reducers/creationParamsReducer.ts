@@ -4,7 +4,8 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
 
 const initialState: CreationParams = {
-    table: Tables.USERS
+    table: Tables.USERS,
+
 }
 
 const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<CreationParams>> = (prevState= initialState, action) => {
