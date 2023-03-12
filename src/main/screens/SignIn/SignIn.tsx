@@ -4,7 +4,7 @@ import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Navigate} from "react-router-dom";
-import {updateLoginPageState} from "../../redux/actions/LoginPageStateActions";
+import {LoginPageState, updateLoginPageState} from "../../redux/actions/LoginPageStateActions";
 
 
 function SignIn() {
@@ -40,7 +40,13 @@ function SignIn() {
                     <Form.Label>Email address</Form.Label>
                     <input className={`sign-in-page__input form-control sign-in-page__input_email ${error?'is-invalid':''}`}  type="email" placeholder="Enter email"
                            value={email}
-                           onInput={(e)=>dispatch(updateLoginPageState({email: e.currentTarget.value}))}
+                           onInput={(e)=> {
+                               const updateObject: Partial<LoginPageState> = {email: e.currentTarget.value}
+                               if (error) {
+                                   updateObject.error = null;
+                               }
+                               dispatch(updateLoginPageState(updateObject))
+                           }}
                            onKeyDown={e=>{
                                if (e.key==="Enter") {
                                    e.preventDefault()
@@ -54,7 +60,13 @@ function SignIn() {
                     <Form.Label>Password</Form.Label>
                     <input ref={passwordInput} className={`sign-in-page__input form-control sign-in-page__input_password ${error?'is-invalid':''}`} type="password" placeholder="Password"
                            value={password}
-                           onInput={(e)=>dispatch(updateLoginPageState({password: e.currentTarget.value}))}
+                           onInput={(e)=> {
+                               const updateObject: Partial<LoginPageState> = {password: e.currentTarget.value}
+                               if (error) {
+                                   updateObject.error = null;
+                               }
+                               dispatch(updateLoginPageState(updateObject))
+                           }}
                            onKeyDown={e=>{
                                if (e.key==="Enter") {
                                    e.preventDefault()

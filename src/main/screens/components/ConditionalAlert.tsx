@@ -18,7 +18,7 @@ function ConditionalAlert () {
 
     useEffect(()=>{
         if (error) {
-            setAlertState(AlertStates.ACTIVE)
+            setTimeout(()=>setAlertState(AlertStates.ACTIVE), 0)
 
             const timers: NodeJS.Timer[] = [];
             timers.push(setTimeout(()=> {

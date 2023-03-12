@@ -5,7 +5,7 @@ import {AppStateActions} from "../actions/AppStateActions";
 import {AuthActions} from "../actions/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
-import apiSearchActions from "../actions/ApiSearchActions";
+import ApiSearchActions from "../actions/ApiSearchActions";
 
 const initialState: AppState = {refreshing: false, isHeaderMenuOpened: false}
 
@@ -48,12 +48,23 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                     const clearType = action.type.slice(0,-("/rejected").length);
 
                     switch (clearType) {
-                        case apiSearchActions.REFRESH_RESULTS: {
+                        case ApiSearchActions.REFRESH_RESULTS: {
                             const httpError = (action as PayloadAction<HttpError>).payload
                             if (httpError) {
                                 const status = httpError.status
                                 if (status&&httpErrors[status]===HttpErrorsNames.UNAUTHENTICATED) {
                                     newState.error = {}
+                                }
+                            }
+                            break;
+                        }
+
+                        case AuthActions.REFRESH_AUTH: {
+                            const httpError = (action as PayloadAction<HttpError>).payload
+                            if (httpError.status) {
+                                const status = httpError.status
+                                if (status&&httpErrors[status]===HttpErrorsNames.UNAUTHENTICATED) {
+                                    newState.error = {message: "Невірні дані користувача"}
                                 }
                             }
                             break;

@@ -5,7 +5,7 @@ import React from "react";
 
 const CreateJurPerson = () => {
     return (
-        <div className="creation-input-group">
+        <Form className="creation-input-group">
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Назва</Form.Label>
@@ -54,7 +54,9 @@ const CreateJurPerson = () => {
 
             </Form.Group>
 
-    </div>
+            <button className="creation-input-group__btn btn btn-primary">Створити юридичну особу</button>
+
+        </Form>
 )
 }
 

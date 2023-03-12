@@ -5,7 +5,7 @@ import React from "react";
 
 const CreatePerson = () => {
     return (
-        <div className={"creation-input-group"}>
+        <Form className={"creation-input-group"}>
             <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Прізвище</Form.Label>
                     <input autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
@@ -64,10 +64,11 @@ const CreatePerson = () => {
                            onKeyDown={keyPressHandler}
                     />
                 </div>
-
             </Form.Group>
 
-    </div>
+            <button className="creation-input-group__btn btn btn-primary">Створити фізичну особу</button>
+
+    </Form>
     )
 }
 

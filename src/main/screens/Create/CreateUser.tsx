@@ -5,7 +5,7 @@ import React from "react";
 
 const CreateUser = () => {
     return (
-        <div className="creation-input-group">
+        <Form className="creation-input-group">
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Email адреса</Form.Label>
                 <input autoComplete={"new-password"} className={`email form-control`}  type="text" placeholder="Введіть EMAIL"
@@ -41,7 +41,8 @@ const CreateUser = () => {
                 />
             </Form.Group>
 
-        </div>
+            <button className="creation-input-group__btn btn btn-primary">Створити обліковий запис користувача</button>
+        </Form>
     )
 }
 

@@ -40,7 +40,7 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
         }
 
         default: {
-            if (action.type.endsWith("rejected")) {
+            if (action.type.endsWith("/rejected")) {
                 try {
                         return errorHandle(prevState, action.payload as unknown as HttpError)
                 } catch (e) {
@@ -53,7 +53,6 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
 }
 
 const errorHandle = (prevState: AuthenticationReducible, error: HttpError): AuthenticationReducible => {
-    console.log(error)
     if (error&&Object.hasOwn(error,'type')) {
         switch (error.type) {
             case HttpErrorsNames.UNAUTHENTICATED: {
@@ -65,9 +64,7 @@ const errorHandle = (prevState: AuthenticationReducible, error: HttpError): Auth
                     return {accessToken: null, refreshToken: prevState.refreshToken, refreshTimerId: null}
                 }
 
-                return  {
-                    accessToken: null, refreshToken: null, refreshTimerId: null
-                }
+                return  null
             }
 
             default: return prevState;
