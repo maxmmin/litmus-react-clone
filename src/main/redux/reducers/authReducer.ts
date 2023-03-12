@@ -1,21 +1,10 @@
-import {AuthActions, refreshAccessToken} from "../actions/AuthActions";
+import AuthActions from "../actions/AuthActions";
 import Authentication, {AuthenticationReducible} from "../../types/Authentication";
 import {Reducer} from "react";
 import {HttpError, HttpErrorsNames} from "../../data/httpErrors";
-import jwtDecode, {JwtPayload} from "jwt-decode";
 import {PayloadAction} from "@reduxjs/toolkit";
-import store from "../store";
-import {setAuthRefreshingTimer} from "../../data/pureFunctions";
 
 const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
-
-    // check and clear timer before this.
-    // ! one more check is placed inside handleError function
-    if (action.type.indexOf(AuthActions.REFRESH_AUTH)>-1||action.type===AuthActions.CLEAR_AUTH) {
-        if (prevState?.refreshTimerId) {
-            clearTimeout(prevState.refreshTimerId)
-        }
-    }
 
     switch (action.type) {
         case AuthActions.CLEAR_AUTH: {
@@ -35,12 +24,7 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
         }
 
         case `${AuthActions.REFRESH_AUTH}/fulfilled`: {
-
-            const accessToken = action.payload.accessToken!;
-
-            let timerId: NodeJS.Timeout | null = setAuthRefreshingTimer(accessToken, action.payload.refreshToken!, store.dispatch);
-
-            return {...action.payload, refreshTimerId: timerId};
+            return {...action.payload};
         }
 
         default: {
@@ -60,12 +44,9 @@ const errorHandle = (prevState: AuthenticationReducible, error: HttpError): Auth
     if (error&&Object.hasOwn(error,'type')) {
         switch (error.type) {
             case HttpErrorsNames.UNAUTHENTICATED: {
-                if (prevState?.refreshTimerId) {
-                    clearTimeout(prevState.refreshTimerId)
-                }
 
                 if (prevState?.accessToken) {
-                    return {accessToken: null, refreshToken: prevState.refreshToken, refreshTimerId: null}
+                    return {accessToken: null, refreshToken: prevState.refreshToken}
                 }
 
                 return  null

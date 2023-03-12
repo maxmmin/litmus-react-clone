@@ -25,7 +25,7 @@ const Explore = () => {
         e.preventDefault();
 
         if (!isInputInvalid&&table) {
-            dispatch(refreshResultsThunk(table))
+            dispatch(refreshResultsThunk({table: table, shouldRefreshGlobally: false}))
         }
     }
 
@@ -33,6 +33,12 @@ const Explore = () => {
         const table: Tables = event.currentTarget.value as Tables;
         dispatch(updateExplorationParams({table: table}))
     }
+
+    useEffect(()=>{
+        window.addEventListener("scroll", () =>{
+            
+        })
+    })
 
     return (
         <div className={"explore-page"}>

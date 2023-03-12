@@ -4,10 +4,12 @@ import CreatePersonDto from "../../types/CreatePersonDto";
 import CreateJurPersonDto from "../../types/CreateJurPersonDto";
 import CreateUserDto from "../../types/CreateUserDto";
 
-export enum CreationParamsActions {
+enum CreationParamsActions {
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
     UPDATE_CREATION_PARAMS="UPDATE_CREATION_PARAMS"
 }
+
+export default CreationParamsActions;
 
 export const updateCreationParams = (payload: CreationParams): PayloadAction<CreationParams> => {
     return {

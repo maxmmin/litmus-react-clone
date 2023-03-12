@@ -1,4 +1,4 @@
-type getPersonDto = {
+type GetPersonDto = {
     id: number;
     firstName: string;
     middleName: string;
@@ -10,4 +10,4 @@ type getPersonDto = {
     place?: any
 }
 
-export default getPersonDto;
+export default GetPersonDto;

@@ -1,12 +1,12 @@
-import getPersonDto from "./GetPersonDto";
+import GetPersonDto from "./GetPersonDto";
 
-type getJurPersonDto = {
+type GetJurPersonDto = {
     id: number;
     name: string;
     edrpou?: string;
     dateOfRegistration?: Array<number>;
-    owner?: getPersonDto;
-    benOwner?: getPersonDto;
+    owner?: GetPersonDto;
+    benOwner?: GetPersonDto;
 }
 
-export default getJurPersonDto;
+export default GetJurPersonDto;

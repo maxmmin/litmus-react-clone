@@ -4,17 +4,24 @@ import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import requestsUrls, {createAuthHeader} from "../../data/requestsUrls";
 import {RootState} from "../store";
 import {BasicHumanSearchPayload, Modes, Tables} from "../../types/explorationParams";
+import {Meta} from "../../types/AppState";
 
-export enum ApiSearchActions {
+enum ApiSearchActions {
     REFRESH_RESULTS="REFRESH_RESULTS"
 }
+
+export default ApiSearchActions;
 
 export type Results = (Array<Object>&{table?: Tables})
 
 export type ResultsReducible = (Array<Object>&{table?: Tables}) | null | undefined
 
-const refreshResultsThunk = createAsyncThunk<Results, Tables>(ApiSearchActions.REFRESH_RESULTS,
-    async (table,{getState, rejectWithValue})=>{
+type RefreshResultsThunkArg = {
+    table: Tables
+} & Meta
+
+const refreshResultsThunk = createAsyncThunk<Results, RefreshResultsThunkArg>(ApiSearchActions.REFRESH_RESULTS,
+    async ({table},{getState, rejectWithValue})=>{
         const state = getState() as RootState;
         const accessToken = state.authentication?.accessToken;
 
@@ -91,5 +98,3 @@ const refreshResultsThunk = createAsyncThunk<Results, Tables>(ApiSearchActions.R
     })
 
 export {refreshResultsThunk};
-
-export default ApiSearchActions;

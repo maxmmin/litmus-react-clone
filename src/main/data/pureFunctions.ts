@@ -1,10 +1,10 @@
 import {Permissions} from "../types/Role";
 import {AppDispatch} from "../redux/store";
-import {clearAuthentication, refreshAccessToken, setAuthentication} from "../redux/actions/AuthActions";
+import {clearAuthentication, refreshAccessToken} from "../redux/actions/AuthActions";
 import {AuthenticationReducible} from "../types/Authentication";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
-import {clearTimeout} from "timers";
+import {clearAuthRefreshTimer, setTimers, TimersReducible} from "../redux/actions/TimersActions";
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)
@@ -35,26 +35,30 @@ export const searchInputGroupsKeyPressHandler = (e: React.KeyboardEvent) => {
     }
 }
 
-export const checkAndRefreshAuth = (auth: AuthenticationReducible, dispatch: AppDispatch) => {
-            if (auth) {
-                if (isInvalid(auth.accessToken!)) {
-                    if (auth.refreshTimerId) {
-                        window.clearTimeout(auth.refreshTimerId)
-                    }
-                    if (auth.refreshToken&&!isInvalid(auth.refreshToken)) {
-                        return dispatch(
-                             refreshAccessToken(auth.refreshToken)
-                        )
-                    } else {
-                        return logOut(dispatch)
-                    }
-                }
+export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {
+    if (auth) {
+        if (isInvalid(auth?.accessToken!)) {
 
-                if (!auth.refreshTimerId&&auth.accessToken&&auth.refreshToken) {
-                    return dispatch(setAuthentication({...auth, refreshTimerId: setAuthRefreshingTimer(auth.accessToken!, auth.refreshToken!, dispatch)}))
-                }
-                return;
+            if (auth?.refreshToken&&!isInvalid(auth.refreshToken)) {
+                return dispatch(
+                    refreshAccessToken({refreshToken: auth.refreshToken, shouldRefreshGlobally: false})
+                )
+            } else {
+                return logOut(dispatch)
             }
+        }
+
+        if (!timers?.authRefreshTimerId&&auth?.accessToken&&auth.refreshToken) {
+            return dispatch(setTimers({authRefreshTimerId: setAuthRefreshingTimer(auth, dispatch)}))
+        }
+    }
+
+    if (!auth&&timers?.authRefreshTimerId) {
+        window.clearTimeout(timers.authRefreshTimerId)
+        dispatch(clearAuthRefreshTimer())
+    }
+
+    return;
 }
 
 export function isInvalid(token: string | null | undefined): boolean {
@@ -68,7 +72,10 @@ export function isInvalid(token: string | null | undefined): boolean {
         return true;
 }
 
-export const setAuthRefreshingTimer = (accessToken: string, refreshToken: string, dispatch: AppDispatch): NodeJS.Timer | null => {
+export const setAuthRefreshingTimer = (authentication: AuthenticationReducible, dispatch: AppDispatch): NodeJS.Timer | null => {
+    const accessToken = authentication?.accessToken!;
+    const refreshToken = authentication?.refreshToken!;
+
     let expirationTimeInMs;
 
     try {
@@ -87,7 +94,7 @@ export const setAuthRefreshingTimer = (accessToken: string, refreshToken: string
     // this callback will fire when it will 1 minute before jwt expiring
     return setTimeout(()=>{
         console.log("updating auth")
-        dispatch(refreshAccessToken(refreshToken))
+        dispatch(refreshAccessToken({refreshToken: refreshToken, shouldRefreshGlobally: false}))
     }, refreshCallbackDelayInMs)
 }
 

@@ -5,16 +5,22 @@ import requestsUrls from "../../data/requestsUrls";
 import { HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import {Action} from "redux";
 import Authentication from "../../types/Authentication";
+import {Meta} from "../../types/AppState";
 
-export enum AuthActions {
+enum AuthActions {
     REFRESH_AUTH="REFRESH_AUTH",
     CLEAR_AUTH="CLEAR_AUTH",
     CHECK_AUTH="CHECK_AUTH"
 }
 
+export default AuthActions;
 
-export const refreshAccessToken = createAsyncThunk(AuthActions.REFRESH_AUTH,
-    async (refreshToken: string, {rejectWithValue}) => {
+type RefreshAccessTokenArg = {
+    refreshToken: string
+} & Meta
+
+export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.REFRESH_AUTH,
+    async ({refreshToken}, {rejectWithValue}) => {
         const response =  await fetch(requestsUrls.refreshAccessKey, {
             method: 'POST',
             headers: {
@@ -46,20 +52,24 @@ export function clearAuthentication (): Action {
     }
 }
 
-type UserCredentialsType = {
+type SignInArg = {
     email: string,
     password: string
-}
+} & Meta
 
-export const signIn = createAsyncThunk<JwtInfo,UserCredentialsType>(AuthActions.REFRESH_AUTH,
-    async (credentials,{rejectWithValue}) => {
+export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.REFRESH_AUTH,
+    async ({email, password},{rejectWithValue}) => {
         const response = await fetch(requestsUrls.signIn, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(credentials)
+            body: JSON.stringify({
+                email, password
+            })
         });
+
+
 
         const json = await response.json();
 

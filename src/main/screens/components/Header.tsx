@@ -3,7 +3,7 @@ import HeaderMenu from "./HeaderMenu";
 import React from "react";
 import {UserIdentityReducible} from "../../types/UserIdentity";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {getAppStateAction, AppStateActions} from "../../redux/actions/AppStateActions";
+import {AppStateActions, getAppStateAction} from "../../redux/actions/AppStateActions";
 import BackButton from "./BackButton";
 
 type PropsType = {

@@ -1,10 +1,10 @@
 import {useAppSelector} from "../../redux/hooks";
 import {Tables} from "../../types/explorationParams";
-import getPersonDto from "../../types/GetPersonDto";
+import GetPersonDto from "../../types/GetPersonDto";
 import {useMemo} from "react";
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import {Results} from "../../redux/actions/ApiSearchActions";
-import getJurPersonDto from "../../types/GetJurPersonDto";
+import GetJurPersonDto from "../../types/GetJurPersonDto";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import GetUserDto from "../../types/GetUserDto";
 import UserInfoTable from "./EntityTables/UserInfoTable";
@@ -15,14 +15,14 @@ const getParsedResults = (results: Results) => {
     switch (table) {
         case Tables.PERSONS: {
             return results.map(entity=>{
-                const person = entity as getPersonDto;
+                const person = entity as GetPersonDto;
                 return <PersonInfoTable key={person.id} person={person}/>
             })
         }
 
         case Tables.JUR_PERSONS: {
             return results.map(entity=>{
-                const jurPerson = entity as getJurPersonDto;
+                const jurPerson = entity as GetJurPersonDto;
                 return <JurPersonInfoTable jurPerson={jurPerson} key={jurPerson.id}/>
             })
         }

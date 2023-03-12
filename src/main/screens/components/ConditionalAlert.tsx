@@ -1,8 +1,7 @@
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {Alert} from "react-bootstrap";
 import {useEffect, useState} from "react";
-import {Action} from "redux";
-import {AppStateActions} from "../../redux/actions/AppStateActions";
+import AppStateActions from "../../redux/actions/AppStateActions";
 
 enum AlertStates {
     INACTIVE='INACTIVE',
@@ -39,7 +38,7 @@ function ConditionalAlert () {
             { error?
                 <div className={`alert-container ${alertState}`}>
                     <Alert className={"bs-alert"} variant={'danger'}>
-                        <h4 className={"text-center"}>{(error.message)?error.message:"Трапилася помилка, спробуйте ще раз."}</h4>
+                        <h4 className={"text-center my-0 mx-0"}>{(error.message)?error.message:"Трапилася помилка, спробуйте ще раз."}</h4>
                     </Alert>
                 </div>
                 :

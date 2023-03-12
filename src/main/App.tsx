@@ -1,6 +1,6 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
-import React, {useEffect} from 'react';
+import React from 'react';
 import SignIn from "./screens/SignIn/SignIn";
 import Home from "./screens/Home/Home";
 import PrivateComponent, {ForbiddenOutputCallbackModesEnum} from "./screens/components/PrivateComponent";
@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import {roles} from "./types/Role";
 import Explore from "./screens/Explore/Explore";
-import {getAppStateAction, AppStateActions} from "./redux/actions/AppStateActions";
+import {AppStateActions,getAppStateAction} from "./redux/actions/AppStateActions";
 import ApplicationStateManager from "./screens/components/ApplicationStateManager";
 import ConditionalAlert from "./screens/components/ConditionalAlert";
 import Create from "./screens/Create/Create";

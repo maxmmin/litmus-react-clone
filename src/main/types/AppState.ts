@@ -3,9 +3,13 @@ export type AppStateError = {
 }
 
 type AppState = {
-    refreshing: boolean,
+    isRefreshing: boolean,
     isHeaderMenuOpened: boolean,
     error?: AppStateError | null
+}
+
+export type Meta = {
+    shouldRefreshGlobally: boolean
 }
 
 export type AppStateReducible = AppState | undefined

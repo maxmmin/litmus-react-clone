@@ -1,23 +1,29 @@
-import AppState, {AppStateReducible} from "../../types/AppState";
+import AppState, {AppStateReducible, Meta} from "../../types/AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
-import {AppStateActions} from "../actions/AppStateActions";
-import {AuthActions} from "../actions/AuthActions";
+import AppStateActions from "../actions/AppStateActions";
+import AuthActions from "../actions/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import ApiSearchActions from "../actions/ApiSearchActions";
 
-const initialState: AppState = {refreshing: false, isHeaderMenuOpened: false}
+const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false}
 
+type PendingMetaAction = {
+    meta: {
+        arg: Meta
+    }
+}
 
 const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState = initialState, action) => {
+
     switch (action.type) {
         case AppStateActions.REFRESH_ON: {
-            return {...prevState, refreshing: true}
+            return {...prevState, isRefreshing: true}
         }
 
         case AppStateActions.REFRESH_OFF: {
-            return { ...prevState, refreshing: false}
+            return { ...prevState, isRefreshing: false}
         }
 
         case AppStateActions.HEADER_MENU_TOGGLE: {
@@ -37,12 +43,19 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
         }
 
         default: {
+
             if (action.type.endsWith("/pending")) {
-                return {...prevState, refreshing: true}
+                const metaAction = action as unknown as PendingMetaAction;
+
+                if (metaAction.meta.arg.shouldRefreshGlobally) {
+                    return {...prevState, isRefreshing: true}
+                }
+
+                return prevState;
             }
 
             if (action.type.endsWith("/fulfilled")||action.type.endsWith("/rejected")) {
-                let newState: AppState = {...prevState, refreshing: false}
+                let newState: AppState = {...prevState, isRefreshing: false}
 
                 if (action.type.endsWith("/rejected")) {
                     const clearType = action.type.slice(0,-("/rejected").length);

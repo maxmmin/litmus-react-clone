@@ -1,9 +1,8 @@
-import {ApiSearchActions, Results, ResultsReducible} from "../actions/ApiSearchActions";
+import ApiSearchActions, {Results, ResultsReducible} from "../actions/ApiSearchActions";
 import {Reducer} from "react";
 import {HttpError} from "../../data/httpErrors";
-import {AuthActions} from "../actions/AuthActions";
+import AuthActions from "../actions/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import store from "../store";
 
 const initialState = null;
 

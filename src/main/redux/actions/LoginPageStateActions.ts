@@ -18,12 +18,12 @@ enum LoginPageStateActions {
     UPDATE_STATE="UPDATE_STATE"
 }
 
+export default LoginPageStateActions;
+
 export const updateLoginPageState = (valuesToBeUpdated: Partial<LoginPageState>): PayloadAction<Partial<LoginPageState>> => {
     return {
         type: LoginPageStateActions.UPDATE_STATE,
         payload: valuesToBeUpdated
     }
 }
-
-export default LoginPageStateActions
 

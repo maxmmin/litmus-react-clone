@@ -1,8 +1,8 @@
-import getPersonDto from "../../../types/GetPersonDto";
+import GetPersonDto from "../../../types/GetPersonDto";
 import {noInfoMessage} from "../../../data/httpErrors";
 
 type Props = {
-    person: getPersonDto
+    person: GetPersonDto
 }
 
 

@@ -1,5 +1,3 @@
-import Role from "./Role";
-
 type GetUserDto = {
     id: number;
 

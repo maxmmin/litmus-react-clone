@@ -2,13 +2,13 @@ import FindByFullName from "../screens/Explore/InputGroupes/FindByFullName";
 import FindById from "../screens/Explore/InputGroupes/FindById";
 import {HttpError} from "../data/httpErrors";
 
-enum Tables {
+export enum Tables {
     PERSONS="PERSONS",
     JUR_PERSONS="JUR_PERSONS",
     USERS="USERS"
 }
 
-enum Modes {
+export enum Modes {
     FIND_BY_FULL_NAME="FIND_BY_FULL_NAME",
     FIND_BY_ID="FIND_BY_ID"
 }
@@ -78,4 +78,4 @@ export type ExplorationParams = Partial<{
 
 export type ExplorationParamsReducible = ExplorationParams | undefined
 
-export {Tables, Modes, modesDataSource}
+export {modesDataSource}

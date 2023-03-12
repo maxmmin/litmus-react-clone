@@ -1,7 +1,7 @@
 import {Reducer} from "react";
 import LoginPageStateActions, {LoginPageState, LoginPageStateReducible} from "../actions/LoginPageStateActions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {AuthActions} from "../actions/AuthActions";
+import AuthActions from "../actions/AuthActions";
 import {HttpError} from "../../data/httpErrors";
 
 const initialState: LoginPageState = {

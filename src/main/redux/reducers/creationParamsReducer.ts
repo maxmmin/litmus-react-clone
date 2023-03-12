@@ -1,5 +1,5 @@
 import {Reducer} from "react";
-import {CreationParams, CreationParamsActions, CreationParamsReducible} from "../actions/CreationParamsActions";
+import CreationParamsActions, {CreationParams, CreationParamsReducible} from "../actions/CreationParamsActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
 

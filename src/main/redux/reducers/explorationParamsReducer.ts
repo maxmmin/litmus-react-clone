@@ -8,8 +8,8 @@ import {
     Tables
 } from "../../types/explorationParams";
 
-import ExplorationActions from "../actions/ExplorationParamsActions";
-import {AuthActions} from "../actions/AuthActions";
+import ExplorationParamsActions from "../actions/ExplorationParamsActions";
+import AuthActions from "../actions/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: ExplorationParamsReducible = {
@@ -28,16 +28,16 @@ const initialState: ExplorationParamsReducible = {
 
 const explorationParamsReducer: Reducer<ExplorationParamsReducible, PayloadAction<ExplorationParams>> = (prev=initialState, action) => {
     switch (action.type) {
-        case ExplorationActions.UPDATE_EXPLORATION_PARAMS:
+        case ExplorationParamsActions.UPDATE_EXPLORATION_PARAMS:
             return {...prev,...action.payload};
 
-        case ExplorationActions.UPDATE_SECTION_PARAMS:
+        case ExplorationParamsActions.UPDATE_SECTION_PARAMS:
             return {...prev, sectionsSettings: {...(prev!.sectionsSettings as SectionsSettings), ...action.payload}};
 
-        case ExplorationActions.CLEAR_EXPLORATION_PARAMS:
+        case ExplorationParamsActions.CLEAR_EXPLORATION_PARAMS:
             return initialState;
 
-        case ExplorationActions.SET_CURRENT_INPUT_DATA: {
+        case ExplorationParamsActions.SET_CURRENT_INPUT_DATA: {
             const input = action.payload as BasicHumanSearchPayload;
 
             return {...prev, input: {

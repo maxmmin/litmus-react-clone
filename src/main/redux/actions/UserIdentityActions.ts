@@ -4,13 +4,14 @@ import requestsUrls, {createAuthHeader} from "../../data/requestsUrls";
 import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import {roles} from "../../types/Role";
 import {isInvalid} from "../../data/pureFunctions";
+import {Meta} from "../../types/AppState";
 
 enum UserIdentityActions {
     GET_IDENTITY="GET_IDENTITY",
     CLEAR_IDENTITY="CLEAR_IDENTITY"
 }
 
-export {UserIdentityActions}
+export default UserIdentityActions;
 
 const setIdentity = (identity: UserIdentity): PayloadAction<UserIdentityReducible> => {
     return {
@@ -19,12 +20,16 @@ const setIdentity = (identity: UserIdentity): PayloadAction<UserIdentityReducibl
     }
 }
 
-type successfulResponseType = {role: string}&UserIdentity
+type SuccessfulResponseType = {role: string}&UserIdentity
 
-export const refreshUserIdentity = createAsyncThunk<UserIdentity,string|null|undefined,{}>(UserIdentityActions.GET_IDENTITY,
-    async (accessToken, {rejectWithValue}) => {
+type RefreshUserIdentityArg = {
+    accessToken: string
+} & Meta
 
-    if (!accessToken||isInvalid(accessToken)) {
+export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIdentityArg>(UserIdentityActions.GET_IDENTITY,
+    async ({accessToken}, {rejectWithValue}) => {
+
+    if (isInvalid(accessToken)) {
         return rejectWithValue({...new HttpError(401, HttpErrorsNames.UNAUTHENTICATED)})
     }
 
@@ -38,7 +43,7 @@ export const refreshUserIdentity = createAsyncThunk<UserIdentity,string|null|und
     const jsonData = await response.json();
 
     if (response.ok) {
-        const responseIdentity = jsonData as successfulResponseType;
+        const responseIdentity = jsonData as SuccessfulResponseType;
         const role = roles[responseIdentity.role]
         const identity: UserIdentity = {...responseIdentity, role: role.role, permissions: role.permissions}
         return identity;

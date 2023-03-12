@@ -30,7 +30,7 @@ function SignIn() {
 
     const signInButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        dispatch(signIn({email: email!, password: password!}))
+        dispatch(signIn({email: email!, password: password!, shouldRefreshGlobally: true}))
     }
 
     return (
@@ -76,7 +76,7 @@ function SignIn() {
                     />
                 </Form.Group>
 
-                <Button ref={button} variant="primary" onClick={signInButtonHandler} className="w-100 py-2 mt-3 litmus-primary-btn">
+                <Button ref={button} variant="primary" disabled={!!error} onClick={signInButtonHandler} className="w-100 py-2 mt-3 litmus-primary-btn">
                     Sign In
                 </Button>
 
