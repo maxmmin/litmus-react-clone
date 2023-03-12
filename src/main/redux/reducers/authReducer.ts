@@ -30,6 +30,10 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
             return action.payload;
         }
 
+        case `${AuthActions.REFRESH_AUTH}`: {
+            return action.payload;
+        }
+
         case `${AuthActions.REFRESH_AUTH}/fulfilled`: {
 
             const accessToken = action.payload.accessToken!;

@@ -60,8 +60,8 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                         }
 
                         case AuthActions.REFRESH_AUTH: {
-                            const httpError = (action as PayloadAction<HttpError>).payload
-                            if (httpError.status) {
+                            const httpError = (action as Partial<PayloadAction<HttpError>>).payload
+                            if (httpError?.status) {
                                 const status = httpError.status
                                 if (status&&httpErrors[status]===HttpErrorsNames.UNAUTHENTICATED) {
                                     newState.error = {message: "Невірні дані користувача"}
