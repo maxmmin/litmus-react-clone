@@ -27,19 +27,24 @@ const Create = () => {
     }, [table])
 
     return (
-        <div className="create-page">
+        <div className="creation-page">
             <Header backButtonPath={"/"}/>
 
-            <main className={"create-page__main-container"}>
-                <Form.Select className={"create__select"} value={table} onChange={handleSelectChange}>
-                    <option value={Tables.PERSONS}>Фізичну особу</option>
-                    <option value={Tables.JUR_PERSONS}>Юридичну особу</option>
-                    <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT}>
-                        <option value={Tables.USERS}>Користувача</option>
-                    </PrivateComponentWrapper>
-                </Form.Select>
+            <main className={"creation-page__main-container"}>
+               <div className="creation-page__creation-container">
+                   <div className="creation-page__create-select-wrapper">
+                       <p style={{marginBottom: '10px'}}>Створити</p>
+                       <Form.Select className={"create__select"} value={table} onChange={handleSelectChange}>
+                           <option value={Tables.PERSONS}>Фізичну особу</option>
+                           <option value={Tables.JUR_PERSONS}>Юридичну особу</option>
+                           <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT}>
+                               <option value={Tables.USERS}>Користувача</option>
+                           </PrivateComponentWrapper>
+                       </Form.Select>
+                   </div>
 
-                <CreateInputSection table={table!}/>
+                   <CreateInputSection table={table!}/>
+               </div>
             </main>
         </div>
     )
