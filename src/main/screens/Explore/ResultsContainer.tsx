@@ -1,7 +1,7 @@
 import {useAppSelector} from "../../redux/hooks";
 import {Tables} from "../../types/explorationParams";
 import GetPersonDto from "../../types/GetPersonDto";
-import {useMemo} from "react";
+import {MutableRefObject, useMemo, useState} from "react";
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import {Results} from "../../redux/actions/ApiSearchActions";
 import GetJurPersonDto from "../../types/GetJurPersonDto";
@@ -13,23 +13,25 @@ import Loader from "../components/Loader";
 const getParsedResults = (results: Results) => {
     const table = results.table;
 
+    const entities = results.data;
+
     switch (table) {
         case Tables.PERSONS: {
-            return results.map(entity=>{
+            return entities.map(entity=>{
                 const person = entity as GetPersonDto;
                 return <PersonInfoTable key={person.id} person={person}/>
             })
         }
 
         case Tables.JUR_PERSONS: {
-            return results.map(entity=>{
+            return entities.map(entity=>{
                 const jurPerson = entity as GetJurPersonDto;
                 return <JurPersonInfoTable jurPerson={jurPerson} key={jurPerson.id}/>
             })
         }
 
         case Tables.USERS: {
-            return results.map(entity=>{
+            return entities.map(entity=>{
                 const user = entity as GetUserDto;
                 return <UserInfoTable user={user} key={user.id}/>
             })
@@ -37,25 +39,32 @@ const getParsedResults = (results: Results) => {
     }
 }
 
+type Props = {
+    containerRef: MutableRefObject<HTMLDivElement|null>
+}
 
-const ResultsContainer = () => {
+const processResults = (results: Results) => {
+    return <>
+        {results.data.length>0?
+            <>
+                <h4>Результатів: {results.data.length}</h4>
+                {getParsedResults(results)}
+            </>
+            :
+            results.pending?null:<h3 className=".text-center">Результатів не знайдено</h3>
+        }
+        {results.pending?<Loader/>:null}
+    </>
+}
+
+const ResultsContainer = ({containerRef}: Props) => {
     const results = useAppSelector(state => state.searchResults)
 
-    if (!results) {
-        return null;
-    }
-    console.log(results)
     return (
-        <div className={"results-container"}>
-            {results.length>0?
-                <>
-                    <h4>Результатів: {results.length}</h4>
-                    {getParsedResults(results)}
-                </>
-                :
-                results.pending?null:<h3 className=".text-center">Результатів не знайдено</h3>
+        <div className={"results-container"} ref={containerRef}>
+            {
+                results ? processResults(results) : null
             }
-            {results.pending?<Loader/>:null}
         </div>
     )
 }

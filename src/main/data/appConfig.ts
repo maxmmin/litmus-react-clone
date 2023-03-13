@@ -4,6 +4,8 @@ const host = "http://localhost:8081";
 
 // const host = "http://192.168.137.89:8081"
 
+export const entitiesPerPage = 3;
+
 const auth = `${host}/auth`
 
 const api = `${host}/api`
@@ -16,7 +18,7 @@ const jurPersons = `${api}/jur-persons`
 
 const authHeader = 'Authorization'
 
-const requestsUrls = {
+const appConfig = {
     signIn: `${auth}/sign-in`,
     refreshAccessKey: `${auth}/refresh`,
     getThisUser: auth,
@@ -29,4 +31,4 @@ export const createAuthHeader = (accessToken: string) => ({
     [authHeader]: `Bearer ${accessToken}`
 })
 
-export default requestsUrls
+export default appConfig

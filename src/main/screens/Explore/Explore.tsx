@@ -1,32 +1,53 @@
 import Header from "../components/Header";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useEffect} from "react";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {Tables} from "../../types/explorationParams";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
 import Button from "react-bootstrap/Button";
 import InputGroup from "./InputGroup";
-import ApiSearchActions, {clearResults, refreshResultsThunk} from "../../redux/actions/ApiSearchActions";
+import ApiSearchActions, {
+    clearResults,
+    lazyLoadResultsThunk,
+    refreshResultsThunk, ResultsFullRequired
+} from "../../redux/actions/ApiSearchActions";
 import ResultsContainer from "./ResultsContainer";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
+import store, {RootState} from "../../redux/store";
 
 const Explore = () => {
 
     const dispatch = useAppDispatch();
 
+    const [posY, setPosY] = useState<number>(0)
+
     const table = useAppSelector(state => state.explorationParams?.table)
     const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![table!])
     const isInputInvalid = useAppSelector(state => state.explorationParams?.isInvalid)
+    const results = useAppSelector(state => state.searchResults)
+
+    const resultsContainer = useRef<HTMLDivElement>(null)
 
     const search = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
         if (!isInputInvalid&&table) {
-            dispatch(clearResults())
             dispatch(refreshResultsThunk({table: table, shouldRefreshGlobally: false}))
+        }
+    }
+
+    const scrollCallback = () => {
+        const results = (store.getState() as RootState).searchResults
+        setPosY(window.scrollY)
+        if (resultsContainer.current&&results&&results?.partlyLoaded) {
+            const rect: DOMRect = resultsContainer.current.getBoundingClientRect();
+
+            if (rect.height+rect.top<window.innerHeight+150) {
+                dispatch(lazyLoadResultsThunk({results: results as ResultsFullRequired, shouldRefreshGlobally: false}))
+            }
         }
     }
 
@@ -36,10 +57,22 @@ const Explore = () => {
     }
 
     useEffect(()=>{
-        window.addEventListener("scroll", () =>{
-            
+        window.addEventListener("scroll", scrollCallback)
+
+        return () => {
+            window.removeEventListener("scroll",scrollCallback)
+        }
+    },[resultsContainer.current])
+
+    useEffect(()=>{
+        console.log(posY)
+        window.scrollTo({
+            left: 0,
+            top: posY,
+            //@ts-ignore
+            behavior: "instant"
         })
-    })
+    },[results, posY])
 
     return (
         <div className={"explore-page"}>
@@ -78,7 +111,7 @@ const Explore = () => {
 
                 </div>
 
-                <ResultsContainer/>
+                <ResultsContainer containerRef={resultsContainer}/>
             </main>
         </div>
     )
