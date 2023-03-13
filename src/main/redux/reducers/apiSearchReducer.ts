@@ -11,6 +11,14 @@ const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (pre
         case (ApiSearchActions.REFRESH_RESULTS): {
             return action.payload;
         }
+
+        case (`${ApiSearchActions.REFRESH_RESULTS}/pending`): {
+            const newState: Results = prevState?[...prevState]:[];
+            newState.pending = true;
+            newState.table = prevState?.table;
+            return newState;
+        }
+
         case (`${ApiSearchActions.REFRESH_RESULTS}/fulfilled`): {
             return action.payload;
         }
@@ -24,6 +32,10 @@ const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (pre
                 }
             }
             return null;
+        }
+
+        case ApiSearchActions.CLEAR_RESULTS: {
+            return initialState;
         }
 
         case AuthActions.CLEAR_AUTH: {

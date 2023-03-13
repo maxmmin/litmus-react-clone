@@ -8,6 +8,7 @@ import GetJurPersonDto from "../../types/GetJurPersonDto";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import GetUserDto from "../../types/GetUserDto";
 import UserInfoTable from "./EntityTables/UserInfoTable";
+import Loader from "../components/Loader";
 
 const getParsedResults = (results: Results) => {
     const table = results.table;
@@ -40,22 +41,21 @@ const getParsedResults = (results: Results) => {
 const ResultsContainer = () => {
     const results = useAppSelector(state => state.searchResults)
 
-    const table = useMemo(()=>results?.table,[results])
-
     if (!results) {
         return null;
     }
-
+    console.log(results)
     return (
         <div className={"results-container"}>
-            {results.length>0&&table?
+            {results.length>0?
                 <>
                     <h4>Результатів: {results.length}</h4>
                     {getParsedResults(results)}
                 </>
                 :
-                <h3 className=".text-center">Результатів не знайдено</h3>
+                results.pending?null:<h3 className=".text-center">Результатів не знайдено</h3>
             }
+            {results.pending?<Loader/>:null}
         </div>
     )
 }

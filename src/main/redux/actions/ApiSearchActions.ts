@@ -5,16 +5,24 @@ import requestsUrls, {createAuthHeader} from "../../data/requestsUrls";
 import {RootState} from "../store";
 import {BasicHumanSearchPayload, Modes, Tables} from "../../types/explorationParams";
 import {Meta} from "../../types/AppState";
+import {Action} from "redux";
 
 enum ApiSearchActions {
-    REFRESH_RESULTS="REFRESH_RESULTS"
+    REFRESH_RESULTS="REFRESH_RESULTS",
+    CLEAR_RESULTS="CLEAR_RESULTS"
 }
 
 export default ApiSearchActions;
 
-export type Results = (Array<Object>&{table?: Tables})
+export const clearResults = (): Action<string> => {
+    return {
+        type: ApiSearchActions.CLEAR_RESULTS
+    }
+}
 
-export type ResultsReducible = (Array<Object>&{table?: Tables}) | null | undefined
+export type Results = (Array<Object>&{table?: Tables, pending?: boolean})
+
+export type ResultsReducible = Results | null | undefined
 
 type RefreshResultsThunkArg = {
     table: Tables

@@ -7,7 +7,7 @@ import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
 import Button from "react-bootstrap/Button";
 import InputGroup from "./InputGroup";
-import { refreshResultsThunk } from "../../redux/actions/ApiSearchActions";
+import ApiSearchActions, {clearResults, refreshResultsThunk} from "../../redux/actions/ApiSearchActions";
 import ResultsContainer from "./ResultsContainer";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";
@@ -25,6 +25,7 @@ const Explore = () => {
         e.preventDefault();
 
         if (!isInputInvalid&&table) {
+            dispatch(clearResults())
             dispatch(refreshResultsThunk({table: table, shouldRefreshGlobally: false}))
         }
     }
