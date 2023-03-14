@@ -23,6 +23,11 @@ const timersActionsReducer: Reducer<TimersReducible, PayloadAction<Timers>> = (p
             return {...prevState, ...action.payload}
         }
 
+        case `${AuthActions.REFRESH_AUTH}/fulfilled`:
+        case `${AuthActions.REFRESH_AUTH}/rejected`: {
+            return {...prevState, authRefreshTimerId: null}
+        }
+
 
         default: {
             return prevState;
