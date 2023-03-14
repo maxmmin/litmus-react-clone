@@ -4,7 +4,7 @@ const host = "http://localhost:8081";
 
 // const host = "http://192.168.137.89:8081"
 
-export const entitiesPerPage = 50;
+export const entitiesPerPage = 3;
 
 const auth = `${host}/auth`
 

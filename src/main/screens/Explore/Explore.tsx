@@ -19,15 +19,12 @@ import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
 import store, {RootState} from "../../redux/store";
 
 const Explore = () => {
-
+    // @todo need to do full results number provide, cause now only 1 page is counted
     const dispatch = useAppDispatch();
-
-    const [posY, setPosY] = useState<number>(0)
 
     const table = useAppSelector(state => state.explorationParams?.table)
     const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![table!])
     const isInputInvalid = useAppSelector(state => state.explorationParams?.isInvalid)
-    const results = useAppSelector(state => state.searchResults)
 
     const resultsContainer = useRef<HTMLDivElement>(null)
 
@@ -41,11 +38,10 @@ const Explore = () => {
 
     const scrollCallback = () => {
         const results = (store.getState() as RootState).searchResults
-        setPosY(window.scrollY)
         if (resultsContainer.current&&results&&results?.partlyLoaded) {
             const rect: DOMRect = resultsContainer.current.getBoundingClientRect();
 
-            if (rect.height+rect.top<window.innerHeight+150) {
+            if (results&&!results.pending&&rect.height+rect.top<window.innerHeight+150) {
                 dispatch(lazyLoadResultsThunk({results: results as ResultsFullRequired, shouldRefreshGlobally: false}))
             }
         }
@@ -64,15 +60,6 @@ const Explore = () => {
         }
     },[resultsContainer.current])
 
-    useEffect(()=>{
-        console.log(posY)
-        window.scrollTo({
-            left: 0,
-            top: posY,
-            //@ts-ignore
-            behavior: "instant"
-        })
-    },[results, posY])
 
     return (
         <div className={"explore-page"}>

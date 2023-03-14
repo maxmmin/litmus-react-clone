@@ -20,21 +20,19 @@ const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (pre
             return action.payload;
         }
 
-        case (`${ApiSearchActions.LAZY_LOAD}/pending`):
-        case (`${ApiSearchActions.REFRESH_RESULTS}/pending`): {
-            let table: Tables;
-            let metaAction = action as unknown as PendingMetaAction;
+        case (`${ApiSearchActions.LAZY_LOAD}/pending`): {
+            const newState: Results = {...prevState!, pending: true}
 
-            if (metaAction.meta.arg.table) {
-                table = metaAction.meta.arg.table;
-            } else if (metaAction.meta.arg.results) {
-                table = metaAction.meta.arg.results.table;
-            }
+            return newState;
+        }
+
+        case (`${ApiSearchActions.REFRESH_RESULTS}/pending`): {
+            let metaAction = action as unknown as PendingMetaAction;
 
             const newState: Results = {
                 data: new Array<Object>(),
                 pending: true,
-                table: table!,
+                table:  metaAction.meta.arg.table!,
                 partlyLoaded: false,
                 index: 0
             }

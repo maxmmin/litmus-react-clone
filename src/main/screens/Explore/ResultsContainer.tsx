@@ -1,7 +1,7 @@
 import {useAppSelector} from "../../redux/hooks";
 import {Tables} from "../../types/explorationParams";
 import GetPersonDto from "../../types/GetPersonDto";
-import {MutableRefObject, useMemo, useState} from "react";
+import {MutableRefObject} from "react";
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import {Results} from "../../redux/actions/ApiSearchActions";
 import GetJurPersonDto from "../../types/GetJurPersonDto";

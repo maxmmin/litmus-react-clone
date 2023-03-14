@@ -107,9 +107,6 @@ const refreshResultsThunk = createAsyncThunk<ResultsFullRequired, RefreshResults
             return rejectWithValue({...new HttpError(401, HttpErrorsNames.UNAUTHENTICATED)})
         }
 
-        dispatch(clearResults())
-
-
         const fetchUrl = getFetchUrl(state.explorationParams, table, rejectWithValue)
 
         const response = await fetch(fetchUrl,{
