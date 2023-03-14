@@ -72,6 +72,7 @@ $opacity-dark: rgba($md-sys-color-on-primary-container-light,0.28);
   top: 0;
   left: 50%;
   transition: 0.5s ease-in-out;
+  z-index: 9999;
   display: flex;
   justify-content: center;
 }

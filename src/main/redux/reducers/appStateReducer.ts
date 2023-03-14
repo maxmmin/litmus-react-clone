@@ -68,6 +68,10 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                                 if (status&&httpErrors[status]===HttpErrorsNames.UNAUTHENTICATED) {
                                     newState.error = {}
                                 }
+
+                                if (status&&httpErrors[status]===HttpErrorsNames.BAD_CREDENTIALS) {
+                                    newState.error = {message: "Невалідні дані"}
+                                }
                             }
                             break;
                         }
@@ -85,7 +89,6 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                     }
 
                 }
-
                 return newState;
             }
 

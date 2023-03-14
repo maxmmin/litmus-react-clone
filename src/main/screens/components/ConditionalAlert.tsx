@@ -31,7 +31,7 @@ function ConditionalAlert () {
                 timers.forEach(timer=>window.clearTimeout(timer))
             }
         }
-    }, [])
+    }, [error])
 
     return (
         <>

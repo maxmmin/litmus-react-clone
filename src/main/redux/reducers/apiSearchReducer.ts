@@ -50,10 +50,12 @@ const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (pre
             const error = action.payload as unknown as HttpError;
 
             if (error?.status) {
-                if (error.status===400) {
-                    return prevState;
+                // only lazy load, because if it's refresh results actions prev state cant be null
+                if (error.status===400&&action.type===`${ApiSearchActions.LAZY_LOAD}/rejected`) {
+                    return {...prevState!, pending: false};
                 }
             }
+
             return null;
         }
 

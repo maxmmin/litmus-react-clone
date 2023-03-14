@@ -56,7 +56,7 @@ const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Table
             const id = (explorationParams.input![table] as {id: string}).id;
 
             if (!id) {
-                return rejectWithValue({...new HttpError(400, HttpErrorsNames.BAD_CREDENTIALS)})
+                throw new HttpError(400, HttpErrorsNames.BAD_CREDENTIALS)
             }
 
             baseUrl += `/${id}`;
@@ -71,7 +71,7 @@ const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Table
             const lastName = fullNameInput.lastName;
 
             if (!firstName||!middleName||!lastName) {
-                return rejectWithValue({...new HttpError(400, HttpErrorsNames.BAD_CREDENTIALS)})
+                throw new HttpError(400, HttpErrorsNames.BAD_CREDENTIALS)
             }
 
             baseUrl += `?lastName=${lastName}&middleName=${middleName}&firstName=${firstName}`
@@ -107,12 +107,18 @@ const refreshResultsThunk = createAsyncThunk<ResultsFullRequired, RefreshResults
             return rejectWithValue({...new HttpError(401, HttpErrorsNames.UNAUTHENTICATED)})
         }
 
-        const fetchUrl = getFetchUrl(state.explorationParams, table, rejectWithValue)
+        let fetchUrl: string = "";
+
+        try {
+            fetchUrl = getFetchUrl(state.explorationParams, table, rejectWithValue)
+        } catch (error) {
+            return rejectWithValue({...(error as HttpError)})
+        }
 
         const response = await fetch(fetchUrl,{
             method: 'GET',
             headers: {
-                ...createAuthHeader(accessToken)
+                // ...createAuthHeader(accessToken)
             }
         })
 
@@ -159,7 +165,13 @@ export const lazyLoadResultsThunk = createAsyncThunk<Results, LazyLoadResultsThu
             return rejectWithValue({...new HttpError(401, HttpErrorsNames.UNAUTHENTICATED)})
         }
 
-        const fetchUrl = getFetchUrl(state.explorationParams, table!, rejectWithValue, results)
+        let fetchUrl: string;
+
+        try {
+            fetchUrl = getFetchUrl(state.explorationParams, table!, rejectWithValue, results)
+        } catch (error) {
+            return rejectWithValue({...(error as HttpError)})
+        }
 
         const response = await fetch(fetchUrl,{
             method: 'GET',
