@@ -58,6 +58,8 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                 let newState: AppState = {...prevState, isRefreshing: false}
 
                 if (action.type.endsWith("/rejected")) {
+                    console.error((action as PayloadAction<HttpError>).payload)
+
                     const clearType = action.type.slice(0,-("/rejected").length);
 
                     switch (clearType) {
