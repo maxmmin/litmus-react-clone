@@ -118,7 +118,7 @@ const refreshResultsThunk = createAsyncThunk<ResultsFullRequired, RefreshResults
         const response = await fetch(fetchUrl,{
             method: 'GET',
             headers: {
-                // ...createAuthHeader(accessToken)
+                ...createAuthHeader(accessToken)
             }
         })
 
