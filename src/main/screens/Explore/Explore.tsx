@@ -25,6 +25,7 @@ const Explore = () => {
     const table = useAppSelector(state => state.explorationParams?.table)
     const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![table!])
     const isInputInvalid = useAppSelector(state => state.explorationParams?.isInvalid)
+    const results = useAppSelector(state => state.searchResults)
 
     const resultsContainer = useRef<HTMLDivElement>(null)
 
@@ -86,8 +87,8 @@ const Explore = () => {
 
                                     <InputGroup/>
 
-                                    <Button onClick={search} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn ${isInputInvalid?'disabled':''}`}>
-                                        Пошук
+                                    <Button disabled={results?.pending} onClick={search} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn ${isInputInvalid?'disabled':''}`}>
+                                        {results?.pending?"Завантаження...":"Пошук"}
                                     </Button>
                                 </Form>
                             </div>

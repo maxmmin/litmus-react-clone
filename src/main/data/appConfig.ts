@@ -18,7 +18,7 @@ const jurPersons = `${api}/jur-persons`
 
 const authHeader = 'Authorization'
 
-const appConfig = {
+const requestsUrls = {
     signIn: `${auth}/sign-in`,
     refreshAccessKey: `${auth}/refresh`,
     getThisUser: auth,
@@ -31,4 +31,4 @@ export const createAuthHeader = (accessToken: string) => ({
     [authHeader]: `Bearer ${accessToken}`
 })
 
-export default appConfig
+export default requestsUrls

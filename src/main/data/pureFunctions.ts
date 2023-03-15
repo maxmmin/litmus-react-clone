@@ -100,4 +100,4 @@ export const setAuthRefreshingTimer = (authentication: AuthenticationReducible, 
 
 
 
-export {checkAuthorization, logOut,}
+export {checkAuthorization, logOut}

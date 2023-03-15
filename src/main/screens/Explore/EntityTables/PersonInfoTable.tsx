@@ -5,8 +5,6 @@ type Props = {
     person: GetPersonDto
 }
 
-
-
 const PersonInfoTable = ({person}: Props) => {
     return (
     <div className={"entity-container person-container"}>

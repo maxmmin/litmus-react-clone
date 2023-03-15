@@ -2,9 +2,9 @@ type CreatePersonDto = {
     firstName: string;
     middleName: string;
     lastName: string;
-    passportNumber?: number;
-    passportSerial?: number;
-    rnokppCode?: number;
+    passportNumber?: string;
+    passportSerial?: string;
+    rnokppCode?: string;
     dateOfBirth?: string;
     place?: any
 }

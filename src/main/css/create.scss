@@ -41,3 +41,30 @@
   width: 100%;
   margin-top: 10px;
 }
+
+.apply-person-modal__found-person-container .person-container {
+  padding: 15px;
+  overflow-x: auto;
+}
+
+.apply-person__input-container {
+    position: relative;
+    display: flex;
+}
+
+.apply-person__loader-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+}
+
+.apply-person__input-container .application-loader {
+  width: 20px;
+  height: 20px;
+}
+
+.jur-person-creation__input.owner, .jur-person-creation__input.ben-owner {
+  text-align: start;
+}

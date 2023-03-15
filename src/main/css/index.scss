@@ -53,6 +53,11 @@ img {
   background-color: $md-sys-color-on-primary-light
 }
 
+.spinner-border.application-loader {
+  border-color: $md-sys-color-inverse-primary-light;
+  border-right-color: transparent;
+}
+
 $opacity-dark: rgba($md-sys-color-on-primary-container-light,0.28);
 
 .form-control:focus, .form-select:focus {
