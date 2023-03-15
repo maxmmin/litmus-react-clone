@@ -98,6 +98,17 @@ export const setAuthRefreshingTimer = (authentication: AuthenticationReducible, 
     }, refreshCallbackDelayInMs)
 }
 
+export const onWakeUp = (callback: Function): NodeJS.Timer => {
+    const TIMEOUT = 20000;
+    let lastTime = (new Date()).getTime();
 
+    return setInterval(function() {
+        const currentTime = (new Date()).getTime();
+        if (currentTime > (lastTime + TIMEOUT + 2000)) {
+            callback()
+        }
+        lastTime = currentTime;
+    }, TIMEOUT);
+}
 
 export {checkAuthorization, logOut}
