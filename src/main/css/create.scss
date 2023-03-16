@@ -52,15 +52,16 @@
     display: flex;
 }
 
-.apply-person__loader-container {
+.loader-container {
   height: 100%;
   display: flex;
   align-items: center;
   position: absolute;
   right: 10px;
+  top: 0;
 }
 
-.apply-person__input-container .application-loader {
+.loader-container .application-loader {
   width: 20px;
   height: 20px;
 }

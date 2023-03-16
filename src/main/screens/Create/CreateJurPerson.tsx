@@ -1,10 +1,11 @@
 import Form from "react-bootstrap/Form";
-import {setLocalInput} from "../../redux/actions/ExplorationParamsActions";
 import {searchInputGroupsKeyPressHandler as keyPressHandler} from "../../data/pureFunctions";
 import React, {useState} from "react";
 import ApplyPersonModal from "./ApplyPersonModal";
 import {useAppSelector} from "../../redux/hooks";
 import GetPersonDto from "../../types/GetPersonDto";
+import CreationGeoInput from "./CreationGeoInput";
+import {Tables} from "../../types/explorationParams";
 
 export enum ModalMode {
     SET_OWNER = "SET_OWNER",
@@ -81,6 +82,11 @@ const CreateJurPerson = () => {
                         />
                     </div>
 
+                </Form.Group>
+
+                <Form.Group className="mb-3 creation-input-group__item">
+                    <Form.Label>Адреса</Form.Label>
+                    <CreationGeoInput table={Tables.JUR_PERSONS}/>
                 </Form.Group>
 
                 <button className="creation-input-group__btn btn btn-primary">Створити юридичну особу</button>

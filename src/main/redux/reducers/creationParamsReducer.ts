@@ -7,6 +7,7 @@ import CreationParamsActions, {
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
 import CreateJurPersonDto from "../../types/CreateJurPersonDto";
+import AuthActions from "../actions/AuthActions";
 
 const initialState: CreationParams = {
     table: Tables.PERSONS,
@@ -27,6 +28,10 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
 
         case CreationParamsActions.UPDATE_JUR_PERSON_DATA: {
             return {...prevState, jurPersonCreationData: {...prevState.jurPersonCreationData, ...(action.payload as unknown as CreateJurPersonDto)}}
+        }
+
+        case AuthActions.CLEAR_AUTH: {
+            return initialState
         }
 
         default: {

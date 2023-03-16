@@ -1,0 +1,29 @@
+@import "colors";
+
+.geo-autocomplete {
+  position: relative;
+}
+
+.autocomplete-items {
+  position: absolute;
+  top: 120%;
+  left: 0;
+  right: 0;
+  padding: 0;
+  text-decoration: none;
+  list-style-type: none;
+  background: $md-sys-color-primary-container-light;
+}
+
+.autocomplete-items__item {
+  padding: 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.autocomplete-items__item:hover {
+  background: rgba($md-sys-color-outline-light, 0.1);
+}

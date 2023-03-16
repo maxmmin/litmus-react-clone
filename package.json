@@ -2,6 +2,10 @@
   "name": "litmus-react-app",
   "version": "0.1.0",
   "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxmmin/litmus-react/"
+  },
   "dependencies": {
     "@redux-devtools/extension": "^3.2.5",
     "@reduxjs/toolkit": "^1.9.2",
@@ -11,12 +15,15 @@
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.12",
     "@types/react": "^18.0.28",
+    "@types/react-autocomplete": "^1.8.6",
     "@types/react-dom": "^18.0.11",
     "bootstrap": "^5.2.3",
     "jwt-decode": "^3.1.2",
+    "leaflet-geosearch": "^3.7.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
+    "react-leaflet": "^4.2.1",
     "react-redux": "^8.0.5",
     "react-router": "^6.8.1",
     "react-router-dom": "^6.8.1",

@@ -1,4 +1,5 @@
 import GetPersonDto from "./GetPersonDto";
+import {Place} from "./Place";
 
 type CreateJurPersonDto = {
     name: string;
@@ -6,6 +7,7 @@ type CreateJurPersonDto = {
     dateOfRegistration: string;
     owner: GetPersonDto | null;
     benOwner: GetPersonDto | null;
+    address: Place | null
 }
 
 export default CreateJurPersonDto;
