@@ -1,33 +1,32 @@
 import Form from "react-bootstrap/Form";
-import {searchInputGroupsKeyPressHandler as keyPressHandler} from "../../data/pureFunctions";
+import {searchInputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
 import React, {useState} from "react";
-import ApplyPersonModal from "./ApplyPersonModal";
-import {useAppSelector} from "../../redux/hooks";
-import GetPersonDto from "../../types/GetPersonDto";
-import {Tables} from "../../types/explorationParams";
-import CreationScreenGeo from "./CreationScreenGeo";
+import ApplyPersonModal from "../ApplyPersonModal";
+import {useAppSelector} from "../../../redux/hooks";
+import GetPersonDto from "../../../types/GetPersonDto";
+import {Tables} from "../../../types/explorationParams";
+import CreationGeoModal from "../geo/CreationGeoModal";
+import {CreationModalModes, CreationModalSettings} from "../CreationView";
 
-export enum ModalMode {
-    SET_OWNER = "SET_OWNER",
-    SET_BEN_OWNER = "SET_BEN_OWNER"
-}
-
-export type ModalSettings = {
-    mode: ModalMode
-}   | null
 
 const getShortInfo = (person: GetPersonDto): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
 
 const CreateJurPerson = () => {
-    const [modalSettings, setModalSettings] = useState<ModalSettings>(null);
+    const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
+
+    const closeModal = () => setModalSettings(null)
 
     const owner = useAppSelector(state => state.creationParams?.jurPersonCreationData.owner)
 
     const benOwner = useAppSelector(state => state.creationParams?.jurPersonCreationData.benOwner)
+    
+    const address = useAppSelector(state => state.creationParams?.jurPersonCreationData.address)
 
     return (
         <>
-            <ApplyPersonModal modalSettings={modalSettings} setModalSettings={setModalSettings}/>
+            <ApplyPersonModal modalSettings={modalSettings} close={closeModal}/>
+            
+            <CreationGeoModal table={Tables.JUR_PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
 
             <Form className="creation-input-group">
 
@@ -49,7 +48,7 @@ const CreateJurPerson = () => {
                     <Form.Label>Власник юридичної особи</Form.Label>
                     <input type={"button"} autoComplete={"new-password"} className={`jur-person-creation__input owner form-control`} placeholder="Оберіть власника юридичної особи"
                            onClick={()=>{
-                               setModalSettings({mode: ModalMode.SET_OWNER})
+                               setModalSettings({mode: CreationModalModes.SET_OWNER})
                            }}
                            value={owner?getShortInfo(owner):"Додати особу"}
                     />
@@ -59,7 +58,7 @@ const CreateJurPerson = () => {
                     <Form.Label>Бенефіціарний власник юридичної особи</Form.Label>
                     <input type={"button"} autoComplete={"new-password"} className={`jur-person-creation__input ben-owner form-control`} placeholder="Оберіть бенефіціарного власника юридичної особи"
                            onClick={()=>{
-                               setModalSettings({mode: ModalMode.SET_BEN_OWNER})
+                               setModalSettings({mode: CreationModalModes.SET_BEN_OWNER})
                            }}
                            value={benOwner?getShortInfo(benOwner):"Додати особу"}
                     />
@@ -86,7 +85,11 @@ const CreateJurPerson = () => {
 
                 <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Адреса</Form.Label>
-                    <CreationScreenGeo table={Tables.JUR_PERSONS}/>
+                    <input type={"button"} className={"jur-person-creation__input address form-control"} value={address?address.label:"Додати адресу"}
+                        onClick={()=>{
+                            setModalSettings({mode: CreationModalModes.SET_GEOLOCATION})
+                        }}
+                    />
                 </Form.Group>
 
                 <button className="creation-input-group__btn btn btn-primary">Створити юридичну особу</button>

@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import {ModalMode, ModalSettings} from "./CreateJurPerson";
 import requestsUrls, {createAuthHeader} from "../../data/appConfig";
 import {Tables} from "../../types/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
@@ -12,13 +11,15 @@ import CreateJurPersonDto from "../../types/CreateJurPersonDto";
 import {updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
 import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
+import {CreationModalModes, CreationModalSettings} from "./CreationView";
+import {Location} from "../../types/Location";
 
 type Props = {
-    modalSettings: ModalSettings,
-    setModalSettings: (prev: ModalSettings) => void
+    modalSettings: CreationModalSettings,
+    close: ()=>void
 }
 
-function ApplyPersonModal ({modalSettings, setModalSettings}: Props) {
+function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const dispatch = useAppDispatch();
 
@@ -36,7 +37,7 @@ function ApplyPersonModal ({modalSettings, setModalSettings}: Props) {
         if (modalSettings) {
             const state = store.getState() as RootState;
             switch (modalSettings?.mode) {
-                case ModalMode.SET_OWNER: {
+                case CreationModalModes.SET_OWNER: {
                     const owner = state.creationParams?.jurPersonCreationData.owner;
                     if (owner) {
                         setPerson(owner)
@@ -44,7 +45,7 @@ function ApplyPersonModal ({modalSettings, setModalSettings}: Props) {
                     break
                 }
 
-                case ModalMode.SET_BEN_OWNER: {
+                case CreationModalModes.SET_BEN_OWNER: {
                     const benOwner = state.creationParams?.jurPersonCreationData.benOwner;
                     if (benOwner) {
                         setPerson(benOwner)
@@ -106,19 +107,19 @@ function ApplyPersonModal ({modalSettings, setModalSettings}: Props) {
     }
 
     const handleClose = () => {
-        setModalSettings(null)
+        close()
         setPerson(null)
     };
 
     const applyPerson = () => {
         const payload: Partial<CreateJurPersonDto> = {}
         switch (modalSettings?.mode) {
-            case ModalMode.SET_OWNER: {
+            case CreationModalModes.SET_OWNER: {
                 payload.owner = person;
                 break
             }
 
-            case ModalMode.SET_BEN_OWNER: {
+            case CreationModalModes.SET_BEN_OWNER: {
                 payload.benOwner = person;
                 break
             }
@@ -130,18 +131,24 @@ function ApplyPersonModal ({modalSettings, setModalSettings}: Props) {
     const clearPerson = () => {
         const payload: Partial<CreateJurPersonDto> = {}
         switch (modalSettings?.mode) {
-            case ModalMode.SET_OWNER: {
+            case CreationModalModes.SET_OWNER: {
                 payload.owner = null;
                 break
             }
 
-            case ModalMode.SET_BEN_OWNER: {
+            case CreationModalModes.SET_BEN_OWNER: {
                 payload.benOwner = null;
                 break
             }
         }
         dispatch(updateJurPersonCreationParams(payload))
         handleClose()
+    }
+
+    // update this list every new apply person modal;
+
+    if (modalSettings?.mode!==CreationModalModes.SET_OWNER&&modalSettings?.mode!==CreationModalModes.SET_BEN_OWNER) {
+        return null;
     }
 
     return (

@@ -1,13 +1,13 @@
 import {Tables} from "../../types/explorationParams";
-import CreatePerson from "./CreatePerson";
-import CreateJurPerson from "./CreateJurPerson";
-import CreateUser from "./CreateUser";
+import CreatePerson from "./person/CreatePerson";
+import CreateJurPerson from "./jur-person/CreateJurPerson";
+import CreateUser from "./user/CreateUser";
 
 type Props = {
     table: Tables
 }
 
-const CreateInputSection = ({table}: Props) => {
+const CreationInputSection = ({table}: Props) => {
     switch (table) {
         case Tables.PERSONS: return <CreatePerson/>
         case Tables.JUR_PERSONS: return <CreateJurPerson/>
@@ -17,4 +17,4 @@ const CreateInputSection = ({table}: Props) => {
     }
 }
 
-export default CreateInputSection
+export default CreationInputSection

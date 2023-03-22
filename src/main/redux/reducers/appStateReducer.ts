@@ -1,4 +1,4 @@
-import AppState, {AppStateReducible, Meta} from "../../types/AppState";
+import AppState, {AppStateReducible, GmapsApiResponse, Meta} from "../../types/AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateActions from "../actions/AppStateActions";
@@ -7,7 +7,7 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import ApiSearchActions from "../actions/ApiSearchActions";
 
-const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false}
+const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null}
 
 type PendingMetaAction = {
     meta: {
@@ -40,6 +40,11 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
 
         case AuthActions.CLEAR_AUTH: {
             return initialState
+        }
+
+        case AppStateActions.SET_MAPS_API_RESPONSE: {
+            const act = action as PayloadAction<GmapsApiResponse>
+            return {...prevState, gmapsApiState: act.payload}
         }
 
         default: {

@@ -61,7 +61,7 @@ export type CreationParams = {
     table: Tables,
     personCreationData: CreatePersonDto,
     jurPersonCreationData: CreateJurPersonDto,
-    userCreationData: CreateUserDto
+    userCreationData: CreateUserDto,
 }
 
 export type CreationParamsReducible = CreationParams | undefined

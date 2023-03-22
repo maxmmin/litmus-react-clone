@@ -10,10 +10,10 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import {roles} from "./types/Role";
 import Explore from "./screens/Explore/Explore";
-import {AppStateActions,getAppStateAction} from "./redux/actions/AppStateActions";
+import {AppStateActions,switchAppState} from "./redux/actions/AppStateActions";
 import ApplicationStateManager from "./screens/components/ApplicationStateManager";
 import ConditionalAlert from "./screens/components/ConditionalAlert";
-import Create from "./screens/Create/Create";
+import CreationView from "./screens/Create/CreationView";
 
 
 function App() {
@@ -26,7 +26,7 @@ function App() {
                           const isMenuOpened = appStore.appState?.isHeaderMenuOpened;
 
                           if (isMenuOpened) {
-                              dispatch(getAppStateAction(AppStateActions.HEADER_MENU_CLOSE))
+                              dispatch(switchAppState(AppStateActions.HEADER_MENU_CLOSE))
                           }
                       }}>
                           <ConditionalAlert/>
@@ -40,7 +40,7 @@ function App() {
                               }/>
 
                               <Route path={"/create"} element={
-                                  <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Create/>} neededPermissions={roles.USER.permissions}/>
+                                  <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<CreationView/>} neededPermissions={roles.USER.permissions}/>
                               }/>
 
                               <Route path="/sign-in" element={<SignIn/>}/>

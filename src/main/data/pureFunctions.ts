@@ -5,6 +5,8 @@ import {AuthenticationReducible} from "../types/Authentication";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
 import {clearAuthRefreshTimer, setTimers, TimersReducible} from "../redux/actions/TimersActions";
+import {getGeocode} from "use-places-autocomplete";
+import Geo from "../types/Geo";
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)
@@ -109,6 +111,24 @@ export const onWakeUp = (callback: Function): NodeJS.Timer => {
         }
         lastTime = currentTime;
     }, TIMEOUT);
+}
+
+export const geocode = async (geoData: Geo|string) => {
+    const requestArgs:  google.maps.GeocoderRequest = {}
+
+    if (typeof geoData==="string") {
+        requestArgs.address = geoData;
+    }   else {
+        requestArgs.location = {
+            lat: geoData.lat,
+            lng: geoData.lng
+        }
+    }
+
+    return await getGeocode({
+        language: "ua",
+        ...requestArgs
+    })
 }
 
 export {checkAuthorization, logOut}

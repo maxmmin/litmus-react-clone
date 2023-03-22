@@ -1,18 +1,33 @@
 @import "colors";
 
-.geo-autocomplete {
+
+.geo-autocomplete-container {
   position: relative;
+  z-index: 4;
 }
 
-.autocomplete-items {
+.autocomplete-items-popover {
   position: absolute;
-  top: 120%;
+  top: 130%;
   left: 0;
   right: 0;
   padding: 0;
+  margin: 0;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.autocomplete-items-list {
   text-decoration: none;
   list-style-type: none;
-  background: $md-sys-color-primary-container-light;
+  background: $md-sys-color-background-light;
+  padding: 0;
+  margin: 0;
+}
+
+.geo-modal-map-container {
+  height: 500px;
+  width: 100%;
+  margin-top: 30px;
 }
 
 .autocomplete-items__item {

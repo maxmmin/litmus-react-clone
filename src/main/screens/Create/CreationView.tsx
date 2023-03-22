@@ -8,9 +8,19 @@ import React, {ChangeEvent, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
 import {updateCreationParams} from "../../redux/actions/CreationParamsActions";
-import CreateInputSection from "./CreateInputSection";
+import CreationInputSection from "./CreationInputSection";
 
-const Create = () => {
+export enum CreationModalModes {
+    SET_OWNER = "SET_OWNER",
+    SET_BEN_OWNER = "SET_BEN_OWNER",
+    "SET_GEOLOCATION" = "SET_GEOLOCATION"
+}
+
+export type CreationModalSettings = {
+    mode: CreationModalModes
+}   | null
+
+const CreationView = () => {
     const dispatch = useAppDispatch();
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -43,11 +53,11 @@ const Create = () => {
                        </Form.Select>
                    </div>
 
-                   <CreateInputSection table={table!}/>
+                   <CreationInputSection table={table!}/>
                </div>
             </main>
         </div>
     )
 }
 
-export default Create;
+export default CreationView;
