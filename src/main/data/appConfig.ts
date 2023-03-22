@@ -6,6 +6,8 @@ const host = "http://localhost:8081";
 
 export const entitiesPerPage = 50;
 
+export const geoApiKey = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA"
+
 const auth = `${host}/auth`
 
 const api = `${host}/api`

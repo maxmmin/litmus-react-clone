@@ -1,38 +1,75 @@
 import {geoApiKey} from "../../data/appConfig";
-import GoogleMapReact, {Coords} from "google-map-react";
-import React, {useEffect, useRef, useState} from "react";
-import {GeoLocationIcon} from "../../data/icons";
+import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Location} from "../../types/Location";
-import ReactGoogleAutocomplete from "react-google-autocomplete";
-
-
-const GeoMarker = ({lat, lng}: {lat: number, lng: number}) => {
-    return <GeoLocationIcon className={""} style={{
-        position: 'relative',
-        left: '-22.5px',
-        top: '-50px',
-        width: '45px',
-        height: '45px'
-    }} color={"#6750A4"}/>
-}
+import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import {Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover} from "@reach/combobox";
+import usePlacesAutocomplete, {
+    getGeocode,
+} from "use-places-autocomplete";
+import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
 
 type Geo = {
     lat: number,
     lng: number
 }
 
-const defaultMapPosition: Coords = {
+const geocode = async (geoData: Geo|string) => {
+    const requestArgs:  google.maps.GeocoderRequest = {}
+
+    if (typeof geoData==="string") {
+        requestArgs.address = geoData;
+    }   else {
+        requestArgs.location = {
+            lat: geoData.lat,
+            lng: geoData.lng
+        }
+    }
+
+    return await getGeocode({
+        language: "ua",
+        ...requestArgs
+    })
+}
+
+const defaultMapPosition: Geo = {
     lat: 50.45466,
     lng: 30.5238
 }
 
-const GeoComponent = () => {
-    const [inputValue, setInputValue] = useState<string>("")
+const libraries: Libraries = ["places"];
 
+const SelectGeoComponent = () => {
+    const { isLoaded } = useLoadScript({
+    googleMapsApiKey: geoApiKey,
+    libraries: libraries,
+});
+
+if (!isLoaded) return <div>Loading...</div>;
+return <Map />;
+}
+
+const Map = () => {
     const [location, setLocation] = useState<Location|null>(null)
 
-    const handlePlaceCompleteSelect = (place: google.maps.places.PlaceResult) => {
-            setLocation({label: place.formatted_address!, lat: place.geometry!.location!.lat(), lng: place.geometry!.location!.lng()})
+    const handlePlaceCompleteSelect = async (place: google.maps.places.PlaceResult) => {
+        console.log(place)
+        console.log("i work")
+        const geocoder = new google.maps.Geocoder();
+        // i should do request with this coords because there's a bug in google maps api. Can't select normal language
+        const geocoderResponse = await geocoder.geocode({
+            location: {
+                lng: place.geometry?.location?.lat()!,
+                lat: place.geometry?.location?.lng()!
+            },
+            region: "UA",
+            language: "uk"
+        })
+
+        const result = geocoderResponse.results[0]
+
+        if (result) {
+            setLocation({label: result.formatted_address, lat: result.geometry.location.lat(), lng: result.geometry.location.lat()})
+        }
     }
 
     const handleMapClick = async ({lat,lng}: Geo) => {
@@ -43,7 +80,8 @@ const GeoComponent = () => {
                 lng: lng,
                 lat: lat
             },
-            language: "ru"
+            region: "UA",
+            language: "uk"
         })
 
         if (geocoderResponse.results.length > 0) {
@@ -56,40 +94,82 @@ const GeoComponent = () => {
         }
     }
 
-    useEffect(()=>{
-        if (location?.label!==undefined&&(inputValue!==location.label)) {
-            setInputValue(location.label)
-        }
-    }, [location])
+    return (
+    <>
+        <div className="places-container">
+            <PlacesAutocomplete address={location?location.label:""} setLocation={setLocation} />
+        </div>
 
+        <GoogleMap
+            center={location?{lat: location.lat, lng: location.lng}:defaultMapPosition}
+            zoom={10}
+            mapContainerStyle={{
+                width: "500px",
+                height: "500px"
+            }}
+            onClick={async (place)=>{
+                const results = await geocode({lat: place.latLng?.lat()!, lng: place.latLng?.lng()!})
+                const result = results[0];
+                setLocation({label: result.formatted_address, lat: result.geometry.location.lat(), lng: result.geometry.location.lng()})
+            }}
 
-    return <GoogleMapReact
-        bootstrapURLKeys={{
-            key: geoApiKey,
-            language: 'ru',
-            region: 'UA',
-            libraries: ["places"]
-        }}
-        center={location?{lat: location.lat, lng: location.lng}:defaultMapPosition}
-        defaultZoom={10}
-        style={{height: '500px', width: '500px'}}
-        onClick={handleMapClick}
-    >
-        <>
-            <ReactGoogleAutocomplete
-                style={{ width: "100%", height: "40px", paddingLeft: 16, marginTop: 2, marginBottom: "2rem" }}
-                value={inputValue}
-                apiKey={geoApiKey}
-                types={["region"]}
-                onPlaceSelected={handlePlaceCompleteSelect}
-                onInput={(e: any)=>{
-                    const event = e as React.ChangeEvent<HTMLInputElement>
-                    setInputValue(event.currentTarget.value)
-                }}
-            />
-        </>
-        {location&&<GeoMarker lat={location.lat} lng={location.lng}/>}
-    </GoogleMapReact>
+        >
+            <>
+                {location && <Marker position={location} />}
+            </>
+        </GoogleMap>
+    </>
+    )
 }
 
-export default GeoComponent;
+type AutocompleteProps = {
+    address: string,
+    setLocation: Dispatch<SetStateAction<Location | null>>;
+}
+
+const PlacesAutocomplete = ({address,setLocation}: AutocompleteProps) => {
+    const {
+        ready,
+        value,
+        setValue,
+        suggestions: { status, data },
+        clearSuggestions,
+    } = usePlacesAutocomplete();
+
+    const handleSelect = async (address: string) => {
+        setValue(address, false);
+        clearSuggestions();
+
+        const results = await geocode(address)
+        const result = results[0]
+
+        setLocation({ lat: result.geometry.location.lat()!, lng: result.geometry.location.lng()!, label: result.formatted_address});
+    };
+
+    useEffect(()=>{
+        setValue(address)
+    }, [address])
+
+    return (
+        <Combobox onSelect={handleSelect}>
+            <ComboboxInput
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
+                disabled={!ready}
+                className="combobox-input"
+                placeholder="Search an address"
+            />
+            <ComboboxPopover>
+                <ComboboxList>
+                    {status === "OK" &&
+                        data.map(({ place_id, description }: {place_id: string, description: string}) => (
+                            <ComboboxOption key={place_id} value={description} />
+                        ))}
+                </ComboboxList>
+            </ComboboxPopover>
+        </Combobox>
+    );
+}
+
+
+export default SelectGeoComponent;

@@ -4,7 +4,7 @@ import CreatePersonDto from "../../types/CreatePersonDto";
 import CreateJurPersonDto from "../../types/CreateJurPersonDto";
 import CreateUserDto from "../../types/CreateUserDto";
 import GetPersonDto from "../../types/GetPersonDto";
-import {Place} from "../../types/Place";
+import {Location} from "../../types/Location";
 
 enum CreationParamsActions {
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
@@ -54,7 +54,7 @@ export class InitJurPersonCreationParams implements CreateJurPersonDto {
     edrpou: string = "";
     name: string = "";
     owner: GetPersonDto | null = null;
-    address: Place | null = null;
+    address: Location | null = null;
 }
 
 export type CreationParams = {

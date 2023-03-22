@@ -1,3 +1,5 @@
+import {CSSProperties} from "react";
+
 type ComponentPropsType = {
     className: string
 }
@@ -38,3 +40,12 @@ export const BackButtonIcon = ({className}: ComponentPropsType) =>
         <path fillRule="evenodd"
               d="M4.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H14.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
     </svg>
+
+export const GeoLocationIcon = ({ color, className, style }: ComponentPropsType&{color: string, style?: CSSProperties}) => (
+    <svg style={style?{...style}:{}} xmlns="http://www.w3.org/2000/svg" className={className} xmlnsXlink="http://www.w3.org/1999/xlink" version="1.1" width="256" height="256" viewBox="0 0 256 256" xmlSpace="preserve">
+        <g style={{ stroke: 'none', strokeWidth: 0, strokeDasharray: 'none', strokeLinecap: 'butt', strokeLinejoin: 'miter', strokeMiterlimit: 10, fill: 'none', fillRule: 'nonzero', opacity: 1 }} transform="translate(1.4065934065934016 1.4065934065934016) scale(2.81 2.81)">
+            <path d="M 45 90 c -1.415 0 -2.725 -0.748 -3.444 -1.966 l -4.385 -7.417 C 28.167 65.396 19.664 51.02 16.759 45.189 c -2.112 -4.331 -3.175 -8.955 -3.175 -13.773 C 13.584 14.093 27.677 0 45 0 c 17.323 0 31.416 14.093 31.416 31.416 c 0 4.815 -1.063 9.438 -3.157 13.741 c -0.025 0.052 -0.053 0.104 -0.08 0.155 c -2.961 5.909 -11.41 20.193 -20.353 35.309 l -4.382 7.413 C 47.725 89.252 46.415 90 45 90 z" style={{ stroke: 'none', strokeWidth: 1, strokeDasharray: 'none', strokeLinecap: 'round', strokeLinejoin: 'miter', strokeMiterlimit: 10, fill: color, fillRule: 'nonzero', opacity: 1 }} transform="matrix(1 0 0 1 0 0)" />
+            <path d="M 45 45.678 c -8.474 0 -15.369 -6.894 -15.369 -15.368 S 36.526 14.941 45 14.941 c 8.474 0 15.368 6.895 15.368 15.369 S 53.474 45.678 45 45.678 z" style={{ stroke: 'none', strokeWidth: 1, strokeDasharray: 'none', strokeLinecap: 'round', strokeLinejoin: 'miter', strokeMiterlimit: 10, fill: '#FFFFFF', fillRule: 'nonzero', opacity: 1 }} transform="matrix(1 0 0 1 0 0)" />
+        </g>
+    </svg>
+);

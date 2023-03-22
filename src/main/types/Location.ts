@@ -1,5 +1,5 @@
 export type Location = {
     label: string,
-    latitude: number,
-    longitude: number
+    lat: number,
+    lng: number
 }

@@ -4,8 +4,8 @@ import React, {useState} from "react";
 import ApplyPersonModal from "./ApplyPersonModal";
 import {useAppSelector} from "../../redux/hooks";
 import GetPersonDto from "../../types/GetPersonDto";
-import CreationGeoInput from "./CreationGeoInput";
 import {Tables} from "../../types/explorationParams";
+import CreationScreenGeo from "./CreationScreenGeo";
 
 export enum ModalMode {
     SET_OWNER = "SET_OWNER",
@@ -86,7 +86,7 @@ const CreateJurPerson = () => {
 
                 <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Адреса</Form.Label>
-                    <CreationGeoInput table={Tables.JUR_PERSONS}/>
+                    <CreationScreenGeo table={Tables.JUR_PERSONS}/>
                 </Form.Group>
 
                 <button className="creation-input-group__btn btn btn-primary">Створити юридичну особу</button>

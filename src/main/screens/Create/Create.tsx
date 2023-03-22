@@ -9,7 +9,6 @@ import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
 import {updateCreationParams} from "../../redux/actions/CreationParamsActions";
 import CreateInputSection from "./CreateInputSection";
-import CreationGeoInput from "./CreationGeoInput";
 
 const Create = () => {
     const dispatch = useAppDispatch();
