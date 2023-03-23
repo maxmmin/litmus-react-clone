@@ -3,8 +3,9 @@ import {Tables} from "../../../types/explorationParams";
 import {Modal, ModalDialog} from "react-bootstrap";
 import React, {Dispatch, SetStateAction, useEffect, useMemo, useState} from "react";
 import Button from "react-bootstrap/Button";
-import {useAppSelector} from "../../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {Location} from "../../../types/Location";
+import {updateJurPersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 
 type Props = {
     table: Tables,
@@ -13,6 +14,8 @@ type Props = {
 }
 
 const CreationGeoModal = ({table, show, close}: Props) => {
+
+    const dispatch = useAppDispatch()
 
     const [location, setLocation] = useState<Location|null>(null)
 
@@ -29,15 +32,28 @@ const CreationGeoModal = ({table, show, close}: Props) => {
     }
 
     const clearGeo = () => {
-
+        switch (table) {
+            case Tables.JUR_PERSONS: {
+                dispatch(updateJurPersonCreationParams({address: null}))
+            }
+        }
+        handleClose()
     }
 
     const applyGeo = () => {
-        switch (table) {
-
+        if (location) {
+            switch (table) {
+                case Tables.JUR_PERSONS: {
+                    dispatch(updateJurPersonCreationParams({address: location}))
+                }
+            }
+            handleClose()
         }
     }
 
+    useEffect(()=>{
+        setLocation(geoLocation!)
+    }, [show, table])
 
 
     return (

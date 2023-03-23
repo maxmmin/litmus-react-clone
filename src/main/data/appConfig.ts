@@ -1,4 +1,5 @@
 import {Tables} from "../types/explorationParams";
+import {RequestOptions} from "use-places-autocomplete";
 
 const host = "http://localhost:8081";
 
@@ -7,6 +8,11 @@ const host = "http://localhost:8081";
 export const entitiesPerPage = 50;
 
 export const geoApiKey = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA"
+
+export const gmapsRegionOptions: {region: string, language: string} = {
+    region: "UA",
+    language: "ua"
+}
 
 const auth = `${host}/auth`
 

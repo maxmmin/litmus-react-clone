@@ -1,8 +1,7 @@
 import {geoApiKey} from "../../../data/appConfig";
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Location} from "../../../types/Location";
-import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
-import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
+import { GoogleMap, Marker } from "@react-google-maps/api";
 import Geo from "../../../types/Geo";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import {geocode} from "../../../data/pureFunctions";
@@ -36,7 +35,7 @@ const Map = ({location, setLocation}: LocationProps) => {
 
         <GoogleMap
             center={location?{lat: location.lat, lng: location.lng}:defaultMapPosition}
-            zoom={10}
+            zoom={15}
             mapContainerClassName={"geo-modal-map-container"}
             onClick={async (place)=>{
                 const results = await geocode({lat: place.latLng?.lat()!, lng: place.latLng?.lng()!})

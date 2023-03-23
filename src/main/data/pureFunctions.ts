@@ -7,6 +7,7 @@ import React from "react";
 import {clearAuthRefreshTimer, setTimers, TimersReducible} from "../redux/actions/TimersActions";
 import {getGeocode} from "use-places-autocomplete";
 import Geo from "../types/Geo";
+import {gmapsRegionOptions} from "./appConfig";
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)
@@ -126,8 +127,8 @@ export const geocode = async (geoData: Geo|string) => {
     }
 
     return await getGeocode({
-        language: "ua",
-        ...requestArgs
+        ...requestArgs,
+        ...gmapsRegionOptions
     })
 }
 

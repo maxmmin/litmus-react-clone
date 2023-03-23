@@ -3,6 +3,7 @@ import {Location} from "../../../types/Location";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import {Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover} from "@reach/combobox";
 import {geocode} from "../../../data/pureFunctions";
+import {gmapsRegionOptions} from "../../../data/appConfig";
 
 
 type AutocompleteProps = {
@@ -16,7 +17,11 @@ const PlacesAutocomplete = ({address,setLocation}: AutocompleteProps) => {
         setValue,
         suggestions: { status, data },
         clearSuggestions,
-    } = usePlacesAutocomplete();
+    } = usePlacesAutocomplete({
+        requestOptions: {
+            ...gmapsRegionOptions
+        }
+    });
 
     const [inputValue, setInputValue] = useState<string>("")
 
