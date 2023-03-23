@@ -6,6 +6,7 @@ import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url"
 import Geo from "../../../types/Geo";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import {geocode} from "../../../data/pureFunctions";
+import {useAppSelector} from "../../../redux/hooks";
 
 
 const defaultMapPosition: Geo = {
@@ -19,11 +20,11 @@ type LocationProps = {
     setLocation: Dispatch<SetStateAction<Location|null>>
 }
 
-const SelectGeoComponent = React.memo(({location, setLocation}: LocationProps) => {
-    // if (!isLoaded) return <div>Loading...</div>;
-    console.log("render")
+const SelectGeoComponent = ({location, setLocation}: LocationProps) => {
+    const isLoaded = useAppSelector(state => state.appState?.gmapsApiState?.isLoaded)
+    if (!isLoaded) return <div>Loading...</div>;
     return <Map location={location} setLocation={setLocation} />;
-})
+}
 
 const Map = ({location, setLocation}: LocationProps) => {
 
