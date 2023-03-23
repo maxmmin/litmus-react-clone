@@ -7,6 +7,8 @@ import GetPersonDto from "../../../types/GetPersonDto";
 import {Tables} from "../../../types/explorationParams";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalModes, CreationModalSettings} from "../CreationView";
+import requestsUrls, {createAuthHeader} from "../../../data/appConfig";
+import store from "../../../redux/store";
 
 
 const getShortInfo = (person: GetPersonDto): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
@@ -92,11 +94,19 @@ const CreateJurPerson = () => {
                     />
                 </Form.Group>
 
-                <button className="creation-input-group__btn btn btn-primary">Створити юридичну особу</button>
+                <button onClick={createJurPerson} className="creation-input-group__btn btn btn-primary">Створити юридичну особу</button>
 
             </Form>
         </>
 )
+}
+
+const createJurPerson = () => {
+    fetch(requestsUrls[Tables.JUR_PERSONS], {
+        headers: {
+            ...createAuthHeader(store.getState().authentication?.accessToken!)
+        }
+    })
 }
 
 export default CreateJurPerson;

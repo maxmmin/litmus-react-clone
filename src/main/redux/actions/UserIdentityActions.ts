@@ -4,7 +4,7 @@ import requestsUrls, {createAuthHeader} from "../../data/appConfig";
 import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import {roles} from "../../types/Role";
 import {isInvalid} from "../../data/pureFunctions";
-import {Meta} from "../../types/AppState";
+import {MetaArg} from "../../types/AppState";
 
 enum UserIdentityActions {
     GET_IDENTITY="GET_IDENTITY",
@@ -22,9 +22,9 @@ const setIdentity = (identity: UserIdentity): PayloadAction<UserIdentityReducibl
 
 type SuccessfulResponseType = {role: string}&UserIdentity
 
-type RefreshUserIdentityArg = {
+type RefreshUserIdentityArg = MetaArg<{
     accessToken: string
-} & Meta
+}>
 
 export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIdentityArg>(UserIdentityActions.GET_IDENTITY,
     async ({accessToken}, {rejectWithValue}) => {

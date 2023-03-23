@@ -10,8 +10,8 @@ import {
     Modes,
     Tables
 } from "../../types/explorationParams";
-import {Meta} from "../../types/AppState";
 import {Action} from "redux";
+import {MetaArg} from "../../types/AppState";
 
 enum ApiSearchActions {
     REFRESH_RESULTS="REFRESH_RESULTS",
@@ -45,9 +45,9 @@ export type ResultsFullRequired = {
 
 export type ResultsReducible = Results | null | undefined
 
-export type RefreshResultsThunkArg = {
+export type RefreshResultsThunkArg = MetaArg<{
     table: Tables
-} & Meta
+ }>
 
 const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Tables, rejectWithValue:  (value: unknown) => any, prevResults?: Results|null) => {
     let baseUrl = requestsUrls[table];
@@ -148,7 +148,7 @@ const refreshResultsThunk = createAsyncThunk<ResultsFullRequired, RefreshResults
         return errorResponseHandle(response, jsonResponse as ErrJson, rejectWithValue)
     })
 
-export type LazyLoadResultsThunkArg = {results: ResultsFullRequired} & Meta
+export type LazyLoadResultsThunkArg = MetaArg<{results: ResultsFullRequired} >
 
 export const lazyLoadResultsThunk = createAsyncThunk<Results, LazyLoadResultsThunkArg>(ApiSearchActions.LAZY_LOAD,
     async ({results}, {getState, rejectWithValue})=>{

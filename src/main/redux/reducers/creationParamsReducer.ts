@@ -13,7 +13,8 @@ const initialState: CreationParams = {
     table: Tables.PERSONS,
     jurPersonCreationData: {...new InitJurPersonCreationParams()},
     personCreationData: {...new InitPersonCreationParams()},
-    userCreationData: {...new InitUserCreationParams()}
+    userCreationData: {...new InitUserCreationParams()},
+    pending: false
 }
 
 const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<CreationParams>> = (prevState= initialState, action) => {

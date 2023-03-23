@@ -1,5 +1,4 @@
-import {geoApiKey} from "../../../data/appConfig";
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction } from "react";
 import {Location} from "../../../types/Location";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import Geo from "../../../types/Geo";

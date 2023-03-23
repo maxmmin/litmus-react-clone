@@ -1,5 +1,5 @@
 import {Tables} from "../../types/explorationParams";
-import {PayloadAction} from "@reduxjs/toolkit";
+import {AsyncThunk, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import CreatePersonDto from "../../types/CreatePersonDto";
 import CreateJurPersonDto from "../../types/CreateJurPersonDto";
 import CreateUserDto from "../../types/CreateUserDto";
@@ -62,6 +62,11 @@ export type CreationParams = {
     personCreationData: CreatePersonDto,
     jurPersonCreationData: CreateJurPersonDto,
     userCreationData: CreateUserDto,
+    pending: boolean
 }
+
+// const createJurPerson = createAsyncThunk(()=>{
+//
+// })
 
 export type CreationParamsReducible = CreationParams | undefined

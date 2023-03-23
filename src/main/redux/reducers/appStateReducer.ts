@@ -1,4 +1,4 @@
-import AppState, {AppStateReducible, GmapsApiResponse, Meta} from "../../types/AppState";
+import AppState, {AppStateReducible, GmapsApiResponse, Meta, MetaArg} from "../../types/AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateActions from "../actions/AppStateActions";
@@ -39,7 +39,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
         }
 
         case AuthActions.CLEAR_AUTH: {
-            return initialState
+            return {...initialState, gmapsApiState: prevState.gmapsApiState}
         }
 
         case AppStateActions.SET_MAPS_API_RESPONSE: {

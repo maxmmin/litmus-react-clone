@@ -1,6 +1,6 @@
 import Loader from "./Loader";
 import {checkAndRefreshAuth, isInvalid, onWakeUp} from "../../data/pureFunctions";
-import React, {ReactNode, useEffect, useState} from "react";
+import React, {ReactNode, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {refreshUserIdentity} from "../../redux/actions/UserIdentityActions";
 import AuthActions from "../../redux/actions/AuthActions";

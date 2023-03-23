@@ -18,6 +18,8 @@ export type Meta = {
     shouldRefreshGlobally: boolean
 }
 
+export type MetaArg<T> = T & Meta
+
 export type AppStateReducible = AppState | undefined
 
 export default AppState;

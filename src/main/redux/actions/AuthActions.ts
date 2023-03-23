@@ -5,7 +5,7 @@ import requestsUrls from "../../data/appConfig";
 import { HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import {Action} from "redux";
 import Authentication from "../../types/Authentication";
-import {Meta} from "../../types/AppState";
+import {MetaArg} from "../../types/AppState";
 
 enum AuthActions {
     REFRESH_AUTH="REFRESH_AUTH",
@@ -15,9 +15,9 @@ enum AuthActions {
 
 export default AuthActions;
 
-type RefreshAccessTokenArg = {
+type RefreshAccessTokenArg = MetaArg<{
     refreshToken: string
-} & Meta
+} >
 
 export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.REFRESH_AUTH,
     async ({refreshToken}, {rejectWithValue}) => {
@@ -52,10 +52,10 @@ export function clearAuthentication (): Action {
     }
 }
 
-type SignInArg = {
+type SignInArg = MetaArg<{
     email: string,
     password: string
-} & Meta
+}>
 
 export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.REFRESH_AUTH,
     async ({email, password},{rejectWithValue}) => {
