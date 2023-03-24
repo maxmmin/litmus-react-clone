@@ -5,7 +5,7 @@ import React from "react";
 
 const CreateUser = () => {
     return (
-        <Form className="creation-input-group">
+        <>
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Email адреса</Form.Label>
                 <input autoComplete={"new-password"} className={`email form-control`}  type="text" placeholder="Введіть EMAIL"
@@ -41,8 +41,13 @@ const CreateUser = () => {
                 />
             </Form.Group>
 
-            <button className="creation-input-group__btn btn btn-primary">Створити обліковий запис користувача</button>
-        </Form>
+            <Form.Group className="mb-3 creation-input-group__item">
+                <Form.Label>Повторіть пароль</Form.Label>
+                <input autoComplete={"new-password"} className={`passport-number form-control`} type="password" placeholder="Повторіть пароль"
+                       onKeyDown={keyPressHandler}
+                />
+            </Form.Group>
+        </>
     )
 }
 

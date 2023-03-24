@@ -17,6 +17,7 @@ import Creation from "./screens/Create/Create";
 import {routingLinks} from "./data/appConfig";
 import {Tables} from "./types/explorationParams";
 
+// @todo check if the refresh token expired
 
 function App() {
     const dispatch = useAppDispatch();

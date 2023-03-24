@@ -1,6 +1,6 @@
 @import "colors";
 
-.creation-page__creation-container {
+.creation-page__create {
   max-width: 800px;
   margin-left: auto;
   margin-right: auto;
@@ -23,7 +23,11 @@
 
 .creation-input-group__item {
   flex-basis: 48%;
+  max-width: 48%;
   flex-grow: 1;
+}
+
+.creation-input-group__item_long {
   max-width: 100%;
 }
 

@@ -5,7 +5,7 @@ import React from "react";
 
 const CreatePerson = () => {
     return (
-        <Form className={"creation-input-group"}>
+        <>
             <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Прізвище</Form.Label>
                     <input autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
@@ -48,7 +48,7 @@ const CreatePerson = () => {
                 />
             </Form.Group>
 
-            <Form.Group className="mb-3 creation-input-group__item">
+            <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Дата народження</Form.Label>
 
                 <div className="date-of-birth date-container">
@@ -66,9 +66,7 @@ const CreatePerson = () => {
                 </div>
             </Form.Group>
 
-            <button className="creation-input-group__btn btn btn-primary">Створити фізичну особу</button>
-
-    </Form>
+    </>
     )
 }
 

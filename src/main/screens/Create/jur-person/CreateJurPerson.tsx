@@ -31,7 +31,7 @@ const CreateJurPerson = () => {
             
             <CreationGeoModal table={Tables.JUR_PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
 
-            <Form className="creation-input-group">
+            <>
 
                 <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Назва</Form.Label>
@@ -67,7 +67,7 @@ const CreateJurPerson = () => {
                     />
                 </Form.Group>
 
-                <Form.Group className="mb-3 creation-input-group__item">
+                <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Дата реєстрації юридичної особи</Form.Label>
 
                     <div className="date-container date-of-registration">
@@ -86,7 +86,7 @@ const CreateJurPerson = () => {
 
                 </Form.Group>
 
-                <Form.Group className="mb-3 creation-input-group__item">
+                <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Адреса</Form.Label>
                     <input type={"button"} className={"jur-person-creation__input address form-control"} value={address?address.label:"Додати адресу"}
                         onClick={()=>{
@@ -94,10 +94,8 @@ const CreateJurPerson = () => {
                         }}
                     />
                 </Form.Group>
-                // @todo i should put this button higher
-                <button onClick={createJurPerson} className="creation-input-group__btn btn btn-primary">Створити юридичну особу</button>
 
-            </Form>
+            </>
         </>
 )
 }

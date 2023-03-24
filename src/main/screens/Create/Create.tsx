@@ -51,19 +51,23 @@ const Creation = () => {
             <Header backButtonPath={"/"}/>
 
             <main className={"creation-page__main-container"}>
-               <div className="creation-page__creation-container">
-                   <div className="creation-page__create-select-wrapper">
-                       <p style={{marginBottom: '10px'}}>Створити</p>
-                       <Form.Select className={"create__select"} value={routingLinks.create[table]} onChange={handleSelectChange}>
-                           <option value={routingLinks.create[Tables.PERSONS]}>Фізичну особу</option>
-                           <option value={routingLinks.create[Tables.JUR_PERSONS]}>Юридичну особу</option>
-                           <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT}>
-                               <option value={routingLinks.create[Tables.USERS]}>Користувача</option>
-                           </PrivateComponentWrapper>
-                       </Form.Select>
-                   </div>
+               <div className="creation-page__create">
+                       <div className="creation-page__create-select-wrapper">
+                           <p style={{marginBottom: '10px'}}>Створити</p>
+                           <Form.Select className={"create__select"} value={routingLinks.create[table]} onChange={handleSelectChange}>
+                               <option value={routingLinks.create[Tables.PERSONS]}>Фізичну особу</option>
+                               <option value={routingLinks.create[Tables.JUR_PERSONS]}>Юридичну особу</option>
+                               <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT}>
+                                   <option value={routingLinks.create[Tables.USERS]}>Користувача</option>
+                               </PrivateComponentWrapper>
+                           </Form.Select>
+                       </div>
 
-                   <CreationInputSection table={table!}/>
+                   <Form className={"creation-input-group"}>
+                       <CreationInputSection table={table!}/>
+
+                       <button className="creation-input-group__btn btn btn-primary">Створити</button>
+                   </Form>
                </div>
             </main>
         </div>

@@ -54,7 +54,7 @@ const ApplicationStateManager = ({children}: Props) => {
         return ()=>{
            window.clearInterval(wakeUpCheckTimerId)
         }
-    }, []);
+    }, [authentication]);
 
     if (isRefreshing) return <Loader/>
 
