@@ -33,7 +33,7 @@ export const routingLinks = {
     explore: {
         [Tables.PERSONS]: `/explore/${Tables.PERSONS.toLowerCase()}`,
         [Tables.JUR_PERSONS]: `/explore/${Tables.JUR_PERSONS.toLowerCase()}`,
-        [Tables.USERS]: `explore/${Tables.USERS.toLowerCase()}`
+        [Tables.USERS]: `/explore/${Tables.USERS.toLowerCase()}`
     },
     create: {
         [Tables.PERSONS]: `/create/${Tables.PERSONS.toLowerCase()}`,
