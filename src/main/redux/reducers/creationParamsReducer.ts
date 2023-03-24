@@ -35,6 +35,11 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
             return initialState
         }
 
+        case CreationParamsActions.SET_LOCAL_PENDING: {
+            const act = action as unknown as PayloadAction<boolean>
+            return {...prevState, pending: act.payload}
+        }
+
         default: {
             return prevState;
         }

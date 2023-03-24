@@ -9,7 +9,8 @@ import {Location} from "../../types/Location";
 enum CreationParamsActions {
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
     UPDATE_CREATION_PARAMS="UPDATE_CREATION_PARAMS",
-    UPDATE_JUR_PERSON_DATA="UPDATE_JUR_PERSON_DATA"
+    UPDATE_JUR_PERSON_DATA="UPDATE_JUR_PERSON_DATA",
+    SET_LOCAL_PENDING="SET_LOCAL_PENDING"
 }
 
 export default CreationParamsActions;
@@ -65,8 +66,11 @@ export type CreationParams = {
     pending: boolean
 }
 
-// const createJurPerson = createAsyncThunk(()=>{
-//
-// })
+export const setPending = (arg: boolean): PayloadAction<boolean> => {
+    return {
+        type: CreationParamsActions.SET_LOCAL_PENDING,
+        payload: arg
+    }
+}
 
 export type CreationParamsReducible = CreationParams | undefined

@@ -9,6 +9,7 @@ import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalModes, CreationModalSettings} from "../CreationView";
 import requestsUrls, {createAuthHeader} from "../../../data/appConfig";
 import store from "../../../redux/store";
+import {setPending} from "../../../redux/actions/CreationParamsActions";
 
 
 const getShortInfo = (person: GetPersonDto): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
@@ -93,7 +94,7 @@ const CreateJurPerson = () => {
                         }}
                     />
                 </Form.Group>
-
+                // @todo i should put this button higher
                 <button onClick={createJurPerson} className="creation-input-group__btn btn btn-primary">Створити юридичну особу</button>
 
             </Form>
@@ -101,12 +102,21 @@ const CreateJurPerson = () => {
 )
 }
 
-const createJurPerson = () => {
-    fetch(requestsUrls[Tables.JUR_PERSONS], {
+const createJurPerson =  async () => {
+    store.dispatch(setPending(true))
+
+    const result = await fetch(requestsUrls[Tables.JUR_PERSONS], {
         headers: {
             ...createAuthHeader(store.getState().authentication?.accessToken!)
-        }
+        },
+        body: JSON.stringify(store.getState().creationParams?.jurPersonCreationData!)
     })
+
+    if (result.ok) {
+        console.log("ok")
+    }
+
+    store.dispatch(setPending(false))
 }
 
 export default CreateJurPerson;
