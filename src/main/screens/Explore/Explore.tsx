@@ -69,12 +69,11 @@ const Explore = () => {
     }
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-        const table: Tables = event.currentTarget.value as Tables;
-        navigate(routingLinks.explore[table])
+        navigate(event.currentTarget.value)
     }
 
     if (!table) {
-        throw new Error("client error. table should be null")
+        throw new Error("client error. table shouldn't be null. reload the page")
     }
 
     return (
@@ -84,11 +83,11 @@ const Explore = () => {
                 <div className="explore-page__search">
                     <p style={{marginBottom: '10px'}}>Знайти</p>
 
-                    <Form.Select className={"explore__select"} value={table} onChange={handleSelectChange}>
-                        <option value={Tables.PERSONS}>Фізичну особу</option>
-                        <option value={Tables.JUR_PERSONS}>Юридичну особу</option>
+                    <Form.Select className={"explore__select"} value={routingLinks.explore[table]} onChange={handleSelectChange}>
+                        <option value={routingLinks.explore[Tables.PERSONS]}>Фізичну особу</option>
+                        <option value={routingLinks.explore[Tables.JUR_PERSONS]}>Юридичну особу</option>
                         <PrivateComponentWrapper neededPermissions={[Permissions.USERS_READ, Permissions.USERS_WRITE]} mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT}>
-                            <option value={Tables.USERS}>Користувача</option>
+                            <option value={routingLinks.explore[Tables.USERS]}>Користувача</option>
                         </PrivateComponentWrapper>
                     </Form.Select>
 

@@ -6,7 +6,7 @@ import {useAppSelector} from "../../../redux/hooks";
 import GetPersonDto from "../../../types/GetPersonDto";
 import {Tables} from "../../../types/explorationParams";
 import CreationGeoModal from "../geo/CreationGeoModal";
-import {CreationModalModes, CreationModalSettings} from "../CreationView";
+import {CreationModalModes, CreationModalSettings} from "../Create";
 import apiLinks, {createAuthHeader} from "../../../data/appConfig";
 import store from "../../../redux/store";
 import {setPending} from "../../../redux/actions/CreationParamsActions";

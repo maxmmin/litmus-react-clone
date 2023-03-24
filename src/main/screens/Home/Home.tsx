@@ -14,6 +14,8 @@ function Home () {
 
     const explorationTable = useAppSelector(state => state.explorationParams?.table)
 
+    const creationTable = useAppSelector(state => state.creationParams?.table)
+
     const [isOpened, setIsOpened] = useState(false);
 
     const navigate = useNavigate()
@@ -34,14 +36,14 @@ function Home () {
             <Header/>
 
             <main className="homepage-actions">
-                    <div itemProp={`${routingLinks.explore[explorationTable?explorationTable:Tables.PERSONS]}`} className="homepage-actions__action" onClick={actionOnClick}>
+                    <div itemProp={`${explorationTable?routingLinks.explore[explorationTable]:Tables.PERSONS}`} className="homepage-actions__action" onClick={actionOnClick}>
                         <div className="homepage-actions__icon-container">
                             <SearchIcon className='homepage-actions__icon'/>
                             <h4 className="homepage-actions__title homepage-actions__title_search">Аналіз</h4>
                         </div>
                     </div>
                     <PrivateComponentWrapper mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT} neededPermissions={roles.MODERATOR.permissions}>
-                        <div itemProp={"/create"} className="homepage-actions__action" onClick={actionOnClick}>
+                        <div itemProp={`${creationTable?routingLinks.create[creationTable]:Tables.PERSONS}`} className="homepage-actions__action" onClick={actionOnClick}>
                             <div className="homepage-actions__icon-container">
                                 <AddUserIcon className='homepage-actions__icon'/>
                                 <h4 className="homepage-actions__title">Додати</h4>

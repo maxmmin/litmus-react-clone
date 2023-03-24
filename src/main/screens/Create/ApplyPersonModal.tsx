@@ -11,7 +11,7 @@ import CreateJurPersonDto from "../../types/CreateJurPersonDto";
 import {updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
 import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
-import {CreationModalModes, CreationModalSettings} from "./CreationView";
+import {CreationModalModes, CreationModalSettings} from "./Create";
 import {Location} from "../../types/Location";
 
 type Props = {

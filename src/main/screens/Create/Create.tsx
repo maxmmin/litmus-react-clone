@@ -4,11 +4,15 @@ import {Tables} from "../../types/explorationParams";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
-import React, {ChangeEvent, useEffect} from "react";
+import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
 import {updateCreationParams} from "../../redux/actions/CreationParamsActions";
 import CreationInputSection from "./CreationInputSection";
+import {getTableNameFromLocation} from "../../data/pureFunctions";
+import {useLocation} from "react-router";
+import {routingLinks} from "../../data/appConfig";
+import {useNavigate} from "react-router-dom";
 
 export enum CreationModalModes {
     SET_OWNER = "SET_OWNER",
@@ -20,21 +24,27 @@ export type CreationModalSettings = {
     mode: CreationModalModes
 }   | null
 
-const CreationView = () => {
+const Creation = () => {
     const dispatch = useAppDispatch();
+    const location = useLocation();
+
+    const navigate = useNavigate();
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-        const table: Tables = event.currentTarget.value as Tables;
-        dispatch(updateCreationParams({table: table}))
+        navigate(event.currentTarget.value)
     }
 
-    const table = useAppSelector(state => state.creationParams?.table)
+    const table = useMemo<Tables|null>(()=>getTableNameFromLocation(location.pathname), [location])
 
-    useEffect(()=>{
-        if (!table) {
-            dispatch(updateExplorationParams({table: Tables.PERSONS}))
+    useLayoutEffect(() => {
+        if (table) {
+            dispatch(updateCreationParams({table}))
         }
-    }, [table])
+    }, [location])
+
+    if (!table) {
+        throw new Error("client error. table shouldn't be null. reload the page")
+    }
 
     return (
         <div className="creation-page">
@@ -44,11 +54,11 @@ const CreationView = () => {
                <div className="creation-page__creation-container">
                    <div className="creation-page__create-select-wrapper">
                        <p style={{marginBottom: '10px'}}>Створити</p>
-                       <Form.Select className={"create__select"} value={table} onChange={handleSelectChange}>
-                           <option value={Tables.PERSONS}>Фізичну особу</option>
-                           <option value={Tables.JUR_PERSONS}>Юридичну особу</option>
+                       <Form.Select className={"create__select"} value={routingLinks.create[table]} onChange={handleSelectChange}>
+                           <option value={routingLinks.create[Tables.PERSONS]}>Фізичну особу</option>
+                           <option value={routingLinks.create[Tables.JUR_PERSONS]}>Юридичну особу</option>
                            <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT}>
-                               <option value={Tables.USERS}>Користувача</option>
+                               <option value={routingLinks.create[Tables.USERS]}>Користувача</option>
                            </PrivateComponentWrapper>
                        </Form.Select>
                    </div>
@@ -60,4 +70,4 @@ const CreationView = () => {
     )
 }
 
-export default CreationView;
+export default Creation;
