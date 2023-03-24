@@ -2,7 +2,7 @@ import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import requestsUrls, {createAuthHeader} from "../../data/appConfig";
+import apiLinks, {createAuthHeader} from "../../data/appConfig";
 import {Tables} from "../../types/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import GetPersonDto from "../../types/GetPersonDto";
@@ -85,7 +85,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     const fetchPerson = async (accessToken: string, id: number) => {
         setPending(true)
 
-        const response = await fetch(`${requestsUrls[Tables.PERSONS]}/${id}`, {
+        const response = await fetch(`${apiLinks[Tables.PERSONS]}/${id}`, {
             headers: {
                 ...createAuthHeader(accessToken)
             }

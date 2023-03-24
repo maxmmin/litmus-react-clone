@@ -1,5 +1,4 @@
 import {Tables} from "../types/explorationParams";
-import {RequestOptions} from "use-places-autocomplete";
 
 const host = "http://localhost:8081";
 
@@ -18,25 +17,33 @@ const auth = `${host}/auth`
 
 const api = `${host}/api`
 
-const persons = `${api}/persons`
-
-const users = `${api}/users`
-
-const jurPersons = `${api}/jur-persons`
 
 const authHeader = 'Authorization'
 
-const requestsUrls = {
+const apiLinks = {
     signIn: `${auth}/sign-in`,
     refreshAccessKey: `${auth}/refresh`,
     getThisUser: auth,
-    [Tables.PERSONS]: persons,
-    [Tables.USERS]: users,
-    [Tables.JUR_PERSONS]: jurPersons
+    [Tables.PERSONS]: `${api}/persons`,
+    [Tables.USERS]: `${api}/users`,
+    [Tables.JUR_PERSONS]: `${api}/jur-persons`,
+}
+
+export const routingLinks = {
+    explore: {
+        [Tables.PERSONS]: `/explore/${Tables.PERSONS.toLowerCase()}`,
+        [Tables.JUR_PERSONS]: `/explore/${Tables.JUR_PERSONS.toLowerCase()}`,
+        [Tables.USERS]: `explore/${Tables.USERS.toLowerCase()}`
+    },
+    create: {
+        [Tables.PERSONS]: "create/persons",
+        [Tables.JUR_PERSONS]: "create/jur-persons",
+        [Tables.USERS]: "create/users"
+    }
 }
 
 export const createAuthHeader = (accessToken: string) => ({
     [authHeader]: `Bearer ${accessToken}`
 })
 
-export default requestsUrls
+export default apiLinks

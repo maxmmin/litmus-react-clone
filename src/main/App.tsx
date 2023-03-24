@@ -14,6 +14,8 @@ import {AppStateActions,switchAppState} from "./redux/actions/AppStateActions";
 import ApplicationStateManager from "./screens/components/ApplicationStateManager";
 import ConditionalAlert from "./screens/components/ConditionalAlert";
 import CreationView from "./screens/Create/CreationView";
+import {routingLinks} from "./data/appConfig";
+import {Tables} from "./types/explorationParams";
 
 
 function App() {
@@ -35,8 +37,16 @@ function App() {
                                   <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Home/>} neededPermissions={roles.USER.permissions}/>
                               }/>
 
-                              <Route path={"/explore"} element={
+                              <Route path={routingLinks.explore[Tables.PERSONS]} element={
                                   <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} neededPermissions={roles.USER.permissions}/>
+                              }/>
+
+                              <Route path={routingLinks.explore[Tables.JUR_PERSONS]} element={
+                                  <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} neededPermissions={roles.USER.permissions}/>
+                              }/>
+
+                              <Route path={routingLinks.explore[Tables.USERS]} element={
+                                  <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} neededPermissions={roles.ADMIN.permissions}/>
                               }/>
 
                               <Route path={"/create"} element={

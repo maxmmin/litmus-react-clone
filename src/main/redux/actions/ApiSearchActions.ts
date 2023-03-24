@@ -1,7 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {isInvalid} from "../../data/pureFunctions";
 import {ErrJson, HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
-import requestsUrls, {createAuthHeader, entitiesPerPage} from "../../data/appConfig";
+import apiLinks, {createAuthHeader, entitiesPerPage} from "../../data/appConfig";
 import {RootState} from "../store";
 import {
     BasicHumanSearchPayload,
@@ -50,7 +50,7 @@ export type RefreshResultsThunkArg = MetaArg<{
  }>
 
 const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Tables, rejectWithValue:  (value: unknown) => any, prevResults?: Results|null) => {
-    let baseUrl = requestsUrls[table];
+    let baseUrl = apiLinks[table];
     switch (explorationParams?.sectionsSettings![table]) {
         case Modes.FIND_BY_ID: {
             const id = (explorationParams.input![table] as {id: string}).id;

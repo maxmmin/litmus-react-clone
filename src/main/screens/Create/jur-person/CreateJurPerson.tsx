@@ -7,7 +7,7 @@ import GetPersonDto from "../../../types/GetPersonDto";
 import {Tables} from "../../../types/explorationParams";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalModes, CreationModalSettings} from "../CreationView";
-import requestsUrls, {createAuthHeader} from "../../../data/appConfig";
+import apiLinks, {createAuthHeader} from "../../../data/appConfig";
 import store from "../../../redux/store";
 import {setPending} from "../../../redux/actions/CreationParamsActions";
 
@@ -105,7 +105,7 @@ const CreateJurPerson = () => {
 const createJurPerson =  async () => {
     store.dispatch(setPending(true))
 
-    const result = await fetch(requestsUrls[Tables.JUR_PERSONS], {
+    const result = await fetch(apiLinks[Tables.JUR_PERSONS], {
         headers: {
             ...createAuthHeader(store.getState().authentication?.accessToken!)
         },

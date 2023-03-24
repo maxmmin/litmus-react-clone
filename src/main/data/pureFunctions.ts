@@ -8,6 +8,8 @@ import {clearAuthRefreshTimer, setTimers, TimersReducible} from "../redux/action
 import {getGeocode} from "use-places-autocomplete";
 import Geo from "../types/Geo";
 import {gmapsRegionOptions} from "./appConfig";
+import {Tables} from "../types/explorationParams";
+import {updateExplorationParams} from "../redux/actions/ExplorationParamsActions";
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)
@@ -36,6 +38,13 @@ export const searchInputGroupsKeyPressHandler = (e: React.KeyboardEvent) => {
             }
         }
     }
+}
+
+export const getTableNameFromLocation = (pathName: string): Tables | null => {
+    const path = pathName.endsWith("/")?pathName.slice(0,-1):pathName;
+    const pathsArray = path.split("/")
+    const table = pathsArray[pathsArray.length-1].toUpperCase() as Tables | null
+    return table;
 }
 
 export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {

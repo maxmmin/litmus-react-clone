@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
 import {Tables} from "../../types/explorationParams";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
@@ -17,17 +17,37 @@ import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
 import store, {RootState} from "../../redux/store";
+import {useNavigate} from "react-router-dom";
+import {routingLinks} from "../../data/appConfig";
+import {useLocation} from "react-router";
+import {getTableNameFromLocation} from "../../data/pureFunctions";
 
 const Explore = () => {
-    // @todo need to do full results number provide, cause now only 1 page is counted
     const dispatch = useAppDispatch();
+    const location = useLocation();
+    const navigate = useNavigate()
 
-    const table = useAppSelector(state => state.explorationParams?.table)
+    const resultsContainer = useRef<HTMLDivElement>(null)
+
+    const table = useMemo<Tables|null>(()=>getTableNameFromLocation(location.pathname), [location])
+
+    useLayoutEffect(() => {
+        if (table) {
+            dispatch(updateExplorationParams({table}))
+        }
+    }, [location])
+
+    useEffect(()=>{
+        window.addEventListener("scroll", scrollCallback)
+
+        return () => {
+            window.removeEventListener("scroll",scrollCallback)
+        }
+    },[resultsContainer.current])
+
     const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![table!])
     const isInputInvalid = useAppSelector(state => state.explorationParams?.isInvalid)
     const results = useAppSelector(state => state.searchResults)
-
-    const resultsContainer = useRef<HTMLDivElement>(null)
 
     const search = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -50,17 +70,12 @@ const Explore = () => {
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
         const table: Tables = event.currentTarget.value as Tables;
-        dispatch(updateExplorationParams({table: table}))
+        navigate(routingLinks.explore[table])
     }
 
-    useEffect(()=>{
-        window.addEventListener("scroll", scrollCallback)
-
-        return () => {
-            window.removeEventListener("scroll",scrollCallback)
-        }
-    },[resultsContainer.current])
-
+    if (!table) {
+        throw new Error("client error. table should be null")
+    }
 
     return (
         <div className={"explore-page"}>

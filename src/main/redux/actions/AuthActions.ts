@@ -1,7 +1,7 @@
 import {AuthenticationReducible} from "../../types/Authentication";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import JwtInfo from "../../types/JwtInfo";
-import requestsUrls from "../../data/appConfig";
+import apiLinks from "../../data/appConfig";
 import { HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import {Action} from "redux";
 import Authentication from "../../types/Authentication";
@@ -21,7 +21,7 @@ type RefreshAccessTokenArg = MetaArg<{
 
 export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.REFRESH_AUTH,
     async ({refreshToken}, {rejectWithValue}) => {
-        const response =  await fetch(requestsUrls.refreshAccessKey, {
+        const response =  await fetch(apiLinks.refreshAccessKey, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ type SignInArg = MetaArg<{
 
 export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.REFRESH_AUTH,
     async ({email, password},{rejectWithValue}) => {
-        const response = await fetch(requestsUrls.signIn, {
+        const response = await fetch(apiLinks.signIn, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

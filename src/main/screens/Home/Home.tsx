@@ -1,13 +1,18 @@
 import React, {useState} from "react";
-import {AddUserIcon, PersonIcon, SearchIcon, SetUpUser} from "../../data/icons";
+import {AddUserIcon, SearchIcon, SetUpUser} from "../../data/icons";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {roles} from "../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
 import {useNavigate} from 'react-router-dom'
 import Header from "../components/Header";
+import {routingLinks} from "../../data/appConfig";
+import {Tables} from "../../types/explorationParams";
+import {useAppSelector} from "../../redux/hooks";
 
 
 function Home () {
+
+    const explorationTable = useAppSelector(state => state.explorationParams?.table)
 
     const [isOpened, setIsOpened] = useState(false);
 
@@ -29,7 +34,7 @@ function Home () {
             <Header/>
 
             <main className="homepage-actions">
-                    <div itemProp={"/explore"} className="homepage-actions__action" onClick={actionOnClick}>
+                    <div itemProp={`${routingLinks.explore[explorationTable?explorationTable:Tables.PERSONS]}`} className="homepage-actions__action" onClick={actionOnClick}>
                         <div className="homepage-actions__icon-container">
                             <SearchIcon className='homepage-actions__icon'/>
                             <h4 className="homepage-actions__title homepage-actions__title_search">Аналіз</h4>

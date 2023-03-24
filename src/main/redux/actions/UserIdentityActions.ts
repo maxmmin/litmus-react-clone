@@ -1,6 +1,6 @@
 import UserIdentity, {UserIdentityReducible} from "../../types/UserIdentity";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import requestsUrls, {createAuthHeader} from "../../data/appConfig";
+import apiLinks, {createAuthHeader} from "../../data/appConfig";
 import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
 import {roles} from "../../types/Role";
 import {isInvalid} from "../../data/pureFunctions";
@@ -33,7 +33,7 @@ export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIden
         return rejectWithValue({...new HttpError(401, HttpErrorsNames.UNAUTHENTICATED)})
     }
 
-    const response = await fetch(requestsUrls.getThisUser,{
+    const response = await fetch(apiLinks.getThisUser,{
         method: 'GET',
         headers: {
             ...createAuthHeader(accessToken)
