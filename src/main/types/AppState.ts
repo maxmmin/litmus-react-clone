@@ -2,9 +2,13 @@ export type AppStateError = {
     message?: string
 }
 
+type GmapsApiError = {
+    name: string; message: string; stack?: string | undefined; cause?: unknown;
+} | null
+
 export type GmapsApiResponse = {
     isLoaded: boolean;
-    loadError: Error | undefined;
+    loadError: GmapsApiError | undefined;
 }
 
 type AppState = {

@@ -19,6 +19,8 @@ type Props = {
     close: ()=>void
 }
 
+// @todo key press handlers
+
 function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const dispatch = useAppDispatch();

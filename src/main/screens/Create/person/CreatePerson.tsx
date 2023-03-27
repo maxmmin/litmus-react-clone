@@ -7,6 +7,7 @@ import {
 import React, {useMemo} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
+import InputDate from "../../components/InputDate";
 
 const CreatePerson = () => {
     const createPersonDto = useAppSelector(state => state.creationParams?.personCreationData)
@@ -24,6 +25,11 @@ const CreatePerson = () => {
     if (!createPersonDto) {
         throw new Error("createPersonDto was null but it shouldn't")
     }
+
+    const setDate = (builder: DateBuilder) => {
+        dispatch(updatePersonCreationParams({dateOfBirth: builder.buildStringDate()}))
+    }
+
     return (
         <>
             <Form.Group className="mb-3 creation-input-group__item">
@@ -95,38 +101,7 @@ const CreatePerson = () => {
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Дата народження</Form.Label>
 
-                <div className="date-of-birth date-container">
-                    <input value={year} autoComplete={"new-password"} className={`date-container__item date-of-birth__input date-of-birth__input_year form-control`} type="text" placeholder="YYYY"
-                           onKeyDown={preventEnter}
-                           onChange={e => {
-                               dispatch(updatePersonCreationParams({dateOfBirth: new DateBuilder().setYear(e.currentTarget.value).setMonth(month).setDay(day).buildStringDate()}))
-                                if (e.currentTarget.value.length>3) {
-                                    switchNeighbourInput(e)
-                                }
-                           }
-                        }
-                    />
-
-                    <input value={month} autoComplete={"new-password"} className={`date-container__item date-of-birth__input date-of-birth__input_month form-control`} type="text" placeholder="MM"
-                           onKeyDown={preventEnter}
-                           onChange={e => {
-                               dispatch(updatePersonCreationParams({dateOfBirth: new DateBuilder().setYear(year).setMonth(e.currentTarget.value).setDay(day).buildStringDate()}))
-                               if (e.currentTarget.value.length>1) {
-                                   switchNeighbourInput(e)
-                               }
-                           }}
-                    />
-                    //@todo write check on undefined for fields
-                    <input value={day} autoComplete={"new-password"} className={`date-container__item date-of-birth__input date-of-birth__input_day form-control`} type="text" placeholder="DD"
-                           onKeyDown={preventEnter}
-                           onChange={e => {
-                               dispatch(updatePersonCreationParams({dateOfBirth: new DateBuilder().setYear(year).setMonth(month).setDay(e.currentTarget.value).buildStringDate()}))
-                                if (e.currentTarget.value.length>1) {
-                                    switchNext(e)
-                                }
-                           }}
-                    />
-                </div>
+                <InputDate date={new DateBuilder().setYear(year).setMonth(month).setDay(day)} setDate={setDate} className={"date-of-birth"}/>
             </Form.Group>
 
     </>

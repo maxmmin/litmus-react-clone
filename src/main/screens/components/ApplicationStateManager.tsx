@@ -32,8 +32,9 @@ const ApplicationStateManager = ({children}: Props) => {
     });
 
     useEffect(()=>{
-        dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError}))
+        dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError?{...loadError}:null}))
     }, [isLoaded, loadError])
+    // fix err if no internet
 
     useEffect(()=>{
         dispatch({type: AuthActions.CHECK_AUTH})

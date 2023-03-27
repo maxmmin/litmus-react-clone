@@ -186,6 +186,18 @@ export class DateBuilder {
 
     private year: string = '';
 
+    getDay (): string {
+        return this.day;
+    }
+
+    getYear (): string {
+        return this.year;
+    }
+
+    getMonth (): string {
+        return this.month;
+    }
+
     setDay (day: string): DateBuilder {
         this.day = day;
         return this;
