@@ -4,15 +4,19 @@ import {Tables} from "../../types/explorationParams";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
-import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo} from "react";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
-import {updateCreationParams} from "../../redux/actions/CreationParamsActions";
+import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
+import {useAppDispatch} from "../../redux/hooks";
+import {CreationParams, CreationParamsReducible, updateCreationParams} from "../../redux/actions/CreationParamsActions";
 import CreationInputSection from "./CreationInputSection";
 import {getTableNameFromLocation} from "../../data/pureFunctions";
 import {useLocation} from "react-router";
-import {routingLinks} from "../../data/appConfig";
+import apiLinks, {createAuthHeader, routingLinks} from "../../data/appConfig";
 import {useNavigate} from "react-router-dom";
+import CreateJurPersonDto from "../../types/CreateJurPersonDto";
+import CreatePersonDto from "../../types/CreatePersonDto";
+import CreateUserDto from "../../types/CreateUserDto";
+import {create} from "domain";
+import store from "../../redux/store";
 
 export enum CreationModalModes {
     SET_OWNER = "SET_OWNER",
@@ -46,6 +50,46 @@ const Creation = () => {
         throw new Error("client error. table shouldn't be null. reload the page")
     }
 
+    const createEntity = (creationParams: CreationParamsReducible, accessToken: string) => {
+        if (creationParams) {
+            const table = creationParams.table;
+
+            const url = apiLinks[table]
+
+            let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
+
+            switch (table) {
+                case Tables.JUR_PERSONS: {
+                    body = creationParams.jurPersonCreationData
+                    break;
+                }
+
+                case Tables.PERSONS: {
+                    body = creationParams.personCreationData;
+                    break;
+                }
+
+                case Tables.USERS: {
+                    body = creationParams.userCreationData;
+                    break;
+                }
+            }
+
+            if (url && body) {
+                fetch(url, {
+                    headers: {
+                        ...createAuthHeader(accessToken)
+                    },
+                    body: JSON.stringify(body)
+                })
+                    .then(res => res.json())
+                    .then(console.log)
+            }
+
+        }
+
+    }
+
     return (
         <div className="creation-page">
             <Header backButtonPath={"/"}/>
@@ -66,7 +110,10 @@ const Creation = () => {
                    <Form className={"creation-input-group"}>
                        <CreationInputSection table={table!}/>
 
-                       <button className="creation-input-group__btn btn btn-primary">Створити</button>
+                       <button onClick={()=>{
+                           const state = store.getState();
+                           createEntity(state.creationParams, state.authentication?.accessToken!)
+                       }} className="creation-input-group__btn btn btn-primary">Створити</button>
                    </Form>
                </div>
             </main>

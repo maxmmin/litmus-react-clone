@@ -2,7 +2,7 @@ import {Tables} from "../types/explorationParams";
 
 const host = "http://localhost:8081";
 
-// const host = "http://192.168.137.89:8081"
+// const host = "http://192.168.111.204:8081"
 
 export const entitiesPerPage = 50;
 

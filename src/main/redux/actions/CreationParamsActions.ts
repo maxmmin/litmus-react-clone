@@ -5,12 +5,15 @@ import CreateJurPersonDto from "../../types/CreateJurPersonDto";
 import CreateUserDto from "../../types/CreateUserDto";
 import GetPersonDto from "../../types/GetPersonDto";
 import {Location} from "../../types/Location";
+import CreateUser from "../../screens/Create/user/CreateUser";
 
 enum CreationParamsActions {
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
     UPDATE_CREATION_PARAMS="UPDATE_CREATION_PARAMS",
-    UPDATE_JUR_PERSON_DATA="UPDATE_JUR_PERSON_DATA",
-    SET_LOCAL_PENDING="SET_LOCAL_PENDING"
+    UPDATE_JUR_PERSON_CREATION_DATA="UPDATE_JUR_PERSON_CREATION_DATA",
+    UPDATE_PERSON_CREATION_DATA="UPDATE_PERSON_CREATION_DATA",
+    UPDATE_USER_CREATION_DATA="UPDATE_USER_CREATION_DATA",
+    SET_CREATION_PENDING="SET_CREATION_PENDING"
 }
 
 export default CreationParamsActions;
@@ -24,7 +27,21 @@ export const updateCreationParams = (payload: Partial<CreationParams>): PayloadA
 
 export const updateJurPersonCreationParams = (payload: Partial<CreateJurPersonDto>): PayloadAction<Partial<CreateJurPersonDto>> => {
     return {
-        type: CreationParamsActions.UPDATE_JUR_PERSON_DATA,
+        type: CreationParamsActions.UPDATE_JUR_PERSON_CREATION_DATA,
+        payload: payload
+    }
+}
+
+export const updateUserCreationParams = (payload: Partial<CreateUserDto>): PayloadAction<Partial<CreateUserDto>> => {
+    return {
+        type: CreationParamsActions.UPDATE_USER_CREATION_DATA,
+        payload: payload
+    }
+}
+
+export const updatePersonCreationParams = (payload: Partial<CreatePersonDto>): PayloadAction<Partial<CreatePersonDto>> => {
+    return {
+        type: CreationParamsActions.UPDATE_PERSON_CREATION_DATA,
         payload: payload
     }
 }
@@ -68,7 +85,7 @@ export type CreationParams = {
 
 export const setPending = (arg: boolean): PayloadAction<boolean> => {
     return {
-        type: CreationParamsActions.SET_LOCAL_PENDING,
+        type: CreationParamsActions.SET_CREATION_PENDING,
         payload: arg
     }
 }

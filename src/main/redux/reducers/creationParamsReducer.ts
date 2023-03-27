@@ -8,6 +8,8 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
 import CreateJurPersonDto from "../../types/CreateJurPersonDto";
 import AuthActions from "../actions/AuthActions";
+import CreatePersonDto from "../../types/CreatePersonDto";
+import CreateUserDto from "../../types/CreateUserDto";
 
 const initialState: CreationParams = {
     table: Tables.PERSONS,
@@ -27,15 +29,23 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
             return {...prevState, ...action.payload}
         }
 
-        case CreationParamsActions.UPDATE_JUR_PERSON_DATA: {
-            return {...prevState, jurPersonCreationData: {...prevState.jurPersonCreationData, ...(action.payload as unknown as CreateJurPersonDto)}}
+        case CreationParamsActions.UPDATE_JUR_PERSON_CREATION_DATA: {
+            return {...prevState, jurPersonCreationData: {...prevState.jurPersonCreationData, ...(action.payload as unknown as Partial<CreateJurPersonDto>)}}
+        }
+
+        case CreationParamsActions.UPDATE_PERSON_CREATION_DATA: {
+            return {...prevState, personCreationData: {...prevState.personCreationData, ...(action.payload as unknown as Partial<CreatePersonDto>)}}
+        }
+
+        case CreationParamsActions.UPDATE_USER_CREATION_DATA: {
+            return {...prevState, userCreationData: {...prevState.userCreationData, ...(action.payload as unknown as Partial<CreateUserDto>)}}
         }
 
         case AuthActions.CLEAR_AUTH: {
             return initialState
         }
 
-        case CreationParamsActions.SET_LOCAL_PENDING: {
+        case CreationParamsActions.SET_CREATION_PENDING: {
             const act = action as unknown as PayloadAction<boolean>
             return {...prevState, pending: act.payload}
         }

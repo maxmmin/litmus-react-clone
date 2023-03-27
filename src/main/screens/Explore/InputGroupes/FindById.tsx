@@ -3,7 +3,7 @@ import React, {useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {setLocalInput, updateExplorationParams} from "../../../redux/actions/ExplorationParamsActions";
 import {BasicHumanSearchPayload} from "../../../types/explorationParams";
-import {searchInputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
+import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
 
 const FindById = () => {
     const dispatch = useAppDispatch();

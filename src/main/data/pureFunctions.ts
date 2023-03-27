@@ -20,23 +20,55 @@ function logOut(dispatch: AppDispatch) {
     dispatch(clearAuthentication())
 }
 
-export const searchInputGroupsKeyPressHandler = (e: React.KeyboardEvent) => {
+export const inputGroupsKeyPressHandler = (e: React.KeyboardEvent) => {
     if (e.key==="Enter") {
         e.preventDefault()
-        const neighbourElems = Array.from(e.currentTarget.parentNode!.parentNode!.children)
-        const currentTargetIndex = neighbourElems.indexOf(e.currentTarget!.parentElement!)
+        switchNext(e)
+    }
+}
 
-        if (!isNaN(currentTargetIndex)&&currentTargetIndex>-1) {
-            const nextElem = neighbourElems[currentTargetIndex+1]
-            if (nextElem instanceof HTMLDivElement) {
-                const supposedInput = nextElem.children[1]
-                if (supposedInput instanceof HTMLInputElement) {
-                    supposedInput.focus()
-                }
-            } else if (nextElem instanceof HTMLButtonElement) {
-                nextElem.click()
-            }
+// condition: div inside container, next container is date container -> label and container with dates inputs
+export const inputBeforeDateContainerHandler = (e: React.KeyboardEvent) => {
+    if (e.key==="Enter") {
+        e.preventDefault()
+        const neighbours = Array.from(e.currentTarget.parentNode!.parentNode!.children)
+        const input = neighbours[neighbours.indexOf(e.currentTarget.parentElement!)+1].children[1].children[0];
+        console.log(input)
+        if (input instanceof HTMLInputElement) {
+            input.focus()
         }
+    }
+}
+
+// it works if all inputs wrapped in containers and these containers have label before input
+
+export const switchNext = (e: React.SyntheticEvent) => {
+    const neighbourElems = Array.from(e.currentTarget.parentNode!.parentNode!.children)
+    const currentTargetIndex = neighbourElems.indexOf(e.currentTarget!.parentElement!)
+
+    if (!isNaN(currentTargetIndex)&&currentTargetIndex>-1) {
+        const nextElem = neighbourElems[currentTargetIndex+1]
+        if (nextElem instanceof HTMLDivElement) {
+            const supposedInput = nextElem.children[1]
+            if (supposedInput instanceof HTMLInputElement) {
+                supposedInput.focus()
+            }
+        } else if (nextElem instanceof HTMLButtonElement) {
+            nextElem.click()
+        } else {
+            (<HTMLInputElement>e.currentTarget).blur()
+        }
+    }
+}
+
+// it works if there's a group of inputs that aren't wrapped in containers
+export const switchNeighbourInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const neighbourElems = Array.from(e.currentTarget.parentNode!.children)
+    const currentTargetIndex = neighbourElems.indexOf(e.currentTarget)
+    const nextInput = neighbourElems[currentTargetIndex+1]
+
+    if (nextInput instanceof HTMLInputElement) {
+        nextInput.focus()
     }
 }
 
@@ -139,6 +171,43 @@ export const geocode = async (geoData: Geo|string) => {
         ...requestArgs,
         ...gmapsRegionOptions
     })
+}
+
+export const preventEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key==="Enter") {
+        e.preventDefault()
+    }
+}
+
+export class DateBuilder {
+    private day: string = '';
+
+    private month: string = '';
+
+    private year: string = '';
+
+    setDay (day: string): DateBuilder {
+        this.day = day;
+        return this;
+    }
+
+    setMonth (month: string): DateBuilder {
+        this.month = month;
+        return this;
+    }
+
+    setYear (year: string): DateBuilder {
+        this.year = year;
+        return this;
+    }
+
+    buildStringDate (): string {
+        return `${this.year}-${this.month}-${this.day}`
+    }
+
+    isValid (): boolean {
+        return !isNaN(new Date(`${this.year}-${this.month}-${this.day}`).getTime())
+    }
 }
 
 export {checkAuthorization, logOut}

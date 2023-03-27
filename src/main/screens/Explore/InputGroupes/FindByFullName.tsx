@@ -3,7 +3,7 @@ import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {BasicHumanSearchPayload} from "../../../types/explorationParams";
 import {setLocalInput} from "../../../redux/actions/ExplorationParamsActions";
-import {searchInputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
+import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
 
 const FindByFullName = () => {
     const dispatch = useAppDispatch()

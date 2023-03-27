@@ -1,50 +1,94 @@
 import Form from "react-bootstrap/Form";
 import {setLocalInput} from "../../../redux/actions/ExplorationParamsActions";
-import {searchInputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
-import React from "react";
+import {
+    DateBuilder, inputBeforeDateContainerHandler,
+    inputGroupsKeyPressHandler as keyPressHandler, preventEnter, switchNeighbourInput, switchNext
+} from "../../../data/pureFunctions";
+import React, {useMemo} from "react";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 
 const CreatePerson = () => {
+    const createPersonDto = useAppSelector(state => state.creationParams?.personCreationData)
+
+    const dispatch = useAppDispatch();
+
+    const [year, month, day] = useMemo<string[]>(() => {
+        const d = createPersonDto?.dateOfBirth;
+        if (d) {
+            return d.split("-")
+        }
+        return new Array(3).fill("")
+    }, [createPersonDto])
+
+    if (!createPersonDto) {
+        throw new Error("createPersonDto was null but it shouldn't")
+    }
     return (
         <>
             <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Прізвище</Form.Label>
-                    <input autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
-                    onKeyDown={keyPressHandler}
-            />
+                    <input value={createPersonDto.lastName} autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
+                        onKeyDown={keyPressHandler}
+                        onChange={e => {
+                            dispatch(updatePersonCreationParams({lastName: e.currentTarget.value}))
+                            }
+                        }
+                    />
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Ім'я</Form.Label>
-                <input autoComplete={"new-password"} className={`firstName form-control`} type="text" placeholder="Введіть ім'я"
+                <input value={createPersonDto.firstName} autoComplete={"new-password"} className={`firstName form-control`} type="text" placeholder="Введіть ім'я"
                     onKeyDown={keyPressHandler}
-            />
+                       onChange={e => {
+                            dispatch(updatePersonCreationParams({firstName: e.currentTarget.value}))
+                        }
+                       }
+                    />
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Ім'я по-батькові</Form.Label>
-                <input autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+                <input value={createPersonDto.middleName} autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
                     onKeyDown={keyPressHandler}
-            />
+                       onChange={e => {
+                           dispatch(updatePersonCreationParams({middleName: e.currentTarget.value}))
+                        }
+                       }
+                />
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Номер паспорта</Form.Label>
-                <input autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
+                <input value={createPersonDto.passportNumber} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
                        onKeyDown={keyPressHandler}
+                       onChange={e => {
+                           dispatch(updatePersonCreationParams({passportNumber: e.currentTarget.value}))
+                        }
+                       }
                 />
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Серія паспорта</Form.Label>
-                <input autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
+                <input  value={createPersonDto.passportSerial} autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
                        onKeyDown={keyPressHandler}
+                        onChange={e => {
+                                dispatch(updatePersonCreationParams({passportSerial: e.currentTarget.value}))
+                            }
+                        }
                 />
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>РНОКПП</Form.Label>
-                <input autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
-                       onKeyDown={keyPressHandler}
+                <input value={createPersonDto.rnokppCode} autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
+                       onKeyDown={inputBeforeDateContainerHandler}
+                       onChange={e => {
+                           dispatch(updatePersonCreationParams({rnokppCode: e.currentTarget.value}))
+                        }
+                       }
                 />
             </Form.Group>
 
@@ -52,16 +96,35 @@ const CreatePerson = () => {
                 <Form.Label>Дата народження</Form.Label>
 
                 <div className="date-of-birth date-container">
-                    <input autoComplete={"new-password"} className={`date-container__item date-of-birth__input date-of-birth__input_year form-control`} type="text" placeholder="YYYY"
-                           onKeyDown={keyPressHandler}
+                    <input value={year} autoComplete={"new-password"} className={`date-container__item date-of-birth__input date-of-birth__input_year form-control`} type="text" placeholder="YYYY"
+                           onKeyDown={preventEnter}
+                           onChange={e => {
+                               dispatch(updatePersonCreationParams({dateOfBirth: new DateBuilder().setYear(e.currentTarget.value).setMonth(month).setDay(day).buildStringDate()}))
+                                if (e.currentTarget.value.length>3) {
+                                    switchNeighbourInput(e)
+                                }
+                           }
+                        }
                     />
 
-                    <input autoComplete={"new-password"} className={`date-container__item date-of-birth__input date-of-birth__input_month form-control`} type="text" placeholder="MM"
-                           onKeyDown={keyPressHandler}
+                    <input value={month} autoComplete={"new-password"} className={`date-container__item date-of-birth__input date-of-birth__input_month form-control`} type="text" placeholder="MM"
+                           onKeyDown={preventEnter}
+                           onChange={e => {
+                               dispatch(updatePersonCreationParams({dateOfBirth: new DateBuilder().setYear(year).setMonth(e.currentTarget.value).setDay(day).buildStringDate()}))
+                               if (e.currentTarget.value.length>1) {
+                                   switchNeighbourInput(e)
+                               }
+                           }}
                     />
-
-                    <input autoComplete={"new-password"} className={`date-container__item date-of-birth__input date-of-birth__input_day form-control`} type="text" placeholder="DD"
-                           onKeyDown={keyPressHandler}
+                    //@todo write check on undefined for fields
+                    <input value={day} autoComplete={"new-password"} className={`date-container__item date-of-birth__input date-of-birth__input_day form-control`} type="text" placeholder="DD"
+                           onKeyDown={preventEnter}
+                           onChange={e => {
+                               dispatch(updatePersonCreationParams({dateOfBirth: new DateBuilder().setYear(year).setMonth(month).setDay(e.currentTarget.value).buildStringDate()}))
+                                if (e.currentTarget.value.length>1) {
+                                    switchNext(e)
+                                }
+                           }}
                     />
                 </div>
             </Form.Group>

@@ -1,5 +1,5 @@
 import Form from "react-bootstrap/Form";
-import {searchInputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
+import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
 import React, {useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppSelector} from "../../../redux/hooks";
