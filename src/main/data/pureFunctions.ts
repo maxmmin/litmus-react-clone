@@ -7,15 +7,27 @@ import React from "react";
 import {clearAuthRefreshTimer, setTimers, TimersReducible} from "../redux/actions/TimersActions";
 import {getGeocode} from "use-places-autocomplete";
 import Geo from "../types/Geo";
-import {gmapsRegionOptions} from "./appConfig";
+import {createAuthHeader, gmapsRegionOptions} from "./appConfig";
 import {Tables} from "../types/explorationParams";
 import {updateExplorationParams} from "../redux/actions/ExplorationParamsActions";
+import CreateUserDto from "../types/CreateUserDto";
+import CreatePersonDto from "../types/CreatePersonDto";
+import CreateJurPersonDto from "../types/CreateJurPersonDto";
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)
     return presentRights.length===neededRights.length;
 }
-
+export const createEntity = (url: string, entity: CreateUserDto | CreatePersonDto | CreateJurPersonDto, accessToken: string): Promise<Response> => {
+    return fetch(url, {
+        headers: {
+            ...createAuthHeader(accessToken),
+            "content-type": "application/json"
+        },
+        method: 'POST',
+        body: JSON.stringify(entity)
+    })
+}
 function logOut(dispatch: AppDispatch) {
     dispatch(clearAuthentication())
 }
@@ -33,7 +45,6 @@ export const inputBeforeDateContainerHandler = (e: React.KeyboardEvent) => {
         e.preventDefault()
         const neighbours = Array.from(e.currentTarget.parentNode!.parentNode!.children)
         const input = neighbours[neighbours.indexOf(e.currentTarget.parentElement!)+1].children[1].children[0];
-        console.log(input)
         if (input instanceof HTMLInputElement) {
             input.focus()
         }

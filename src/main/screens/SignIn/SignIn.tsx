@@ -53,6 +53,7 @@ function SignIn() {
                                    passwordInput.current?.focus()
                                }
                            }}
+                           autoComplete={"email"}
                     />
                 </Form.Group>
 
@@ -60,6 +61,7 @@ function SignIn() {
                     <Form.Label>Password</Form.Label>
                     <input ref={passwordInput} className={`sign-in-page__input form-control sign-in-page__input_password ${error?'is-invalid':''}`} type="password" placeholder="Password"
                            value={password}
+                           autoComplete={"current-password"}
                            onInput={(e)=> {
                                const updateObject: Partial<LoginPageState> = {password: e.currentTarget.value}
                                if (error) {

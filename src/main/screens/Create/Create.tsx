@@ -8,7 +8,7 @@ import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
 import {useAppDispatch} from "../../redux/hooks";
 import {CreationParams, CreationParamsReducible, updateCreationParams} from "../../redux/actions/CreationParamsActions";
 import CreationInputSection from "./CreationInputSection";
-import {getTableNameFromLocation} from "../../data/pureFunctions";
+import {createEntity, getTableNameFromLocation} from "../../data/pureFunctions";
 import {useLocation} from "react-router";
 import apiLinks, {createAuthHeader, routingLinks} from "../../data/appConfig";
 import {useNavigate} from "react-router-dom";
@@ -50,7 +50,7 @@ const Creation = () => {
         throw new Error("client error. table shouldn't be null. reload the page")
     }
 
-    const createEntity = (creationParams: CreationParamsReducible, accessToken: string) => {
+    const createButtonOnClick = (creationParams: CreationParamsReducible, accessToken: string) => {
         if (creationParams) {
             const table = creationParams.table;
 
@@ -76,14 +76,9 @@ const Creation = () => {
             }
 
             if (url && body) {
-                fetch(url, {
-                    headers: {
-                        ...createAuthHeader(accessToken)
-                    },
-                    body: JSON.stringify(body)
-                })
-                    .then(res => res.json())
-                    .then(console.log)
+                    createEntity(url, body, accessToken)
+                        .then(res => res.json())
+                        .then(console.log)
             }
 
         }
@@ -110,9 +105,10 @@ const Creation = () => {
                    <Form className={"creation-input-group"}>
                        <CreationInputSection table={table!}/>
 
-                       <button onClick={()=>{
+                       <button onClick={event => {
+                           event.preventDefault();
                            const state = store.getState();
-                           createEntity(state.creationParams, state.authentication?.accessToken!)
+                           createButtonOnClick(state.creationParams, state.authentication?.accessToken!)
                        }} className="creation-input-group__btn btn btn-primary">Створити</button>
                    </Form>
                </div>

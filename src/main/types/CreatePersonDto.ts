@@ -1,3 +1,5 @@
+import Geo from "./Geo";
+
 type CreatePersonDto = {
     firstName: string;
     middleName: string;
@@ -6,7 +8,7 @@ type CreatePersonDto = {
     passportSerial?: string;
     rnokppCode?: string;
     dateOfBirth?: string;
-    place?: any
+    place?: Location
 }
 
 export default CreatePersonDto;

@@ -172,6 +172,10 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                                     className={`${isValid?'':'is-invalid'} ${person?'is-valid':''}`}
                                     onInput={onInputHandler}
                                     defaultValue={person?.id}
+                                    onKeyDown={e => {
+                                        e.preventDefault()
+                                        applyPerson()
+                                    }}
                                 />
 
                                 {pending ?

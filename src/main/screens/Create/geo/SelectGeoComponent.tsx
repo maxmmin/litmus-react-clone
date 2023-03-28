@@ -29,21 +29,21 @@ const Map = ({location, setLocation}: LocationProps) => {
     return (
     <>
         <div className="places-container">
-            <PlacesAutocomplete address={location?location.label:""} setLocation={setLocation} />
+            <PlacesAutocomplete address={location?location.address:""} setLocation={setLocation} />
         </div>
 
         <GoogleMap
-            center={location?{lat: location.lat, lng: location.lng}:defaultMapPosition}
+            center={location?{lat: location.latitude, lng: location.longitude}:defaultMapPosition}
             zoom={15}
             mapContainerClassName={"geo-modal-map-container"}
             onClick={async (place)=>{
                 const results = await geocode({lat: place.latLng?.lat()!, lng: place.latLng?.lng()!})
                 const result = results[0];
-                setLocation({label: result.formatted_address, lat: result.geometry.location.lat(), lng: result.geometry.location.lng()})
+                setLocation({address: result.formatted_address, latitude: result.geometry.location.lat(), longitude: result.geometry.location.lng()})
             }}
         >
             <>
-                {location && <Marker position={location} />}
+                {location && <Marker position={{lat: location.latitude, lng: location.longitude}} />}
             </>
         </GoogleMap>
     </>

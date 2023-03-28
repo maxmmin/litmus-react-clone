@@ -32,7 +32,7 @@ const PlacesAutocomplete = ({address,setLocation}: AutocompleteProps) => {
         const results = await geocode(address)
         const result = results[0]
 
-        setLocation({ lat: result.geometry.location.lat()!, lng: result.geometry.location.lng()!, label: result.formatted_address});
+        setLocation({ latitude: result.geometry.location.lat()!, longitude: result.geometry.location.lng()!, address: result.formatted_address});
     };
     // I split value for input and value of autocomplete to prevent firing Google Maps Autocomplete invoking when you select position on map.
     useEffect(()=>{

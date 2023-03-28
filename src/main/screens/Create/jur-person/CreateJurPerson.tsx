@@ -97,7 +97,7 @@ const CreateJurPerson = () => {
 
                 <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Адреса</Form.Label>
-                    <input type={"button"} className={"jur-person-creation__input address form-control"} value={createJurPersonDto.address?createJurPersonDto.address.label:"Додати адресу"}
+                    <input type={"button"} className={"jur-person-creation__input address form-control"} value={createJurPersonDto.address?createJurPersonDto.address.address:"Додати адресу"}
                         onClick={()=>{
                             setModalSettings({mode: CreationModalModes.SET_GEOLOCATION})
                         }}
