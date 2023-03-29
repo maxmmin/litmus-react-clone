@@ -104,21 +104,4 @@ const CreateJurPerson = () => {
 )
 }
 
-const createJurPerson =  async () => {
-    store.dispatch(setPending(true))
-
-    const result = await fetch(apiLinks[Tables.JUR_PERSONS], {
-        headers: {
-            ...createAuthHeader(store.getState().authentication?.accessToken!)
-        },
-        body: JSON.stringify(store.getState().creationParams?.jurPersonCreationData!)
-    })
-
-    if (result.ok) {
-        console.log("ok")
-    }
-
-    store.dispatch(setPending(false))
-}
-
 export default CreateJurPerson;

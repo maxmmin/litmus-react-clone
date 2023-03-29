@@ -5,7 +5,7 @@ import React, {Dispatch, SetStateAction, useEffect, useMemo, useState} from "rea
 import Button from "react-bootstrap/Button";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {Location} from "../../../types/Location";
-import {updateJurPersonCreationParams} from "../../../redux/actions/CreationParamsActions";
+import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 
 type Props = {
     table: Tables,
@@ -23,6 +23,10 @@ const CreationGeoModal = ({table, show, close}: Props) => {
         switch (table) {
             case Tables.JUR_PERSONS: {
                 return state.creationParams?.jurPersonCreationData.location;
+            }
+
+            case Tables.PERSONS: {
+                return state.creationParams?.personCreationData.location;
             }
         }
     })
@@ -45,12 +49,19 @@ const CreationGeoModal = ({table, show, close}: Props) => {
             switch (table) {
                 case Tables.JUR_PERSONS: {
                     dispatch(updateJurPersonCreationParams({location: location}))
+                    break;
+                }
+
+                case Tables.PERSONS: {
+                    dispatch(updatePersonCreationParams({location: location}))
+                    break;
                 }
             }
             handleClose()
         }
     }
 
+    // eslint-disable-next-line
     useEffect(()=>{
         setLocation(geoLocation!)
     }, [show, table])

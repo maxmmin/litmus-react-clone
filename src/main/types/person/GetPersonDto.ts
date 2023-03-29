@@ -1,3 +1,5 @@
+import {Location} from "../Location";
+
 type GetPersonDto = {
     id: number;
     firstName: string;
@@ -7,7 +9,7 @@ type GetPersonDto = {
     passportSerial?: number;
     rnokppCode?: number;
     dateOfBirth?: number[];
-    place?: any
+    location?: Location
 }
 
 export default GetPersonDto;

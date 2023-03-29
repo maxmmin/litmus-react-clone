@@ -1,4 +1,5 @@
 import Geo from "../Geo";
+import {Location} from "../Location";
 
 type CreatePersonDto = {
     firstName: string;

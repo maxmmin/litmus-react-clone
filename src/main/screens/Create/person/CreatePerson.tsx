@@ -3,13 +3,19 @@ import {
     DateBuilder, inputBeforeDateContainerHandler,
     inputGroupsKeyPressHandler as keyPressHandler, preventEnter, switchNeighbourInput, switchNext
 } from "../../../data/pureFunctions";
-import React, {useMemo} from "react";
+import React, {useMemo, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 import InputDate from "../../components/InputDate";
 import {DateEntity} from "../../../types/DateEntity";
+import {CreationModalModes, CreationModalSettings} from "../Create";
+import ApplyPersonModal from "../ApplyPersonModal";
+import CreationGeoModal from "../geo/CreationGeoModal";
+import {Tables} from "../../../types/explorationParams";
 
 const CreatePerson = () => {
+    const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
+
     const createPersonDto = useAppSelector(state => state.creationParams?.personCreationData)
 
     const dispatch = useAppDispatch();
@@ -24,8 +30,12 @@ const CreatePerson = () => {
         dispatch(updatePersonCreationParams({dateOfBirth: date}))
     }
 
+    const closeModal = () => setModalSettings(null)
+
     return (
         <>
+            <CreationGeoModal table={Tables.PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
+
             <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Прізвище</Form.Label>
                     <input value={createPersonDto.lastName} autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
@@ -96,6 +106,15 @@ const CreatePerson = () => {
                 <Form.Label>Дата народження</Form.Label>
 
                 <InputDate date={new DateBuilder().setYear(year).setMonth(month).setDay(day)} setDate={setDate} className={"date-of-birth"}/>
+            </Form.Group>
+
+            <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
+                <Form.Label>Адреса</Form.Label>
+                <input type={"button"} className={"jur-person-creation__input address form-control"} value={createPersonDto.location?createPersonDto.location.address:"Додати адресу"}
+                       onClick={()=>{
+                           setModalSettings({mode: CreationModalModes.SET_GEOLOCATION})
+                       }}
+                />
             </Form.Group>
 
     </>

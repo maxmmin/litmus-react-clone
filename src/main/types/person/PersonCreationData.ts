@@ -1,5 +1,6 @@
 import Geo from "../Geo";
 import {DateEntity} from "../DateEntity";
+import {Location} from "../Location";
 
 type PersonCreationData = {
     firstName: string;
