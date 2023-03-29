@@ -1,5 +1,5 @@
 import {noInfoMessage} from "../../../data/httpErrors";
-import GetUserDto from "../../../types/GetUserDto";
+import GetUserDto from "../../../types/user/GetUserDto";
 
 type Props = {
     user: GetUserDto

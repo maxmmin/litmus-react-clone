@@ -3,7 +3,7 @@ import {DateBuilder, inputGroupsKeyPressHandler as keyPressHandler} from "../../
 import React, {useMemo, useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import GetPersonDto from "../../../types/GetPersonDto";
+import GetPersonDto from "../../../types/person/GetPersonDto";
 import {Tables} from "../../../types/explorationParams";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalModes, CreationModalSettings} from "../Create";
@@ -11,6 +11,7 @@ import apiLinks, {createAuthHeader} from "../../../data/appConfig";
 import store from "../../../redux/store";
 import {setPending, updateJurPersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 import InputDate from "../../components/InputDate";
+import {DateEntity, getInitialDate} from "../../../types/DateEntity";
 
 
 const getShortInfo = (person: GetPersonDto): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
@@ -22,13 +23,7 @@ const CreateJurPerson = () => {
 
     const createJurPersonDto = useAppSelector(state => state.creationParams?.jurPersonCreationData)
 
-    const [year, month, day] = useMemo<string[]>(() => {
-        const d = createJurPersonDto?.dateOfRegistration;
-        if (d) {
-            return d.split("-")
-        }
-        return new Array(3).fill("")
-    }, [createJurPersonDto])
+    const {year, month, day} = useMemo<DateEntity>(() => createJurPersonDto?.dateOfRegistration?createJurPersonDto.dateOfRegistration:getInitialDate(), [createJurPersonDto])
 
     const dispatch = useAppDispatch();
 
@@ -36,8 +31,8 @@ const CreateJurPerson = () => {
         throw new Error("createPersonDto was null but it shouldn't")
     }
 
-    const setDate = (date: DateBuilder) => {
-        dispatch(updateJurPersonCreationParams({dateOfRegistration: date.buildStringDate()}))
+    const setDate = (date: DateEntity) => {
+        dispatch(updateJurPersonCreationParams({dateOfRegistration: date}))
     }
 
     return (
@@ -97,7 +92,7 @@ const CreateJurPerson = () => {
 
                 <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Адреса</Form.Label>
-                    <input type={"button"} className={"jur-person-creation__input address form-control"} value={createJurPersonDto.address?createJurPersonDto.address.address:"Додати адресу"}
+                    <input type={"button"} className={"jur-person-creation__input address form-control"} value={createJurPersonDto.location?createJurPersonDto.location.address:"Додати адресу"}
                         onClick={()=>{
                             setModalSettings({mode: CreationModalModes.SET_GEOLOCATION})
                         }}

@@ -10,9 +10,9 @@ import Geo from "../types/Geo";
 import {createAuthHeader, gmapsRegionOptions} from "./appConfig";
 import {Tables} from "../types/explorationParams";
 import {updateExplorationParams} from "../redux/actions/ExplorationParamsActions";
-import CreateUserDto from "../types/CreateUserDto";
-import CreatePersonDto from "../types/CreatePersonDto";
-import CreateJurPersonDto from "../types/CreateJurPersonDto";
+import CreateUserDto from "../types/user/CreateUserDto";
+import CreatePersonDto from "../types/person/CreatePersonDto";
+import CreateJurPersonDto from "../types/jurPerson/CreateJurPersonDto";
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)

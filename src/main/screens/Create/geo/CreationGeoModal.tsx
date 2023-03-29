@@ -22,7 +22,7 @@ const CreationGeoModal = ({table, show, close}: Props) => {
     const geoLocation = useAppSelector(state => {
         switch (table) {
             case Tables.JUR_PERSONS: {
-                return state.creationParams?.jurPersonCreationData.address;
+                return state.creationParams?.jurPersonCreationData.location;
             }
         }
     })
@@ -34,7 +34,7 @@ const CreationGeoModal = ({table, show, close}: Props) => {
     const clearGeo = () => {
         switch (table) {
             case Tables.JUR_PERSONS: {
-                dispatch(updateJurPersonCreationParams({address: null}))
+                dispatch(updateJurPersonCreationParams({location: null}))
             }
         }
         handleClose()
@@ -44,7 +44,7 @@ const CreationGeoModal = ({table, show, close}: Props) => {
         if (location) {
             switch (table) {
                 case Tables.JUR_PERSONS: {
-                    dispatch(updateJurPersonCreationParams({address: location}))
+                    dispatch(updateJurPersonCreationParams({location: location}))
                 }
             }
             handleClose()

@@ -12,11 +12,12 @@ import {createEntity, getTableNameFromLocation} from "../../data/pureFunctions";
 import {useLocation} from "react-router";
 import apiLinks, {createAuthHeader, routingLinks} from "../../data/appConfig";
 import {useNavigate} from "react-router-dom";
-import CreateJurPersonDto from "../../types/CreateJurPersonDto";
-import CreatePersonDto from "../../types/CreatePersonDto";
-import CreateUserDto from "../../types/CreateUserDto";
+import CreateJurPersonDto from "../../types/jurPerson/CreateJurPersonDto";
+import CreatePersonDto from "../../types/person/CreatePersonDto";
+import CreateUserDto from "../../types/user/CreateUserDto";
 import {create} from "domain";
 import store from "../../redux/store";
+import {JurPersonCreationData} from "../../types/jurPerson/JurPersonCreationData";
 
 export enum CreationModalModes {
     SET_OWNER = "SET_OWNER",
@@ -60,12 +61,13 @@ const Creation = () => {
 
             switch (table) {
                 case Tables.JUR_PERSONS: {
-                    body = creationParams.jurPersonCreationData
+                    const data = creationParams.jurPersonCreationData
+
                     break;
                 }
 
                 case Tables.PERSONS: {
-                    body = creationParams.personCreationData;
+                    const data = creationParams.personCreationData;
                     break;
                 }
 

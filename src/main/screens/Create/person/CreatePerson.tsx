@@ -1,5 +1,4 @@
 import Form from "react-bootstrap/Form";
-import {setLocalInput} from "../../../redux/actions/ExplorationParamsActions";
 import {
     DateBuilder, inputBeforeDateContainerHandler,
     inputGroupsKeyPressHandler as keyPressHandler, preventEnter, switchNeighbourInput, switchNext
@@ -8,26 +7,21 @@ import React, {useMemo} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 import InputDate from "../../components/InputDate";
+import {DateEntity} from "../../../types/DateEntity";
 
 const CreatePerson = () => {
     const createPersonDto = useAppSelector(state => state.creationParams?.personCreationData)
 
     const dispatch = useAppDispatch();
 
-    const [year, month, day] = useMemo<string[]>(() => {
-        const d = createPersonDto?.dateOfBirth;
-        if (d) {
-            return d.split("-")
-        }
-        return new Array(3).fill("")
-    }, [createPersonDto])
+    const {year, month, day} = useMemo<DateEntity>(() => createPersonDto?.dateOfBirth!, [createPersonDto])
 
     if (!createPersonDto) {
         throw new Error("createPersonDto was null but it shouldn't")
     }
 
-    const setDate = (builder: DateBuilder) => {
-        dispatch(updatePersonCreationParams({dateOfBirth: builder.buildStringDate()}))
+    const setDate = (date: DateEntity) => {
+        dispatch(updatePersonCreationParams({dateOfBirth: date}))
     }
 
     return (

@@ -5,14 +5,15 @@ import Modal from 'react-bootstrap/Modal';
 import apiLinks, {createAuthHeader} from "../../data/appConfig";
 import {Tables} from "../../types/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import GetPersonDto from "../../types/GetPersonDto";
+import GetPersonDto from "../../types/person/GetPersonDto";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
-import CreateJurPersonDto from "../../types/CreateJurPersonDto";
+import CreateJurPersonDto from "../../types/jurPerson/CreateJurPersonDto";
 import {updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
 import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalModes, CreationModalSettings} from "./Create";
 import {Location} from "../../types/Location";
+import {JurPersonCreationData} from "../../types/jurPerson/JurPersonCreationData";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -114,7 +115,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     };
 
     const applyPerson = () => {
-        const payload: Partial<CreateJurPersonDto> = {}
+        const payload: Partial<JurPersonCreationData> = {}
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER: {
                 payload.owner = person;
@@ -131,7 +132,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     }
 
     const clearPerson = () => {
-        const payload: Partial<CreateJurPersonDto> = {}
+        const payload: Partial<JurPersonCreationData> = {}
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER: {
                 payload.owner = null;
@@ -173,8 +174,10 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                                     onInput={onInputHandler}
                                     defaultValue={person?.id}
                                     onKeyDown={e => {
-                                        e.preventDefault()
-                                        applyPerson()
+                                        if (e.key==="Enter") {
+                                            e.preventDefault()
+                                            applyPerson()
+                                        }
                                     }}
                                 />
 

@@ -6,10 +6,13 @@ import CreationParamsActions, {
 } from "../actions/CreationParamsActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
-import CreateJurPersonDto from "../../types/CreateJurPersonDto";
+import CreateJurPersonDto from "../../types/jurPerson/CreateJurPersonDto";
 import AuthActions from "../actions/AuthActions";
-import CreatePersonDto from "../../types/CreatePersonDto";
-import CreateUserDto from "../../types/CreateUserDto";
+import CreatePersonDto from "../../types/person/CreatePersonDto";
+import CreateUserDto from "../../types/user/CreateUserDto";
+import {JurPersonCreationData} from "../../types/jurPerson/JurPersonCreationData";
+import PersonCreationData from "../../types/person/PersonCreationData";
+import UserCreationData from "../../types/user/UserCreationData";
 
 const initialState: CreationParams = {
     table: Tables.PERSONS,
@@ -30,15 +33,15 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
         }
 
         case CreationParamsActions.UPDATE_JUR_PERSON_CREATION_DATA: {
-            return {...prevState, jurPersonCreationData: {...prevState.jurPersonCreationData, ...(action.payload as unknown as Partial<CreateJurPersonDto>)}}
+            return {...prevState, jurPersonCreationData: {...prevState.jurPersonCreationData, ...(action.payload as unknown as Partial<JurPersonCreationData>)}}
         }
 
         case CreationParamsActions.UPDATE_PERSON_CREATION_DATA: {
-            return {...prevState, personCreationData: {...prevState.personCreationData, ...(action.payload as unknown as Partial<CreatePersonDto>)}}
+            return {...prevState, personCreationData: {...prevState.personCreationData, ...(action.payload as unknown as Partial<PersonCreationData>)}}
         }
 
         case CreationParamsActions.UPDATE_USER_CREATION_DATA: {
-            return {...prevState, userCreationData: {...prevState.userCreationData, ...(action.payload as unknown as Partial<CreateUserDto>)}}
+            return {...prevState, userCreationData: {...prevState.userCreationData, ...(action.payload as unknown as Partial<UserCreationData>)}}
         }
 
         case AuthActions.CLEAR_AUTH: {

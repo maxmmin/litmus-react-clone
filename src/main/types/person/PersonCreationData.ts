@@ -1,4 +1,5 @@
-import Geo from "./Geo";
+import Geo from "../Geo";
+import {DateEntity} from "../DateEntity";
 
 type CreatePersonDto = {
     firstName: string;
@@ -7,8 +8,8 @@ type CreatePersonDto = {
     passportNumber?: string;
     passportSerial?: string;
     rnokppCode?: string;
-    dateOfBirth?: string;
-    place?: Location
+    dateOfBirth?: DateEntity;
+    location?: Location | null
 }
 
 export default CreatePersonDto;

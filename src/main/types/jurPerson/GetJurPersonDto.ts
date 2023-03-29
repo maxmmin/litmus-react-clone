@@ -1,4 +1,4 @@
-import GetPersonDto from "./GetPersonDto";
+import GetPersonDto from "../person/GetPersonDto";
 
 type GetJurPersonDto = {
     id: number;

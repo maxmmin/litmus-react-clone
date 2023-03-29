@@ -1,12 +1,12 @@
 import {useAppSelector} from "../../redux/hooks";
 import {Tables} from "../../types/explorationParams";
-import GetPersonDto from "../../types/GetPersonDto";
+import GetPersonDto from "../../types/person/GetPersonDto";
 import {MutableRefObject} from "react";
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import {Results} from "../../redux/actions/ApiSearchActions";
-import GetJurPersonDto from "../../types/GetJurPersonDto";
+import GetJurPersonDto from "../../types/jurPerson/GetJurPersonDto";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
-import GetUserDto from "../../types/GetUserDto";
+import GetUserDto from "../../types/user/GetUserDto";
 import UserInfoTable from "./EntityTables/UserInfoTable";
 import Loader from "../components/Loader";
 

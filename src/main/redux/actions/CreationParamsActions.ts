@@ -1,11 +1,11 @@
 import {Tables} from "../../types/explorationParams";
-import {AsyncThunk, createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import CreatePersonDto from "../../types/CreatePersonDto";
-import CreateJurPersonDto from "../../types/CreateJurPersonDto";
-import CreateUserDto from "../../types/CreateUserDto";
-import GetPersonDto from "../../types/GetPersonDto";
+import {PayloadAction} from "@reduxjs/toolkit";
+import GetPersonDto from "../../types/person/GetPersonDto";
 import {Location} from "../../types/Location";
-import CreateUser from "../../screens/Create/user/CreateUser";
+import {JurPersonCreationData} from "../../types/jurPerson/JurPersonCreationData";
+import {DateEntity, getInitialDate} from "../../types/DateEntity";
+import PersonCreationData from "../../types/person/PersonCreationData";
+import UserCreationData from "../../types/user/UserCreationData";
 
 enum CreationParamsActions {
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
@@ -25,39 +25,39 @@ export const updateCreationParams = (payload: Partial<CreationParams>): PayloadA
     }
 }
 
-export const updateJurPersonCreationParams = (payload: Partial<CreateJurPersonDto>): PayloadAction<Partial<CreateJurPersonDto>> => {
+export const updateJurPersonCreationParams = (payload: Partial<JurPersonCreationData>): PayloadAction<Partial<JurPersonCreationData>> => {
     return {
         type: CreationParamsActions.UPDATE_JUR_PERSON_CREATION_DATA,
         payload: payload
     }
 }
 
-export const updateUserCreationParams = (payload: Partial<CreateUserDto>): PayloadAction<Partial<CreateUserDto>> => {
+export const updateUserCreationParams = (payload: Partial<UserCreationData>): PayloadAction<Partial<UserCreationData>> => {
     return {
         type: CreationParamsActions.UPDATE_USER_CREATION_DATA,
         payload: payload
     }
 }
 
-export const updatePersonCreationParams = (payload: Partial<CreatePersonDto>): PayloadAction<Partial<CreatePersonDto>> => {
+export const updatePersonCreationParams = (payload: Partial<PersonCreationData>): PayloadAction<Partial<PersonCreationData>> => {
     return {
         type: CreationParamsActions.UPDATE_PERSON_CREATION_DATA,
         payload: payload
     }
 }
 
-export class InitPersonCreationParams implements CreatePersonDto {
-    dateOfBirth: string = "";
+export class InitPersonCreationParams implements PersonCreationData {
+    dateOfBirth: DateEntity = getInitialDate();
     firstName: string = "";
     lastName: string = "";
     middleName: string = "";
     passportNumber: string = "";
     passportSerial: string = "";
-    place: any;
+    location = null;
     rnokppCode: string = "";
 }
 
-export class InitUserCreationParams implements CreateUserDto {
+export class InitUserCreationParams implements UserCreationData {
     email: string = "";
     firstName: string = "";
     lastName: string = "";
@@ -66,20 +66,20 @@ export class InitUserCreationParams implements CreateUserDto {
     role: string = "";
 }
 
-export class InitJurPersonCreationParams implements CreateJurPersonDto {
+export class InitJurPersonCreationParams implements JurPersonCreationData {
     benOwner: GetPersonDto | null = null;
-    dateOfRegistration: string = "";
+    dateOfRegistration: DateEntity = getInitialDate();
     edrpou: string = "";
     name: string = "";
     owner: GetPersonDto | null = null;
-    address: Location | null = null;
+    location: Location | null = null;
 }
 
 export type CreationParams = {
     table: Tables,
-    personCreationData: CreatePersonDto,
-    jurPersonCreationData: CreateJurPersonDto,
-    userCreationData: CreateUserDto,
+    personCreationData: PersonCreationData,
+    jurPersonCreationData: JurPersonCreationData,
+    userCreationData: UserCreationData,
     pending: boolean
 }
 
