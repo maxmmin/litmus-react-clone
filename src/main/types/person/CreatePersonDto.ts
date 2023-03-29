@@ -4,11 +4,11 @@ type CreatePersonDto = {
     firstName: string;
     middleName: string;
     lastName: string;
-    passportNumber?: string;
-    passportSerial?: string;
-    rnokppCode?: string;
-    dateOfBirth?: string;
-    location?: Location | null
+    passportNumber: number | null;
+    passportSerial: number | null;
+    rnokppCode: number | null;
+    dateOfBirth: string | null;
+    location: Location | null
 }
 
 export default CreatePersonDto;

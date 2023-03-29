@@ -9,7 +9,7 @@ type CreateUserDto = {
 
     password: string
 
-    role?: string;
+    role: string | null;
 
 }
 

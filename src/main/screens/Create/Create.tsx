@@ -6,7 +6,12 @@ import {Permissions} from "../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
 import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
 import {useAppDispatch} from "../../redux/hooks";
-import {CreationParams, CreationParamsReducible, updateCreationParams} from "../../redux/actions/CreationParamsActions";
+import {
+    CreationParams,
+    CreationParamsReducible,
+    getCreateJurPersonDto, getCreatePersonDto, getCreateUserDto,
+    updateCreationParams
+} from "../../redux/actions/CreationParamsActions";
 import CreationInputSection from "./CreationInputSection";
 import {createEntity, getTableNameFromLocation} from "../../data/pureFunctions";
 import {useLocation} from "react-router";
@@ -61,18 +66,20 @@ const Creation = () => {
 
             switch (table) {
                 case Tables.JUR_PERSONS: {
-                    const data = creationParams.jurPersonCreationData
-
+                    const creationData = creationParams.jurPersonCreationData;
+                    body = getCreateJurPersonDto(creationData);
                     break;
                 }
 
                 case Tables.PERSONS: {
-                    const data = creationParams.personCreationData;
+                    const creationData = creationParams.personCreationData;
+                    body = getCreatePersonDto(creationData)
                     break;
                 }
 
                 case Tables.USERS: {
-                    body = creationParams.userCreationData;
+                    const creationData = creationParams.userCreationData;
+                    body = getCreateUserDto(creationData);
                     break;
                 }
             }

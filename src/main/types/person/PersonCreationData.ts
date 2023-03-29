@@ -1,7 +1,7 @@
 import Geo from "../Geo";
 import {DateEntity} from "../DateEntity";
 
-type CreatePersonDto = {
+type PersonCreationData = {
     firstName: string;
     middleName: string;
     lastName: string;
@@ -12,4 +12,4 @@ type CreatePersonDto = {
     location?: Location | null
 }
 
-export default CreatePersonDto;
+export default PersonCreationData;
