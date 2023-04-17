@@ -8,7 +8,7 @@ type GetPersonDto = {
     passportNumber?: number;
     passportSerial?: number;
     rnokppCode?: number;
-    dateOfBirth?: number[];
+    dateOfBirth?: string;
     location?: Location
 }
 

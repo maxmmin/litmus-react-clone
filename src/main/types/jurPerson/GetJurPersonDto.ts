@@ -5,7 +5,7 @@ type GetJurPersonDto = {
     id: number;
     name: string;
     edrpou?: string;
-    dateOfRegistration?: Array<number>;
+    dateOfRegistration?: string;
     owner?: GetPersonDto;
     benOwner?: GetPersonDto;
     location?: Location;

@@ -93,6 +93,7 @@ const Creation = () => {
         }
 
     }
+    // @todo DO VALIDATION
 
     return (
         <div className="creation-page">
