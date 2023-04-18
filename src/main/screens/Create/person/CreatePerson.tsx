@@ -25,7 +25,7 @@ const CreatePerson = () => {
     const passportData = createPersonDto?.passportData;
 
     if (!createPersonDto) {
-        throw new Error("createPersonDto was null but it shouldn't")
+        throw new Error("createPersonDto was null but it shouldn't be")
     }
 
     const setDate = (date: DateEntity) => {
@@ -73,7 +73,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Номер паспорта</Form.Label>
-                <input value={passportData?.passportNumber} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
+                <input value={passportData!.passportNumber} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
                        onKeyDown={keyPressHandler}
                        onChange={e => {
                            dispatch(updatePassportData({passportNumber: e.currentTarget.value}))
@@ -84,7 +84,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Серія паспорта</Form.Label>
-                <input  value={passportData?.passportSerial} autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
+                <input  value={passportData!.passportSerial} autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
                        onKeyDown={keyPressHandler}
                         onChange={e => {
                                 dispatch(updatePassportData({passportSerial: e.currentTarget.value}))
@@ -95,7 +95,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>РНОКПП</Form.Label>
-                <input value={passportData?.rnokppCode} autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
+                <input value={passportData!.rnokppCode} autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
                        onKeyDown={inputBeforeDateContainerHandler}
                        onChange={e => {
                            dispatch(updatePassportData({rnokppCode: e.currentTarget.value}))

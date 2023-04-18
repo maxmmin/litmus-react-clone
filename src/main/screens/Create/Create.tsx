@@ -63,7 +63,6 @@ const Creation = () => {
             const url = apiLinks[table]
 
             let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
-
             switch (table) {
                 case Tables.JUR_PERSONS: {
                     const creationData = creationParams.jurPersonCreationData;

@@ -112,9 +112,9 @@ export const getCreatePersonDto = (creationData: PersonCreationData): CreatePers
         createDtoDate = new DateBuilder().setDay(DOB.day).setMonth(DOB.month).setYear(DOB.year).buildStringDate();
     }
 
-    const passportNumber = creationData.passportData?.passportNumber;
-    const passportSerial = creationData.passportData?.passportSerial;
-    const rnokpp = creationData.passportData?.passportSerial;
+    const passportNumber = creationData.passportData.passportNumber;
+    const passportSerial = creationData.passportData.passportSerial;
+    const rnokpp = creationData.passportData.rnokppCode;
 
     return {
         dateOfBirth: createDtoDate,
@@ -123,9 +123,9 @@ export const getCreatePersonDto = (creationData: PersonCreationData): CreatePers
         location: creationData.location?creationData.location:null,
         middleName: creationData.middleName,
         passportData: {
-            passportNumber: passportNumber?passportNumber:null,
-            passportSerial: passportSerial?passportSerial:null,
-            rnokppCode: rnokpp?rnokpp:null
+            passportNumber: passportNumber!==""?passportNumber:null,
+            passportSerial: passportSerial!==""?passportSerial:null,
+            rnokppCode: rnokpp!==""?rnokpp:null
         }
     }
 }
