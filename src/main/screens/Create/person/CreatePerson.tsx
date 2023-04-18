@@ -5,7 +5,7 @@ import {
 } from "../../../data/pureFunctions";
 import React, {useMemo, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
+import {updatePassportData, updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 import InputDate from "../../components/InputDate";
 import {DateEntity} from "../../../types/DateEntity";
 import {CreationModalModes, CreationModalSettings} from "../Create";
@@ -20,7 +20,9 @@ const CreatePerson = () => {
 
     const dispatch = useAppDispatch();
 
-    const {year, month, day} = useMemo<DateEntity>(() => createPersonDto?.dateOfBirth!, [createPersonDto])
+    const {year, month, day} = createPersonDto?.dateOfBirth!;
+
+    const passportData = createPersonDto?.passportData;
 
     if (!createPersonDto) {
         throw new Error("createPersonDto was null but it shouldn't")
@@ -71,10 +73,10 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Номер паспорта</Form.Label>
-                <input value={createPersonDto.passportNumber} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
+                <input value={passportData?.passportNumber} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
                        onKeyDown={keyPressHandler}
                        onChange={e => {
-                           dispatch(updatePersonCreationParams({passportNumber: e.currentTarget.value}))
+                           dispatch(updatePassportData({passportNumber: e.currentTarget.value}))
                         }
                        }
                 />
@@ -82,10 +84,10 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Серія паспорта</Form.Label>
-                <input  value={createPersonDto.passportSerial} autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
+                <input  value={passportData?.passportSerial} autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
                        onKeyDown={keyPressHandler}
                         onChange={e => {
-                                dispatch(updatePersonCreationParams({passportSerial: e.currentTarget.value}))
+                                dispatch(updatePassportData({passportSerial: e.currentTarget.value}))
                             }
                         }
                 />
@@ -93,10 +95,10 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>РНОКПП</Form.Label>
-                <input value={createPersonDto.rnokppCode} autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
+                <input value={passportData?.rnokppCode} autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
                        onKeyDown={inputBeforeDateContainerHandler}
                        onChange={e => {
-                           dispatch(updatePersonCreationParams({rnokppCode: e.currentTarget.value}))
+                           dispatch(updatePassportData({rnokppCode: e.currentTarget.value}))
                         }
                        }
                 />

@@ -6,13 +6,11 @@ import CreationParamsActions, {
 } from "../actions/CreationParamsActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
-import CreateJurPersonDto from "../../types/jurPerson/CreateJurPersonDto";
 import AuthActions from "../actions/AuthActions";
-import CreatePersonDto from "../../types/person/CreatePersonDto";
-import CreateUserDto from "../../types/user/CreateUserDto";
 import {JurPersonCreationData} from "../../types/jurPerson/JurPersonCreationData";
 import PersonCreationData from "../../types/person/PersonCreationData";
 import UserCreationData from "../../types/user/UserCreationData";
+import {PassportData} from "../../types/person/PassportData";
 
 const initialState: CreationParams = {
     table: Tables.PERSONS,
@@ -42,6 +40,13 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
 
         case CreationParamsActions.UPDATE_USER_CREATION_DATA: {
             return {...prevState, userCreationData: {...prevState.userCreationData, ...(action.payload as unknown as Partial<UserCreationData>)}}
+        }
+
+        case CreationParamsActions.UPDATE_PASSPORT_DATA: {
+            const payload = action.payload as unknown as Partial<PassportData>;
+
+            let passportData: PassportData = Object.assign({},prevState.personCreationData.passportData, payload);
+            return {...prevState, personCreationData: {...prevState.personCreationData, passportData}}
         }
 
         case AuthActions.CLEAR_AUTH: {

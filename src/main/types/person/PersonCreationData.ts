@@ -1,14 +1,13 @@
 import Geo from "../Geo";
 import {DateEntity} from "../DateEntity";
 import {Location} from "../Location";
+import {PassportData} from "./PassportData";
 
 type PersonCreationData = {
     firstName: string;
     middleName: string;
     lastName: string;
-    passportNumber?: string;
-    passportSerial?: string;
-    rnokppCode?: string;
+    passportData: PassportData;
     dateOfBirth?: DateEntity;
     location?: Location | null
 }

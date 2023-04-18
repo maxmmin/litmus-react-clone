@@ -10,6 +10,7 @@ import CreatePersonDto from "../../types/person/CreatePersonDto";
 import {DateBuilder} from "../../data/pureFunctions";
 import CreateUserDto from "../../types/user/CreateUserDto";
 import CreateJurPersonDto from "../../types/jurPerson/CreateJurPersonDto";
+import {PassportData} from "../../types/person/PassportData";
 
 enum CreationParamsActions {
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
@@ -17,7 +18,8 @@ enum CreationParamsActions {
     UPDATE_JUR_PERSON_CREATION_DATA="UPDATE_JUR_PERSON_CREATION_DATA",
     UPDATE_PERSON_CREATION_DATA="UPDATE_PERSON_CREATION_DATA",
     UPDATE_USER_CREATION_DATA="UPDATE_USER_CREATION_DATA",
-    SET_CREATION_PENDING="SET_CREATION_PENDING"
+    SET_CREATION_PENDING="SET_CREATION_PENDING",
+    UPDATE_PASSPORT_DATA="UPDATE_PASSPORT_DATA"
 }
 
 export default CreationParamsActions;
@@ -50,15 +52,20 @@ export const updatePersonCreationParams = (payload: Partial<PersonCreationData>)
     }
 }
 
+export const updatePassportData = (payload: Partial<PassportData>): PayloadAction<Partial<PassportData>> => {
+    return {
+        type: CreationParamsActions.UPDATE_PASSPORT_DATA,
+        payload: payload
+    }
+}
+
 export class InitPersonCreationParams implements PersonCreationData {
     dateOfBirth: DateEntity = getInitialDate();
-    firstName: string = "";
-    lastName: string = "";
-    middleName: string = "";
-    passportNumber: string = "";
-    passportSerial: string = "";
+    firstName = "";
+    lastName = "";
+    middleName = "";
+    passportData = {passportSerial: "", passportNumber: "", rnokppCode: ""};
     location = null;
-    rnokppCode: string = "";
 }
 
 export class InitUserCreationParams implements UserCreationData {
@@ -105,11 +112,9 @@ export const getCreatePersonDto = (creationData: PersonCreationData): CreatePers
         createDtoDate = new DateBuilder().setDay(DOB.day).setMonth(DOB.month).setYear(DOB.year).buildStringDate();
     }
 
-    const passportNumber = +creationData.passportNumber!;
-
-    const passportSerial = +creationData.passportSerial!;
-
-    const rnokppCode = +creationData.rnokppCode!;
+    const passportNumber = creationData.passportData?.passportNumber;
+    const passportSerial = creationData.passportData?.passportSerial;
+    const rnokpp = creationData.passportData?.passportSerial;
 
     return {
         dateOfBirth: createDtoDate,
@@ -117,9 +122,11 @@ export const getCreatePersonDto = (creationData: PersonCreationData): CreatePers
         lastName: creationData.lastName,
         location: creationData.location?creationData.location:null,
         middleName: creationData.middleName,
-        passportNumber: passportNumber?passportNumber:null,
-        passportSerial: passportSerial?passportSerial:null,
-        rnokppCode: rnokppCode?rnokppCode:null
+        passportData: {
+            passportNumber: passportNumber?passportNumber:null,
+            passportSerial: passportSerial?passportSerial:null,
+            rnokppCode: rnokpp?rnokpp:null
+        }
     }
 }
 // @todo i think middle name should be optional
