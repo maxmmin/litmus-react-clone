@@ -1,33 +1,31 @@
 import Form from "react-bootstrap/Form";
-import {DateBuilder, inputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
+import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
 import React, {useMemo, useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import GetPersonDto from "../../../types/person/GetPersonDto";
 import {Tables} from "../../../types/explorationParams";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalModes, CreationModalSettings} from "../Create";
-import apiLinks, {createAuthHeader} from "../../../data/appConfig";
-import store from "../../../redux/store";
-import {setPending, updateJurPersonCreationParams} from "../../../redux/actions/CreationParamsActions";
+import {updateJurPersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 import InputDate from "../../components/InputDate";
-import {DateEntity, getInitialDate} from "../../../types/DateEntity";
+import Person from "../../../types/Person";
+import DateEntity, {DateBuilder} from "../../../types/DateEntity";
 
 
-const getShortInfo = (person: GetPersonDto): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
+const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
 
 const CreateJurPerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
 
     const closeModal = () => setModalSettings(null)
 
-    const createJurPersonDto = useAppSelector(state => state.creationParams?.jurPersonCreationData)
+    const jurPersonCreationData = useAppSelector(state => state.creationParams?.jurPersonCreationData)
 
-    const {year, month, day} = useMemo<DateEntity>(() => createJurPersonDto?.dateOfRegistration?createJurPersonDto.dateOfRegistration:getInitialDate(), [createJurPersonDto])
+    const {year, month, day} = jurPersonCreationData!.dateOfRegistration
 
     const dispatch = useAppDispatch();
 
-    if (!createJurPersonDto) {
+    if (!jurPersonCreationData) {
         throw new Error("createPersonDto was null but it shouldn't")
     }
 
@@ -45,7 +43,7 @@ const CreateJurPerson = () => {
 
                 <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Назва</Form.Label>
-                    <input value={createJurPersonDto.name} autoComplete={"new-password"} className={`name form-control`} type="text" placeholder="Введіть назву юридичної особи"
+                    <input value={jurPersonCreationData.name} autoComplete={"new-password"} className={`name form-control`} type="text" placeholder="Введіть назву юридичної особи"
                            onKeyDown={keyPressHandler}
                            onChange={e=>{
                                dispatch(updateJurPersonCreationParams({name: e.currentTarget.value}))
@@ -55,7 +53,7 @@ const CreateJurPerson = () => {
 
                 <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>ЄДРПОУ</Form.Label>
-                    <input value={createJurPersonDto.edrpou} autoComplete={"new-password"} className={`edrpou form-control`} type="text" placeholder="Введіть ЄДРПОУ"
+                    <input value={jurPersonCreationData.edrpou} autoComplete={"new-password"} className={`edrpou form-control`} type="text" placeholder="Введіть ЄДРПОУ"
                            onKeyDown={keyPressHandler}
                            onChange={e=>{
                                dispatch(updateJurPersonCreationParams({edrpou: e.currentTarget.value}))
@@ -69,7 +67,7 @@ const CreateJurPerson = () => {
                            onClick={()=>{
                                setModalSettings({mode: CreationModalModes.SET_OWNER})
                            }}
-                           value={createJurPersonDto.owner?getShortInfo(createJurPersonDto.owner):"Додати особу"}
+                           value={jurPersonCreationData.owner?getShortInfo(jurPersonCreationData.owner):"Додати особу"}
                     />
                 </Form.Group>
 
@@ -79,20 +77,21 @@ const CreateJurPerson = () => {
                            onClick={()=>{
                                setModalSettings({mode: CreationModalModes.SET_BEN_OWNER})
                            }}
-                           value={createJurPersonDto.benOwner?getShortInfo(createJurPersonDto.benOwner):"Додати особу"}
+                           value={jurPersonCreationData.benOwner?getShortInfo(jurPersonCreationData.benOwner):"Додати особу"}
                     />
                 </Form.Group>
 
                 <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Дата реєстрації юридичної особи</Form.Label>
 
-                    <InputDate date={new DateBuilder().setDay(day).setMonth(month).setYear(year)} setDate={setDate} className={"date-of-registration"}/>
+                    <InputDate date={new DateBuilder().setDay(day).setMonth(month).setYear(year).build()} setDate={setDate} className={"date-of-registration"}/>
 
                 </Form.Group>
 
                 <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Адреса</Form.Label>
-                    <input type={"button"} className={"jur-person-creation__input address form-control"} value={createJurPersonDto.location?createJurPersonDto.location.address:"Додати адресу"}
+                    <input type={"button"} className={"jur-person-creation__input address form-control"}
+                           value={jurPersonCreationData.location?jurPersonCreationData.location.address:"Додати адресу"}
                         onClick={()=>{
                             setModalSettings({mode: CreationModalModes.SET_GEOLOCATION})
                         }}

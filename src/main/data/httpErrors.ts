@@ -1,7 +1,7 @@
 // names of this errors will be acting like actions //
 enum HttpErrorsNames {
     UNAUTHENTICATED="UNAUTHENTICATED",
-    BAD_CREDENTIALS="BAD_CREDENTIALS",
+    BAD_REQUEST="BAD_REQUEST",
     UNKNOWN_ERROR="UNKNOWN_ERROR",
     NOT_FOUND="NOT_FOUND",
     FORBIDDEN="FORBIDDEN"
@@ -13,7 +13,7 @@ type HttpErrors = Record<number,HttpErrorsNames>
 
 const httpErrors: HttpErrors = {
     401: HttpErrorsNames.UNAUTHENTICATED,
-    400: HttpErrorsNames.BAD_CREDENTIALS,
+    400: HttpErrorsNames.BAD_REQUEST,
     403: HttpErrorsNames.FORBIDDEN,
     404: HttpErrorsNames.NOT_FOUND,
 }

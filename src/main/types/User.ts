@@ -1,4 +1,8 @@
-type CreateUserDto = {
+import {Roles} from "./Role";
+
+type User = {
+    id?: string;
+
     email: string;
 
     firstName: string;
@@ -9,8 +13,8 @@ type CreateUserDto = {
 
     password: string
 
-    role: string | null;
+    role: Roles;
 
 }
 
-export default CreateUserDto;
+export default User;

@@ -1,8 +1,8 @@
 import {noInfoMessage} from "../../../data/httpErrors";
-import GetUserDto from "../../../types/user/GetUserDto";
+import User from "../../../types/User";
 
 type Props = {
-    user: GetUserDto
+    user: User
 }
 
 const UserInfoTable = ({user}: Props) => {

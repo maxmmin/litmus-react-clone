@@ -5,7 +5,6 @@ import apiLinks, {createAuthHeader, entitiesPerPage} from "../../data/appConfig"
 import {RootState} from "../store";
 import {
     BasicHumanSearchPayload,
-    ExplorationParams,
     ExplorationParamsReducible,
     Modes,
     Tables
@@ -56,7 +55,7 @@ const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Table
             const id = (explorationParams.input![table] as {id: string}).id;
 
             if (!id) {
-                throw new HttpError(400, HttpErrorsNames.BAD_CREDENTIALS)
+                throw new HttpError(400, HttpErrorsNames.BAD_REQUEST)
             }
 
             baseUrl += `/${id}`;
@@ -70,11 +69,11 @@ const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Table
             const middleName = fullNameInput.middleName;
             const lastName = fullNameInput.lastName;
 
-            if (!firstName||!middleName||!lastName) {
-                throw new HttpError(400, HttpErrorsNames.BAD_CREDENTIALS)
+            if (!lastName) {
+                throw new HttpError(400, HttpErrorsNames.BAD_REQUEST)
             }
 
-            baseUrl += `?lastName=${lastName}&middleName=${middleName}&firstName=${firstName}`
+            baseUrl += `?lastName=${lastName}${middleName?"&middleName="+middleName:""}&${firstName?"&firstName="+firstName:""}`
 
             if (typeof prevResults?.index === 'number') {
                 baseUrl += `&index=${prevResults.index+1}`

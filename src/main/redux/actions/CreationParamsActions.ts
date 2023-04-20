@@ -1,16 +1,13 @@
 import {Tables} from "../../types/explorationParams";
 import {PayloadAction} from "@reduxjs/toolkit";
-import GetPersonDto from "../../types/person/GetPersonDto";
 import {Location} from "../../types/Location";
-import {JurPersonCreationData} from "../../types/jurPerson/JurPersonCreationData";
-import {DateEntity, getInitialDate} from "../../types/DateEntity";
-import PersonCreationData from "../../types/person/PersonCreationData";
-import UserCreationData from "../../types/user/UserCreationData";
-import CreatePersonDto from "../../types/person/CreatePersonDto";
-import {DateBuilder} from "../../data/pureFunctions";
-import CreateUserDto from "../../types/user/CreateUserDto";
-import CreateJurPersonDto from "../../types/jurPerson/CreateJurPersonDto";
-import {PassportData} from "../../types/person/PassportData";
+import {JurPerson} from "../../types/JurPerson";
+import Person from "../../types/Person";
+import User from "../../types/User";
+import {PassportData} from "../../types/PassportData";
+import {Roles} from "../../types/Role";
+import DateEntity, {DateBuilder} from "../../types/DateEntity";
+import person from "../../types/Person";
 
 enum CreationParamsActions {
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
@@ -31,21 +28,21 @@ export const updateCreationParams = (payload: Partial<CreationParams>): PayloadA
     }
 }
 
-export const updateJurPersonCreationParams = (payload: Partial<JurPersonCreationData>): PayloadAction<Partial<JurPersonCreationData>> => {
+export const updateJurPersonCreationParams = (payload: Partial<JurPerson>): PayloadAction<Partial<JurPerson>> => {
     return {
         type: CreationParamsActions.UPDATE_JUR_PERSON_CREATION_DATA,
         payload: payload
     }
 }
 
-export const updateUserCreationParams = (payload: Partial<UserCreationData>): PayloadAction<Partial<UserCreationData>> => {
+export const updateUserCreationParams = (payload: Partial<User>): PayloadAction<Partial<User>> => {
     return {
         type: CreationParamsActions.UPDATE_USER_CREATION_DATA,
         payload: payload
     }
 }
 
-export const updatePersonCreationParams = (payload: Partial<PersonCreationData>): PayloadAction<Partial<PersonCreationData>> => {
+export const updatePersonCreationParams = (payload: Partial<Person>): PayloadAction<Partial<Person>> => {
     return {
         type: CreationParamsActions.UPDATE_PERSON_CREATION_DATA,
         payload: payload
@@ -59,8 +56,8 @@ export const updatePassportData = (payload: Partial<PassportData>): PayloadActio
     }
 }
 
-export class InitPersonCreationParams implements PersonCreationData {
-    dateOfBirth: DateEntity = getInitialDate();
+export class InitPersonCreationParams implements Person {
+    dateOfBirth = {...new DateBuilder().build()};
     firstName = "";
     lastName = "";
     middleName = "";
@@ -68,29 +65,29 @@ export class InitPersonCreationParams implements PersonCreationData {
     location = null;
 }
 
-export class InitUserCreationParams implements UserCreationData {
+export class InitUserCreationParams implements User {
     email: string = "";
     firstName: string = "";
     lastName: string = "";
     middleName: string = "";
     password: string = "";
-    role: string = "";
+    role: Roles = Roles.USER;
 }
 
-export class InitJurPersonCreationParams implements JurPersonCreationData {
-    benOwner: GetPersonDto | null = null;
-    dateOfRegistration: DateEntity = getInitialDate();
+export class InitJurPersonCreationParams implements JurPerson {
+    benOwner: Person | null = null;
+    dateOfRegistration: DateEntity = {...new DateBuilder().build()};
     edrpou: string = "";
     name: string = "";
-    owner: GetPersonDto | null = null;
+    owner: Person | null = null;
     location: Location | null = null;
 }
 
 export type CreationParams = {
     table: Tables,
-    personCreationData: PersonCreationData,
-    jurPersonCreationData: JurPersonCreationData,
-    userCreationData: UserCreationData,
+    personCreationData: Person,
+    jurPersonCreationData: JurPerson,
+    userCreationData: User,
     pending: boolean
 }
 
@@ -103,57 +100,121 @@ export const setPending = (arg: boolean): PayloadAction<boolean> => {
 
 export type CreationParamsReducible = CreationParams | undefined
 
-export const getCreatePersonDto = (creationData: PersonCreationData): CreatePersonDto => {
+export const getCreatePersonDto = (creationData: Person): CreatePersonDto => {
     const DOB = creationData.dateOfBirth;
 
-    let createDtoDate: string | null = null;
+    let date: string | null = null;
 
     if (DOB) {
-        createDtoDate = new DateBuilder().setDay(DOB.day).setMonth(DOB.month).setYear(DOB.year).buildStringDate();
+        date = new DateBuilder().setDay(DOB.day).setMonth(DOB.month).setYear(DOB.year).buildStringDate();
     }
 
-    const passportNumber = creationData.passportData.passportNumber;
-    const passportSerial = creationData.passportData.passportSerial;
-    const rnokpp = creationData.passportData.rnokppCode;
+    const passportNumber = creationData.passportData?.passportNumber;
+    const passportSerial = creationData.passportData?.passportSerial;
+    const rnokpp = creationData.passportData?.rnokppCode;
+    const location = creationData.location;
 
-    return {
-        dateOfBirth: createDtoDate,
+    const passportData = (passportNumber!==""||passportSerial!==""||rnokpp!=="") ? creationData.passportData : null;
+
+    const personCreationDto: CreatePersonDto = {
         firstName: creationData.firstName,
         lastName: creationData.lastName,
-        location: creationData.location?creationData.location:null,
         middleName: creationData.middleName,
-        passportData: {
-            passportNumber: passportNumber!==""?passportNumber:null,
-            passportSerial: passportSerial!==""?passportSerial:null,
-            rnokppCode: rnokpp!==""?rnokpp:null
+    }
+
+    if (location!==null) {
+        personCreationDto.location = creationData.location!;
+    }
+
+    if (date!==null) {
+        personCreationDto.dateOfBirth = date;
+    }
+
+    if (passportData!==null) {
+        personCreationDto.passportData = {}
+
+        if (rnokpp) {
+            personCreationDto.passportData.rnokppCode = rnokpp;
+        }
+
+        if (passportNumber) {
+            personCreationDto.passportData.passportNumber = passportNumber;
+        }
+
+        if (passportSerial) {
+            personCreationDto.passportData.passportSerial = passportSerial;
         }
     }
+
+    return personCreationDto;
 }
+
+export type CreateJurPersonDto = {
+    name: string;
+    edrpou?: string;
+    dateOfRegistration?: string;
+    location?: Location | null;
+    benOwnerId?: string;
+    ownerId?: string;
+}
+
+export type CreateUserDto = Partial<User>
+
+export type CreatePersonDto = {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    passportData?: Partial<PassportData>;
+    dateOfBirth?: string;
+    location?: Location
+}
+
 // @todo i think middle name should be optional
-export const getCreateUserDto = (creationData: UserCreationData): CreateUserDto => {
+export const getCreateUserDto = (creationData: User): User => {
     return {
-        email: creationData.email, firstName: creationData.firstName, lastName: creationData.lastName, middleName: creationData.middleName, password: creationData.password, role: creationData.role?creationData.role:null
+        email: creationData.email, firstName: creationData.firstName, lastName: creationData.lastName, middleName: creationData.middleName, password: creationData.password, role: creationData.role
     }
 }
 // @todo in future, you need check, can u store id in number typed variable. it can be long ;)
-export const getCreateJurPersonDto = (creationData: JurPersonCreationData): CreateJurPersonDto => {
+export const getCreateJurPersonDto = (creationData: JurPerson): CreateJurPersonDto => {
     const benOwnerId = creationData.benOwner?creationData.benOwner.id:null
     const ownerId = creationData.owner?creationData.owner.id:null
 
     const DOR = creationData.dateOfRegistration;
 
-    let createDtoDate: string | null = null;
+    let date: string | null = null;
 
     if (DOR) {
-        createDtoDate = new DateBuilder().setDay(DOR.day).setMonth(DOR.month).setYear(DOR.year).buildStringDate();
+        date = new DateBuilder().setDay(DOR.day).setMonth(DOR.month).setYear(DOR.year).buildStringDate();
     }
 
-    return  {
-        benOwnerId: benOwnerId,
-        dateOfRegistration: createDtoDate,
-        edrpou: creationData.edrpou?creationData.edrpou:null,
-        location: creationData.location,
+    const location = creationData.location;
+
+    const edrpou = creationData.edrpou;
+
+    const createJurPersonDto: CreateJurPersonDto = {
         name: creationData.name,
-        ownerId: ownerId
     }
+
+    if (location) {
+        createJurPersonDto.location = location;
+    }
+
+    if (edrpou) {
+        createJurPersonDto.edrpou = edrpou;
+    }
+
+    if (DOR) {
+        createJurPersonDto.dateOfRegistration = date!;
+    }
+
+    if (ownerId) {
+        createJurPersonDto.ownerId = ownerId;
+    }
+
+    if (benOwnerId) {
+        createJurPersonDto.benOwnerId = benOwnerId;
+    }
+
+    return createJurPersonDto;
 }

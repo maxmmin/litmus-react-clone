@@ -9,15 +9,21 @@ import {getGeocode} from "use-places-autocomplete";
 import Geo from "../types/Geo";
 import {createAuthHeader, gmapsRegionOptions} from "./appConfig";
 import {Tables} from "../types/explorationParams";
-import {updateExplorationParams} from "../redux/actions/ExplorationParamsActions";
-import CreateUserDto from "../types/user/CreateUserDto";
-import CreatePersonDto from "../types/person/CreatePersonDto";
-import CreateJurPersonDto from "../types/jurPerson/CreateJurPersonDto";
+import User from "../types/User";
+import Person from "../types/Person";
+import {JurPerson} from "../types/JurPerson";
+import {CreateJurPersonDto, CreatePersonDto, CreateUserDto} from "../redux/actions/CreationParamsActions";
+import {DateBuilder} from "../types/DateEntity";
+import PersonInfoTable from "../screens/Explore/EntityTables/PersonInfoTable";
+import person from "../types/Person";
+
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)
     return presentRights.length===neededRights.length;
 }
+
+
 export const createEntity = (url: string, entity: CreateUserDto | CreatePersonDto | CreateJurPersonDto, accessToken: string): Promise<Response> => {
     return fetch(url, {
         headers: {
@@ -190,47 +196,28 @@ export const preventEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     }
 }
 
-export class DateBuilder {
-    private day: string = '';
+export const getPersonFromResponse = (obj: object): Person => {
+    // @ts-ignore
+    const date = obj.dateOfBirth as string;
+    /** need to use spread operator to not mutate redux state **/
+    const person = {...obj} as person;
+    person.dateOfBirth = new DateBuilder().buildFromString(date);
+    return person;
+}
 
-    private month: string = '';
+export const getJurPersonFromEntity = (obj: object): JurPerson => {
+    // @ts-ignore
+    const date = obj.dateOfRegistration as string;
+    /** need to use spread operator to not mutate redux state **/
+    const jurPerson = {...obj} as JurPerson
+    jurPerson.dateOfRegistration = new DateBuilder().buildFromString(date);
+    return jurPerson;
+}
 
-    private year: string = '';
-
-    getDay (): string {
-        return this.day;
-    }
-
-    getYear (): string {
-        return this.year;
-    }
-
-    getMonth (): string {
-        return this.month;
-    }
-
-    setDay (day: string): DateBuilder {
-        this.day = day;
-        return this;
-    }
-
-    setMonth (month: string): DateBuilder {
-        this.month = month;
-        return this;
-    }
-
-    setYear (year: string): DateBuilder {
-        this.year = year;
-        return this;
-    }
-
-    buildStringDate (): string {
-        return `${this.year}-${this.month}-${this.day}`
-    }
-
-    isValid (): boolean {
-        return !isNaN(new Date(`${this.year}-${this.month}-${this.day}`).getTime())
-    }
+export const getUserFromResponse = (obj: object): User => {
+    /** need to use spread operator to not mutate redux state **/
+    const user = {...obj} as User;
+    return user;
 }
 
 export {checkAuthorization, logOut}

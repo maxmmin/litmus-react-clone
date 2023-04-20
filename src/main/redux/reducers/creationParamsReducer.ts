@@ -7,10 +7,10 @@ import CreationParamsActions, {
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
 import AuthActions from "../actions/AuthActions";
-import {JurPersonCreationData} from "../../types/jurPerson/JurPersonCreationData";
-import PersonCreationData from "../../types/person/PersonCreationData";
-import UserCreationData from "../../types/user/UserCreationData";
-import {PassportData} from "../../types/person/PassportData";
+import {JurPerson} from "../../types/JurPerson";
+import Person from "../../types/Person";
+import User from "../../types/User";
+import {PassportData} from "../../types/PassportData";
 
 const initialState: CreationParams = {
     table: Tables.PERSONS,
@@ -31,15 +31,15 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
         }
 
         case CreationParamsActions.UPDATE_JUR_PERSON_CREATION_DATA: {
-            return {...prevState, jurPersonCreationData: {...prevState.jurPersonCreationData, ...(action.payload as unknown as Partial<JurPersonCreationData>)}}
+            return {...prevState, jurPersonCreationData: {...prevState.jurPersonCreationData, ...(action.payload as unknown as Partial<JurPerson>)}}
         }
 
         case CreationParamsActions.UPDATE_PERSON_CREATION_DATA: {
-            return {...prevState, personCreationData: {...prevState.personCreationData, ...(action.payload as unknown as Partial<PersonCreationData>)}}
+            return {...prevState, personCreationData: {...prevState.personCreationData, ...(action.payload as unknown as Partial<Person>)}}
         }
 
         case CreationParamsActions.UPDATE_USER_CREATION_DATA: {
-            return {...prevState, userCreationData: {...prevState.userCreationData, ...(action.payload as unknown as Partial<UserCreationData>)}}
+            return {...prevState, userCreationData: {...prevState.userCreationData, ...(action.payload as unknown as Partial<User>)}}
         }
 
         case CreationParamsActions.UPDATE_PASSPORT_DATA: {

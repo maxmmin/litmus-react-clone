@@ -1,13 +1,14 @@
-import GetPersonDto from "../../../types/person/GetPersonDto";
 import {noInfoMessage} from "../../../data/httpErrors";
 import {useMemo} from "react";
+import Person from "../../../types/Person";
+import {DateBuilder} from "../../../types/DateEntity";
 
 type Props = {
-    person: GetPersonDto
+    person: Person
 }
 
 const PersonInfoTable = ({person}: Props) => {
-    const passportData = useMemo(()=>person.passportData, [person])
+    const passportData = person.passportData;
     return (
     <div className={"entity-container person-container"}>
         <div className="entity-container__column-title-block entity-container__column-title-block_person"><h6 className="entity-container__column-title entity-container__column-title_person">ID</h6></div>
@@ -24,7 +25,7 @@ const PersonInfoTable = ({person}: Props) => {
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.lastName?person.lastName:noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.firstName?person.firstName:noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.middleName?person.middleName:noInfoMessage}</p></div>
-        <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.dateOfBirth?person.dateOfBirth:noInfoMessage}</p></div>
+        <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.dateOfBirth?new DateBuilder().buildStringFrom(person.dateOfBirth):noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{passportData?.passportNumber?passportData.passportNumber:noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{passportData?.passportSerial?passportData.passportSerial:noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{passportData?.rnokppCode?passportData.rnokppCode:noInfoMessage}</p></div>

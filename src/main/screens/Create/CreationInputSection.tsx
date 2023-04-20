@@ -1,6 +1,6 @@
 import {Tables} from "../../types/explorationParams";
 import CreatePerson from "./person/CreatePerson";
-import CreateJurPerson from "./jur-person/CreateJurPerson";
+import CreateJurPerson from "./jurperson/CreateJurPerson";
 import CreateUser from "./user/CreateUser";
 
 type Props = {

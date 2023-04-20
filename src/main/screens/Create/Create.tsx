@@ -7,22 +7,22 @@ import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
 import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
 import {useAppDispatch} from "../../redux/hooks";
 import {
+    CreateJurPersonDto, CreatePersonDto, CreateUserDto,
     CreationParams,
     CreationParamsReducible,
     getCreateJurPersonDto, getCreatePersonDto, getCreateUserDto,
     updateCreationParams
 } from "../../redux/actions/CreationParamsActions";
 import CreationInputSection from "./CreationInputSection";
-import {createEntity, getTableNameFromLocation} from "../../data/pureFunctions";
+import {
+    createEntity,
+    getTableNameFromLocation
+} from "../../data/pureFunctions";
 import {useLocation} from "react-router";
-import apiLinks, {createAuthHeader, routingLinks} from "../../data/appConfig";
+import apiLinks, {routingLinks} from "../../data/appConfig";
 import {useNavigate} from "react-router-dom";
-import CreateJurPersonDto from "../../types/jurPerson/CreateJurPersonDto";
-import CreatePersonDto from "../../types/person/CreatePersonDto";
-import CreateUserDto from "../../types/user/CreateUserDto";
-import {create} from "domain";
 import store from "../../redux/store";
-import {JurPersonCreationData} from "../../types/jurPerson/JurPersonCreationData";
+
 
 export enum CreationModalModes {
     SET_OWNER = "SET_OWNER",
@@ -63,6 +63,7 @@ const Creation = () => {
             const url = apiLinks[table]
 
             let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
+
             switch (table) {
                 case Tables.JUR_PERSONS: {
                     const creationData = creationParams.jurPersonCreationData;

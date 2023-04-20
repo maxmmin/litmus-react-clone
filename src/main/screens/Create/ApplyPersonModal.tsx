@@ -5,15 +5,15 @@ import Modal from 'react-bootstrap/Modal';
 import apiLinks, {createAuthHeader} from "../../data/appConfig";
 import {Tables} from "../../types/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import GetPersonDto from "../../types/person/GetPersonDto";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
-import CreateJurPersonDto from "../../types/jurPerson/CreateJurPersonDto";
 import {updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
 import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalModes, CreationModalSettings} from "./Create";
-import {Location} from "../../types/Location";
-import {JurPersonCreationData} from "../../types/jurPerson/JurPersonCreationData";
+import {JurPerson} from "../../types/JurPerson";
+import Person from "../../types/Person";
+import {DateBuilder} from "../../types/DateEntity";
+import {getPersonFromResponse} from "../../data/pureFunctions";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -30,7 +30,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const [isValid, setIsValid] = useState<boolean>(true)
 
-    const [person, setPerson] = useState<GetPersonDto|null>(null);
+    const [person, setPerson] = useState<Person|null>(null);
 
     const [pending, setPending] = useState<boolean>(false);
 
@@ -94,14 +94,14 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             }
         });
 
-        let responseJson: GetPersonDto | null = null;
+        let responsePerson: Person | null = null;
 
         try {
-            responseJson = await response.json() as GetPersonDto;
+            responsePerson = getPersonFromResponse(await response.json());
         } catch (e) {}
 
-        if (response.ok&&responseJson) {
-            setPerson(responseJson)
+        if (response.ok&&responsePerson) {
+            setPerson(responsePerson)
         } else {
             setPerson(null)
         }
@@ -115,7 +115,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     };
 
     const applyPerson = () => {
-        const payload: Partial<JurPersonCreationData> = {}
+        const payload: Partial<JurPerson> = {}
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER: {
                 payload.owner = person;
@@ -132,7 +132,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     }
 
     const clearPerson = () => {
-        const payload: Partial<JurPersonCreationData> = {}
+        const payload: Partial<JurPerson> = {}
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER: {
                 payload.owner = null;

@@ -1,8 +1,9 @@
-import jurPerson from "../../../types/jurPerson/GetJurPersonDto";
 import {noInfoMessage} from "../../../data/httpErrors";
+import {JurPerson} from "../../../types/JurPerson";
+import {DateBuilder} from "../../../types/DateEntity";
 
 type Props = {
-    jurPerson: jurPerson
+    jurPerson: JurPerson
 }
 
 const JurPersonInfoTable = ({jurPerson}: Props) => {
@@ -19,7 +20,7 @@ const JurPersonInfoTable = ({jurPerson}: Props) => {
             <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.id?jurPerson.id:noInfoMessage}</p></div>
             <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.name?jurPerson.name:noInfoMessage}</p></div>
             <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.edrpou?jurPerson.edrpou:noInfoMessage}</p></div>
-            <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.dateOfRegistration?jurPerson.dateOfRegistration:noInfoMessage}</p></div>
+            <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.dateOfRegistration?new DateBuilder().buildStringFrom(jurPerson.dateOfRegistration):noInfoMessage}</p></div>
             <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.owner?jurPerson.owner.lastName:noInfoMessage}</p></div>
             <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.benOwner?jurPerson.benOwner.lastName:noInfoMessage}</p></div>
             <div className="entity-container__value entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.location?jurPerson.location.address:noInfoMessage}</p></div>

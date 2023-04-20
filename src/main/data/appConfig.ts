@@ -17,7 +17,6 @@ const auth = `${host}/auth`
 
 const api = `${host}/api`
 
-
 const authHeader = 'Authorization'
 
 const apiLinks = {

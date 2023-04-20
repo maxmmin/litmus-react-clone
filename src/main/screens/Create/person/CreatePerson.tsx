@@ -1,17 +1,17 @@
 import Form from "react-bootstrap/Form";
 import {
-    DateBuilder, inputBeforeDateContainerHandler,
+    inputBeforeDateContainerHandler,
     inputGroupsKeyPressHandler as keyPressHandler, preventEnter, switchNeighbourInput, switchNext
 } from "../../../data/pureFunctions";
 import React, {useMemo, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {updatePassportData, updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 import InputDate from "../../components/InputDate";
-import {DateEntity} from "../../../types/DateEntity";
 import {CreationModalModes, CreationModalSettings} from "../Create";
 import ApplyPersonModal from "../ApplyPersonModal";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {Tables} from "../../../types/explorationParams";
+import DateEntity, {DateBuilder} from "../../../types/DateEntity";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -20,7 +20,7 @@ const CreatePerson = () => {
 
     const dispatch = useAppDispatch();
 
-    const {year, month, day} = createPersonDto?.dateOfBirth!;
+    const {year, month, day} = createPersonDto!.dateOfBirth;
 
     const passportData = createPersonDto?.passportData;
 
@@ -107,7 +107,7 @@ const CreatePerson = () => {
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Дата народження</Form.Label>
 
-                <InputDate date={new DateBuilder().setYear(year).setMonth(month).setDay(day)} setDate={setDate} className={"date-of-birth"}/>
+                <InputDate date={new DateBuilder().setYear(year).setMonth(month).setDay(day).build()} setDate={setDate} className={"date-of-birth"}/>
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">

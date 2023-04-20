@@ -1,4 +1,3 @@
-
 export type Authentication = {
     accessToken: string|null
     refreshToken: string|null

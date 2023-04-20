@@ -76,7 +76,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                                     newState.error = {}
                                 }
 
-                                if (status&&httpErrors[status]===HttpErrorsNames.BAD_CREDENTIALS) {
+                                if (status&&httpErrors[status]===HttpErrorsNames.BAD_REQUEST) {
                                     newState.error = {message: "Невалідні дані"}
                                 }
                             }
