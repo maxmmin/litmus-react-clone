@@ -8,6 +8,7 @@ import {PassportData} from "../../types/PassportData";
 import {Roles} from "../../types/Role";
 import DateEntity, {DateBuilder} from "../../types/DateEntity";
 import person from "../../types/Person";
+import Sex from "../../types/Sex";
 
 enum CreationParamsActions {
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
@@ -16,7 +17,8 @@ enum CreationParamsActions {
     UPDATE_PERSON_CREATION_DATA="UPDATE_PERSON_CREATION_DATA",
     UPDATE_USER_CREATION_DATA="UPDATE_USER_CREATION_DATA",
     SET_CREATION_PENDING="SET_CREATION_PENDING",
-    UPDATE_PASSPORT_DATA="UPDATE_PASSPORT_DATA"
+    UPDATE_PASSPORT_DATA="UPDATE_PASSPORT_DATA",
+    UPDATE_PERSON_SEX="UPDATE_PERSON_SEX"
 }
 
 export default CreationParamsActions;
@@ -49,6 +51,13 @@ export const updatePersonCreationParams = (payload: Partial<Person>): PayloadAct
     }
 }
 
+export const updatePersonSex = (payload: Sex): PayloadAction<Sex> => {
+    return {
+        type: CreationParamsActions.UPDATE_PERSON_SEX,
+        payload: payload
+    }
+}
+
 export const updatePassportData = (payload: Partial<PassportData>): PayloadAction<Partial<PassportData>> => {
     return {
         type: CreationParamsActions.UPDATE_PASSPORT_DATA,
@@ -61,6 +70,7 @@ export class InitPersonCreationParams implements Person {
     firstName = "";
     lastName = "";
     middleName = "";
+    sex = null;
     passportData = {passportSerial: "", passportNumber: "", rnokppCode: ""};
     location = null;
 }

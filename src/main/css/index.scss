@@ -58,6 +58,15 @@ img {
   border-right-color: transparent;
 }
 
+.form-check-input:checked {
+  background-color: $md-sys-color-primary-light;
+  border-color: $md-sys-color-primary-light;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.2rem $md-sys-color-inverse-primary-light;
+}
+
 $opacity-dark: rgba($md-sys-color-on-primary-container-light,0.28);
 
 .form-control:focus, .form-select:focus {

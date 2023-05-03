@@ -11,6 +11,7 @@ import {JurPerson} from "../../types/JurPerson";
 import Person from "../../types/Person";
 import User from "../../types/User";
 import {PassportData} from "../../types/PassportData";
+import Sex from "../../types/Sex";
 
 const initialState: CreationParams = {
     table: Tables.PERSONS,
@@ -36,6 +37,10 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
 
         case CreationParamsActions.UPDATE_PERSON_CREATION_DATA: {
             return {...prevState, personCreationData: {...prevState.personCreationData, ...(action.payload as unknown as Partial<Person>)}}
+        }
+
+        case CreationParamsActions.UPDATE_PERSON_SEX: {
+            return {...prevState, personCreationData: {...prevState.personCreationData, sex: action.payload as unknown as Sex}}
         }
 
         case CreationParamsActions.UPDATE_USER_CREATION_DATA: {

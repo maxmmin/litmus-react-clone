@@ -33,7 +33,9 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     const [person, setPerson] = useState<Person|null>(null);
 
     const [pending, setPending] = useState<boolean>(false);
-
+    /**
+     * requestTimerId stores the id of pending timer for remove this timer when component unmounts
+     */
     const [requestTimerId, setRequestTimerId] = useState<NodeJS.Timeout|null>(null)
 
     useEffect(() => {

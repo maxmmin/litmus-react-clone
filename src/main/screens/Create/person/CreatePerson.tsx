@@ -1,17 +1,21 @@
 import Form from "react-bootstrap/Form";
 import {
     inputBeforeDateContainerHandler,
-    inputGroupsKeyPressHandler as keyPressHandler, preventEnter, switchNeighbourInput, switchNext
+    inputGroupsKeyPressHandler as keyPressHandler
 } from "../../../data/pureFunctions";
-import React, {useMemo, useState} from "react";
+import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {updatePassportData, updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
+import {
+    updatePassportData,
+    updatePersonCreationParams,
+    updatePersonSex
+} from "../../../redux/actions/CreationParamsActions";
 import InputDate from "../../components/InputDate";
 import {CreationModalModes, CreationModalSettings} from "../Create";
-import ApplyPersonModal from "../ApplyPersonModal";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {Tables} from "../../../types/explorationParams";
 import DateEntity, {DateBuilder} from "../../../types/DateEntity";
+import Sex from "../../../types/Sex";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -70,6 +74,27 @@ const CreatePerson = () => {
                        }
                 />
             </Form.Group>
+
+           <Form.Group className="mb-3 creation-input-group__item">
+               <p className="m-0">Стать</p>
+
+               <div className="form-check">
+                   <input className="form-check-input maleRadioBtn" type="radio" checked={createPersonDto.sex===Sex.male} name="sex" onChange={()=>{
+                        dispatch(updatePersonSex(Sex.male))
+                   }}/>
+                   <label className="form-check-label" htmlFor="maleRadioBtn">
+                       Чоловіча
+                   </label>
+               </div>
+               <div className="form-check">
+                   <input className="form-check-input femaleRadioBtn" type="radio" checked={createPersonDto.sex===Sex.female} name="sex" onChange={()=>{
+                       dispatch(updatePersonSex(Sex.female))
+                   }}/>
+                   <label className="form-check-label" htmlFor="femaleRadioBtn">
+                       Жіноча
+                   </label>
+               </div>
+           </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Номер паспорта</Form.Label>
