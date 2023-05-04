@@ -24,11 +24,7 @@ type Props = {
 /**
  *  whitelist of modes(instances of CreationModalModes), which are make this component shown
  */
-const whitelistModes: Map<CreationModalModes, Object> = new Map<CreationModalModes, Object>();
-
-whitelistModes.set(CreationModalModes.SET_BEN_OWNER, {});
-whitelistModes.set(CreationModalModes.SET_OWNER, {});
-whitelistModes.set(CreationModalModes.SET_RELATIONSHIP, {});
+const whitelist: Array<CreationModalModes> = [CreationModalModes.SET_BEN_OWNER, CreationModalModes.SET_OWNER, CreationModalModes.SET_RELATIONSHIP];
 
 function ApplyPersonModal ({modalSettings, close}: Props) {
 
@@ -173,15 +169,17 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     }
     // update this list every new apply person modal;
 
-    const showClearBtn: boolean = useMemo<boolean>(()=>{
-        if (modalSettings===null) return false;
-        const show = Boolean(modalSettings?.mode)&&(modalSettings.mode!==CreationModalModes.SET_RELATIONSHIP);
-        return show;
-    }, [modalSettings?.mode])
+    let show: boolean = false;
+    let showClearBtn: boolean = false;
+
+    if (modalSettings) {
+        show = whitelist.includes(modalSettings.mode);
+        showClearBtn = (modalSettings.mode!==CreationModalModes.SET_RELATIONSHIP);
+    }
 
     return (
         <>
-            <Modal size={"xl"} className="apply-person-modal" show={Boolean(modalSettings)} onHide={handleClose}>
+            <Modal size={"xl"} className="apply-person-modal" show={show} onHide={handleClose}>
                 <Modal.Header closeButton>
                     <Modal.Title>Прикріпити особу</Modal.Title>
                 </Modal.Header>
