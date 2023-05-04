@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useMemo, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -9,10 +9,11 @@ import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
 import {updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
 import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
-import {CreationModalModes, CreationModalSettings} from "./Create";
+import {CreationModalSettings} from "./Create";
 import {JurPerson} from "../../types/JurPerson";
 import Person from "../../types/Person";
 import {getPersonFromResponse} from "../../data/pureFunctions";
+import {CreationModalModes} from "../../types/CreationModalModes";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -160,7 +161,12 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     }
     // update this list every new apply person modal;
 
-    if (!modalSettings||modalSettings?.mode||!whitelistModes.has(modalSettings.mode)) {
+    const showClearBtn: boolean = useMemo<boolean>(()=>{
+        const show = modalSettings?.mode!==CreationModalModes.SET_RELATIONSHIP;
+        return show;
+    }, [modalSettings?.mode])
+
+    if (!modalSettings||!modalSettings?.mode||!whitelistModes.has(modalSettings.mode)) {
         return null;
     }
 
@@ -208,9 +214,14 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={clearPerson}>
-                        Очистити
-                    </Button>
+                    {
+                        showClearBtn?
+                        <Button variant="secondary" onClick={clearPerson}>
+                            Очистити
+                        </Button>
+                        :
+                        null
+                    }
                     <Button disabled={!person} variant="primary" onClick={applyPerson}>
                         Додати
                     </Button>

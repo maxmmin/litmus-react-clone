@@ -11,13 +11,14 @@ import {
     updatePersonSex
 } from "../../../redux/actions/CreationParamsActions";
 import InputDate from "../../components/InputDate";
-import {CreationModalModes, CreationModalSettings} from "../Create";
+import {CreationModalSettings} from "../Create";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {Tables} from "../../../types/explorationParams";
 import DateEntity, {DateBuilder} from "../../../types/DateEntity";
 import Sex from "../../../types/Sex";
 import {AddIcon} from "../../../data/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
+import {CreationModalModes} from "../../../types/CreationModalModes";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);

@@ -22,14 +22,8 @@ import {useLocation} from "react-router";
 import apiLinks, {routingLinks} from "../../data/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
+import {CreationModalModes} from "../../types/CreationModalModes";
 
-
-export enum CreationModalModes {
-    SET_OWNER = "SET_OWNER",
-    SET_BEN_OWNER = "SET_BEN_OWNER",
-    SET_GEOLOCATION = "SET_GEOLOCATION",
-    SET_RELATIONSHIP = "SET_RELATIONSHIP"
-}
 
 export type CreationModalSettings = {
     mode: CreationModalModes

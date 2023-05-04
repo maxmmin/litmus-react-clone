@@ -5,11 +5,12 @@ import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {Tables} from "../../../types/explorationParams";
 import CreationGeoModal from "../geo/CreationGeoModal";
-import {CreationModalModes, CreationModalSettings} from "../Create";
+import {CreationModalSettings} from "../Create";
 import {updateJurPersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 import InputDate from "../../components/InputDate";
 import Person from "../../../types/Person";
 import DateEntity, {DateBuilder} from "../../../types/DateEntity";
+import {CreationModalModes} from "../../../types/CreationModalModes";
 
 
 const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
