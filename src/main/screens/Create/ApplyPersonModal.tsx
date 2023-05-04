@@ -1,4 +1,4 @@
-import React, {Dispatch, SetStateAction, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -12,7 +12,6 @@ import store, {RootState} from "../../redux/store";
 import {CreationModalModes, CreationModalSettings} from "./Create";
 import {JurPerson} from "../../types/JurPerson";
 import Person from "../../types/Person";
-import {DateBuilder} from "../../types/DateEntity";
 import {getPersonFromResponse} from "../../data/pureFunctions";
 
 type Props = {
@@ -136,19 +135,19 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     }
 
     const clearPerson = () => {
-        const payload: Partial<JurPerson> = {}
         switch (modalSettings?.mode) {
-            case CreationModalModes.SET_OWNER: {
-                payload.owner = null;
-                break
-            }
-
+            case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
-                payload.benOwner = null;
+                const payload: Partial<JurPerson> = {}
+                if (modalSettings.mode===CreationModalModes.SET_OWNER) {
+                    payload.owner = null;
+                } else {
+                    payload.benOwner = null;
+                }
+                dispatch(updateJurPersonCreationParams(payload))
                 break
             }
         }
-        dispatch(updateJurPersonCreationParams(payload))
         handleClose()
     }
 
