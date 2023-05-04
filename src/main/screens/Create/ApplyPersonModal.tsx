@@ -20,6 +20,14 @@ type Props = {
 }
 
 // @todo key press handlers
+/**
+ *  whitelist of modes(instances of CreationModalModes), which are make this component shown
+ */
+const whitelistModes: Map<CreationModalModes, Object> = new Map<CreationModalModes, Object>();
+
+whitelistModes.set(CreationModalModes.SET_BEN_OWNER, {});
+whitelistModes.set(CreationModalModes.SET_OWNER, {});
+whitelistModes.set(CreationModalModes.SET_RELATIONSHIP, {});
 
 function ApplyPersonModal ({modalSettings, close}: Props) {
 
@@ -150,10 +158,9 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         }
         handleClose()
     }
-
     // update this list every new apply person modal;
 
-    if (!modalSettings?.mode) {
+    if (!modalSettings||modalSettings?.mode||!whitelistModes.has(modalSettings.mode)) {
         return null;
     }
 
