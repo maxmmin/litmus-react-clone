@@ -216,8 +216,7 @@ export const getJurPersonFromEntity = (obj: object): JurPerson => {
 
 export const getUserFromResponse = (obj: object): User => {
     /** need to use spread operator to not mutate redux state **/
-    const user = {...obj} as User;
-    return user;
+    return  {...obj} as User;
 }
 
 export {checkAuthorization, logOut}

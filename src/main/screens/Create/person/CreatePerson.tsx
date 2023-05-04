@@ -17,6 +17,7 @@ import {Tables} from "../../../types/explorationParams";
 import DateEntity, {DateBuilder} from "../../../types/DateEntity";
 import Sex from "../../../types/Sex";
 import {AddIcon} from "../../../data/icons";
+import ApplyPersonModal from "../ApplyPersonModal";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -42,6 +43,8 @@ const CreatePerson = () => {
     return (
         <>
             <CreationGeoModal table={Tables.PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
+
+            <ApplyPersonModal modalSettings={modalSettings} close={()=>console.log("exit")}/>
 
             <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Прізвище</Form.Label>
@@ -148,13 +151,18 @@ const CreatePerson = () => {
             <div className="relationships-container">
                 <div className="relationships-container__heading-block">
                     <p className={"relationships-container__heading"}>Пов'язані особи</p>
-                    <button className="relationships-container__add-person-btn">
+                    <button className="relationships-container__add-person-btn"
+                        onClick={event => {
+                            event.preventDefault();
+                            setModalSettings({mode: CreationModalModes.SET_RELATIONSHIP})
+                        }}
+                    >
                         <AddIcon className={"add-person-icon"} color={"white"}/>
                     </button>
                 </div>
 
                 <div className="relationships-container__relations">
-                    <p className={"m-0 placeholder-ltm"}>Наразі не прив'язано ніяких осіб</p>
+                    <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
                 </div>
             </div>
 

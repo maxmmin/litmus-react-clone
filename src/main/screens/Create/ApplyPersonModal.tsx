@@ -31,7 +31,9 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     const [isValid, setIsValid] = useState<boolean>(true)
 
     const [person, setPerson] = useState<Person|null>(null);
-
+    /**
+     * state of modal input pending
+     */
     const [pending, setPending] = useState<boolean>(false);
     /**
      * requestTimerId stores the id of pending timer for remove this timer when component unmounts
@@ -152,7 +154,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     // update this list every new apply person modal;
 
-    if (modalSettings?.mode!==CreationModalModes.SET_OWNER&&modalSettings?.mode!==CreationModalModes.SET_BEN_OWNER) {
+    if (!modalSettings?.mode) {
         return null;
     }
 
