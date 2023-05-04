@@ -8,7 +8,6 @@ import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
 import {useAppDispatch} from "../../redux/hooks";
 import {
     CreateJurPersonDto, CreatePersonDto, CreateUserDto,
-    CreationParams,
     CreationParamsReducible,
     getCreateJurPersonDto, getCreatePersonDto, getCreateUserDto,
     updateCreationParams

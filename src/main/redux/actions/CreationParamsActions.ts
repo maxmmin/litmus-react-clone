@@ -7,18 +7,40 @@ import User from "../../types/User";
 import {PassportData} from "../../types/PassportData";
 import {Roles} from "../../types/Role";
 import DateEntity, {DateBuilder} from "../../types/DateEntity";
-import person from "../../types/Person";
 import Sex from "../../types/Sex";
 
 enum CreationParamsActions {
+    /**
+     * general actions
+     */
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
     UPDATE_CREATION_PARAMS="UPDATE_CREATION_PARAMS",
-    UPDATE_JUR_PERSON_CREATION_DATA="UPDATE_JUR_PERSON_CREATION_DATA",
-    UPDATE_PERSON_CREATION_DATA="UPDATE_PERSON_CREATION_DATA",
-    UPDATE_USER_CREATION_DATA="UPDATE_USER_CREATION_DATA",
     SET_CREATION_PENDING="SET_CREATION_PENDING",
+    /**
+     * jur person creation actions
+     */
+    UPDATE_JUR_PERSON_CREATION_DATA="UPDATE_JUR_PERSON_CREATION_DATA",
+    /**
+     * person creation actions
+     */
+    UPDATE_PERSON_CREATION_DATA="UPDATE_PERSON_CREATION_DATA",
     UPDATE_PASSPORT_DATA="UPDATE_PASSPORT_DATA",
-    UPDATE_PERSON_SEX="UPDATE_PERSON_SEX"
+    UPDATE_PERSON_SEX="UPDATE_PERSON_SEX",
+    ADD_NON_TYPED_PERSON_RELATION="ADD_NON_TYPED_PERSON_RELATION",
+    /**
+     * users creation actions
+     */
+    UPDATE_USER_CREATION_DATA="UPDATE_USER_CREATION_DATA"
+}
+
+enum RelationType {
+    FATHER="FATHER",
+    MOTHER="MOTHER",
+    SIBLING="SIBLING",
+    RELATIVE="RELATIVE",
+    FRIEND="FRIEND",
+    CHILD="CHILD",
+    SPOUSE="SPOUSE"
 }
 
 export default CreationParamsActions;
@@ -58,6 +80,13 @@ export const updatePersonSex = (payload: Sex): PayloadAction<Sex> => {
     }
 }
 
+export const addNonTypedRelation = (payload: Person): PayloadAction<Person> => {
+    return {
+        type: CreationParamsActions.ADD_NON_TYPED_PERSON_RELATION,
+        payload: payload
+    }
+}
+
 export const updatePassportData = (payload: Partial<PassportData>): PayloadAction<Partial<PassportData>> => {
     return {
         type: CreationParamsActions.UPDATE_PASSPORT_DATA,
@@ -70,6 +99,13 @@ export class InitPersonCreationParams implements Person {
     firstName = "";
     lastName = "";
     middleName = "";
+    father = null;
+    mother = null;
+    siblings = new Array<Person>();
+    relatives = new Array<Person>();
+    friends = new Array<Person>();
+    nonTypedRelations = new Array<Person>();
+    spouse = null;
     sex = null;
     passportData = {passportSerial: "", passportNumber: "", rnokppCode: ""};
     location = null;
@@ -91,6 +127,7 @@ export class InitJurPersonCreationParams implements JurPerson {
     name: string = "";
     owner: Person | null = null;
     location: Location | null = null;
+
 }
 
 export type CreationParams = {

@@ -8,6 +8,12 @@ type Person = {
     firstName: string;
     middleName: string;
     lastName: string;
+    father: Person|null;
+    mother: Person|null;
+    spouse: Person|null;
+    relatives: Array<Person>;
+    siblings: Array<Person>;
+    friends: Array<Person>;
     sex: Sex | null;
     passportData: PassportData | null;
     dateOfBirth: DateEntity;

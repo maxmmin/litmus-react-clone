@@ -109,10 +109,25 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
+  .add-person-icon {
+    transition: 0.3s ease-in-out;
+  }
+}
+
+.relationships-container__add-person-btn:hover {
+  background: rgba($md-sys-color-outline-light, 0.6);
+}
+
+.relationships-container__add-person-btn:active {
+  box-shadow: 0 0 0 0.2rem rgba($md-sys-color-tertiary-light, 0.4);
+}
+
+.relationships-container__add-person-btn:focus {
+  outline: 3px solid rgba($md-sys-color-tertiary-light, 0.2);
 }
 
 .add-person-icon {
-  width: 20px;
-  height: 20px;
+  width: 100%;
+  height: 100%;
 }
-

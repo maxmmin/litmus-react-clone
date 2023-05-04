@@ -6,7 +6,7 @@ import apiLinks, {createAuthHeader} from "../../data/appConfig";
 import {Tables} from "../../types/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
-import {updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
+import {addNonTypedRelation, updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
 import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./Create";
@@ -127,19 +127,31 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     };
 
     const applyPerson = () => {
-        const payload: Partial<JurPerson> = {}
+        if (person===null) {
+            close();
+            throw new Error("applied person was null but it shouldn't")
+        }
+
         switch (modalSettings?.mode) {
-            case CreationModalModes.SET_OWNER: {
-                payload.owner = person;
+            case CreationModalModes.SET_OWNER:
+            case CreationModalModes.SET_BEN_OWNER: {
+                const payload: Partial<JurPerson> = {}
+
+                if (modalSettings.mode===CreationModalModes.SET_OWNER) {
+                    payload.owner = person;
+                } else {
+                    payload.benOwner = person;
+                }
+
+                dispatch(updateJurPersonCreationParams(payload))
                 break
             }
 
-            case CreationModalModes.SET_BEN_OWNER: {
-                payload.benOwner = person;
-                break
+            case CreationModalModes.SET_RELATIONSHIP: {
+                dispatch(addNonTypedRelation(person))
             }
         }
-        dispatch(updateJurPersonCreationParams(payload))
+
         handleClose()
     }
 
@@ -162,13 +174,10 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     // update this list every new apply person modal;
 
     const showClearBtn: boolean = useMemo<boolean>(()=>{
-        const show = modalSettings?.mode!==CreationModalModes.SET_RELATIONSHIP;
+        if (modalSettings===null) return false;
+        const show = Boolean(modalSettings?.mode)&&(modalSettings.mode!==CreationModalModes.SET_RELATIONSHIP);
         return show;
     }, [modalSettings?.mode])
-
-    if (!modalSettings||!modalSettings?.mode||!whitelistModes.has(modalSettings.mode)) {
-        return null;
-    }
 
     return (
         <>

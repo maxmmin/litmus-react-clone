@@ -63,7 +63,7 @@ img {
   border-color: $md-sys-color-primary-light;
 }
 
-.form-check-input:focus {
+.form-check-input:focus, .btn-close:focus {
   box-shadow: 0 0 0 0.2rem $md-sys-color-inverse-primary-light;
 }
 

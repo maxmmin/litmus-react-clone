@@ -45,7 +45,7 @@ const CreatePerson = () => {
         <>
             <CreationGeoModal table={Tables.PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
 
-            <ApplyPersonModal modalSettings={modalSettings} close={()=>console.log("exit")}/>
+            <ApplyPersonModal modalSettings={modalSettings} close={closeModal}/>
 
             <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Прізвище</Form.Label>
