@@ -16,6 +16,7 @@ import CreationGeoModal from "../geo/CreationGeoModal";
 import {Tables} from "../../../types/explorationParams";
 import DateEntity, {DateBuilder} from "../../../types/DateEntity";
 import Sex from "../../../types/Sex";
+import {AddIcon} from "../../../data/icons";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -143,6 +144,19 @@ const CreatePerson = () => {
                        }}
                 />
             </Form.Group>
+
+            <div className="relationships-container">
+                <div className="relationships-container__heading-block">
+                    <p className={"relationships-container__heading"}>Пов'язані особи</p>
+                    <button className="relationships-container__add-person-btn">
+                        <AddIcon className={"add-person-icon"} color={"white"}/>
+                    </button>
+                </div>
+
+                <div className="relationships-container__relations">
+                    <p className={"m-0 placeholder-ltm"}>Наразі не прив'язано ніяких осіб</p>
+                </div>
+            </div>
 
     </>
     )

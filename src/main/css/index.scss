@@ -67,6 +67,27 @@ img {
   box-shadow: 0 0 0 0.2rem $md-sys-color-inverse-primary-light;
 }
 
+.form-control::-webkit-input-placeholder { /* WebKit browsers */
+  color: $placeholder-color;
+}
+
+.form-control:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: $placeholder-color;
+}
+
+.form-control::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: $placeholder-color;
+}
+
+.form-control:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color: $placeholder-color;
+}
+
+.form-control::placeholder { /* modern browsers */
+  color: $placeholder-color;
+}
+
+
 $opacity-dark: rgba($md-sys-color-on-primary-container-light,0.28);
 
 .form-control:focus, .form-select:focus {
@@ -80,6 +101,10 @@ $opacity-dark: rgba($md-sys-color-on-primary-container-light,0.28);
   background: var();
 }
 
+.placeholder-ltm {
+  color: $placeholder-color;
+  font-size: 16px;
+}
 
 .alert-container {
   position: absolute;
