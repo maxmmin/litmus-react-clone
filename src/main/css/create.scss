@@ -1,4 +1,5 @@
 @import "colors";
+@import "createRelationshipsPage";
 
 .creation-page__create {
   max-width: 800px;
@@ -73,61 +74,4 @@
 
 .jur-person-creation__input.owner, .jur-person-creation__input.ben-owner, .jur-person-creation__input.address {
   text-align: start;
-}
-
-.create-relationships-section {
-  width: 100%;
-  padding: 10px 0px;
-}
-
-.create-relationships-section__relations {
-  background: $md-sys-color-background-light;
-  padding: 6px 12px;
-  border-radius: 0.375rem;
-  border: 1px solid #ced4da;
-  margin-top: 15px;
-}
-
-.create-relationships-section__heading-block {
-  display: flex;
-  justify-content: space-between;
-}
-
-.create-relationships-section__heading {
-  margin: 0;
-}
-
-.create-relationships-section__add-person-btn {
-  border: 1px solid #ced4da;
-  background: $md-sys-color-outline-variant-light;
-  padding: 0;
-  height: 30px;
-  width: 30px;
-  font-size: 21px;
-  color: white;
-  border-radius: 0.375rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  .add-person-icon {
-    transition: 0.3s ease-in-out;
-  }
-}
-
-.create-relationships-section__add-person-btn:hover {
-  background: rgba($md-sys-color-outline-light, 0.6);
-}
-
-.create-relationships-section__add-person-btn:active {
-  box-shadow: 0 0 0 0.2rem rgba($md-sys-color-tertiary-light, 0.4);
-}
-
-.create-relationships-section__add-person-btn:focus {
-  outline: 3px solid rgba($md-sys-color-tertiary-light, 0.2);
-}
-
-.add-person-icon {
-  width: 100%;
-  height: 100%;
 }

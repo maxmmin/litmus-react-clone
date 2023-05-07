@@ -92,8 +92,8 @@ export const updatePassportData = (payload: Partial<PassportData>): PayloadActio
         payload: payload
     }
 }
-//@todo rewrite it. i don't need so many arrays
-export class InitPersonCreationParams implements Person {
+
+export class PersonCreationParams implements Person {
     dateOfBirth = {...new DateBuilder().build()};
     firstName = "";
     lastName = "";
@@ -104,7 +104,7 @@ export class InitPersonCreationParams implements Person {
     location = null;
 }
 
-export class InitUserCreationParams implements User {
+export class UserCreationParams implements User {
     email: string = "";
     firstName: string = "";
     lastName: string = "";
@@ -113,7 +113,7 @@ export class InitUserCreationParams implements User {
     role: Roles = Roles.USER;
 }
 
-export class InitJurPersonCreationParams implements JurPerson {
+export class JurPersonCreationParams implements JurPerson {
     benOwner: Person | null = null;
     dateOfRegistration: DateEntity = {...new DateBuilder().build()};
     edrpou: string = "";

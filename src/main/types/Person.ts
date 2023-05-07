@@ -15,6 +15,10 @@ type Person = {
     location: Location | null
 }
 
+export const getFullName = (person: Person) => {
+    return `${person.lastName} ${person.firstName} ${person.middleName}`
+}
+
 export type Relationship ={
     person: Person,
     relationType: RelationType | null,

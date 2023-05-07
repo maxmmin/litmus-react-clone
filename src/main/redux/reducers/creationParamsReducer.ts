@@ -1,8 +1,8 @@
 import {Reducer} from "react";
 import CreationParamsActions, {
     CreationParams,
-    CreationParamsReducible, InitJurPersonCreationParams,
-    InitPersonCreationParams, InitUserCreationParams
+    CreationParamsReducible, JurPersonCreationParams,
+    PersonCreationParams, UserCreationParams
 } from "../actions/CreationParamsActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
@@ -15,9 +15,9 @@ import Sex from "../../types/Sex";
 
 const initialState: CreationParams = {
     table: Tables.PERSONS,
-    jurPersonCreationData: {...new InitJurPersonCreationParams()},
-    personCreationData: {...new InitPersonCreationParams()},
-    userCreationData: {...new InitUserCreationParams()},
+    jurPersonCreationData: {...new JurPersonCreationParams()},
+    personCreationData: {...new PersonCreationParams()},
+    userCreationData: {...new UserCreationParams()},
     pending: false
 }
 

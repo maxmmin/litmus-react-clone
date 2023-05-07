@@ -19,7 +19,7 @@ import Sex from "../../../types/Sex";
 import {AddIcon} from "../../../data/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../types/CreationModalModes";
-import PersonRelations from "./PersonRelations";
+import PersonRelationships from "./PersonRelationships";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -159,14 +159,14 @@ const CreatePerson = () => {
                             setModalSettings({mode: CreationModalModes.SET_RELATIONSHIP})
                         }}
                     >
-                        <AddIcon className={"add-person-icon"} color={"white"}/>
+                        <AddIcon className={"create-relationships-section__add-person-icon"} color={"white"}/>
                     </button>
                 </div>
 
                 <div className="create-relationships-section__relations">
                     {
                         createPersonDto.relationships.length>0?
-                            <PersonRelations relations={createPersonDto.relationships}/>
+                            <PersonRelationships relations={createPersonDto.relationships}/>
                             :
                             <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
                     }
