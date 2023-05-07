@@ -8,16 +8,21 @@ type Person = {
     firstName: string;
     middleName: string;
     lastName: string;
-    father: Person|null;
-    mother: Person|null;
-    spouse: Person|null;
-    relatives: Array<Person>;
-    siblings: Array<Person>;
-    friends: Array<Person>;
+    relationships: Array<Relationship>,
     sex: Sex | null;
     passportData: PassportData | null;
     dateOfBirth: DateEntity;
     location: Location | null
+}
+
+export type Relationship ={
+    person: Person,
+    relationType: RelationType | null,
+    note: string
+}
+
+export enum RelationType {
+    MOTHER="MOTHER", FATHER="FATHER", SPOUSE="SPOUSE", SIBLING="SIBLING", RELATIVE="RELATIVE", FRIEND="FRIEND"
 }
 
 

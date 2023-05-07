@@ -8,7 +8,7 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
 import AuthActions from "../actions/AuthActions";
 import {JurPerson} from "../../types/JurPerson";
-import Person from "../../types/Person";
+import Person, {Relationship} from "../../types/Person";
 import User from "../../types/User";
 import {PassportData} from "../../types/PassportData";
 import Sex from "../../types/Sex";
@@ -31,10 +31,17 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
             return {...prevState, ...action.payload}
         }
 
+        /**
+         *  jur person specified
+         */
         case CreationParamsActions.UPDATE_JUR_PERSON_CREATION_DATA: {
             return {...prevState, jurPersonCreationData: {...prevState.jurPersonCreationData, ...(action.payload as unknown as Partial<JurPerson>)}}
         }
 
+
+        /**
+         *  person specified
+         */
         case CreationParamsActions.UPDATE_PERSON_CREATION_DATA: {
             return {...prevState, personCreationData: {...prevState.personCreationData, ...(action.payload as unknown as Partial<Person>)}}
         }
@@ -43,8 +50,9 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
             return {...prevState, personCreationData: {...prevState.personCreationData, sex: action.payload as unknown as Sex}}
         }
 
-        case CreationParamsActions.UPDATE_USER_CREATION_DATA: {
-            return {...prevState, userCreationData: {...prevState.userCreationData, ...(action.payload as unknown as Partial<User>)}}
+        case CreationParamsActions.ADD_PERSON_RELATION: {
+            const updatedRelationships = [...prevState.personCreationData.relationships, action.payload as unknown as Relationship]
+            return {...prevState, personCreationData: {...prevState.personCreationData, relationships: updatedRelationships}}
         }
 
         case CreationParamsActions.UPDATE_PASSPORT_DATA: {
@@ -54,6 +62,17 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
             return {...prevState, personCreationData: {...prevState.personCreationData, passportData}}
         }
 
+        /**
+         *  user specified
+         */
+
+        case CreationParamsActions.UPDATE_USER_CREATION_DATA: {
+            return {...prevState, userCreationData: {...prevState.userCreationData, ...(action.payload as unknown as Partial<User>)}}
+        }
+
+        /**
+         *  non-business-logic
+         */
         case AuthActions.CLEAR_AUTH: {
             return initialState
         }

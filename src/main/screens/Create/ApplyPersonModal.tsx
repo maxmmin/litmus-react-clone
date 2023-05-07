@@ -6,12 +6,12 @@ import apiLinks, {createAuthHeader} from "../../data/appConfig";
 import {Tables} from "../../types/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
-import {addNonTypedRelation, updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
+import {addRelationship, updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
 import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./Create";
 import {JurPerson} from "../../types/JurPerson";
-import Person from "../../types/Person";
+import Person, {Relationship} from "../../types/Person";
 import {getPersonFromResponse} from "../../data/pureFunctions";
 import {CreationModalModes} from "../../types/CreationModalModes";
 
@@ -144,7 +144,11 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             }
 
             case CreationModalModes.SET_RELATIONSHIP: {
-                dispatch(addNonTypedRelation(person))
+                const relationship: Relationship = {
+                    note: "", person: person, relationType: null
+
+                }
+                dispatch(addRelationship(relationship))
             }
         }
 

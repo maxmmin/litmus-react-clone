@@ -19,6 +19,7 @@ import Sex from "../../../types/Sex";
 import {AddIcon} from "../../../data/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../types/CreationModalModes";
+import PersonRelations from "./PersonRelations";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -149,10 +150,10 @@ const CreatePerson = () => {
                 />
             </Form.Group>
 
-            <div className="relationships-container">
-                <div className="relationships-container__heading-block">
-                    <p className={"relationships-container__heading"}>Пов'язані особи</p>
-                    <button className="relationships-container__add-person-btn"
+            <div className="create-relationships-section">
+                <div className="create-relationships-section__heading-block">
+                    <p className={"create-relationships-section__heading"}>Пов'язані особи</p>
+                    <button className="create-relationships-section__add-person-btn"
                         onClick={event => {
                             event.preventDefault();
                             setModalSettings({mode: CreationModalModes.SET_RELATIONSHIP})
@@ -162,8 +163,13 @@ const CreatePerson = () => {
                     </button>
                 </div>
 
-                <div className="relationships-container__relations">
-                    <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
+                <div className="create-relationships-section__relations">
+                    {
+                        createPersonDto.relationships.length>0?
+                            <PersonRelations relations={createPersonDto.relationships}/>
+                            :
+                            <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
+                    }
                 </div>
             </div>
 

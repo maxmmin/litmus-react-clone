@@ -2,7 +2,7 @@ import {Tables} from "../../types/explorationParams";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Location} from "../../types/Location";
 import {JurPerson} from "../../types/JurPerson";
-import Person from "../../types/Person";
+import Person, {Relationship} from "../../types/Person";
 import User from "../../types/User";
 import {PassportData} from "../../types/PassportData";
 import {Roles} from "../../types/Role";
@@ -26,7 +26,7 @@ enum CreationParamsActions {
     UPDATE_PERSON_CREATION_DATA="UPDATE_PERSON_CREATION_DATA",
     UPDATE_PASSPORT_DATA="UPDATE_PASSPORT_DATA",
     UPDATE_PERSON_SEX="UPDATE_PERSON_SEX",
-    ADD_NON_TYPED_PERSON_RELATION="ADD_NON_TYPED_PERSON_RELATION",
+    ADD_PERSON_RELATION="ADD_PERSON_RELATION",
     /**
      * users creation actions
      */
@@ -34,13 +34,12 @@ enum CreationParamsActions {
 }
 
 enum RelationType {
-    FATHER="FATHER",
-    MOTHER="MOTHER",
-    SIBLING="SIBLING",
-    RELATIVE="RELATIVE",
-    FRIEND="FRIEND",
-    CHILD="CHILD",
-    SPOUSE="SPOUSE"
+    PARENT="Батько/мати",
+    SPOUSE="Чоловік/дружина",
+    CHILD="Син/дочка",
+    SIBLING="Брат/сестра",
+    RELATIVE="Родич",
+    FRIEND="Товариш"
 }
 
 export default CreationParamsActions;
@@ -80,9 +79,9 @@ export const updatePersonSex = (payload: Sex): PayloadAction<Sex> => {
     }
 }
 
-export const addNonTypedRelation = (payload: Person): PayloadAction<Person> => {
+export const addRelationship = (payload: Relationship): PayloadAction<Relationship> => {
     return {
-        type: CreationParamsActions.ADD_NON_TYPED_PERSON_RELATION,
+        type: CreationParamsActions.ADD_PERSON_RELATION,
         payload: payload
     }
 }
@@ -93,19 +92,13 @@ export const updatePassportData = (payload: Partial<PassportData>): PayloadActio
         payload: payload
     }
 }
-
+//@todo rewrite it. i don't need so many arrays
 export class InitPersonCreationParams implements Person {
     dateOfBirth = {...new DateBuilder().build()};
     firstName = "";
     lastName = "";
     middleName = "";
-    father = null;
-    mother = null;
-    siblings = new Array<Person>();
-    relatives = new Array<Person>();
-    friends = new Array<Person>();
-    nonTypedRelations = new Array<Person>();
-    spouse = null;
+    relationships = [];
     sex = null;
     passportData = {passportSerial: "", passportNumber: "", rnokppCode: ""};
     location = null;
