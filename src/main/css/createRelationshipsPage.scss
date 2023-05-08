@@ -86,8 +86,22 @@
 .create-relation__person-info {
   list-style-type: none;
   padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .create-relation__person-info-li {
   margin: 0;
+}
+
+.select-relation-type__heading {
+  //margin-top: 5px;
+}
+
+.create-relation__select-relation-type {
+  font-weight: 300;
+  margin-top: 3px;
+  padding: 5px 10px;
 }
