@@ -8,7 +8,7 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import {Tables} from "../../types/explorationParams";
 import AuthActions from "../actions/AuthActions";
 import {JurPerson} from "../../types/JurPerson";
-import Person, {Relationship} from "../../types/Person";
+import Person, {Relationship, RelationshipsLinkObject} from "../../types/Person";
 import User from "../../types/User";
 import {PassportData} from "../../types/PassportData";
 import Sex from "../../types/Sex";
@@ -51,8 +51,19 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
         }
 
         case CreationParamsActions.ADD_PERSON_RELATION: {
-            const updatedRelationships = [...prevState.personCreationData.relationships, action.payload as unknown as Relationship]
-            return {...prevState, personCreationData: {...prevState.personCreationData, relationships: updatedRelationships}}
+            const relToAdd = (action.payload as unknown as Relationship);
+            const updatedRelLinkObject = new RelationshipsLinkObject();
+            updatedRelLinkObject.loadRelationsFromLinkObject(prevState.personCreationData.relationshipsLinkObject);
+            updatedRelLinkObject.addRelationship(relToAdd);
+            return {...prevState, personCreationData: {...prevState.personCreationData, relationshipsLinkObject: updatedRelLinkObject}}
+        }
+
+        case CreationParamsActions.UPDATE_PERSON_RELATION: {
+            const relToUpdate = (action.payload as unknown as Relationship);
+            const updatedRelLinkObject = new RelationshipsLinkObject();
+            updatedRelLinkObject.loadRelationsFromLinkObject(prevState.personCreationData.relationshipsLinkObject);
+            updatedRelLinkObject.updateRelationship(relToUpdate);
+            return {...prevState, personCreationData: {...prevState.personCreationData, relationshipsLinkObject: updatedRelLinkObject}}
         }
 
         case CreationParamsActions.UPDATE_PASSPORT_DATA: {

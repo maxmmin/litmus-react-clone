@@ -2,7 +2,7 @@ import {Tables} from "../../types/explorationParams";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Location} from "../../types/Location";
 import {JurPerson} from "../../types/JurPerson";
-import Person, {Relationship} from "../../types/Person";
+import Person, {Relationship, RelationshipsLinkObject} from "../../types/Person";
 import User from "../../types/User";
 import {PassportData} from "../../types/PassportData";
 import {Roles} from "../../types/Role";
@@ -27,6 +27,7 @@ enum CreationParamsActions {
     UPDATE_PASSPORT_DATA="UPDATE_PASSPORT_DATA",
     UPDATE_PERSON_SEX="UPDATE_PERSON_SEX",
     ADD_PERSON_RELATION="ADD_PERSON_RELATION",
+    UPDATE_PERSON_RELATION="UPDATE_PERSON_RELATION",
     /**
      * users creation actions
      */
@@ -98,7 +99,7 @@ export class PersonCreationParams implements Person {
     firstName = "";
     lastName = "";
     middleName = "";
-    relationships = [];
+    relationshipsLinkObject = new RelationshipsLinkObject();
     sex = null;
     passportData = {passportSerial: "", passportNumber: "", rnokppCode: ""};
     location = null;
