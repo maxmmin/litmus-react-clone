@@ -4,8 +4,9 @@ import {Tables} from "../../../types/explorationParams";
 import PrivateComponentWrapper from "../../components/PrivateComponentWrapper";
 import {Permissions} from "../../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../../components/PrivateComponent";
-import {Form} from "react-bootstrap";
+import {FloatingLabel, Form} from "react-bootstrap";
 import React from "react";
+import {CrossIcon, RemoveIcon} from "../../../data/icons";
 
 type Props = {
     relationship: Relationship
@@ -39,6 +40,23 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
                             </Form.Select>
                     </li>
                 </ul>
+            </div>
+
+            <div className="create-relation__note">
+                <FloatingLabel controlId="create-relation__note-text-area-id" label="Нотатка">
+                    <Form.Control
+                        className={"create-relation__note-textarea fw-light"}
+                        as="textarea"
+                        placeholder="Залишіть нотатку"
+                        style={{ height: '100px' }}
+                    />
+                </FloatingLabel>
+            </div>
+
+            <div className="create-relation__remove-btn-wrapper">
+                <button className="create-relation__remove-btn">
+                    <CrossIcon className={"create-relation__remove-btn-icon"} color={"grey"}/>
+                </button>
             </div>
         </div>
     )

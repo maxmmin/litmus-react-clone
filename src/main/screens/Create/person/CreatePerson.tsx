@@ -16,7 +16,7 @@ import CreationGeoModal from "../geo/CreationGeoModal";
 import {Tables} from "../../../types/explorationParams";
 import DateEntity, {DateBuilder} from "../../../types/DateEntity";
 import Sex from "../../../types/Sex";
-import {AddIcon} from "../../../data/icons";
+import {CrossIcon} from "../../../data/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../types/CreationModalModes";
 import PersonRelationships from "./PersonRelationships";
@@ -159,7 +159,7 @@ const CreatePerson = () => {
                             setModalSettings({mode: CreationModalModes.SET_RELATIONSHIP})
                         }}
                     >
-                        <AddIcon className={"create-relationships-section__add-person-icon"} color={"white"}/>
+                        <CrossIcon className={"create-relationships-section__add-person-icon"} color={"white"}/>
                     </button>
                 </div>
 
