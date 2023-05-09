@@ -165,8 +165,8 @@ const CreatePerson = () => {
 
                 <div className="create-relationships-section__relations">
                     {
-                        createPersonDto.relationshipsLinkObject.relationships.length>0?
-                            <PersonRelationships relationsLinkObj={createPersonDto.relationshipsLinkObject}/>
+                        createPersonDto.relationships.length>0?
+                            <PersonRelationships relationships={createPersonDto.relationships}/>
                             :
                             <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
                     }

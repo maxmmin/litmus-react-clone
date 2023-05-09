@@ -1,15 +1,15 @@
 import {Relationship, RelationshipsLinkObject} from "../../../types/Person";
 import RelationshipCreationComponent from "./RelationshipCreationComponent";
 
-type props = {relationsLinkObj: RelationshipsLinkObject}
+type props = {relationships: Relationship[]}
 
-const PersonRelationships = ({relationsLinkObj}: props) => {
+const PersonRelationships = ({relationships}: props) => {
     return (
             <>
                 {
-                    relationsLinkObj.relationships.map(relation => {
+                    relationships.map(relation => {
                         return (
-                            <RelationshipCreationComponent relationship={relation}/>
+                            <RelationshipCreationComponent key={relation.person.id} relationship={relation}/>
                         )
                     })
                 }

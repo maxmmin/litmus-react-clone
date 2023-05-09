@@ -52,18 +52,20 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
 
         case CreationParamsActions.ADD_PERSON_RELATION: {
             const relToAdd = (action.payload as unknown as Relationship);
-            const updatedRelLinkObject = new RelationshipsLinkObject();
-            updatedRelLinkObject.loadRelationsFromLinkObject(prevState.personCreationData.relationshipsLinkObject);
-            updatedRelLinkObject.addRelationship(relToAdd);
-            return {...prevState, personCreationData: {...prevState.personCreationData, relationshipsLinkObject: updatedRelLinkObject}}
+
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.personCreationData.relationships);
+            relationshipsLinkObject.addRelationship(relToAdd);
+
+            return {...prevState, personCreationData: {...prevState.personCreationData, relationships: relationshipsLinkObject.relationships}}
         }
 
         case CreationParamsActions.UPDATE_PERSON_RELATION: {
             const relToUpdate = (action.payload as unknown as Relationship);
-            const updatedRelLinkObject = new RelationshipsLinkObject();
-            updatedRelLinkObject.loadRelationsFromLinkObject(prevState.personCreationData.relationshipsLinkObject);
-            updatedRelLinkObject.updateRelationship(relToUpdate);
-            return {...prevState, personCreationData: {...prevState.personCreationData, relationshipsLinkObject: updatedRelLinkObject}}
+
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.personCreationData.relationships);
+            relationshipsLinkObject.updateRelationship(relToUpdate);
+
+            return {...prevState, personCreationData: {...prevState.personCreationData, relationships: relationshipsLinkObject.relationships}}
         }
 
         case CreationParamsActions.UPDATE_PASSPORT_DATA: {

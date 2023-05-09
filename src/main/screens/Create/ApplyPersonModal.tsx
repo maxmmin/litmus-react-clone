@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -11,7 +11,7 @@ import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./Create";
 import {JurPerson} from "../../types/JurPerson";
-import Person, {Relationship} from "../../types/Person";
+import Person, {Relationship, RelationshipsLinkObject} from "../../types/Person";
 import {getPersonFromResponse} from "../../data/pureFunctions";
 import {CreationModalModes} from "../../types/CreationModalModes";
 
@@ -84,13 +84,16 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
         const id = +e.currentTarget.value;
 
+        let isValid = false;
+
         if (isNaN(id)) {
-            setSearchError(new SearchError("Невалідний ідентифікатор", null))
-        } else if (searchError&&!isNaN(id)) {
+            setSearchError(new SearchError("Невалідний ідентифікатор", null));
+        } else {
             setSearchError(null);
+            isValid = true;
         }
 
-        if (!isNaN(id)&&accessToken) {
+        if (isValid&&accessToken) {
             // TODO: Maybe write additional checkup for auth, add global error handler and Authentication error: 05/09
             setPending(true)
             const timerID = setTimeout(()=>fetchPerson(accessToken,id),250)
@@ -130,6 +133,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     const handleClose = () => {
         close()
         setPerson(null)
+        setSearchError(null)
     };
 
     const applyPerson = () => {
@@ -156,8 +160,15 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             case CreationModalModes.SET_RELATIONSHIP: {
                 const relationship: Relationship = {
                     note: "", person: person, relationType: null
-
                 }
+
+                const sourceRelObject = new RelationshipsLinkObject(store.getState().creationParams?.personCreationData.relationships);
+
+                if (sourceRelObject?.isPresent(relationship)) {
+                    setSearchError(new SearchError("Дана особа вже присутня в списку відносин", null));
+                    return;
+                }
+
                 dispatch(addRelationship(relationship))
             }
         }
@@ -249,7 +260,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                         :
                         null
                     }
-                    <Button disabled={!person} variant="primary" onClick={applyPerson}>
+                    <Button disabled={!person||Boolean(searchError)} variant="primary" onClick={applyPerson}>
                         Додати
                     </Button>
                 </Modal.Footer>

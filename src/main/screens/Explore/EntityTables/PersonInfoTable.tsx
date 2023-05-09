@@ -8,7 +8,6 @@ type Props = {
 }
 
 const PersonInfoTable = ({person}: Props) => {
-    console.log(person)
     const passportData = person.passportData;
     return (
     <div className={"entity-container person-container"}>

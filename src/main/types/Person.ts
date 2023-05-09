@@ -2,14 +2,13 @@ import {Location} from "./Location";
 import {PassportData} from "./PassportData";
 import DateEntity from "./DateEntity";
 import Sex from "./Sex";
-import person from "./Person";
 
 type Person = {
     id?: string;
     firstName: string;
     middleName: string;
     lastName: string;
-    relationshipsLinkObject: RelationshipsLinkObject,
+    relationships: Relationship[],
     sex: Sex | null;
     passportData: PassportData | null;
     dateOfBirth: DateEntity;
@@ -42,21 +41,19 @@ class RelationshipAlreadyExists extends Error {
 }
 
 export class RelationshipsLinkObject {
-    private _relationships: Array<Relationship> = new Array<Relationship>();
+    private readonly _relationships: Array<Relationship> = new Array<Relationship>();
+
+    constructor(relations?: Array<Relationship>|undefined) {
+        if (relations) {
+            this._relationships = [...relations]
+        };
+    }
 
     /**
      * returns copy of relationShip array. If you want to mutate original array, use addRelation or removeRelation methods.
      */
     get relationships(): Array<Relationship> {
         return [...this._relationships];
-    }
-
-    private set relationships(relationList) {
-        this._relationships = [...relationList];
-    }
-
-    loadRelationsFromLinkObject (relationshipsLinkObj: RelationshipsLinkObject) {
-        this.relationships = [...relationshipsLinkObj.relationships];
     }
 
     private getOriginalRelationships (): Array<Relationship> {
@@ -113,7 +110,7 @@ export class RelationshipsLinkObject {
         return false;
     }
 
-    private isPresent (rel: Relationship): boolean {
+    isPresent (rel: Relationship): boolean {
         const presentRelationships = this.relationships;
 
         for (let counter = 0; counter<presentRelationships.length; counter++) {

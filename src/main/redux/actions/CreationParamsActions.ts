@@ -2,7 +2,7 @@ import {Tables} from "../../types/explorationParams";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Location} from "../../types/Location";
 import {JurPerson} from "../../types/JurPerson";
-import Person, {Relationship, RelationshipsLinkObject} from "../../types/Person";
+import Person, {Relationship} from "../../types/Person";
 import User from "../../types/User";
 import {PassportData} from "../../types/PassportData";
 import {Roles} from "../../types/Role";
@@ -99,7 +99,7 @@ export class PersonCreationParams implements Person {
     firstName = "";
     lastName = "";
     middleName = "";
-    relationshipsLinkObject = new RelationshipsLinkObject();
+    relationships = [];
     sex = null;
     passportData = {passportSerial: "", passportNumber: "", rnokppCode: ""};
     location = null;
