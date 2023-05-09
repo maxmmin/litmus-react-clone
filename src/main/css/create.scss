@@ -54,8 +54,14 @@
 }
 
 .apply-person__input-container {
-    position: relative;
-    display: flex;
+  position: relative;
+  display: flex;
+}
+
+.apply-person-modal__error-description {
+  margin: 10px 0 0;
+  color: $md-sys-color-error-light;
+  font-size: 12px;
 }
 
 .loader-container {

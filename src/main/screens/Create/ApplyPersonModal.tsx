@@ -32,7 +32,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const accessToken = useAppSelector(state => state.authentication?.accessToken)
 
-    const [isValid, setIsValid] = useState<boolean>(true)
+    const [searchError, setSearchError] = useState<SearchError|null>(null);
 
     const [person, setPerson] = useState<Person|null>(null);
     /**
@@ -77,15 +77,21 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             setRequestTimerId(null)
         }
 
+        if (e.currentTarget.value==="") {
+            setSearchError(null);
+            return;
+        }
+
         const id = +e.currentTarget.value;
 
-        if (isValid&&isNaN(id)) {
-            setIsValid(false)
-        } else if (!isValid&&!isNaN(id)) {
-            setIsValid(true)
+        if (isNaN(id)) {
+            setSearchError(new SearchError("Невалідний ідентифікатор", null))
+        } else if (searchError&&!isNaN(id)) {
+            setSearchError(null);
         }
 
         if (!isNaN(id)&&accessToken) {
+            // TODO: Maybe write additional checkup for auth, add global error handler and Authentication error: 05/09
             setPending(true)
             const timerID = setTimeout(()=>fetchPerson(accessToken,id),250)
             setRequestTimerId(timerID)
@@ -106,12 +112,16 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
         try {
             responsePerson = getPersonFromResponse(await response.json());
-        } catch (e) {}
 
-        if (response.ok&&responsePerson) {
-            setPerson(responsePerson)
-        } else {
-            setPerson(null)
+            if (response.ok&&responsePerson) {
+                setPerson(responsePerson)
+            } else {
+                setPerson(null)
+            }
+
+        } catch (e) {
+            // set search error if response was with no content
+            setSearchError(new SearchError(`Особу з ідентифікатором ${id} не знайдено`, response));
         }
 
         setPending(false)
@@ -197,7 +207,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                                     type="text"
                                     placeholder="Example: 43"
                                     autoFocus
-                                    className={`${isValid?'':'is-invalid'} ${person?'is-valid':''}`}
+                                    className={`${searchError?'is-invalid':''} ${person?'is-valid':''}`}
                                     onInput={onInputHandler}
                                     defaultValue={person?.id}
                                     onKeyDown={e => {
@@ -215,6 +225,12 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                                 :   null
                                 }
                             </div>
+
+                            {searchError?
+                                <p className="apply-person-modal__error-description">{searchError.message}</p>
+                                :
+                                null
+                            }
 
                         </Form.Group>
 
@@ -243,3 +259,24 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 }
 
 export default ApplyPersonModal;
+
+
+class SearchError extends Error {
+    private readonly _response: Response|null;
+    private readonly _message: string;
+
+    constructor(message: string, response: Response|null) {
+        super(message);
+        this._response = response;
+        this._message = message;
+    }
+
+
+    get response(): Response|null {
+        return this._response;
+    }
+
+    get message(): string {
+        return this._message;
+    }
+}
