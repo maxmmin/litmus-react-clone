@@ -7,6 +7,8 @@ import {ForbiddenOutputCallbackModesEnum} from "../../components/PrivateComponen
 import {FloatingLabel, Form} from "react-bootstrap";
 import React from "react";
 import {CrossIcon, RemoveIcon} from "../../../data/icons";
+import {useAppDispatch} from "../../../redux/hooks";
+import {removeRelationship} from "../../../redux/actions/CreationParamsActions";
 
 type Props = {
     relationship: Relationship
@@ -14,6 +16,8 @@ type Props = {
 
 const RelationshipCreationComponent = ({relationship}: Props) => {
     const person = relationship.person;
+
+    const dispatch = useAppDispatch();
 
     const handleSelectChange = (e: React.SyntheticEvent<HTMLSelectElement>) => {
         console.log(e.currentTarget.value)
@@ -43,7 +47,7 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
             </div>
 
             <div className="create-relation__note">
-                <FloatingLabel controlId="create-relation__note-text-area-id" label="Нотатка">
+                <FloatingLabel className={"create-relation__floating-label-container"} controlId="create-relation__note-text-area-id" label="Нотатка">
                     <Form.Control
                         className={"create-relation__note-textarea fw-light"}
                         as="textarea"
@@ -54,7 +58,9 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
             </div>
 
             <div className="create-relation__remove-btn-wrapper">
-                <button className="create-relation__remove-btn">
+                <button className="create-relation__remove-btn" onClick={()=>{
+                    dispatch(removeRelationship(relationship))
+                }}>
                     <CrossIcon className={"create-relation__remove-btn-icon"} color={"grey"}/>
                 </button>
             </div>

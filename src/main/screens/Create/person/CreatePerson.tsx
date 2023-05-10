@@ -32,6 +32,8 @@ const CreatePerson = () => {
 
     const passportData = createPersonDto?.passportData;
 
+    const relationships = createPersonDto?.relationships;
+
     if (!createPersonDto) {
         throw new Error("createPersonDto was null but it shouldn't be")
     }
@@ -163,9 +165,9 @@ const CreatePerson = () => {
                     </button>
                 </div>
 
-                <div className="create-relationships-section__relations">
+                <div className={`create-relationships-section__relations ${relationships!.length>0?'':'empty'}`}>
                     {
-                        createPersonDto.relationships.length>0?
+                        relationships!.length>0?
                             <PersonRelationships relationships={createPersonDto.relationships}/>
                             :
                             <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>

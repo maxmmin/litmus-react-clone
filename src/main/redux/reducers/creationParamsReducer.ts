@@ -59,6 +59,15 @@ const creationParamsReducer: Reducer<CreationParamsReducible, PayloadAction<Crea
             return {...prevState, personCreationData: {...prevState.personCreationData, relationships: relationshipsLinkObject.relationships}}
         }
 
+        case CreationParamsActions.REMOVE_PERSON_RELATION: {
+            const relToAdd = (action.payload as unknown as Relationship);
+
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.personCreationData.relationships);
+            relationshipsLinkObject.removeRelationship(relToAdd);
+
+            return {...prevState, personCreationData: {...prevState.personCreationData, relationships: relationshipsLinkObject.relationships}}
+        }
+
         case CreationParamsActions.UPDATE_PERSON_RELATION: {
             const relToUpdate = (action.payload as unknown as Relationship);
 

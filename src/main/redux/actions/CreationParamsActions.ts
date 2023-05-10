@@ -28,6 +28,7 @@ enum CreationParamsActions {
     UPDATE_PERSON_SEX="UPDATE_PERSON_SEX",
     ADD_PERSON_RELATION="ADD_PERSON_RELATION",
     UPDATE_PERSON_RELATION="UPDATE_PERSON_RELATION",
+    REMOVE_PERSON_RELATION="REMOVE_PERSON_RELATION",
     /**
      * users creation actions
      */
@@ -83,6 +84,13 @@ export const updatePersonSex = (payload: Sex): PayloadAction<Sex> => {
 export const addRelationship = (payload: Relationship): PayloadAction<Relationship> => {
     return {
         type: CreationParamsActions.ADD_PERSON_RELATION,
+        payload: payload
+    }
+}
+
+export const removeRelationship = (payload: Relationship): PayloadAction<Relationship> => {
+    return {
+        type: CreationParamsActions.REMOVE_PERSON_RELATION,
         payload: payload
     }
 }
