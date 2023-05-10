@@ -31,12 +31,11 @@ $md-sys-color-scrim-light: #000000;
 
 // cust
 
-$light-pink: rgba($md-sys-color-surface-variant-light, 0.5);
-$primary-light: rgba($md-sys-color-primary-light,0.85);
-$backButtonColor: rgba($md-sys-color-on-surface-variant-light,0.08);
-$backButtonColorHover: rgba($md-sys-color-on-surface-variant-light,0.1);
-$backButtonColorActive: rgba($md-sys-color-on-surface-variant-light,0.13);
-$placeholder-color: rgba(black, 0.6);
-$opacity-dark: rgba($md-sys-color-on-primary-container-light,0.28);
+$primary-light-container: lighten($md-sys-color-inverse-primary-light, 10%);
+$primary-light: lighten($md-sys-color-primary-light, 6%);
+$backButtonColor: lighten($md-sys-color-on-surface-variant-light, 64%);
+$backButtonColorHover: lighten($md-sys-color-on-surface-variant-light, 62%);
+$backButtonColorActive: lighten($md-sys-color-on-surface-variant-light, 58%);
+$placeholder-color: lighten(black, 50%);
 
 

@@ -33,7 +33,7 @@ img {
 }
 
 .btn.btn-primary.disabled {
-  background: rgba($primary-light, 0.5);
+  background: lighten($primary-light, 2%);
 }
 
 .btn.btn-primary:hover {
@@ -60,7 +60,7 @@ img {
 
 .form-check-input:checked {
   background-color: $md-sys-color-primary-light;
-  border-color: $md-sys-color-primary-light;
+  border-color: $md-sys-color-surface-tint-light;
 }
 
 .form-check-input:focus, .btn-close:focus {
@@ -88,9 +88,9 @@ img {
 }
 
 .form-control:focus, .form-select:focus {
-  -webkit-box-shadow: 0px 0px 0px 3px $opacity-dark;
-  -moz-box-shadow: 0px 0px 0px 3px $opacity-dark;
-  box-shadow: 0px 0px 0px 3px $opacity-dark;
+  -webkit-box-shadow: 0px 0px 0px 3px $md-sys-color-inverse-primary-light;
+  -moz-box-shadow: 0px 0px 0px 3px $md-sys-color-inverse-primary-light;
+  box-shadow: 0px 0px 0px 3px $md-sys-color-inverse-primary-light;
   border: initial;
 }
 

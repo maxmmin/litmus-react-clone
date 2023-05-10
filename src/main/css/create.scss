@@ -18,7 +18,7 @@
   flex-wrap: wrap;
   column-gap: 4%;
   padding: 15px;
-  background: $light-pink;
+  background: $md-sys-color-on-primary-light;
   border-radius: 10px;
 }
 
@@ -45,7 +45,7 @@
 .creation-input-group__btn {
   display: block;
   width: 100%;
-  margin-top: 10px;
+  margin-top: 15px;
 }
 
 .apply-person-modal__found-person-container .person-container {

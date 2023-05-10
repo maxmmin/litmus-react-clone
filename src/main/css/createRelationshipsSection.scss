@@ -7,10 +7,8 @@
 
 .create-relationships-section__relations {
   background: $md-sys-color-background-light;
-  padding: 32px;
-  border-radius: 0.375rem;
-  border: 1px solid #ced4da;
-  margin-top: 15px;
+  padding: 0px;
+  margin-top: 22px;
 }
 
 .create-relationships-section__relations.empty {
@@ -62,13 +60,15 @@
 }
 
 .create-relationships-section__create-relation {
-  background: rgba($light-pink, 0.5);
-  border-radius: 12px;
+  background: $md-sys-color-on-primary-light;
+  padding: 32px;
+  border-radius: 0.375rem;
+  border: 1px solid #ced4da;
   position: relative;
 }
 
 .create-relationships-section__create-relation + .create-relationships-section__create-relation {
-  margin-top: 32px;
+  margin-top: 20px;
 }
 
 
@@ -112,6 +112,7 @@
   height: 100%;
   padding: 0;
   flex-shrink: 0;
+  background: transparent;
 }
 
 .create-relation__remove-btn-icon {
@@ -143,9 +144,9 @@
 }
 
 .create-relation__note-textarea:focus {
-  -webkit-box-shadow: 0px 0px 0px 1px $opacity-dark;
-  -moz-box-shadow: 0px 0px 0px 1px $opacity-dark;
-  box-shadow: 0px 0px 0px 1px $opacity-dark;
+  -webkit-box-shadow: 0px 0px 0px 1px $md-sys-color-inverse-primary-light;
+  -moz-box-shadow: 0px 0px 0px 1px $md-sys-color-inverse-primary-light;
+  box-shadow: 0px 0px 0px 1px $md-sys-color-inverse-primary-light;
   border: initial;
 }
 
@@ -153,7 +154,7 @@
   resize: none;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
-  padding: 30px 30px 5px !important;
+  padding: 45px 30px 5px !important;
   font-weight: 400 !important;
 
 }
@@ -162,15 +163,18 @@
 .create-relation__floating-label-container.form-floating>.form-control-plaintext~label,
 .form-floating>.form-control:focus~label, .form-floating>.form-control:not(:placeholder-shown)~label,
 .form-floating>.form-select~label {
-  transform: scale(0.85) translateY(-0.4rem) translateX(0.15rem);
-  height: fit-content;
-  width: fit-content;
-
+  transform: scale(0.85) translateY(-90%) translateX(0.15rem);
+  opacity: 1;
+  padding: 2px 10px;
+  color: rgba(black, 0.65);
+  background: darken($primary-light-container, 2%);
+  border-radius: 15px;
 }
 
 .create-relation__floating-label-container label {
   left: 20px;
-  top: 5px;
-  padding: 4px 7px;
+  top: 32%;
   width: fit-content;
+  height: fit-content;
+  padding: 4px 7px;
 }
