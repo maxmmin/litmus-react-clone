@@ -224,7 +224,9 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                                     onKeyDown={e => {
                                         if (e.key==="Enter") {
                                             e.preventDefault()
-                                            applyPerson()
+                                            if (person) {
+                                                applyPerson();
+                                            }
                                         }
                                     }}
                                 />
