@@ -61,6 +61,12 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
                         as="textarea"
                         placeholder="Залишіть нотатку"
                         style={{ height: '100px' }}
+                        value={relationship.note}
+                        onChange={e => {
+                            const relShip = {...relationship};
+                            relShip.note = e.currentTarget.value;
+                            dispatch(updateRelationship(relShip));
+                        }}
                     />
                 </FloatingLabel>
             </div>
