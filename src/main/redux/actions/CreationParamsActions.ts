@@ -88,6 +88,13 @@ export const addRelationship = (payload: Relationship): PayloadAction<Relationsh
     }
 }
 
+export const updateRelationship = (payload: Relationship): PayloadAction<Relationship> => {
+    return {
+        type: CreationParamsActions.UPDATE_PERSON_RELATION,
+        payload: payload
+    }
+}
+
 export const removeRelationship = (payload: Relationship): PayloadAction<Relationship> => {
     return {
         type: CreationParamsActions.REMOVE_PERSON_RELATION,

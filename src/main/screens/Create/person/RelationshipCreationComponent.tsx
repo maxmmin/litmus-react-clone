@@ -1,4 +1,4 @@
-import {getFullName, Relationship, RelationType} from "../../../types/Person";
+import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../types/Person";
 import {routingLinks} from "../../../data/appConfig";
 import {Tables} from "../../../types/explorationParams";
 import PrivateComponentWrapper from "../../components/PrivateComponentWrapper";
@@ -8,20 +8,28 @@ import {FloatingLabel, Form} from "react-bootstrap";
 import React from "react";
 import {CrossIcon, RemoveIcon} from "../../../data/icons";
 import {useAppDispatch} from "../../../redux/hooks";
-import {removeRelationship} from "../../../redux/actions/CreationParamsActions";
+import {removeRelationship, updateRelationship} from "../../../redux/actions/CreationParamsActions";
 
 type Props = {
     relationship: Relationship
 }
 
 const RelationshipCreationComponent = ({relationship}: Props) => {
-    const person = relationship.person;
+    const personTo = relationship.person;
 
     const dispatch = useAppDispatch();
 
     const handleSelectChange = (e: React.SyntheticEvent<HTMLSelectElement>) => {
-        console.log(e.currentTarget.value)
+        const relShip: Relationship = {...relationship};
+        try {
+            relShip.relationType = getRelationTypeFrom(e.currentTarget.value)
+        } catch (e) {
+            relShip.relationType = null;
+        }
+        dispatch(updateRelationship(relShip));
     }
+
+    const relType = relationship.relationType?relationship.relationType:undefined;
 
     return (
         <div className={"create-relationships-section__create-relation"}>
@@ -31,10 +39,10 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
                 </div>
 
                 <ul className="create-relation__person-info">
-                    <li className={"create-relation__person-info-li"}>ID: <span className={"fw-light"}>{person.id}</span></li>
-                    <li className={"create-relation__person-info-li"}>ФІО: <span className={"fw-light"}>{getFullName(person)}</span></li>
+                    <li className={"create-relation__person-info-li"}>ID: <span className={"fw-light"}>{personTo.id}</span></li>
+                    <li className={"create-relation__person-info-li"}>ФІО: <span className={"fw-light"}>{getFullName(personTo)}</span></li>
                     <li className={"create-relation__person-info-li select-relation-type__heading"}>Ступінь родинних відносин:
-                            <Form.Select className={"create-relation__select-relation-type"} value={undefined} onChange={handleSelectChange}>
+                            <Form.Select className={"create-relation__select-relation-type"} value={relType} onChange={handleSelectChange}>
                                 <option value={undefined}>Не обрано</option>
                                 <option value={RelationType.PARENT}>Батько/мати/опікун</option>
                                 <option value={RelationType.SPOUSE}>Чоловік/дружина</option>

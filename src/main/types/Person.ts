@@ -128,9 +128,20 @@ export class RelationshipsLinkObject {
 }
 
 export enum RelationType {
-    PARENT="RELATIVE", SPOUSE="SPOUSE", SIBLING="SIBLING", RELATIVE="RELATIVE", FRIEND="FRIEND"
+    PARENT="PARENT", SPOUSE="SPOUSE", SIBLING="SIBLING", RELATIVE="RELATIVE", FRIEND="FRIEND"
 }
 
+export const getRelationTypeFrom = (s: String) => {
+   const enumValues = Object.values(RelationType);
+
+   const relationType: RelationType = s as RelationType;
+
+   if (enumValues.includes(relationType)) {
+       return relationType;
+   } else {
+       throw new Error(`RelationType ${s} does not exist`)
+   }
+}
 
 
 export default Person;
