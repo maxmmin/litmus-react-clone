@@ -176,6 +176,7 @@ export const getCreatePersonDto = (creationData: Person): CreatePersonDto => {
         firstName: creationData.firstName,
         lastName: creationData.lastName,
         middleName: creationData.middleName,
+        sex: creationData.sex
     }
 
     if (location!==null) {
@@ -220,6 +221,7 @@ export type CreatePersonDto = {
     firstName: string;
     middleName: string;
     lastName: string;
+    sex: Sex|null;
     passportData?: Partial<PassportData>;
     dateOfBirth?: string;
     location?: Location
