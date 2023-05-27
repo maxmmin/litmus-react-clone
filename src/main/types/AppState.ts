@@ -1,5 +1,12 @@
-export type AppStateError = {
-    message?: string
+/**
+ * type - type of alert
+ * message - msg to be shown
+ * duration - time notification will stay on screen(animation exclusive)
+ */
+export interface Notification {
+    type?: 'success' | 'info' | 'warning' | 'danger';
+    message?: string,
+    duration?: number;
 }
 
 type GmapsApiError = {
@@ -15,7 +22,7 @@ type AppState = {
     isRefreshing: boolean,
     isHeaderMenuOpened: boolean,
     gmapsApiState: GmapsApiResponse | null
-    error?: AppStateError | null
+    notification?: Notification | null,
 }
 
 export type Meta = {

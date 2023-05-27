@@ -12,7 +12,7 @@ import {roles} from "./types/Role";
 import Explore from "./screens/Explore/Explore";
 import {AppStateActions,switchAppState} from "./redux/actions/AppStateActions";
 import ApplicationStateManager from "./screens/components/ApplicationStateManager";
-import ConditionalAlert from "./screens/components/ConditionalAlert";
+import Notification from "./screens/components/Notification";
 import Creation from "./screens/Create/Create";
 import {routingLinks} from "./data/appConfig";
 import {Tables} from "./types/explorationParams";
@@ -32,7 +32,7 @@ function App() {
                               dispatch(switchAppState(AppStateActions.HEADER_MENU_CLOSE))
                           }
                       }}>
-                          <ConditionalAlert/>
+                          <Notification/>
                           <Routes>
                               <Route path={"/"} element={
                                   <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Home/>} neededPermissions={roles.USER.permissions}/>

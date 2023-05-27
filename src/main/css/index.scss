@@ -38,6 +38,12 @@ img {
 
 .btn.btn-primary:hover {
   background: $md-sys-color-primary-light;
+  border-color: $md-sys-color-inverse-primary-light;
+}
+
+.btn.btn-primary:active {
+  border: none;
+  outline: none;
 }
 
 .error-text {
@@ -94,9 +100,7 @@ img {
   border: initial;
 }
 
-.btn:hover {
-  background: var();
-}
+
 
 .placeholder-ltm {
   color: $placeholder-color;

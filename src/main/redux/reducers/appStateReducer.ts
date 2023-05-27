@@ -1,4 +1,4 @@
-import AppState, {AppStateReducible, GmapsApiResponse, Meta, MetaArg} from "../../types/AppState";
+import AppState, {AppStateReducible, GmapsApiResponse, Meta, MetaArg, Notification} from "../../types/AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateActions from "../actions/AppStateActions";
@@ -34,8 +34,12 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
             return {...prevState, isHeaderMenuOpened: false}
         }
 
-        case AppStateActions.CLEAR_ERROR: {
-            return {...prevState, error: null}
+        case AppStateActions.SET_NOTIFICATION: {
+            return {...prevState, notification: (action as PayloadAction<Notification>).payload}
+        }
+
+        case AppStateActions.CLEAR_NOTIFICATION: {
+            return {...prevState, notification: null}
         }
 
         case AuthActions.CLEAR_AUTH: {
@@ -65,7 +69,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                 if (action.type.endsWith("/rejected")) {
                     console.error((action as PayloadAction<HttpError>).payload)
 
-                    const clearType = action.type.slice(0,-("/rejected").length);
+                    const clearType = action.type.replace("/rejected", "");
 
                     switch (clearType) {
                         case ApiSearchActions.REFRESH_RESULTS: {
@@ -73,11 +77,11 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                             if (httpError) {
                                 const status = httpError.status
                                 if (status&&httpErrors[status]===HttpErrorsNames.UNAUTHENTICATED) {
-                                    newState.error = {}
+                                    newState.notification = {type: 'danger'}
                                 }
 
                                 if (status&&httpErrors[status]===HttpErrorsNames.BAD_REQUEST) {
-                                    newState.error = {message: "Невалідні дані"}
+                                    newState.notification = {message: "Невалідні дані", type: 'danger'}
                                 }
                             }
                             break;
@@ -88,7 +92,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                             if (httpError?.status) {
                                 const status = httpError.status
                                 if (status&&httpErrors[status]===HttpErrorsNames.UNAUTHENTICATED) {
-                                    newState.error = {message: "Невірні дані користувача"}
+                                    newState.notification = {message: "Невірні дані користувача", type: 'danger'}
                                 }
                             }
                             break;

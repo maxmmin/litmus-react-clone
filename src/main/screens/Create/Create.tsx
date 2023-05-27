@@ -22,6 +22,8 @@ import apiLinks, {routingLinks} from "../../data/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
 import {CreationModalModes} from "../../types/CreationModalModes";
+import {Notification} from "../../types/AppState";
+import {setNotification} from "../../redux/actions/AppStateActions";
 
 
 export type CreationModalSettings = {
@@ -50,7 +52,7 @@ const Creation = () => {
         throw new Error("client error. table shouldn't be null. reload the page")
     }
 
-    const createButtonOnClick = (creationParams: CreationParamsReducible, accessToken: string) => {
+    const createButtonOnClick = async (creationParams: CreationParamsReducible, accessToken: string) => {
         if (creationParams) {
             const table = creationParams.table;
 
@@ -79,9 +81,17 @@ const Creation = () => {
             }
 
             if (url && body) {
-                    createEntity(url, body, accessToken)
-                        .then(res => res.json())
-                        .then(console.log)
+                    const notification: Notification = {}
+
+                    const response = await createEntity(url, body, accessToken);
+
+                    if (response.ok) {
+                        notification.type = 'success';
+                    } else notification.type = 'danger';
+
+                    notification.message = await response.json();
+
+                    dispatch(setNotification(notification));
             }
 
         }
