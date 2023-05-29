@@ -1,7 +1,7 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {isInvalid} from "../../data/pureFunctions";
-import {ErrJson, HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
-import apiLinks, {createAuthHeader, entitiesPerPage} from "../../data/appConfig";
+import {isValid} from "../../util/pureFunctions";
+import {ErrJson, BasicHttpError, HttpStatus} from "../../util/HttpStatus";
+import apiLinks, {createAuthHeader, entitiesPerPage} from "../../util/appConfig";
 import {RootState} from "../store";
 import {
     BasicHumanSearchPayload,
@@ -55,7 +55,12 @@ const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Table
             const id = (explorationParams.input![table] as {id: string}).id;
 
             if (!id) {
-                throw new HttpError(400, HttpErrorsNames.BAD_REQUEST)
+                throw new BasicHttpError(400, {errorDetails: {
+                    // @todo write normal class for creating error details
+                        validationErrors: {
+                            id: "should not be null"
+                        }
+                    }})
             }
 
             baseUrl += `/${id}`;
@@ -70,7 +75,11 @@ const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Table
             const lastName = fullNameInput.lastName;
 
             if (!lastName) {
-                throw new HttpError(400, HttpErrorsNames.BAD_REQUEST)
+                throw new BasicHttpError(400, {errorDetails: {
+                        // @todo write normal class for creating error details
+                        validationErrors: {
+                            lastName: "should not be null"
+                        }}});
             }
 
             baseUrl += `?lastName=${lastName}${middleName?"&middleName="+middleName:""}&${firstName?"&firstName="+firstName:""}`
@@ -86,13 +95,7 @@ const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Table
 }
 
 const errorResponseHandle = (response: Response, json: ErrJson, rejectWithValue: (value: unknown) => any) => {
-    let httpErrName: HttpErrorsNames = httpErrors[response.status];
-
-    if (httpErrName===undefined) {
-        httpErrName = HttpErrorsNames.UNKNOWN_ERROR;
-    }
-
-    const error = new HttpError(response.status,httpErrName, json);
+    const error = new BasicHttpError(response.status);
 
     return rejectWithValue({...error})
 }
@@ -102,8 +105,11 @@ const refreshResultsThunk = createAsyncThunk<ResultsFullRequired, RefreshResults
         const state = getState() as RootState;
         const accessToken = state.authentication?.accessToken;
 
-        if (!accessToken||isInvalid(accessToken)) {
-            return rejectWithValue({...new HttpError(401, HttpErrorsNames.UNAUTHENTICATED)})
+        if (!accessToken||!isValid(accessToken)) {
+            //@todo create separate function for checkup acess token and rejectwith value if it is expired
+            return rejectWithValue({...new BasicHttpError(401,{errorDetails: {
+                        message: "Помилка автентифікації. Застарілий access token"
+                    }})})
         }
 
         let fetchUrl: string = "";
@@ -111,7 +117,7 @@ const refreshResultsThunk = createAsyncThunk<ResultsFullRequired, RefreshResults
         try {
             fetchUrl = getFetchUrl(state.explorationParams, table, rejectWithValue)
         } catch (error) {
-            return rejectWithValue({...(error as HttpError)})
+            return rejectWithValue({...(error as BasicHttpError)})
         }
 
         const response = await fetch(fetchUrl,{
@@ -160,8 +166,11 @@ export const lazyLoadResultsThunk = createAsyncThunk<Results, LazyLoadResultsThu
 
         const table = results.table;
 
-        if (!accessToken||isInvalid(accessToken)) {
-            return rejectWithValue({...new HttpError(401, HttpErrorsNames.UNAUTHENTICATED)})
+        if (!accessToken||!isValid(accessToken)) {
+            //@todo separate function
+            return rejectWithValue({...new BasicHttpError(401,{errorDetails: {
+                        message: "Помилка автентифікації. Застарілий access token"
+                    }})})
         }
 
         let fetchUrl: string;
@@ -169,7 +178,7 @@ export const lazyLoadResultsThunk = createAsyncThunk<Results, LazyLoadResultsThu
         try {
             fetchUrl = getFetchUrl(state.explorationParams, table!, rejectWithValue, results)
         } catch (error) {
-            return rejectWithValue({...(error as HttpError)})
+            return rejectWithValue({...(error as BasicHttpError)})
         }
 
         const response = await fetch(fetchUrl,{

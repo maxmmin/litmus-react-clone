@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import apiLinks, {createAuthHeader} from "../../data/appConfig";
+import apiLinks, {createAuthHeader} from "../../util/appConfig";
 import {Tables} from "../../types/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
@@ -12,7 +12,7 @@ import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./Create";
 import {JurPerson} from "../../types/JurPerson";
 import Person, {Relationship, RelationshipsLinkObject} from "../../types/Person";
-import {getPersonFromResponse} from "../../data/pureFunctions";
+import {getPersonFromResponse, isValid} from "../../util/pureFunctions";
 import {CreationModalModes} from "../../types/CreationModalModes";
 
 type Props = {
@@ -84,19 +84,19 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
         const id = +e.currentTarget.value;
 
-        let isValid = false;
+        let isIdValid = false;
 
         if (isNaN(id)) {
             setSearchError(new SearchError("Невалідний ідентифікатор", null));
         } else {
             setSearchError(null);
-            isValid = true;
+            isIdValid = true;
         }
 
-        if (isValid&&accessToken) {
+        if (isIdValid&&isValid(accessToken)) {
             // TODO: Maybe write additional checkup for auth, add global error handler and Authentication error: 05/09
             setPending(true)
-            const timerID = setTimeout(()=>fetchPerson(accessToken,id),250)
+            const timerID = setTimeout(()=>fetchPerson(accessToken!,id),250)
             setRequestTimerId(timerID)
         }
 

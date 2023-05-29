@@ -1,4 +1,4 @@
-import {PersonIcon} from "../../data/icons";
+import {PersonIcon} from "../../util/icons";
 import HeaderMenu from "./HeaderMenu";
 import React from "react";
 import {UserIdentityReducible} from "../../types/UserIdentity";

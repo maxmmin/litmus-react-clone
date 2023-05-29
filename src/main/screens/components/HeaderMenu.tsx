@@ -2,7 +2,7 @@ import {Dropdown} from "react-bootstrap";
 import React from "react";
 import {Link} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {logOut} from "../../data/pureFunctions";
+import {logOut} from "../../util/pureFunctions";
 
 
 function HeaderMenu () {

@@ -2,8 +2,8 @@ import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
 import {Location} from "../../../types/Location";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import {Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover} from "@reach/combobox";
-import {geocode} from "../../../data/pureFunctions";
-import {gmapsRegionOptions} from "../../../data/appConfig";
+import {geocode} from "../../../util/pureFunctions";
+import {gmapsRegionOptions} from "../../../util/appConfig";
 
 
 type AutocompleteProps = {

@@ -28,7 +28,7 @@ const persistConfig: PersistConfig<any> = {
     whitelist: ['authentication']
 }
 
-const RootReducer = combineReducers({
+const rootReducer = combineReducers({
     authentication: authReducer,
     appState: appStateReducer,
     userIdentity: userIdentityReducer,
@@ -39,7 +39,7 @@ const RootReducer = combineReducers({
     timers: timersReducer
 } )
 
-const persistedReducer = persistReducer(persistConfig, RootReducer) as typeof RootReducer
+const persistedReducer = persistReducer(persistConfig, rootReducer) as typeof rootReducer;
 
 const store = configureStore({
     reducer: persistedReducer,

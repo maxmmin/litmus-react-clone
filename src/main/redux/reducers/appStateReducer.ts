@@ -1,13 +1,19 @@
-import AppState, {AppStateReducible, GmapsApiResponse, Meta, MetaArg, Notification} from "../../types/AppState";
+import AppState, {
+    AppStateReducible,
+    GmapsApiResponse,
+    Meta,
+    MetaArg
+} from "../../types/AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateActions from "../actions/AppStateActions";
 import AuthActions from "../actions/AuthActions";
-import {PayloadAction} from "@reduxjs/toolkit";
-import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
+import {isRejected, PayloadAction} from "@reduxjs/toolkit";
+import {BasicHttpError, HttpStatus} from "../../util/HttpStatus";
 import ApiSearchActions from "../actions/ApiSearchActions";
+import {Notification} from "../../util/NotificationManager";
 
-const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null}
+const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 
 type PendingMetaAction = {
     meta: {
@@ -34,22 +40,31 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
             return {...prevState, isHeaderMenuOpened: false}
         }
 
-        case AppStateActions.SET_NOTIFICATION: {
-            return {...prevState, notification: (action as PayloadAction<Notification>).payload}
-        }
-
-        case AppStateActions.CLEAR_NOTIFICATION: {
-            return {...prevState, notification: null}
-        }
-
         case AuthActions.CLEAR_AUTH: {
             return {...initialState, gmapsApiState: prevState.gmapsApiState}
         }
 
         case AppStateActions.SET_MAPS_API_RESPONSE: {
-            const act = action as PayloadAction<GmapsApiResponse>
-            return {...prevState, gmapsApiState: act.payload}
+            const gmapsResponseAction = action as PayloadAction<GmapsApiResponse>
+            return {...prevState, gmapsApiState: gmapsResponseAction.payload}
         }
+
+        /**
+         * Notification manager actions
+         */
+
+        case AppStateActions.SET_NOTIFICATIONS: {
+            const notifications: Notification[] = (action as PayloadAction<Notification[]>).payload;
+            return {...prevState, notifications: notifications};
+        }
+
+        case AppStateActions.ADD_NOTIFICATION: {
+            const notification = (action as PayloadAction<Notification>).payload;
+            return {...prevState, notifications: [...prevState.notifications, notification]};
+        }
+
+        /**
+         * */
 
         default: {
 
@@ -61,46 +76,6 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                 }
 
                 return prevState;
-            }
-
-            if (action.type.endsWith("/fulfilled")||action.type.endsWith("/rejected")) {
-                let newState: AppState = {...prevState, isRefreshing: false}
-
-                if (action.type.endsWith("/rejected")) {
-                    console.error((action as PayloadAction<HttpError>).payload)
-
-                    const clearType = action.type.replace("/rejected", "");
-
-                    switch (clearType) {
-                        case ApiSearchActions.REFRESH_RESULTS: {
-                            const httpError = (action as PayloadAction<HttpError>).payload
-                            if (httpError) {
-                                const status = httpError.status
-                                if (status&&httpErrors[status]===HttpErrorsNames.UNAUTHENTICATED) {
-                                    newState.notification = {type: 'danger'}
-                                }
-
-                                if (status&&httpErrors[status]===HttpErrorsNames.BAD_REQUEST) {
-                                    newState.notification = {message: "Невалідні дані", type: 'danger'}
-                                }
-                            }
-                            break;
-                        }
-
-                        case AuthActions.REFRESH_AUTH: {
-                            const httpError = (action as Partial<PayloadAction<HttpError>>).payload
-                            if (httpError?.status) {
-                                const status = httpError.status
-                                if (status&&httpErrors[status]===HttpErrorsNames.UNAUTHENTICATED) {
-                                    newState.notification = {message: "Невірні дані користувача", type: 'danger'}
-                                }
-                            }
-                            break;
-                        }
-                    }
-
-                }
-                return newState;
             }
 
             return prevState;

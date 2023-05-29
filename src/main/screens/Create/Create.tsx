@@ -16,14 +16,14 @@ import CreationInputSection from "./CreationInputSection";
 import {
     createEntity,
     getTableNameFromLocation
-} from "../../data/pureFunctions";
+} from "../../util/pureFunctions";
 import {useLocation} from "react-router";
-import apiLinks, {routingLinks} from "../../data/appConfig";
+import apiLinks, {routingLinks} from "../../util/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
 import {CreationModalModes} from "../../types/CreationModalModes";
-import {Notification} from "../../types/AppState";
-import {setNotification} from "../../redux/actions/AppStateActions";
+import {BasicNotification, Notification, NotificationType} from "../../util/NotificationManager";
+import {addNotification} from "../../redux/actions/AppStateActions";
 
 
 export type CreationModalSettings = {
@@ -81,17 +81,17 @@ const Creation = () => {
             }
 
             if (url && body) {
-                    const notification: Notification = {}
+                    let type: NotificationType | null = null;
 
                     const response = await createEntity(url, body, accessToken);
 
                     if (response.ok) {
-                        notification.type = 'success';
-                    } else notification.type = 'danger';
+                        type = 'success';
+                    } else type = 'danger';
 
-                    notification.message = await response.json();
+                    const message = await response.json();
 
-                    dispatch(setNotification(notification));
+                    dispatch(addNotification({...new BasicNotification(type, message)}));
             }
 
         }

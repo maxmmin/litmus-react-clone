@@ -1,8 +1,8 @@
 import {AuthenticationReducible} from "../../types/Authentication";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import JwtInfo from "../../types/JwtInfo";
-import apiLinks from "../../data/appConfig";
-import { HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
+import apiLinks from "../../util/appConfig";
+import { BasicHttpError, HttpStatus} from "../../util/HttpStatus";
 import {Action} from "redux";
 import Authentication from "../../types/Authentication";
 import {MetaArg} from "../../types/AppState";
@@ -35,7 +35,7 @@ export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenAr
             return data;
         }
 
-        return rejectWithValue({...new HttpError(response.status,httpErrors[response.status], data)})
+        return rejectWithValue({...new BasicHttpError(response.status, data)})
     })
 
 
@@ -71,19 +71,14 @@ export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.REFRESH_AU
 
 
 
-        const json = await response.json();
+        const errorResponse = await response.json();
 
         if (response.ok) {
-            return json;
+            return errorResponse;
         }
 
-        let httpErrName: HttpErrorsNames = httpErrors[response.status];
 
-        if (httpErrName===undefined) {
-            httpErrName = HttpErrorsNames.UNKNOWN_ERROR;
-        }
-
-        const error = new HttpError(response.status,httpErrName, json);
+        const error = new BasicHttpError(response.status, errorResponse);
 
         return rejectWithValue({...error});
     })

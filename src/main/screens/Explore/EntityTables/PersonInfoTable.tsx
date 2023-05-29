@@ -1,4 +1,4 @@
-import {noInfoMessage} from "../../../data/httpErrors";
+import {noInfoMessage} from "../../../util/HttpStatus";
 import {useMemo} from "react";
 import Person from "../../../types/Person";
 import {DateBuilder} from "../../../types/DateEntity";

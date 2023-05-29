@@ -1,6 +1,6 @@
 import ApiSearchActions, {LazyLoadResultsThunkArg, Results, ResultsReducible} from "../actions/ApiSearchActions";
 import {Reducer} from "react";
-import {HttpError} from "../../data/httpErrors";
+import {BasicHttpError} from "../../util/HttpStatus";
 import AuthActions from "../actions/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {RefreshResultsThunkArg} from "../actions/ApiSearchActions"
@@ -47,7 +47,7 @@ const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (pre
 
         case (`${ApiSearchActions.LAZY_LOAD}/rejected`):
         case (`${ApiSearchActions.REFRESH_RESULTS}/rejected`): {
-            const error = action.payload as unknown as HttpError;
+            const error = action.payload as unknown as BasicHttpError;
 
             if (error?.status) {
                 // only lazy load, because if it's refresh results actions prev state cant be null

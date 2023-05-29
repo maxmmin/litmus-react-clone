@@ -2,7 +2,7 @@ import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
 import TimersActions, {Timers, TimersReducible} from "../actions/TimersActions";
 import AuthActions from "../actions/AuthActions";
-import {setAuthRefreshingTimer} from "../../data/pureFunctions";
+import {setAuthRefreshingTimer} from "../../util/pureFunctions";
 
 export const initState: TimersReducible = {
     authRefreshTimerId: null

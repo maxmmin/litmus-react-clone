@@ -18,9 +18,9 @@ import {Permissions} from "../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
 import store, {RootState} from "../../redux/store";
 import {useNavigate} from "react-router-dom";
-import {routingLinks} from "../../data/appConfig";
+import {routingLinks} from "../../util/appConfig";
 import {useLocation} from "react-router";
-import {getTableNameFromLocation} from "../../data/pureFunctions";
+import {getTableNameFromLocation} from "../../util/pureFunctions";
 
 const Explore = () => {
     const dispatch = useAppDispatch();

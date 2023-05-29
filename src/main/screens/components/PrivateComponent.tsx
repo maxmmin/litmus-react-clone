@@ -3,7 +3,7 @@ import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {Navigate} from 'react-router-dom'
 import {Permissions} from "../../types/Role";
 import Loader from "./Loader";
-import {checkAndRefreshAuth, checkAuthorization, isInvalid} from "../../data/pureFunctions";
+import {checkAndRefreshAuth, checkAuthorization, isValid} from "../../util/pureFunctions";
 
 type Props = {
     Component: ReactNode,

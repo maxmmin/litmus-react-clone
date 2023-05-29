@@ -3,7 +3,7 @@ import {Location} from "../../../types/Location";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import Geo from "../../../types/Geo";
 import PlacesAutocomplete from "./PlacesAutocomplete";
-import {geocode} from "../../../data/pureFunctions";
+import {geocode} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
 
 

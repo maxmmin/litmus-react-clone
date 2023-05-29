@@ -1,4 +1,4 @@
-import {noInfoMessage} from "../../../data/httpErrors";
+import {noInfoMessage} from "../../../util/HttpStatus";
 import User from "../../../types/User";
 
 type Props = {

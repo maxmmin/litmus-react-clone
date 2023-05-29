@@ -1,11 +1,11 @@
 import React, {useState} from "react";
-import {AddUserIcon, SearchIcon, SetUpUser} from "../../data/icons";
+import {AddUserIcon, SearchIcon, SetUpUser} from "../../util/icons";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {roles} from "../../types/Role";
 import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
 import {useNavigate} from 'react-router-dom'
 import Header from "../components/Header";
-import {routingLinks} from "../../data/appConfig";
+import {routingLinks} from "../../util/appConfig";
 import {Tables} from "../../types/explorationParams";
 import {useAppSelector} from "../../redux/hooks";
 

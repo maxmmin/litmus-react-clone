@@ -41,9 +41,10 @@ img {
   border-color: $md-sys-color-inverse-primary-light;
 }
 
-.btn.btn-primary:active {
-  border: none;
-  outline: none;
+.btn.btn-primary {
+  &:active, &:focus {
+    box-shadow: none;
+  }
 }
 
 .error-text {

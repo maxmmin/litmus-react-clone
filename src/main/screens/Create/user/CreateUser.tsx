@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import {setLocalInput} from "../../../redux/actions/ExplorationParamsActions";
-import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../data/pureFunctions";
+import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import React from "react";
 import {useAppDispatch} from "../../../redux/hooks";
 import {updatePersonCreationParams, updateUserCreationParams} from "../../../redux/actions/CreationParamsActions";

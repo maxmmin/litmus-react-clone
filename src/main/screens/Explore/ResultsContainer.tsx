@@ -11,7 +11,7 @@ import {JurPerson} from "../../types/JurPerson";
 import User from "../../types/User";
 import {DateBuilder} from "../../types/DateEntity";
 import person from "../../types/Person";
-import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../data/pureFunctions";
+import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../util/pureFunctions";
 
 const getParsedResults = (results: Results) => {
     const table = results.table;

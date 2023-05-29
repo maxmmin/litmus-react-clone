@@ -1,7 +1,7 @@
 import AuthActions from "../actions/AuthActions";
 import Authentication, {AuthenticationReducible} from "../../types/Authentication";
 import {Reducer} from "react";
-import {HttpError, HttpErrorsNames} from "../../data/httpErrors";
+import {BasicHttpError, HttpStatus} from "../../util/HttpStatus";
 import {PayloadAction} from "@reduxjs/toolkit";
 
 const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
@@ -30,7 +30,7 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
         default: {
             if (action.type.endsWith("/rejected")) {
                 try {
-                        return errorHandle(prevState, action.payload as unknown as HttpError)
+                        return errorHandle(prevState, action.payload as unknown as BasicHttpError)
                 } catch (e) {
                     console.log(e)
                 }
@@ -40,10 +40,10 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
     }
 }
 
-const errorHandle = (prevState: AuthenticationReducible, error: HttpError): AuthenticationReducible => {
+const errorHandle = (prevState: AuthenticationReducible, error: BasicHttpError): AuthenticationReducible => {
     if (error&&Object.hasOwn(error,'type')) {
-        switch (error.type) {
-            case HttpErrorsNames.UNAUTHENTICATED: {
+        switch (error.status) {
+            case HttpStatus.UNAUTHENTICATED: {
 
                 if (prevState?.accessToken) {
                     return {accessToken: null, refreshToken: prevState.refreshToken}

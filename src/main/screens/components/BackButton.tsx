@@ -1,6 +1,6 @@
 import backIcon from "../../img/boxArrowLeft.svg"
 import {useNavigate} from "react-router-dom";
-import {BackButtonIcon} from "../../data/icons";
+import {BackButtonIcon} from "../../util/icons";
 
 type PropsType = {
     className?: string,

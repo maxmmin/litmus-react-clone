@@ -2,7 +2,7 @@ import Form from "react-bootstrap/Form";
 import {
     inputBeforeDateContainerHandler,
     inputGroupsKeyPressHandler as keyPressHandler
-} from "../../../data/pureFunctions";
+} from "../../../util/pureFunctions";
 import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {
@@ -16,7 +16,7 @@ import CreationGeoModal from "../geo/CreationGeoModal";
 import {Tables} from "../../../types/explorationParams";
 import DateEntity, {DateBuilder} from "../../../types/DateEntity";
 import Sex from "../../../types/Sex";
-import {CrossIcon} from "../../../data/icons";
+import {CrossIcon} from "../../../util/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../types/CreationModalModes";
 import PersonRelationships from "./PersonRelationships";

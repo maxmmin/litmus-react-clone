@@ -12,9 +12,9 @@ import {roles} from "./types/Role";
 import Explore from "./screens/Explore/Explore";
 import {AppStateActions,switchAppState} from "./redux/actions/AppStateActions";
 import ApplicationStateManager from "./screens/components/ApplicationStateManager";
-import Notification from "./screens/components/Notification";
+import NotificationCenter from "./screens/components/NotificationCenter";
 import Creation from "./screens/Create/Create";
-import {routingLinks} from "./data/appConfig";
+import {routingLinks} from "./util/appConfig";
 import {Tables} from "./types/explorationParams";
 
 // @todo check if the refresh token expired
@@ -32,7 +32,7 @@ function App() {
                               dispatch(switchAppState(AppStateActions.HEADER_MENU_CLOSE))
                           }
                       }}>
-                          <Notification/>
+                          <NotificationCenter/>
                           <Routes>
                               <Route path={"/"} element={
                                   <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Home/>} neededPermissions={roles.USER.permissions}/>

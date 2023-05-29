@@ -3,11 +3,8 @@
  * message - msg to be shown
  * duration - time notification will stay on screen(animation exclusive)
  */
-export interface Notification {
-    type?: 'success' | 'info' | 'warning' | 'danger';
-    message?: string,
-    duration?: number;
-}
+import {Notification} from "../util/NotificationManager";
+
 
 type GmapsApiError = {
     name: string; message: string; stack?: string | undefined; cause?: unknown;
@@ -21,8 +18,8 @@ export type GmapsApiResponse = {
 type AppState = {
     isRefreshing: boolean,
     isHeaderMenuOpened: boolean,
-    gmapsApiState: GmapsApiResponse | null
-    notification?: Notification | null,
+    gmapsApiState: GmapsApiResponse | null,
+    notifications: Notification[]
 }
 
 export type Meta = {

@@ -98,9 +98,8 @@ export const getTableNameFromLocation = (pathName: string): Tables | null => {
 
 export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {
     if (auth) {
-        if (isInvalid(auth?.accessToken!)) {
-
-            if (auth?.refreshToken&&!isInvalid(auth.refreshToken)) {
+        if (!isValid(auth?.accessToken!)) {
+            if (auth?.refreshToken&&isValid(auth.refreshToken)) {
                 return dispatch(
                     refreshAccessToken({refreshToken: auth.refreshToken, shouldRefreshGlobally: false})
                 )
@@ -122,15 +121,15 @@ export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: Timers
     return;
 }
 
-export function isInvalid(token: string | null | undefined): boolean {
+export function isValid(token: string | null | undefined): boolean {
         try {
             if (token) {
-                return jwtDecode<JwtPayload>(token).exp!*1000<Date.now();
+                return !(jwtDecode<JwtPayload>(token).exp!*1000<Date.now());
             }
         } catch (e) {
             console.error(e)
         }
-        return true;
+        return false;
 }
 
 export const setAuthRefreshingTimer = (authentication: AuthenticationReducible, dispatch: AppDispatch): NodeJS.Timer | null => {
@@ -217,6 +216,14 @@ export const getJurPersonFromEntity = (obj: object): JurPerson => {
 export const getUserFromResponse = (obj: object): User => {
     /** need to use spread operator to not mutate redux state **/
     return  {...obj} as User;
+}
+
+export const isRejected = (actionType: string) => {
+    return actionType.endsWith("/rejected");
+}
+
+export const isFulfilled = (actionType: string) => {
+    return actionType.endsWith("/fulfilled");
 }
 
 export {checkAuthorization, logOut}

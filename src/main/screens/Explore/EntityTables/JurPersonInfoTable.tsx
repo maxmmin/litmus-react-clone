@@ -1,4 +1,4 @@
-import {noInfoMessage} from "../../../data/httpErrors";
+import {noInfoMessage} from "../../../util/HttpStatus";
 import {JurPerson} from "../../../types/JurPerson";
 import {DateBuilder} from "../../../types/DateEntity";
 

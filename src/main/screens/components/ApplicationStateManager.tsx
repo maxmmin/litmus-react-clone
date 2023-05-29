@@ -1,12 +1,12 @@
 import Loader from "./Loader";
-import {checkAndRefreshAuth, isInvalid, onWakeUp} from "../../data/pureFunctions";
+import {checkAndRefreshAuth, isValid, onWakeUp} from "../../util/pureFunctions";
 import React, {ReactNode, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {refreshUserIdentity} from "../../redux/actions/UserIdentityActions";
 import AuthActions from "../../redux/actions/AuthActions";
 import store from "../../redux/store";
 import {useLoadScript} from "@react-google-maps/api";
-import {geoApiKey, gmapsRegionOptions} from "../../data/appConfig";
+import {geoApiKey, gmapsRegionOptions} from "../../util/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
 import {setMapsApiResponse} from "../../redux/actions/AppStateActions";
 
@@ -39,7 +39,7 @@ const ApplicationStateManager = ({children}: Props) => {
     useEffect(()=>{
         dispatch({type: AuthActions.CHECK_AUTH})
 
-        if (!isInvalid(authentication?.accessToken)) {
+        if (!!isValid(authentication?.accessToken)) {
             dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!,shouldRefreshGlobally: !authentication}))
         }
     },[authentication])

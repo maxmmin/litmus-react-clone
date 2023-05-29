@@ -1,9 +1,9 @@
 import UserIdentity, {UserIdentityReducible} from "../../types/UserIdentity";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import apiLinks, {createAuthHeader} from "../../data/appConfig";
-import {HttpError, httpErrors, HttpErrorsNames} from "../../data/httpErrors";
+import apiLinks, {createAuthHeader} from "../../util/appConfig";
+import {BasicHttpError, HttpStatus} from "../../util/HttpStatus";
 import {roles} from "../../types/Role";
-import {isInvalid} from "../../data/pureFunctions";
+import {isValid} from "../../util/pureFunctions";
 import {MetaArg} from "../../types/AppState";
 
 enum UserIdentityActions {
@@ -29,8 +29,11 @@ type RefreshUserIdentityArg = MetaArg<{
 export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIdentityArg>(UserIdentityActions.GET_IDENTITY,
     async ({accessToken}, {rejectWithValue}) => {
 
-    if (isInvalid(accessToken)) {
-        return rejectWithValue({...new HttpError(401, HttpErrorsNames.UNAUTHENTICATED)})
+    if (!isValid(accessToken)) {
+        return rejectWithValue({...new BasicHttpError(401, {errorDetails: {
+                message: "Помилка аутентифікації"
+            }})
+        })
     }
 
     const response = await fetch(apiLinks.getThisUser,{
@@ -49,6 +52,6 @@ export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIden
         return identity;
     }
 
-    return rejectWithValue({...new HttpError(response.status, httpErrors[response.status], jsonData)})
+    return rejectWithValue({...new BasicHttpError(response.status,  jsonData)})
 
 })
