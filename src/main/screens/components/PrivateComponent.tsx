@@ -6,12 +6,12 @@ import Loader from "./Loader";
 import {checkAndRefreshAuth, checkAuthorization, isValid} from "../../util/pureFunctions";
 
 type Props = {
-    Component: ReactNode,
+    component: ReactNode,
     requiredPermissions: Permissions[],
     mode: ForbiddenOutputCallbackModesEnum
 }
 
-const PrivateComponent = ({Component, mode, requiredPermissions}: Props) => {
+const PrivateComponent = ({component, mode, requiredPermissions}: Props) => {
 
     const authentication = useAppSelector(state => state.authentication)
 
@@ -30,7 +30,7 @@ const PrivateComponent = ({Component, mode, requiredPermissions}: Props) => {
     if (!isAuthorized) {return <>{forbiddenOutputCallbackModes[mode]()}</>}
 
     return (
-        <>{Component}</>
+        <>{component}</>
     )
 }
 

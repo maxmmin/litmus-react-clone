@@ -9,7 +9,7 @@ type Props = {
 }
 
 function PrivateComponentWrapper ({children, neededPermissions,mode, ...props}: Props) {
-    return <PrivateComponent mode={mode} Component={children} requiredPermissions={neededPermissions} {...props}/>
+    return <PrivateComponent mode={mode} component={children} requiredPermissions={neededPermissions} {...props}/>
 }
 
 export default PrivateComponentWrapper;
