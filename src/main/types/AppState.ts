@@ -23,7 +23,8 @@ type AppState = {
 }
 
 export type Meta = {
-    shouldRefreshGlobally: boolean
+    shouldRefreshGlobally?: boolean,
+    shouldNotifyOnEnd?: boolean
 }
 
 export type MetaArg<T> = T & Meta

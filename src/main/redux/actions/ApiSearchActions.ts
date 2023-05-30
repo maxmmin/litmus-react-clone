@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {isValid} from "../../util/pureFunctions";
-import {ErrJson, BasicHttpError, HttpStatus} from "../../util/HttpStatus";
+import {ErrJson, BasicHttpError} from "../../util/HttpStatus";
 import apiLinks, {createAuthHeader, entitiesPerPage} from "../../util/appConfig";
 import {RootState} from "../store";
 import {

@@ -81,7 +81,7 @@ const Creation = () => {
             }
 
             if (url && body) {
-                    let type: NotificationType | null = null;
+                    let type: NotificationType;
 
                     const response = await createEntity(url, body, accessToken);
 

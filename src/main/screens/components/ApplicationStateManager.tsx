@@ -42,7 +42,7 @@ const ApplicationStateManager = ({children}: Props) => {
         dispatch({type: AuthActions.CHECK_AUTH})
 
         if (isValid(authentication?.accessToken)) {
-            dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!,shouldRefreshGlobally: !authentication}))
+            dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!}))
         }
     },[authentication])
 
