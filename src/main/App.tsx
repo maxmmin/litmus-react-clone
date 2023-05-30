@@ -36,31 +36,31 @@ function App() {
                     }}>
                         <Routes>
                             <Route path={"/"} element={
-                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Home/>} neededPermissions={roles.USER.permissions}/>
+                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Home/>} requiredPermissions={roles.USER.permissions}/>
                             }/>
 
                             <Route path={routingLinks.explore[Tables.PERSONS]} element={
-                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} neededPermissions={roles.USER.permissions}/>
+                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} requiredPermissions={roles.USER.permissions}/>
                             }/>
 
                             <Route path={routingLinks.explore[Tables.JUR_PERSONS]} element={
-                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} neededPermissions={roles.USER.permissions}/>
+                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} requiredPermissions={roles.USER.permissions}/>
                             }/>
 
                             <Route path={routingLinks.explore[Tables.USERS]} element={
-                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} neededPermissions={roles.ADMIN.permissions}/>
+                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Explore/>} requiredPermissions={roles.ADMIN.permissions}/>
                             }/>
 
                             <Route path={routingLinks.create[Tables.PERSONS]} element={
-                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Creation/>} neededPermissions={roles.MODERATOR.permissions}/>
+                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Creation/>} requiredPermissions={roles.MODERATOR.permissions}/>
                             }/>
 
                             <Route path={routingLinks.create[Tables.JUR_PERSONS]} element={
-                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Creation/>} neededPermissions={roles.MODERATOR.permissions}/>
+                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Creation/>} requiredPermissions={roles.MODERATOR.permissions}/>
                             }/>
 
                             <Route path={routingLinks.create[Tables.USERS]} element={
-                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Creation/>} neededPermissions={roles.ADMIN.permissions}/>
+                                <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Creation/>} requiredPermissions={roles.ADMIN.permissions}/>
                             }/>
 
                             <Route path="/sign-in" element={<SignIn/>}/>

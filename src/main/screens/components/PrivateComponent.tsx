@@ -7,11 +7,11 @@ import {checkAndRefreshAuth, checkAuthorization, isValid} from "../../util/pureF
 
 type Props = {
     Component: ReactNode,
-    neededPermissions: Permissions[],
+    requiredPermissions: Permissions[],
     mode: ForbiddenOutputCallbackModesEnum
 }
 
-const PrivateComponent = ({Component, mode, neededPermissions}: Props) => {
+const PrivateComponent = ({Component, mode, requiredPermissions}: Props) => {
 
     const authentication = useAppSelector(state => state.authentication)
 
@@ -20,7 +20,7 @@ const PrivateComponent = ({Component, mode, neededPermissions}: Props) => {
 
     const isAuthorized: boolean = useMemo(()=>{
             if (user) {
-                return checkAuthorization(neededPermissions, user.permissions)
+                return checkAuthorization(requiredPermissions, user.permissions)
             }
             return false;
     },[user]);
