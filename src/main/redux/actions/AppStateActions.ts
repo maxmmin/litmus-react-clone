@@ -1,7 +1,7 @@
 import {Action} from "redux";
 import {GmapsApiResponse} from "../../types/AppState";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {Notification} from "../../util/NotificationManager";
+import Notification from "../../util/Notification";
 
 export enum AppStateActions {
     REFRESH_ON="REFRESH_ON",
@@ -9,8 +9,12 @@ export enum AppStateActions {
     HEADER_MENU_TOGGLE="HEADER_MENU_TOGGLE",
     HEADER_MENU_CLOSE="HEADER_MENU_CLOSE",
     SET_MAPS_API_RESPONSE="SET_MAPS_API_RESPONSE",
+    /**
+     * NOTIFICATIONS
+     */
     SET_NOTIFICATIONS="UPDATE_NOTIFICATIONS",
-    ADD_NOTIFICATION="ADD_NOTIFICATION"
+    ADD_NOTIFICATION="ADD_NOTIFICATION",
+    CLEAR_NOTIFICATIONS="CLEAR_NOTIFICATIONS"
 }
 
 export default AppStateActions;
@@ -39,5 +43,11 @@ export const addNotification = (notification: Notification): PayloadAction<Notif
     return {
         type: AppStateActions.ADD_NOTIFICATION,
         payload: notification
+    }
+}
+
+export const clearNotifications = (): Action => {
+    return {
+        type: AppStateActions.CLEAR_NOTIFICATIONS
     }
 }

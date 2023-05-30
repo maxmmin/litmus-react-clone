@@ -3,7 +3,7 @@
  * message - msg to be shown
  * duration - time notification will stay on screen(animation exclusive)
  */
-import {Notification} from "../util/NotificationManager";
+import Notification from "../util/Notification";
 
 
 type GmapsApiError = {

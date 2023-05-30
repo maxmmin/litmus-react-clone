@@ -22,7 +22,7 @@ import apiLinks, {routingLinks} from "../../util/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
 import {CreationModalModes} from "../../types/CreationModalModes";
-import {BasicNotification, Notification, NotificationType} from "../../util/NotificationManager";
+import Notification, {BasicNotification, NotificationType, notificationTypes} from "../../util/Notification";
 import {addNotification} from "../../redux/actions/AppStateActions";
 
 
@@ -86,12 +86,12 @@ const Creation = () => {
                     const response = await createEntity(url, body, accessToken);
 
                     if (response.ok) {
-                        type = 'success';
-                    } else type = 'danger';
+                        type = notificationTypes.SUCCESS;
+                    } else type = notificationTypes.ERROR;
 
-                    const message = await response.json();
+                    const message: object = await response.json();
 
-                    dispatch(addNotification({...new BasicNotification(type, message)}));
+                    dispatch(addNotification({...new BasicNotification(type, JSON.stringify(message))}));
             }
 
         }

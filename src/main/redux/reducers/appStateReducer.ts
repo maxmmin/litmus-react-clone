@@ -11,7 +11,7 @@ import AuthActions from "../actions/AuthActions";
 import {isRejected, PayloadAction} from "@reduxjs/toolkit";
 import {BasicHttpError, HttpStatus} from "../../util/HttpStatus";
 import ApiSearchActions from "../actions/ApiSearchActions";
-import {Notification} from "../../util/NotificationManager";
+import Notification from "../../util/Notification";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 
@@ -61,6 +61,10 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
         case AppStateActions.ADD_NOTIFICATION: {
             const notification = (action as PayloadAction<Notification>).payload;
             return {...prevState, notifications: [...prevState.notifications, notification]};
+        }
+
+        case AppStateActions.CLEAR_NOTIFICATIONS: {
+            return {...prevState, notifications: []}
         }
 
         /**

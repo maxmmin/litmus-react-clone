@@ -3,7 +3,7 @@ import {RootState} from "./store";
 import {isRejected} from "../util/pureFunctions";
 import {isFulfilled, PayloadAction} from "@reduxjs/toolkit";
 import {BasicHttpError, HttpStatus} from "../util/HttpStatus";
-import {BasicNotification, Notification} from "../util/NotificationManager";
+import Notification , {BasicNotification, notificationTypes} from "../util/Notification";
 
 const notificationManagerMiddleware: Middleware<{}, RootState> = ({getState, dispatch}) => (
     next
@@ -19,18 +19,18 @@ const notificationManagerMiddleware: Middleware<{}, RootState> = ({getState, dis
             if (httpError) {
                 switch (httpError.status) {
                     case HttpStatus.BAD_REQUEST:
-                        notification = new BasicNotification('danger', "Невірні дані були надіслані на сервер"+JSON.stringify(httpError.responseJson));
+                        notification = new BasicNotification(notificationTypes.ERROR, "Невірні дані були надіслані на сервер"+JSON.stringify(httpError.responseJson));
                         break;
                     case HttpStatus.UNKNOWN_ERROR:
-                        notification = new BasicNotification('danger', "Сталася невідома помилка:"+JSON.stringify(httpError.responseJson));
+                        notification = new BasicNotification(notificationTypes.ERROR, "Сталася невідома помилка:"+JSON.stringify(httpError.responseJson));
                         break;
                     case HttpStatus.NOT_FOUND:
                         break;
                     case HttpStatus.FORBIDDEN:
-                        notification = new BasicNotification( 'danger', "Помилка доступу");
+                        notification = new BasicNotification( notificationTypes.ERROR, "Помилка доступу");
                         break;
                     case (HttpStatus.UNAUTHENTICATED): {
-                        notification = new BasicNotification('danger', "Помилка аутентифікації");
+                        notification = new BasicNotification(notificationTypes.ERROR, "Помилка аутентифікації");
                         break;
                     }
                 }

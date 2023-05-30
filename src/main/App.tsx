@@ -23,6 +23,7 @@ function App() {
     const dispatch = useAppDispatch();
   return (
               <BrowserRouter basename={"/"}>
+                  <NotificationCenter/>
                   <ApplicationStateManager>
                       <div className={"wrapper"} onClick={e=>{
                           const appStore = store.getState();
@@ -32,7 +33,6 @@ function App() {
                               dispatch(switchAppState(AppStateActions.HEADER_MENU_CLOSE))
                           }
                       }}>
-                          <NotificationCenter/>
                           <Routes>
                               <Route path={"/"} element={
                                   <PrivateComponent mode={ForbiddenOutputCallbackModesEnum.ERROR_PAGE} Component={<Home/>} neededPermissions={roles.USER.permissions}/>
