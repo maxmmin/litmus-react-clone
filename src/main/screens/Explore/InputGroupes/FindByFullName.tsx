@@ -7,7 +7,7 @@ import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureF
 
 const FindByFullName = () => {
     const dispatch = useAppDispatch()
-    const table = useAppSelector(state => state.explorationParams?.table)
+    const table = useAppSelector(state => state.explorationParams?.entity)
 
     const localInput = useAppSelector(state => {
         const globalInput = state.explorationParams?.input;

@@ -4,7 +4,7 @@ import {BasicHttpError} from "../../util/HttpStatus";
 import AuthActions from "../actions/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {RefreshResultsThunkArg} from "../actions/ApiSearchActions"
-import {Tables} from "../../types/explorationParams";
+import {Entity} from "../../types/explorationParams";
 
 const initialState = null;
 

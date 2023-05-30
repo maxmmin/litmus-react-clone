@@ -8,7 +8,7 @@ import {clearAuthRefreshTimer, setTimers, TimersReducible} from "../redux/action
 import {getGeocode} from "use-places-autocomplete";
 import Geo from "../types/Geo";
 import {createAuthHeader, gmapsRegionOptions} from "./appConfig";
-import {Tables} from "../types/explorationParams";
+import {Entity} from "../types/explorationParams";
 import User from "../types/User";
 import Person from "../types/Person";
 import person from "../types/Person";
@@ -89,10 +89,10 @@ export const switchNeighbourInput = (e: React.ChangeEvent<HTMLInputElement>) => 
     }
 }
 
-export const getTableNameFromLocation = (pathName: string): Tables | null => {
+export const getTableNameFromLocation = (pathName: string): Entity | null => {
     const path = pathName.endsWith("/")?pathName.slice(0,-1):pathName;
     const pathsArray = path.split("/")
-    return pathsArray[pathsArray.length - 1].toUpperCase() as Tables | null;
+    return pathsArray[pathsArray.length - 1].toUpperCase() as Entity | null;
 }
 
 export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {

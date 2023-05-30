@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import apiLinks, {createAuthHeader} from "../../util/appConfig";
-import {Tables} from "../../types/explorationParams";
+import {Entity} from "../../types/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
 import {addRelationship, updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
@@ -105,7 +105,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     const fetchPerson = async (accessToken: string, id: number) => {
         setPending(true)
 
-        const response = await fetch(`${apiLinks[Tables.PERSONS]}/${id}`, {
+        const response = await fetch(`${apiLinks[Entity.PERSONS]}/${id}`, {
             headers: {
                 ...createAuthHeader(accessToken)
             }

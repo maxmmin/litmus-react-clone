@@ -1,6 +1,6 @@
 import Header from "../components/Header";
 import {Form} from "react-bootstrap";
-import {Tables} from "../../types/explorationParams";
+import {Entity} from "../../types/explorationParams";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";
 import {NO_OUTPUT} from "../components/PrivateComponent";
@@ -40,7 +40,7 @@ const Creation = () => {
         navigate(event.currentTarget.value)
     }
 
-    const table = useMemo<Tables|null>(()=>getTableNameFromLocation(location.pathname), [location])
+    const table = useMemo<Entity|null>(()=>getTableNameFromLocation(location.pathname), [location])
 
     useLayoutEffect(() => {
         if (table) {
@@ -61,19 +61,19 @@ const Creation = () => {
             let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
 
             switch (table) {
-                case Tables.JUR_PERSONS: {
+                case Entity.JUR_PERSONS: {
                     const creationData = creationParams.jurPersonCreationData;
                     body = getCreateJurPersonDto(creationData);
                     break;
                 }
 
-                case Tables.PERSONS: {
+                case Entity.PERSONS: {
                     const creationData = creationParams.personCreationData;
                     body = getCreatePersonDto(creationData)
                     break;
                 }
 
-                case Tables.USERS: {
+                case Entity.USERS: {
                     const creationData = creationParams.userCreationData;
                     body = getCreateUserDto(creationData);
                     break;
@@ -108,10 +108,10 @@ const Creation = () => {
                        <div className="creation-page__create-select-wrapper">
                            <p style={{marginBottom: '10px'}}>Створити</p>
                            <Form.Select className={"create__select"} value={routingLinks.create[table]} onChange={handleSelectChange}>
-                               <option value={routingLinks.create[Tables.PERSONS]}>Фізичну особу</option>
-                               <option value={routingLinks.create[Tables.JUR_PERSONS]}>Юридичну особу</option>
+                               <option value={routingLinks.create[Entity.PERSONS]}>Фізичну особу</option>
+                               <option value={routingLinks.create[Entity.JUR_PERSONS]}>Юридичну особу</option>
                                <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
-                                   <option value={routingLinks.create[Tables.USERS]}>Користувача</option>
+                                   <option value={routingLinks.create[Entity.USERS]}>Користувача</option>
                                </PrivateComponentWrapper>
                            </Form.Select>
                        </div>

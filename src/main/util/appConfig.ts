@@ -1,4 +1,4 @@
-import {Tables} from "../types/explorationParams";
+import {Entity} from "../types/explorationParams";
 
 const host = "http://localhost:8081";
 
@@ -23,21 +23,21 @@ const apiLinks = {
     signIn: `${auth}/sign-in`,
     refreshAccessKey: `${auth}/refresh`,
     getThisUser: auth,
-    [Tables.PERSONS]: `${api}/persons`,
-    [Tables.USERS]: `${api}/users`,
-    [Tables.JUR_PERSONS]: `${api}/jur-persons`,
+    [Entity.PERSONS]: `${api}/persons`,
+    [Entity.USERS]: `${api}/users`,
+    [Entity.JUR_PERSONS]: `${api}/jur-persons`,
 }
 
 export const routingLinks = {
     explore: {
-        [Tables.PERSONS]: `/explore/${Tables.PERSONS.toLowerCase()}`,
-        [Tables.JUR_PERSONS]: `/explore/${Tables.JUR_PERSONS.toLowerCase()}`,
-        [Tables.USERS]: `/explore/${Tables.USERS.toLowerCase()}`
+        [Entity.PERSONS]: `/explore/${Entity.PERSONS.toLowerCase()}`,
+        [Entity.JUR_PERSONS]: `/explore/${Entity.JUR_PERSONS.toLowerCase()}`,
+        [Entity.USERS]: `/explore/${Entity.USERS.toLowerCase()}`
     },
     create: {
-        [Tables.PERSONS]: `/create/${Tables.PERSONS.toLowerCase()}`,
-        [Tables.JUR_PERSONS]: `/create/${Tables.JUR_PERSONS.toLowerCase()}`,
-        [Tables.USERS]: `/create/${Tables.USERS.toLowerCase()}`
+        [Entity.PERSONS]: `/create/${Entity.PERSONS.toLowerCase()}`,
+        [Entity.JUR_PERSONS]: `/create/${Entity.JUR_PERSONS.toLowerCase()}`,
+        [Entity.USERS]: `/create/${Entity.USERS.toLowerCase()}`
     }
 }
 

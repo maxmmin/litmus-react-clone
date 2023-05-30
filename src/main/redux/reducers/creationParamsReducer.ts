@@ -5,7 +5,7 @@ import CreationParamsActions, {
     PersonCreationParams, UserCreationParams
 } from "../actions/CreationParamsActions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {Tables} from "../../types/explorationParams";
+import {Entity} from "../../types/explorationParams";
 import AuthActions from "../actions/AuthActions";
 import {JurPerson} from "../../types/JurPerson";
 import Person, {Relationship, RelationshipsLinkObject} from "../../types/Person";
@@ -14,7 +14,7 @@ import {PassportData} from "../../types/PassportData";
 import Sex from "../../types/Sex";
 
 const initialState: CreationParams = {
-    table: Tables.PERSONS,
+    table: Entity.PERSONS,
     jurPersonCreationData: {...new JurPersonCreationParams()},
     personCreationData: {...new PersonCreationParams()},
     userCreationData: {...new UserCreationParams()},

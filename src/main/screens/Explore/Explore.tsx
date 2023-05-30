@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
-import {Tables} from "../../types/explorationParams";
+import {Entity} from "../../types/explorationParams";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
@@ -29,11 +29,11 @@ const Explore = () => {
 
     const resultsContainer = useRef<HTMLDivElement>(null)
 
-    const table = useMemo<Tables|null>(()=>getTableNameFromLocation(location.pathname), [location])
+    const table = useMemo<Entity|null>(()=>getTableNameFromLocation(location.pathname), [location])
 
     useLayoutEffect(() => {
         if (table) {
-            dispatch(updateExplorationParams({table}))
+            dispatch(updateExplorationParams({entity: table}))
         }
     }, [location])
 
@@ -84,10 +84,10 @@ const Explore = () => {
                     <p style={{marginBottom: '10px'}}>Знайти</p>
 
                     <Form.Select className={"explore__select"} value={routingLinks.explore[table]} onChange={handleSelectChange}>
-                        <option value={routingLinks.explore[Tables.PERSONS]}>Фізичну особу</option>
-                        <option value={routingLinks.explore[Tables.JUR_PERSONS]}>Юридичну особу</option>
+                        <option value={routingLinks.explore[Entity.PERSONS]}>Фізичну особу</option>
+                        <option value={routingLinks.explore[Entity.JUR_PERSONS]}>Юридичну особу</option>
                         <PrivateComponentWrapper neededPermissions={[Permissions.USERS_READ, Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
-                            <option value={routingLinks.explore[Tables.USERS]}>Користувача</option>
+                            <option value={routingLinks.explore[Entity.USERS]}>Користувача</option>
                         </PrivateComponentWrapper>
                     </Form.Select>
 

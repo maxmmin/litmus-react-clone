@@ -1,4 +1,4 @@
-import {ExplorationParams, Modes, Tables} from "../../types/explorationParams";
+import {ExplorationParams, Mode, Entity} from "../../types/explorationParams";
 import {BasicHumanSearchPayload} from "../../types/explorationParams";
 
 enum ExplorationParamsActions  {
@@ -15,7 +15,7 @@ const updateExplorationParams = (payload: Partial<ExplorationParams>) => ({
         payload:  payload
     })
 
-export const updateSectionExplorationParams = (payload: Partial<Record<Tables, Modes>>) => ({
+export const updateSectionExplorationParams = (payload: Partial<Record<Entity, Mode>>) => ({
         type: ExplorationParamsActions.UPDATE_SECTION_PARAMS,
         payload:  payload
     })

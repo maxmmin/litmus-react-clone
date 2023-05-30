@@ -13,7 +13,7 @@ import {
 import InputDate from "../../components/InputDate";
 import {CreationModalSettings} from "../Create";
 import CreationGeoModal from "../geo/CreationGeoModal";
-import {Tables} from "../../../types/explorationParams";
+import {Entity} from "../../../types/explorationParams";
 import DateEntity, {DateBuilder} from "../../../types/DateEntity";
 import Sex from "../../../types/Sex";
 import {CrossIcon} from "../../../util/icons";
@@ -46,7 +46,7 @@ const CreatePerson = () => {
 
     return (
         <>
-            <CreationGeoModal table={Tables.PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
+            <CreationGeoModal table={Entity.PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
 
             <ApplyPersonModal modalSettings={modalSettings} close={closeModal}/>
 

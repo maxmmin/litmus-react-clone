@@ -1,5 +1,5 @@
 import SelectGeoComponent from "./SelectGeoComponent";
-import {Tables} from "../../../types/explorationParams";
+import {Entity} from "../../../types/explorationParams";
 import {Modal, ModalDialog} from "react-bootstrap";
 import React, {Dispatch, SetStateAction, useEffect, useMemo, useState} from "react";
 import Button from "react-bootstrap/Button";
@@ -8,7 +8,7 @@ import {Location} from "../../../types/Location";
 import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
 
 type Props = {
-    table: Tables,
+    table: Entity,
     show: boolean,
     close: ()=>void
 }
@@ -21,11 +21,11 @@ const CreationGeoModal = ({table, show, close}: Props) => {
 
     const geoLocation = useAppSelector(state => {
         switch (table) {
-            case Tables.JUR_PERSONS: {
+            case Entity.JUR_PERSONS: {
                 return state.creationParams?.jurPersonCreationData.location;
             }
 
-            case Tables.PERSONS: {
+            case Entity.PERSONS: {
                 return state.creationParams?.personCreationData.location;
             }
         }
@@ -37,7 +37,7 @@ const CreationGeoModal = ({table, show, close}: Props) => {
 
     const clearGeo = () => {
         switch (table) {
-            case Tables.JUR_PERSONS: {
+            case Entity.JUR_PERSONS: {
                 dispatch(updateJurPersonCreationParams({location: null}))
             }
         }
@@ -47,12 +47,12 @@ const CreationGeoModal = ({table, show, close}: Props) => {
     const applyGeo = () => {
         if (location) {
             switch (table) {
-                case Tables.JUR_PERSONS: {
+                case Entity.JUR_PERSONS: {
                     dispatch(updateJurPersonCreationParams({location: location}))
                     break;
                 }
 
-                case Tables.PERSONS: {
+                case Entity.PERSONS: {
                     dispatch(updatePersonCreationParams({location: location}))
                     break;
                 }

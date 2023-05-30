@@ -2,42 +2,42 @@ import FindByFullName from "../screens/Explore/InputGroupes/FindByFullName";
 import FindById from "../screens/Explore/InputGroupes/FindById";
 import {BasicHttpError} from "../util/HttpStatus";
 
-export enum Tables {
+export enum Entity {
     PERSONS="PERSONS",
     JUR_PERSONS="JUR_PERSONS",
     USERS="USERS"
 }
 
-export enum Modes {
+export enum Mode {
     FIND_BY_FULL_NAME="FIND_BY_FULL_NAME",
     FIND_BY_ID="FIND_BY_ID"
 }
 
-type ModeInfoType = Partial<Record<Modes, {title: string, jsx: ()=>JSX.Element}>>
+type ModeInfoType = Partial<Record<Mode, {title: string, jsx: ()=>JSX.Element}>>
 
-const modesDataSource: Record<Tables, ModeInfoType> = {
-    [Tables.PERSONS]: {
-        [Modes.FIND_BY_FULL_NAME]: {
+const modesDataSource: Record<Entity, ModeInfoType> = {
+    [Entity.PERSONS]: {
+        [Mode.FIND_BY_FULL_NAME]: {
             title: "ФІО",
             jsx: ()=><FindByFullName/>
         },
-        [Modes.FIND_BY_ID]: {
+        [Mode.FIND_BY_ID]: {
             title: "за ID",
             jsx: ()=><FindById/>
         }
     },
-    [Tables.JUR_PERSONS]: {
-        [Modes.FIND_BY_ID]: {
+    [Entity.JUR_PERSONS]: {
+        [Mode.FIND_BY_ID]: {
             title: "за ID",
             jsx: ()=><FindById/>
         }
     },
-    [Tables.USERS]: {
-        [Modes.FIND_BY_FULL_NAME]: {
+    [Entity.USERS]: {
+        [Mode.FIND_BY_FULL_NAME]: {
             title: "ФІО",
             jsx: ()=><FindByFullName/>
         },
-        [Modes.FIND_BY_ID]: {
+        [Mode.FIND_BY_ID]: {
             title: "за ID",
             jsx: ()=><FindById/>
         }
@@ -59,18 +59,18 @@ export class BasicHumanSearchInputInit {
 }
 
 type Input = Partial<{
-    [Tables.PERSONS]: BasicHumanSearchPayload,
-    [Tables.USERS]: BasicHumanSearchPayload,
-    [Tables.JUR_PERSONS]: {
+    [Entity.PERSONS]: BasicHumanSearchPayload,
+    [Entity.USERS]: BasicHumanSearchPayload,
+    [Entity.JUR_PERSONS]: {
         id?: string,
         name?: string
     }
 }>
 
-export type SectionsSettings = Record<Tables, Modes>
+export type SectionsSettings = Record<Entity, Mode>
 
 export type ExplorationParams = Partial<{
-    table: Tables,
+    entity: Entity,
     sectionsSettings: SectionsSettings
     isInvalid: boolean
     input: Input

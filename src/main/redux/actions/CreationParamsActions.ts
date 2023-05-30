@@ -1,4 +1,4 @@
-import {Tables} from "../../types/explorationParams";
+import {Entity} from "../../types/explorationParams";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Location} from "../../types/Location";
 import {JurPerson} from "../../types/JurPerson";
@@ -140,7 +140,7 @@ export class JurPersonCreationParams implements JurPerson {
 }
 
 export type CreationParams = {
-    table: Tables,
+    table: Entity,
     personCreationData: Person,
     jurPersonCreationData: JurPerson,
     userCreationData: User,

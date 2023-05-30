@@ -15,7 +15,7 @@ import ApplicationStateManager from "./screens/components/ApplicationStateManage
 import NotificationCenter from "./screens/components/NotificationCenter";
 import Creation from "./screens/Create/Create";
 import {routingLinks} from "./util/appConfig";
-import {Tables} from "./types/explorationParams";
+import {Entity} from "./types/explorationParams";
 import {ErrorBoundary} from "react-error-boundary";
 
 // @todo check if the refresh token expired
@@ -39,27 +39,27 @@ function App() {
                                 <PrivateComponent mode={"ERROR_PAGE"} component={<Home/>} requiredPermissions={roles.USER.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.explore[Tables.PERSONS]} element={
+                            <Route path={routingLinks.explore[Entity.PERSONS]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={roles.USER.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.explore[Tables.JUR_PERSONS]} element={
+                            <Route path={routingLinks.explore[Entity.JUR_PERSONS]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={roles.USER.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.explore[Tables.USERS]} element={
+                            <Route path={routingLinks.explore[Entity.USERS]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={roles.ADMIN.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.create[Tables.PERSONS]} element={
+                            <Route path={routingLinks.create[Entity.PERSONS]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={roles.MODERATOR.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.create[Tables.JUR_PERSONS]} element={
+                            <Route path={routingLinks.create[Entity.JUR_PERSONS]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={roles.MODERATOR.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.create[Tables.USERS]} element={
+                            <Route path={routingLinks.create[Entity.USERS]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={roles.ADMIN.permissions}/>
                             }/>
 

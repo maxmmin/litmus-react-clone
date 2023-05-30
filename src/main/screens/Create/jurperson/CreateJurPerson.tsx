@@ -3,7 +3,7 @@ import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureF
 import React, {useMemo, useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {Tables} from "../../../types/explorationParams";
+import {Entity} from "../../../types/explorationParams";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../Create";
 import {updateJurPersonCreationParams} from "../../../redux/actions/CreationParamsActions";
@@ -38,7 +38,7 @@ const CreateJurPerson = () => {
         <>
             <ApplyPersonModal modalSettings={modalSettings} close={closeModal}/>
             
-            <CreationGeoModal table={Tables.JUR_PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
+            <CreationGeoModal table={Entity.JUR_PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
 
             <>
 

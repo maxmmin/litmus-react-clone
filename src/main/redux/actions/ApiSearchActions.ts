@@ -6,8 +6,8 @@ import {RootState} from "../store";
 import {
     BasicHumanSearchPayload,
     ExplorationParamsReducible,
-    Modes,
-    Tables
+    Mode,
+    Entity
 } from "../../types/explorationParams";
 import {Action} from "redux";
 import {MetaArg} from "../../types/AppState";
@@ -28,7 +28,7 @@ export const clearResults = (): Action<string> => {
 
 export type Results = {
     data: Array<Object>,
-    table?: Tables,
+    table?: Entity,
     pending?: boolean,
     partlyLoaded?: boolean,
     index?: number
@@ -36,7 +36,7 @@ export type Results = {
 
 export type ResultsFullRequired = {
     data: Array<Object>,
-    table: Tables,
+    table: Entity,
     pending: boolean,
     partlyLoaded: boolean,
     index: number
@@ -45,13 +45,13 @@ export type ResultsFullRequired = {
 export type ResultsReducible = Results | null | undefined
 
 export type RefreshResultsThunkArg = MetaArg<{
-    table: Tables
+    table: Entity
  }>
 
-const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Tables, rejectWithValue:  (value: unknown) => any, prevResults?: Results|null) => {
+const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Entity, rejectWithValue:  (value: unknown) => any, prevResults?: Results|null) => {
     let baseUrl = apiLinks[table];
     switch (explorationParams?.sectionsSettings![table]) {
-        case Modes.FIND_BY_ID: {
+        case Mode.FIND_BY_ID: {
             const id = (explorationParams.input![table] as {id: string}).id;
 
             if (!id) {
@@ -67,7 +67,7 @@ const getFetchUrl = (explorationParams: ExplorationParamsReducible, table: Table
             break;
         }
 
-        case Modes.FIND_BY_FULL_NAME: {
+        case Mode.FIND_BY_FULL_NAME: {
             const fullNameInput = explorationParams.input![table] as BasicHumanSearchPayload;
 
             const firstName = fullNameInput.firstName;

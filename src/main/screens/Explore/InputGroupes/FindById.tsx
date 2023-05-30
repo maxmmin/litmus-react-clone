@@ -9,7 +9,7 @@ const FindById = () => {
     const dispatch = useAppDispatch();
 
     const isInvalid = useAppSelector(state => state.explorationParams!.isInvalid)
-    const table = useAppSelector(state => state.explorationParams?.table)
+    const table = useAppSelector(state => state.explorationParams?.entity)
 
     const localInput = useAppSelector(state => {
         const globalInput = state.explorationParams?.input;

@@ -1,5 +1,5 @@
 import {useAppSelector} from "../../redux/hooks";
-import {Tables} from "../../types/explorationParams";
+import {Entity} from "../../types/explorationParams";
 import {MutableRefObject} from "react";
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import {Results} from "../../redux/actions/ApiSearchActions";
@@ -19,21 +19,21 @@ const getParsedResults = (results: Results) => {
     const entities = results.data;
 
     switch (table) {
-        case Tables.PERSONS: {
+        case Entity.PERSONS: {
             return entities.map(entity=>{
                 const person = getPersonFromResponse(entity);
                 return <PersonInfoTable key={person.id} person={person}/>
             })
         }
 
-        case Tables.JUR_PERSONS: {
+        case Entity.JUR_PERSONS: {
             return entities.map(entity=>{
                 const jurPerson = getJurPersonFromEntity(entity);
                 return <JurPersonInfoTable jurPerson={jurPerson} key={jurPerson.id}/>
             })
         }
 
-        case Tables.USERS: {
+        case Entity.USERS: {
             return entities.map(entity=>{
                 const user = getUserFromResponse(entity);
                 return <UserInfoTable user={user} key={user.id}/>

@@ -4,8 +4,8 @@ import {
     BasicHumanSearchPayload,
     ExplorationParams,
     ExplorationParamsReducible,
-    Modes, SectionsSettings,
-    Tables
+    Mode, SectionsSettings,
+    Entity
 } from "../../types/explorationParams";
 
 import ExplorationParamsActions from "../actions/ExplorationParamsActions";
@@ -13,16 +13,16 @@ import AuthActions from "../actions/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: ExplorationParamsReducible = {
-    table: Tables.PERSONS,
+    entity: Entity.PERSONS,
     sectionsSettings: {
-        PERSONS: Modes.FIND_BY_FULL_NAME,
-        JUR_PERSONS: Modes.FIND_BY_ID,
-        USERS: Modes.FIND_BY_FULL_NAME
+        PERSONS: Mode.FIND_BY_FULL_NAME,
+        JUR_PERSONS: Mode.FIND_BY_ID,
+        USERS: Mode.FIND_BY_FULL_NAME
     },
     input: {
-        [Tables.PERSONS]: {...new BasicHumanSearchInputInit()},
-        [Tables.USERS]: {...new BasicHumanSearchInputInit()},
-        [Tables.JUR_PERSONS]: {id: ""}
+        [Entity.PERSONS]: {...new BasicHumanSearchInputInit()},
+        [Entity.USERS]: {...new BasicHumanSearchInputInit()},
+        [Entity.JUR_PERSONS]: {id: ""}
     }
 }
 
@@ -41,7 +41,7 @@ const explorationParamsReducer: Reducer<ExplorationParamsReducible, PayloadActio
             const input = action.payload as BasicHumanSearchPayload;
 
             return {...prev, input: {
-                    ...prev?.input, [prev!.table!]:  input
+                    ...prev?.input, [prev!.entity!]:  input
                 }}
         }
 

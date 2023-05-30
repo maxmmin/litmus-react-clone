@@ -3,7 +3,7 @@ import {useAppSelector} from "../../redux/hooks";
 import {useMemo} from "react";
 
 function InputGroup (): JSX.Element|null {
-    const table = useAppSelector(state => state.explorationParams?.table)
+    const table = useAppSelector(state => state.explorationParams?.entity)
     const explorationMode = useAppSelector(state => state.explorationParams?.sectionsSettings![table!])
 
     return useMemo(()=>{

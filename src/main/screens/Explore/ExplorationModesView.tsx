@@ -1,6 +1,6 @@
 import {
-    Modes,
-    modesDataSource, Tables
+    Mode,
+    modesDataSource, Entity
 } from "../../types/explorationParams";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useMemo, useState} from "react";
@@ -11,31 +11,26 @@ import {updateExplorationParams, updateSectionExplorationParams} from "../../red
 const ExplorationModesView = () => {
     const dispatch = useAppDispatch();
 
-    const exploredTable = useAppSelector(state => state.explorationParams?.table);
+    const exploredEntity = useAppSelector(state => state.explorationParams?.entity);
 
-    const explorationMode = useAppSelector(state => state.explorationParams?.sectionsSettings![exploredTable!])
+    const explorationMode = useAppSelector(state => state.explorationParams?.sectionsSettings![exploredEntity!])
 
-    const modes = useMemo(()=>{
-        if (exploredTable) {
-            return Object.entries(modesDataSource[exploredTable])
-        }
-        return null;
-    },[exploredTable])
+    const modes = Object.entries(modesDataSource[exploredEntity!]);
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-        const mode = event.currentTarget.value as Modes;
-        dispatch(updateSectionExplorationParams({[exploredTable!]: mode}))
+        const mode = event.currentTarget.value as Mode;
+        dispatch(updateSectionExplorationParams({[exploredEntity!]: mode}))
     }
 
     useEffect(()=>{
-        if (exploredTable) {
+        if (exploredEntity) {
             if (!explorationMode) {
                 dispatch(updateExplorationParams({
-                    [exploredTable]: Object.keys(modesDataSource[exploredTable!])[0]
+                    [exploredEntity]: Object.keys(modesDataSource[exploredEntity!])[0]
                 }))
             }
         }
-    },[exploredTable])
+    },[exploredEntity])
 
 
     if (modes&&explorationMode) {
