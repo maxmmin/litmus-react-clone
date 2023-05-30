@@ -8,9 +8,9 @@ import {
     ExplorationParamsReducible,
     Mode,
     Entity
-} from "../../../types/explorationParams";
+} from "../explorationParams";
 import {Action} from "redux";
-import {MetaArg} from "../../../types/AppState";
+import {MetaArg} from "../../applicationState/AppState";
 
 enum ExplorationDataActions {
     REFRESH_RESULTS="REFRESH_RESULTS",

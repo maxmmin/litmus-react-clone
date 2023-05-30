@@ -1,11 +1,11 @@
-import {AuthenticationReducible} from "../../types/Authentication";
+import {AuthenticationReducible} from "./Authentication";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import JwtInfo from "../../types/JwtInfo";
+import JwtInfo from "./JwtInfo";
 import apiLinks from "../../util/appConfig";
 import { BasicHttpError, HttpStatus} from "../../util/HttpStatus";
 import {Action} from "redux";
-import Authentication from "../../types/Authentication";
-import {MetaArg} from "../../types/AppState";
+import Authentication from "./Authentication";
+import {MetaArg} from "../applicationState/AppState";
 
 enum AuthActions {
     REFRESH_AUTH="REFRESH_AUTH",

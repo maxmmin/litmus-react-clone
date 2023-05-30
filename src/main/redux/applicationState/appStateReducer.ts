@@ -3,7 +3,7 @@ import AppState, {
     GmapsApiResponse,
     Meta,
     MetaArg
-} from "../../types/AppState";
+} from "./AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateActions from "./AppStateActions";

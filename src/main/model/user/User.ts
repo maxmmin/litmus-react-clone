@@ -1,4 +1,4 @@
-import {Roles} from "./Role";
+import {Roles} from "../../redux/userIdentity/Role";
 
 type User = {
     id?: string;

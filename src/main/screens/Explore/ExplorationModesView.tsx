@@ -1,7 +1,7 @@
 import {
     Mode,
     modesDataSource, Entity
-} from "../../types/explorationParams";
+} from "../../redux/exploration/explorationParams";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useMemo, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";

@@ -1,5 +1,5 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {Location} from "../../../types/Location";
+import {Location} from "../../../model/Location";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import {Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover} from "@reach/combobox";
 import {geocode} from "../../../util/pureFunctions";

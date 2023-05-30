@@ -1,6 +1,6 @@
 import {Action, Middleware} from "redux";
-import AppState from "../../types/AppState";
-import {AuthenticationReducible} from "../../types/Authentication";
+import AppState from "../applicationState/AppState";
+import {AuthenticationReducible} from "./Authentication";
 import {
     checkAndRefreshAuth} from "../../util/pureFunctions";
 import AuthActions from "./AuthActions";

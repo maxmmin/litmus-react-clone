@@ -1,7 +1,7 @@
 import React, {Dispatch, SetStateAction } from "react";
-import {Location} from "../../../types/Location";
+import {Location} from "../../../model/Location";
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import Geo from "../../../types/Geo";
+import Geo from "../../../model/Geo";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import {geocode} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";

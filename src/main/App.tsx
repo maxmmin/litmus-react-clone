@@ -8,14 +8,14 @@ import {useAppDispatch, useAppSelector} from "./redux/hooks";
 import store from "./redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
-import {roles} from "./types/Role";
+import {roles} from "./redux/userIdentity/Role";
 import Explore from "./screens/Explore/Explore";
 import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateActions";
 import ApplicationStateManager from "./screens/components/ApplicationStateManager";
 import NotificationCenter from "./screens/components/NotificationCenter";
 import Creation from "./screens/Create/Create";
 import {routingLinks} from "./util/appConfig";
-import {Entity} from "./types/explorationParams";
+import {Entity} from "./redux/exploration/explorationParams";
 import {ErrorBoundary} from "react-error-boundary";
 
 // @todo check if the refresh token expired

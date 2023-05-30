@@ -1,5 +1,5 @@
 import {noInfoMessage} from "../../../util/HttpStatus";
-import User from "../../../types/User";
+import User from "../../../model/user/User";
 
 type Props = {
     user: User

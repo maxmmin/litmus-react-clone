@@ -1,5 +1,5 @@
-import {ExplorationParams, Mode, Entity} from "../../../types/explorationParams";
-import {BasicHumanSearchPayload} from "../../../types/explorationParams";
+import {ExplorationParams, Mode, Entity} from "../explorationParams";
+import {BasicHumanSearchPayload} from "../explorationParams";
 
 enum ExplorationParamsActions  {
     UPDATE_EXPLORATION_PARAMS="UPDATE_EXPLORATION_PARAMS",

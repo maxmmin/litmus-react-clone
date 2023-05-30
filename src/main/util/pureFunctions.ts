@@ -1,20 +1,20 @@
-import {Permissions} from "../types/Role";
+import {Permissions} from "../redux/userIdentity/Role";
 import {AppDispatch} from "../redux/store";
 import {clearAuthentication, refreshAccessToken} from "../redux/auth/AuthActions";
-import {AuthenticationReducible} from "../types/Authentication";
+import {AuthenticationReducible} from "../redux/auth/Authentication";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
 import {clearAuthRefreshTimer, setTimers, TimersReducible} from "../redux/timers/TimersActions";
 import {getGeocode} from "use-places-autocomplete";
-import Geo from "../types/Geo";
+import Geo from "../model/Geo";
 import {createAuthHeader, gmapsRegionOptions} from "./appConfig";
-import {Entity} from "../types/explorationParams";
-import User from "../types/User";
-import Person from "../types/Person";
-import person from "../types/Person";
-import {JurPerson} from "../types/JurPerson";
+import {Entity} from "../redux/exploration/explorationParams";
+import User from "../model/user/User";
+import Person from "../model/person/Person";
+import person from "../model/person/Person";
+import {JurPerson} from "../model/jurPerson/JurPerson";
 import {CreateJurPersonDto, CreatePersonDto, CreateUserDto} from "../redux/creation/CreationParamsActions";
-import {DateBuilder} from "../types/DateEntity";
+import {DateBuilder} from "../model/DateEntity";
 import {Action} from "redux";
 
 

@@ -1,4 +1,4 @@
-import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../types/Person";
+import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../model/person/Person";
 import {FloatingLabel, Form} from "react-bootstrap";
 import React from "react";
 import {CrossIcon} from "../../../util/icons";

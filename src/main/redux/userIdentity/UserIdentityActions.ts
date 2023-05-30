@@ -1,10 +1,10 @@
-import UserIdentity, {UserIdentityReducible} from "../../types/UserIdentity";
+import UserIdentity, {UserIdentityReducible} from "./UserIdentity";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import apiLinks, {createAuthHeader} from "../../util/appConfig";
-import {BasicHttpError, HttpStatus} from "../../util/HttpStatus";
-import {roles} from "../../types/Role";
+import {BasicHttpError} from "../../util/HttpStatus";
+import {roles} from "./Role";
 import {isValid} from "../../util/pureFunctions";
-import {MetaArg} from "../../types/AppState";
+import {MetaArg} from "../applicationState/AppState";
 
 enum UserIdentityActions {
     GET_IDENTITY="GET_IDENTITY",

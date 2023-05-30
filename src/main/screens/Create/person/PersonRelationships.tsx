@@ -1,4 +1,4 @@
-import {Relationship, RelationshipsLinkObject} from "../../../types/Person";
+import {Relationship, RelationshipsLinkObject} from "../../../model/person/Person";
 import RelationshipCreationComponent from "./RelationshipCreationComponent";
 
 type props = {relationships: Relationship[]}

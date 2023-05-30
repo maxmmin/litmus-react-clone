@@ -1,6 +1,6 @@
 import {noInfoMessage} from "../../../util/HttpStatus";
-import {JurPerson} from "../../../types/JurPerson";
-import {DateBuilder} from "../../../types/DateEntity";
+import {JurPerson} from "../../../model/jurPerson/JurPerson";
+import {DateBuilder} from "../../../model/DateEntity";
 
 type Props = {
     jurPerson: JurPerson

@@ -1,4 +1,4 @@
-import {Entity} from "../../types/explorationParams";
+import {Entity} from "../../redux/exploration/explorationParams";
 import CreatePerson from "./person/CreatePerson";
 import CreateJurPerson from "./jurperson/CreateJurPerson";
 import CreateUser from "./user/CreateUser";

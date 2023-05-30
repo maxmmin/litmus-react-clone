@@ -1,6 +1,6 @@
-import FindByFullName from "../screens/Explore/InputGroupes/FindByFullName";
-import FindById from "../screens/Explore/InputGroupes/FindById";
-import {BasicHttpError} from "../util/HttpStatus";
+import FindByFullName from "../../screens/Explore/InputGroupes/FindByFullName";
+import FindById from "../../screens/Explore/InputGroupes/FindById";
+import {BasicHttpError} from "../../util/HttpStatus";
 
 export enum Entity {
     PERSONS="PERSONS",

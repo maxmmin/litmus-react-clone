@@ -1,4 +1,4 @@
-import {UserIdentityReducible} from "../../types/UserIdentity";
+import {UserIdentityReducible} from "./UserIdentity";
 import {Reducer} from "react";
 import UserIdentityActions from "./UserIdentityActions";
 import AuthActions from "../auth/AuthActions";

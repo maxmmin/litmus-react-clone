@@ -3,7 +3,7 @@
  * message - msg to be shown
  * duration - time notification will stay on screen(animation exclusive)
  */
-import Notification from "../redux/applicationState/Notification";
+import Notification from "./Notification";
 
 
 type GmapsApiError = {

@@ -1,8 +1,8 @@
 import Header from "../components/Header";
 import {Form} from "react-bootstrap";
-import {Entity} from "../../types/explorationParams";
+import {Entity} from "../../redux/exploration/explorationParams";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
-import {Permissions} from "../../types/Role";
+import {Permissions} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../components/PrivateComponent";
 import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
 import {useAppDispatch} from "../../redux/hooks";
@@ -21,7 +21,7 @@ import {useLocation} from "react-router";
 import apiLinks, {routingLinks} from "../../util/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
-import {CreationModalModes} from "../../types/CreationModalModes";
+import {CreationModalModes} from "../../redux/creation/CreationModalModes";
 import Notification, {BasicNotification, NotificationType, notificationTypes} from "../../redux/applicationState/Notification";
 import {addNotification} from "../../redux/applicationState/AppStateActions";
 

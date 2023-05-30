@@ -1,6 +1,6 @@
 import {ElementType, ReactNode} from "react";
 import PrivateComponent, {ForbiddenOutputMode} from "./PrivateComponent";
-import {Permissions} from "../../types/Role";
+import {Permissions} from "../../redux/userIdentity/Role";
 
 type Props = {
     children: ReactNode,

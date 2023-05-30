@@ -3,14 +3,14 @@ import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureF
 import React, {useMemo, useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {Entity} from "../../../types/explorationParams";
+import {Entity} from "../../../redux/exploration/explorationParams";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../Create";
 import {updateJurPersonCreationParams} from "../../../redux/creation/CreationParamsActions";
 import InputDate from "../../components/InputDate";
-import Person from "../../../types/Person";
-import DateEntity, {DateBuilder} from "../../../types/DateEntity";
-import {CreationModalModes} from "../../../types/CreationModalModes";
+import Person from "../../../model/person/Person";
+import DateEntity, {DateBuilder} from "../../../model/DateEntity";
+import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 
 
 const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`

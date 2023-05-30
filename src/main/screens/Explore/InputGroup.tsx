@@ -1,4 +1,4 @@
-import {modesDataSource} from "../../types/explorationParams";
+import {modesDataSource} from "../../redux/exploration/explorationParams";
 import {useAppSelector} from "../../redux/hooks";
 import {useMemo} from "react";
 

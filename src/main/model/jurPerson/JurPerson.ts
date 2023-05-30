@@ -1,6 +1,6 @@
-import {Location} from "./Location";
-import Person from "./Person";
-import DateEntity from "./DateEntity";
+import {Location} from "../Location";
+import Person from "../person/Person";
+import DateEntity from "../DateEntity";
 
 export type JurPerson = {
     id?: string;

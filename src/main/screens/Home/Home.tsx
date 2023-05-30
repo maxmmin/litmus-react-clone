@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {AddUserIcon, SearchIcon, SetUpUser} from "../../util/icons";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
-import {roles} from "../../types/Role";
+import {roles} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../components/PrivateComponent";
 import {useNavigate} from 'react-router-dom'
 import Header from "../components/Header";
 import {routingLinks} from "../../util/appConfig";
-import {Entity} from "../../types/explorationParams";
+import {Entity} from "../../redux/exploration/explorationParams";
 import {useAppSelector} from "../../redux/hooks";
 
 

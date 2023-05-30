@@ -1,7 +1,7 @@
 import {noInfoMessage} from "../../../util/HttpStatus";
 import {useMemo} from "react";
-import Person from "../../../types/Person";
-import {DateBuilder} from "../../../types/DateEntity";
+import Person from "../../../model/person/Person";
+import {DateBuilder} from "../../../model/DateEntity";
 
 type Props = {
     person: Person

@@ -1,7 +1,7 @@
 import Header from "../components/Header";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
-import {Entity} from "../../types/explorationParams";
+import {Entity} from "../../redux/exploration/explorationParams";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../redux/exploration/params/ExplorationParamsActions";
@@ -14,7 +14,7 @@ import ExplorationDataActions, {
 } from "../../redux/exploration/data/ExplorationDataActions";
 import ResultsContainer from "./ResultsContainer";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
-import {Permissions} from "../../types/Role";
+import {Permissions} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../components/PrivateComponent";
 import store, {RootState} from "../../redux/store";
 import {useNavigate} from "react-router-dom";

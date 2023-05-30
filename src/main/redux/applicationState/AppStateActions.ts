@@ -1,5 +1,5 @@
 import {Action} from "redux";
-import {GmapsApiResponse} from "../../types/AppState";
+import {GmapsApiResponse} from "./AppState";
 import {PayloadAction} from "@reduxjs/toolkit";
 import Notification from "./Notification";
 

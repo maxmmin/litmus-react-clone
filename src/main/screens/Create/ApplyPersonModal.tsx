@@ -3,17 +3,17 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import apiLinks, {createAuthHeader} from "../../util/appConfig";
-import {Entity} from "../../types/explorationParams";
+import {Entity} from "../../redux/exploration/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
 import {addRelationship, updateJurPersonCreationParams} from "../../redux/creation/CreationParamsActions";
 import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./Create";
-import {JurPerson} from "../../types/JurPerson";
-import Person, {Relationship, RelationshipsLinkObject} from "../../types/Person";
+import {JurPerson} from "../../model/jurPerson/JurPerson";
+import Person, {Relationship, RelationshipsLinkObject} from "../../model/person/Person";
 import {getPersonFromResponse, isValid} from "../../util/pureFunctions";
-import {CreationModalModes} from "../../types/CreationModalModes";
+import {CreationModalModes} from "../../redux/creation/CreationModalModes";
 
 type Props = {
     modalSettings: CreationModalSettings,
