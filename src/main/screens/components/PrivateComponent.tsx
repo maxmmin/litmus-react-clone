@@ -8,8 +8,20 @@ import {checkAndRefreshAuth, checkAuthorization, isValid} from "../../util/pureF
 type Props = {
     component: ReactNode,
     requiredPermissions: Permissions[],
-    mode: ForbiddenOutputCallbackModesEnum
+    mode: ForbiddenOutputMode
 }
+
+export type ForbiddenOutputMode = "NO_OUTPUT" | "ERROR_PAGE"
+
+const forbiddenOutputs: Record<ForbiddenOutputMode, ()=>ReactNode> = {
+    ERROR_PAGE: () => <h1>ERROR 403</h1>,
+    NO_OUTPUT: () => null
+}
+
+const ERROR_PAGE: ForbiddenOutputMode = "ERROR_PAGE"
+const NO_OUTPUT: ForbiddenOutputMode = "NO_OUTPUT"
+
+export {ERROR_PAGE, NO_OUTPUT}
 
 const PrivateComponent = ({component, mode, requiredPermissions}: Props) => {
 
@@ -27,25 +39,13 @@ const PrivateComponent = ({component, mode, requiredPermissions}: Props) => {
 
     if (!authentication) return <Navigate to="/sign-in"/>
 
-    if (!isAuthorized) {return <>{forbiddenOutputCallbackModes[mode]()}</>}
+    if (!isAuthorized) {return <>{forbiddenOutputs[mode]()}</>}
 
     return (
         <>{component}</>
     )
 }
 
-export enum ForbiddenOutputCallbackModesEnum {
-    NO_OUTPUT="NO_OUTPUT",
-    ERROR_PAGE="ERROR_PAGE"
-}
-
-type ForbiddenOutputCallbackModesType = Record<ForbiddenOutputCallbackModesEnum, ()=>ReactNode>
-
-const forbiddenOutputCallbackModes: ForbiddenOutputCallbackModesType = {
-    ERROR_PAGE: () => <h1>ERROR 403</h1>,
-    NO_OUTPUT: () => null
-}
-
-export {forbiddenOutputCallbackModes}
+export {forbiddenOutputs}
 
 export default PrivateComponent

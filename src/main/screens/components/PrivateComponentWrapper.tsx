@@ -1,11 +1,11 @@
 import {ElementType, ReactNode} from "react";
-import PrivateComponent, {ForbiddenOutputCallbackModesEnum} from "./PrivateComponent";
+import PrivateComponent, {ForbiddenOutputMode} from "./PrivateComponent";
 import {Permissions} from "../../types/Role";
 
 type Props = {
     children: ReactNode,
     neededPermissions: Permissions[],
-    mode: ForbiddenOutputCallbackModesEnum
+    mode: ForbiddenOutputMode
 }
 
 function PrivateComponentWrapper ({children, neededPermissions,mode, ...props}: Props) {

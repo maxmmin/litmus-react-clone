@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import {AddUserIcon, SearchIcon, SetUpUser} from "../../util/icons";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {roles} from "../../types/Role";
-import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
+import {NO_OUTPUT} from "../components/PrivateComponent";
 import {useNavigate} from 'react-router-dom'
 import Header from "../components/Header";
 import {routingLinks} from "../../util/appConfig";
@@ -42,7 +42,7 @@ function Home () {
                             <h4 className="homepage-actions__title homepage-actions__title_search">Аналіз</h4>
                         </div>
                     </div>
-                    <PrivateComponentWrapper mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT} neededPermissions={roles.MODERATOR.permissions}>
+                    <PrivateComponentWrapper mode={NO_OUTPUT} neededPermissions={roles.MODERATOR.permissions}>
                         <div itemProp={`${creationTable?routingLinks.create[creationTable]:Tables.PERSONS}`} className="homepage-actions__action" onClick={actionOnClick}>
                             <div className="homepage-actions__icon-container">
                                 <AddUserIcon className='homepage-actions__icon'/>
@@ -50,7 +50,7 @@ function Home () {
                             </div>
                         </div>
                     </PrivateComponentWrapper>
-                    <PrivateComponentWrapper mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT} neededPermissions={roles.ADMIN.permissions}>
+                    <PrivateComponentWrapper mode={NO_OUTPUT} neededPermissions={roles.ADMIN.permissions}>
                         <div itemProp={"/admin"} className="homepage-actions__action" onClick={actionOnClick}>
                             <div className="homepage-actions__icon-container">
                                 <SetUpUser className='homepage-actions__icon'/>

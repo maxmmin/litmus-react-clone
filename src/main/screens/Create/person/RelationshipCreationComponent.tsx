@@ -1,12 +1,7 @@
 import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../types/Person";
-import {routingLinks} from "../../../util/appConfig";
-import {Tables} from "../../../types/explorationParams";
-import PrivateComponentWrapper from "../../components/PrivateComponentWrapper";
-import {Permissions} from "../../../types/Role";
-import {ForbiddenOutputCallbackModesEnum} from "../../components/PrivateComponent";
 import {FloatingLabel, Form} from "react-bootstrap";
 import React from "react";
-import {CrossIcon, RemoveIcon} from "../../../util/icons";
+import {CrossIcon} from "../../../util/icons";
 import {useAppDispatch} from "../../../redux/hooks";
 import {removeRelationship, updateRelationship} from "../../../redux/actions/CreationParamsActions";
 

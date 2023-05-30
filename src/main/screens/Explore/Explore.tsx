@@ -15,7 +15,7 @@ import ApiSearchActions, {
 import ResultsContainer from "./ResultsContainer";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";
-import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
+import {NO_OUTPUT} from "../components/PrivateComponent";
 import store, {RootState} from "../../redux/store";
 import {useNavigate} from "react-router-dom";
 import {routingLinks} from "../../util/appConfig";
@@ -86,7 +86,7 @@ const Explore = () => {
                     <Form.Select className={"explore__select"} value={routingLinks.explore[table]} onChange={handleSelectChange}>
                         <option value={routingLinks.explore[Tables.PERSONS]}>Фізичну особу</option>
                         <option value={routingLinks.explore[Tables.JUR_PERSONS]}>Юридичну особу</option>
-                        <PrivateComponentWrapper neededPermissions={[Permissions.USERS_READ, Permissions.USERS_WRITE]} mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT}>
+                        <PrivateComponentWrapper neededPermissions={[Permissions.USERS_READ, Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
                             <option value={routingLinks.explore[Tables.USERS]}>Користувача</option>
                         </PrivateComponentWrapper>
                     </Form.Select>

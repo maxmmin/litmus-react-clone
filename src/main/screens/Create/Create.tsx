@@ -3,7 +3,7 @@ import {Form} from "react-bootstrap";
 import {Tables} from "../../types/explorationParams";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";
-import {ForbiddenOutputCallbackModesEnum} from "../components/PrivateComponent";
+import {NO_OUTPUT} from "../components/PrivateComponent";
 import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
 import {useAppDispatch} from "../../redux/hooks";
 import {
@@ -110,7 +110,7 @@ const Creation = () => {
                            <Form.Select className={"create__select"} value={routingLinks.create[table]} onChange={handleSelectChange}>
                                <option value={routingLinks.create[Tables.PERSONS]}>Фізичну особу</option>
                                <option value={routingLinks.create[Tables.JUR_PERSONS]}>Юридичну особу</option>
-                               <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={ForbiddenOutputCallbackModesEnum.NO_OUTPUT}>
+                               <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
                                    <option value={routingLinks.create[Tables.USERS]}>Користувача</option>
                                </PrivateComponentWrapper>
                            </Form.Select>
