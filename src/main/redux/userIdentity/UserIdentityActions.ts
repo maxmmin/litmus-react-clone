@@ -7,7 +7,7 @@ import {isValid} from "../../util/pureFunctions";
 import {MetaArg} from "../applicationState/AppState";
 
 enum UserIdentityActions {
-    GET_IDENTITY="GET_IDENTITY",
+    REFRESH_IDENTITY="REFRESH_IDENTITY",
     CLEAR_IDENTITY="CLEAR_IDENTITY"
 }
 
@@ -15,7 +15,7 @@ export default UserIdentityActions;
 
 const setIdentity = (identity: UserIdentity): PayloadAction<UserIdentityReducible> => {
     return {
-        type: UserIdentityActions.GET_IDENTITY,
+        type: UserIdentityActions.REFRESH_IDENTITY,
         payload: identity
     }
 }
@@ -26,7 +26,7 @@ type RefreshUserIdentityArg = MetaArg<{
     accessToken: string
 }>
 
-export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIdentityArg>(UserIdentityActions.GET_IDENTITY,
+export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIdentityArg>(UserIdentityActions.REFRESH_IDENTITY,
     async ({accessToken}, {rejectWithValue}) => {
 
     if (!isValid(accessToken)) {

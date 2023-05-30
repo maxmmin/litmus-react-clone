@@ -9,7 +9,7 @@ const initialState = null;
 const userIdentityReducer: Reducer<UserIdentityReducible, PayloadAction<UserIdentityReducible>> = (prevState=null, identityAction): UserIdentityReducible => {
 
     switch (identityAction.type) {
-        case `${UserIdentityActions.GET_IDENTITY}/fulfilled`: {
+        case `${UserIdentityActions.REFRESH_IDENTITY}/fulfilled`: {
             return identityAction.payload;
         }
 
