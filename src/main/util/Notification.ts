@@ -1,7 +1,7 @@
 import store, {AppDispatch} from "../redux/store";
-import {setNotifications} from "../redux/actions/AppStateActions";
+import {addNotification, AppStateActions} from "../redux/actions/AppStateActions";
 import {ToastContent, ToastOptions, TypeOptions} from "react-toastify";
-import {type} from "os";
+import {useAppDispatch} from "../redux/hooks";
 
 
 export type NotificationContent = ToastContent;
@@ -44,4 +44,54 @@ export class BasicNotification extends Notification {
         };
         super(content, options);
     }
+}
+
+interface NotificationManager {
+    error(message: string): void;
+    success(message: string): void;
+    info(message: string): void;
+    warning(message: string): void;
+    addNotification(notification: Notification): void
+}
+
+export class BasicNotificationManager implements NotificationManager {
+    private readonly dispatch: typeof store.dispatch;
+
+    private readonly ADD_NOTIFICATION: string = AppStateActions.ADD_NOTIFICATION;
+
+    private readonly CLEAR_NOTIFICATIONS: string = AppStateActions.CLEAR_NOTIFICATIONS;
+
+    constructor(dispatch: AppDispatch) {
+        this.dispatch = dispatch;
+    }
+
+    addNotification(notification: Notification): void {
+        this.dispatch({
+            type: this.ADD_NOTIFICATION,
+            payload: {...notification}
+        })
+    }
+
+    clearNotifications(): void {
+        this.dispatch({
+            type: this.CLEAR_NOTIFICATIONS
+        })
+    }
+
+    error(message: string): void {
+        addNotification(new BasicNotification(notificationTypes.ERROR, message))
+    }
+
+    info(message: string): void {
+        addNotification(new BasicNotification(notificationTypes.INFO, message))
+    }
+
+    success(message: string): void {
+        addNotification(new BasicNotification(notificationTypes.SUCCESS, message))
+    }
+
+    warning(message: string): void {
+        addNotification(new BasicNotification(notificationTypes.WARNING, message))
+    }
+
 }

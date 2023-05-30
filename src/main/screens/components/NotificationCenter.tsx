@@ -1,21 +1,22 @@
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {useEffect} from "react";
-import {clearNotifications} from "../../redux/actions/AppStateActions";
+import {useEffect, useMemo} from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {BasicNotificationManager} from "../../util/Notification";
 
 function NotificationCenter () {
-    const dispatch = useAppDispatch();
-
     const notifications = useAppSelector(state => state.appState?.notifications);
 
+    const dispatch = useAppDispatch();
+
     useEffect(()=>{
+        const notificationManager = new BasicNotificationManager(dispatch);
+
         if (notifications&&notifications.length>0) {
             notifications?.forEach(notification => {
-                console.log(notification.content)
                 toast(notification.content, notification.options)
             })
-            dispatch(clearNotifications());
+            notificationManager.clearNotifications();
         }
     }, [notifications])
 

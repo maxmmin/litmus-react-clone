@@ -11,11 +11,11 @@ import {createAuthHeader, gmapsRegionOptions} from "./appConfig";
 import {Tables} from "../types/explorationParams";
 import User from "../types/User";
 import Person from "../types/Person";
+import person from "../types/Person";
 import {JurPerson} from "../types/JurPerson";
 import {CreateJurPersonDto, CreatePersonDto, CreateUserDto} from "../redux/actions/CreationParamsActions";
 import {DateBuilder} from "../types/DateEntity";
-import PersonInfoTable from "../screens/Explore/EntityTables/PersonInfoTable";
-import person from "../types/Person";
+import {Action} from "redux";
 
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
@@ -92,8 +92,7 @@ export const switchNeighbourInput = (e: React.ChangeEvent<HTMLInputElement>) => 
 export const getTableNameFromLocation = (pathName: string): Tables | null => {
     const path = pathName.endsWith("/")?pathName.slice(0,-1):pathName;
     const pathsArray = path.split("/")
-    const table = pathsArray[pathsArray.length-1].toUpperCase() as Tables | null
-    return table;
+    return pathsArray[pathsArray.length - 1].toUpperCase() as Tables | null;
 }
 
 export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {
@@ -218,12 +217,16 @@ export const getUserFromResponse = (obj: object): User => {
     return  {...obj} as User;
 }
 
-export const isRejected = (actionType: string) => {
-    return actionType.endsWith("/rejected");
+export const isActionRejected = (action: Action<String>) => {
+    return action.type.endsWith("/rejected");
 }
 
-export const isFulfilled = (actionType: string) => {
-    return actionType.endsWith("/fulfilled");
+export const isActionFulfilled = (action: Action<String>) => {
+    return action.type.endsWith("/fulfilled");
+}
+
+export const isActionPending = (action: Action<String>) => {
+    return action.type.endsWith("/pending")
 }
 
 export {checkAuthorization, logOut}

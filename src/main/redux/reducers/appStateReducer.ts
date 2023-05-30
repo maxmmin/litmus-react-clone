@@ -8,10 +8,11 @@ import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateActions from "../actions/AppStateActions";
 import AuthActions from "../actions/AuthActions";
-import {isRejected, PayloadAction} from "@reduxjs/toolkit";
+import {isFulfilled, isRejected, PayloadAction} from "@reduxjs/toolkit";
 import {BasicHttpError, HttpStatus} from "../../util/HttpStatus";
 import ApiSearchActions from "../actions/ApiSearchActions";
 import Notification from "../../util/Notification";
+import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 
@@ -72,14 +73,16 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
 
         default: {
 
-            if (action.type.endsWith("/pending")) {
+            if (isActionPending(action)) {
                 const metaAction = action as unknown as PendingMetaAction;
 
                 if (metaAction.meta.arg.shouldRefreshGlobally) {
                     return {...prevState, isRefreshing: true}
                 }
+            }
 
-                return prevState;
+            if (isActionFulfilled(action)||isActionRejected(action)) {
+                return  {...prevState, isRefreshing: false};
             }
 
             return prevState;
@@ -88,3 +91,29 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
 }
 
 export default appStateReducer;
+
+            // if (action.type.endsWith("/fulfilled")||action.type.endsWith("/rejected")) {
+            //     let newState: AppState = {...prevState, isRefreshing: false}
+            //
+            //     if (action.type.endsWith("/rejected")) {
+            //         console.error((action as PayloadAction<HttpError>).payload)
+            //
+            //         const clearType = action.type.slice(0,-("/rejected").length);
+            //
+            //         switch (clearType) {
+            //             case ApiSearchActions.REFRESH_RESULTS: {
+            //                 const httpError = (action as PayloadAction<HttpError>).payload
+            //                 if (httpError) {
+            //                     const status = httpError.status
+            //                     if (status&&httpErrors[status]===HttpErrorsNames.UNAUTHENTICATED) {
+            //                         newState.error = {}
+            //                     }
+            //
+            //                     if (status&&httpErrors[status]===HttpErrorsNames.BAD_REQUEST) {
+            //                         newState.error = {message: "Невалідні дані"}
+            //                     }
+            //                 }
+            //                 break;
+            //             }
+
+

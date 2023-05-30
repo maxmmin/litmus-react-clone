@@ -21,6 +21,7 @@ import authenticationCheckMiddleware from "./authenticationCheckMiddleware";
 import loginPageStateReducer from "./reducers/loginPageStateReducer";
 import creationParamsReducer from "./reducers/creationParamsReducer";
 import timersReducer from "./reducers/timersReducer";
+import notificationManagerMiddleware from "./notificationManagerMiddleware";
 
 const persistConfig: PersistConfig<any> = {
     storage,
@@ -48,7 +49,7 @@ const store = configureStore({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
             },
-        }).concat(authenticationCheckMiddleware, thunk),
+        }).concat(authenticationCheckMiddleware, notificationManagerMiddleware, thunk),
     enhancers: defaultEnhancers => [...defaultEnhancers],
     devTools: true
 })

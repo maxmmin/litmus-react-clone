@@ -1,19 +1,18 @@
 import {Action, Middleware} from "redux";
-import {RootState} from "./store";
-import {isRejected} from "../util/pureFunctions";
-import {isFulfilled, PayloadAction} from "@reduxjs/toolkit";
+import {isActionRejected, isActionFulfilled} from "../util/pureFunctions";
+import {PayloadAction} from "@reduxjs/toolkit";
 import {BasicHttpError, HttpStatus} from "../util/HttpStatus";
-import Notification , {BasicNotification, notificationTypes} from "../util/Notification";
+import Notification, {BasicNotification, BasicNotificationManager, notificationTypes} from "../util/Notification";
 
-const notificationManagerMiddleware: Middleware<{}, RootState> = ({getState, dispatch}) => (
+const notificationManagerMiddleware: Middleware<{}, {}> = ({getState, dispatch}) => (
     next
 ) => (action: Action) => {
-    const type = action.type;
+    if (isActionFulfilled(action)||isActionRejected(action)) {
+        const notificationManager = new BasicNotificationManager(dispatch);
 
-    if (isFulfilled(type)||isRejected(type)) {
-        let notification: Notification;
+        let notification: Notification | null = null;
 
-        if (isRejected(action.type)) {
+        if (isActionRejected(action)) {
             const httpError = (action as PayloadAction<BasicHttpError>).payload
 
             if (httpError) {
@@ -37,8 +36,12 @@ const notificationManagerMiddleware: Middleware<{}, RootState> = ({getState, dis
             }
         }
 
-
+        if (notification) {
+            notificationManager.addNotification(notification);
+        }
     }
 
     next(action)
 };
+
+export default notificationManagerMiddleware

@@ -9,6 +9,8 @@ import {useLoadScript} from "@react-google-maps/api";
 import {geoApiKey, gmapsRegionOptions} from "../../util/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
 import {setMapsApiResponse} from "../../redux/actions/AppStateActions";
+import {ErrorBoundary} from "react-error-boundary";
+import NotificationCenter from "./NotificationCenter";
 
 type Props = {
     children: ReactNode
@@ -57,9 +59,14 @@ const ApplicationStateManager = ({children}: Props) => {
         }
     }, [authentication]);
 
-    if (isRefreshing) return <Loader/>
-
-    return (<>{children}</>)
+    return (
+        <>
+            <NotificationCenter/>
+            {
+                isRefreshing ? <Loader/> : <>{children}</>
+            }
+        </>
+    )
 
 }
 
