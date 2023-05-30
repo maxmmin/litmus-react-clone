@@ -13,16 +13,16 @@ export type LoginPageStateReducible = {
     error: BasicHttpError | null
 } | null | undefined
 
-enum LoginPageStateActions {
+enum SignUpPageDataActions {
     SET_STATE="SET_STATE",
     UPDATE_STATE="UPDATE_STATE"
 }
 
-export default LoginPageStateActions;
+export default SignUpPageDataActions;
 
 export const updateLoginPageState = (valuesToBeUpdated: Partial<LoginPageState>): PayloadAction<Partial<LoginPageState>> => {
     return {
-        type: LoginPageStateActions.UPDATE_STATE,
+        type: SignUpPageDataActions.UPDATE_STATE,
         payload: valuesToBeUpdated
     }
 }

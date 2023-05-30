@@ -5,7 +5,7 @@ import {
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useMemo, useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {updateExplorationParams, updateSectionExplorationParams} from "../../redux/actions/ExplorationParamsActions";
+import {updateExplorationParams, updateSectionExplorationParams} from "../../redux/exploration/params/ExplorationParamsActions";
 
 
 const ExplorationModesView = () => {

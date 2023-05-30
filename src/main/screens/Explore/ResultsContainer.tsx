@@ -2,7 +2,7 @@ import {useAppSelector} from "../../redux/hooks";
 import {Entity} from "../../types/explorationParams";
 import {MutableRefObject} from "react";
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
-import {Results} from "../../redux/actions/ApiSearchActions";
+import {Results} from "../../redux/exploration/data/ExplorationDataActions";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import UserInfoTable from "./EntityTables/UserInfoTable";
 import Loader from "../components/Loader";

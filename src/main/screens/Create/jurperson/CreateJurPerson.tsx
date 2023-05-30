@@ -6,7 +6,7 @@ import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {Entity} from "../../../types/explorationParams";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../Create";
-import {updateJurPersonCreationParams} from "../../../redux/actions/CreationParamsActions";
+import {updateJurPersonCreationParams} from "../../../redux/creation/CreationParamsActions";
 import InputDate from "../../components/InputDate";
 import Person from "../../../types/Person";
 import DateEntity, {DateBuilder} from "../../../types/DateEntity";

@@ -6,10 +6,10 @@ import {
     ExplorationParamsReducible,
     Mode, SectionsSettings,
     Entity
-} from "../../types/explorationParams";
+} from "../../../types/explorationParams";
 
-import ExplorationParamsActions from "../actions/ExplorationParamsActions";
-import AuthActions from "../actions/AuthActions";
+import ExplorationParamsActions from "./ExplorationParamsActions";
+import AuthActions from "../../auth/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: ExplorationParamsReducible = {

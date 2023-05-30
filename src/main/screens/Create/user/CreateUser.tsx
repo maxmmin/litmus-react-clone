@@ -1,9 +1,9 @@
 import Form from "react-bootstrap/Form";
-import {setLocalInput} from "../../../redux/actions/ExplorationParamsActions";
+import {setLocalInput} from "../../../redux/exploration/params/ExplorationParamsActions";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import React from "react";
 import {useAppDispatch} from "../../../redux/hooks";
-import {updatePersonCreationParams, updateUserCreationParams} from "../../../redux/actions/CreationParamsActions";
+import {updatePersonCreationParams, updateUserCreationParams} from "../../../redux/creation/CreationParamsActions";
 
 const CreateUser = () => {
     const dispatch = useAppDispatch();

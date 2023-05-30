@@ -10,7 +10,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import {roles} from "./types/Role";
 import Explore from "./screens/Explore/Explore";
-import {AppStateActions,switchAppState} from "./redux/actions/AppStateActions";
+import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateActions";
 import ApplicationStateManager from "./screens/components/ApplicationStateManager";
 import NotificationCenter from "./screens/components/NotificationCenter";
 import Creation from "./screens/Create/Create";

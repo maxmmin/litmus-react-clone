@@ -1,5 +1,5 @@
 import {preventEnter, switchNeighbourInput, switchNext} from "../../util/pureFunctions";
-import {updatePersonCreationParams} from "../../redux/actions/CreationParamsActions";
+import {updatePersonCreationParams} from "../../redux/creation/CreationParamsActions";
 import React from "react";
 import DateEntity, {DateBuilder} from "../../types/DateEntity";
 

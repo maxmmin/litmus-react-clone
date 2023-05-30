@@ -5,7 +5,7 @@ import React, {Dispatch, SetStateAction, useEffect, useMemo, useState} from "rea
 import Button from "react-bootstrap/Button";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {Location} from "../../../types/Location";
-import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../redux/actions/CreationParamsActions";
+import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../redux/creation/CreationParamsActions";
 
 type Props = {
     table: Entity,

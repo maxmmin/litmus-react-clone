@@ -6,7 +6,7 @@ import apiLinks, {createAuthHeader} from "../../util/appConfig";
 import {Entity} from "../../types/explorationParams";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
-import {addRelationship, updateJurPersonCreationParams} from "../../redux/actions/CreationParamsActions";
+import {addRelationship, updateJurPersonCreationParams} from "../../redux/creation/CreationParamsActions";
 import LoaderSpinner from "../components/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./Create";

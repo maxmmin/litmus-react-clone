@@ -2,7 +2,7 @@ import Form from "react-bootstrap/Form";
 import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {BasicHumanSearchPayload} from "../../../types/explorationParams";
-import {setLocalInput} from "../../../redux/actions/ExplorationParamsActions";
+import {setLocalInput} from "../../../redux/exploration/params/ExplorationParamsActions";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 
 const FindByFullName = () => {

@@ -1,9 +1,9 @@
 import {Action, Middleware} from "redux";
-import {isActionRejected, isActionFulfilled} from "../util/pureFunctions";
+import {isActionRejected, isActionFulfilled} from "../../util/pureFunctions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {BasicHttpError, HttpStatus} from "../util/HttpStatus";
-import Notification, {BasicNotification, BasicNotificationManager, notificationTypes} from "../util/Notification";
-import {MetaAction} from "./reducers/appStateReducer";
+import {BasicHttpError, HttpStatus} from "../../util/HttpStatus";
+import Notification, {BasicNotification, BasicNotificationManager, notificationTypes} from "./Notification";
+import {MetaAction} from "./appStateReducer";
 
 const notificationManagerMiddleware: Middleware<{}, {}> = ({getState, dispatch}) => (
     next

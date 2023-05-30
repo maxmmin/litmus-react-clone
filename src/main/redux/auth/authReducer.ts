@@ -1,4 +1,4 @@
-import AuthActions from "../actions/AuthActions";
+import AuthActions from "./AuthActions";
 import Authentication, {AuthenticationReducible} from "../../types/Authentication";
 import {Reducer} from "react";
 import {BasicHttpError, HttpStatus} from "../../util/HttpStatus";

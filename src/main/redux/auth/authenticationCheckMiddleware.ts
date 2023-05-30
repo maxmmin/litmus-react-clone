@@ -1,10 +1,10 @@
 import {Action, Middleware} from "redux";
-import AppState from "../types/AppState";
-import {AuthenticationReducible} from "../types/Authentication";
+import AppState from "../../types/AppState";
+import {AuthenticationReducible} from "../../types/Authentication";
 import {
-    checkAndRefreshAuth} from "../util/pureFunctions";
-import AuthActions from "./actions/AuthActions";
-import {TimersReducible} from "./actions/TimersActions";
+    checkAndRefreshAuth} from "../../util/pureFunctions";
+import AuthActions from "./AuthActions";
+import {TimersReducible} from "../timers/TimersActions";
 
 
 type PartedStoreType = {

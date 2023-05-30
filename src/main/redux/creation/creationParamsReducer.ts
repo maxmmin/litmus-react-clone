@@ -3,10 +3,10 @@ import CreationParamsActions, {
     CreationParams,
     CreationParamsReducible, JurPersonCreationParams,
     PersonCreationParams, UserCreationParams
-} from "../actions/CreationParamsActions";
+} from "./CreationParamsActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Entity} from "../../types/explorationParams";
-import AuthActions from "../actions/AuthActions";
+import AuthActions from "../auth/AuthActions";
 import {JurPerson} from "../../types/JurPerson";
 import Person, {Relationship, RelationshipsLinkObject} from "../../types/Person";
 import User from "../../types/User";

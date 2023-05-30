@@ -11,7 +11,7 @@ import {
     CreationParamsReducible,
     getCreateJurPersonDto, getCreatePersonDto, getCreateUserDto,
     updateCreationParams
-} from "../../redux/actions/CreationParamsActions";
+} from "../../redux/creation/CreationParamsActions";
 import CreationInputSection from "./CreationInputSection";
 import {
     createEntity,
@@ -22,8 +22,8 @@ import apiLinks, {routingLinks} from "../../util/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
 import {CreationModalModes} from "../../types/CreationModalModes";
-import Notification, {BasicNotification, NotificationType, notificationTypes} from "../../util/Notification";
-import {addNotification} from "../../redux/actions/AppStateActions";
+import Notification, {BasicNotification, NotificationType, notificationTypes} from "../../redux/applicationState/Notification";
+import {addNotification} from "../../redux/applicationState/AppStateActions";
 
 
 export type CreationModalSettings = {

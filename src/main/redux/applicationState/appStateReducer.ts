@@ -6,10 +6,10 @@ import AppState, {
 } from "../../types/AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
-import AppStateActions from "../actions/AppStateActions";
-import AuthActions from "../actions/AuthActions";
+import AppStateActions from "./AppStateActions";
+import AuthActions from "../auth/AuthActions";
 import {isFulfilled, isRejected, PayloadAction} from "@reduxjs/toolkit";
-import Notification from "../../util/Notification";
+import Notification from "./Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}

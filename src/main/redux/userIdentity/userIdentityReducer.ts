@@ -1,7 +1,7 @@
 import {UserIdentityReducible} from "../../types/UserIdentity";
 import {Reducer} from "react";
-import UserIdentityActions from "../actions/UserIdentityActions";
-import AuthActions from "../actions/AuthActions";
+import UserIdentityActions from "./UserIdentityActions";
+import AuthActions from "../auth/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 
 const initialState = null;

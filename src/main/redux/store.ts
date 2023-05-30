@@ -1,8 +1,8 @@
 import {configureStore} from '@reduxjs/toolkit'
-import apiSearchReducer from "./reducers/apiSearchReducer";
+import explorationDataReducer from "./exploration/data/explorationDataReducer";
 import thunk from 'redux-thunk'
-import authReducer from "./reducers/authReducer";
-import appStateReducer from "./reducers/appStateReducer";
+import authReducer from "./auth/authReducer";
+import appStateReducer from "./applicationState/appStateReducer";
 import {combineReducers} from "redux"
 import {
     persistReducer,
@@ -15,13 +15,13 @@ import {
     REGISTER    }   from "reduxjs-toolkit-persist";
 import {PersistConfig} from "reduxjs-toolkit-persist/es/types";
 import storage from 'reduxjs-toolkit-persist/lib/storage'
-import userIdentityReducer from "./reducers/userIdentityReducer";
-import explorationParamsReducer from "./reducers/explorationParamsReducer";
-import authenticationCheckMiddleware from "./authenticationCheckMiddleware";
-import loginPageStateReducer from "./reducers/loginPageStateReducer";
-import creationParamsReducer from "./reducers/creationParamsReducer";
-import timersReducer from "./reducers/timersReducer";
-import notificationManagerMiddleware from "./notificationManagerMiddleware";
+import userIdentityReducer from "./userIdentity/userIdentityReducer";
+import explorationParamsReducer from "./exploration/params/explorationParamsReducer";
+import authenticationCheckMiddleware from "./auth/authenticationCheckMiddleware";
+import signUpPageDataReducer from "./signUp/signUpPageDataReducer";
+import creationParamsReducer from "./creation/creationParamsReducer";
+import timersReducer from "./timers/timersReducer";
+import notificationManagerMiddleware from "./applicationState/notificationManagerMiddleware";
 
 const persistConfig: PersistConfig<any> = {
     storage,
@@ -33,9 +33,9 @@ const rootReducer = combineReducers({
     authentication: authReducer,
     appState: appStateReducer,
     userIdentity: userIdentityReducer,
-    searchResults: apiSearchReducer,
+    searchResults: explorationDataReducer,
     explorationParams: explorationParamsReducer,
-    loginPageState: loginPageStateReducer,
+    loginPageState: signUpPageDataReducer,
     creationParams: creationParamsReducer,
     timers: timersReducer
 } )

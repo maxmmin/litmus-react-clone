@@ -1,28 +1,28 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {isValid} from "../../util/pureFunctions";
-import {ErrJson, BasicHttpError} from "../../util/HttpStatus";
-import apiLinks, {createAuthHeader, entitiesPerPage} from "../../util/appConfig";
-import {RootState} from "../store";
+import {isValid} from "../../../util/pureFunctions";
+import {ErrJson, BasicHttpError} from "../../../util/HttpStatus";
+import apiLinks, {createAuthHeader, entitiesPerPage} from "../../../util/appConfig";
+import {RootState} from "../../store";
 import {
     BasicHumanSearchPayload,
     ExplorationParamsReducible,
     Mode,
     Entity
-} from "../../types/explorationParams";
+} from "../../../types/explorationParams";
 import {Action} from "redux";
-import {MetaArg} from "../../types/AppState";
+import {MetaArg} from "../../../types/AppState";
 
-enum ApiSearchActions {
+enum ExplorationDataActions {
     REFRESH_RESULTS="REFRESH_RESULTS",
     CLEAR_RESULTS="CLEAR_RESULTS",
     LAZY_LOAD="LAZY_LOAD"
 }
 
-export default ApiSearchActions;
+export default ExplorationDataActions;
 
 export const clearResults = (): Action<string> => {
     return {
-        type: ApiSearchActions.CLEAR_RESULTS
+        type: ExplorationDataActions.CLEAR_RESULTS
     }
 }
 
@@ -100,7 +100,7 @@ const errorResponseHandle = (response: Response, json: ErrJson, rejectWithValue:
     return rejectWithValue({...error})
 }
 
-const refreshResultsThunk = createAsyncThunk<ResultsFullRequired, RefreshResultsThunkArg>(ApiSearchActions.REFRESH_RESULTS,
+const refreshResultsThunk = createAsyncThunk<ResultsFullRequired, RefreshResultsThunkArg>(ExplorationDataActions.REFRESH_RESULTS,
     async ({table},{getState, dispatch, rejectWithValue})=>{
         const state = getState() as RootState;
         const accessToken = state.authentication?.accessToken;
@@ -155,7 +155,7 @@ const refreshResultsThunk = createAsyncThunk<ResultsFullRequired, RefreshResults
 
 export type LazyLoadResultsThunkArg = MetaArg<{results: ResultsFullRequired} >
 
-export const lazyLoadResultsThunk = createAsyncThunk<Results, LazyLoadResultsThunkArg>(ApiSearchActions.LAZY_LOAD,
+export const lazyLoadResultsThunk = createAsyncThunk<Results, LazyLoadResultsThunkArg>(ExplorationDataActions.LAZY_LOAD,
     async ({results}, {getState, rejectWithValue})=>{
         // it's for safety. now im sure I won't mutate original object
         results = {...results}

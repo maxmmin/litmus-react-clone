@@ -1,10 +1,10 @@
-import ApiSearchActions, {LazyLoadResultsThunkArg, Results, ResultsReducible} from "../actions/ApiSearchActions";
+import ExplorationDataActions, {LazyLoadResultsThunkArg, Results, ResultsReducible} from "./ExplorationDataActions";
 import {Reducer} from "react";
-import {BasicHttpError} from "../../util/HttpStatus";
-import AuthActions from "../actions/AuthActions";
+import {BasicHttpError} from "../../../util/HttpStatus";
+import AuthActions from "../../auth/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {RefreshResultsThunkArg} from "../actions/ApiSearchActions"
-import {Entity} from "../../types/explorationParams";
+import {RefreshResultsThunkArg} from "./ExplorationDataActions"
+import {Entity} from "../../../types/explorationParams";
 
 const initialState = null;
 
@@ -14,19 +14,19 @@ type PendingMetaAction = {
     }
 }
 
-const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (prevState=initialState, action) => {
+const explorationDataReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (prevState=initialState, action) => {
     switch (action.type) {
-        case (ApiSearchActions.REFRESH_RESULTS): {
+        case (ExplorationDataActions.REFRESH_RESULTS): {
             return action.payload;
         }
 
-        case (`${ApiSearchActions.LAZY_LOAD}/pending`): {
+        case (`${ExplorationDataActions.LAZY_LOAD}/pending`): {
             const newState: Results = {...prevState!, pending: true}
 
             return newState;
         }
 
-        case (`${ApiSearchActions.REFRESH_RESULTS}/pending`): {
+        case (`${ExplorationDataActions.REFRESH_RESULTS}/pending`): {
             let metaAction = action as unknown as PendingMetaAction;
 
             const newState: Results = {
@@ -40,18 +40,18 @@ const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (pre
             return newState;
         }
 
-        case (`${ApiSearchActions.LAZY_LOAD}/fulfilled`):
-        case (`${ApiSearchActions.REFRESH_RESULTS}/fulfilled`): {
+        case (`${ExplorationDataActions.LAZY_LOAD}/fulfilled`):
+        case (`${ExplorationDataActions.REFRESH_RESULTS}/fulfilled`): {
             return action.payload;
         }
 
-        case (`${ApiSearchActions.LAZY_LOAD}/rejected`):
-        case (`${ApiSearchActions.REFRESH_RESULTS}/rejected`): {
+        case (`${ExplorationDataActions.LAZY_LOAD}/rejected`):
+        case (`${ExplorationDataActions.REFRESH_RESULTS}/rejected`): {
             const error = action.payload as unknown as BasicHttpError;
 
             if (error?.status) {
                 // only lazy load, because if it's refresh results actions prev state cant be null
-                if (error.status===400&&action.type===`${ApiSearchActions.LAZY_LOAD}/rejected`) {
+                if (error.status===400&&action.type===`${ExplorationDataActions.LAZY_LOAD}/rejected`) {
                     return {...prevState!, pending: false};
                 }
             }
@@ -59,7 +59,7 @@ const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (pre
             return null;
         }
 
-        case ApiSearchActions.CLEAR_RESULTS: {
+        case ExplorationDataActions.CLEAR_RESULTS: {
             return initialState;
         }
 
@@ -71,4 +71,4 @@ const apiSearchReducer: Reducer<ResultsReducible, PayloadAction<Results>> = (pre
     }
 }
 
-export default apiSearchReducer
+export default explorationDataReducer

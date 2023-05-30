@@ -1,7 +1,7 @@
-import store, {AppDispatch} from "../redux/store";
-import {addNotification, AppStateActions} from "../redux/actions/AppStateActions";
+import store, {AppDispatch} from "../store";
+import {addNotification, AppStateActions} from "./AppStateActions";
 import {ToastContent, ToastOptions, TypeOptions} from "react-toastify";
-import {useAppDispatch} from "../redux/hooks";
+import {useAppDispatch} from "../hooks";
 
 
 export type NotificationContent = ToastContent;

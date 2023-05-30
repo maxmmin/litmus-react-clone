@@ -4,14 +4,14 @@ import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef, useStat
 import {Entity} from "../../types/explorationParams";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {updateExplorationParams} from "../../redux/actions/ExplorationParamsActions";
+import {updateExplorationParams} from "../../redux/exploration/params/ExplorationParamsActions";
 import Button from "react-bootstrap/Button";
 import InputGroup from "./InputGroup";
-import ApiSearchActions, {
+import ExplorationDataActions, {
     clearResults,
     lazyLoadResultsThunk,
     refreshResultsThunk, ResultsFullRequired
-} from "../../redux/actions/ApiSearchActions";
+} from "../../redux/exploration/data/ExplorationDataActions";
 import ResultsContainer from "./ResultsContainer";
 import PrivateComponentWrapper from "../components/PrivateComponentWrapper";
 import {Permissions} from "../../types/Role";

@@ -1,7 +1,7 @@
 import {Action} from "redux";
 import {GmapsApiResponse} from "../../types/AppState";
 import {PayloadAction} from "@reduxjs/toolkit";
-import Notification from "../../util/Notification";
+import Notification from "./Notification";
 
 export enum AppStateActions {
     REFRESH_ON="REFRESH_ON",
