@@ -1,19 +1,19 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
 import React from 'react';
-import SignIn from "./screens/SignIn/SignIn";
-import Home from "./screens/Home/Home";
-import PrivateComponent, {ERROR_PAGE} from "./screens/components/PrivateComponent";
-import {useAppDispatch, useAppSelector} from "./redux/hooks";
+import SignIn from "./react/screens/SignIn/SignIn";
+import Home from "./react/screens/Home/Home";
+import PrivateComponent, {ERROR_PAGE} from "./react/components/PrivateComponent";
+import {useAppDispatch} from "./redux/hooks";
 import store from "./redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import {roles} from "./redux/userIdentity/Role";
-import Explore from "./screens/Explore/Explore";
+import Explore from "./react/screens/Explore/Explore";
 import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateActions";
-import ApplicationStateManager from "./screens/components/ApplicationStateManager";
-import NotificationCenter from "./screens/components/NotificationCenter";
-import Creation from "./screens/Create/Create";
+import ApplicationStateManager from "./react/components/ApplicationStateManager";
+import NotificationCenter from "./react/components/NotificationCenter";
+import Creation from "./react/screens/Create/Create";
 import {routingLinks} from "./util/appConfig";
 import {Entity} from "./redux/exploration/explorationParams";
 import {ErrorBoundary} from "react-error-boundary";
