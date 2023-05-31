@@ -1,7 +1,7 @@
 import Loader from "./Loader";
 import {checkAndRefreshAuth, isValid, onWakeUp} from "../../util/pureFunctions";
 import React, {ReactNode, useEffect} from "react";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {useAppSelector} from "../../redux/hooks";
 import {refreshUserIdentity} from "../../redux/userIdentity/UserIdentityActions";
 import AuthActions from "../../redux/auth/AuthActions";
 import store from "../../redux/store";
@@ -20,8 +20,6 @@ const libraries: Libraries = ["places"];
 
 const ApplicationStateManager = ({children}: Props) => {
 
-    const dispatch = useAppDispatch();
-
     const authentication = useAppSelector(state => state.authentication)
 
     const isRefreshing = useAppSelector(state => state.appState?.isRefreshing)
@@ -34,32 +32,29 @@ const ApplicationStateManager = ({children}: Props) => {
     });
 
     useEffect(()=>{
-        dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError?{...loadError}:null}))
-        /* eslint-disable */
+        store.dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError?{...loadError}:null}))
     }, [isLoaded, loadError])
     // fix err if no internet
 
     useEffect(()=>{
-        dispatch({type: AuthActions.CHECK_AUTH})
+        store.dispatch({type: AuthActions.CHECK_AUTH})
 
         if (isValid(authentication?.accessToken)) {
-            dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!}))
+            store.dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!}))
         }
-        /* eslint-disable */
     },[authentication])
 
     useEffect(() => {
        const wakeUpCheckTimerId = onWakeUp(()=>{
            console.log("wake up")
            if (authentication) {
-               checkAndRefreshAuth(authentication, store.getState().timers, dispatch)
+               checkAndRefreshAuth(authentication, store.getState().timers, store.dispatch)
            }
        })
 
         return ()=>{
            window.clearInterval(wakeUpCheckTimerId)
         }
-        /* eslint-disable */
     }, [authentication]);
 
     return (

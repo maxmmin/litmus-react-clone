@@ -32,6 +32,7 @@ export type CreationModalSettings = {
 
 const Creation = () => {
     const dispatch = useAppDispatch();
+
     const location = useLocation();
 
     const navigate = useNavigate();
@@ -46,7 +47,7 @@ const Creation = () => {
         if (entity) {
             dispatch(updateCreationParams({table: entity}))
         }
-        /* eslint-disable */ // set location on it's change
+        /* eslint-disable-next-line */ // -f | DON'T DISABLE. LOCATION IS LOCAL STATE AND RELATIVE ENTITY SHOULD BE UPDATED ONLY ON IT'S CHANGE(no entity change)
     }, [location])
 
     if (!entity) {

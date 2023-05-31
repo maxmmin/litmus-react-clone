@@ -21,6 +21,8 @@ import {routingLinks} from "../../../util/appConfig";
 import {useLocation} from "react-router";
 import {getTableNameFromLocation} from "../../../util/pureFunctions";
 
+/* btn isInputInvalid?'disabled':''*/
+
 const Explore = () => {
     const dispatch = useAppDispatch();
     const location = useLocation();
@@ -31,13 +33,12 @@ const Explore = () => {
     const exploredEntity = useMemo<Entity|null>(()=>getTableNameFromLocation(location.pathname), [location])
 
     const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![exploredEntity!])
-    const isInputInvalid = useAppSelector(state => state.explorationParams?.isInvalid)
     const results = useAppSelector(state => state.searchResults)
 
     const search = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        if (!isInputInvalid&&exploredEntity) {
+        if (exploredEntity) {
             dispatch(refreshResultsThunk({table: exploredEntity, shouldRefreshGlobally: false}))
         }
     }
@@ -61,7 +62,7 @@ const Explore = () => {
         if (exploredEntity) {
             dispatch(updateExplorationParams({entity: exploredEntity}))
         }
-        /* eslint-disable */
+        /* eslint-disable-next-line */ // -f | WE UPDATE EXPLORATION PARAMS ON URL CHANGE, NOT ENTITY
     }, [location])
 
     useEffect(()=>{
@@ -70,7 +71,7 @@ const Explore = () => {
         return () => {
             window.removeEventListener("scroll",scrollCallback)
         }
-        /* eslint-disable */
+        /* eslint-disable-next-line */ // -f | scrollBack is  static function inside component and is not required in dependency list
     },[])
 
     if (!exploredEntity) {
@@ -102,7 +103,7 @@ const Explore = () => {
 
                                     <InputGroup/>
 
-                                    <Button disabled={results?.pending} onClick={search} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn ${isInputInvalid?'disabled':''}`}>
+                                    <Button disabled={results?.pending} onClick={search} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
                                         {results?.pending?"Завантаження...":"Пошук"}
                                     </Button>
                                 </Form>

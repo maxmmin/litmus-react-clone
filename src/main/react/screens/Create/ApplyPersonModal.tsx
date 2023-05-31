@@ -72,6 +72,10 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             setPerson(null)
         }
 
+        if (pending) {
+            setPending(false)
+        }
+
         if (requestTimerId) {
             window.clearTimeout(requestTimerId)
             setRequestTimerId(null)
@@ -84,6 +88,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
         const id = +e.currentTarget.value;
 
+        // local variable to know if new input valid before setState work
         let isIdValid = false;
 
         if (isNaN(id)) {

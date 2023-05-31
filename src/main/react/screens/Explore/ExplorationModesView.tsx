@@ -6,6 +6,7 @@ import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {updateExplorationParams, updateSectionExplorationParams} from "../../../redux/exploration/params/ExplorationParamsActions";
+import store from "../../../redux/store";
 
 
 const ExplorationModesView = () => {
@@ -24,11 +25,10 @@ const ExplorationModesView = () => {
 
     useEffect(()=>{
         if (exploredEntity&&explorationMode) {
-            dispatch(updateExplorationParams({
+            store.dispatch(updateExplorationParams({
                 [exploredEntity]: Object.keys(modesDataSource[exploredEntity!])[0]
             }))
         }
-        /* eslint-disable */
     },[exploredEntity, explorationMode])
 
 

@@ -1,44 +1,45 @@
 import Form from "react-bootstrap/Form";
-import React, {useEffect} from "react";
+import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
-import {setLocalInput, updateExplorationParams} from "../../../../redux/exploration/params/ExplorationParamsActions";
+import {setLocalInput} from "../../../../redux/exploration/params/ExplorationParamsActions";
 import {BasicHumanSearchPayload} from "../../../../redux/exploration/explorationParams";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../../util/pureFunctions";
 
 const FindById = () => {
     const dispatch = useAppDispatch();
 
-    const isInvalid = useAppSelector(state => state.explorationParams!.isInvalid)
-    const table = useAppSelector(state => state.explorationParams?.entity)
+    const isInvalid = useState<boolean>(false);
+    const entity = useAppSelector(state => state.explorationParams?.entity)
 
     const localInput = useAppSelector(state => {
         const globalInput = state.explorationParams?.input;
-        if (table&&globalInput) {
-            return globalInput[table] as BasicHumanSearchPayload;
+        if (entity&&globalInput) {
+            return globalInput[entity] as BasicHumanSearchPayload;
         }
         return null;
     })
 
     const id = localInput?localInput.id:""
 
-    useEffect(()=>{
-        if (isNaN(+id!)) {
-            if (!isInvalid) {
-                dispatch(updateExplorationParams({isInvalid: true}))
-            }
-        } else if (isInvalid) {
-            dispatch(updateExplorationParams({isInvalid: false}))
-        }
-        /* eslint-disable */
-    },[id, isInvalid])
+    // useEffect(()=>{
+    //     if (isNaN(+id!)) {
+    //         if (!isInvalid) {
+    //             dispatch(updateExplorationParams({isInvalid: true}))
+    //         }
+    //     } else if (isInvalid) {
+    //         dispatch(updateExplorationParams({isInvalid: false}))
+    //     }
+    // },[id, isInvalid])
 
+
+    // ${isInvalid?"is-invalid":""}`}
     return (
         <>
             <Form.Group className="mb-3">
                 <Form.Label>ID</Form.Label>
                 <input autoComplete={"new-password"} onChange={e=>{
                     dispatch(setLocalInput({...localInput, id: e.currentTarget.value}))
-                }} className={`id form-control  ${isInvalid?"is-invalid":""}`} value={id} type="text" placeholder="Введіть id"
+                }} className={`id form-control`} value={id} type="text" placeholder="Введіть id"
                 onKeyDown={keyPressHandler}
                 />
             </Form.Group>

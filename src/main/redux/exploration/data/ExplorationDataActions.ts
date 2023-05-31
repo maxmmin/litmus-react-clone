@@ -6,7 +6,6 @@ import {RootState} from "../../store";
 import {
     BasicHumanSearchPayload,
     ExplorationParamsReducible,
-    Mode,
     Entity
 } from "../explorationParams";
 import {Action} from "redux";

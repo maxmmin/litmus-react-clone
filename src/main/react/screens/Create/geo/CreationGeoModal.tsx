@@ -61,11 +61,12 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
         }
     }
 
-    // eslint-disable-next-line
     useEffect(()=>{
-        setLocation(geoLocation!)
-        /* eslint-disable */ // set geo on close
-    }, [show, entity])
+        if (show) {
+            setLocation(geoLocation!)
+        }
+        /* eslint-disable-next-line */ // -f // set location of entity on modal open
+    }, [show])
 
 
     return (
