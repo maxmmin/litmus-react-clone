@@ -35,6 +35,7 @@ const ApplicationStateManager = ({children}: Props) => {
 
     useEffect(()=>{
         dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError?{...loadError}:null}))
+        /* eslint-disable */
     }, [isLoaded, loadError])
     // fix err if no internet
 
@@ -44,6 +45,7 @@ const ApplicationStateManager = ({children}: Props) => {
         if (isValid(authentication?.accessToken)) {
             dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!}))
         }
+        /* eslint-disable */
     },[authentication])
 
     useEffect(() => {
@@ -57,14 +59,17 @@ const ApplicationStateManager = ({children}: Props) => {
         return ()=>{
            window.clearInterval(wakeUpCheckTimerId)
         }
+        /* eslint-disable */
     }, [authentication]);
 
     return (
         <>
-            <NotificationCenter/>
-            {
-                isRefreshing ? <Loader/> : <>{children}</>
-            }
+            <ErrorBoundary fallback={<h1>Something went wrong...</h1>}>
+                <NotificationCenter/>
+                {
+                    isRefreshing ? <Loader/> : <>{children}</>
+                }
+            </ErrorBoundary>
         </>
     )
 

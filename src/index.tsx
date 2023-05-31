@@ -5,7 +5,6 @@ import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
 import store, {persistor} from "./main/redux/store";
 import {PersistGate } from "reduxjs-toolkit-persist/es/integration/react";
-import {useAppDispatch, useAppSelector} from "./main/redux/hooks";
 import Loader from "./main/react/components/Loader";
 
 

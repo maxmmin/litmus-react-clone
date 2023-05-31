@@ -29,7 +29,8 @@ const FindById = () => {
         } else if (isInvalid) {
             dispatch(updateExplorationParams({isInvalid: false}))
         }
-    },[id])
+        /* eslint-disable */
+    },[id, isInvalid])
 
     return (
         <>

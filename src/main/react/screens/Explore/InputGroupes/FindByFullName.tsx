@@ -1,5 +1,5 @@
 import Form from "react-bootstrap/Form";
-import React, {useState} from "react";
+import React from "react";
 import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
 import {BasicHumanSearchPayload} from "../../../../redux/exploration/explorationParams";
 import {setLocalInput} from "../../../../redux/exploration/params/ExplorationParamsActions";

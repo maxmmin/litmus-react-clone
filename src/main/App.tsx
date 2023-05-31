@@ -12,18 +12,15 @@ import {roles} from "./redux/userIdentity/Role";
 import Explore from "./react/screens/Explore/Explore";
 import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateActions";
 import ApplicationStateManager from "./react/components/ApplicationStateManager";
-import NotificationCenter from "./react/components/NotificationCenter";
 import Creation from "./react/screens/Create/Create";
 import {routingLinks} from "./util/appConfig";
 import {Entity} from "./redux/exploration/explorationParams";
-import {ErrorBoundary} from "react-error-boundary";
 
 // @todo check if the refresh token expired
 
 function App() {
     const dispatch = useAppDispatch();
   return (
-        <ErrorBoundary fallback={<h1>Something went wrong</h1>}>
             <BrowserRouter basename={"/"}>
                 <ApplicationStateManager>
                     <div className={"wrapper"} onClick={e=>{
@@ -68,7 +65,6 @@ function App() {
                     </div>
                 </ApplicationStateManager>
             </BrowserRouter>
-        </ErrorBoundary>
       )
 }
 

@@ -1,14 +1,13 @@
 import Header from "../../components/Header";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef, useState} from "react";
+import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef} from "react";
 import {Entity} from "../../../redux/exploration/explorationParams";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {updateExplorationParams} from "../../../redux/exploration/params/ExplorationParamsActions";
 import Button from "react-bootstrap/Button";
 import InputGroup from "./InputGroup";
-import ExplorationDataActions, {
-    clearResults,
+import {
     lazyLoadResultsThunk,
     refreshResultsThunk, ResultsFullRequired
 } from "../../../redux/exploration/data/ExplorationDataActions";
@@ -29,31 +28,17 @@ const Explore = () => {
 
     const resultsContainer = useRef<HTMLDivElement>(null)
 
-    const table = useMemo<Entity|null>(()=>getTableNameFromLocation(location.pathname), [location])
+    const exploredEntity = useMemo<Entity|null>(()=>getTableNameFromLocation(location.pathname), [location])
 
-    useLayoutEffect(() => {
-        if (table) {
-            dispatch(updateExplorationParams({entity: table}))
-        }
-    }, [location])
-
-    useEffect(()=>{
-        window.addEventListener("scroll", scrollCallback)
-
-        return () => {
-            window.removeEventListener("scroll",scrollCallback)
-        }
-    },[resultsContainer.current])
-
-    const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![table!])
+    const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![exploredEntity!])
     const isInputInvalid = useAppSelector(state => state.explorationParams?.isInvalid)
     const results = useAppSelector(state => state.searchResults)
 
     const search = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
 
-        if (!isInputInvalid&&table) {
-            dispatch(refreshResultsThunk({table: table, shouldRefreshGlobally: false}))
+        if (!isInputInvalid&&exploredEntity) {
+            dispatch(refreshResultsThunk({table: exploredEntity, shouldRefreshGlobally: false}))
         }
     }
 
@@ -72,7 +57,23 @@ const Explore = () => {
         navigate(event.currentTarget.value)
     }
 
-    if (!table) {
+    useLayoutEffect(() => {
+        if (exploredEntity) {
+            dispatch(updateExplorationParams({entity: exploredEntity}))
+        }
+        /* eslint-disable */
+    }, [location])
+
+    useEffect(()=>{
+        window.addEventListener("scroll", scrollCallback)
+
+        return () => {
+            window.removeEventListener("scroll",scrollCallback)
+        }
+        /* eslint-disable */
+    },[])
+
+    if (!exploredEntity) {
         throw new Error("client error. table shouldn't be null. reload the page")
     }
 
@@ -83,7 +84,7 @@ const Explore = () => {
                 <div className="explore-page__search">
                     <p style={{marginBottom: '10px'}}>Знайти</p>
 
-                    <Form.Select className={"explore__select"} value={routingLinks.explore[table]} onChange={handleSelectChange}>
+                    <Form.Select className={"explore__select"} value={routingLinks.explore[exploredEntity]} onChange={handleSelectChange}>
                         <option value={routingLinks.explore[Entity.PERSONS]}>Фізичну особу</option>
                         <option value={routingLinks.explore[Entity.JUR_PERSONS]}>Юридичну особу</option>
                         <PrivateComponentWrapper neededPermissions={[Permissions.USERS_READ, Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
@@ -94,7 +95,7 @@ const Explore = () => {
                     <ExplorationModesView/>
 
 
-                    {table&&mode?
+                    {exploredEntity&&mode?
                         <>
                             <div className="explore-page__input-group-container">
                                 <Form className={"explore-input-group"}>

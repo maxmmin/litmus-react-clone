@@ -1,26 +1,26 @@
 import SelectGeoComponent from "./SelectGeoComponent";
 import {Entity} from "../../../../redux/exploration/explorationParams";
-import {Modal, ModalDialog} from "react-bootstrap";
-import React, {Dispatch, SetStateAction, useEffect, useMemo, useState} from "react";
+import {Modal} from "react-bootstrap";
+import React, { useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
 import {Location} from "../../../../model/Location";
 import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../../redux/creation/CreationParamsActions";
 
 type Props = {
-    table: Entity,
+    entity: Entity,
     show: boolean,
     close: ()=>void
 }
 
-const CreationGeoModal = ({table, show, close}: Props) => {
+const CreationGeoModal = ({entity, show, close}: Props) => {
 
     const dispatch = useAppDispatch()
 
     const [location, setLocation] = useState<Location|null>(null)
 
     const geoLocation = useAppSelector(state => {
-        switch (table) {
+        switch (entity) {
             case Entity.JUR_PERSONS: {
                 return state.creationParams?.jurPersonCreationData.location;
             }
@@ -36,7 +36,7 @@ const CreationGeoModal = ({table, show, close}: Props) => {
     }
 
     const clearGeo = () => {
-        switch (table) {
+        switch (entity) {
             case Entity.JUR_PERSONS: {
                 dispatch(updateJurPersonCreationParams({location: null}))
             }
@@ -46,7 +46,7 @@ const CreationGeoModal = ({table, show, close}: Props) => {
 
     const applyGeo = () => {
         if (location) {
-            switch (table) {
+            switch (entity) {
                 case Entity.JUR_PERSONS: {
                     dispatch(updateJurPersonCreationParams({location: location}))
                     break;
@@ -64,7 +64,8 @@ const CreationGeoModal = ({table, show, close}: Props) => {
     // eslint-disable-next-line
     useEffect(()=>{
         setLocation(geoLocation!)
-    }, [show, table])
+        /* eslint-disable */ // set geo on close
+    }, [show, entity])
 
 
     return (

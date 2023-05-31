@@ -1,12 +1,12 @@
 import Form from "react-bootstrap/Form";
-import {setLocalInput} from "../../../../redux/exploration/params/ExplorationParamsActions";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../../util/pureFunctions";
 import React from "react";
 import {useAppDispatch} from "../../../../redux/hooks";
-import {updatePersonCreationParams, updateUserCreationParams} from "../../../../redux/creation/CreationParamsActions";
+import {updateUserCreationParams} from "../../../../redux/creation/CreationParamsActions";
 
 const CreateUser = () => {
     const dispatch = useAppDispatch();
+    // todo: this section
     return (
         <>
             <Form.Group className="mb-3 creation-input-group__item">
@@ -64,7 +64,6 @@ const CreateUser = () => {
                 <input autoComplete={"new-password"} className={`passport-number form-control`} type="password" placeholder="Повторіть пароль"
                        onKeyDown={keyPressHandler}
                 />
-                // todo this input
             </Form.Group>
         </>
     )

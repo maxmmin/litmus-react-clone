@@ -1,5 +1,4 @@
 import {noInfoMessage} from "../../../../util/HttpStatus";
-import {useMemo} from "react";
 import Person from "../../../../model/person/Person";
 import {DateBuilder} from "../../../../model/DateEntity";
 

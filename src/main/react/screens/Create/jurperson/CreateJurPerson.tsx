@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../../util/pureFunctions";
-import React, {useMemo, useState} from "react";
+import React, {useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
 import {Entity} from "../../../../redux/exploration/explorationParams";
@@ -38,7 +38,7 @@ const CreateJurPerson = () => {
         <>
             <ApplyPersonModal modalSettings={modalSettings} close={closeModal}/>
             
-            <CreationGeoModal table={Entity.JUR_PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
+            <CreationGeoModal entity={Entity.JUR_PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
 
             <>
 

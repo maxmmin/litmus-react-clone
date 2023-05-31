@@ -1,9 +1,8 @@
 import React, {useMemo, ReactNode} from "react";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {useAppSelector} from "../../redux/hooks";
 import {Navigate} from 'react-router-dom'
 import {Permissions} from "../../redux/userIdentity/Role";
-import Loader from "./Loader";
-import {checkAndRefreshAuth, checkAuthorization, isValid} from "../../util/pureFunctions";
+import {checkAuthorization} from "../../util/pureFunctions";
 
 type Props = {
     component: ReactNode,
@@ -35,7 +34,7 @@ const PrivateComponent = ({component, mode, requiredPermissions}: Props) => {
                 return checkAuthorization(requiredPermissions, user.permissions)
             }
             return false;
-    },[user]);
+    },[user, requiredPermissions]);
 
     if (!authentication) return <Navigate to="/sign-in"/>
 

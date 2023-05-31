@@ -6,11 +6,6 @@ import {Results} from "../../../redux/exploration/data/ExplorationDataActions";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import UserInfoTable from "./EntityTables/UserInfoTable";
 import Loader from "../../components/Loader";
-import Person from "../../../model/person/Person";
-import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import User from "../../../model/user/User";
-import {DateBuilder} from "../../../model/DateEntity";
-import person from "../../../model/person/Person";
 import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../../util/pureFunctions";
 
 const getParsedResults = (results: Results) => {

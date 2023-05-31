@@ -46,7 +46,7 @@ const CreatePerson = () => {
 
     return (
         <>
-            <CreationGeoModal table={Entity.PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
+            <CreationGeoModal entity={Entity.PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
 
             <ApplyPersonModal modalSettings={modalSettings} close={closeModal}/>
 

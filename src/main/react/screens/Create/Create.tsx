@@ -22,7 +22,7 @@ import apiLinks, {routingLinks} from "../../../util/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../../redux/store";
 import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
-import Notification, {BasicNotification, NotificationType, notificationTypes} from "../../../redux/applicationState/Notification";
+import {BasicNotification, NotificationType, notificationTypes} from "../../../redux/applicationState/Notification";
 import {addNotification} from "../../../redux/applicationState/AppStateActions";
 
 
@@ -40,15 +40,16 @@ const Creation = () => {
         navigate(event.currentTarget.value)
     }
 
-    const table = useMemo<Entity|null>(()=>getTableNameFromLocation(location.pathname), [location])
+    const entity = useMemo<Entity|null>(()=>getTableNameFromLocation(location.pathname), [location])
 
     useLayoutEffect(() => {
-        if (table) {
-            dispatch(updateCreationParams({table}))
+        if (entity) {
+            dispatch(updateCreationParams({table: entity}))
         }
+        /* eslint-disable */ // set location on it's change
     }, [location])
 
-    if (!table) {
+    if (!entity) {
         throw new Error("client error. table shouldn't be null. reload the page")
     }
 
@@ -107,7 +108,7 @@ const Creation = () => {
                <div className="creation-page__create">
                        <div className="creation-page__create-select-wrapper">
                            <p style={{marginBottom: '10px'}}>Створити</p>
-                           <Form.Select className={"create__select"} value={routingLinks.create[table]} onChange={handleSelectChange}>
+                           <Form.Select className={"create__select"} value={routingLinks.create[entity]} onChange={handleSelectChange}>
                                <option value={routingLinks.create[Entity.PERSONS]}>Фізичну особу</option>
                                <option value={routingLinks.create[Entity.JUR_PERSONS]}>Юридичну особу</option>
                                <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
@@ -117,7 +118,7 @@ const Creation = () => {
                        </div>
 
                    <Form className={"creation-input-group"}>
-                       <CreationInputSection table={table!}/>
+                       <CreationInputSection table={entity!}/>
 
                        <button onClick={event => {
                            event.preventDefault();

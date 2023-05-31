@@ -1,9 +1,9 @@
 import {
     Mode,
-    modesDataSource, Entity
+    modesDataSource
 } from "../../../redux/exploration/explorationParams";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useEffect, useMemo, useState} from "react";
+import React, {ChangeEvent, useEffect} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {updateExplorationParams, updateSectionExplorationParams} from "../../../redux/exploration/params/ExplorationParamsActions";
 
@@ -23,14 +23,13 @@ const ExplorationModesView = () => {
     }
 
     useEffect(()=>{
-        if (exploredEntity) {
-            if (!explorationMode) {
-                dispatch(updateExplorationParams({
-                    [exploredEntity]: Object.keys(modesDataSource[exploredEntity!])[0]
-                }))
-            }
+        if (exploredEntity&&explorationMode) {
+            dispatch(updateExplorationParams({
+                [exploredEntity]: Object.keys(modesDataSource[exploredEntity!])[0]
+            }))
         }
-    },[exploredEntity])
+        /* eslint-disable */
+    },[exploredEntity, explorationMode])
 
 
     if (modes&&explorationMode) {

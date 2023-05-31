@@ -1,4 +1,4 @@
-import {ElementType, ReactNode} from "react";
+import {ReactNode} from "react";
 import PrivateComponent, {ForbiddenOutputMode} from "./PrivateComponent";
 import {Permissions} from "../../redux/userIdentity/Role";
 
