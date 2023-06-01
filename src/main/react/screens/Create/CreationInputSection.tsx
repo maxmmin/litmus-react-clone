@@ -9,9 +9,9 @@ type Props = {
 
 const CreationInputSection = ({table}: Props) => {
     switch (table) {
-        case Entity.PERSONS: return <CreatePerson/>
-        case Entity.JUR_PERSONS: return <CreateJurPerson/>
-        case Entity.USERS: return <CreateUser/>
+        case Entity.PERSON: return <CreatePerson/>
+        case Entity.JUR_PERSON: return <CreateJurPerson/>
+        case Entity.USER: return <CreateUser/>
 
         default: return null;
     }

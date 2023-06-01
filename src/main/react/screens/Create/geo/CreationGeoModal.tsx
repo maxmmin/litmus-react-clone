@@ -21,11 +21,11 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
 
     const geoLocation = useAppSelector(state => {
         switch (entity) {
-            case Entity.JUR_PERSONS: {
+            case Entity.JUR_PERSON: {
                 return state.creationParams?.jurPersonCreationData.location;
             }
 
-            case Entity.PERSONS: {
+            case Entity.PERSON: {
                 return state.creationParams?.personCreationData.location;
             }
         }
@@ -37,7 +37,7 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
 
     const clearGeo = () => {
         switch (entity) {
-            case Entity.JUR_PERSONS: {
+            case Entity.JUR_PERSON: {
                 dispatch(updateJurPersonCreationParams({location: null}))
             }
         }
@@ -47,12 +47,12 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
     const applyGeo = () => {
         if (location) {
             switch (entity) {
-                case Entity.JUR_PERSONS: {
+                case Entity.JUR_PERSON: {
                     dispatch(updateJurPersonCreationParams({location: location}))
                     break;
                 }
 
-                case Entity.PERSONS: {
+                case Entity.PERSON: {
                     dispatch(updatePersonCreationParams({location: location}))
                     break;
                 }

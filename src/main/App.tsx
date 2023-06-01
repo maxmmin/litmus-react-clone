@@ -36,27 +36,27 @@ function App() {
                                 <PrivateComponent mode={"ERROR_PAGE"} component={<Home/>} requiredPermissions={roles.USER.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.explore[Entity.PERSONS]} element={
+                            <Route path={routingLinks.explore[Entity.PERSON]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={roles.USER.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.explore[Entity.JUR_PERSONS]} element={
+                            <Route path={routingLinks.explore[Entity.JUR_PERSON]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={roles.USER.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.explore[Entity.USERS]} element={
+                            <Route path={routingLinks.explore[Entity.USER]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={roles.ADMIN.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.create[Entity.PERSONS]} element={
+                            <Route path={routingLinks.create[Entity.PERSON]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={roles.MODERATOR.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.create[Entity.JUR_PERSONS]} element={
+                            <Route path={routingLinks.create[Entity.JUR_PERSON]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={roles.MODERATOR.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.create[Entity.USERS]} element={
+                            <Route path={routingLinks.create[Entity.USER]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={roles.ADMIN.permissions}/>
                             }/>
 

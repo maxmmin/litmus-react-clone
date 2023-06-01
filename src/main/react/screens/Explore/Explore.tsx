@@ -86,10 +86,10 @@ const Explore = () => {
                     <p style={{marginBottom: '10px'}}>Знайти</p>
 
                     <Form.Select className={"explore__select"} value={routingLinks.explore[exploredEntity]} onChange={handleSelectChange}>
-                        <option value={routingLinks.explore[Entity.PERSONS]}>Фізичну особу</option>
-                        <option value={routingLinks.explore[Entity.JUR_PERSONS]}>Юридичну особу</option>
+                        <option value={routingLinks.explore[Entity.PERSON]}>Фізичну особу</option>
+                        <option value={routingLinks.explore[Entity.JUR_PERSON]}>Юридичну особу</option>
                         <PrivateComponentWrapper neededPermissions={[Permissions.USERS_READ, Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
-                            <option value={routingLinks.explore[Entity.USERS]}>Користувача</option>
+                            <option value={routingLinks.explore[Entity.USER]}>Користувача</option>
                         </PrivateComponentWrapper>
                     </Form.Select>
 

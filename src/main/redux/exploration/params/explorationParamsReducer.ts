@@ -13,16 +13,16 @@ import AuthActions from "../../auth/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 
 const initialState: ExplorationParamsReducible = {
-    entity: Entity.PERSONS,
+    entity: Entity.PERSON,
     sectionsSettings: {
         PERSONS: Mode.FIND_BY_FULL_NAME,
         JUR_PERSONS: Mode.FIND_BY_ID,
         USERS: Mode.FIND_BY_FULL_NAME
     },
     input: {
-        [Entity.PERSONS]: {...new BasicHumanSearchInputInit()},
-        [Entity.USERS]: {...new BasicHumanSearchInputInit()},
-        [Entity.JUR_PERSONS]: {id: ""}
+        [Entity.PERSON]: {...new BasicHumanSearchInputInit()},
+        [Entity.USER]: {...new BasicHumanSearchInputInit()},
+        [Entity.JUR_PERSON]: {id: ""}
     }
 }
 

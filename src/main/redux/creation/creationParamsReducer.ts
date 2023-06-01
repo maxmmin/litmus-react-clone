@@ -14,7 +14,7 @@ import {PassportData} from "../../model/person/PassportData";
 import Sex from "../../model/person/Sex";
 
 const initialState: CreationParams = {
-    table: Entity.PERSONS,
+    table: Entity.PERSON,
     jurPersonCreationData: {...new JurPersonCreationParams()},
     personCreationData: {...new PersonCreationParams()},
     userCreationData: {...new UserCreationParams()},

@@ -38,7 +38,7 @@ const CreateJurPerson = () => {
         <>
             <ApplyPersonModal modalSettings={modalSettings} close={closeModal}/>
             
-            <CreationGeoModal entity={Entity.JUR_PERSONS} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
+            <CreationGeoModal entity={Entity.JUR_PERSON} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
 
             <>
 

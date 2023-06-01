@@ -14,21 +14,21 @@ const getParsedResults = (results: Results) => {
     const entities = results.data;
 
     switch (table) {
-        case Entity.PERSONS: {
+        case Entity.PERSON: {
             return entities.map(entity=>{
                 const person = getPersonFromResponse(entity);
                 return <PersonInfoTable key={person.id} person={person}/>
             })
         }
 
-        case Entity.JUR_PERSONS: {
+        case Entity.JUR_PERSON: {
             return entities.map(entity=>{
                 const jurPerson = getJurPersonFromEntity(entity);
                 return <JurPersonInfoTable jurPerson={jurPerson} key={jurPerson.id}/>
             })
         }
 
-        case Entity.USERS: {
+        case Entity.USER: {
             return entities.map(entity=>{
                 const user = getUserFromResponse(entity);
                 return <UserInfoTable user={user} key={user.id}/>

@@ -63,19 +63,19 @@ const Creation = () => {
             let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
 
             switch (table) {
-                case Entity.JUR_PERSONS: {
+                case Entity.JUR_PERSON: {
                     const creationData = creationParams.jurPersonCreationData;
                     body = getCreateJurPersonDto(creationData);
                     break;
                 }
 
-                case Entity.PERSONS: {
+                case Entity.PERSON: {
                     const creationData = creationParams.personCreationData;
                     body = getCreatePersonDto(creationData)
                     break;
                 }
 
-                case Entity.USERS: {
+                case Entity.USER: {
                     const creationData = creationParams.userCreationData;
                     body = getCreateUserDto(creationData);
                     break;
@@ -110,10 +110,10 @@ const Creation = () => {
                        <div className="creation-page__create-select-wrapper">
                            <p style={{marginBottom: '10px'}}>Створити</p>
                            <Form.Select className={"create__select"} value={routingLinks.create[entity]} onChange={handleSelectChange}>
-                               <option value={routingLinks.create[Entity.PERSONS]}>Фізичну особу</option>
-                               <option value={routingLinks.create[Entity.JUR_PERSONS]}>Юридичну особу</option>
+                               <option value={routingLinks.create[Entity.PERSON]}>Фізичну особу</option>
+                               <option value={routingLinks.create[Entity.JUR_PERSON]}>Юридичну особу</option>
                                <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
-                                   <option value={routingLinks.create[Entity.USERS]}>Користувача</option>
+                                   <option value={routingLinks.create[Entity.USER]}>Користувача</option>
                                </PrivateComponentWrapper>
                            </Form.Select>
                        </div>

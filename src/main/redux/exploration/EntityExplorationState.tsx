@@ -2,9 +2,9 @@ import ExplorationByFullName from "../../react/screens/Explore/InputGroupes/Find
 import ExplorationById from "../../react/screens/Explore/InputGroupes/FindById";
 
 export enum Entity {
-    PERSONS="PERSONS",
-    JUR_PERSONS="JUR_PERSONS",
-    USERS="USERS"
+    PERSON="PERSON",
+    JUR_PERSON="JUR_PERSON",
+    USER="USER"
 }
 
 /**

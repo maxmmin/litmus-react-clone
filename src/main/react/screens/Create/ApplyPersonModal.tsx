@@ -110,7 +110,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     const fetchPerson = async (accessToken: string, id: number) => {
         setPending(true)
 
-        const response = await fetch(`${apiLinks[Entity.PERSONS]}/${id}`, {
+        const response = await fetch(`${apiLinks[Entity.PERSON]}/${id}`, {
             headers: {
                 ...createAuthHeader(accessToken)
             }

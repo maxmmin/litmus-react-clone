@@ -23,21 +23,21 @@ const apiLinks = {
     signIn: `${auth}/sign-in`,
     refreshAccessKey: `${auth}/refresh`,
     getThisUser: auth,
-    [Entity.PERSONS]: `${api}/persons`,
-    [Entity.USERS]: `${api}/users`,
-    [Entity.JUR_PERSONS]: `${api}/jur-persons`,
+    [Entity.PERSON]: `${api}/persons`,
+    [Entity.USER]: `${api}/users`,
+    [Entity.JUR_PERSON]: `${api}/jur-persons`,
 }
 
 export const routingLinks = {
     explore: {
-        [Entity.PERSONS]: `/explore/${Entity.PERSONS.toLowerCase()}`,
-        [Entity.JUR_PERSONS]: `/explore/${Entity.JUR_PERSONS.toLowerCase()}`,
-        [Entity.USERS]: `/explore/${Entity.USERS.toLowerCase()}`
+        [Entity.PERSON]: `/explore/${Entity.PERSON.toLowerCase()}`,
+        [Entity.JUR_PERSON]: `/explore/${Entity.JUR_PERSON.toLowerCase()}`,
+        [Entity.USER]: `/explore/${Entity.USER.toLowerCase()}`
     },
     create: {
-        [Entity.PERSONS]: `/create/${Entity.PERSONS.toLowerCase()}`,
-        [Entity.JUR_PERSONS]: `/create/${Entity.JUR_PERSONS.toLowerCase()}`,
-        [Entity.USERS]: `/create/${Entity.USERS.toLowerCase()}`
+        [Entity.PERSON]: `/create/${Entity.PERSON.toLowerCase()}`,
+        [Entity.JUR_PERSON]: `/create/${Entity.JUR_PERSON.toLowerCase()}`,
+        [Entity.USER]: `/create/${Entity.USER.toLowerCase()}`
     }
 }
 

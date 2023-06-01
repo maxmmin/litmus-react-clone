@@ -55,15 +55,15 @@ class ExplorationStateManager <E, P extends EntityExplorationParams> {
 
     static getManager (dispatch: AppDispatch, entityType: Entity) {
         switch (entityType) {
-            case Entity.JUR_PERSONS: {
+            case Entity.JUR_PERSON: {
                 return new ExplorationStateManager<JurPerson, JurPersonExplorationParams>(dispatch, ExplorationStateManager.jurPersonActions);
             }
 
-            case Entity.PERSONS: {
+            case Entity.PERSON: {
                 return new ExplorationStateManager<Person, PersonExplorationParams>(dispatch, ExplorationStateManager.personActions);
             }
 
-            case Entity.USERS: {
+            case Entity.USER: {
                 return new ExplorationStateManager<User, UserExplorationParams>(dispatch, ExplorationStateManager.userActions);
             }
 
