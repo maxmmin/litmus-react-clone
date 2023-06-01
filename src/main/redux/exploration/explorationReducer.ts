@@ -8,6 +8,7 @@ import {JurPersonExplorationParams, JurPersonExplorationState} from "./JurPerson
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {UserExplorationParams, UserExplorationState} from "./UserExploration";
 import User from "../../model/user/User";
+import {combineReducers} from "redux";
 
 const initialPersonExplorationState = new PersonExplorationState(new BasicEntityExplorationData(), new PersonExplorationParams());
 
@@ -74,3 +75,11 @@ const userExplorationReducer: Reducer<UserExplorationState, PayloadAction<any>> 
         }
     }
 }
+
+const explorationReducer = combineReducers({
+    person: personExplorationReducer,
+    jurPerson: jurPersonExplorationReducer,
+    user: userExplorationReducer
+})
+
+export default explorationReducer;
