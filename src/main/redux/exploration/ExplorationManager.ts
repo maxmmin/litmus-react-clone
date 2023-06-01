@@ -71,21 +71,21 @@ class ExplorationStateManager <E, P extends EntityExplorationParams> {
         }
     }
 
-    updateStateAction (state: EntityExplorationState<E, P>): void {
+    updateState (state: EntityExplorationState<E, P>): void {
         this.dispatch({
             type: this.actions[ExplorationAction.UPDATE_EXPLORATION_STATE],
             payload: state
         })
     }
 
-    updateParamsAction (params: P): void {
+    updateParams (params: P): void {
         this.dispatch({
             type: this.actions[ExplorationAction.UPDATE_EXPLORATION_PARAMS],
             payload: params
         })
     }
 
-    updateDataAction (data: EntityExplorationData<E>): void {
+    updateData (data: EntityExplorationData<E>): void {
         this.dispatch({
             type: this.actions[ExplorationAction.UPDATE_EXPLORATION_DATA],
             payload: data
