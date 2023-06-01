@@ -1,60 +1,37 @@
-import {EntityExplorationData, EntityExplorationState, ExplorationMode} from "./explorationParams";
+import {
+    BasicJurPersonExplorationParamsGroup,
+    EntityExplorationData,
+    EntityExplorationParams,
+    EntityExplorationState,
+    ExplorationMode
+} from "./EntityExplorationState";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 
-class JurPersonExplorationState implements EntityExplorationState<JurPerson> {
-    private readonly _data: EntityExplorationData<any>;
-    private readonly _params: JurPerson;
+class JurPersonExplorationState implements EntityExplorationState<JurPerson, JurPersonExplorationParams> {
+    readonly data: EntityExplorationData<JurPerson>;
+    readonly params: JurPersonExplorationParams;
 
 
-    constructor(data: EntityExplorationData<any>, params: JurPerson) {
-        this._data = data;
-        this._params = params;
-    }
-
-
-    get data(): EntityExplorationData<any> {
-        return this._data;
-    }
-
-    get params(): JurPerson {
-        return this._params;
+    constructor(data: EntityExplorationData<JurPerson>, params: JurPersonExplorationParams) {
+        this.data = data;
+        this.params = params;
     }
 }
 
 
-class JurPersonExplorationParams {
-    private readonly _mode: ExplorationMode = ExplorationMode.BY_ID;
-    private readonly _id: string | null = null;
+export class JurPersonExplorationParams implements EntityExplorationParams, BasicJurPersonExplorationParamsGroup {
+    readonly mode: ExplorationMode;
+    readonly id: string | null = null;
+    readonly name: string | null = null;
 
 
-    constructor(id?: string, mode?: ExplorationMode) {
-        if (id) {
-            this._id = id;
-        }
-        if (mode) {
-            this._mode = mode;
-        }
-    }
-
-
-    get mode(): ExplorationMode {
-        return this._mode;
-    }
-
-    get id(): string | null {
-        return this._id;
-    }
-
-}
-
-class JurPersonExplorationData implements EntityExplorationData<JurPerson> {
-    private readonly _data: Array<JurPerson> | null = null;
-
-    constructor(data: Array<JurPerson> | null) {
-        this._data = data;
-    }
-
-    get(): Array<JurPerson> | null {
-        return this._data;
+    constructor(mode: ExplorationMode, id?: string, name?: string) {
+       this.mode = mode;
+       if (id) {
+           this.id = id;
+       }
+       if (name) {
+           this.name = name;
+       }
     }
 }

@@ -8,7 +8,7 @@ import {clearAuthRefreshTimer, setTimers, TimersReducible} from "../redux/timers
 import {getGeocode} from "use-places-autocomplete";
 import Geo from "../model/Geo";
 import {createAuthHeader, gmapsRegionOptions} from "./appConfig";
-import {Entity} from "../redux/exploration/explorationParams";
+import {Entity} from "../redux/exploration/EntityExplorationState";
 import User from "../model/user/User";
 import Person from "../model/person/Person";
 import person from "../model/person/Person";

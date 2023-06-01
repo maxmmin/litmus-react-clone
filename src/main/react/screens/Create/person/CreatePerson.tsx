@@ -13,7 +13,7 @@ import {
 import InputDate from "../../../components/InputDate";
 import {CreationModalSettings} from "../Create";
 import CreationGeoModal from "../geo/CreationGeoModal";
-import {Entity} from "../../../../redux/exploration/explorationParams";
+import {Entity} from "../../../../redux/exploration/EntityExplorationState";
 import DateEntity, {DateBuilder} from "../../../../model/DateEntity";
 import Sex from "../../../../model/person/Sex";
 import {CrossIcon} from "../../../../util/icons";

@@ -5,7 +5,7 @@ import CreationParamsActions, {
     PersonCreationParams, UserCreationParams
 } from "./CreationParamsActions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {Entity} from "../exploration/explorationParams";
+import {Entity} from "../exploration/EntityExplorationState";
 import AuthActions from "../auth/AuthActions";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import Person, {Relationship, RelationshipsLinkObject} from "../../model/person/Person";

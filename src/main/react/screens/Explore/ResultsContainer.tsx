@@ -1,5 +1,5 @@
 import {useAppSelector} from "../../../redux/hooks";
-import {Entity} from "../../../redux/exploration/explorationParams";
+import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import {MutableRefObject} from "react";
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import {Results} from "../../../redux/exploration/data/ExplorationDataActions";

@@ -1,0 +1,77 @@
+import ExplorationByFullName from "../../react/screens/Explore/InputGroupes/FindByFullName";
+import ExplorationById from "../../react/screens/Explore/InputGroupes/FindById";
+
+export enum Entity {
+    PERSONS="PERSONS",
+    JUR_PERSONS="JUR_PERSONS",
+    USERS="USERS"
+}
+
+/**
+ * E - entity type
+ * P - params type
+ */
+export interface EntityExplorationState <E,P extends EntityExplorationParams> {
+    params: P,
+    data: EntityExplorationData<E>
+}
+
+export interface EntityExplorationParams {
+    mode: ExplorationMode;
+    id: string | null;
+}
+
+export interface BasicHumanExplorationParamsGroup {
+    firstName: string | null,
+    middleName: string | null,
+    lastName: string | null
+}
+
+export interface BasicJurPersonExplorationParamsGroup {
+    name: string | null
+}
+
+export interface EntityExplorationData <E> {
+    results: Array<E>|null;
+}
+// @todo: WRITE ADDITIONAL FLAGS WHICH CAN BE NEEDED
+export abstract class AbstractEntityExplorationData <E> implements EntityExplorationData<E>{
+    readonly results: Array<E>|null = null;
+
+    constructor(results?: Array<E>) {
+        if (results) {
+            this.results = results;
+        }
+    }
+}
+
+/**
+ * class used for fast access for all exploration modes.
+ * Jsx is not stored inside ExplorationMode component because redux object should be POJO
+ */
+export class ExplorationMode {
+    public static readonly BY_FULL_NAME: ExplorationMode = new ExplorationMode("За ФІО")
+    public static readonly BY_ID: ExplorationMode = new ExplorationMode("За ID")
+
+    public readonly title: string;
+
+    private constructor(title: string) {
+        this.title = title;
+    }
+
+    public static getJsx (mode: ExplorationMode): JSX.Element {
+        switch (mode) {
+            case (this.BY_FULL_NAME): {
+                return <ExplorationByFullName/>
+            }
+
+            case (this.BY_ID): {
+                return <ExplorationById/>
+            }
+
+            default: {
+                throw new Error("unknown exploration mode value was provided")
+            }
+        }
+    }
+}

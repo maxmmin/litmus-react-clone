@@ -6,7 +6,7 @@ import {NO_OUTPUT} from "../../components/PrivateComponent";
 import {useNavigate} from 'react-router-dom'
 import Header from "../../components/Header";
 import {routingLinks} from "../../../util/appConfig";
-import {Entity} from "../../../redux/exploration/explorationParams";
+import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import {useAppSelector} from "../../../redux/hooks";
 
 

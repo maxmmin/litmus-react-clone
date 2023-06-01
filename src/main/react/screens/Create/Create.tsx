@@ -1,6 +1,6 @@
 import Header from "../../components/Header";
 import {Form} from "react-bootstrap";
-import {Entity} from "../../../redux/exploration/explorationParams";
+import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import PrivateComponentWrapper from "../../components/PrivateComponentWrapper";
 import {Permissions} from "../../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../../components/PrivateComponent";

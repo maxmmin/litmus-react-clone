@@ -1,4 +1,4 @@
-import {Entity} from "../exploration/explorationParams";
+import {Entity} from "../exploration/EntityExplorationState";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Location} from "../../model/Location";
 import {JurPerson} from "../../model/jurPerson/JurPerson";

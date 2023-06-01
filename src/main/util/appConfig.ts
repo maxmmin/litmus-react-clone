@@ -1,4 +1,4 @@
-import {Entity} from "../redux/exploration/explorationParams";
+import {Entity} from "../redux/exploration/EntityExplorationState";
 
 const host = "http://localhost:8081";
 

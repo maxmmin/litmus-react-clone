@@ -14,7 +14,7 @@ import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateA
 import ApplicationStateManager from "./react/components/ApplicationStateManager";
 import Creation from "./react/screens/Create/Create";
 import {routingLinks} from "./util/appConfig";
-import {Entity} from "./redux/exploration/explorationParams";
+import {Entity} from "./redux/exploration/EntityExplorationState";
 
 // @todo check if the refresh token expired
 

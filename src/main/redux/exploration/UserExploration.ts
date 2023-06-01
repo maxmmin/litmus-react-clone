@@ -1,82 +1,43 @@
 import User from "../../model/user/User";
-import {EntityExplorationData, EntityExplorationState, ExplorationMode} from "./explorationParams";
+import {
+    BasicHumanExplorationParamsGroup,
+    EntityExplorationData, EntityExplorationParams,
+    EntityExplorationState,
+    ExplorationMode
+} from "./EntityExplorationState";
 
-class UserExplorationState implements EntityExplorationState<UserExplorationParams> {
-    private readonly _params: UserExplorationParams;
-    private readonly _data: UserExplorationData;
+export class UserExplorationState implements EntityExplorationState<User, UserExplorationParams> {
+    readonly data: EntityExplorationData<User>;
+    readonly params: UserExplorationParams;
 
-
-    constructor(params: UserExplorationParams, data: UserExplorationData) {
-        this._params = params;
-        this._data = data;
-    }
-
-    get params(): UserExplorationParams {
-        return this._params;
-    }
-
-    get data(): UserExplorationData {
-        return this._data;
+    constructor(data: EntityExplorationData<User>, params: UserExplorationParams) {
+        this.data = data;
+        this.params = params;
     }
 }
 
-class UserExplorationParams {
-    private readonly _mode: ExplorationMode = ExplorationMode.BY_FULL_NAME;
-    private readonly _id: string | null = null;
-    private readonly _firstName: string | null = null;
-    private readonly _middleName: string | null = null;
-    private readonly _lastName: string | null = null;
+export class UserExplorationParams implements EntityExplorationParams, BasicHumanExplorationParamsGroup{
+    readonly mode: ExplorationMode;
+    readonly id: string | null = null;
+    readonly firstName: string | null = null;
+    readonly middleName: string | null = null;
+    readonly lastName: string | null = null;
 
-    constructor(id?: string, firstName?: string, middleName?: string, lastName?: string, mode?: ExplorationMode) {
+
+    constructor(mod: ExplorationMode, id?: string, firstName?: string, middleName?: string, lastName?: string) {
+        this.mode = mod;
         if (id) {
-            this._id = id;
+            this.id = id;
         }
         if (firstName) {
-            this._firstName = firstName;
+            this.firstName=firstName;
         }
         if (middleName) {
-            this._middleName = middleName;
+            this.middleName=middleName;
         }
         if (lastName) {
-            this._lastName = lastName;
-        }
-        if (mode) {
-            this._mode = mode;
+            this.lastName=lastName;
         }
     }
 
-
-    get mode(): ExplorationMode {
-        return this._mode;
-    }
-
-    get id(): string | null {
-        return this._id;
-    }
-
-    get firstName(): string | null {
-        return this._firstName;
-    }
-
-    get middleName(): string | null {
-        return this._middleName;
-    }
-
-    get lastName(): string | null {
-        return this._lastName;
-    }
-}
-
-class UserExplorationData implements EntityExplorationData<User>{
-    private readonly _data: Array<User> | null = null;
-
-    constructor(users?: Array<User>) {
-        if (users) {
-            this._data = users;
-        }
-    }
-
-    get(): Array<User> | null {
-        return this._data;
-    }
 }

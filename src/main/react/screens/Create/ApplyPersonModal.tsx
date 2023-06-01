@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import apiLinks, {createAuthHeader} from "../../../util/appConfig";
-import {Entity} from "../../../redux/exploration/explorationParams";
+import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
 import {addRelationship, updateJurPersonCreationParams} from "../../../redux/creation/CreationParamsActions";

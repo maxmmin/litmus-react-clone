@@ -1,7 +1,7 @@
 import Header from "../../components/Header";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef} from "react";
-import {Entity} from "../../../redux/exploration/explorationParams";
+import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {updateExplorationParams} from "../../../redux/exploration/params/ExplorationParamsActions";

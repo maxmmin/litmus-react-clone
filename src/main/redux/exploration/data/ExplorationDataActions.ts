@@ -7,7 +7,7 @@ import {
     BasicHumanSearchPayload,
     ExplorationParamsReducible,
     Entity
-} from "../explorationParams";
+} from "../EntityExplorationState";
 import {Action} from "redux";
 import {MetaArg} from "../../applicationState/AppState";
 

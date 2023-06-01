@@ -3,7 +3,7 @@ import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../../util/pu
 import React, {useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
-import {Entity} from "../../../../redux/exploration/explorationParams";
+import {Entity} from "../../../../redux/exploration/EntityExplorationState";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../Create";
 import {updateJurPersonCreationParams} from "../../../../redux/creation/CreationParamsActions";

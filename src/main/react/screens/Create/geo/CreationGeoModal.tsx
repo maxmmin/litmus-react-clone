@@ -1,5 +1,5 @@
 import SelectGeoComponent from "./SelectGeoComponent";
-import {Entity} from "../../../../redux/exploration/explorationParams";
+import {Entity} from "../../../../redux/exploration/EntityExplorationState";
 import {Modal} from "react-bootstrap";
 import React, { useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";

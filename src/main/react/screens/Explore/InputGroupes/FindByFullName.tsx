@@ -1,7 +1,7 @@
 import Form from "react-bootstrap/Form";
 import React from "react";
 import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
-import {BasicHumanSearchPayload} from "../../../../redux/exploration/explorationParams";
+import {BasicHumanSearchPayload} from "../../../../redux/exploration/EntityExplorationState";
 import {setLocalInput} from "../../../../redux/exploration/params/ExplorationParamsActions";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../../util/pureFunctions";
 

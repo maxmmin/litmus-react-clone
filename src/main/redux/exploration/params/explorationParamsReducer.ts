@@ -6,7 +6,7 @@ import {
     ExplorationParamsReducible,
     Mode, SectionsSettings,
     Entity
-} from "../explorationParams";
+} from "../EntityExplorationState";
 
 import ExplorationParamsActions from "./ExplorationParamsActions";
 import AuthActions from "../../auth/AuthActions";
