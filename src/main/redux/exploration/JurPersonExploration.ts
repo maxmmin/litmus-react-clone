@@ -20,6 +20,8 @@ export class JurPersonExplorationState implements EntityExplorationState<JurPers
 
 
 export class JurPersonExplorationParams implements EntityExplorationParams, BasicJurPersonExplorationParamsGroup {
+    public readonly supportedModes: ExplorationMode[] = Array.from([ExplorationMode.BY_ID]);
+
     readonly mode: ExplorationMode = ExplorationMode.BY_ID;
     readonly id: string | null = null;
     readonly name: string | null = null;
@@ -36,4 +38,5 @@ export class JurPersonExplorationParams implements EntityExplorationParams, Basi
            this.name = name;
        }
     }
+
 }

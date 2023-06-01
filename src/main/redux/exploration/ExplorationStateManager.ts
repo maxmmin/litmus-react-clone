@@ -3,7 +3,7 @@ import {
     Entity,
     EntityExplorationData,
     EntityExplorationParams,
-    EntityExplorationState,
+    EntityExplorationState, ExplorationMode,
 } from "./EntityExplorationState";
 import Person from "../../model/person/Person";
 import User from "../../model/user/User";
@@ -12,6 +12,7 @@ import {PersonExplorationParams} from "./PersonExploration";
 import {UserExplorationParams} from "./UserExploration";
 import {AppDispatch} from "../store";
 import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
+import {setExploredEntityAction} from "./explorationReducer";
 
 /**
  * E - entity
@@ -21,6 +22,13 @@ class ExplorationStateManager <E, P extends EntityExplorationParams> {
     private readonly dispatch;
 
     private readonly actions: ExplorationTypedActions;
+
+    static switchEntity (entity: Entity, dispatch: AppDispatch) {
+        dispatch({
+            type: setExploredEntityAction,
+            payload: entity
+        })
+    }
 
     private constructor(dispatch: AppDispatch, actions: ExplorationTypedActions) {
         this.dispatch = dispatch;
@@ -64,6 +72,11 @@ class ExplorationStateManager <E, P extends EntityExplorationParams> {
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA],
             payload: data
         })
+    }
+
+    switchExplorationMode(mode: ExplorationMode): void {
+        if ()
+            // i need to check if mod supported
     }
 
 }

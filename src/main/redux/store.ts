@@ -22,6 +22,7 @@ import signUpPageDataReducer from "./signUp/signUpPageDataReducer";
 import creationParamsReducer from "./creation/creationParamsReducer";
 import timersReducer from "./timers/timersReducer";
 import notificationManagerMiddleware from "./applicationState/notificationManagerMiddleware";
+import explorationReducer from "./exploration/explorationReducer";
 
 const persistConfig: PersistConfig<any> = {
     storage,
@@ -33,8 +34,7 @@ const rootReducer = combineReducers({
     authentication: authReducer,
     appState: appStateReducer,
     userIdentity: userIdentityReducer,
-    searchResults: explorationDataReducer,
-    explorationParams: explorationParamsReducer,
+    exploration: explorationReducer,
     loginPageState: signUpPageDataReducer,
     creationParams: creationParamsReducer,
     timers: timersReducer

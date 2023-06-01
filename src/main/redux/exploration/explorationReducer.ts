@@ -1,7 +1,7 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {PersonExplorationParams, PersonExplorationState} from "./PersonExploration";
-import {BasicEntityExplorationData, EntityExplorationData, ExplorationMode} from "./EntityExplorationState";
+import {BasicEntityExplorationData, Entity, EntityExplorationData, ExplorationMode} from "./EntityExplorationState";
 import Person from "../../model/person/Person";
 import {ExplorationTypedActions} from "./ExplorationActions";
 import {JurPersonExplorationParams, JurPersonExplorationState} from "./JurPersonExploration";
@@ -12,7 +12,9 @@ import {combineReducers} from "redux";
 
 const initialPersonExplorationState = new PersonExplorationState(new BasicEntityExplorationData(), new PersonExplorationParams());
 
-const personExplorationReducer: Reducer<PersonExplorationState, PayloadAction<any>> = (prevState=initialPersonExplorationState, action) => {
+type PersonExplorationStateReducible = PersonExplorationState | undefined;
+
+const personExplorationReducer: Reducer<PersonExplorationStateReducible, PayloadAction<any>> = (prevState=initialPersonExplorationState, action) => {
     const actions = ExplorationTypedActions.person;
     switch (action.type) {
         case actions.UPDATE_EXPLORATION_STATE: {
@@ -32,9 +34,12 @@ const personExplorationReducer: Reducer<PersonExplorationState, PayloadAction<an
     }
 }
 
+
 const initialJurPersonExplorationState = new JurPersonExplorationState(new BasicEntityExplorationData(), new JurPersonExplorationParams());
 
-const jurPersonExplorationReducer: Reducer<JurPersonExplorationState, PayloadAction<any>> = (prevState=initialJurPersonExplorationState, action) => {
+type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
+
+const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, PayloadAction<any>> = (prevState=initialJurPersonExplorationState, action) => {
     const actions = ExplorationTypedActions.jurPerson;
     switch (action.type) {
         case actions.UPDATE_EXPLORATION_STATE: {
@@ -56,7 +61,9 @@ const jurPersonExplorationReducer: Reducer<JurPersonExplorationState, PayloadAct
 
 const initialUserExplorationState = new UserExplorationState(new BasicEntityExplorationData(), new UserExplorationParams());
 
-const userExplorationReducer: Reducer<UserExplorationState, PayloadAction<any>> = (prevState= initialUserExplorationState, action) => {
+type UserExplorationStateReducible = UserExplorationState | undefined;
+
+const userExplorationReducer: Reducer<UserExplorationStateReducible, PayloadAction<any>> = (prevState= initialUserExplorationState, action) => {
     const actions = ExplorationTypedActions.user;
     switch (action.type) {
         case actions.UPDATE_EXPLORATION_STATE: {
@@ -76,10 +83,21 @@ const userExplorationReducer: Reducer<UserExplorationState, PayloadAction<any>> 
     }
 }
 
+const initialEntity = Entity.PERSON;
+
+export const setExploredEntityAction = "SET_EXPLORED_ENTITY"
+
+const exploredEntityReducer:  Reducer<Entity|undefined, PayloadAction<Entity>> = (prevState=initialEntity, action) => {
+    if (action.type===setExploredEntityAction) {
+        return action.payload;
+    }
+}
+
 const explorationReducer = combineReducers({
     person: personExplorationReducer,
     jurPerson: jurPersonExplorationReducer,
-    user: userExplorationReducer
+    user: userExplorationReducer,
+    exploredEntity: exploredEntityReducer
 })
 
 export default explorationReducer;

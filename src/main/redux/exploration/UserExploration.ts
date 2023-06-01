@@ -17,6 +17,8 @@ export class UserExplorationState implements EntityExplorationState<User, UserEx
 }
 
 export class UserExplorationParams implements EntityExplorationParams, BasicHumanExplorationParamsGroup{
+    public readonly supportedModes = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME])
+
     readonly mode: ExplorationMode = ExplorationMode.BY_FULL_NAME;
     readonly id: string | null = null;
     readonly firstName: string | null = null;
@@ -28,6 +30,7 @@ export class UserExplorationParams implements EntityExplorationParams, BasicHuma
         if (mode) {
             this.mode = mode;
         }
+        // this.checkModeSupport(this.mode);
         if (id) {
             this.id = id;
         }
@@ -42,4 +45,13 @@ export class UserExplorationParams implements EntityExplorationParams, BasicHuma
         }
     }
 
+    // private isModeSupported(mode: ExplorationMode): boolean {
+    //     return UserExplorationParams.supportedMods.includes(mode);
+    // } @TODO: write this when i be able to check serialization feature
+    //
+    // private checkModeSupport(mode: ExplorationMode): void {
+    //     if (!this.isModeSupported(mode)) {
+    //         throw new Error("unsupported mode");
+    //     }
+    // }
 }

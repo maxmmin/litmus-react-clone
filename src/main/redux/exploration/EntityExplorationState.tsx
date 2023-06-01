@@ -19,6 +19,7 @@ export interface EntityExplorationState <E,P extends EntityExplorationParams> {
 export interface EntityExplorationParams {
     mode: ExplorationMode;
     id: string | null;
+    supportedModes: ExplorationMode[]
 }
 
 export interface BasicHumanExplorationParamsGroup {
