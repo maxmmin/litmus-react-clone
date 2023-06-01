@@ -17,15 +17,17 @@ export class UserExplorationState implements EntityExplorationState<User, UserEx
 }
 
 export class UserExplorationParams implements EntityExplorationParams, BasicHumanExplorationParamsGroup{
-    readonly mode: ExplorationMode;
+    readonly mode: ExplorationMode = ExplorationMode.BY_FULL_NAME;
     readonly id: string | null = null;
     readonly firstName: string | null = null;
     readonly middleName: string | null = null;
     readonly lastName: string | null = null;
 
 
-    constructor(mod: ExplorationMode, id?: string, firstName?: string, middleName?: string, lastName?: string) {
-        this.mode = mod;
+    constructor(mode?: ExplorationMode, id?: string, firstName?: string, middleName?: string, lastName?: string) {
+        if (mode) {
+            this.mode = mode;
+        }
         if (id) {
             this.id = id;
         }

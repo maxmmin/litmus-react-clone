@@ -36,6 +36,7 @@ export interface EntityExplorationData <E> {
     isFullyLoaded: boolean;
     isPending: boolean
 }
+
 // @todo: WRITE ADDITIONAL FLAGS WHICH CAN BE NEEDED
 export class BasicEntityExplorationData <E> implements EntityExplorationData<E>{
     readonly results: Array<E>|null = null;
