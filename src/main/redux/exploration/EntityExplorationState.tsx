@@ -33,14 +33,24 @@ export interface BasicJurPersonExplorationParamsGroup {
 
 export interface EntityExplorationData <E> {
     results: Array<E>|null;
+    isFullyLoaded: boolean;
+    isPending: boolean
 }
 // @todo: WRITE ADDITIONAL FLAGS WHICH CAN BE NEEDED
-export abstract class AbstractEntityExplorationData <E> implements EntityExplorationData<E>{
+export class AbstractEntityExplorationData <E> implements EntityExplorationData<E>{
     readonly results: Array<E>|null = null;
+    readonly isFullyLoaded: boolean = false;
+    readonly isPending: boolean = false;
 
-    constructor(results?: Array<E>) {
+    constructor(results?: Array<E>, isFullyLoaded?: boolean, isPending?: boolean) {
         if (results) {
             this.results = results;
+        }
+        if (isFullyLoaded) {
+            this.isFullyLoaded = isFullyLoaded;
+        }
+        if (isPending) {
+            this.isPending = isPending;
         }
     }
 }
