@@ -48,7 +48,7 @@ class ExplorationStateManager <E, P extends EntityExplorationParams> {
 
     private readonly actions: EntityActions;
 
-    constructor(dispatch: AppDispatch, actions: EntityActions) {
+    private constructor(dispatch: AppDispatch, actions: EntityActions) {
         this.dispatch = dispatch;
         this.actions = actions;
     }
