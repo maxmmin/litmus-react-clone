@@ -6,7 +6,7 @@ import {refreshUserIdentity} from "../../redux/userIdentity/UserIdentityActions"
 import AuthActions from "../../redux/auth/AuthActions";
 import store from "../../redux/store";
 import {useLoadScript} from "@react-google-maps/api";
-import {geoApiKey, gmapsRegionOptions} from "../../config/appConfig";
+import appConfig, {gmapsRegionOptions} from "../../config/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
 import {setMapsApiResponse} from "../../redux/applicationState/AppStateActions";
 import {ErrorBoundary} from "react-error-boundary";
@@ -25,7 +25,7 @@ const ApplicationStateCenter = ({children}: Props) => {
     const isRefreshing = useAppSelector(state => state.appState?.isRefreshing)
 
     const {isLoaded, loadError} = useLoadScript({
-        googleMapsApiKey: geoApiKey,
+        googleMapsApiKey: appConfig.geoApiKey,
         libraries: libraries,
         language: gmapsRegionOptions.language!,
         region: gmapsRegionOptions.region!,
