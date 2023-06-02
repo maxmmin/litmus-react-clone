@@ -77,6 +77,7 @@ const userExplorationReducer: Reducer<UserExplorationStateReducible, PayloadActi
             const params = action.payload as UserExplorationParams;
             return {...prevState, params: params};
         }
+
         default: {
             return prevState;
         }

@@ -75,8 +75,15 @@ class ExplorationStateManager <E, P extends EntityExplorationParams> {
     }
 
     switchExplorationMode(mode: ExplorationMode): void {
-        if ()
-            // i need to check if mod supported
+        switch (this.actions) {
+            case ExplorationTypedActions.user: {
+                console.log(new UserExplorationParams().supportedModes)
+            }
+        }
+        this.dispatch({
+            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE],
+            payload: mode
+        })
     }
 
 }

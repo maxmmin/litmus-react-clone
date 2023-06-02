@@ -1,7 +1,8 @@
 export enum ExplorationCoreAction{
     UPDATE_EXPLORATION_STATE="UPDATE_EXPLORATION_STATE",
     UPDATE_EXPLORATION_PARAMS="UPDATE_EXPLORATION_PARAMS",
-    UPDATE_EXPLORATION_DATA="UPDATE_EXPLORATION_DATA"
+    UPDATE_EXPLORATION_DATA="UPDATE_EXPLORATION_DATA",
+    UPDATE_EXPLORATION_PARAMS_MODE="UPDATE_EXPLORATION_PARAMS_MODE"
 }
 
 export class ExplorationTypedActions {
@@ -16,7 +17,10 @@ export class ExplorationTypedActions {
 
 
     public readonly [ExplorationCoreAction.UPDATE_EXPLORATION_STATE]: string;
+
+    public readonly [ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE]: string;
     public readonly [ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS]: string;
+
     public readonly [ExplorationCoreAction.UPDATE_EXPLORATION_DATA]: string;
 
     private static getTypedAction(core: ExplorationCoreAction, delimiter: string, type: string) {
@@ -32,6 +36,9 @@ export class ExplorationTypedActions {
 
         const UPDATE_DATA_CORE = ExplorationCoreAction.UPDATE_EXPLORATION_DATA;
         this[UPDATE_DATA_CORE] = ExplorationTypedActions.getTypedAction(UPDATE_DATA_CORE, ExplorationTypedActions.delimiter, domain);
+
+        const UPDATE_PARAMS_MODE_CORE = ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE;
+        this[UPDATE_PARAMS_MODE_CORE] = ExplorationTypedActions.getTypedAction(UPDATE_PARAMS_MODE_CORE, ExplorationTypedActions.delimiter, domain);
     }
 
 }
