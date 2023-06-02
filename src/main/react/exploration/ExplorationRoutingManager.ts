@@ -1,7 +1,7 @@
 import {Entity, ExplorationMode, ExplorationModeName} from "../../redux/exploration/EntityExplorationState";
-import {PersonExplorationParams} from "../../redux/exploration/PersonExploration";
-import {UserExplorationParams} from "../../redux/exploration/UserExploration";
-import {JurPersonExplorationParams} from "../../redux/exploration/JurPersonExploration";
+import {PersonExplorationParams} from "../../redux/exploration/person/PersonExploration";
+import {UserExplorationParams} from "../../redux/exploration/user/UserExploration";
+import {JurPersonExplorationParams} from "../../redux/exploration/jurPerson/JurPersonExploration";
 
 class ExplorationRoutingManager {
     private static actionUrlBase = "explore"

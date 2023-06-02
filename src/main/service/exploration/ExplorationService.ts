@@ -1,8 +1,8 @@
 import {Entity, EntityExplorationParams} from "../../redux/exploration/EntityExplorationState";
 
 
-interface ExplorationService {
-    exploreById(id: string): void;
+interface ExplorationService<E> {
+    findById (id: string): Promise<E>;
 }
 
 export default ExplorationService;

@@ -1,10 +1,15 @@
 import JurPersonExplorationService from "./JurPersonExplorationService";
+import {ExplorationMode} from "../../../redux/exploration/EntityExplorationState";
+import {JurPerson} from "../../../model/jurPerson/JurPerson";
 
 class JurPersonExplorationServiceImpl implements JurPersonExplorationService {
-    exploreById(id: string): void {
+
+    findById(id: string): Promise<JurPerson> {
     }
 
-    exploreByName(name: string): void {
+    findByName(name: string): Promise<JurPerson> {
     }
 
 }
+
+export default JurPersonExplorationServiceImpl;

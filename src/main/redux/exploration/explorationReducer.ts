@@ -1,12 +1,12 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {PersonExplorationParams, PersonExplorationState} from "./PersonExploration";
+import {PersonExplorationParams, PersonExplorationState} from "./person/PersonExploration";
 import {BasicEntityExplorationData, Entity, EntityExplorationData, ExplorationMode} from "./EntityExplorationState";
 import Person from "../../model/person/Person";
 import {ExplorationTypedActions} from "./ExplorationActions";
-import {JurPersonExplorationParams, JurPersonExplorationState} from "./JurPersonExploration";
+import {JurPersonExplorationParams, JurPersonExplorationState} from "./jurPerson/JurPersonExploration";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import {UserExplorationParams, UserExplorationState} from "./UserExploration";
+import {UserExplorationParams, UserExplorationState} from "./user/UserExploration";
 import User from "../../model/user/User";
 import {combineReducers} from "redux";
 

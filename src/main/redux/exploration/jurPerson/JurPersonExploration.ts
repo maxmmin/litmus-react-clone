@@ -4,8 +4,8 @@ import {
     EntityExplorationParams,
     EntityExplorationState,
     ExplorationMode
-} from "./EntityExplorationState";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
+} from "../EntityExplorationState";
+import {JurPerson} from "../../../model/jurPerson/JurPerson";
 
 export class JurPersonExplorationState implements EntityExplorationState<JurPerson, JurPersonExplorationParams> {
     readonly data: EntityExplorationData<JurPerson>;

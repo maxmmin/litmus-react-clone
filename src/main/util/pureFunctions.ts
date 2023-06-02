@@ -230,3 +230,9 @@ export const isActionPending = (action: Action<String>) => {
 }
 
 export {checkAuthorization, logOut}
+
+export function checkNotNull <T> (arg: T) {
+    if (arg===null) {
+        throw new Error("null arg exception")
+    } else return arg;
+}

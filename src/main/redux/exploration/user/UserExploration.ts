@@ -1,10 +1,10 @@
-import User from "../../model/user/User";
+import User from "../../../model/user/User";
 import {
     BasicHumanExplorationParamsGroup,
     EntityExplorationData, EntityExplorationParams,
     EntityExplorationState,
     ExplorationMode
-} from "./EntityExplorationState";
+} from "../EntityExplorationState";
 
 export class UserExplorationState implements EntityExplorationState<User, UserExplorationParams> {
     readonly data: EntityExplorationData<User>;

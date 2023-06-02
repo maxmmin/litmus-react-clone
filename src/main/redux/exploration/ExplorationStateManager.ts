@@ -7,18 +7,19 @@ import {
 } from "./EntityExplorationState";
 import Person from "../../model/person/Person";
 import User from "../../model/user/User";
-import {JurPersonExplorationParams} from "./JurPersonExploration";
-import {PersonExplorationParams} from "./PersonExploration";
-import {UserExplorationParams} from "./UserExploration";
+import {JurPersonExplorationParams, JurPersonExplorationState} from "./jurPerson/JurPersonExploration";
+import {PersonExplorationParams, PersonExplorationState} from "./person/PersonExploration";
+import {UserExplorationParams, UserExplorationState} from "./user/UserExploration";
 import {AppDispatch} from "../store";
 import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
 import {setExploredEntityAction} from "./explorationReducer";
+import store from "../store";
 
 /**
  * E - entity
  * P -params
  */
-class ExplorationStateManager <E, P extends EntityExplorationParams> {
+class ExplorationStateManager <E,P extends EntityExplorationParams> {
     private readonly dispatch;
 
     private readonly actions: ExplorationTypedActions;
@@ -30,23 +31,37 @@ class ExplorationStateManager <E, P extends EntityExplorationParams> {
         })
     }
 
-    private constructor(dispatch: AppDispatch, actions: ExplorationTypedActions) {
+    public getExplorationState: ()=>EntityExplorationState<E, P>;
+
+    public getExplorationData (): EntityExplorationData<E> {
+        return this.getExplorationState().data;
+    }
+
+    public getExplorationParams(): P {
+        return this.getExplorationState().params;
+    }
+
+    private constructor(dispatch: AppDispatch, getState: ()=>EntityExplorationState<E, P>, actions: ExplorationTypedActions) {
         this.dispatch = dispatch;
+        this.getExplorationState = getState;
         this.actions = actions;
     }
 
-    static getManager (dispatch: AppDispatch, entityType: Entity) {
+    static getManager (providedStore: typeof store, entityType: Entity) {
         switch (entityType) {
             case Entity.JUR_PERSON: {
-                return new ExplorationStateManager<JurPerson, JurPersonExplorationParams>(dispatch, ExplorationTypedActions.jurPerson);
+                const getState = ()=>providedStore.getState().exploration.jurPerson as JurPersonExplorationState
+                return new ExplorationStateManager<JurPerson, JurPersonExplorationParams>(providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
             }
 
             case Entity.PERSON: {
-                return new ExplorationStateManager<Person, PersonExplorationParams>(dispatch, ExplorationTypedActions.person);
+                const getState = ()=>providedStore.getState().exploration.person as PersonExplorationState;
+                return new ExplorationStateManager<Person, PersonExplorationParams>(providedStore.dispatch,getState, ExplorationTypedActions.person);
             }
 
             case Entity.USER: {
-                return new ExplorationStateManager<User, UserExplorationParams>(dispatch, ExplorationTypedActions.user);
+                const getState = ()=>providedStore.getState().exploration.user as UserExplorationState;
+                return new ExplorationStateManager<User, UserExplorationParams>(providedStore.dispatch,getState, ExplorationTypedActions.user);
             }
 
             default: throw new Error("provided unknown entity type")
@@ -60,7 +75,7 @@ class ExplorationStateManager <E, P extends EntityExplorationParams> {
         })
     }
 
-    updateParams (params: P): void {
+    updateParams (params: EntityExplorationState<E, P>): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS],
             payload: params
