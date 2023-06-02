@@ -17,7 +17,9 @@ export class UserExplorationState implements EntityExplorationState<User, UserEx
 }
 
 export class UserExplorationParams implements EntityExplorationParams, BasicHumanExplorationParamsGroup{
-    public readonly supportedModes = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME])
+    public static readonly supportedModes = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME])
+
+    public readonly supportedModes = UserExplorationParams.supportedModes;
 
     readonly mode: ExplorationMode = ExplorationMode.BY_FULL_NAME;
     readonly id: string | null = null;

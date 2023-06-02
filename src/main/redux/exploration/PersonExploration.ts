@@ -8,7 +8,6 @@ import {
 } from "./EntityExplorationState";
 
 export class PersonExplorationState implements EntityExplorationState<Person, PersonExplorationParams>{
-    // @TODO: maybe write smth like supported exploration modes
     readonly data: EntityExplorationData<Person>;
     readonly params: PersonExplorationParams;
 
@@ -19,7 +18,8 @@ export class PersonExplorationState implements EntityExplorationState<Person, Pe
 }
 
 export class PersonExplorationParams implements EntityExplorationParams, BasicHumanExplorationParamsGroup{
-    public readonly supportedModes: ExplorationMode[] = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME]);
+    public static supportedModes: ExplorationMode[] = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME]);
+    public readonly supportedModes: ExplorationMode[] = PersonExplorationParams.supportedModes;
 
     readonly mode: ExplorationMode = ExplorationMode.BY_FULL_NAME;
     readonly id: string | null = null;

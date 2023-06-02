@@ -77,13 +77,32 @@ class ExplorationStateManager <E, P extends EntityExplorationParams> {
     switchExplorationMode(mode: ExplorationMode): void {
         switch (this.actions) {
             case ExplorationTypedActions.user: {
-                console.log(new UserExplorationParams().supportedModes)
+                this.checkSupport(mode, UserExplorationParams.supportedModes);
+                break;
+            }
+            case ExplorationTypedActions.person: {
+                this.checkSupport(mode, PersonExplorationParams.supportedModes);
+                break;
+            }
+            case ExplorationTypedActions.jurPerson: {
+                this.checkSupport(mode, JurPersonExplorationParams.supportedModes);
+                break;
             }
         }
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE],
             payload: mode
         })
+    }
+
+    checkSupport(mode: ExplorationMode, supported: ExplorationMode[]) {
+        if (!this.isSupported(mode, supported)) {
+            throw new Error("mode is not supported");
+        }
+    }
+
+    isSupported (mode: ExplorationMode, supported: ExplorationMode[]) {
+        return supported.includes(mode);
     }
 
 }
