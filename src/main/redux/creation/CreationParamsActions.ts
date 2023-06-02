@@ -5,7 +5,7 @@ import {JurPerson} from "../../model/jurPerson/JurPerson";
 import Person, {Relationship} from "../../model/person/Person";
 import User from "../../model/user/User";
 import {PassportData} from "../../model/person/PassportData";
-import {Roles} from "../userIdentity/Role";
+import {RoleName} from "../userIdentity/Role";
 import DateEntity, {DateBuilder} from "../../model/DateEntity";
 import Sex from "../../model/person/Sex";
 
@@ -126,7 +126,7 @@ export class UserCreationParams implements User {
     lastName: string = "";
     middleName: string = "";
     password: string = "";
-    role: Roles = Roles.USER;
+    role: RoleName = RoleName.USER;
 }
 
 export class JurPersonCreationParams implements JurPerson {

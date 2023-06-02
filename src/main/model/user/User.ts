@@ -1,4 +1,4 @@
-import {Roles} from "../../redux/userIdentity/Role";
+import {RoleName} from "../../redux/userIdentity/Role";
 
 type User = {
     id?: string;
@@ -13,7 +13,7 @@ type User = {
 
     password: string
 
-    role: Roles;
+    role: RoleName;
 
 }
 

@@ -5,7 +5,7 @@ import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
 import store, {persistor} from "./main/redux/store";
 import {PersistGate } from "reduxjs-toolkit-persist/es/integration/react";
-import Loader from "./main/react/screens/loader/Loader";
+import Loader from "./main/react/loader/Loader";
 
 
 const root = ReactDOM.createRoot(

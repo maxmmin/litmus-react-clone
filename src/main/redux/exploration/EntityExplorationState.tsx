@@ -1,5 +1,7 @@
-import ExplorationByFullName from "../../react/screens/exploration/InputGroupes/FindByFullName";
-import ExplorationById from "../../react/screens/exploration/InputGroupes/FindById";
+import ExplorationByFullName from "../../react/exploration/InputGroupes/FindByFullName";
+import ExplorationById from "../../react/exploration/InputGroupes/FindById";
+import {PersonExplorationParams} from "./PersonExploration";
+import {JurPersonExplorationParams} from "./JurPersonExploration";
 
 export enum Entity {
     PERSON="PERSON",
@@ -57,13 +59,18 @@ export class BasicEntityExplorationData <E> implements EntityExplorationData<E>{
     }
 }
 
+export enum ExplorationModeName {
+    BY_FULL_NAME="BY_FULL_NAME",
+    BY_ID="BY_ID"
+}
+
 /**
  * class used for fast access for all exploration modes.
  * Jsx is not stored inside ExplorationMode component because redux object should be POJO
  */
 export class ExplorationMode {
-    public static readonly BY_FULL_NAME: ExplorationMode = new ExplorationMode("За ФІО")
-    public static readonly BY_ID: ExplorationMode = new ExplorationMode("За ID")
+    public static readonly [ExplorationModeName.BY_FULL_NAME]: ExplorationMode = new ExplorationMode("За ФІО")
+    public static readonly [ExplorationModeName.BY_ID]: ExplorationMode = new ExplorationMode("За ID")
 
     public readonly title: string;
 

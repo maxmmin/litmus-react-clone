@@ -1,12 +1,27 @@
 import {Entity} from "../redux/exploration/EntityExplorationState";
 
-const host = "http://localhost:8081";
+type AppConfig = {
+    apiHost: string,
+    entitiesPerPage: number,
+    geoApiKey: string,
+    entityDomains: Record<Entity, string>
+}
 
-// const host = "http://192.168.111.204:8081"
+const appConfig: AppConfig = {
+    apiHost: "http://localhost:8081",
+    entitiesPerPage: 50,
+    geoApiKey: "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA",
+    entityDomains: {
+        [Entity.USER]: "users",
+        [Entity.PERSON]: "persons",
+        [Entity.JUR_PERSON]: "jur_persons"
+    }
+}
 
-export const entitiesPerPage = 50;
+export default appConfig;
 
-export const geoApiKey = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA"
+export const host = "http://localhost:8081";
+
 
 export const gmapsRegionOptions: {region: string, language: string} = {
     region: "UA",
@@ -45,4 +60,3 @@ export const createAuthHeader = (accessToken: string) => ({
     [authHeader]: `Bearer ${accessToken}`
 })
 
-export default apiLinks

@@ -1,4 +1,4 @@
-enum Roles {
+enum RoleName {
     ADMIN='ADMIN',
     MODERATOR='MODERATOR',
     USER='USER'
@@ -11,29 +11,25 @@ enum Permissions {
     DATA_WRITE="data:write"
 }
 
-class Role {
-    role: Roles;
-    permissions: Permissions[];
+const adminPermissions = Array.from([Permissions.USERS_READ, Permissions.USERS_WRITE, Permissions.DATA_READ, Permissions.DATA_WRITE]);
+const moderatorPermissions = Array.from([Permissions.DATA_READ, Permissions.DATA_WRITE]);
+const userPermissions = Array.from([Permissions.DATA_READ]);
 
-    constructor(role: Roles, permissions: Permissions[]) {
+class Role {
+    static [RoleName.ADMIN] = new Role(RoleName.ADMIN, adminPermissions)
+    static [RoleName.MODERATOR] = new Role(RoleName.MODERATOR, moderatorPermissions);
+    static [RoleName.USER] = new Role(RoleName.USER, userPermissions);
+
+    readonly role: RoleName;
+    readonly permissions: Permissions[];
+
+    private constructor(role: RoleName, permissions: Permissions[]) {
         this.role = role;
         this.permissions = permissions;
     }
 }
 
-type RolesObjectType = Record<Roles, Role>
 
-const adminPermissions = [Permissions.USERS_READ, Permissions.USERS_WRITE, Permissions.DATA_READ, Permissions.DATA_WRITE];
-const moderatorPermissions = [Permissions.DATA_READ, Permissions.DATA_WRITE];
-const usersPermissions = [Permissions.DATA_READ];
-
-
-const roles: RolesObjectType = {
-    ADMIN: new Role(Roles.ADMIN, adminPermissions),
-    MODERATOR: new Role(Roles.MODERATOR, moderatorPermissions),
-    USER: new Role(Roles.USER, usersPermissions),
-}
-
-export {roles,Permissions,Roles};
+export {Permissions,RoleName};
 
 export default Role;

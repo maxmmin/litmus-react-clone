@@ -4,12 +4,12 @@ import {Permissions} from "../../redux/userIdentity/Role";
 
 type Props = {
     children: ReactNode,
-    neededPermissions: Permissions[],
+    requiredPermissions: Permissions[],
     mode: ForbiddenOutputMode
 }
 
-function PrivateComponentWrapper ({children, neededPermissions,mode, ...props}: Props) {
-    return <PrivateComponent mode={mode} component={children} requiredPermissions={neededPermissions} {...props}/>
+function PrivateComponentWrapper ({children, requiredPermissions,mode, ...props}: Props) {
+    return <PrivateComponent mode={mode} component={children} requiredPermissions={requiredPermissions} {...props}/>
 }
 
 export default PrivateComponentWrapper;

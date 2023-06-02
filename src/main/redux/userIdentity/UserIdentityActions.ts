@@ -1,6 +1,6 @@
 import UserIdentity, {UserIdentityReducible} from "./UserIdentity";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import apiLinks, {createAuthHeader} from "../../util/appConfig";
+import apiLinks, {createAuthHeader} from "../../config/appConfig";
 import {BasicHttpError} from "../../util/HttpStatus";
 import {roles} from "./Role";
 import {isValid} from "../../util/pureFunctions";

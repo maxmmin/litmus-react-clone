@@ -18,7 +18,7 @@ import {
     getTableNameFromLocation
 } from "../../util/pureFunctions";
 import {useLocation} from "react-router";
-import apiLinks, {routingLinks} from "../../util/appConfig";
+import apiLinks, {routingLinks} from "../../config/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
 import {CreationModalModes} from "../../redux/creation/CreationModalModes";
@@ -112,7 +112,7 @@ const Creation = () => {
                            <Form.Select className={"create__select"} value={routingLinks.create[entity]} onChange={handleSelectChange}>
                                <option value={routingLinks.create[Entity.PERSON]}>Фізичну особу</option>
                                <option value={routingLinks.create[Entity.JUR_PERSON]}>Юридичну особу</option>
-                               <PrivateComponentWrapper neededPermissions={[Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
+                               <PrivateComponentWrapper requiredPermissions={[Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
                                    <option value={routingLinks.create[Entity.USER]}>Користувача</option>
                                </PrivateComponentWrapper>
                            </Form.Select>

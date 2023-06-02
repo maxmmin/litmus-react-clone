@@ -5,7 +5,7 @@ import {roles} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import {useNavigate} from 'react-router-dom'
 import Header from "../header/Header";
-import {routingLinks} from "../../util/appConfig";
+import {routingLinks} from "../../config/appConfig";
 import {Entity} from "../../redux/exploration/EntityExplorationState";
 import {useAppSelector} from "../../redux/hooks";
 
@@ -42,7 +42,7 @@ function HomeScreen () {
                             <h4 className="homepage-actions__title homepage-actions__title_search">Аналіз</h4>
                         </div>
                     </div>
-                    <PrivateComponentWrapper mode={NO_OUTPUT} neededPermissions={roles.MODERATOR.permissions}>
+                    <PrivateComponentWrapper mode={NO_OUTPUT} requiredPermissions={roles.MODERATOR.permissions}>
                         <div itemProp={`${creationTable?routingLinks.create[creationTable]:Entity.PERSON}`} className="homepage-actions__action" onClick={actionOnClick}>
                             <div className="homepage-actions__icon-container">
                                 <AddUserIcon className='homepage-actions__icon'/>
@@ -50,7 +50,7 @@ function HomeScreen () {
                             </div>
                         </div>
                     </PrivateComponentWrapper>
-                    <PrivateComponentWrapper mode={NO_OUTPUT} neededPermissions={roles.ADMIN.permissions}>
+                    <PrivateComponentWrapper mode={NO_OUTPUT} requiredPermissions={roles.ADMIN.permissions}>
                         <div itemProp={"/admin"} className="homepage-actions__action" onClick={actionOnClick}>
                             <div className="homepage-actions__icon-container">
                                 <SetUpUser className='homepage-actions__icon'/>

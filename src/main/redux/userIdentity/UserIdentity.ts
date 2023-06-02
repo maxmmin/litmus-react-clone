@@ -1,4 +1,4 @@
-import {Permissions, Roles} from "./Role";
+import {Permissions, RoleName} from "./Role";
 
 type UserIdentity = {
     email: string;
@@ -7,7 +7,7 @@ type UserIdentity = {
     lastName: string;
     middleName: string;
     records: number;
-    role: Roles;
+    role: RoleName;
     permissions: Permissions[];
     status: string;
 }
