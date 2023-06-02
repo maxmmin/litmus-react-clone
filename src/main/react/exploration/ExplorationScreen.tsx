@@ -31,7 +31,7 @@ import {getTableNameFromLocation} from "../../util/pureFunctions";
 //     }
 // }
 
-const Explore = () => {
+const ExplorationScreen = () => {
     const dispatch = useAppDispatch();
     const location = useLocation();
     const navigate = useNavigate()
@@ -131,4 +131,4 @@ const Explore = () => {
     )
 }
 
-export default Explore;
+export default ExplorationScreen;

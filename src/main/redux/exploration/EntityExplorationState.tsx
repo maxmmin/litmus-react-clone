@@ -1,5 +1,5 @@
-import ExplorationByFullName from "../../react/screens/Explore/InputGroupes/FindByFullName";
-import ExplorationById from "../../react/screens/Explore/InputGroupes/FindById";
+import ExplorationByFullName from "../../react/screens/exploration/InputGroupes/FindByFullName";
+import ExplorationById from "../../react/screens/exploration/InputGroupes/FindById";
 
 export enum Entity {
     PERSON="PERSON",

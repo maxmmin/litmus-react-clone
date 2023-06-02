@@ -1,18 +1,18 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
 import React from 'react';
-import SignIn from "./react/screens/SignIn/SignIn";
-import Home from "./react/screens/Home/Home";
+import SignIn from "./react/screens/signIn/signIn";
+import Home from "./react/screens/home/home";
 import PrivateComponent, {ERROR_PAGE} from "./react/screens/authorization/PrivateComponent";
 import {useAppDispatch} from "./redux/hooks";
 import store from "./redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import {roles} from "./redux/userIdentity/Role";
-import Explore from "./react/screens/Explore/Explore";
+import Explore from "./react/screens/exploration/exploration";
 import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateActions";
 import ApplicationStateCenter from "./react/screens/serviceComponents/ApplicationStateCenter";
-import Creation from "./react/screens/Create/Create";
+import Creation from "./react/screens/creation/creation";
 import {routingLinks} from "./util/appConfig";
 import {Entity} from "./redux/exploration/EntityExplorationState";
 

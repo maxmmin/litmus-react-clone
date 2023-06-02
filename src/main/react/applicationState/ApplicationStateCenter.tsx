@@ -10,7 +10,7 @@ import {geoApiKey, gmapsRegionOptions} from "../../util/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
 import {setMapsApiResponse} from "../../redux/applicationState/AppStateActions";
 import {ErrorBoundary} from "react-error-boundary";
-import NotificationCenter from "./NotificationCenter";
+import NotificationCenter from "../notifications/NotificationCenter";
 
 type Props = {
     children: ReactNode

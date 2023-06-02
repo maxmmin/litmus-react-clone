@@ -10,7 +10,7 @@ import {Entity} from "../../redux/exploration/EntityExplorationState";
 import {useAppSelector} from "../../redux/hooks";
 
 
-function Home () {
+function HomeScreen () {
 
     const explorationTable = useAppSelector(state => state.explorationParams?.entity)
 
@@ -63,4 +63,4 @@ function Home () {
     )
 }
 
-export default Home;
+export default HomeScreen;

@@ -7,7 +7,7 @@ import {Navigate} from "react-router-dom";
 import {LoginPageState, updateLoginPageState} from "../../redux/signUp/SignUpPageDataActions";
 
 
-function SignIn() {
+function SignInScreen() {
     const dispatch = useAppDispatch();
 
     const passwordInput = useRef<HTMLInputElement>(null)
@@ -89,4 +89,4 @@ function SignIn() {
     );
 }
 
-export default SignIn;
+export default SignInScreen;

@@ -11,7 +11,7 @@ import {
     updatePersonSex
 } from "../../../redux/creation/CreationParamsActions";
 import InputDate from "../../general/InputDate";
-import {CreationModalSettings} from "../Create";
+import {CreationModalSettings} from "../CreationScreen";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import DateEntity, {DateBuilder} from "../../../model/DateEntity";
