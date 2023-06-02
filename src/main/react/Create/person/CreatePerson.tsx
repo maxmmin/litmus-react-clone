@@ -2,23 +2,23 @@ import Form from "react-bootstrap/Form";
 import {
     inputBeforeDateContainerHandler,
     inputGroupsKeyPressHandler as keyPressHandler
-} from "../../../../util/pureFunctions";
+} from "../../../util/pureFunctions";
 import React, {useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {
     updatePassportData,
     updatePersonCreationParams,
     updatePersonSex
-} from "../../../../redux/creation/CreationParamsActions";
+} from "../../../redux/creation/CreationParamsActions";
 import InputDate from "../../general/InputDate";
 import {CreationModalSettings} from "../Create";
 import CreationGeoModal from "../geo/CreationGeoModal";
-import {Entity} from "../../../../redux/exploration/EntityExplorationState";
-import DateEntity, {DateBuilder} from "../../../../model/DateEntity";
-import Sex from "../../../../model/person/Sex";
-import {CrossIcon} from "../../../../util/icons";
+import {Entity} from "../../../redux/exploration/EntityExplorationState";
+import DateEntity, {DateBuilder} from "../../../model/DateEntity";
+import Sex from "../../../model/person/Sex";
+import {CrossIcon} from "../../../util/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
-import {CreationModalModes} from "../../../../redux/creation/CreationModalModes";
+import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 import PersonRelationships from "./PersonRelationships";
 
 const CreatePerson = () => {

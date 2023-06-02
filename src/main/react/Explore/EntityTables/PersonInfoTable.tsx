@@ -1,6 +1,6 @@
-import {noInfoMessage} from "../../../../util/HttpStatus";
-import Person from "../../../../model/person/Person";
-import {DateBuilder} from "../../../../model/DateEntity";
+import {noInfoMessage} from "../../../util/HttpStatus";
+import Person from "../../../model/person/Person";
+import {DateBuilder} from "../../../model/DateEntity";
 
 type Props = {
     person: Person

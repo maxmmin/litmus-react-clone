@@ -1,9 +1,9 @@
 import Header from "../header/Header";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef} from "react";
-import {Entity} from "../../../redux/exploration/EntityExplorationState";
+import {Entity} from "../../redux/exploration/EntityExplorationState";
 import ExplorationModesView from "./ExplorationModesView";
-import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {updateExplorationParams} from "../../../redux/exploration/params/ExplorationParamsActions";
 import Button from "react-bootstrap/Button";
 import InputGroup from "./InputGroup";
@@ -13,13 +13,13 @@ import {
 } from "../../../redux/exploration/data/ExplorationDataActions";
 import ResultsContainer from "./ResultsContainer";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
-import {Permissions} from "../../../redux/userIdentity/Role";
+import {Permissions} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
-import store, {AppDispatch, RootState} from "../../../redux/store";
+import store, {AppDispatch, RootState} from "../../redux/store";
 import {useNavigate} from "react-router-dom";
-import {routingLinks} from "../../../util/appConfig";
+import {routingLinks} from "../../util/appConfig";
 import {useLocation} from "react-router";
-import {getTableNameFromLocation} from "../../../util/pureFunctions";
+import {getTableNameFromLocation} from "../../util/pureFunctions";
 
 /* btn isInputInvalid?'disabled':''*/
 

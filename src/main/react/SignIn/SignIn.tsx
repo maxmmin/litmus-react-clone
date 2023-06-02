@@ -1,10 +1,10 @@
 import React, {useRef} from 'react';
-import {signIn} from "../../../redux/auth/AuthActions";
-import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {signIn} from "../../redux/auth/AuthActions";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Navigate} from "react-router-dom";
-import {LoginPageState, updateLoginPageState} from "../../../redux/signUp/SignUpPageDataActions";
+import {LoginPageState, updateLoginPageState} from "../../redux/signUp/SignUpPageDataActions";
 
 
 function SignIn() {

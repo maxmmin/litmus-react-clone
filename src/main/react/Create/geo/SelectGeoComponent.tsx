@@ -1,10 +1,10 @@
 import React, {Dispatch, SetStateAction } from "react";
-import {Location} from "../../../../model/Location";
+import {Location} from "../../../model/Location";
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import Geo from "../../../../model/Geo";
+import Geo from "../../../model/Geo";
 import PlacesAutocomplete from "./PlacesAutocomplete";
-import {geocode} from "../../../../util/pureFunctions";
-import {useAppSelector} from "../../../../redux/hooks";
+import {geocode} from "../../../util/pureFunctions";
+import {useAppSelector} from "../../../redux/hooks";
 
 
 const defaultMapPosition: Geo = {

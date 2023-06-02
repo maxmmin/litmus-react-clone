@@ -1,16 +1,16 @@
 import Form from "react-bootstrap/Form";
-import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../../util/pureFunctions";
+import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import React, {useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
-import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
-import {Entity} from "../../../../redux/exploration/EntityExplorationState";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../Create";
-import {updateJurPersonCreationParams} from "../../../../redux/creation/CreationParamsActions";
+import {updateJurPersonCreationParams} from "../../../redux/creation/CreationParamsActions";
 import InputDate from "../../general/InputDate";
-import Person from "../../../../model/person/Person";
-import DateEntity, {DateBuilder} from "../../../../model/DateEntity";
-import {CreationModalModes} from "../../../../redux/creation/CreationModalModes";
+import Person from "../../../model/person/Person";
+import DateEntity, {DateBuilder} from "../../../model/DateEntity";
+import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 
 
 const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`

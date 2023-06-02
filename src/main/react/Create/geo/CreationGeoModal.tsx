@@ -1,11 +1,11 @@
 import SelectGeoComponent from "./SelectGeoComponent";
-import {Entity} from "../../../../redux/exploration/EntityExplorationState";
+import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import {Modal} from "react-bootstrap";
 import React, { useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
-import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
-import {Location} from "../../../../model/Location";
-import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../../redux/creation/CreationParamsActions";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {Location} from "../../../model/Location";
+import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../redux/creation/CreationParamsActions";
 
 type Props = {
     entity: Entity,

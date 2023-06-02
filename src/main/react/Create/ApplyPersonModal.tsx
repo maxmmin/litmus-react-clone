@@ -2,18 +2,18 @@ import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import apiLinks, {createAuthHeader} from "../../../util/appConfig";
-import {Entity} from "../../../redux/exploration/EntityExplorationState";
-import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import apiLinks, {createAuthHeader} from "../../util/appConfig";
+import {Entity} from "../../redux/exploration/EntityExplorationState";
+import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
-import {addRelationship, updateJurPersonCreationParams} from "../../../redux/creation/CreationParamsActions";
+import {addRelationship, updateJurPersonCreationParams} from "../../redux/creation/CreationParamsActions";
 import LoaderSpinner from "../loader/LoaderSpinner";
-import store, {RootState} from "../../../redux/store";
+import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./Create";
-import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import Person, {Relationship, RelationshipsLinkObject} from "../../../model/person/Person";
-import {getPersonFromResponse, isValid} from "../../../util/pureFunctions";
-import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
+import {JurPerson} from "../../model/jurPerson/JurPerson";
+import Person, {Relationship, RelationshipsLinkObject} from "../../model/person/Person";
+import {getPersonFromResponse, isValid} from "../../util/pureFunctions";
+import {CreationModalModes} from "../../redux/creation/CreationModalModes";
 
 type Props = {
     modalSettings: CreationModalSettings,

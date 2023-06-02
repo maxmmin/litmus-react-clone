@@ -1,29 +1,29 @@
 import Header from "../header/Header";
 import {Form} from "react-bootstrap";
-import {Entity} from "../../../redux/exploration/EntityExplorationState";
+import {Entity} from "../../redux/exploration/EntityExplorationState";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
-import {Permissions} from "../../../redux/userIdentity/Role";
+import {Permissions} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
-import {useAppDispatch} from "../../../redux/hooks";
+import {useAppDispatch} from "../../redux/hooks";
 import {
     CreateJurPersonDto, CreatePersonDto, CreateUserDto,
     CreationParamsReducible,
     getCreateJurPersonDto, getCreatePersonDto, getCreateUserDto,
     updateCreationParams
-} from "../../../redux/creation/CreationParamsActions";
+} from "../../redux/creation/CreationParamsActions";
 import CreationInputSection from "./CreationInputSection";
 import {
     createEntity,
     getTableNameFromLocation
-} from "../../../util/pureFunctions";
+} from "../../util/pureFunctions";
 import {useLocation} from "react-router";
-import apiLinks, {routingLinks} from "../../../util/appConfig";
+import apiLinks, {routingLinks} from "../../util/appConfig";
 import {useNavigate} from "react-router-dom";
-import store from "../../../redux/store";
-import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
-import {BasicNotification, NotificationType, notificationTypes} from "../../../redux/applicationState/Notification";
-import {addNotification} from "../../../redux/applicationState/AppStateActions";
+import store from "../../redux/store";
+import {CreationModalModes} from "../../redux/creation/CreationModalModes";
+import {BasicNotification, NotificationType, notificationTypes} from "../../redux/applicationState/Notification";
+import {addNotification} from "../../redux/applicationState/AppStateActions";
 
 
 export type CreationModalSettings = {

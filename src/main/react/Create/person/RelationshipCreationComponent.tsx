@@ -1,9 +1,9 @@
-import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../../model/person/Person";
+import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../model/person/Person";
 import {FloatingLabel, Form} from "react-bootstrap";
 import React from "react";
-import {CrossIcon} from "../../../../util/icons";
-import {useAppDispatch} from "../../../../redux/hooks";
-import {removeRelationship, updateRelationship} from "../../../../redux/creation/CreationParamsActions";
+import {CrossIcon} from "../../../util/icons";
+import {useAppDispatch} from "../../../redux/hooks";
+import {removeRelationship, updateRelationship} from "../../../redux/creation/CreationParamsActions";
 
 type Props = {
     relationship: Relationship

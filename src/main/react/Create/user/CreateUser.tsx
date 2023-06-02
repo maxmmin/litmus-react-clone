@@ -1,8 +1,8 @@
 import Form from "react-bootstrap/Form";
-import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../../util/pureFunctions";
+import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import React from "react";
-import {useAppDispatch} from "../../../../redux/hooks";
-import {updateUserCreationParams} from "../../../../redux/creation/CreationParamsActions";
+import {useAppDispatch} from "../../../redux/hooks";
+import {updateUserCreationParams} from "../../../redux/creation/CreationParamsActions";
 
 const CreateUser = () => {
     const dispatch = useAppDispatch();

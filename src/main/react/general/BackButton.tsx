@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {BackButtonIcon} from "../../../util/icons";
+import {BackButtonIcon} from "../../util/icons";
 
 type PropsType = {
     className?: string,

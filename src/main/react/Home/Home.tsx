@@ -1,13 +1,13 @@
 import React, {useState} from "react";
-import {AddUserIcon, SearchIcon, SetUpUser} from "../../../util/icons";
+import {AddUserIcon, SearchIcon, SetUpUser} from "../../util/icons";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
-import {roles} from "../../../redux/userIdentity/Role";
+import {roles} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import {useNavigate} from 'react-router-dom'
 import Header from "../header/Header";
-import {routingLinks} from "../../../util/appConfig";
-import {Entity} from "../../../redux/exploration/EntityExplorationState";
-import {useAppSelector} from "../../../redux/hooks";
+import {routingLinks} from "../../util/appConfig";
+import {Entity} from "../../redux/exploration/EntityExplorationState";
+import {useAppSelector} from "../../redux/hooks";
 
 
 function Home () {

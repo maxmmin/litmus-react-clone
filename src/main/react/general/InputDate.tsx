@@ -1,6 +1,6 @@
-import {preventEnter, switchNeighbourInput, switchNext} from "../../../util/pureFunctions";
+import {preventEnter, switchNeighbourInput, switchNext} from "../../util/pureFunctions";
 import React from "react";
-import DateEntity from "../../../model/DateEntity";
+import DateEntity from "../../model/DateEntity";
 
 type DateProps = {
     date: DateEntity,

@@ -1,12 +1,12 @@
-import {useAppSelector} from "../../../redux/hooks";
-import {Entity} from "../../../redux/exploration/EntityExplorationState";
+import {useAppSelector} from "../../redux/hooks";
+import {Entity} from "../../redux/exploration/EntityExplorationState";
 import {MutableRefObject} from "react";
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import {Results} from "../../../redux/exploration/data/ExplorationDataActions";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import UserInfoTable from "./EntityTables/UserInfoTable";
 import Loader from "../loader/Loader";
-import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../../util/pureFunctions";
+import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../util/pureFunctions";
 
 const getParsedResults = (results: Results) => {
     const table = results.table;

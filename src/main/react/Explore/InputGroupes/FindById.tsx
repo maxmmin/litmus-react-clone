@@ -1,9 +1,9 @@
 import Form from "react-bootstrap/Form";
 import React, {useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../../../redux/hooks";
+import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {setLocalInput} from "../../../../redux/exploration/params/ExplorationParamsActions";
-import {BasicHumanSearchPayload} from "../../../../redux/exploration/EntityExplorationState";
-import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../../util/pureFunctions";
+import {BasicHumanSearchPayload} from "../../../redux/exploration/EntityExplorationState";
+import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 
 const FindById = () => {
     const dispatch = useAppDispatch();
