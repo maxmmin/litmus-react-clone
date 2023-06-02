@@ -7,7 +7,7 @@ import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import PersonInfoTable from "../Explore/EntityTables/PersonInfoTable";
 import {addRelationship, updateJurPersonCreationParams} from "../../../redux/creation/CreationParamsActions";
-import LoaderSpinner from "../../components/LoaderSpinner";
+import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../../redux/store";
 import {CreationModalSettings} from "./Create";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";

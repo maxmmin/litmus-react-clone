@@ -1,14 +1,14 @@
-import Loader from "./Loader";
-import {checkAndRefreshAuth, isValid, onWakeUp} from "../../util/pureFunctions";
+import Loader from "../loader/Loader";
+import {checkAndRefreshAuth, isValid, onWakeUp} from "../../../util/pureFunctions";
 import React, {ReactNode, useEffect} from "react";
-import {useAppSelector} from "../../redux/hooks";
-import {refreshUserIdentity} from "../../redux/userIdentity/UserIdentityActions";
-import AuthActions from "../../redux/auth/AuthActions";
-import store from "../../redux/store";
+import {useAppSelector} from "../../../redux/hooks";
+import {refreshUserIdentity} from "../../../redux/userIdentity/UserIdentityActions";
+import AuthActions from "../../../redux/auth/AuthActions";
+import store from "../../../redux/store";
 import {useLoadScript} from "@react-google-maps/api";
-import {geoApiKey, gmapsRegionOptions} from "../../util/appConfig";
+import {geoApiKey, gmapsRegionOptions} from "../../../util/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
-import {setMapsApiResponse} from "../../redux/applicationState/AppStateActions";
+import {setMapsApiResponse} from "../../../redux/applicationState/AppStateActions";
 import {ErrorBoundary} from "react-error-boundary";
 import NotificationCenter from "./NotificationCenter";
 
@@ -18,7 +18,7 @@ type Props = {
 
 const libraries: Libraries = ["places"];
 
-const ApplicationStateManager = ({children}: Props) => {
+const ApplicationStateCenter = ({children}: Props) => {
 
     const authentication = useAppSelector(state => state.authentication)
 
@@ -70,4 +70,4 @@ const ApplicationStateManager = ({children}: Props) => {
 
 }
 
-export default ApplicationStateManager;
+export default ApplicationStateCenter;

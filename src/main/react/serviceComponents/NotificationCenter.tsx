@@ -1,9 +1,9 @@
-import {useAppSelector} from "../../redux/hooks";
+import {useAppSelector} from "../../../redux/hooks";
 import {useEffect} from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {BasicNotificationManager} from "../../redux/applicationState/Notification";
-import store from "../../redux/store";
+import {BasicNotificationManager} from "../../../redux/applicationState/Notification";
+import store from "../../../redux/store";
 
 function NotificationCenter () {
     const notifications = useAppSelector(state => state.appState?.notifications);

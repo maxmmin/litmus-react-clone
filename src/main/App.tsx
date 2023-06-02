@@ -3,7 +3,7 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import React from 'react';
 import SignIn from "./react/screens/SignIn/SignIn";
 import Home from "./react/screens/Home/Home";
-import PrivateComponent, {ERROR_PAGE} from "./react/components/PrivateComponent";
+import PrivateComponent, {ERROR_PAGE} from "./react/screens/authorization/PrivateComponent";
 import {useAppDispatch} from "./redux/hooks";
 import store from "./redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -11,7 +11,7 @@ import './css/index.scss';
 import {roles} from "./redux/userIdentity/Role";
 import Explore from "./react/screens/Explore/Explore";
 import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateActions";
-import ApplicationStateManager from "./react/components/ApplicationStateManager";
+import ApplicationStateCenter from "./react/screens/serviceComponents/ApplicationStateCenter";
 import Creation from "./react/screens/Create/Create";
 import {routingLinks} from "./util/appConfig";
 import {Entity} from "./redux/exploration/EntityExplorationState";
@@ -22,7 +22,7 @@ function App() {
     const dispatch = useAppDispatch();
   return (
             <BrowserRouter basename={"/"}>
-                <ApplicationStateManager>
+                <ApplicationStateCenter>
                     <div className={"wrapper"} onClick={e=>{
                         const appStore = store.getState();
                         const isMenuOpened = appStore.appState?.isHeaderMenuOpened;
@@ -63,7 +63,7 @@ function App() {
                             <Route path="/sign-in" element={<SignIn/>}/>
                         </Routes>
                     </div>
-                </ApplicationStateManager>
+                </ApplicationStateCenter>
             </BrowserRouter>
       )
 }

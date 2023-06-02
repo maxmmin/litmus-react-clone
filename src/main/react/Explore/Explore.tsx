@@ -1,4 +1,4 @@
-import Header from "../../components/Header";
+import Header from "../header/Header";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useLayoutEffect, useMemo, useRef} from "react";
 import {Entity} from "../../../redux/exploration/EntityExplorationState";
@@ -12,16 +12,24 @@ import {
     refreshResultsThunk, ResultsFullRequired
 } from "../../../redux/exploration/data/ExplorationDataActions";
 import ResultsContainer from "./ResultsContainer";
-import PrivateComponentWrapper from "../../components/PrivateComponentWrapper";
+import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import {Permissions} from "../../../redux/userIdentity/Role";
-import {NO_OUTPUT} from "../../components/PrivateComponent";
-import store, {RootState} from "../../../redux/store";
+import {NO_OUTPUT} from "../authorization/PrivateComponent";
+import store, {AppDispatch, RootState} from "../../../redux/store";
 import {useNavigate} from "react-router-dom";
 import {routingLinks} from "../../../util/appConfig";
 import {useLocation} from "react-router";
 import {getTableNameFromLocation} from "../../../util/pureFunctions";
 
 /* btn isInputInvalid?'disabled':''*/
+
+// const search = (e: React.MouseEvent<HTMLButtonElement>, dispatch: AppDispatch) => {
+//     e.preventDefault();
+//
+//     if (exploredEntity) {
+//         dispatch(refreshResultsThunk({table: exploredEntity, shouldRefreshGlobally: false}))
+//     }
+// }
 
 const Explore = () => {
     const dispatch = useAppDispatch();
@@ -32,19 +40,21 @@ const Explore = () => {
 
     const exploredEntity = useMemo<Entity|null>(()=>getTableNameFromLocation(location.pathname), [location])
 
-    const mode = useAppSelector(state =>  state.explorationParams?.sectionsSettings![exploredEntity!])
-    const results = useAppSelector(state => state.searchResults)
-
-    const search = (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-
+    const data = useAppSelector(state => {
         if (exploredEntity) {
-            dispatch(refreshResultsThunk({table: exploredEntity, shouldRefreshGlobally: false}))
-        }
-    }
+            switch (exploredEntity) {
+                case Entity.PERSON:
+                    return state.exploration.person?.data;
+                case Entity.JUR_PERSON:
+                    return state.exploration.jurPerson?.data;
+                case Entity.USER:
+                    return state.exploration.user?.data;
+            }
+        }   else return null;
+    })
 
     const scrollCallback = () => {
-        const results = (store.getState() as RootState).searchResults
+        const results = (store.getState() as RootState).exploration;
         if (resultsContainer.current&&results&&results?.partlyLoaded) {
             const rect: DOMRect = resultsContainer.current.getBoundingClientRect();
 
@@ -96,7 +106,7 @@ const Explore = () => {
                     <ExplorationModesView/>
 
 
-                    {exploredEntity&&mode?
+                    {exploredEntity?
                         <>
                             <div className="explore-page__input-group-container">
                                 <Form className={"explore-input-group"}>

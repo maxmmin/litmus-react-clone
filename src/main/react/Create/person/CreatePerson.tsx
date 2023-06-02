@@ -10,7 +10,7 @@ import {
     updatePersonCreationParams,
     updatePersonSex
 } from "../../../../redux/creation/CreationParamsActions";
-import InputDate from "../../../components/InputDate";
+import InputDate from "../../general/InputDate";
 import {CreationModalSettings} from "../Create";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {Entity} from "../../../../redux/exploration/EntityExplorationState";

@@ -1,6 +1,6 @@
 import {Entity, ExplorationMode} from "../../../redux/exploration/EntityExplorationState";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useEffect} from "react";
+import React, {ChangeEvent} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {PersonExplorationState} from "../../../redux/exploration/PersonExploration";
 import {JurPersonExplorationState} from "../../../redux/exploration/JurPersonExploration";

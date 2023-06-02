@@ -1,8 +1,8 @@
 import React, {useMemo, ReactNode} from "react";
-import {useAppSelector} from "../../redux/hooks";
+import {useAppSelector} from "../../../redux/hooks";
 import {Navigate} from 'react-router-dom'
-import {Permissions} from "../../redux/userIdentity/Role";
-import {checkAuthorization} from "../../util/pureFunctions";
+import {Permissions} from "../../../redux/userIdentity/Role";
+import {checkAuthorization} from "../../../util/pureFunctions";
 
 type Props = {
     component: ReactNode,
