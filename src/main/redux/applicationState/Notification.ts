@@ -8,9 +8,12 @@ export type NotificationContent = ToastContent;
 export type NotificationOptions = ToastOptions;
 export type NotificationType = TypeOptions;
 
-type BasicType = "ERROR" | "WARNING" | "INFO" | "SUCCESS" | "DEFAULT"
+/**
+ * GET NOTIFICATIONS TYPE ONLY BY notificationTypes object for flexibility!
+ */
+type AppNotificationType = "ERROR" | "WARNING" | "INFO" | "SUCCESS" | "DEFAULT"
 
-export const notificationTypes: Record<BasicType, NotificationType> = {
+export const notificationTypes: Record<AppNotificationType, NotificationType> = {
     "ERROR": 'error',
     "WARNING": 'warning',
     "INFO": 'info',
@@ -46,7 +49,7 @@ export class BasicNotification extends Notification {
     }
 }
 
-interface NotificationManager {
+export interface NotificationManager {
     error(message: string): void;
     success(message: string): void;
     info(message: string): void;

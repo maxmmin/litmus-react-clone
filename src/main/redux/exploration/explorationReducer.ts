@@ -1,9 +1,14 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {PersonExplorationParams, PersonExplorationState} from "./person/PersonExploration";
-import {BasicEntityExplorationData, Entity, EntityExplorationData, ExplorationMode} from "./EntityExplorationState";
+import {
+    BasicEntityExplorationData,
+    Entity,
+    EntityExplorationData,
+    EntityExplorationState
+} from "./EntityExplorationState";
 import Person from "../../model/person/Person";
-import {ExplorationTypedActions} from "./ExplorationActions";
+import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
 import {JurPersonExplorationParams, JurPersonExplorationState} from "./jurPerson/JurPersonExploration";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {UserExplorationParams, UserExplorationState} from "./user/UserExploration";
@@ -14,22 +19,44 @@ const initialPersonExplorationState = new PersonExplorationState(new BasicEntity
 
 type PersonExplorationStateReducible = PersonExplorationState | undefined;
 
+
+const entityExplorationReducer = <S extends EntityExplorationState<any, any>> (prevState: S, action: PayloadAction<any>): S => {
+    switch (action.type) {
+        case ExplorationCoreAction.UPDATE_EXPLORATION_STATE: {
+            return action.payload as S;
+        }
+        case ExplorationCoreAction.UPDATE_EXPLORATION_DATA: {
+            const newData = action.payload as S["data"];
+            return {...prevState, data: newData};
+        }
+        case ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS: {
+            const params = action.payload as S["params"];
+            return {...prevState, params: params};
+        }
+
+        case ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING: {
+            const bool: boolean = action.payload as boolean;
+            return {...prevState, data: {...prevState.data, isPending: bool}}
+        }
+
+        case ExplorationCoreAction.UPDATE_EXPLORATION_DATA_RESULTS: {
+            let results: S["data"]['results'] = action.payload;
+            return {...prevState, data: {...prevState.data, results: results}}
+        }
+
+        default: {
+            return prevState;
+        }
+    }
+}
+
 const personExplorationReducer: Reducer<PersonExplorationStateReducible, PayloadAction<any>> = (prevState=initialPersonExplorationState, action) => {
     const actions = ExplorationTypedActions.person;
     switch (action.type) {
-        case actions.UPDATE_EXPLORATION_STATE: {
-            return action.payload as PersonExplorationState;
-        }
-        case actions.UPDATE_EXPLORATION_DATA: {
-            const newData = action.payload as EntityExplorationData<Person>;
-            return {...prevState, data: newData};
-        }
-        case actions.UPDATE_EXPLORATION_PARAMS: {
-            const params = action.payload as PersonExplorationParams;
-            return {...prevState, params: params};
-        }
+        // code-place for person specific actions
         default: {
-            return prevState;
+            const coreAction: PayloadAction<any> = {...action, type: ExplorationTypedActions.getCoreAction(action.type)}
+            return entityExplorationReducer(prevState, coreAction);
         }
     }
 }
@@ -42,19 +69,11 @@ type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
 const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, PayloadAction<any>> = (prevState=initialJurPersonExplorationState, action) => {
     const actions = ExplorationTypedActions.jurPerson;
     switch (action.type) {
-        case actions.UPDATE_EXPLORATION_STATE: {
-            return action.payload as JurPersonExplorationState;
-        }
-        case actions.UPDATE_EXPLORATION_DATA: {
-            const newData = action.payload as EntityExplorationData<JurPerson>;
-            return {...prevState, data: newData};
-        }
-        case actions.UPDATE_EXPLORATION_PARAMS: {
-            const params = action.payload as JurPersonExplorationParams;
-            return {...prevState, params: params};
-        }
+        // code-place for jur person specific actions
+            // @todo write getClear action
         default: {
-            return prevState;
+            const coreAction: PayloadAction<any> = {...action, type: ExplorationTypedActions.getCoreAction(action.type)}
+            return entityExplorationReducer(prevState, coreAction);
         }
     }
 }
@@ -66,20 +85,9 @@ type UserExplorationStateReducible = UserExplorationState | undefined;
 const userExplorationReducer: Reducer<UserExplorationStateReducible, PayloadAction<any>> = (prevState= initialUserExplorationState, action) => {
     const actions = ExplorationTypedActions.user;
     switch (action.type) {
-        case actions.UPDATE_EXPLORATION_STATE: {
-            return action.payload as UserExplorationState;
-        }
-        case actions.UPDATE_EXPLORATION_DATA: {
-            const newData = action.payload as EntityExplorationData<User>;
-            return {...prevState, data: newData};
-        }
-        case actions.UPDATE_EXPLORATION_PARAMS: {
-            const params = action.payload as UserExplorationParams;
-            return {...prevState, params: params};
-        }
-
         default: {
-            return prevState;
+            const coreAction: PayloadAction<any> = {...action, type: ExplorationTypedActions.getCoreAction(action.type)}
+            return entityExplorationReducer(prevState, coreAction);
         }
     }
 }

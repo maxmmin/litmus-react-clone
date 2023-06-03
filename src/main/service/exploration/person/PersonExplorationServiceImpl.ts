@@ -3,10 +3,10 @@ import {FullName} from "../FullName";
 import Person from "../../../model/person/Person";
 
 class PersonExplorationServiceImpl implements PersonExplorationService {
-    findByFullName(fullName: FullName): Promise<Person> {
+    findByFullName(fullName: FullName): Person[] {
     }
 
-    exploreById(id: string): void {
+    findById(id: string): Person {
     }
 }
 

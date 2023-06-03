@@ -20,6 +20,12 @@ import UserExplorationService from "./user/UserExplorationService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {JurPersonExplorationParams} from "../../redux/exploration/jurPerson/JurPersonExploration";
 import JurPersonExplorationService from "./jurPerson/JurPersonExplorationService";
+import Notification, {
+    BasicNotification,
+    BasicNotificationManager,
+    NotificationManager,
+    NotificationType, notificationTypes
+} from "../../redux/applicationState/Notification";
 
 class UnsupportedModeError extends Error {
 
@@ -31,28 +37,43 @@ class UnsupportedModeError extends Error {
 class ExplorationManagerImpl implements ExplorationManager {
     private readonly _store: typeof store;
 
+    private readonly notificationManager: NotificationManager|null = null;
 
-    constructor(providedStore: typeof store) {
+    private readonly shouldNotify: boolean;
+
+    constructor(providedStore: typeof store, shouldNotify: boolean = true) {
         this._store = providedStore;
+        this.shouldNotify = shouldNotify;
+        if (shouldNotify) {
+            this.notificationManager = new BasicNotificationManager(providedStore.dispatch);
+        }
+    }
+
+    private conditionalOutput(type: NotificationType,message: string) {
+        if (this.shouldNotify) {
+            this.notificationManager!.addNotification(new BasicNotification(type, message));
+        }
     }
     
-    private async explorePersons(stateManager: ExplorationStateManager<Person, PersonExplorationParams>, service: PersonExplorationService) {
+    private async explorePersons(stateManager: ExplorationStateManager<Person, PersonExplorationParams>, service: PersonExplorationService): Promise<Person[]> {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
 
-        let result: Promise<Response>|null = null;
+        let results: Person[] = [];
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
                 const res = service.findById(id);
+                results = results.concat(res)
                 break;
             }
 
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
                 const lastName = checkNotNull(stateManager.getExplorationState().params.lastName);
                 const middleName = stateManager.getExplorationState().params.middleName;
-                const firstName = stateManager.getExplorationState().params.firstName
-                const res = service.findByFullName({lastName, middleName, firstName})
+                const firstName = stateManager.getExplorationState().params.firstName;
+                const res = service.findByFullName({lastName, middleName, firstName});
+                results = results.concat(res);
                 break;
             }
 
@@ -60,28 +81,30 @@ class ExplorationManagerImpl implements ExplorationManager {
                 if (PersonExplorationParams.supportedModes.includes(mode)) {
                     throw new Error("mod is supported by person exploration params but isn't added to switch branch")
                 } else throw new UnsupportedModeError();
-            };
+            }
         }
 
+        return results;
     }
 
-    private async exploreUsers(stateManager: ExplorationStateManager<User, UserExplorationParams>, service: UserExplorationService) {
-        const mode: ExplorationMode = stateManager.getExplorationParams().mode;
+    private async exploreUsers(service: UserExplorationService, mode: ExplorationMode): Promise<User[]> {
 
-        let result: Promise<Response>|null = null;
+        let results: User[] = [];
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
                 const lastName = checkNotNull(stateManager.getExplorationState().params.lastName);
                 const middleName = stateManager.getExplorationState().params.middleName;
                 const firstName = stateManager.getExplorationState().params.firstName
-                const res = service.findByFullName({lastName, middleName, firstName})
+                const res = await service.findByFullName({lastName, middleName, firstName})
+                results = results.concat(res);
                 break;
             }
 
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
-                const res = service.findById(id);
+                const res = await service.findById(id);
+                results = results.concat(res)
                 break;
             }
 
@@ -89,19 +112,41 @@ class ExplorationManagerImpl implements ExplorationManager {
                 if (PersonExplorationParams.supportedModes.includes(mode)) {
                     throw new Error("mod is supported by person exploration params but isn't added to switch branch")
                 } else throw new UnsupportedModeError();
-            };
+            }
+        }
+
+        return results;
+    }
+
+    private async updateUsers (stateManager: ExplorationStateManager<User, UserExplorationParams>, service: UserExplorationService) {
+        const mode: ExplorationMode = stateManager.getExplorationParams().mode;
+
+        try {
+            stateManager.enableDataPending();
+            // todo: write output of this (IDEA! write condition for time -1 or null for only hand delete)
+            const users: User[] = await this.exploreUsers(service, mode);
+        } catch (e: any) {
+            if (e instanceof Error) {
+                this.conditionalOutput(notificationTypes.ERROR, e.message)
+                console.log(e.message);
+            }
+        }
+        finally {
+            stateManager.disableDataPending();
         }
     }
+
 
     private async exploreJurPersons(stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>, service: JurPersonExplorationService) {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
 
-        let result: Promise<Response>|null = null;
+        let results: JurPerson[] = [];
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
-                const res = service.findById(id);
+                const res = await service.findById(id);
+                results = results.concat(res);
                 break;
             }
 
@@ -109,22 +154,18 @@ class ExplorationManagerImpl implements ExplorationManager {
                 if (PersonExplorationParams.supportedModes.includes(mode)) {
                     throw new Error("mod is supported by person exploration params but isn't added to switch branch")
                 } else throw new UnsupportedModeError();}
-            }
+        }
+
+        return results;
     }
 
-    explore(entity: Entity): void {
+    explore(entity: Entity) {
         switch (entity) {
             case Entity.PERSON: {
                 const stateManager: ExplorationStateManager<Person, PersonExplorationParams> = ExplorationStateManager.getManager(this._store, Entity.PERSON) as ExplorationStateManager<Person, PersonExplorationParams>;
-                const mode: ExplorationMode = stateManager.getExplorationParams().mode;
-                
                 const service = new PersonExplorationServiceImpl();
                 
-                switch (mode) {
-                    case ExplorationMode[ExplorationModeName.BY_ID]: {
-                        
-                    }    
-                }
+                this.explorePersons(stateManager, service);
                 
                 break;
             }

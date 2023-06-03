@@ -89,6 +89,27 @@ class ExplorationStateManager <E,P extends EntityExplorationParams> {
         })
     }
 
+    updateDataResults(data: EntityExplorationData<E>['results']) {
+        this.dispatch({
+            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA_RESULTS],
+            payload: data
+        })
+    }
+
+    enableDataPending (): void {
+        this.dispatch({
+            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING],
+            payload: true
+        })
+    }
+
+    disableDataPending (): void {
+        this.dispatch({
+            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING],
+            payload: false
+        })
+    }
+
     switchExplorationMode(mode: ExplorationMode): void {
         switch (this.actions) {
             case ExplorationTypedActions.user: {
