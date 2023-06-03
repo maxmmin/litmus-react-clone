@@ -87,7 +87,25 @@ class ExplorationManagerImpl implements ExplorationManager {
         return results;
     }
 
-    private async exploreUsers(service: UserExplorationService, mode: ExplorationMode): Promise<User[]> {
+    private async updatePersons(stateManager: ExplorationStateManager<Person, PersonExplorationParams>, service: PersonExplorationService) {
+        try {
+            stateManager.enableDataPending();
+            // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
+            const persons: Person[] = await this.explorePersons(stateManager, service);
+            stateManager.updateDataResults(persons);
+        } catch (e: any) {
+            if (e instanceof Error) {
+                this.conditionalOutput(notificationTypes.ERROR, e.message)
+                console.log(e.message);
+            }
+        }
+        finally {
+            stateManager.disableDataPending();
+        }
+    }
+
+    private async exploreUsers(stateManager: ExplorationStateManager<User, UserExplorationParams>, service: UserExplorationService): Promise<User[]> {
+        const mode: ExplorationMode = stateManager.getExplorationParams().mode;
 
         let results: User[] = [];
 
@@ -119,12 +137,11 @@ class ExplorationManagerImpl implements ExplorationManager {
     }
 
     private async updateUsers (stateManager: ExplorationStateManager<User, UserExplorationParams>, service: UserExplorationService) {
-        const mode: ExplorationMode = stateManager.getExplorationParams().mode;
-
         try {
             stateManager.enableDataPending();
-            // todo: write output of this (IDEA! write condition for time -1 or null for only hand delete)
-            const users: User[] = await this.exploreUsers(service, mode);
+            // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
+            const users: User[] = await this.exploreUsers(stateManager, service);
+            stateManager.updateDataResults(users);
         } catch (e: any) {
             if (e instanceof Error) {
                 this.conditionalOutput(notificationTypes.ERROR, e.message)
@@ -159,12 +176,29 @@ class ExplorationManagerImpl implements ExplorationManager {
         return results;
     }
 
+    private async updateJurPersons (stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>, service: JurPersonExplorationService) {
+        try {
+            stateManager.enableDataPending();
+            // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
+            const jurPersons: JurPerson[] = await this.exploreJurPersons(stateManager, service);
+            stateManager.updateDataResults(jurPersons);
+        } catch (e: any) {
+            if (e instanceof Error) {
+                this.conditionalOutput(notificationTypes.ERROR, e.message)
+                console.log(e.message);
+            }
+        }
+        finally {
+            stateManager.disableDataPending();
+        }
+    }
+
     explore(entity: Entity) {
         switch (entity) {
             case Entity.PERSON: {
                 const stateManager: ExplorationStateManager<Person, PersonExplorationParams> = ExplorationStateManager.getManager(this._store, Entity.PERSON) as ExplorationStateManager<Person, PersonExplorationParams>;
                 const service = new PersonExplorationServiceImpl();
-                
+
                 this.explorePersons(stateManager, service);
                 
                 break;
