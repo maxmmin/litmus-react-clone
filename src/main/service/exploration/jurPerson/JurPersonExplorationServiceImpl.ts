@@ -7,6 +7,7 @@ class JurPersonExplorationServiceImpl implements JurPersonExplorationService {
     private readonly apiUrl: string = appConfig.apiMapping.jurPerson;
 
     findById(id: string): JurPerson {
+        fetch()
         return undefined;
     }
 

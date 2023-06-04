@@ -5,12 +5,14 @@ type AppConfig = {
     entitiesPerPage: number,
     geoApiKey: string,
     entityDomains: Readonly<Record<Entity, string>>,
-    apiMapping: Readonly<typeof apiMapping>
+    apiMapping: Readonly<typeof apiMapping>,
+    apiAuthHeader: string
 }
 
 const apiHost = "http://localhost:8081";
 const entitiesPerPage = 50;
 const geoApiKEy = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA";
+const apiAuthHeader = "Authorization"
 
 const entityDomains: AppConfig['entityDomains'] = Object.freeze({
     [Entity.USER]: "users",
@@ -33,7 +35,8 @@ const appConfig: AppConfig = {
         [Entity.PERSON]: "persons",
         [Entity.JUR_PERSON]: "jur_persons"
     },
-    apiMapping: apiMapping
+    apiMapping: apiMapping,
+    apiAuthHeader: apiAuthHeader
 }
 
 export default appConfig;
