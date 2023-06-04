@@ -4,18 +4,36 @@ type AppConfig = {
     apiHost: string,
     entitiesPerPage: number,
     geoApiKey: string,
-    entityDomains: Record<Entity, string>
+    entityDomains: Readonly<Record<Entity, string>>,
+    apiMapping: Readonly<typeof apiMapping>
 }
 
+const apiHost = "http://localhost:8081";
+const entitiesPerPage = 50;
+const geoApiKEy = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA";
+
+const entityDomains: AppConfig['entityDomains'] = Object.freeze({
+    [Entity.USER]: "users",
+    [Entity.PERSON]: "persons",
+    [Entity.JUR_PERSON]: "jur_persons"
+})
+
+const apiMapping = Object.freeze({
+    "user": apiHost.concat("/", entityDomains.USER),
+    "person": apiHost.concat("/", entityDomains.PERSON),
+    "jurPerson": apiHost.concat("/", entityDomains.JUR_PERSON)
+})
+
 const appConfig: AppConfig = {
-    apiHost: "http://localhost:8081",
-    entitiesPerPage: 50,
-    geoApiKey: "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA",
+    apiHost: apiHost,
+    entitiesPerPage: entitiesPerPage,
+    geoApiKey: geoApiKEy,
     entityDomains: {
         [Entity.USER]: "users",
         [Entity.PERSON]: "persons",
         [Entity.JUR_PERSON]: "jur_persons"
-    }
+    },
+    apiMapping: apiMapping
 }
 
 export default appConfig;
