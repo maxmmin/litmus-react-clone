@@ -29,7 +29,7 @@ import Notification, {
 
 class UnsupportedModeError extends Error {
 
-    constructor(message?: string = "Unsupported exploration mode") {
+    constructor(message: string = "Unsupported exploration mode") {
         super(message);
     }
 }
@@ -196,7 +196,7 @@ class ExplorationManagerImpl implements ExplorationManager {
     explore(entity: Entity) {
         switch (entity) {
             case Entity.PERSON: {
-                const stateManager: ExplorationStateManager<Person, PersonExplorationParams> = ExplorationStateManager.getManager(this._store, Entity.PERSON) as ExplorationStateManager<Person, PersonExplorationParams>;
+                const stateManager: ExplorationStateManager<Person, PersonExplorationParams> = ExplorationStateManager.getPersonManager(this._store);
                 const service = new PersonExplorationServiceImpl();
 
                 this.explorePersons(stateManager, service);
@@ -204,15 +204,18 @@ class ExplorationManagerImpl implements ExplorationManager {
                 break;
             }
             case Entity.JUR_PERSON: {
-                const stateManager = ExplorationStateManager.getManager(this._store, Entity.JUR_PERSON);
-                const mode: ExplorationMode = (stateManager.getExplorationParams() as EntityExplorationParams).mode;
+                const stateManager = ExplorationStateManager.getJurPersonManager(this._store);
                 const service = new JurPersonExplorationServiceImpl();
+
+                this.exploreJurPersons(stateManager, service);
+
                 break;
             }
             case Entity.USER: {
-                const stateManager = ExplorationStateManager.getManager(this._store, Entity.USER);
-                const mode: ExplorationMode = (stateManager.getExplorationParams() as EntityExplorationParams).mode;
+                const stateManager = ExplorationStateManager.getUserManager(this._store);
                 const service = new UserExplorationServiceImpl();
+
+                this.exploreUsers(stateManager, service);
             }
         }
     }

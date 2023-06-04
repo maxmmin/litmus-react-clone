@@ -4,16 +4,12 @@ import User from "../../../model/user/User";
 import ExplorationStateManager from "../../../redux/exploration/ExplorationStateManager";
 
 class UserExplorationServiceImpl implements UserExplorationService {
-    private stateManager: ExplorationStateManager<any, any>
 
-    constructor() {
+    findByFullName(fullName: FullName): User[] {
     }
 
-    findByFullName(fullName: FullName): Promise<User> {
-    }
-
-    findById(id: string): Promise<User> {
-        return Promise.resolve(undefined);
+    findById(id: string): User {
+        return void;
     }
 
     explore(): void {

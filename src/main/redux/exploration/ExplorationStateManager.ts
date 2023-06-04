@@ -47,26 +47,21 @@ class ExplorationStateManager <E,P extends EntityExplorationParams> {
         this.actions = actions;
     }
 
-    static getManager (providedStore: typeof store, entityType: Entity) {
-        switch (entityType) {
-            case Entity.JUR_PERSON: {
-                const getState = ()=>providedStore.getState().exploration.jurPerson as JurPersonExplorationState
-                return new ExplorationStateManager<JurPerson, JurPersonExplorationParams>(providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
-            }
-
-            case Entity.PERSON: {
-                const getState = ()=>providedStore.getState().exploration.person as PersonExplorationState;
-                return new ExplorationStateManager<Person, PersonExplorationParams>(providedStore.dispatch,getState, ExplorationTypedActions.person);
-            }
-
-            case Entity.USER: {
-                const getState = ()=>providedStore.getState().exploration.user as UserExplorationState;
-                return new ExplorationStateManager<User, UserExplorationParams>(providedStore.dispatch,getState, ExplorationTypedActions.user);
-            }
-
-            default: throw new Error("provided unknown entity type")
-        }
+    static getJurPersonManager (providedStore: typeof store): ExplorationStateManager<JurPerson, JurPersonExplorationParams> {
+        const getState = ()=>providedStore.getState().exploration.jurPerson as JurPersonExplorationState
+        return new ExplorationStateManager<JurPerson, JurPersonExplorationParams>(providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
     }
+
+    static getPersonManager (providedStore: typeof store): ExplorationStateManager<Person, PersonExplorationParams> {
+        const getState = ()=>providedStore.getState().exploration.person as PersonExplorationState;
+        return new ExplorationStateManager<Person, PersonExplorationParams>(providedStore.dispatch,getState, ExplorationTypedActions.person);
+    }
+
+    static getUserManager (providedStore: typeof store): ExplorationStateManager<User, UserExplorationParams> {
+        const getState = ()=>providedStore.getState().exploration.user as UserExplorationState;
+        return new ExplorationStateManager<User, UserExplorationParams>(providedStore.dispatch,getState, ExplorationTypedActions.user);
+    }
+
 
     updateState (state: EntityExplorationState<E, P>): void {
         this.dispatch({
