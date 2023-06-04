@@ -1,9 +1,9 @@
-import UserExplorationService from "./UserExplorationService";
-import {FullName} from "../FullName";
+import UserService from "./UserService";
+import {FullName} from "../../exploration/FullName";
 import User from "../../../model/user/User";
 import ExplorationStateManager from "../../../redux/exploration/ExplorationStateManager";
 
-class UserExplorationServiceImpl implements UserExplorationService {
+class UserServiceImpl implements UserService {
 
     findByFullName(fullName: FullName): User[] {
     }
@@ -18,4 +18,4 @@ class UserExplorationServiceImpl implements UserExplorationService {
 
 }
 
-export default UserExplorationServiceImpl;
+export default UserServiceImpl;

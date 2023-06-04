@@ -1,5 +1,5 @@
 export type FullName = {
-    firstName: string|null,
+    [firstName: string]: string|null,
     middleName: string|null,
     lastName: string
 }

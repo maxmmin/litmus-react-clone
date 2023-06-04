@@ -65,7 +65,7 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
         if (show) {
             setLocation(geoLocation!)
         }
-        /* eslint-disable-next-line */ // -f // set location of entity on modal open
+        /* eslint-disable-next-line */ // -f // set location of entityService on modal open
     }, [show])
 
 

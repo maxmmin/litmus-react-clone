@@ -47,7 +47,7 @@ const Creation = () => {
         if (entity) {
             dispatch(updateCreationParams({table: entity}))
         }
-        /* eslint-disable-next-line */ // -f | DON'T DISABLE. LOCATION IS LOCAL STATE AND RELATIVE ENTITY SHOULD BE UPDATED ONLY ON IT'S CHANGE(no entity change)
+        /* eslint-disable-next-line */ // -f | DON'T DISABLE. LOCATION IS LOCAL STATE AND RELATIVE ENTITY SHOULD BE UPDATED ONLY ON IT'S CHANGE(no entityService change)
     }, [location])
 
     if (!entity) {

@@ -47,7 +47,7 @@ class ExplorationRoutingManager {
     public static getCurrentMode (pathName: string): ExplorationMode|null {
         const currentEntity = this.getCurrentEntity(pathName);
 
-        if (!currentEntity) throw new Error("invalid entity in pathname");
+        if (!currentEntity) throw new Error("invalid entityService in pathname");
 
         let supportedModes: Array<ExplorationMode>;
 
@@ -61,7 +61,7 @@ class ExplorationRoutingManager {
             case Entity.USER:
                 supportedModes = UserExplorationParams.supportedModes;
                 break;
-            default: throw new Error("unknown entity")
+            default: throw new Error("unknown entityService")
         }
 
         const mode = pathName.split(`/${this.actionUrlBase}/${this.getEntityDomain(pathName)}/`)[1]

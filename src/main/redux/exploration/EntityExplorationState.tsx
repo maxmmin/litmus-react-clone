@@ -10,7 +10,7 @@ export enum Entity {
 }
 
 /**
- * E - entity type
+ * E - entityService type
  * P - params type
  */
 export interface EntityExplorationState <E,P extends EntityExplorationParams> {

@@ -8,6 +8,7 @@ export enum HttpMethod {
 
 export default interface ApiRequestManager {
     url(url: string): ApiRequestManager;
+    setQueryParam(key: string, value: string): ApiRequestManager;
     method(method: HttpMethod): ApiRequestManager;
     body(body: BodyInit): ApiRequestManager;
     token(token: string): ApiRequestManager;

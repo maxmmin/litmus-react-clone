@@ -16,6 +16,15 @@ class BasicApiRequestManager implements ApiRequestManager {
         return this;
     }
 
+    setQueryParam(key: string, value: string|null): ApiRequestManager {
+        if (this.fetchUrl!==null) {
+            if (this.fetchUrl.includes("?")) {
+                this.fetchUrl+=`&${key}=${value}`
+            }
+            return this;
+        } else throw new Error("could not set url param because url is null")
+    }
+
     reset(): ApiRequestManager {
        this.fetchUrl = null;
        this.init = this.getDefaultRequestInit();

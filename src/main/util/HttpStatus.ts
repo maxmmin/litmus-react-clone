@@ -11,20 +11,29 @@ export const noInfoMessage = "Інформація відсутня"
 
 export interface HttpError {
     status: HttpStatus;
-    responseJson?: ErrJson;
+    responseJson?: ErrorResponse;
 }
 
-export type ErrJson = {
+export type ErrorResponse = {
     errorDetails: object
 }
 
 class BasicHttpError implements HttpError {
-    responseJson?: ErrJson;
+    responseJson?: ErrorResponse;
     status: HttpStatus;
 
-    constructor(status: HttpStatus, response?: ErrJson) {
+    constructor(status: HttpStatus, response?: ErrorResponse) {
         this.responseJson = response;
         this.status = status;
+    }
+
+    static async getHttpErrorResponse(response: Response): Promise<ErrorResponse|undefined> {
+        try {
+            return await response.json() as ErrorResponse;
+        }
+        catch (e) {
+            return undefined;
+        }
     }
 }
 

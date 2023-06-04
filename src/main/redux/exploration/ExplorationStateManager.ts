@@ -16,7 +16,7 @@ import {setExploredEntityAction} from "./explorationReducer";
 import store from "../store";
 
 /**
- * E - entity
+ * E - entityService
  * P -params
  */
 class ExplorationStateManager <E,P extends EntityExplorationParams> {
