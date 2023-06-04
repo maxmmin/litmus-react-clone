@@ -1,6 +1,6 @@
 /**
  * E - entity
- * service with realized common methods
+ * service which provides shared methods
  */
 import EntityService from "./EntityService";
 import BasicApiRequestManager from "../../util/apiRequest/BasicApiRequestManager";
