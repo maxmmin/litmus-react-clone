@@ -47,7 +47,7 @@ class BasicApiRequestManager implements ApiRequestManager {
         return this;
     }
 
-    token(token: string): ApiRequestManager {
+    authentication(token: string): ApiRequestManager {
         (this.init.headers as Record<string, string>)[this.authHeader] = token;
         return this;
     }

@@ -4,7 +4,7 @@ import Person from "../../../model/person/Person";
 import User from "../../../model/user/User";
 
 interface UserService extends EntityService<User> {
-    findByFullName (fullName: FullName): User[]
+    findByFullName (fullName: FullName): Promise<User[]>
 }
 
 export default UserService;

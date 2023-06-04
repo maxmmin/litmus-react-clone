@@ -11,7 +11,7 @@ export default interface ApiRequestManager {
     setQueryParam(key: string, value: string): ApiRequestManager;
     method(method: HttpMethod): ApiRequestManager;
     body(body: BodyInit): ApiRequestManager;
-    token(token: string): ApiRequestManager;
+    authentication(token: string): ApiRequestManager;
     reset(): ApiRequestManager;
     fetch(): Promise<Response>
     fetchWithParams(url: string, params: RequestInit): Promise<Response>;

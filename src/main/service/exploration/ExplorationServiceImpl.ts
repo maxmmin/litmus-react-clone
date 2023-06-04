@@ -1,7 +1,6 @@
 import ExplorationService from "./ExplorationService";
 import {
     Entity,
-    EntityExplorationParams,
     ExplorationMode,
     ExplorationModeName
 } from "../../redux/exploration/EntityExplorationState";
@@ -15,12 +14,12 @@ import {PersonExplorationParams} from "../../redux/exploration/person/PersonExpl
 import PersonService from "../entityService/person/PersonService";
 import {checkNotNull} from "../../util/pureFunctions";
 import User from "../../model/user/User";
-import {UserExplorationParams, UserExplorationState} from "../../redux/exploration/user/UserExploration";
+import {UserExplorationParams} from "../../redux/exploration/user/UserExploration";
 import UserService from "../entityService/user/UserService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {JurPersonExplorationParams} from "../../redux/exploration/jurPerson/JurPersonExploration";
 import JurPersonService from "../entityService/jurPerson/JurPersonService";
-import Notification, {
+import {
     BasicNotification,
     BasicNotificationManager,
     NotificationManager,
@@ -54,6 +53,15 @@ class ExplorationServiceImpl implements ExplorationService {
             this.notificationManager!.addNotification(new BasicNotification(type, message));
         }
     }
+
+    private handleError (err: any) {
+        let msg = 'unknown error'
+        if (err instanceof Error) {
+            msg = err.message;
+        }
+        this.conditionalOutput(notificationTypes.ERROR, msg);
+        console.error(err);
+    }
     
     private async explorePersons(stateManager: ExplorationStateManager<Person, PersonExplorationParams>, service: PersonService): Promise<Person[]> {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
@@ -63,7 +71,7 @@ class ExplorationServiceImpl implements ExplorationService {
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
-                const res = service.findById(id);
+                const res = await service.findById(id);
                 results = results.concat(res)
                 break;
             }
@@ -72,8 +80,8 @@ class ExplorationServiceImpl implements ExplorationService {
                 const lastName = checkNotNull(stateManager.getExplorationState().params.lastName);
                 const middleName = stateManager.getExplorationState().params.middleName;
                 const firstName = stateManager.getExplorationState().params.firstName;
-                const res = service.findByFullName({lastName, middleName, firstName});
-                results = results.concat(res);
+                const foundPersons = await service.findByFullName({lastName, middleName, firstName});
+                results = results.concat(foundPersons);
                 break;
             }
 
@@ -94,10 +102,7 @@ class ExplorationServiceImpl implements ExplorationService {
             const persons: Person[] = await this.explorePersons(stateManager, service);
             stateManager.updateDataResults(persons);
         } catch (e: any) {
-            if (e instanceof Error) {
-                this.conditionalOutput(notificationTypes.ERROR, e.message)
-                console.log(e.message);
-            }
+            this.handleError(e);
         }
         finally {
             stateManager.disableDataPending();
@@ -143,10 +148,7 @@ class ExplorationServiceImpl implements ExplorationService {
             const users: User[] = await this.exploreUsers(stateManager, service);
             stateManager.updateDataResults(users);
         } catch (e: any) {
-            if (e instanceof Error) {
-                this.conditionalOutput(notificationTypes.ERROR, e.message)
-                console.log(e.message);
-            }
+            this.handleError(e);
         }
         finally {
             stateManager.disableDataPending();
@@ -183,13 +185,20 @@ class ExplorationServiceImpl implements ExplorationService {
             const jurPersons: JurPerson[] = await this.exploreJurPersons(stateManager, service);
             stateManager.updateDataResults(jurPersons);
         } catch (e: any) {
-            if (e instanceof Error) {
-                this.conditionalOutput(notificationTypes.ERROR, e.message)
-                console.log(e.message);
-            }
+            this.handleError(e)
         }
         finally {
             stateManager.disableDataPending();
+        }
+    }
+
+    private getAccessToken (): string {
+        const token = this._store.getState().authentication?.accessToken;
+        if (token) {
+            //@todo: rewrite it with isvalid
+            return token;
+        } else {
+            throw new Error("null token")
         }
     }
 
@@ -197,25 +206,29 @@ class ExplorationServiceImpl implements ExplorationService {
         switch (entity) {
             case Entity.PERSON: {
                 const stateManager: ExplorationStateManager<Person, PersonExplorationParams> = ExplorationStateManager.getPersonManager(this._store);
-                const service = new PersonServiceImpl();
+                const service = new PersonServiceImpl(this.getAccessToken);
 
-                this.explorePersons(stateManager, service);
+                //@todo add some logic to err handing
+                this.explorePersons(stateManager, service)
+                    .catch(this.handleError);
                 
                 break;
             }
             case Entity.JUR_PERSON: {
                 const stateManager = ExplorationStateManager.getJurPersonManager(this._store);
-                const service = new JurPersonServiceImpl();
+                const service = new JurPersonServiceImpl(this.getAccessToken);
 
-                this.exploreJurPersons(stateManager, service);
+                this.exploreJurPersons(stateManager, service)
+                    .catch(this.handleError);
 
                 break;
             }
             case Entity.USER: {
                 const stateManager = ExplorationStateManager.getUserManager(this._store);
-                const service = new UserServiceImpl();
+                const service = new UserServiceImpl(this.getAccessToken);
 
-                this.exploreUsers(stateManager, service);
+                this.exploreUsers(stateManager, service)
+                    .catch(this.handleError);
             }
         }
     }
