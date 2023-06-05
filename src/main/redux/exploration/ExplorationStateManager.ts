@@ -7,9 +7,9 @@ import {
 } from "./EntityExplorationState";
 import Person from "../../model/person/Person";
 import User from "../../model/user/User";
-import {JurPersonExplorationParams, JurPersonExplorationState} from "./jurPerson/JurPersonExploration";
-import {PersonExplorationParams, PersonExplorationState} from "./person/PersonExploration";
-import {UserExplorationParams, UserExplorationState} from "./user/UserExploration";
+import {JurPersonExplorationParams, JurPersonExplorationState} from "./jurPerson/JurPersonExplorationState";
+import {PersonExplorationParams, PersonExplorationState} from "./person/PersonExplorationState";
+import {UserExplorationParams, UserExplorationState} from "./user/UserExplorationState";
 import {AppDispatch} from "../store";
 import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
 import {setExploredEntityAction} from "./explorationReducer";

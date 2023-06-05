@@ -25,7 +25,7 @@ export interface EntityExplorationParams {
     supportedModes: ExplorationMode[]
 }
 
-export interface BasicHumanExplorationParamsGroup {
+export interface BasicHumanExplorationParamsGroup extends EntityExplorationParams{
     firstName: string | null,
     middleName: string | null,
     lastName: string | null

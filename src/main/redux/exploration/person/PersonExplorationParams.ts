@@ -1,23 +1,6 @@
-import Person from "../../../model/person/Person";
-import {
-    BasicHumanExplorationParamsGroup,
-    EntityExplorationData,
-    EntityExplorationParams,
-    EntityExplorationState,
-    ExplorationMode
-} from "../EntityExplorationState";
+import {BasicHumanExplorationParamsGroup, ExplorationMode} from "../EntityExplorationState";
 
-export class PersonExplorationState implements EntityExplorationState<Person, PersonExplorationParams>{
-    readonly data: EntityExplorationData<Person>;
-    readonly params: PersonExplorationParams;
-
-    constructor(data: EntityExplorationData<Person>, params: PersonExplorationParams) {
-        this.data = data;
-        this.params = params;
-    }
-}
-
-export class PersonExplorationParams implements EntityExplorationParams, BasicHumanExplorationParamsGroup{
+export default class PersonExplorationParams implements BasicHumanExplorationParamsGroup{
     public static supportedModes: ExplorationMode[] = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME]);
     public readonly supportedModes: ExplorationMode[] = PersonExplorationParams.supportedModes;
 

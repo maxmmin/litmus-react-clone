@@ -10,14 +10,14 @@ import PersonServiceImpl from "../entityService/person/PersonServiceImpl";
 import JurPersonServiceImpl from "../entityService/jurPerson/JurPersonServiceImpl";
 import UserServiceImpl from "../entityService/user/UserServiceImpl";
 import Person from "../../model/person/Person";
-import {PersonExplorationParams} from "../../redux/exploration/person/PersonExploration";
+import {PersonExplorationParams} from "../../redux/exploration/person/PersonExplorationState";
 import PersonService from "../entityService/person/PersonService";
 import {checkNotNull} from "../../util/pureFunctions";
 import User from "../../model/user/User";
-import {UserExplorationParams} from "../../redux/exploration/user/UserExploration";
+import {UserExplorationParams} from "../../redux/exploration/user/UserExplorationState";
 import UserService from "../entityService/user/UserService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import {JurPersonExplorationParams} from "../../redux/exploration/jurPerson/JurPersonExploration";
+import {JurPersonExplorationParams} from "../../redux/exploration/jurPerson/JurPersonExplorationState";
 import JurPersonService from "../entityService/jurPerson/JurPersonService";
 import {
     BasicNotification,
