@@ -3,13 +3,14 @@ import JurPersonExplorationParams from "../../redux/exploration/jurPerson/JurPer
 import UserExplorationParams from "../../redux/exploration/user/UserExplorationParams";
 import {Entity} from "../../redux/exploration/Entity";
 import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/ExplorationMode";
+import appConfig from "../../config/appConfig";
 
 class ExplorationRoutingManager {
     private static actionUrlBase = "explore"
 
-    private static urlPersonDomain: string="persons";
-    private static urlJurPersonDomain: string="jur_persons";
-    private static urlUsersDomain: string="users";
+    private static urlPersonDomain: string=appConfig.entityDomains.PERSON;
+    private static urlJurPersonDomain: string=appConfig.entityDomains.JUR_PERSON;
+    private static urlUsersDomain: string=appConfig.entityDomains.USER;
 
     /**
      *

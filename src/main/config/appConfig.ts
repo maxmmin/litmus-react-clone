@@ -8,14 +8,13 @@ type AppConfig = {
     entityDomains: Readonly<Record<Entity, string>>,
     serverMappings: Readonly<typeof serverMappings>,
     applicationMappings: Readonly<typeof applicationMappings>
-    apiAuthHeader: string
+    authHeader: string
 }
 
 const host = "http://localhost:8081";
 
 const apiRoot = `${host}/api`
 const authRoot = `${host}/auth`
-
 const entitiesPerPage = 50;
 const geoApiKEy = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA";
 const apiAuthHeader = "Authorization"
@@ -23,7 +22,7 @@ const apiAuthHeader = "Authorization"
 const entityDomains: AppConfig['entityDomains'] = Object.freeze({
     [Entity.USER]: "users",
     [Entity.PERSON]: "persons",
-    [Entity.JUR_PERSON]: "jur_persons"
+    [Entity.JUR_PERSON]: "jur-persons"
 })
 
 const serverMappings = Object.freeze({
@@ -34,6 +33,8 @@ const serverMappings = Object.freeze({
     "refreshTokens": buildMapping(authRoot, "/refresh"),
     "signIn": buildMapping(apiRoot, "/sign-in")
 })
+
+console.log(serverMappings)
 
 const explorationRoot = "/explore";
 
@@ -47,9 +48,9 @@ const applicationMappings = Object.freeze({
     exploration: {
         default: personExplorationMapping,
         root: explorationRoot,
-        explorePersons: personExplorationMapping,
-        exploreUsers: buildMapping(explorationRoot, entityDomains.USER),
-        exploreJurPersons: buildMapping(explorationRoot, entityDomains.JUR_PERSON)
+        [Entity.PERSON]: personExplorationMapping,
+        [Entity.JUR_PERSON]: buildMapping(explorationRoot, entityDomains.JUR_PERSON),
+        [Entity.USER]: buildMapping(explorationRoot, entityDomains.USER)
     },
     creation: {
         default: personCreationMapping,
@@ -64,14 +65,10 @@ const appConfig: AppConfig = {
     apiHost: host,
     entitiesPerPage: entitiesPerPage,
     geoApiKey: geoApiKEy,
-    entityDomains: {
-        [Entity.USER]: "users",
-        [Entity.PERSON]: "persons",
-        [Entity.JUR_PERSON]: "jur_persons"
-    },
+    entityDomains: entityDomains,
     serverMappings: serverMappings,
     applicationMappings: applicationMappings,
-    apiAuthHeader: apiAuthHeader
+    authHeader: apiAuthHeader
 }
 
 export default appConfig;
@@ -80,21 +77,6 @@ export default appConfig;
 export const gmapsRegionOptions: {region: string, language: string} = {
     region: "UA",
     language: "ua"
-}
-
-const auth = `${host}/auth`
-
-const api = `${host}/api`
-
-const authHeader = 'Authorization'
-
-const apiLinks = {
-    signIn: `${auth}/sign-in`,
-    refreshAccessKey: `${auth}/refresh`,
-    getThisUser: auth,
-    [Entity.PERSON]: `${api}/persons`,
-    [Entity.USER]: `${api}/users`,
-    [Entity.JUR_PERSON]: `${api}/jur-persons`,
 }
 
 export const routingLinks = {
@@ -111,6 +93,6 @@ export const routingLinks = {
 }
 
 export const createAuthHeader = (accessToken: string) => ({
-    [authHeader]: `Bearer ${accessToken}`
+    [appConfig.authHeader]: `Bearer ${accessToken}`
 })
 

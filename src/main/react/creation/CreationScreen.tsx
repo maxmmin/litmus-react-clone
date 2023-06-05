@@ -49,7 +49,7 @@ const Creation = () => {
     }, [location])
 
     if (!entity) {
-        throw new Error("client error. table shouldn't be null. reload the page")
+        return null
     }
 
     const createButtonOnClick = async (creationParams: CreationParamsReducible, accessToken: string) => {

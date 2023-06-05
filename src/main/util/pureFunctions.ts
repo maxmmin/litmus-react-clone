@@ -16,7 +16,6 @@ import {JurPerson} from "../model/jurPerson/JurPerson";
 import {CreateJurPersonDto, CreatePersonDto, CreateUserDto} from "../redux/creation/CreationParamsActions";
 import {DateBuilder} from "../model/DateEntity";
 import {Action} from "redux";
-import path from "path-browserify";
 
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
@@ -242,6 +241,14 @@ export function isEmpty (str: string|undefined|null) {
     return str!==null&&str!==undefined&&str.trim()===""
 }
 
-export function buildMapping(...args: string[]) {
-    return path.join(...args);
+export function buildMapping(...args: string[]): string {
+    return args.map((part, index)=>{
+        if (part.endsWith("/")) {
+            part = part.slice(0, -1)
+        }
+        if (part.startsWith("/")&&index!==0) {
+            part = part.slice(1)
+        }
+        return part;
+    }).join("/")
 }

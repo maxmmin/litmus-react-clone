@@ -4,7 +4,7 @@ import appConfig from "../../config/appConfig";
 
 class BasicApiRequestManager implements ApiRequestManager {
     private fetchUrl: string|null = null;
-    private authHeader = appConfig.apiAuthHeader;
+    private authHeader = appConfig.authHeader;
     private init: RequestInit = {}
 
     private getDefaultRequestInit () {

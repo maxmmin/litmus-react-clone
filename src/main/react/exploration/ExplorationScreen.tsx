@@ -1,15 +1,15 @@
 import Header from "../header/Header";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useEffect, useLayoutEffect, useRef, useState} from "react";
+import React, {ChangeEvent, useEffect, useRef, useState} from "react";
 import {Entity} from "../../redux/exploration/Entity";
-import ExplorationModesView from "./ExplorationModesView";
+import ExplorationModesSelectContainer from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from "react-bootstrap/Button";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import Role, {Permissions, RoleName} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import {useNavigate} from "react-router-dom";
-import appConfig, {routingLinks} from "../../config/appConfig";
+import appConfig from "../../config/appConfig";
 import {useLocation, useParams} from "react-router";
 import InputGroup from "./InputGroup";
 
@@ -34,11 +34,10 @@ const ExplorationScreen = () => {
 
     const {entityDomain}: {entityDomain?: string} = useParams<{entityDomain: string}>();
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         let entity: Entity|null = null;
 
         if (entityDomain) {
-
             Object.entries(appConfig.entityDomains).forEach(([key, value])=>{
                 if (entityDomain===value) {
                     entity = Entity[key as Entity];
@@ -111,9 +110,8 @@ const ExplorationScreen = () => {
     },[])
 
     if (!exploredEntity) {
-        throw new Error("client error. table shouldn't be null. reload the page")
+       return null;
     }
-
     return (
        <PrivateComponentWrapper requiredPermissions={requiredPermissions} mode={"ERROR_PAGE"}>
            <div className={"explore-page"}>
@@ -122,38 +120,20 @@ const ExplorationScreen = () => {
                    <div className="explore-page__search">
                        <p style={{marginBottom: '10px'}}>Знайти</p>
 
-                       <Form.Select className={"explore__select"} value={appConfig.entityDomains[exploredEntity!]} onChange={handleSelectChange}>
-                           <option value={routingLinks.explore[Entity.PERSON]}>Фізичну особу</option>
-                           <option value={routingLinks.explore[Entity.JUR_PERSON]}>Юридичну особу</option>
+                       <Form.Select className={"explore__select"} value={appConfig.applicationMappings.exploration[exploredEntity]} onChange={handleSelectChange}>
+                           <option value={appConfig.applicationMappings.exploration[Entity.PERSON]}>Фізичну особу</option>
+                           <option value={appConfig.applicationMappings.exploration[Entity.JUR_PERSON]}>Юридичну особу</option>
                            <PrivateComponentWrapper requiredPermissions={[Permissions.USERS_READ]} mode={NO_OUTPUT}>
-                               <option value={routingLinks.explore[Entity.USER]}>Користувача</option>
+                               <option value={appConfig.applicationMappings.exploration[Entity.USER]}>Користувача</option>
                            </PrivateComponentWrapper>
                        </Form.Select>
 
-                       <ExplorationModesView/>
+                       <ExplorationModesSelectContainer/>
 
-
-                       {exploredEntity?
-                           <>
-                               <div className="explore-page__input-group-container">
-                                   <Form className={"explore-input-group"}>
-
-                                       {/*@todo this*/}
-                                       {/*<InputGroup/>*/}
-
-                                       <Button disabled={data?.isPending} onClick={()=>"search"} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
-                                           {data?.isPending?"Завантаження...":"Пошук"}
-                                       </Button>
-                                   </Form>
-                               </div>
-                           </>
-                           : null
-                       }
+                       {exploredEntity?<InputGroup isPending={Boolean(data?.isPending)} exploredEntity={exploredEntity}/>:null}
 
 
                    </div>
-
-                   <InputGroup exploredEntity={exploredEntity}/>
                    {/*<ResultsContainer containerRef={resultsContainer}/>*/}
                </main>
            </div>

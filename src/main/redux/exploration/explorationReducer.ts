@@ -2,7 +2,6 @@ import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
 import EntityExplorationState from "./EntityExplorationState";
 import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
-
 import {combineReducers} from "redux";
 import PersonExplorationState from "./person/PersonExplorationState";
 import PersonExplorationParams from "./person/PersonExplorationParams";
@@ -12,24 +11,27 @@ import UserExplorationState from "./user/UserExplorationState";
 import UserExplorationParams from "./user/UserExplorationParams";
 import BasicEntityExplorationData from "./BasicEntityExplorationData";
 import {Entity} from "./Entity";
+import EntityExplorationParams from "./EntityExplorationParams";
 
-const initialPersonExplorationState = new PersonExplorationState(new BasicEntityExplorationData(), new PersonExplorationParams());
-
-type PersonExplorationStateReducible = PersonExplorationState | undefined;
-
+const getSerializableState = <S extends EntityExplorationState<any, EntityExplorationParams>> (state: S): S => {
+    let serializableState = {...state};
+    serializableState.data = {...state.data};
+    serializableState.params = {...state.params}
+    return serializableState;
+}
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, any>> (prevState: S, action: PayloadAction<any>): S => {
     switch (action.type) {
         case ExplorationCoreAction.UPDATE_EXPLORATION_STATE: {
-            return action.payload as S;
+            return getSerializableState(action.payload as S);
         }
         case ExplorationCoreAction.UPDATE_EXPLORATION_DATA: {
             const newData = action.payload as S["data"];
-            return {...prevState, data: newData};
+            return {...prevState, data: {...newData}};
         }
         case ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS: {
             const params = action.payload as S["params"];
-            return {...prevState, params: params};
+            return {...prevState, params: {...params}};
         }
 
         case ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING: {
@@ -48,6 +50,10 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, any>> (p
     }
 }
 
+const initialPersonExplorationState = getSerializableState(new PersonExplorationState(new BasicEntityExplorationData(), new PersonExplorationParams()));
+
+type PersonExplorationStateReducible = PersonExplorationState | undefined;
+
 const personExplorationReducer: Reducer<PersonExplorationStateReducible, PayloadAction<any>> = (prevState=initialPersonExplorationState, action) => {
     const actions = ExplorationTypedActions.person;
     switch (action.type) {
@@ -60,7 +66,7 @@ const personExplorationReducer: Reducer<PersonExplorationStateReducible, Payload
 }
 
 
-const initialJurPersonExplorationState = new JurPersonExplorationState(new BasicEntityExplorationData(), new JurPersonExplorationParams());
+const initialJurPersonExplorationState = getSerializableState(new JurPersonExplorationState(new BasicEntityExplorationData(), new JurPersonExplorationParams()))
 
 type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
 
@@ -76,7 +82,7 @@ const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, P
     }
 }
 
-const initialUserExplorationState = new UserExplorationState(new BasicEntityExplorationData(), new UserExplorationParams());
+const initialUserExplorationState = getSerializableState(new UserExplorationState(new BasicEntityExplorationData(), new UserExplorationParams()));
 
 type UserExplorationStateReducible = UserExplorationState | undefined;
 
@@ -97,6 +103,8 @@ export const setExploredEntityAction = "SET_EXPLORED_ENTITY"
 const exploredEntityReducer:  Reducer<Entity|undefined, PayloadAction<Entity>> = (prevState=initialEntity, action) => {
     if (action.type===setExploredEntityAction) {
         return action.payload;
+    } else {
+        return prevState;
     }
 }
 
