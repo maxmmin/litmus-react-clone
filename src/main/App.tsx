@@ -4,7 +4,7 @@ import React from 'react';
 import SignIn from "./react/signIn/SignInScreen";
 import Home from "./react/home/HomeScreen";
 import PrivateComponent, {ERROR_PAGE} from "./react/authorization/PrivateComponent";
-import {useAppDispatch} from "./redux/hooks";
+import {useAppDispatch, useAppSelector} from "./redux/hooks";
 import store from "./redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
@@ -13,7 +13,7 @@ import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateA
 import ApplicationStateCenter from "./react/applicationState/ApplicationStateCenter";
 import Creation from "./react/creation/CreationScreen";
 import appConfig, {routingLinks} from "./config/appConfig";
-import Role from "./redux/userIdentity/Role";
+import Role, {Permissions} from "./redux/userIdentity/Role";
 import {buildMapping} from "./util/pureFunctions";
 import {Entity} from "./redux/exploration/Entity";
 
@@ -21,6 +21,7 @@ import {Entity} from "./redux/exploration/Entity";
 
 function App() {
     const dispatch = useAppDispatch();
+
   return (
             <BrowserRouter basename={"/"}>
                 <ApplicationStateCenter>
@@ -34,11 +35,11 @@ function App() {
                     }}>
                         <Routes>
                             <Route path={"/"} element={
-                                <PrivateComponent mode={"ERROR_PAGE"} component={<Home/>} requiredPermissions={Role.USER.permissions}/>
+                                <PrivateComponent mode={"ERROR_PAGE"} component={<Home/>} requiredPermissions={[Permissions.DATA_READ]}/>
                             }/>
 
                             <Route path={""} element={
-                                <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={Role.USER.permissions}/>
+                                <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={[Permissions.DATA_READ]}/>
                             }/>
 
                             <Route path={buildMapping(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={

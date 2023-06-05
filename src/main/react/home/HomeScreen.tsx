@@ -15,6 +15,8 @@ function HomeScreen () {
 
     const navigate = useNavigate()
 
+    const exploredEntity = useAppSelector(state => state.exploration.exploredEntity)
+
     const actionOnClick = (event: React.MouseEvent) => {
         const actionPath = event.currentTarget.getAttribute("itemprop")
         if (actionPath) {
@@ -31,7 +33,7 @@ function HomeScreen () {
             <Header/>
 
             <main className="homepage-actions">
-                    <div itemProp={appConfig.applicationMappings.exploration.root} className="homepage-actions__action" onClick={actionOnClick}>
+                    <div itemProp={appConfig.applicationMappings.exploration[exploredEntity!]} className="homepage-actions__action" onClick={actionOnClick}>
                         <div className="homepage-actions__icon-container">
                             <SearchIcon className='homepage-actions__icon'/>
                             <h4 className="homepage-actions__title homepage-actions__title_search">Аналіз</h4>

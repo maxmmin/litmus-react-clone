@@ -47,13 +47,13 @@ const ExplorationScreen = () => {
             })
 
         }
-
-        if (urlEntity) {
-            if (urlEntity!==exploredEntity) {
-                ExplorationStateManager.switchEntity(urlEntity, store.dispatch)
-            }
-        } else {
-            navigate(appConfig.applicationMappings.exploration.default);
+        console.log(location)
+        if (!urlEntity) {
+            if (exploredEntity) {
+                navigate(appConfig.applicationMappings.exploration[exploredEntity])
+            } else navigate(appConfig.applicationMappings.exploration.default);
+        } else if (urlEntity!==exploredEntity) {
+            ExplorationStateManager.switchEntity(urlEntity, store.dispatch);
         }
     }, [location])
 
