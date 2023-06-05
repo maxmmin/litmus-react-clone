@@ -12,6 +12,7 @@ import UserExplorationParams from "./user/UserExplorationParams";
 import BasicEntityExplorationData from "./BasicEntityExplorationData";
 import {Entity} from "./Entity";
 import EntityExplorationParams from "./EntityExplorationParams";
+import ExplorationMode from "./ExplorationMode";
 
 const getSerializableState = <S extends EntityExplorationState<any, EntityExplorationParams>> (state: S): S => {
     let serializableState = {...state};
@@ -20,7 +21,7 @@ const getSerializableState = <S extends EntityExplorationState<any, EntityExplor
     return serializableState;
 }
 
-const entityExplorationReducer = <S extends EntityExplorationState<any, any>> (prevState: S, action: PayloadAction<any>): S => {
+const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<any>): S => {
     switch (action.type) {
         case ExplorationCoreAction.UPDATE_EXPLORATION_STATE: {
             return getSerializableState(action.payload as S);
@@ -44,6 +45,14 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, any>> (p
             return {...prevState, data: {...prevState.data, results: results}}
         }
 
+        case ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE: {
+            const selectedMode = action.payload as ExplorationMode;
+            if (!prevState.params.supportedModes.includes(selectedMode)) {
+                throw new Error("unsupported mode was provided")
+            }
+            return {...prevState, params: {...prevState.params, mode: selectedMode}}
+        }
+
         default: {
             return prevState;
         }
@@ -57,10 +66,15 @@ type PersonExplorationStateReducible = PersonExplorationState | undefined;
 const personExplorationReducer: Reducer<PersonExplorationStateReducible, PayloadAction<any>> = (prevState=initialPersonExplorationState, action) => {
     const actions = ExplorationTypedActions.person;
     switch (action.type) {
-        // code-place for person specific actions
+        // code-place for jur person specific actions
+        // @todo write getClear action
         default: {
-            const coreAction: PayloadAction<any> = {...action, type: ExplorationTypedActions.getCoreAction(action.type)}
-            return entityExplorationReducer(prevState, coreAction);
+            const [coreType, domain] = ExplorationTypedActions.parseAction(action.type);
+            if (domain===ExplorationTypedActions.personDomain) {
+                const coreAction: PayloadAction<any> = {...action, type: coreType}
+                return entityExplorationReducer(prevState, coreAction);
+            }
+            else return prevState;
         }
     }
 }
@@ -71,13 +85,16 @@ const initialJurPersonExplorationState = getSerializableState(new JurPersonExplo
 type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
 
 const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, PayloadAction<any>> = (prevState=initialJurPersonExplorationState, action) => {
-    const actions = ExplorationTypedActions.jurPerson;
     switch (action.type) {
         // code-place for jur person specific actions
             // @todo write getClear action
         default: {
-            const coreAction: PayloadAction<any> = {...action, type: ExplorationTypedActions.getCoreAction(action.type)}
-            return entityExplorationReducer(prevState, coreAction);
+            const [coreType, domain] = ExplorationTypedActions.parseAction(action.type);
+            if (domain===ExplorationTypedActions.jurPersonDomain) {
+                const coreAction: PayloadAction<any> = {...action, type: coreType}
+                return entityExplorationReducer(prevState, coreAction);
+            }
+            else return prevState;
         }
     }
 }
@@ -89,9 +106,15 @@ type UserExplorationStateReducible = UserExplorationState | undefined;
 const userExplorationReducer: Reducer<UserExplorationStateReducible, PayloadAction<any>> = (prevState= initialUserExplorationState, action) => {
     const actions = ExplorationTypedActions.user;
     switch (action.type) {
+        // code-place for jur person specific actions
+        // @todo write getClear action
         default: {
-            const coreAction: PayloadAction<any> = {...action, type: ExplorationTypedActions.getCoreAction(action.type)}
-            return entityExplorationReducer(prevState, coreAction);
+            const [coreType, domain] = ExplorationTypedActions.parseAction(action.type);
+            if (domain===ExplorationTypedActions.userDomain) {
+                const coreAction: PayloadAction<any> = {...action, type: coreType}
+                return entityExplorationReducer(prevState, coreAction);
+            }
+            else return prevState;
         }
     }
 }

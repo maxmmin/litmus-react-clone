@@ -1,10 +1,9 @@
 import Header from "../header/Header";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, useEffect, useRef} from "react";
 import {Entity} from "../../redux/exploration/Entity";
-import ExplorationModesSelectContainer from "./ExplorationModesView";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import Button from "react-bootstrap/Button";
+import ExplorationModeSelectContainer from "./ExplorationModesView";
+import {useAppSelector} from "../../redux/hooks";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import Role, {Permissions, RoleName} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
@@ -12,6 +11,9 @@ import {useNavigate} from "react-router-dom";
 import appConfig from "../../config/appConfig";
 import {useLocation, useParams} from "react-router";
 import InputGroup from "./InputGroup";
+import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
+import store from "../../redux/store";
+import ExplorationData from "./ExplorationData";
 
 /* btn isInputInvalid?'disabled':''*/
 
@@ -24,46 +26,46 @@ import InputGroup from "./InputGroup";
 // }
 
 const ExplorationScreen = () => {
-    const dispatch = useAppDispatch();
     const location = useLocation();
-    const navigate = useNavigate()
+
+    const navigate = useNavigate();
 
     const resultsContainer = useRef<HTMLDivElement>(null)
 
-    const [exploredEntity, setExploredEntity] = useState<Entity|null>(null);
+    const exploredEntity = useAppSelector(state => state.exploration.exploredEntity);
 
     const {entityDomain}: {entityDomain?: string} = useParams<{entityDomain: string}>();
 
     useEffect(() => {
-        let entity: Entity|null = null;
+        let urlEntity: Entity|null = null;
 
         if (entityDomain) {
             Object.entries(appConfig.entityDomains).forEach(([key, value])=>{
                 if (entityDomain===value) {
-                    entity = Entity[key as Entity];
+                    urlEntity = Entity[key as Entity];
                 }
             })
 
         }
 
-        if (entity) {
-            setExploredEntity(entity)
+        if (urlEntity) {
+            if (urlEntity!==exploredEntity) {
+                ExplorationStateManager.switchEntity(urlEntity, store.dispatch)
+            }
         } else {
-            if (exploredEntity) {
-
-            } else navigate(appConfig.applicationMappings.exploration.default);
+            navigate(appConfig.applicationMappings.exploration.default);
         }
     }, [location])
 
-    const data = useAppSelector(state => {
+    const isPending = useAppSelector(state => {
         if (exploredEntity) {
             switch (exploredEntity) {
                 case Entity.PERSON:
-                    return state.exploration.person?.data;
+                    return state.exploration.person?.data.isPending;
                 case Entity.JUR_PERSON:
-                    return state.exploration.jurPerson?.data;
+                    return state.exploration.jurPerson?.data.isPending;
                 case Entity.USER:
-                    return state.exploration.user?.data;
+                    return state.exploration.user?.data.isPending;
             }
         }   else return null;
     })
@@ -128,13 +130,12 @@ const ExplorationScreen = () => {
                            </PrivateComponentWrapper>
                        </Form.Select>
 
-                       <ExplorationModesSelectContainer/>
+                       <ExplorationModeSelectContainer/>
 
-                       {exploredEntity?<InputGroup isPending={Boolean(data?.isPending)} exploredEntity={exploredEntity}/>:null}
-
+                       <InputGroup isPending={Boolean(isPending)} exploredEntity={exploredEntity}/>
 
                    </div>
-                   {/*<ResultsContainer containerRef={resultsContainer}/>*/}
+                   <ExplorationData exploredEntity={exploredEntity} containerRef={resultsContainer}/>
                </main>
            </div>
        </PrivateComponentWrapper>

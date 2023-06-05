@@ -3,7 +3,7 @@ import BasicHumanExplorationParamsGroup from "../BasicHumanExplorationParamsGrou
 import ExplorationMode from "../ExplorationMode";
 
 export class UserExplorationParams implements EntityExplorationParams, BasicHumanExplorationParamsGroup{
-    public static readonly supportedModes = Array.from([{...ExplorationMode.BY_ID}, {...ExplorationMode.BY_FULL_NAME}])
+    public static readonly supportedModes = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME])
 
     public readonly supportedModes = UserExplorationParams.supportedModes;
 

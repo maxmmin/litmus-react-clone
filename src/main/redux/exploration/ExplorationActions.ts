@@ -9,9 +9,9 @@ export enum ExplorationCoreAction{
 }
 
 export class ExplorationTypedActions {
-    private static readonly userDomain = "USER";
-    private static readonly personDomain = "PERSON";
-    private static readonly jurPersonDomain = "JUR_PERSON";
+    public static readonly userDomain = "USER";
+    public static readonly personDomain = "PERSON";
+    public static readonly jurPersonDomain = "JUR_PERSON";
     private static readonly delimiter = "@";
 
     public static readonly user: ExplorationTypedActions = new ExplorationTypedActions(ExplorationTypedActions.userDomain);
@@ -35,8 +35,12 @@ export class ExplorationTypedActions {
         return core+delimiter+type;
     }
 
-    public static getCoreAction(typedAction: string, delimiter: string = ExplorationTypedActions.delimiter): string {
-        return typedAction.split(delimiter)[1]
+    public static parseAction(typedAction: string, delimiter: string = ExplorationTypedActions.delimiter): [string, string] {
+        const parsedAction = typedAction.split(delimiter);
+        if (parsedAction.length!==2) {
+            return ["",""];
+        }
+        return parsedAction as [string, string]
     }
 
     private constructor(domain: string) {

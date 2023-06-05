@@ -1,7 +1,6 @@
-import {AppDispatch} from "../store";
+import store, {AppDispatch} from "../store";
 import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
 import {setExploredEntityAction} from "./explorationReducer";
-import store from "../store";
 import JurPersonExplorationState from "./jurPerson/JurPersonExplorationState";
 import PersonExplorationState from "./person/PersonExplorationState";
 import UserExplorationState from "./user/UserExplorationState";
@@ -21,6 +20,8 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
 
     private readonly actions: ExplorationTypedActions;
 
+    public readonly entity: Entity;
+
     static switchEntity (entity: Entity, dispatch: AppDispatch) {
         dispatch({
             type: setExploredEntityAction,
@@ -38,7 +39,8 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
         return this.getExplorationState().params;
     }
 
-    private constructor(dispatch: AppDispatch, getState: ()=>S, actions: ExplorationTypedActions) {
+    private constructor(entity: Entity, dispatch: AppDispatch, getState: ()=>S, actions: ExplorationTypedActions) {
+        this.entity = entity;
         this.dispatch = dispatch;
         this.getExplorationState = getState;
         this.actions = actions;
@@ -46,17 +48,17 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
 
     static getJurPersonManager (providedStore: typeof store): ExplorationStateManager<JurPersonExplorationState> {
         const getState = ()=>providedStore.getState().exploration.jurPerson as JurPersonExplorationState
-        return new ExplorationStateManager<JurPersonExplorationState>(providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
+        return new ExplorationStateManager<JurPersonExplorationState>(Entity.JUR_PERSON, providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
     }
 
     static getPersonManager (providedStore: typeof store): ExplorationStateManager<PersonExplorationState> {
         const getState = ()=>providedStore.getState().exploration.person as PersonExplorationState;
-        return new ExplorationStateManager<PersonExplorationState>(providedStore.dispatch,getState, ExplorationTypedActions.person);
+        return new ExplorationStateManager<PersonExplorationState>(Entity.PERSON, providedStore.dispatch,getState, ExplorationTypedActions.person);
     }
 
     static getUserManager (providedStore: typeof store): ExplorationStateManager<UserExplorationState> {
         const getState = ()=>providedStore.getState().exploration.user as UserExplorationState;
-        return new ExplorationStateManager<UserExplorationState>(providedStore.dispatch,getState, ExplorationTypedActions.user);
+        return new ExplorationStateManager<UserExplorationState>(Entity.USER, providedStore.dispatch,getState, ExplorationTypedActions.user);
     }
 
     static getEntityManager(providedStore: typeof store, entity: Entity): ExplorationStateManager<EntityExplorationState<any, EntityExplorationParams>> {
@@ -134,6 +136,7 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
                 break;
             }
         }
+        console.log(this.actions)
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE],
             payload: mode

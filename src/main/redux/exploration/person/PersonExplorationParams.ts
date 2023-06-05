@@ -2,7 +2,7 @@ import ExplorationMode from "../ExplorationMode";
 import BasicHumanExplorationParamsGroup from "../BasicHumanExplorationParamsGroup";
 
 export default class PersonExplorationParams implements BasicHumanExplorationParamsGroup{
-    public static supportedModes: ExplorationMode[] = Array.from([{...ExplorationMode.BY_ID}, {...ExplorationMode.BY_FULL_NAME}]);
+    public static supportedModes: ExplorationMode[] = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME]);
     public readonly supportedModes: ExplorationMode[] = PersonExplorationParams.supportedModes;
 
     readonly mode: ExplorationMode = ExplorationMode.BY_FULL_NAME;

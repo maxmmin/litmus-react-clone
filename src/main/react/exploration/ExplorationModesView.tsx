@@ -46,15 +46,18 @@ const ExplorationModesView = () => {
 
     const explorationModes: ExplorationMode[]|null = explorationParams?explorationParams.supportedModes:null;
 
+    console.log(exploredEntity)
+    console.log(explorationModes)
+
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>): void {
         const modeIndex = Number(event.currentTarget.value);
 
         const mode = explorationModes![modeIndex];
 
         if (mode) {
-            explorationManager?.switchExplorationMode(mode);
+            explorationManager!.switchExplorationMode(mode);
             return;
-        } else  throw new Error("unknown mode");
+        } else throw new Error("unknown mode");
     }
 
     if (explorationMode&&explorationModes) {
