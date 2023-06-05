@@ -12,7 +12,7 @@ import Explore from "./react/exploration/ExplorationScreen";
 import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateActions";
 import ApplicationStateCenter from "./react/applicationState/ApplicationStateCenter";
 import Creation from "./react/creation/CreationScreen";
-import {routingLinks} from "./config/appConfig";
+import appConfig, {routingLinks} from "./config/appConfig";
 import {Entity} from "./redux/exploration/EntityExplorationState";
 import Role from "./redux/userIdentity/Role";
 
@@ -40,7 +40,7 @@ function App() {
                                 <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={Role.USER.permissions}/>
                             }/>
 
-                            <Route path="/explore:entity" element={
+                            <Route path={`${appConfig.applicationMappings.explorationRoot}:entityDomain`} element={
                                 <Explore/>
                             }/>
 

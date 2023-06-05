@@ -4,7 +4,7 @@ import React from "react";
 import {UserIdentityReducible} from "../../redux/userIdentity/UserIdentity";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import {AppStateActions, switchAppState} from "../../redux/applicationState/AppStateActions";
-import BackButton from "../general/BackButton";
+import BackButton from "../common/BackButton";
 
 type PropsType = {
     backButtonPath?: string

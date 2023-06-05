@@ -1,8 +1,9 @@
 import ExplorationByFullName from "../../react/exploration/InputGroupes/FindByFullName";
 import ExplorationById from "../../react/exploration/InputGroupes/FindById";
-import {PersonExplorationParams} from "./person/PersonExploration";
-import {JurPersonExplorationParams} from "./jurPerson/JurPersonExploration";
 
+/**
+ * do not change values! key and value should be same
+ */
 export enum Entity {
     PERSON="PERSON",
     JUR_PERSON="JUR_PERSON",

@@ -11,7 +11,7 @@ import Sex from "../../model/person/Sex";
 
 enum CreationParamsActions {
     /**
-     * general actions
+     * common actions
      */
     SET_CREATION_PARAMS="SET_CREATION_PARAMS",
     UPDATE_CREATION_PARAMS="UPDATE_CREATION_PARAMS",

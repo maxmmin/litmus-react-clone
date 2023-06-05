@@ -7,7 +7,7 @@ import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../CreationScreen";
 import {updateJurPersonCreationParams} from "../../../redux/creation/CreationParamsActions";
-import InputDate from "../../general/InputDate";
+import InputDate from "../../common/InputDate";
 import Person from "../../../model/person/Person";
 import DateEntity, {DateBuilder} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/creation/CreationModalModes";

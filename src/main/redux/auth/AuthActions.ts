@@ -6,6 +6,7 @@ import { BasicHttpError, HttpStatus} from "../../util/HttpStatus";
 import {Action} from "redux";
 import Authentication from "./Authentication";
 import {MetaArg} from "../applicationState/AppState";
+import appConfig from "../../config/appConfig";
 
 enum AuthActions {
     REFRESH_AUTH="REFRESH_AUTH",
@@ -21,7 +22,7 @@ type RefreshAccessTokenArg = MetaArg<{
 
 export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.REFRESH_AUTH,
     async ({refreshToken}, {rejectWithValue}) => {
-        const response =  await fetch(apiLinks.refreshAccessKey, {
+        const response =  await fetch(appConfig.serverMappings.refreshTokens, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -59,7 +60,7 @@ type SignInArg = MetaArg<{
 
 export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.REFRESH_AUTH,
     async ({email, password},{rejectWithValue}) => {
-        const response = await fetch(apiLinks.signIn, {
+        const response = await fetch(appConfig.serverMappings.signIn, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

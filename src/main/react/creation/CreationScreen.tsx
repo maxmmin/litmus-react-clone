@@ -57,44 +57,44 @@ const Creation = () => {
     const createButtonOnClick = async (creationParams: CreationParamsReducible, accessToken: string) => {
         if (creationParams) {
             const table = creationParams.table;
+            // @todo creation manager
+            // const url = apiLinks[table]
+            //
+            // let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
+            //
+            // switch (table) {
+            //     case Entity.JUR_PERSON: {
+            //         const creationData = creationParams.jurPersonCreationData;
+            //         body = getCreateJurPersonDto(creationData);
+            //         break;
+            //     }
+            //
+            //     case Entity.PERSON: {
+            //         const creationData = creationParams.personCreationData;
+            //         body = getCreatePersonDto(creationData)
+            //         break;
+            //     }
+            //
+            //     case Entity.USER: {
+            //         const creationData = creationParams.userCreationData;
+            //         body = getCreateUserDto(creationData);
+            //         break;
+            //     }
+            // }
 
-            const url = apiLinks[table]
-
-            let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
-
-            switch (table) {
-                case Entity.JUR_PERSON: {
-                    const creationData = creationParams.jurPersonCreationData;
-                    body = getCreateJurPersonDto(creationData);
-                    break;
-                }
-
-                case Entity.PERSON: {
-                    const creationData = creationParams.personCreationData;
-                    body = getCreatePersonDto(creationData)
-                    break;
-                }
-
-                case Entity.USER: {
-                    const creationData = creationParams.userCreationData;
-                    body = getCreateUserDto(creationData);
-                    break;
-                }
-            }
-
-            if (url && body) {
-                    let type: NotificationType;
-
-                    const response = await createEntity(url, body, accessToken);
-
-                    if (response.ok) {
-                        type = notificationTypes.SUCCESS;
-                    } else type = notificationTypes.ERROR;
-
-                    const message: object = await response.json();
-
-                    dispatch(addNotification({...new BasicNotification(type, JSON.stringify(message))}));
-            }
+            // if (url && body) {
+            //         let type: NotificationType;
+            //
+            //         const response = await createEntity(url, body, accessToken);
+            //
+            //         if (response.ok) {
+            //             type = notificationTypes.SUCCESS;
+            //         } else type = notificationTypes.ERROR;
+            //
+            //         const message: object = await response.json();
+            //
+            //         dispatch(addNotification({...new BasicNotification(type, JSON.stringify(message))}));
+            // }
 
         }
 

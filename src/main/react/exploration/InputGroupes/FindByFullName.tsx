@@ -1,31 +1,25 @@
 import Form from "react-bootstrap/Form";
-import React from "react";
+import React, {useMemo} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {BasicHumanSearchPayload} from "../../../redux/exploration/EntityExplorationState";
-import {setLocalInput} from "../../../../redux/exploration/params/ExplorationParamsActions";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
+import {Entity, EntityExplorationParams} from "../../../redux/exploration/EntityExplorationState";
+import ExplorationStateManager from "../../../redux/exploration/ExplorationStateManager";
+import {EntityType} from "../../../model/EntityType";
 
-const FindByFullName = () => {
-    const dispatch = useAppDispatch()
-    const table = useAppSelector(state => state.explorationParams?.entity)
+type Params = {
+    stateManager?: ExplorationStateManager<EntityType, EntityExplorationParams>
+}
 
-    const localInput = useAppSelector(state => {
-        const globalInput = state.explorationParams?.input;
-        if (table&&globalInput) {
-            return globalInput[table] as BasicHumanSearchPayload;
-        }
-        return null;
-    })
+const FindByFullName = ({stateManager}: Params) => {
 
-    const firstName = localInput?localInput.firstName:"";
-    const middleName = localInput?localInput.middleName:"";
-    const lastName = localInput?localInput.lastName:"";
+
+    if (!stateManager) return null;
 
     return (
         <>
             <Form.Group className="mb-3">
                 <Form.Label>Прізвище</Form.Label>
-                <input autoComplete={"new-password"} value={lastName} onChange={e=>{
+                <input autoComplete={"new-password"} value={stateManager.getExplorationState().params.} onChange={e=>{
                     dispatch(setLocalInput({...localInput, lastName: e.currentTarget.value}))
                 }} className={`last-name form-control`}  type="text" placeholder="Введіть прізвище"
                 onKeyDown={keyPressHandler}

@@ -36,13 +36,24 @@ const ExplorationScreen = () => {
     const [exploredEntity, setExploredEntity] = useState<Entity|null>(null);
 
     useLayoutEffect(() => {
-        const {entity}: {entity?: string} = useParams<{entity: string}>();
-        if (entity&&Entity[entity as Entity]) {
-            if (exploredEntity!==entity) {
-                setExploredEntity(Entity[entity as Entity])
-            }
+        const {entityDomain}: {entityDomain?: string} = useParams<{entityDomain: string}>();
+
+        let entity: Entity|null = null;
+
+        if (entityDomain) {
+
+            Object.entries(appConfig.entityDomains).forEach(([key, value])=>{
+                if (entityDomain===value) {
+                    entity = Entity[key as Entity];
+                }
+            })
+
+        }
+
+        if (entity) {
+            setExploredEntity(entity)
         } else {
-            //@todo redirect to normal path
+            navigate(appConfig.applicationMappings.explorePersons);
         }
     }, [location])
 

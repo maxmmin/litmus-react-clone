@@ -16,10 +16,9 @@ import {setExploredEntityAction} from "./explorationReducer";
 import store from "../store";
 
 /**
- * E - entityService
- * P -params
- */
-class ExplorationStateManager <E,P extends EntityExplorationParams> {
+ * S - entityExplorationState
+ * */
+class ExplorationStateManager <S extends EntityExplorationState<any, any>> {
     private readonly dispatch;
 
     private readonly actions: ExplorationTypedActions;
@@ -31,60 +30,60 @@ class ExplorationStateManager <E,P extends EntityExplorationParams> {
         })
     }
 
-    public getExplorationState: ()=>EntityExplorationState<E, P>;
+    public getExplorationState: ()=>S;
 
-    public getExplorationData (): EntityExplorationData<E> {
+    public getExplorationData (): S["data"] {
         return this.getExplorationState().data;
     }
 
-    public getExplorationParams(): P {
+    public getExplorationParams(): S["params"] {
         return this.getExplorationState().params;
     }
 
-    private constructor(dispatch: AppDispatch, getState: ()=>EntityExplorationState<E, P>, actions: ExplorationTypedActions) {
+    private constructor(dispatch: AppDispatch, getState: ()=>S, actions: ExplorationTypedActions) {
         this.dispatch = dispatch;
         this.getExplorationState = getState;
         this.actions = actions;
     }
 
-    static getJurPersonManager (providedStore: typeof store): ExplorationStateManager<JurPerson, JurPersonExplorationParams> {
+    static getJurPersonManager (providedStore: typeof store): ExplorationStateManager<JurPersonExplorationState> {
         const getState = ()=>providedStore.getState().exploration.jurPerson as JurPersonExplorationState
-        return new ExplorationStateManager<JurPerson, JurPersonExplorationParams>(providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
+        return new ExplorationStateManager<JurPersonExplorationState>(providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
     }
 
-    static getPersonManager (providedStore: typeof store): ExplorationStateManager<Person, PersonExplorationParams> {
+    static getPersonManager (providedStore: typeof store): ExplorationStateManager<PersonExplorationState> {
         const getState = ()=>providedStore.getState().exploration.person as PersonExplorationState;
-        return new ExplorationStateManager<Person, PersonExplorationParams>(providedStore.dispatch,getState, ExplorationTypedActions.person);
+        return new ExplorationStateManager<PersonExplorationState>(providedStore.dispatch,getState, ExplorationTypedActions.person);
     }
 
-    static getUserManager (providedStore: typeof store): ExplorationStateManager<User, UserExplorationParams> {
+    static getUserManager (providedStore: typeof store): ExplorationStateManager<UserExplorationState> {
         const getState = ()=>providedStore.getState().exploration.user as UserExplorationState;
-        return new ExplorationStateManager<User, UserExplorationParams>(providedStore.dispatch,getState, ExplorationTypedActions.user);
+        return new ExplorationStateManager<UserExplorationState>(providedStore.dispatch,getState, ExplorationTypedActions.user);
     }
 
 
-    updateState (state: EntityExplorationState<E, P>): void {
+    updateState (state: S): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_STATE],
             payload: state
         })
     }
 
-    updateParams (params: EntityExplorationState<E, P>): void {
+    updateParams (params: S['params']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS],
             payload: params
         })
     }
 
-    updateData (data: EntityExplorationData<E>): void {
+    updateData (data: S['data']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA],
             payload: data
         })
     }
 
-    updateDataResults(data: EntityExplorationData<E>['results']) {
+    updateDataResults(data: S['data']['results']) {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA_RESULTS],
             payload: data

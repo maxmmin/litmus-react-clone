@@ -109,28 +109,28 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const fetchPerson = async (accessToken: string, id: number) => {
         setPending(true)
+        // @todo w my manager
+        // const response = await fetch(`${apiLinks[Entity.PERSON]}/${id}`, {
+        //     headers: {
+        //         ...createAuthHeader(accessToken)
+        //     }
+        // });
 
-        const response = await fetch(`${apiLinks[Entity.PERSON]}/${id}`, {
-            headers: {
-                ...createAuthHeader(accessToken)
-            }
-        });
-
-        let responsePerson: Person | null = null;
-
-        try {
-            responsePerson = getPersonFromResponse(await response.json());
-
-            if (response.ok&&responsePerson) {
-                setPerson(responsePerson)
-            } else {
-                setPerson(null)
-            }
-
-        } catch (e) {
-            // set search error if response was with no content
-            setSearchError(new SearchError(`Особу з ідентифікатором ${id} не знайдено`, response));
-        }
+        // let responsePerson: Person | null = null;
+        //
+        // try {
+        //     responsePerson = getPersonFromResponse(await response.json());
+        //
+        //     if (response.ok&&responsePerson) {
+        //         setPerson(responsePerson)
+        //     } else {
+        //         setPerson(null)
+        //     }
+        //
+        // } catch (e) {
+        //     // set search error if response was with no content
+        //     setSearchError(new SearchError(`Особу з ідентифікатором ${id} не знайдено`, response));
+        // }
 
         setPending(false)
     }

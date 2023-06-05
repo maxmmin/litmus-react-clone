@@ -5,11 +5,16 @@ type AppConfig = {
     entitiesPerPage: number,
     geoApiKey: string,
     entityDomains: Readonly<Record<Entity, string>>,
-    apiMapping: Readonly<typeof apiMapping>,
+    serverMappings: Readonly<typeof serverMappings>,
+    applicationMappings: Readonly<typeof applicationMappings>
     apiAuthHeader: string
 }
 
-const apiHost = "http://localhost:8081";
+const host = "http://localhost:8081";
+
+const apiRoot = `${host}/api`
+const authRoot = `${host}/auth`
+
 const entitiesPerPage = 50;
 const geoApiKEy = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA";
 const apiAuthHeader = "Authorization"
@@ -20,14 +25,28 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
     [Entity.JUR_PERSON]: "jur_persons"
 })
 
-const apiMapping = Object.freeze({
-    "user": apiHost.concat("/", entityDomains.USER),
-    "person": apiHost.concat("/", entityDomains.PERSON),
-    "jurPerson": apiHost.concat("/", entityDomains.JUR_PERSON)
+const serverMappings = Object.freeze({
+    "users": apiRoot.concat(entityDomains.USER),
+    "persons": apiRoot.concat(entityDomains.PERSON),
+    "jurPersons": apiRoot.concat(entityDomains.JUR_PERSON),
+    "refreshTokens":  authRoot.concat("/refresh"),
+    "signIn": authRoot.concat("/sign-in")
+})
+
+const explorationRoot = "/explore";
+
+const personExplorationMapping = explorationRoot.concat(entityDomains.PERSON)
+
+const applicationMappings = Object.freeze({
+    default: personExplorationMapping,
+    explorationRoot: explorationRoot,
+    explorePersons: personExplorationMapping,
+    exploreUsers: explorationRoot.concat(entityDomains.USER),
+    exploreJurPersons: explorationRoot.concat(entityDomains.JUR_PERSON)
 })
 
 const appConfig: AppConfig = {
-    apiHost: apiHost,
+    apiHost: host,
     entitiesPerPage: entitiesPerPage,
     geoApiKey: geoApiKEy,
     entityDomains: {
@@ -35,13 +54,12 @@ const appConfig: AppConfig = {
         [Entity.PERSON]: "persons",
         [Entity.JUR_PERSON]: "jur_persons"
     },
-    apiMapping: apiMapping,
+    serverMappings: serverMappings,
+    applicationMappings: applicationMappings,
     apiAuthHeader: apiAuthHeader
 }
 
 export default appConfig;
-
-export const host = "http://localhost:8081";
 
 
 export const gmapsRegionOptions: {region: string, language: string} = {
