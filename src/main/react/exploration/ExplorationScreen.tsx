@@ -1,7 +1,7 @@
 import Header from "../header/Header";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useLayoutEffect, useRef, useState} from "react";
-import {Entity} from "../../redux/exploration/EntityExplorationState";
+import {Entity} from "../../redux/exploration/Entity";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from "react-bootstrap/Button";
@@ -11,6 +11,7 @@ import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import {useNavigate} from "react-router-dom";
 import appConfig, {routingLinks} from "../../config/appConfig";
 import {useLocation, useParams} from "react-router";
+import InputGroup from "./InputGroup";
 
 /* btn isInputInvalid?'disabled':''*/
 
@@ -31,9 +32,9 @@ const ExplorationScreen = () => {
 
     const [exploredEntity, setExploredEntity] = useState<Entity|null>(null);
 
-    useLayoutEffect(() => {
-        const {entityDomain}: {entityDomain?: string} = useParams<{entityDomain: string}>();
+    const {entityDomain}: {entityDomain?: string} = useParams<{entityDomain: string}>();
 
+    useLayoutEffect(() => {
         let entity: Entity|null = null;
 
         if (entityDomain) {
@@ -68,18 +69,18 @@ const ExplorationScreen = () => {
         }   else return null;
     })
 
-    let requiredPermissions;
+    let requiredPermissions: Permissions[] = Role[RoleName.USER].permissions;
     {
         if (exploredEntity) {
             switch (exploredEntity) {
                 case Entity.PERSON:
-                    requiredPermissions = Role[RoleName.USER];
+                    requiredPermissions = Role[RoleName.USER].permissions;
                     break;
                 case Entity.JUR_PERSON:
-                    requiredPermissions = Role[RoleName.USER];
+                    requiredPermissions = Role[RoleName.USER].permissions;
                     break;
                 case Entity.USER:
-                    requiredPermissions = Role[RoleName.ADMIN];
+                    requiredPermissions = Role[RoleName.ADMIN].permissions;
                     break;
             }
         }
@@ -114,7 +115,7 @@ const ExplorationScreen = () => {
     }
 
     return (
-       <PrivateComponentWrapper requiredPermissions={Role[RoleName.USER].permissions} mode={"ERROR_PAGE"}>
+       <PrivateComponentWrapper requiredPermissions={requiredPermissions} mode={"ERROR_PAGE"}>
            <div className={"explore-page"}>
                <Header backButtonPath={"/"}/>
                <main className={"explore-page__main"}>
@@ -124,7 +125,7 @@ const ExplorationScreen = () => {
                        <Form.Select className={"explore__select"} value={appConfig.entityDomains[exploredEntity!]} onChange={handleSelectChange}>
                            <option value={routingLinks.explore[Entity.PERSON]}>Фізичну особу</option>
                            <option value={routingLinks.explore[Entity.JUR_PERSON]}>Юридичну особу</option>
-                           <PrivateComponentWrapper requiredPermissions={[Permissions.USERS_READ, Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
+                           <PrivateComponentWrapper requiredPermissions={[Permissions.USERS_READ]} mode={NO_OUTPUT}>
                                <option value={routingLinks.explore[Entity.USER]}>Користувача</option>
                            </PrivateComponentWrapper>
                        </Form.Select>
@@ -152,7 +153,7 @@ const ExplorationScreen = () => {
 
                    </div>
 
-                   @todo results
+                   <InputGroup exploredEntity={exploredEntity}/>
                    {/*<ResultsContainer containerRef={resultsContainer}/>*/}
                </main>
            </div>

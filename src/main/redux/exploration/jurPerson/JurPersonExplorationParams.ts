@@ -1,8 +1,6 @@
-import {
-    BasicJurPersonExplorationParamsGroup,
-    EntityExplorationParams,
-    ExplorationMode
-} from "../EntityExplorationState";
+import EntityExplorationParams from "../EntityExplorationParams";
+import ExplorationMode from "../ExplorationMode";
+import BasicJurPersonExplorationParamsGroup from "./BasicJurPersonExplorationParamsGroup";
 
 export default class JurPersonExplorationParams implements EntityExplorationParams, BasicJurPersonExplorationParamsGroup {
     public static readonly supportedModes: ExplorationMode[] = Array.from([ExplorationMode.BY_ID]);

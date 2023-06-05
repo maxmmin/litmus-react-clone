@@ -1,4 +1,3 @@
-import {Entity} from "../exploration/EntityExplorationState";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Location} from "../../model/Location";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
@@ -8,6 +7,7 @@ import {PassportData} from "../../model/person/PassportData";
 import {RoleName} from "../userIdentity/Role";
 import DateEntity, {DateBuilder} from "../../model/DateEntity";
 import Sex from "../../model/person/Sex";
+import {Entity} from "../exploration/Entity";
 
 enum CreationParamsActions {
     /**

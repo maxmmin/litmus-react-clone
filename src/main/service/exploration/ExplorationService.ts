@@ -1,4 +1,4 @@
-import {Entity} from "../../redux/exploration/EntityExplorationState";
+import {Entity} from "../../redux/exploration/Entity";
 
 interface ExplorationService {
     explore(entity: Entity): void;

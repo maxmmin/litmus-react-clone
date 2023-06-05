@@ -1,9 +1,4 @@
 import ExplorationService from "./ExplorationService";
-import {
-    Entity,
-    ExplorationMode,
-    ExplorationModeName
-} from "../../redux/exploration/EntityExplorationState";
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
 import PersonServiceImpl from "../entityService/person/PersonServiceImpl";
@@ -26,6 +21,8 @@ import PersonExplorationState from "../../redux/exploration/person/PersonExplora
 import PersonExplorationParams from "../../redux/exploration/person/PersonExplorationParams";
 import UserExplorationState from "../../redux/exploration/user/UserExplorationState";
 import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPersonExplorationState";
+import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/ExplorationMode";
+import {Entity} from "../../redux/exploration/Entity";
 
 class UnsupportedModeError extends Error {
 

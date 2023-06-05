@@ -1,5 +1,5 @@
-import {Entity} from "../redux/exploration/EntityExplorationState";
 import {buildMapping} from "../util/pureFunctions";
+import {Entity} from "../redux/exploration/Entity";
 
 type AppConfig = {
     apiHost: string,

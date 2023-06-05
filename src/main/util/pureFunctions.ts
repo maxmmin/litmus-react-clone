@@ -8,7 +8,7 @@ import {clearAuthRefreshTimer, setTimers, TimersReducible} from "../redux/timers
 import {getGeocode} from "use-places-autocomplete";
 import Geo from "../model/Geo";
 import {createAuthHeader, gmapsRegionOptions} from "../config/appConfig";
-import {Entity} from "../redux/exploration/EntityExplorationState";
+import {Entity} from "../redux/exploration/Entity";
 import User from "../model/user/User";
 import Person from "../model/person/Person";
 import person from "../model/person/Person";
@@ -16,7 +16,7 @@ import {JurPerson} from "../model/jurPerson/JurPerson";
 import {CreateJurPersonDto, CreatePersonDto, CreateUserDto} from "../redux/creation/CreationParamsActions";
 import {DateBuilder} from "../model/DateEntity";
 import {Action} from "redux";
-import path from "path";
+import path from "path-browserify";
 
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {

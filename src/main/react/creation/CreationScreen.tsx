@@ -1,15 +1,13 @@
 import Header from "../header/Header";
 import {Form} from "react-bootstrap";
-import {Entity} from "../../redux/exploration/EntityExplorationState";
+import {Entity} from "../../redux/exploration/Entity";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import {Permissions} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
 import {useAppDispatch} from "../../redux/hooks";
 import {
-    CreateJurPersonDto, CreatePersonDto, CreateUserDto,
     CreationParamsReducible,
-    getCreateJurPersonDto, getCreatePersonDto, getCreateUserDto,
     updateCreationParams
 } from "../../redux/creation/CreationParamsActions";
 import CreationInputSection from "./CreationInputSection";

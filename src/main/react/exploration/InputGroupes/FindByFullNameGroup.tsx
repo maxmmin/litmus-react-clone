@@ -3,11 +3,10 @@ import React, {useMemo} from "react";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
 import ExplorationStateManager from "../../../redux/exploration/ExplorationStateManager";
-import {
-    BasicHumanExplorationParamsGroup, Entity,
-    EntityExplorationState
-} from "../../../redux/exploration/EntityExplorationState";
 import store from "../../../redux/store";
+import EntityExplorationState from "../../../redux/exploration/EntityExplorationState";
+import BasicHumanExplorationParamsGroup from "../../../redux/exploration/BasicHumanExplorationParamsGroup";
+import {Entity} from "../../../redux/exploration/Entity";
 
 
 const FindByFullNameGroup = () => {

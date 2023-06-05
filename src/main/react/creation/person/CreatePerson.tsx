@@ -13,13 +13,13 @@ import {
 import InputDate from "../../common/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
 import CreationGeoModal from "../geo/CreationGeoModal";
-import {Entity} from "../../../redux/exploration/EntityExplorationState";
 import DateEntity, {DateBuilder} from "../../../model/DateEntity";
 import Sex from "../../../model/person/Sex";
 import {CrossIcon} from "../../../util/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 import PersonRelationships from "./PersonRelationships";
+import {Entity} from "../../../redux/exploration/Entity";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);

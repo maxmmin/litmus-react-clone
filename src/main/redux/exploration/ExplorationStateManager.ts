@@ -1,7 +1,3 @@
-import {
-    Entity, EntityExplorationData, EntityExplorationParams,
-    EntityExplorationState, ExplorationMode,
-} from "./EntityExplorationState";
 import {AppDispatch} from "../store";
 import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
 import {setExploredEntityAction} from "./explorationReducer";
@@ -12,6 +8,10 @@ import UserExplorationState from "./user/UserExplorationState";
 import UserExplorationParams from "./user/UserExplorationParams";
 import PersonExplorationParams from "./person/PersonExplorationParams";
 import JurPersonExplorationParams from "./jurPerson/JurPersonExplorationParams";
+import EntityExplorationState from "./EntityExplorationState";
+import EntityExplorationParams from "./EntityExplorationParams";
+import {Entity} from "./Entity";
+import ExplorationMode from "./ExplorationMode";
 
 /**
  * S - entityExplorationState
