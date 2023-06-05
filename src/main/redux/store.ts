@@ -1,5 +1,4 @@
 import {configureStore} from '@reduxjs/toolkit'
-import explorationDataReducer from "./exploration/data/explorationDataReducer";
 import thunk from 'redux-thunk'
 import authReducer from "./auth/authReducer";
 import appStateReducer from "./applicationState/appStateReducer";
@@ -16,7 +15,6 @@ import {
 import {PersistConfig} from "reduxjs-toolkit-persist/es/types";
 import storage from 'reduxjs-toolkit-persist/lib/storage'
 import userIdentityReducer from "./userIdentity/userIdentityReducer";
-import explorationParamsReducer from "./exploration/params/explorationParamsReducer";
 import authenticationCheckMiddleware from "./auth/authenticationCheckMiddleware";
 import signUpPageDataReducer from "./signUp/signUpPageDataReducer";
 import creationParamsReducer from "./creation/creationParamsReducer";

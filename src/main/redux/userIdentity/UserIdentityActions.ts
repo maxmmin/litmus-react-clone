@@ -1,10 +1,10 @@
 import UserIdentity, {UserIdentityReducible} from "./UserIdentity";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import apiLinks, {createAuthHeader} from "../../config/appConfig";
+import appConfig, {createAuthHeader} from "../../config/appConfig";
 import {BasicHttpError} from "../../util/HttpStatus";
-import {roles} from "./Role";
 import {isValid} from "../../util/pureFunctions";
 import {MetaArg} from "../applicationState/AppState";
+import Role from "./Role";
 
 enum UserIdentityActions {
     REFRESH_IDENTITY="REFRESH_IDENTITY",
@@ -36,7 +36,7 @@ export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIden
         })
     }
 
-    const response = await fetch(apiLinks.getThisUser,{
+    const response = await fetch(appConfig.serverMappings.getCurrentUser,{
         method: 'GET',
         headers: {
             ...createAuthHeader(accessToken)
@@ -47,7 +47,7 @@ export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIden
 
     if (response.ok) {
         const responseIdentity = jsonData as SuccessfulResponseType;
-        const role = roles[responseIdentity.role]
+        const role = Role[responseIdentity.role]
         const identity: UserIdentity = {...responseIdentity, role: role.role, permissions: role.permissions}
         return identity;
     }

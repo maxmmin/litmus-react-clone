@@ -1,5 +1,5 @@
-import ExplorationByFullName from "../../react/exploration/InputGroupes/FindByFullName";
-import ExplorationById from "../../react/exploration/InputGroupes/FindById";
+import FindByFullNameGroup from "../../react/exploration/InputGroupes/FindByFullNameGroup";
+import FindByIdGroup from "../../react/exploration/InputGroupes/FindByIdGroup";
 
 /**
  * do not change values! key and value should be same
@@ -82,11 +82,11 @@ export class ExplorationMode {
     public static getJsx (mode: ExplorationMode): JSX.Element {
         switch (mode) {
             case (this.BY_FULL_NAME): {
-                return <ExplorationByFullName/>
+                return <FindByFullNameGroup/>
             }
 
             case (this.BY_ID): {
-                return <ExplorationById/>
+                return <FindByIdGroup/>
             }
 
             default: {

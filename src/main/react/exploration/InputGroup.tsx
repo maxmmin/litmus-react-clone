@@ -1,17 +1,16 @@
-import {modesDataSource} from "../../redux/exploration/EntityExplorationState";
 import {useAppSelector} from "../../redux/hooks";
 import {useMemo} from "react";
 
-function InputGroup (): JSX.Element|null {
-    const table = useAppSelector(state => state.explorationParams?.entity)
-    const explorationMode = useAppSelector(state => state.explorationParams?.sectionsSettings![table!])
-
-    return useMemo(()=>{
-        if (table&&explorationMode&&Object.hasOwn(modesDataSource[table!], explorationMode)) {
-            return modesDataSource[table][explorationMode]!.jsx();
-        }
-        return null
-    },[table, explorationMode])
-}
-
-export default InputGroup
+// function InputGroup (): JSX.Element|null {
+//     // const table = useAppSelector(state => state.explorationParams?.entity)
+//     // const explorationMode = useAppSelector(state => state.explorationParams?.sectionsSettings![table!])
+//     //
+//     // return useMemo(()=>{
+//     //     if (table&&explorationMode&&Object.hasOwn(modesDataSource[table!], explorationMode)) {
+//     //         return modesDataSource[table][explorationMode]!.jsx();
+//     //     }
+//     //     return null
+//     // },[table, explorationMode])
+// }@todo this
+//
+// export default InputGroup

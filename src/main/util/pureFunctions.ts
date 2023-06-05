@@ -16,6 +16,7 @@ import {JurPerson} from "../model/jurPerson/JurPerson";
 import {CreateJurPersonDto, CreatePersonDto, CreateUserDto} from "../redux/creation/CreationParamsActions";
 import {DateBuilder} from "../model/DateEntity";
 import {Action} from "redux";
+import path from "path";
 
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
@@ -235,4 +236,12 @@ export function checkNotNull <T> (arg: T) {
     if (arg===null) {
         throw new Error("null arg exception")
     } else return arg;
+}
+
+export function isEmpty (str: string|undefined|null) {
+    return str!==null&&str!==undefined&&str.trim()===""
+}
+
+export function buildMapping(...args: string[]) {
+    return path.join(...args);
 }

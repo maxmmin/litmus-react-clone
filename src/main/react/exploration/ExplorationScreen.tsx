@@ -5,13 +5,9 @@ import {Entity} from "../../redux/exploration/EntityExplorationState";
 import ExplorationModesView from "./ExplorationModesView";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from "react-bootstrap/Button";
-import InputGroup from "./InputGroup";
-
-import ResultsContainer from "./ResultsContainer";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import Role, {Permissions, RoleName} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
-import store, {RootState} from "../../redux/store";
 import {useNavigate} from "react-router-dom";
 import appConfig, {routingLinks} from "../../config/appConfig";
 import {useLocation, useParams} from "react-router";
@@ -53,7 +49,9 @@ const ExplorationScreen = () => {
         if (entity) {
             setExploredEntity(entity)
         } else {
-            navigate(appConfig.applicationMappings.explorePersons);
+            if (exploredEntity) {
+
+            } else navigate(appConfig.applicationMappings.exploration.default);
         }
     }, [location])
 
@@ -139,7 +137,8 @@ const ExplorationScreen = () => {
                                <div className="explore-page__input-group-container">
                                    <Form className={"explore-input-group"}>
 
-                                       <InputGroup/>
+                                       {/*@todo this*/}
+                                       {/*<InputGroup/>*/}
 
                                        <Button disabled={data?.isPending} onClick={()=>"search"} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
                                            {data?.isPending?"Завантаження...":"Пошук"}
@@ -153,7 +152,8 @@ const ExplorationScreen = () => {
 
                    </div>
 
-                   <ResultsContainer containerRef={resultsContainer}/>
+                   @todo results
+                   {/*<ResultsContainer containerRef={resultsContainer}/>*/}
                </main>
            </div>
        </PrivateComponentWrapper>

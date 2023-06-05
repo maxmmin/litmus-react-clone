@@ -10,14 +10,11 @@ import PersonServiceImpl from "../entityService/person/PersonServiceImpl";
 import JurPersonServiceImpl from "../entityService/jurPerson/JurPersonServiceImpl";
 import UserServiceImpl from "../entityService/user/UserServiceImpl";
 import Person from "../../model/person/Person";
-import {PersonExplorationParams} from "../../redux/exploration/person/PersonExplorationState";
 import PersonService from "../entityService/person/PersonService";
 import {checkNotNull} from "../../util/pureFunctions";
 import User from "../../model/user/User";
-import {UserExplorationParams} from "../../redux/exploration/user/UserExplorationState";
 import UserService from "../entityService/user/UserService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import {JurPersonExplorationParams} from "../../redux/exploration/jurPerson/JurPersonExplorationState";
 import JurPersonService from "../entityService/jurPerson/JurPersonService";
 import {
     BasicNotification,
@@ -25,6 +22,10 @@ import {
     NotificationManager,
     NotificationType, notificationTypes
 } from "../../redux/applicationState/Notification";
+import PersonExplorationState from "../../redux/exploration/person/PersonExplorationState";
+import PersonExplorationParams from "../../redux/exploration/person/PersonExplorationParams";
+import UserExplorationState from "../../redux/exploration/user/UserExplorationState";
+import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPersonExplorationState";
 
 class UnsupportedModeError extends Error {
 
@@ -63,7 +64,7 @@ class ExplorationServiceImpl implements ExplorationService {
         console.error(err);
     }
     
-    private async explorePersons(stateManager: ExplorationStateManager<Person, PersonExplorationParams>, service: PersonService): Promise<Person[]> {
+    private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService): Promise<Person[]> {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
 
         let results: Person[] = [];
@@ -95,7 +96,7 @@ class ExplorationServiceImpl implements ExplorationService {
         return results;
     }
 
-    private async updatePersons(stateManager: ExplorationStateManager<Person, PersonExplorationParams>, service: PersonService) {
+    private async updatePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService) {
         try {
             stateManager.enableDataPending();
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
@@ -109,7 +110,7 @@ class ExplorationServiceImpl implements ExplorationService {
         }
     }
 
-    private async exploreUsers(stateManager: ExplorationStateManager<User, UserExplorationParams>, service: UserService): Promise<User[]> {
+    private async exploreUsers(stateManager: ExplorationStateManager<UserExplorationState>, service: UserService): Promise<User[]> {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
 
         let results: User[] = [];
@@ -141,7 +142,7 @@ class ExplorationServiceImpl implements ExplorationService {
         return results;
     }
 
-    private async updateUsers (stateManager: ExplorationStateManager<User, UserExplorationParams>, service: UserService) {
+    private async updateUsers (stateManager: ExplorationStateManager<UserExplorationState>, service: UserService) {
         try {
             stateManager.enableDataPending();
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
@@ -156,7 +157,7 @@ class ExplorationServiceImpl implements ExplorationService {
     }
 
 
-    private async exploreJurPersons(stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>, service: JurPersonService) {
+    private async exploreJurPersons(stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService) {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
 
         let results: JurPerson[] = [];
@@ -178,7 +179,7 @@ class ExplorationServiceImpl implements ExplorationService {
         return results;
     }
 
-    private async updateJurPersons (stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>, service: JurPersonService) {
+    private async updateJurPersons (stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService) {
         try {
             stateManager.enableDataPending();
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
@@ -205,7 +206,7 @@ class ExplorationServiceImpl implements ExplorationService {
     explore(entity: Entity) {
         switch (entity) {
             case Entity.PERSON: {
-                const stateManager: ExplorationStateManager<Person, PersonExplorationParams> = ExplorationStateManager.getPersonManager(this._store);
+                const stateManager: ExplorationStateManager<PersonExplorationState> = ExplorationStateManager.getPersonManager(this._store);
                 const service = new PersonServiceImpl(this.getAccessToken);
 
                 //@todo add some logic to err handing

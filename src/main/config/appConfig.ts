@@ -1,4 +1,5 @@
 import {Entity} from "../redux/exploration/EntityExplorationState";
+import {buildMapping} from "../util/pureFunctions";
 
 type AppConfig = {
     apiHost: string,
@@ -26,23 +27,37 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
 })
 
 const serverMappings = Object.freeze({
-    "users": apiRoot.concat(entityDomains.USER),
-    "persons": apiRoot.concat(entityDomains.PERSON),
-    "jurPersons": apiRoot.concat(entityDomains.JUR_PERSON),
-    "refreshTokens":  authRoot.concat("/refresh"),
-    "signIn": authRoot.concat("/sign-in")
+    "users": buildMapping(apiRoot, entityDomains.USER),
+    "persons": buildMapping(apiRoot, entityDomains.PERSON),
+    "jurPersons": buildMapping(apiRoot, entityDomains.JUR_PERSON),
+    "getCurrentUser": buildMapping(authRoot),
+    "refreshTokens": buildMapping(authRoot, "/refresh"),
+    "signIn": buildMapping(apiRoot, "/sign-in")
 })
 
 const explorationRoot = "/explore";
 
-const personExplorationMapping = explorationRoot.concat(entityDomains.PERSON)
+const personExplorationMapping = buildMapping(explorationRoot, entityDomains.PERSON)
+
+const creationRoot = "/create";
+
+const personCreationMapping = buildMapping(explorationRoot, entityDomains.PERSON)
 
 const applicationMappings = Object.freeze({
-    default: personExplorationMapping,
-    explorationRoot: explorationRoot,
-    explorePersons: personExplorationMapping,
-    exploreUsers: explorationRoot.concat(entityDomains.USER),
-    exploreJurPersons: explorationRoot.concat(entityDomains.JUR_PERSON)
+    exploration: {
+        default: personExplorationMapping,
+        root: explorationRoot,
+        explorePersons: personExplorationMapping,
+        exploreUsers: buildMapping(explorationRoot, entityDomains.USER),
+        exploreJurPersons: buildMapping(explorationRoot, entityDomains.JUR_PERSON)
+    },
+    creation: {
+        default: personCreationMapping,
+        root: creationRoot,
+        createPersons: personCreationMapping,
+        createJurPersons: buildMapping(creationRoot, entityDomains.USER),
+        createUsers: buildMapping(creationRoot, entityDomains.USER)
+    }
 })
 
 const appConfig: AppConfig = {

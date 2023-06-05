@@ -1,7 +1,7 @@
 import {Entity, ExplorationMode, ExplorationModeName} from "../../redux/exploration/EntityExplorationState";
-import {PersonExplorationParams} from "../../redux/exploration/person/PersonExplorationState";
-import {UserExplorationParams} from "../../redux/exploration/user/UserExplorationState";
-import {JurPersonExplorationParams} from "../../redux/exploration/jurPerson/JurPersonExplorationState";
+import PersonExplorationParams from "../../redux/exploration/person/PersonExplorationParams";
+import JurPersonExplorationParams from "../../redux/exploration/jurPerson/JurPersonExplorationParams";
+import UserExplorationParams from "../../redux/exploration/user/UserExplorationParams";
 
 class ExplorationRoutingManager {
     private static actionUrlBase = "explore"
@@ -47,7 +47,7 @@ class ExplorationRoutingManager {
     public static getCurrentMode (pathName: string): ExplorationMode|null {
         const currentEntity = this.getCurrentEntity(pathName);
 
-        if (!currentEntity) throw new Error("invalid entityService in pathname");
+        if (!currentEntity) throw new Error("invalid entity in pathname");
 
         let supportedModes: Array<ExplorationMode>;
 
@@ -61,12 +61,16 @@ class ExplorationRoutingManager {
             case Entity.USER:
                 supportedModes = UserExplorationParams.supportedModes;
                 break;
-            default: throw new Error("unknown entityService")
+            default: throw new Error("unknown entity")
         }
 
         const mode = pathName.split(`/${this.actionUrlBase}/${this.getEntityDomain(pathName)}/`)[1]
 
         const explorationMode = ExplorationMode[mode as ExplorationModeName];
+
+        if (!supportedModes.includes(explorationMode)) {
+            throw new Error("unsupported mode")
+        }
 
         return explorationMode?explorationMode:null;
     }

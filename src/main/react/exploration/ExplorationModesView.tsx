@@ -1,18 +1,21 @@
-import {Entity, EntityExplorationParams, ExplorationMode} from "../../redux/exploration/EntityExplorationState";
+import {
+    Entity,
+    EntityExplorationParams,
+    EntityExplorationState,
+    ExplorationMode
+} from "../../redux/exploration/EntityExplorationState";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useMemo} from "react";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {PersonExplorationState} from "../../redux/exploration/person/PersonExplorationState";
-import {JurPersonExplorationState} from "../../redux/exploration/jurPerson/JurPersonExplorationState";
-import {UserExplorationState} from "../../redux/exploration/user/UserExplorationState";
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
-import {EntityType} from "../../model/EntityType";
+import PersonExplorationState from "../../redux/exploration/person/PersonExplorationState";
+import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPersonExplorationState";
+import UserExplorationState from "../../redux/exploration/user/UserExplorationState";
+import explorationStateManager from "../../redux/exploration/ExplorationStateManager";
 
 
 const ExplorationModesView = () => {
-    const dispatch = useAppDispatch();
-
     const exploredEntity = useAppSelector<Entity|undefined>(state => state.exploration.exploredEntity);
 
     const explorationParams = useAppSelector<EntityExplorationParams|undefined>(state => {
@@ -35,24 +38,10 @@ const ExplorationModesView = () => {
         }
     })
 
-    const explorationManager = useMemo<ExplorationStateManager<EntityType, EntityExplorationParams>|undefined>(()=>{
-        if (exploredEntity) {
-            switch (exploredEntity) {
-                case Entity.PERSON: {
-                    return ExplorationStateManager.getPersonManager(store);
-                }
-
-                case Entity.JUR_PERSON: {
-                    return ExplorationStateManager.getJurPersonManager(store);
-                }
-
-                case Entity.USER: {
-                    return ExplorationStateManager.getUserManager(store);
-                }
-
-                default: throw new Error("unknown entityService is in the state");
-            }
-        }
+    const explorationManager = useMemo<ExplorationStateManager<EntityExplorationState<any, any>>|undefined>(()=>{
+       if (exploredEntity) {
+           return explorationStateManager.getEntityManager(store, exploredEntity)
+       }
     }, [exploredEntity])
 
     const explorationMode: ExplorationMode|null = explorationParams?explorationParams.mode:null;

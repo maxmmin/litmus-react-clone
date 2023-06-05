@@ -15,6 +15,7 @@ import Creation from "./react/creation/CreationScreen";
 import appConfig, {routingLinks} from "./config/appConfig";
 import {Entity} from "./redux/exploration/EntityExplorationState";
 import Role from "./redux/userIdentity/Role";
+import {buildMapping} from "./util/pureFunctions";
 
 // @todo check if the refresh token expired
 
@@ -40,7 +41,7 @@ function App() {
                                 <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={Role.USER.permissions}/>
                             }/>
 
-                            <Route path={`${appConfig.applicationMappings.explorationRoot}:entityDomain`} element={
+                            <Route path={buildMapping(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={
                                 <Explore/>
                             }/>
 

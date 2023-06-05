@@ -1,25 +1,18 @@
 import Form from "react-bootstrap/Form";
 import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {setLocalInput} from "../../../../redux/exploration/params/ExplorationParamsActions";
-import {BasicHumanSearchPayload} from "../../../redux/exploration/EntityExplorationState";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
+import ExplorationStateManager from "../../../redux/exploration/ExplorationStateManager";
+import store from "../../../redux/store";
 
-const FindById = () => {
-    const dispatch = useAppDispatch();
+const FindByIdGroup = () => {
+    const entity = useAppSelector(state => state.exploration?.exploredEntity)
 
-    const isInvalid = useState<boolean>(false);
-    const entity = useAppSelector(state => state.explorationParams?.entity)
+    if (!entity) return null;
 
-    const localInput = useAppSelector(state => {
-        const globalInput = state.explorationParams?.input;
-        if (entity&&globalInput) {
-            return globalInput[entity] as BasicHumanSearchPayload;
-        }
-        return null;
-    })
+    const stateManager = ExplorationStateManager.getEntityManager(store, entity);
 
-    const id = localInput?localInput.id:""
+    const {id} = stateManager.getExplorationState().params;
 
     // useEffect(()=>{
     //     if (isNaN(+id!)) {
@@ -38,8 +31,9 @@ const FindById = () => {
             <Form.Group className="mb-3">
                 <Form.Label>ID</Form.Label>
                 <input autoComplete={"new-password"} onChange={e=>{
-                    dispatch(setLocalInput({...localInput, id: e.currentTarget.value}))
-                }} className={`id form-control`} value={id} type="text" placeholder="Введіть id"
+                    const prev = stateManager.getExplorationState().params;
+                    stateManager.updateParams({...prev, id: e.currentTarget.value});
+                }} className={`id form-control`} value={id?id:''} type="text" placeholder="Введіть id"
                 onKeyDown={keyPressHandler}
                 />
             </Form.Group>
@@ -47,4 +41,4 @@ const FindById = () => {
     )
 }
 
-export default FindById;
+export default FindByIdGroup;

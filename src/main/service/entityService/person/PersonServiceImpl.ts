@@ -5,11 +5,12 @@ import appConfig from "../../../config/appConfig";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicEntityService from "../BasicEntityService";
+import {isEmpty} from "../../../util/pureFunctions";
 
 class PersonServiceImpl extends BasicEntityService<Person> implements PersonService {
 
 
-    constructor(getToken: () => string, apiMapping: string = appConfig.apiMapping.person) {
+    constructor(getToken: () => string, apiMapping: string = appConfig.serverMappings.persons) {
         super(apiMapping, getToken);
     }
 
@@ -24,7 +25,7 @@ class PersonServiceImpl extends BasicEntityService<Person> implements PersonServ
             .authentication(token);
 
         for (const key in fullName) {
-            if (Object.hasOwn(fullName, key)) {
+            if (Object.hasOwn(fullName, key)&&!isEmpty(fullName[key])) {
                 requestManager.setQueryParam(key,fullName[key]);
             }
         }
