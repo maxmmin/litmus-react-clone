@@ -100,21 +100,14 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
         })
     }
 
-    updateDataResults(data: S['data']['results']) {
-        this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA_RESULTS],
-            payload: data
-        })
-    }
-
-    enableDataPending (): void {
+    enablePending (): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING],
             payload: true
         })
     }
 
-    disableDataPending (): void {
+    disablePending (): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING],
             payload: false
@@ -122,35 +115,22 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
     }
 
     switchExplorationMode(mode: ExplorationMode): void {
-        switch (this.actions) {
-            case ExplorationTypedActions.user: {
-                this.checkSupport(mode, UserExplorationParams.supportedModes);
-                break;
-            }
-            case ExplorationTypedActions.person: {
-                this.checkSupport(mode, PersonExplorationParams.supportedModes);
-                break;
-            }
-            case ExplorationTypedActions.jurPerson: {
-                this.checkSupport(mode, JurPersonExplorationParams.supportedModes);
-                break;
-            }
-        }
-        console.log(this.actions)
+        this.checkSupport(mode);
+
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE],
             payload: mode
         })
     }
 
-    checkSupport(mode: ExplorationMode, supported: ExplorationMode[]) {
-        if (!this.isSupported(mode, supported)) {
+    checkSupport(mode: ExplorationMode) {
+        if (!this.supports(mode)) {
             throw new Error("mode is not supported");
         }
     }
 
-    isSupported (mode: ExplorationMode, supported: ExplorationMode[]) {
-        return supported.includes(mode);
+    supports (mode: ExplorationMode) {
+        return this.getExplorationParams().supportedModes.includes(mode);
     }
 
 }

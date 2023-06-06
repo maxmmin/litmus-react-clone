@@ -13,15 +13,17 @@ import BasicEntityExplorationData from "./BasicEntityExplorationData";
 import {Entity} from "./Entity";
 import EntityExplorationParams from "./EntityExplorationParams";
 import ExplorationMode from "./ExplorationMode";
+import User from "../../model/user/User";
+import EntityExplorationData from "./EntityExplorationData";
 
 const getSerializableState = <S extends EntityExplorationState<any, EntityExplorationParams>> (state: S): S => {
     let serializableState = {...state};
-    serializableState.data = {...state.data};
+    serializableState.data = state.data?{...state.data}:null;
     serializableState.params = {...state.params}
     return serializableState;
 }
 
-const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<any>): S => {
+const entityExplorationReducer = <E,S extends EntityExplorationState<E, EntityExplorationParams>> (prevState: S, action: PayloadAction<any>): S => {
     switch (action.type) {
         case ExplorationCoreAction.UPDATE_EXPLORATION_STATE: {
             return getSerializableState(action.payload as S);
@@ -40,11 +42,6 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, EntityEx
             return {...prevState, data: {...prevState.data, isPending: bool}}
         }
 
-        case ExplorationCoreAction.UPDATE_EXPLORATION_DATA_RESULTS: {
-            let results: S["data"]['results'] = action.payload;
-            return {...prevState, data: {...prevState.data, results: results}}
-        }
-
         case ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE: {
             const selectedMode = action.payload as ExplorationMode;
             if (!prevState.params.supportedModes.includes(selectedMode)) {
@@ -59,7 +56,7 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, EntityEx
     }
 }
 
-const initialPersonExplorationState = getSerializableState(new PersonExplorationState(new BasicEntityExplorationData(), new PersonExplorationParams()));
+const initialPersonExplorationState = getSerializableState(new PersonExplorationState(new PersonExplorationParams()));
 
 type PersonExplorationStateReducible = PersonExplorationState | undefined;
 
@@ -80,7 +77,7 @@ const personExplorationReducer: Reducer<PersonExplorationStateReducible, Payload
 }
 
 
-const initialJurPersonExplorationState = getSerializableState(new JurPersonExplorationState(new BasicEntityExplorationData(), new JurPersonExplorationParams()))
+const initialJurPersonExplorationState = getSerializableState(new JurPersonExplorationState(new JurPersonExplorationParams()))
 
 type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
 
@@ -99,7 +96,7 @@ const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, P
     }
 }
 
-const initialUserExplorationState = getSerializableState(new UserExplorationState(new BasicEntityExplorationData(), new UserExplorationParams()));
+const initialUserExplorationState = getSerializableState(new UserExplorationState( new UserExplorationParams()));
 
 type UserExplorationStateReducible = UserExplorationState | undefined;
 

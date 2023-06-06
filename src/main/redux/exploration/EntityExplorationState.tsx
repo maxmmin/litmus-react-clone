@@ -7,6 +7,7 @@ import EntityExplorationData from "./EntityExplorationData";
  */
 export default interface EntityExplorationState <E,P extends EntityExplorationParams> {
     params: P,
-    data: EntityExplorationData<E, P>
+    isPending: boolean,
+    data: EntityExplorationData<E, P>|null
 }
 

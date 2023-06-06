@@ -95,7 +95,7 @@ class ExplorationServiceImpl implements ExplorationService {
 
     private async updatePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService) {
         try {
-            stateManager.enableDataPending();
+            stateManager.enablePending();
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
             const persons: Person[] = await this.explorePersons(stateManager, service);
             stateManager.updateDataResults(persons);
@@ -103,7 +103,7 @@ class ExplorationServiceImpl implements ExplorationService {
             this.handleError(e);
         }
         finally {
-            stateManager.disableDataPending();
+            stateManager.disablePending();
         }
     }
 
@@ -141,7 +141,7 @@ class ExplorationServiceImpl implements ExplorationService {
 
     private async updateUsers (stateManager: ExplorationStateManager<UserExplorationState>, service: UserService) {
         try {
-            stateManager.enableDataPending();
+            stateManager.enablePending();
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
             const users: User[] = await this.exploreUsers(stateManager, service);
             stateManager.updateDataResults(users);
@@ -149,7 +149,7 @@ class ExplorationServiceImpl implements ExplorationService {
             this.handleError(e);
         }
         finally {
-            stateManager.disableDataPending();
+            stateManager.disablePending();
         }
     }
 
@@ -178,7 +178,7 @@ class ExplorationServiceImpl implements ExplorationService {
 
     private async updateJurPersons (stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService) {
         try {
-            stateManager.enableDataPending();
+            stateManager.enablePending();
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
             const jurPersons: JurPerson[] = await this.exploreJurPersons(stateManager, service);
             stateManager.updateDataResults(jurPersons);
@@ -186,7 +186,7 @@ class ExplorationServiceImpl implements ExplorationService {
             this.handleError(e)
         }
         finally {
-            stateManager.disableDataPending();
+            stateManager.disablePending();
         }
     }
 
