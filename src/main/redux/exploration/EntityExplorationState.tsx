@@ -7,6 +7,6 @@ import EntityExplorationData from "./EntityExplorationData";
  */
 export default interface EntityExplorationState <E,P extends EntityExplorationParams> {
     params: P,
-    data: EntityExplorationData<E>
+    data: EntityExplorationData<E, P>
 }
 

@@ -1,5 +1,7 @@
-export default interface EntityExplorationData <E> {
-    results: Array<E>|null;
+import EntityExplorationParams from "./EntityExplorationParams";
+
+export default interface EntityExplorationData <E, P extends EntityExplorationParams> {
+    results: Array<E>;
     isFullyLoaded: boolean;
-    isPending: boolean
+    requestParams: P|null;
 }

@@ -47,7 +47,7 @@ const ExplorationScreen = () => {
             })
 
         }
-        console.log(location)
+
         if (!urlEntity) {
             if (exploredEntity) {
                 navigate(appConfig.applicationMappings.exploration[exploredEntity])
