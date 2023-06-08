@@ -1,28 +1,28 @@
-import PersonService from "./PersonService";
+import HumanService from "./HumanService";
+import PagedResponse from "../PagedResponse";
 import {FullName} from "../../exploration/FullName";
-import Person from "../../../model/person/Person";
+import BasicEntityService from "../BasicEntityService";
 import appConfig from "../../../config/appConfig";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
-import BasicEntityService from "../BasicEntityService";
 import {isEmpty} from "../../../util/pureFunctions";
+import {Human} from "../../../model/human/Human";
 
-class PersonServiceImpl extends BasicEntityService<Person> implements PersonService {
+export default class BasicHumanService<E extends Human> extends BasicEntityService<E> implements HumanService<E> {
 
-
-    constructor(getToken: () => string, apiMapping: string = appConfig.serverMappings.persons) {
+    constructor(apiMapping: string = appConfig.serverMappings.users, getToken: () => string) {
         super(apiMapping, getToken);
     }
 
-    async findByFullName(fullName: FullName): Promise<Person[]> {
+    async findByFullName(fullName: FullName): Promise<PagedResponse<E>> {
         const requestManager = new BasicApiRequestManager();
 
-        const token = this.getAccessToken();
+        const accessToken = this.getAccessToken();
 
         requestManager
             .url(this.apiUrl)
             .method(HttpMethod.GET)
-            .authentication(token);
+            .authentication(accessToken);
 
         for (const key in fullName) {
             if (Object.hasOwn(fullName, key)&&!isEmpty(fullName[key])) {
@@ -30,8 +30,6 @@ class PersonServiceImpl extends BasicEntityService<Person> implements PersonServ
             }
         }
         const response = await requestManager.fetch();
-        return await response.json() as Person[];
+        return await response.json() as PagedResponse<E>;
     }
 }
-
-export default PersonServiceImpl;

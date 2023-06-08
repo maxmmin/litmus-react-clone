@@ -1,10 +1,7 @@
-import EntityService from "../EntityService";
-import {FullName} from "../../exploration/FullName";
-import Person from "../../../model/person/Person";
-import User from "../../../model/user/User";
+import User from "../../../model/human/user/User";
+import HumanService from "../human/HumanService";
 
-interface UserService extends EntityService<User> {
-    findByFullName (fullName: FullName): Promise<User[]>
+interface UserService extends HumanService<User> {
 }
 
 export default UserService;

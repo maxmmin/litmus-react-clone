@@ -9,7 +9,7 @@ import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./CreationScreen";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import Person, {Relationship, RelationshipsLinkObject} from "../../model/person/Person";
+import Person, {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 import {getPersonFromResponse, isValid} from "../../util/pureFunctions";
 import {CreationModalModes} from "../../redux/creation/CreationModalModes";
 

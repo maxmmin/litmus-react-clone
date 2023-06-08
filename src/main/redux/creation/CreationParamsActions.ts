@@ -1,12 +1,12 @@
 import {PayloadAction} from "@reduxjs/toolkit";
 import {Location} from "../../model/Location";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import Person, {Relationship} from "../../model/person/Person";
-import User from "../../model/user/User";
-import {PassportData} from "../../model/person/PassportData";
+import Person, {Relationship} from "../../model/human/person/Person";
+import User from "../../model/human/user/User";
+import {PassportData} from "../../model/human/person/PassportData";
 import {RoleName} from "../userIdentity/Role";
 import DateEntity, {DateBuilder} from "../../model/DateEntity";
-import Sex from "../../model/person/Sex";
+import Sex from "../../model/human/person/Sex";
 import {Entity} from "../exploration/Entity";
 
 enum CreationParamsActions {

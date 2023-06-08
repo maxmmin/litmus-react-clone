@@ -1,5 +1,5 @@
 import {noInfoMessage} from "../../../util/HttpStatus";
-import Person from "../../../model/person/Person";
+import Person from "../../../model/human/person/Person";
 import {DateBuilder} from "../../../model/DateEntity";
 
 type Props = {

@@ -13,7 +13,7 @@ import BasicEntityExplorationData from "./BasicEntityExplorationData";
 import {Entity} from "./Entity";
 import EntityExplorationParams from "./EntityExplorationParams";
 import ExplorationMode from "./ExplorationMode";
-import User from "../../model/user/User";
+import User from "../../model/human/user/User";
 import EntityExplorationData from "./EntityExplorationData";
 
 const getSerializableState = <S extends EntityExplorationState<any, EntityExplorationParams>> (state: S): S => {

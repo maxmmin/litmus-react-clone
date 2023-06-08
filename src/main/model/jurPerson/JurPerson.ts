@@ -1,5 +1,5 @@
 import {Location} from "../Location";
-import Person from "../person/Person";
+import Person from "../human/person/Person";
 import DateEntity from "../DateEntity";
 
 export type JurPerson = {

@@ -14,7 +14,7 @@ import InputDate from "../../common/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import DateEntity, {DateBuilder} from "../../../model/DateEntity";
-import Sex from "../../../model/person/Sex";
+import Sex from "../../../model/human/person/Sex";
 import {CrossIcon} from "../../../util/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../redux/creation/CreationModalModes";

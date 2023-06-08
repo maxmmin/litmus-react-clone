@@ -1,16 +1,16 @@
 import ExplorationService from "./ExplorationService";
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
-import PersonServiceImpl from "../entityService/person/PersonServiceImpl";
-import JurPersonServiceImpl from "../entityService/jurPerson/JurPersonServiceImpl";
+import PersonServiceImpl from "../entityService/human/person/PersonServiceImpl";
+import JurPersonServiceImpl from "../entityService/human/jurPerson/JurPersonServiceImpl";
 import UserServiceImpl from "../entityService/user/UserServiceImpl";
-import Person from "../../model/person/Person";
-import PersonService from "../entityService/person/PersonService";
+import Person from "../../model/human/person/Person";
+import PersonService from "../entityService/human/person/PersonService";
 import {checkNotNull} from "../../util/pureFunctions";
-import User from "../../model/user/User";
+import User from "../../model/human/user/User";
 import UserService from "../entityService/user/UserService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import JurPersonService from "../entityService/jurPerson/JurPersonService";
+import JurPersonService from "../entityService/human/jurPerson/JurPersonService";
 import {
     BasicNotification,
     BasicNotificationManager,
@@ -98,7 +98,7 @@ class ExplorationServiceImpl implements ExplorationService {
             stateManager.enablePending();
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
             const persons: Person[] = await this.explorePersons(stateManager, service);
-            stateManager.updateDataResults(persons);
+            stateManager.updateData({});
         } catch (e: any) {
             this.handleError(e);
         }

@@ -1,6 +1,6 @@
-import {Location} from "../Location";
+import {Location} from "../../Location";
 import {PassportData} from "./PassportData";
-import DateEntity from "../DateEntity";
+import DateEntity from "../../DateEntity";
 import Sex from "./Sex";
 
 type Person = {

@@ -61,11 +61,11 @@ const ExplorationScreen = () => {
         if (exploredEntity) {
             switch (exploredEntity) {
                 case Entity.PERSON:
-                    return state.exploration.person?.data.isPending;
+                    return state.exploration.person?.isPending
                 case Entity.JUR_PERSON:
-                    return state.exploration.jurPerson?.data.isPending;
+                    return state.exploration.jurPerson?.isPending;
                 case Entity.USER:
-                    return state.exploration.user?.data.isPending;
+                    return state.exploration.user?.isPending;
             }
         }   else return null;
     })

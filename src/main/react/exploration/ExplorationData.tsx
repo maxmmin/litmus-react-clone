@@ -46,11 +46,13 @@ const ExplorationData = ({containerRef, exploredEntity}: Props) => {
 
     const entity = manager.entity;
 
-    const data = manager.getExplorationData();
+    const state = manager.getExplorationState();
 
-    const results = data.results;
+    const data = state.data;
 
-    if (!results) return null;
+    if (!data) return null;
+
+    const results = data.response.content;
 
     return (
         <div className={"results-container"} ref={containerRef}>
@@ -60,9 +62,9 @@ const ExplorationData = ({containerRef, exploredEntity}: Props) => {
                     {getProcessedResults(entity,results)}
                 </>
                 :
-                data.isPending?null:<h3 className=".text-center">Результатів не знайдено</h3>
+                state.isPending?null:<h3 className=".text-center">Результатів не знайдено</h3>
             }
-            {data.isPending?<Loader/>:null}
+            {state.isPending?<Loader/>:null}
         </div>
     )
 }

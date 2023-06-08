@@ -1,14 +1,14 @@
 import JurPersonService from "./JurPersonService";
-import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import appConfig from "../../../config/appConfig";
-import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
-import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
-import {BasicHttpError} from "../../../util/HttpStatus";
-import BasicEntityService from "../BasicEntityService";
+import {JurPerson} from "../../../../model/jurPerson/JurPerson";
+import appConfig from "../../../../config/appConfig";
+import {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
+import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
+import {BasicHttpError} from "../../../../util/HttpStatus";
+import BasicEntityService from "../../BasicEntityService";
 
 class JurPersonServiceImpl extends BasicEntityService<JurPerson> implements JurPersonService {
 
-    constructor(getToken: () => string, apiMapping: string = appConfig.serverMappings.jurPersons) {
+    constructor( apiMapping: string = appConfig.serverMappings.jurPersons, getToken: ()=>string) {
         super(apiMapping, getToken);
     }
 

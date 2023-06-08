@@ -1,7 +1,7 @@
 import EntityExplorationParams from "./EntityExplorationParams";
+import PagedResponse from "../../service/entityService/PagedResponse";
 
 export default interface EntityExplorationData <E, P extends EntityExplorationParams> {
-    results: Array<E>;
-    isFullyLoaded: boolean;
-    requestParams: P|null;
+    response: PagedResponse<E>|E,
+    requestParams: P
 }
