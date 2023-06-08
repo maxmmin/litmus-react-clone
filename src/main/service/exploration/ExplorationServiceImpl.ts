@@ -63,9 +63,6 @@ class ExplorationServiceImpl implements ExplorationService {
     
     private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService): Promise<Person[]> {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
-
-        let results: Person[] = [];
-
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
