@@ -8,7 +8,7 @@ import BasicEntityService from "../../BasicEntityService";
 
 class JurPersonServiceImpl extends BasicEntityService<JurPerson> implements JurPersonService {
 
-    constructor( apiMapping: string = appConfig.serverMappings.jurPersons, getToken: ()=>string) {
+    constructor(getToken: ()=>string, apiMapping: string = appConfig.serverMappings.jurPersons) {
         super(apiMapping, getToken);
     }
 
