@@ -14,7 +14,7 @@ import ApplicationStateCenter from "./react/applicationState/ApplicationStateCen
 import Creation from "./react/creation/CreationScreen";
 import appConfig, {routingLinks} from "./config/appConfig";
 import Role, {Permissions} from "./redux/userIdentity/Role";
-import {buildMapping} from "./util/pureFunctions";
+import {buildUrl} from "./util/pureFunctions";
 import {Entity} from "./redux/exploration/Entity";
 
 // @todo check if the refresh token expired
@@ -42,7 +42,7 @@ function App() {
                                 <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={[Permissions.DATA_READ]}/>
                             }/>
 
-                            <Route path={buildMapping(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={
+                            <Route path={buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={
                                 <Explore/>
                             }/>
 

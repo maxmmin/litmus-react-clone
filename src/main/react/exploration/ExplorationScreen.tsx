@@ -10,10 +10,14 @@ import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import {useNavigate} from "react-router-dom";
 import appConfig from "../../config/appConfig";
 import {useLocation, useParams} from "react-router";
-import InputGroup from "./InputGroup";
+import ExplorationInputForm from "./ExplorationInputForm";
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
 import ExplorationData from "./ExplorationData";
+import EntityExplorationState from "../../redux/exploration/EntityExplorationState";
+import EntityExplorationParams from "../../redux/exploration/EntityExplorationParams";
+import ExplorationService from "../../service/exploration/ExplorationService";
+import ExplorationServiceImpl from "../../service/exploration/ExplorationServiceImpl";
 
 /* btn isInputInvalid?'disabled':''*/
 
@@ -24,6 +28,15 @@ import ExplorationData from "./ExplorationData";
 //         dispatch(refreshResultsThunk({table: exploredEntity, shouldRefreshGlobally: false}))
 //     }
 // }
+
+
+function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplorationParams>> (explorationService: ExplorationService, stateManager: ExplorationStateManager<S>) {
+    const entity = stateManager.entity;
+    return (e: React.MouseEvent<HTMLButtonElement>) => {
+       explorationService.explore(entity);
+       console.log("search...")
+    }
+}
 
 const ExplorationScreen = () => {
     const location = useLocation();
@@ -81,6 +94,7 @@ const ExplorationScreen = () => {
                 case Entity.USER:
                     requiredPermissions = Role[RoleName.ADMIN].permissions;
                     break;
+                default: requiredPermissions = Role[RoleName.USER].permissions;
             }
         }
     }
@@ -92,6 +106,11 @@ const ExplorationScreen = () => {
     if (!exploredEntity) {
        return null;
     }
+
+    const explorationStateManager = ExplorationStateManager.getEntityManager(store,exploredEntity);
+
+    const explorationService = new ExplorationServiceImpl(store,true);
+
     return (
        <PrivateComponentWrapper requiredPermissions={requiredPermissions} mode={"ERROR_PAGE"}>
            <div className={"explore-page"}>
@@ -110,7 +129,7 @@ const ExplorationScreen = () => {
 
                        <ExplorationModeSelectContainer/>
 
-                       <InputGroup isPending={Boolean(isPending)} exploredEntity={exploredEntity}/>
+                       <ExplorationInputForm onSubmit={getOnSubmitCallback(explorationService, explorationStateManager)} isPending={Boolean(isPending)} exploredEntity={exploredEntity}/>
 
                    </div>
 

@@ -5,7 +5,7 @@
 
 
 interface EntityService<E> {
-    findById (id: string): Promise<E>;
+    findById (id: string): Promise<E|null>;
 }
 
 export default EntityService;

@@ -2,11 +2,8 @@ import store, {AppDispatch} from "../store";
 import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
 import {setExploredEntityAction} from "./explorationReducer";
 import JurPersonExplorationState from "./jurPerson/JurPersonExplorationState";
-import PersonExplorationState from "./person/PersonExplorationState";
-import UserExplorationState from "./user/UserExplorationState";
-import UserExplorationParams from "./user/UserExplorationParams";
-import PersonExplorationParams from "./person/PersonExplorationParams";
-import JurPersonExplorationParams from "./jurPerson/JurPersonExplorationParams";
+import PersonExplorationState from "./human/person/PersonExplorationState";
+import UserExplorationState from "./human/user/UserExplorationState";
 import EntityExplorationState from "./EntityExplorationState";
 import EntityExplorationParams from "./EntityExplorationParams";
 import {Entity} from "./Entity";
@@ -130,7 +127,7 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
     }
 
     supports (mode: ExplorationMode) {
-        return this.getExplorationParams().supportedModes.includes(mode);
+        return this.getExplorationParams().supportedModesIdList.includes(mode);
     }
 
 }

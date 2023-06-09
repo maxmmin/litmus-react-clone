@@ -5,9 +5,9 @@ import React, {ChangeEvent, useMemo} from "react";
 import {useAppSelector} from "../../redux/hooks";
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
-import PersonExplorationState from "../../redux/exploration/person/PersonExplorationState";
+import PersonExplorationState from "../../redux/exploration/human/person/PersonExplorationState";
 import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPersonExplorationState";
-import UserExplorationState from "../../redux/exploration/user/UserExplorationState";
+import UserExplorationState from "../../redux/exploration/human/user/UserExplorationState";
 import explorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import EntityExplorationParams from "../../redux/exploration/EntityExplorationParams";
 import ExplorationMode from "../../redux/exploration/ExplorationMode";
@@ -42,12 +42,9 @@ const ExplorationModesView = () => {
        }
     }, [exploredEntity])
 
-    const explorationMode: ExplorationMode|null = explorationParams?explorationParams.mode:null;
+    const explorationMode: ExplorationMode|null = explorationParams?ExplorationMode.getModeById(explorationParams.modeId):null;
 
-    const explorationModes: ExplorationMode[]|null = explorationParams?explorationParams.supportedModes:null;
-
-    console.log(exploredEntity)
-    console.log(explorationModes)
+    const explorationModes: ExplorationMode[]|null = explorationParams?explorationParams.supportedModesIdList.map(ExplorationMode.getModeById):null;
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>): void {
         const modeIndex = Number(event.currentTarget.value);

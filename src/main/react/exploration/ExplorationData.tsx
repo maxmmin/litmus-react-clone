@@ -6,7 +6,7 @@ import UserInfoTable from "./EntityTables/UserInfoTable";
 import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../util/pureFunctions";
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
-import PagedData, {isUnPaged} from "../../service/entityService/PagedData";
+import PagedData, {isUnPaged} from "../../service/exploration/entityService/PagedData";
 
 const getProcessedResults = (entity: Entity, results: any[]) => {
     switch (entity) {

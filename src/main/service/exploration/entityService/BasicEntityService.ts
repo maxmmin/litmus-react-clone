@@ -3,10 +3,10 @@
  * service which provides shared methods
  */
 import EntityService from "./EntityService";
-import BasicApiRequestManager from "../../util/apiRequest/BasicApiRequestManager";
-import path from "path";
-import {HttpMethod} from "../../util/apiRequest/ApiRequestManager";
-import {BasicHttpError} from "../../util/HttpStatus";
+import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
+import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
+import {BasicHttpError} from "../../../util/HttpStatus";
+import {buildUrl} from "../../../util/pureFunctions";
 
 class BasicEntityService<E> implements EntityService<E>{
     protected readonly apiUrl: string;
@@ -19,15 +19,16 @@ class BasicEntityService<E> implements EntityService<E>{
 
     async findById(id: string): Promise<E> {
         const requestManager = new BasicApiRequestManager();
-        this.getAccessToken();
+        const accessToken = this.getAccessToken();
         const response = await requestManager
-            .url(path.join(this.apiUrl, id))
+            .url(buildUrl(this.apiUrl, id))
             .method(HttpMethod.GET)
+            .authentication(accessToken)
             .fetch();
         if (!response.ok) {
             throw new BasicHttpError(response.status, await BasicHttpError.getHttpErrorResponse(response));
         } else {
-            return await response.json() as E;
+            return await response.json().catch(()=>null) as E;
         }
     }
 }

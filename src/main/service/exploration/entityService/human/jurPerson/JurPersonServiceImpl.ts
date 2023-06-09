@@ -1,9 +1,9 @@
 import JurPersonService from "./JurPersonService";
-import {JurPerson} from "../../../../model/jurPerson/JurPerson";
-import appConfig from "../../../../config/appConfig";
-import {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
-import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
-import {BasicHttpError} from "../../../../util/HttpStatus";
+import {JurPerson} from "../../../../../model/jurPerson/JurPerson";
+import appConfig from "../../../../../config/appConfig";
+import {HttpMethod} from "../../../../../util/apiRequest/ApiRequestManager";
+import BasicApiRequestManager from "../../../../../util/apiRequest/BasicApiRequestManager";
+import {BasicHttpError} from "../../../../../util/HttpStatus";
 import BasicEntityService from "../../BasicEntityService";
 
 class JurPersonServiceImpl extends BasicEntityService<JurPerson> implements JurPersonService {

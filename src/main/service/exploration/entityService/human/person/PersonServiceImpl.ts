@@ -1,6 +1,6 @@
 import PersonService from "./PersonService";
-import Person from "../../../../model/human/person/Person";
-import appConfig from "../../../../config/appConfig";
+import Person from "../../../../../model/human/person/Person";
+import appConfig from "../../../../../config/appConfig";
 import BasicHumanService from "../BasicHumanService";
 
 class PersonServiceImpl extends BasicHumanService<Person> implements PersonService {

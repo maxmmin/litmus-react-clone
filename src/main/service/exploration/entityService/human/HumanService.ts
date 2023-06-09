@@ -1,6 +1,6 @@
-import {FullName} from "../../exploration/FullName";
+import {FullName} from "../../FullName";
 import PagedData from "../PagedData";
-import {Human} from "../../../model/human/Human";
+import {Human} from "../../../../model/human/Human";
 import EntityService from "../EntityService";
 
 /**

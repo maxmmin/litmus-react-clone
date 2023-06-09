@@ -1,4 +1,4 @@
-import {JurPerson} from "../../../../model/jurPerson/JurPerson";
+import {JurPerson} from "../../../../../model/jurPerson/JurPerson";
 import EntityService from "../../EntityService";
 
 

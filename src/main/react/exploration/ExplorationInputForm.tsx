@@ -25,7 +25,11 @@ function getInputGroupJsxByMode (mode: ExplorationMode): JSX.Element {
     }
 }
 
-function InputGroup ({exploredEntity, isPending}: {exploredEntity: Entity, isPending: boolean}): JSX.Element|null {
+export type ExplorationFormProps = {
+    exploredEntity: Entity, isPending: boolean, onSubmit: (e: React.MouseEvent<HTMLButtonElement>)=>void
+}
+
+function ExplorationInputForm ({exploredEntity, isPending, onSubmit}: ExplorationFormProps): JSX.Element|null {
     const exploration: RootState['exploration'] = useAppSelector(state => state.exploration)
     if (!exploredEntity) {
         return null;
@@ -34,13 +38,13 @@ function InputGroup ({exploredEntity, isPending}: {exploredEntity: Entity, isPen
 
         switch (exploredEntity) {
             case Entity.PERSON:
-                explorationMode = exploration.person!.params.mode;
+                explorationMode = exploration.person!.params.modeId;
                 break;
             case Entity.JUR_PERSON:
-                explorationMode = exploration.jurPerson!.params.mode;
+                explorationMode = exploration.jurPerson!.params.modeId;
                 break;
             case Entity.USER:
-                explorationMode = exploration.user!.params.mode;
+                explorationMode = exploration.user!.params.modeId;
                 break;
             default: throw new Error("provided unknown entity")
         }
@@ -51,7 +55,7 @@ function InputGroup ({exploredEntity, isPending}: {exploredEntity: Entity, isPen
 
                     { getInputGroupJsxByMode(explorationMode) }
 
-                    <Button disabled={isPending} onClick={()=>"search"} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
+                    <Button disabled={isPending} onClick={onSubmit} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
                         {isPending?"Завантаження...":"Пошук"}
                     </Button>
                 </Form>
@@ -60,4 +64,4 @@ function InputGroup ({exploredEntity, isPending}: {exploredEntity: Entity, isPen
     }
 }
 
-export default InputGroup
+export default ExplorationInputForm

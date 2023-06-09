@@ -1,4 +1,4 @@
-import {buildMapping} from "../util/pureFunctions";
+import {buildUrl} from "../util/pureFunctions";
 import {Entity} from "../redux/exploration/Entity";
 
 type AppConfig = {
@@ -26,38 +26,38 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
 })
 
 const serverMappings = Object.freeze({
-    "users": buildMapping(apiRoot, entityDomains.USER),
-    "persons": buildMapping(apiRoot, entityDomains.PERSON),
-    "jurPersons": buildMapping(apiRoot, entityDomains.JUR_PERSON),
-    "getCurrentUser": buildMapping(authRoot),
-    "refreshTokens": buildMapping(authRoot, "/refresh"),
-    "signIn": buildMapping(apiRoot, "/sign-in")
+    "users": buildUrl(apiRoot, entityDomains.USER),
+    "persons": buildUrl(apiRoot, entityDomains.PERSON),
+    "jurPersons": buildUrl(apiRoot, entityDomains.JUR_PERSON),
+    "getCurrentUser": buildUrl(authRoot),
+    "refreshTokens": buildUrl(authRoot, "/refresh"),
+    "signIn": buildUrl(apiRoot, "/sign-in")
 })
 
 console.log(serverMappings)
 
 const explorationRoot = "/explore";
 
-const personExplorationMapping = buildMapping(explorationRoot, entityDomains.PERSON)
+const personExplorationMapping = buildUrl(explorationRoot, entityDomains.PERSON)
 
 const creationRoot = "/create";
 
-const personCreationMapping = buildMapping(explorationRoot, entityDomains.PERSON)
+const personCreationMapping = buildUrl(explorationRoot, entityDomains.PERSON)
 
 const applicationMappings = Object.freeze({
     exploration: {
         default: personExplorationMapping,
         root: explorationRoot,
         [Entity.PERSON]: personExplorationMapping,
-        [Entity.JUR_PERSON]: buildMapping(explorationRoot, entityDomains.JUR_PERSON),
-        [Entity.USER]: buildMapping(explorationRoot, entityDomains.USER)
+        [Entity.JUR_PERSON]: buildUrl(explorationRoot, entityDomains.JUR_PERSON),
+        [Entity.USER]: buildUrl(explorationRoot, entityDomains.USER)
     },
     creation: {
         default: personCreationMapping,
         root: creationRoot,
         createPersons: personCreationMapping,
-        createJurPersons: buildMapping(creationRoot, entityDomains.USER),
-        createUsers: buildMapping(creationRoot, entityDomains.USER)
+        createJurPersons: buildUrl(creationRoot, entityDomains.USER),
+        createUsers: buildUrl(creationRoot, entityDomains.USER)
     }
 })
 

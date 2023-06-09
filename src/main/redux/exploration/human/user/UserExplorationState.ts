@@ -1,7 +1,7 @@
-import User from "../../../model/human/user/User";
+import User from "../../../../model/human/user/User";
 import UserExplorationParams from "./UserExplorationParams";
-import EntityExplorationState from "../EntityExplorationState";
-import EntityExplorationData from "../EntityExplorationData";
+import EntityExplorationState from "../../EntityExplorationState";
+import EntityExplorationData from "../../EntityExplorationData";
 
 export default class UserExplorationState implements EntityExplorationState<User, UserExplorationParams> {
     readonly data: EntityExplorationData<User, UserExplorationParams>|null;

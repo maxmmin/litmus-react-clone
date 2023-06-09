@@ -5,10 +5,10 @@ import appConfig from "../../config/appConfig";
 class BasicApiRequestManager implements ApiRequestManager {
     private fetchUrl: string|null = null;
     private authHeader = appConfig.authHeader;
-    private init: RequestInit = {}
+    private init: RequestInit = this.getDefaultRequestInit();
 
-    private getDefaultRequestInit () {
-        return {}
+    private getDefaultRequestInit (): RequestInit {
+        return {headers: {}}
     }
 
     body(body: BodyInit): ApiRequestManager {
@@ -48,13 +48,17 @@ class BasicApiRequestManager implements ApiRequestManager {
     }
 
     authentication(token: string): ApiRequestManager {
-        (this.init.headers as Record<string, string>)[this.authHeader] = token;
+        (this.init.headers as Record<string, string>)[this.authHeader] = BasicApiRequestManager.createBearerToken(token);
         return this;
     }
 
     url(url: string): ApiRequestManager {
         this.fetchUrl = url;
         return this;
+    }
+
+    public static createBearerToken(token: string) {
+        return "Bearer ".concat(token);
     }
 
 }

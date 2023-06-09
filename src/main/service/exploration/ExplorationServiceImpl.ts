@@ -1,29 +1,29 @@
 import ExplorationService from "./ExplorationService";
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
-import PersonServiceImpl from "../entityService/human/person/PersonServiceImpl";
-import JurPersonServiceImpl from "../entityService/human/jurPerson/JurPersonServiceImpl";
-import UserServiceImpl from "../entityService/user/UserServiceImpl";
+import PersonServiceImpl from "./entityService/human/person/PersonServiceImpl";
+import JurPersonServiceImpl from "./entityService/human/jurPerson/JurPersonServiceImpl";
+import UserServiceImpl from "./entityService/user/UserServiceImpl";
 import Person from "../../model/human/person/Person";
-import PersonService from "../entityService/human/person/PersonService";
+import PersonService from "./entityService/human/person/PersonService";
 import {checkNotNull} from "../../util/pureFunctions";
 import User from "../../model/human/user/User";
-import UserService from "../entityService/user/UserService";
+import UserService from "./entityService/user/UserService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import JurPersonService from "../entityService/human/jurPerson/JurPersonService";
+import JurPersonService from "./entityService/human/jurPerson/JurPersonService";
 import {
     BasicNotification,
     BasicNotificationManager,
     NotificationManager,
     NotificationType, notificationTypes
 } from "../../redux/applicationState/Notification";
-import PersonExplorationState from "../../redux/exploration/person/PersonExplorationState";
-import PersonExplorationParams from "../../redux/exploration/person/PersonExplorationParams";
-import UserExplorationState from "../../redux/exploration/user/UserExplorationState";
+import PersonExplorationState from "../../redux/exploration/human/person/PersonExplorationState";
+import PersonExplorationParams from "../../redux/exploration/human/person/PersonExplorationParams";
+import UserExplorationState from "../../redux/exploration/human/user/UserExplorationState";
 import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPersonExplorationState";
 import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/ExplorationMode";
 import {Entity} from "../../redux/exploration/Entity";
-import PagedData, {UnPagedData} from "../entityService/PagedData";
+import PagedData, {UnPagedData} from "./entityService/PagedData";
 
 class UnsupportedModeError extends Error {
 
@@ -63,23 +63,25 @@ class ExplorationServiceImpl implements ExplorationService {
     }
     
     private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService): Promise<PagedData<Person>> {
-        const mode: ExplorationMode = stateManager.getExplorationParams().mode;
+        const mode: ExplorationMode = stateManager.getExplorationParams().modeId;
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
+                const content: Person[] = []
                 const person = await service.findById(id);
-                return new UnPagedData([person]);
+                if (person) content.push(person);
+                return new UnPagedData(content);
             }
 
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
                 const lastName = checkNotNull(stateManager.getExplorationState().params.lastName);
                 const middleName = stateManager.getExplorationState().params.middleName;
                 const firstName = stateManager.getExplorationState().params.firstName;
-                return  await service.findByFullName({lastName, middleName, firstName}) as PagedData<Person>;
+                return await service.findByFullName({lastName, middleName, firstName}) as PagedData<Person>;
             }
 
             default: {
-                if (PersonExplorationParams.supportedModes.includes(mode)) {
+                if (PersonExplorationParams.supportedModesIdList.includes(mode)) {
                     throw new Error("mod is supported by person exploration params but isn't added to switch branch")
                 } else throw new UnsupportedModeError();
             }
@@ -102,13 +104,15 @@ class ExplorationServiceImpl implements ExplorationService {
     }
 
     private async exploreUsers(stateManager: ExplorationStateManager<UserExplorationState>, service: UserService): Promise<PagedData<User>> {
-        const mode: ExplorationMode = stateManager.getExplorationParams().mode;
+        const mode: ExplorationMode = stateManager.getExplorationParams().modeId;
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
-                const res = await service.findById(id);
-                return new UnPagedData<User>([res]);
+                const content: User[] = [];
+                const user = await service.findById(id);
+                if (user) content.push(user);
+                return new UnPagedData<User>(content);
             }
 
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
@@ -119,7 +123,7 @@ class ExplorationServiceImpl implements ExplorationService {
             }
 
             default: {
-                if (PersonExplorationParams.supportedModes.includes(mode)) {
+                if (PersonExplorationParams.supportedModesIdList.includes(mode)) {
                     throw new Error("mod is supported by person exploration params but isn't added to switch branch")
                 } else throw new UnsupportedModeError();
             }
@@ -144,17 +148,21 @@ class ExplorationServiceImpl implements ExplorationService {
 
 
     private async exploreJurPersons(stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService): Promise<PagedData<JurPerson>> {
-        const mode: ExplorationMode = stateManager.getExplorationParams().mode;
+        const mode: ExplorationMode = stateManager.getExplorationParams().modeId;
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
-                const res = await service.findById(id);
-                return new UnPagedData([res]);
+                const content: JurPerson[] = [];
+                const jurPerson = await service.findById(id);
+                if (jurPerson) {
+                    content.push(jurPerson)
+                }
+                return new UnPagedData(content);
             }
 
             default: {
-                if (PersonExplorationParams.supportedModes.includes(mode)) {
+                if (PersonExplorationParams.supportedModesIdList.includes(mode)) {
                     throw new Error("mod is supported by person exploration params but isn't added to switch branch")
                 } else throw new UnsupportedModeError();}
         }
@@ -190,30 +198,32 @@ class ExplorationServiceImpl implements ExplorationService {
         switch (entity) {
             case Entity.PERSON: {
                 const stateManager: ExplorationStateManager<PersonExplorationState> = ExplorationStateManager.getPersonManager(this._store);
-                const service = new PersonServiceImpl(this.getAccessToken);
+                const service = new PersonServiceImpl(this.getAccessToken.bind(this));
 
                 //@todo add some logic to err handing
-                this.explorePersons(stateManager, service)
-                    .catch(this.handleError);
+                this.updatePersons(stateManager, service)
+                    .catch(this.handleError.bind(this));
                 
                 break;
             }
             case Entity.JUR_PERSON: {
                 const stateManager = ExplorationStateManager.getJurPersonManager(this._store);
-                const service = new JurPersonServiceImpl(this.getAccessToken);
+                const service = new JurPersonServiceImpl(this.getAccessToken.bind(this));
 
-                this.exploreJurPersons(stateManager, service)
-                    .catch(this.handleError);
+                this.updateJurPersons(stateManager, service)
+                    .catch(this.handleError.bind(this));
 
                 break;
             }
             case Entity.USER: {
                 const stateManager = ExplorationStateManager.getUserManager(this._store);
-                const service = new UserServiceImpl(this.getAccessToken);
+                const service = new UserServiceImpl(this.getAccessToken.bind(this));
 
-                this.exploreUsers(stateManager, service)
-                    .catch(this.handleError);
+                this.updateUsers(stateManager, service)
+                    .catch(this.handleError.bind(this));
             }
         }
     }
 }
+
+export default ExplorationServiceImpl;
