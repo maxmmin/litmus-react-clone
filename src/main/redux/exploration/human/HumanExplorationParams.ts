@@ -1,4 +1,4 @@
-import EntityExplorationParams from "./EntityExplorationParams";
+import EntityExplorationParams from "../EntityExplorationParams";
 
 export default interface HumanExplorationParams extends EntityExplorationParams{
     firstName: string | null,

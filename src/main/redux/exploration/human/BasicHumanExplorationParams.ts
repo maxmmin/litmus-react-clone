@@ -1,4 +1,4 @@
-import HumanExplorationParams from "../HumanExplorationParams";
+import HumanExplorationParams from "./HumanExplorationParams";
 
 abstract class BasicHumanExplorationParams implements HumanExplorationParams {
     abstract readonly modeId: number;

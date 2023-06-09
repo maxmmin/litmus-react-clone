@@ -5,7 +5,7 @@ import {useAppSelector} from "../../../redux/hooks";
 import ExplorationStateManager from "../../../redux/exploration/ExplorationStateManager";
 import store from "../../../redux/store";
 import EntityExplorationState from "../../../redux/exploration/EntityExplorationState";
-import HumanExplorationParams from "../../../redux/exploration/HumanExplorationParams";
+import HumanExplorationParams from "../../../redux/exploration/human/HumanExplorationParams";
 import {Entity} from "../../../redux/exploration/Entity";
 
 

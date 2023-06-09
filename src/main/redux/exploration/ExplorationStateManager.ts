@@ -8,6 +8,7 @@ import EntityExplorationState from "./EntityExplorationState";
 import EntityExplorationParams from "./EntityExplorationParams";
 import {Entity} from "./Entity";
 import ExplorationMode from "./ExplorationMode";
+import deepCopy from "../../util/pureFunctions";
 
 /**
  * S - entityExplorationState
@@ -79,34 +80,34 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
     updateState (state: S): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_STATE],
-            payload: state
+            payload: deepCopy(state)
         })
     }
 
     updateParams (params: S['params']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS],
-            payload: params
+            payload: deepCopy(params)
         })
     }
 
     updateData (data: S['data']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA],
-            payload: data
+            payload: deepCopy(data)
         })
     }
 
     enablePending (): void {
         this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING],
+            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_STATE_PENDING],
             payload: true
         })
     }
 
     disablePending (): void {
         this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING],
+            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_STATE_PENDING],
             payload: false
         })
     }
@@ -116,7 +117,7 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
 
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE],
-            payload: mode
+            payload: deepCopy(mode)
         })
     }
 

@@ -1,7 +1,7 @@
 import {useAppSelector} from "../../redux/hooks";
 import {RootState} from "../../redux/store";
 import {Entity} from "../../redux/exploration/Entity";
-import ExplorationMode from "../../redux/exploration/ExplorationMode";
+import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/ExplorationMode";
 import FindByFullNameGroup from "./InputGroupes/FindByFullNameGroup";
 import FindByIdGroup from "./InputGroupes/FindByIdGroup";
 import React from "react";
@@ -9,7 +9,6 @@ import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 function getInputGroupJsxByMode (mode: ExplorationMode): JSX.Element {
-    console.log(mode)
     switch (mode) {
         case (ExplorationMode.BY_FULL_NAME): {
             return <FindByFullNameGroup/>

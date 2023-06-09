@@ -10,8 +10,8 @@ export default class ExplorationMode {
     private static lastId: number = 0;
     private static readonly modes: ExplorationMode[] = []
 
-    public static readonly [ExplorationModeName.BY_FULL_NAME]: ExplorationMode = {...new ExplorationMode("За ФІО")};
-    public static readonly [ExplorationModeName.BY_ID]: ExplorationMode = {...new ExplorationMode("За ID")};
+    public static readonly [ExplorationModeName.BY_FULL_NAME]: ExplorationMode = new ExplorationMode("За ФІО");
+    public static readonly [ExplorationModeName.BY_ID]: ExplorationMode = new ExplorationMode("За ID");
 
     public readonly id: number;
     public readonly title: string;

@@ -7,6 +7,7 @@ import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
 import PagedData, {isUnPaged} from "../../service/exploration/entityService/PagedData";
+import EntityExplorationState from "../../redux/exploration/EntityExplorationState";
 
 const getProcessedResults = (entity: Entity, results: any[]) => {
     switch (entity) {
@@ -36,23 +37,22 @@ const getProcessedResults = (entity: Entity, results: any[]) => {
 }
 
 type Props = {
-    exploredEntity: Entity
+    exploredEntity: Entity,
+    state: EntityExplorationState<any, any>
 }
 
-const ExplorationData = ({exploredEntity}: Props) => {
+const ExplorationData = ({exploredEntity, state}: Props) => {
 
     const manager = ExplorationStateManager.getEntityManager(store,exploredEntity);
 
     const entity = manager.entity;
-
-    const state = manager.getExplorationState();
 
     const data = state.data;
 
     if (!data) return null;
 
     const pagedResponse: PagedData<any> = data.response;
-
+    console.log(data)
     const {content, totalElements} = pagedResponse;
 
     const unPaged: boolean = isUnPaged(pagedResponse)

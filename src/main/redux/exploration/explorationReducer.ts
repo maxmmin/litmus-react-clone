@@ -14,24 +14,23 @@ import EntityExplorationParams from "./EntityExplorationParams";
 import ExplorationMode from "./ExplorationMode";
 import deepCopy from "../../util/pureFunctions";
 
-const entityExplorationReducer = <E,S extends EntityExplorationState<E, EntityExplorationParams>> (prevState: S, action: PayloadAction<any>): S => {
+const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<any>): S => {
     switch (action.type) {
         case ExplorationCoreAction.UPDATE_EXPLORATION_STATE: {
-            return deepCopy(action.payload as S);
+            return action.payload as S;
         }
         case ExplorationCoreAction.UPDATE_EXPLORATION_DATA: {
             const newData = action.payload as S["data"];
-            return {...prevState, data: {...newData}};
+            return {...prevState, data: newData};
         }
         case ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS: {
             let params = action.payload as S["params"];
-            params = deepCopy(params)
             return {...prevState, params};
         }
 
-        case ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING: {
+        case ExplorationCoreAction.UPDATE_EXPLORATION_STATE_PENDING: {
             const bool: boolean = action.payload as boolean;
-            return {...prevState, data: {...prevState.data, isPending: bool}}
+            return {...prevState, isPending: bool} as S;
         }
 
         case ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE: {
@@ -40,7 +39,8 @@ const entityExplorationReducer = <E,S extends EntityExplorationState<E, EntityEx
             if (!prevState.params.supportedModesIdList.includes(modeId)) {
                 throw new Error("unsupported mode was provided")
             }
-            return {...prevState, params: {...prevState.params, modeId: selectedMode}}
+
+            return {...prevState, params: {...prevState.params, modeId: modeId}}
         }
 
         default: {

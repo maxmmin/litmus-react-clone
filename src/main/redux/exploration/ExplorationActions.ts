@@ -3,7 +3,7 @@ export enum ExplorationCoreAction{
     UPDATE_EXPLORATION_PARAMS="UPDATE_EXPLORATION_PARAMS",
     UPDATE_EXPLORATION_DATA="UPDATE_EXPLORATION_DATA",
     UPDATE_EXPLORATION_PARAMS_MODE="UPDATE_EXPLORATION_PARAMS_MODE",
-    UPDATE_EXPLORATION_DATA_PENDING="UPDATE_EXPLORATION_DATA_PENDING",
+    UPDATE_EXPLORATION_STATE_PENDING="UPDATE_EXPLORATION_STATE_PENDING",
     UPDATE_EXPLORATION_DATA_RESULTS="UPDATE_EXPLORATION_DATA_RESULTS"
 
 }
@@ -26,7 +26,7 @@ export class ExplorationTypedActions {
 
     public readonly [ExplorationCoreAction.UPDATE_EXPLORATION_DATA]: string;
 
-    public readonly [ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING]: string;
+    public readonly [ExplorationCoreAction.UPDATE_EXPLORATION_STATE_PENDING]: string;
 
     public readonly [ExplorationCoreAction.UPDATE_EXPLORATION_DATA_RESULTS]: string;
 
@@ -56,7 +56,7 @@ export class ExplorationTypedActions {
         const UPDATE_PARAMS_MODE_CORE = ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE;
         this[UPDATE_PARAMS_MODE_CORE] = ExplorationTypedActions.getTypedAction(UPDATE_PARAMS_MODE_CORE, domain);
 
-        const UPDATE_DATA_PENDING_CORE = ExplorationCoreAction.UPDATE_EXPLORATION_DATA_PENDING;
+        const UPDATE_DATA_PENDING_CORE = ExplorationCoreAction.UPDATE_EXPLORATION_STATE_PENDING;
         this[UPDATE_DATA_PENDING_CORE] = ExplorationTypedActions.getTypedAction(UPDATE_DATA_PENDING_CORE, domain);
 
         const UPDATE_DATA_RESULTS_CORE = ExplorationCoreAction.UPDATE_EXPLORATION_DATA_RESULTS;

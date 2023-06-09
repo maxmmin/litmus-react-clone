@@ -68,17 +68,18 @@ const ExplorationScreen = () => {
         }
     }, [location])
 
-    const isPending = useAppSelector(state => {
+    const explorationState = useAppSelector<EntityExplorationState<any, any>|undefined>(state => {
         if (exploredEntity) {
             switch (exploredEntity) {
                 case Entity.PERSON:
-                    return state.exploration.person?.isPending
+                    return state.exploration.person;
                 case Entity.JUR_PERSON:
-                    return state.exploration.jurPerson?.isPending;
+                    return state.exploration.jurPerson;
                 case Entity.USER:
-                    return state.exploration.user?.isPending;
+                    return state.exploration.user;
+                default: throw new Error("unknown entity: "+exploredEntity);
             }
-        }   else return null;
+        }   else return undefined;
     })
 
     let requiredPermissions: Permissions[] = Role[RoleName.USER].permissions;
@@ -129,11 +130,11 @@ const ExplorationScreen = () => {
 
                        <ExplorationModeSelectContainer/>
 
-                       <ExplorationInputForm onSubmit={getOnSubmitCallback(explorationService, explorationStateManager)} isPending={Boolean(isPending)} exploredEntity={exploredEntity}/>
+                       <ExplorationInputForm onSubmit={getOnSubmitCallback(explorationService, explorationStateManager)} isPending={Boolean(explorationState?.isPending)} exploredEntity={exploredEntity}/>
 
                    </div>
 
-                   <ExplorationData exploredEntity={exploredEntity}/>
+                   <ExplorationData state={explorationState!} exploredEntity={exploredEntity}/>
                </main>
            </div>
        </PrivateComponentWrapper>
