@@ -127,7 +127,7 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
     }
 
     supports (mode: ExplorationMode) {
-        return this.getExplorationParams().supportedModesIdList.includes(mode);
+        return this.getExplorationParams().supportedModesIdList.includes(mode.id);
     }
 
 }

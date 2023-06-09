@@ -34,25 +34,26 @@ function ExplorationInputForm ({exploredEntity, isPending, onSubmit}: Exploratio
     if (!exploredEntity) {
         return null;
     } else {
-        let explorationMode: ExplorationMode|null = null;
+        let explorationModeId: number;
 
         switch (exploredEntity) {
             case Entity.PERSON:
-                explorationMode = exploration.person!.params.modeId;
+                explorationModeId = exploration.person!.params.modeId;
                 break;
             case Entity.JUR_PERSON:
-                explorationMode = exploration.jurPerson!.params.modeId;
+                explorationModeId = exploration.jurPerson!.params.modeId;
                 break;
             case Entity.USER:
-                explorationMode = exploration.user!.params.modeId;
+                explorationModeId = exploration.user!.params.modeId;
                 break;
             default: throw new Error("provided unknown entity")
         }
 
+        const explorationMode = ExplorationMode.getModeById(explorationModeId);
+
         return (
             <div className="explore-page__input-group-container">
                 <Form className={"explore-input-group"}>
-
                     { getInputGroupJsxByMode(explorationMode) }
 
                     <Button disabled={isPending} onClick={onSubmit} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>

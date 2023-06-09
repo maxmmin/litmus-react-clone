@@ -63,7 +63,8 @@ class ExplorationServiceImpl implements ExplorationService {
     }
     
     private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService): Promise<PagedData<Person>> {
-        const mode: ExplorationMode = stateManager.getExplorationParams().modeId;
+        const modeId = stateManager.getExplorationParams().modeId;
+        const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
@@ -81,7 +82,7 @@ class ExplorationServiceImpl implements ExplorationService {
             }
 
             default: {
-                if (PersonExplorationParams.supportedModesIdList.includes(mode)) {
+                if (PersonExplorationParams.supportedModesIdList.includes(modeId)) {
                     throw new Error("mod is supported by person exploration params but isn't added to switch branch")
                 } else throw new UnsupportedModeError();
             }
@@ -104,7 +105,8 @@ class ExplorationServiceImpl implements ExplorationService {
     }
 
     private async exploreUsers(stateManager: ExplorationStateManager<UserExplorationState>, service: UserService): Promise<PagedData<User>> {
-        const mode: ExplorationMode = stateManager.getExplorationParams().modeId;
+        const modeId: number = stateManager.getExplorationParams().modeId;
+        const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
@@ -123,7 +125,7 @@ class ExplorationServiceImpl implements ExplorationService {
             }
 
             default: {
-                if (PersonExplorationParams.supportedModesIdList.includes(mode)) {
+                if (PersonExplorationParams.supportedModesIdList.includes(modeId)) {
                     throw new Error("mod is supported by person exploration params but isn't added to switch branch")
                 } else throw new UnsupportedModeError();
             }
@@ -148,7 +150,8 @@ class ExplorationServiceImpl implements ExplorationService {
 
 
     private async exploreJurPersons(stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService): Promise<PagedData<JurPerson>> {
-        const mode: ExplorationMode = stateManager.getExplorationParams().modeId;
+        const modeId: number = stateManager.getExplorationParams().modeId;
+        const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
@@ -162,7 +165,7 @@ class ExplorationServiceImpl implements ExplorationService {
             }
 
             default: {
-                if (PersonExplorationParams.supportedModesIdList.includes(mode)) {
+                if (PersonExplorationParams.supportedModesIdList.includes(modeId)) {
                     throw new Error("mod is supported by person exploration params but isn't added to switch branch")
                 } else throw new UnsupportedModeError();}
         }
