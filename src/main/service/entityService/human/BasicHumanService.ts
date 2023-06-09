@@ -1,5 +1,5 @@
 import HumanService from "./HumanService";
-import PagedResponse from "../PagedResponse";
+import PagedData from "../PagedData";
 import {FullName} from "../../exploration/FullName";
 import BasicEntityService from "../BasicEntityService";
 import appConfig from "../../../config/appConfig";
@@ -14,7 +14,7 @@ export default class BasicHumanService<E extends Human> extends BasicEntityServi
         super(apiMapping, getToken);
     }
 
-    async findByFullName(fullName: FullName): Promise<PagedResponse<E>> {
+    async findByFullName(fullName: FullName): Promise<PagedData<E>> {
         const requestManager = new BasicApiRequestManager();
 
         const accessToken = this.getAccessToken();
@@ -30,6 +30,6 @@ export default class BasicHumanService<E extends Human> extends BasicEntityServi
             }
         }
         const response = await requestManager.fetch();
-        return await response.json() as PagedResponse<E>;
+        return await response.json() as PagedData<E>;
     }
 }

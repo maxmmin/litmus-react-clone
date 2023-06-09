@@ -1,14 +1,14 @@
 // @todo: WRITE ADDITIONAL FLAGS WHICH CAN BE NEEDED
 import EntityExplorationData from "./EntityExplorationData";
 import EntityExplorationParams from "./EntityExplorationParams";
-import PagedResponse from "../../service/entityService/PagedResponse";
+import PagedData from "../../service/entityService/PagedData";
 
 export default class BasicEntityExplorationData <E, P extends EntityExplorationParams> implements EntityExplorationData<E, P>{
-    response: PagedResponse<E>;
+    response: PagedData<E>;
     requestParams: P;
 
 
-    constructor(data: PagedResponse<E>, requestParams: P) {
+    constructor(data: PagedData<E>, requestParams: P) {
         this.response = data;
         this.requestParams = requestParams;
     }

@@ -23,7 +23,7 @@ import UserExplorationState from "../../redux/exploration/user/UserExplorationSt
 import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPersonExplorationState";
 import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/ExplorationMode";
 import {Entity} from "../../redux/exploration/Entity";
-import PagedResponse, {UnPagedResponse} from "../entityService/PagedResponse";
+import PagedData, {UnPagedData} from "../entityService/PagedData";
 
 class UnsupportedModeError extends Error {
 
@@ -62,20 +62,20 @@ class ExplorationServiceImpl implements ExplorationService {
         console.error(err);
     }
     
-    private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService): Promise<PagedResponse<Person>> {
+    private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService): Promise<PagedData<Person>> {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
                 const person = await service.findById(id);
-                return new UnPagedResponse([person]);
+                return new UnPagedData([person]);
             }
 
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
                 const lastName = checkNotNull(stateManager.getExplorationState().params.lastName);
                 const middleName = stateManager.getExplorationState().params.middleName;
                 const firstName = stateManager.getExplorationState().params.firstName;
-                return  await service.findByFullName({lastName, middleName, firstName}) as PagedResponse<Person>;
+                return  await service.findByFullName({lastName, middleName, firstName}) as PagedData<Person>;
             }
 
             default: {
@@ -91,7 +91,7 @@ class ExplorationServiceImpl implements ExplorationService {
             stateManager.enablePending();
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
             const requestParams = stateManager.getExplorationParams();
-            const pagedResponse: PagedResponse<Person> = await this.explorePersons(stateManager, service);
+            const pagedResponse: PagedData<Person> = await this.explorePersons(stateManager, service);
             stateManager.updateData({response: pagedResponse, requestParams: requestParams});
         } catch (e: any) {
             this.handleError(e);
@@ -101,14 +101,14 @@ class ExplorationServiceImpl implements ExplorationService {
         }
     }
 
-    private async exploreUsers(stateManager: ExplorationStateManager<UserExplorationState>, service: UserService): Promise<PagedResponse<User>> {
+    private async exploreUsers(stateManager: ExplorationStateManager<UserExplorationState>, service: UserService): Promise<PagedData<User>> {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
                 const res = await service.findById(id);
-                return new UnPagedResponse<User>([res]);
+                return new UnPagedData<User>([res]);
             }
 
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
@@ -132,7 +132,7 @@ class ExplorationServiceImpl implements ExplorationService {
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
             // @todo: 06.09 -MAYBE I SHOULD MADE ONLY 1 UPDATE ENTITY METHOD
             const requestParams = stateManager.getExplorationState().params;
-            const pagedResponse: PagedResponse<User> = await this.exploreUsers(stateManager, service);
+            const pagedResponse: PagedData<User> = await this.exploreUsers(stateManager, service);
             stateManager.updateData({response: pagedResponse, requestParams: requestParams});
         } catch (e: any) {
             this.handleError(e);
@@ -143,14 +143,14 @@ class ExplorationServiceImpl implements ExplorationService {
     }
 
 
-    private async exploreJurPersons(stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService): Promise<PagedResponse<JurPerson>> {
+    private async exploreJurPersons(stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService): Promise<PagedData<JurPerson>> {
         const mode: ExplorationMode = stateManager.getExplorationParams().mode;
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotNull(stateManager.getExplorationState().params.id);
                 const res = await service.findById(id);
-                return new UnPagedResponse([res]);
+                return new UnPagedData([res]);
             }
 
             default: {
@@ -166,7 +166,7 @@ class ExplorationServiceImpl implements ExplorationService {
             stateManager.enablePending();
             // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
             const requestParams = stateManager.getExplorationParams();
-            const response: PagedResponse<JurPerson> = await this.exploreJurPersons(stateManager, service);
+            const response: PagedData<JurPerson> = await this.exploreJurPersons(stateManager, service);
             stateManager.updateData({response, requestParams});
         } catch (e: any) {
             this.handleError(e)

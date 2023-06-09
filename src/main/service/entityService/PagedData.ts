@@ -1,4 +1,4 @@
-export default interface PagedResponse<E> {
+export default interface PagedData<E> {
     content: E[];
 
     index: number;
@@ -18,7 +18,7 @@ export default interface PagedResponse<E> {
     empty: boolean;
 }
 
-export class UnPagedResponse<E> implements PagedResponse<E>{
+export class UnPagedData<E> implements PagedData<E>{
     content: E[];
     empty: boolean;
     first: boolean = false;
@@ -39,4 +39,8 @@ export class UnPagedResponse<E> implements PagedResponse<E>{
     }
 }
 
+export function isUnPaged(response: PagedData<any>) {
+    const unPagedFlag = "unPaged"
+    return Object.hasOwn(response,unPagedFlag)&&(response as any)[unPagedFlag]===true
+}
 

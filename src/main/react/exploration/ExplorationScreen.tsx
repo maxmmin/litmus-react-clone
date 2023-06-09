@@ -30,8 +30,6 @@ const ExplorationScreen = () => {
 
     const navigate = useNavigate();
 
-    const resultsContainer = useRef<HTMLDivElement>(null)
-
     const exploredEntity = useAppSelector(state => state.exploration.exploredEntity);
 
     const {entityDomain}: {entityDomain?: string} = useParams<{entityDomain: string}>();
@@ -87,29 +85,9 @@ const ExplorationScreen = () => {
         }
     }
 
-    const scrollCallback = () => {
-        // const results = (store.getState() as RootState).exploration;
-        // if (resultsContainer.current&&results&&results?.partlyLoaded) {
-        //     const rect: DOMRect = resultsContainer.current.getBoundingClientRect();
-        //
-        //     if (results&&!results.pending&&rect.height+rect.top<window.innerHeight+150) {
-        //         dispatch(lazyLoadResultsThunk({results: results as ResultsFullRequired, shouldRefreshGlobally: false}))
-        //     }
-        // }
-    }
-
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
         navigate(event.currentTarget.value)
     }
-
-    useEffect(()=>{
-        window.addEventListener("scroll", scrollCallback)
-        //@todo move scrollCallback outisde
-        return () => {
-            window.removeEventListener("scroll",scrollCallback)
-        }
-        /* eslint-disable-next-line */ // -f | scrollBack is  static function inside component and is not required in dependency list
-    },[])
 
     if (!exploredEntity) {
        return null;
@@ -135,7 +113,8 @@ const ExplorationScreen = () => {
                        <InputGroup isPending={Boolean(isPending)} exploredEntity={exploredEntity}/>
 
                    </div>
-                   <ExplorationData exploredEntity={exploredEntity} containerRef={resultsContainer}/>
+
+                   <ExplorationData exploredEntity={exploredEntity}/>
                </main>
            </div>
        </PrivateComponentWrapper>

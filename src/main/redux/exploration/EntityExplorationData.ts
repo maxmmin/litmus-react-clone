@@ -1,7 +1,7 @@
 import EntityExplorationParams from "./EntityExplorationParams";
-import PagedResponse from "../../service/entityService/PagedResponse";
+import PagedData from "../../service/entityService/PagedData";
 
 export default interface EntityExplorationData <E, P extends EntityExplorationParams> {
-    response: PagedResponse<E>|E,
+    response: PagedData<E>,
     requestParams: P
 }
