@@ -1,7 +1,7 @@
 import Header from "../header/Header";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useEffect, useRef} from "react";
-import {Entity} from "../../redux/exploration/Entity";
+import {Entity} from "../../model/Entity";
 import ExplorationModeSelectContainer from "./ExplorationModesView";
 import {useAppSelector} from "../../redux/hooks";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
@@ -11,11 +11,11 @@ import {useNavigate} from "react-router-dom";
 import appConfig from "../../config/appConfig";
 import {useLocation, useParams} from "react-router";
 import ExplorationInputForm from "./ExplorationInputForm";
-import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
+import ExplorationStateManager from "../../service/exploration/ExplorationStateManager";
 import store from "../../redux/store";
 import ExplorationData from "./ExplorationData";
-import EntityExplorationState from "../../redux/exploration/EntityExplorationState";
-import EntityExplorationParams from "../../redux/exploration/EntityExplorationParams";
+import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
+import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
 import ExplorationService from "../../service/exploration/ExplorationService";
 import ExplorationServiceImpl from "../../service/exploration/ExplorationServiceImpl";
 

@@ -15,7 +15,7 @@ import Creation from "./react/creation/CreationScreen";
 import appConfig, {routingLinks} from "./config/appConfig";
 import Role, {Permissions} from "./redux/userIdentity/Role";
 import {buildUrl} from "./util/pureFunctions";
-import {Entity} from "./redux/exploration/Entity";
+import {Entity} from "./model/Entity";
 
 // @todo check if the refresh token expired
 

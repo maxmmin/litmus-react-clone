@@ -1,13 +1,13 @@
-import {Entity} from "../../redux/exploration/Entity";
+import {Entity} from "../../model/Entity";
 import Pagination from 'react-bootstrap/Pagination';
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import UserInfoTable from "./EntityTables/UserInfoTable";
 import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../util/pureFunctions";
-import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
+import ExplorationStateManager from "../../service/exploration/ExplorationStateManager";
 import store from "../../redux/store";
 import PagedData, {isUnPaged} from "../../util/apiRequest/PagedData";
-import EntityExplorationState from "../../redux/exploration/EntityExplorationState";
+import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
 import {isPending} from "@reduxjs/toolkit";
 import Loader from "../loader/Loader";
 

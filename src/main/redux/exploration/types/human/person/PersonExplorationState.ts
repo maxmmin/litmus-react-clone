@@ -1,4 +1,4 @@
-import Person from "../../../../model/human/person/Person";
+import Person from "../../../../../model/human/person/Person";
 import PersonExplorationParams from "./PersonExplorationParams";
 import EntityExplorationData from "../../EntityExplorationData";
 import EntityExplorationState from "../../EntityExplorationState";

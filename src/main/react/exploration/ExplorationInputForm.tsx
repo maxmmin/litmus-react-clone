@@ -1,7 +1,7 @@
 import {useAppSelector} from "../../redux/hooks";
 import {RootState} from "../../redux/store";
-import {Entity} from "../../redux/exploration/Entity";
-import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/ExplorationMode";
+import {Entity} from "../../model/Entity";
+import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/types/ExplorationMode";
 import FindByFullNameGroup from "./InputGroupes/FindByFullNameGroup";
 import FindByIdGroup from "./InputGroupes/FindByIdGroup";
 import React from "react";

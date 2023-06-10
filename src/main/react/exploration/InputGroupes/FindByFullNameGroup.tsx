@@ -2,11 +2,11 @@ import Form from "react-bootstrap/Form";
 import React, {useMemo} from "react";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
-import ExplorationStateManager from "../../../redux/exploration/ExplorationStateManager";
+import ExplorationStateManager from "../../../service/exploration/ExplorationStateManager";
 import store from "../../../redux/store";
-import EntityExplorationState from "../../../redux/exploration/EntityExplorationState";
-import HumanExplorationParams from "../../../redux/exploration/human/HumanExplorationParams";
-import {Entity} from "../../../redux/exploration/Entity";
+import EntityExplorationState from "../../../redux/exploration/types/EntityExplorationState";
+import HumanExplorationParams from "../../../redux/exploration/types/human/HumanExplorationParams";
+import {Entity} from "../../../model/Entity";
 
 
 const FindByFullNameGroup = () => {

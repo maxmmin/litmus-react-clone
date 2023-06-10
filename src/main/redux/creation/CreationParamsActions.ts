@@ -7,7 +7,7 @@ import {PassportData} from "../../model/human/person/PassportData";
 import {RoleName} from "../userIdentity/Role";
 import DateEntity, {DateBuilder} from "../../model/DateEntity";
 import Sex from "../../model/human/person/Sex";
-import {Entity} from "../exploration/Entity";
+import {Entity} from "../../model/Entity";
 
 enum CreationParamsActions {
     /**

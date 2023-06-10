@@ -19,7 +19,7 @@ import {CrossIcon} from "../../../util/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 import PersonRelationships from "./PersonRelationships";
-import {Entity} from "../../../redux/exploration/Entity";
+import {Entity} from "../../../model/Entity";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);

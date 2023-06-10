@@ -1,5 +1,5 @@
 import ExplorationService from "./ExplorationService";
-import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
+import ExplorationStateManager from "./ExplorationStateManager";
 import store from "../../redux/store";
 import PersonLookupServiceImpl from "./lookup/human/person/PersonLookupServiceImpl";
 import JurPersonLookupServiceImpl from "./lookup/jurPerson/JurPersonLookupServiceImpl";
@@ -17,15 +17,15 @@ import {
     NotificationManager,
     NotificationType, notificationTypes
 } from "../../redux/applicationState/Notification";
-import PersonExplorationState from "../../redux/exploration/human/person/PersonExplorationState";
-import PersonExplorationParams from "../../redux/exploration/human/person/PersonExplorationParams";
-import UserExplorationState from "../../redux/exploration/human/user/UserExplorationState";
-import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPersonExplorationState";
-import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/ExplorationMode";
-import {Entity} from "../../redux/exploration/Entity";
+import PersonExplorationState from "../../redux/exploration/types/human/person/PersonExplorationState";
+import PersonExplorationParams from "../../redux/exploration/types/human/person/PersonExplorationParams";
+import UserExplorationState from "../../redux/exploration/types/human/user/UserExplorationState";
+import JurPersonExplorationState from "../../redux/exploration/types/jurPerson/JurPersonExplorationState";
+import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/types/ExplorationMode";
+import {Entity} from "../../model/Entity";
 import PagedData, {UnPagedData} from "../../util/apiRequest/PagedData";
-import EntityExplorationState from "../../redux/exploration/EntityExplorationState";
-import EntityExplorationParams from "../../redux/exploration/EntityExplorationParams";
+import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
+import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 

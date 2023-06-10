@@ -1,17 +1,17 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
-import EntityExplorationState from "./EntityExplorationState";
+import EntityExplorationState from "./types/EntityExplorationState";
 import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
 import {combineReducers} from "redux";
-import PersonExplorationState from "./human/person/PersonExplorationState";
-import PersonExplorationParams from "./human/person/PersonExplorationParams";
-import JurPersonExplorationState from "./jurPerson/JurPersonExplorationState";
-import JurPersonExplorationParams from "./jurPerson/JurPersonExplorationParams";
-import UserExplorationState from "./human/user/UserExplorationState";
-import UserExplorationParams from "./human/user/UserExplorationParams";
-import {Entity} from "./Entity";
-import EntityExplorationParams from "./EntityExplorationParams";
-import ExplorationMode from "./ExplorationMode";
+import PersonExplorationState from "./types/human/person/PersonExplorationState";
+import PersonExplorationParams from "./types/human/person/PersonExplorationParams";
+import JurPersonExplorationState from "./types/jurPerson/JurPersonExplorationState";
+import JurPersonExplorationParams from "./types/jurPerson/JurPersonExplorationParams";
+import UserExplorationState from "./types/human/user/UserExplorationState";
+import UserExplorationParams from "./types/human/user/UserExplorationParams";
+import {Entity} from "../../model/Entity";
+import EntityExplorationParams from "./types/EntityExplorationParams";
+import ExplorationMode from "./types/ExplorationMode";
 import deepCopy from "../../util/pureFunctions";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<any>): S => {

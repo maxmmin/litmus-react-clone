@@ -1,7 +1,7 @@
 import CreatePerson from "./person/CreatePerson";
 import CreateJurPerson from "./jurperson/CreateJurPerson";
 import CreateUser from "./user/CreateUser";
-import {Entity} from "../../redux/exploration/Entity";
+import {Entity} from "../../model/Entity";
 
 type Props = {
     table: Entity

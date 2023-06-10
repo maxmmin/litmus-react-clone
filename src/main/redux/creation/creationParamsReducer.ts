@@ -11,7 +11,7 @@ import Person, {Relationship, RelationshipsLinkObject} from "../../model/human/p
 import User from "../../model/human/user/User";
 import {PassportData} from "../../model/human/person/PassportData";
 import Sex from "../../model/human/person/Sex";
-import {Entity} from "../exploration/Entity";
+import {Entity} from "../../model/Entity";
 
 const initialState: CreationParams = {
     table: Entity.PERSON,

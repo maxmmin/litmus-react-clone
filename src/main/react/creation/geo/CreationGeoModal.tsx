@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {Location} from "../../../model/Location";
 import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../redux/creation/CreationParamsActions";
-import {Entity} from "../../../redux/exploration/Entity";
+import {Entity} from "../../../model/Entity";
 
 type Props = {
     entity: Entity,

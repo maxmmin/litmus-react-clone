@@ -1,16 +1,16 @@
-import EntityExplorationState from "../../redux/exploration/EntityExplorationState";
-import {Entity} from "../../redux/exploration/Entity";
+import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
+import {Entity} from "../../model/Entity";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useMemo} from "react";
 import {useAppSelector} from "../../redux/hooks";
-import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
+import ExplorationStateManager from "../../service/exploration/ExplorationStateManager";
 import store from "../../redux/store";
-import PersonExplorationState from "../../redux/exploration/human/person/PersonExplorationState";
-import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPersonExplorationState";
-import UserExplorationState from "../../redux/exploration/human/user/UserExplorationState";
-import explorationStateManager from "../../redux/exploration/ExplorationStateManager";
-import EntityExplorationParams from "../../redux/exploration/EntityExplorationParams";
-import ExplorationMode from "../../redux/exploration/ExplorationMode";
+import PersonExplorationState from "../../redux/exploration/types/human/person/PersonExplorationState";
+import JurPersonExplorationState from "../../redux/exploration/types/jurPerson/JurPersonExplorationState";
+import UserExplorationState from "../../redux/exploration/types/human/user/UserExplorationState";
+import explorationStateManager from "../../service/exploration/ExplorationStateManager";
+import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
+import ExplorationMode from "../../redux/exploration/types/ExplorationMode";
 
 
 const ExplorationModesView = () => {
