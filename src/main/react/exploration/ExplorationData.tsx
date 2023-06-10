@@ -8,6 +8,8 @@ import ExplorationStateManager from "../../redux/exploration/ExplorationStateMan
 import store from "../../redux/store";
 import PagedData, {isUnPaged} from "../../model/PagedData";
 import EntityExplorationState from "../../redux/exploration/EntityExplorationState";
+import {isPending} from "@reduxjs/toolkit";
+import Loader from "../loader/Loader";
 
 const getProcessedResults = (entity: Entity, results: any[]) => {
     switch (entity) {
@@ -48,12 +50,18 @@ const ExplorationData = ({exploredEntity, state}: Props) => {
 
     const entity = manager.entity;
 
+    if (state.isPending) {
+        return <div style={{margin: '50px auto 0px', maxWidth: '100px'}}>
+            <Loader/>
+        </div>
+    }
+
     const data = state.data;
 
     if (!data) return null;
 
     const pagedResponse: PagedData<any> = data.response;
-    console.log(data)
+
     const {content, totalElements} = pagedResponse;
 
     const unPaged: boolean = isUnPaged(pagedResponse)

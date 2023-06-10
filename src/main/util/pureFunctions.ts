@@ -195,11 +195,16 @@ export const preventEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
 }
 
 export const getPersonFromResponse = (obj: object): Person => {
-    // @ts-ignore
-    const date = obj.dateOfBirth as string;
     /** need to use spread operator to not mutate redux state **/
     const person = {...obj} as person;
-    person.dateOfBirth = new DateBuilder().buildFromString(date);
+
+    if ('dateOfBirth' in obj) {
+        const date = obj.dateOfBirth as string;
+        if (date) {
+            person.dateOfBirth = new DateBuilder().buildFromString(date);
+        }
+    }
+
     return person;
 }
 
@@ -208,7 +213,12 @@ export const getJurPersonFromEntity = (obj: object): JurPerson => {
     const date = obj.dateOfRegistration as string;
     /** need to use spread operator to not mutate redux state **/
     const jurPerson = {...obj} as JurPerson
-    jurPerson.dateOfRegistration = new DateBuilder().buildFromString(date);
+
+    if ('dateOfRegistration' in obj) {
+        const date = obj.dateOfRegistration as string;
+        jurPerson.dateOfRegistration = new DateBuilder().buildFromString(date);
+    }
+
     return jurPerson;
 }
 

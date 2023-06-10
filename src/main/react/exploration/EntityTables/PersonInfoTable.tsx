@@ -8,6 +8,7 @@ type Props = {
 
 const PersonInfoTable = ({person}: Props) => {
     const passportData = person.passportData;
+
     return (
     <div className={"entity-container person-container"}>
         <div className="entity-container__column-title-block entity-container__column-title-block_person"><h6 className="entity-container__column-title entity-container__column-title_person">ID</h6></div>

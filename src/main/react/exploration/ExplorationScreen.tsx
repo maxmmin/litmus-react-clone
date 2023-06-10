@@ -34,7 +34,6 @@ function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplora
     const entity = stateManager.entity;
     return (e: React.MouseEvent<HTMLButtonElement>) => {
        explorationService.explore(entity);
-       console.log("search...")
     }
 }
 
@@ -104,7 +103,7 @@ const ExplorationScreen = () => {
         navigate(event.currentTarget.value)
     }
 
-    if (!exploredEntity) {
+    if (!exploredEntity||!explorationState) {
        return null;
     }
 
@@ -134,7 +133,7 @@ const ExplorationScreen = () => {
 
                    </div>
 
-                   <ExplorationData state={explorationState!} exploredEntity={exploredEntity}/>
+                   <ExplorationData state={explorationState} exploredEntity={exploredEntity}/>
                </main>
            </div>
        </PrivateComponentWrapper>
