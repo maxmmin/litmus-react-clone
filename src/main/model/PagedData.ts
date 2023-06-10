@@ -33,7 +33,7 @@ export class UnPagedData<E> implements PagedData<E>{
 
     constructor(content: E[]) {
         this.content = Array.of(...content);
-        this.empty = content.length>0;
+        this.empty = content.length===0;
         this.numberOfElements = content.length;
         this.totalElements = content.length;
     }

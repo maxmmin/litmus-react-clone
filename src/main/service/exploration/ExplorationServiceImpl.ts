@@ -23,7 +23,7 @@ import UserExplorationState from "../../redux/exploration/human/user/UserExplora
 import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPersonExplorationState";
 import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/ExplorationMode";
 import {Entity} from "../../redux/exploration/Entity";
-import PagedData, {UnPagedData} from "./entityService/PagedData";
+import PagedData, {UnPagedData} from "../../model/PagedData";
 
 class UnsupportedModeError extends Error {
 

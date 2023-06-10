@@ -1,5 +1,5 @@
 import {FullName} from "../../FullName";
-import PagedData from "../PagedData";
+import PagedData from "../../../../model/PagedData";
 import {Human} from "../../../../model/human/Human";
 import EntityService from "../EntityService";
 

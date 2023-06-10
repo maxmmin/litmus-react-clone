@@ -1,7 +1,7 @@
 // @todo: WRITE ADDITIONAL FLAGS WHICH CAN BE NEEDED
 import EntityExplorationData from "./EntityExplorationData";
 import EntityExplorationParams from "./EntityExplorationParams";
-import PagedData from "../../service/exploration/entityService/PagedData";
+import PagedData from "../../model/PagedData";
 
 export default class BasicEntityExplorationData <E, P extends EntityExplorationParams> implements EntityExplorationData<E, P>{
     response: PagedData<E>;

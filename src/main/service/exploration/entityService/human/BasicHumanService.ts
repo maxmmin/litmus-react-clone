@@ -1,5 +1,5 @@
 import HumanService from "./HumanService";
-import PagedData from "../PagedData";
+import PagedData from "../../../../model/PagedData";
 import {FullName} from "../../FullName";
 import BasicEntityService from "../BasicEntityService";
 import appConfig from "../../../../config/appConfig";

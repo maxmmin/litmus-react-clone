@@ -6,7 +6,7 @@ import UserInfoTable from "./EntityTables/UserInfoTable";
 import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../util/pureFunctions";
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
-import PagedData, {isUnPaged} from "../../service/exploration/entityService/PagedData";
+import PagedData, {isUnPaged} from "../../model/PagedData";
 import EntityExplorationState from "../../redux/exploration/EntityExplorationState";
 
 const getProcessedResults = (entity: Entity, results: any[]) => {
@@ -14,6 +14,7 @@ const getProcessedResults = (entity: Entity, results: any[]) => {
         case Entity.PERSON: {
             return results.map(entity=>{
                 const person = getPersonFromResponse(entity);
+
                 return <PersonInfoTable key={person.id} person={person}/>
             })
         }
