@@ -3,7 +3,7 @@ import {JurPerson} from "../../../../../model/jurPerson/JurPerson";
 import appConfig from "../../../../../config/appConfig";
 import {HttpMethod} from "../../../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../../../util/apiRequest/BasicApiRequestManager";
-import {BasicHttpError} from "../../../../../util/HttpStatus";
+import {BasicHttpError} from "../../../../../util/apiRequest/BasicHttpError";
 import BasicEntityService from "../../BasicEntityService";
 
 class JurPersonServiceImpl extends BasicEntityService<JurPerson> implements JurPersonService {
@@ -24,7 +24,7 @@ class JurPersonServiceImpl extends BasicEntityService<JurPerson> implements JurP
             .authentication(token)
             .fetch();
         if (!response.ok) {
-            throw new BasicHttpError(response.status, await BasicHttpError.getHttpErrorResponse(response));
+            throw await BasicHttpError.getHttpErrorFromResponse(response);
         } else {
             return await response.json() as JurPerson[];
         }

@@ -1,7 +1,7 @@
 import UserIdentity, {UserIdentityReducible} from "./UserIdentity";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import appConfig, {createAuthHeader} from "../../config/appConfig";
-import {BasicHttpError} from "../../util/HttpStatus";
+import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import {isValid} from "../../util/pureFunctions";
 import {MetaArg} from "../applicationState/AppState";
 import Role from "./Role";
@@ -30,10 +30,7 @@ export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIden
     async ({accessToken}, {rejectWithValue}) => {
 
     if (!isValid(accessToken)) {
-        return rejectWithValue({...new BasicHttpError(401, {errorDetails: {
-                message: "Помилка аутентифікації"
-            }})
-        })
+        return rejectWithValue({...new BasicHttpError(401, "Помилка аутентифікації. Невалідний accessToken")});
     }
 
     const response = await fetch(appConfig.serverMappings.getCurrentUser,{

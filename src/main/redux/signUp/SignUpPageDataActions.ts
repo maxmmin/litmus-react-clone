@@ -1,16 +1,16 @@
-import {BasicHttpError} from "../../util/HttpStatus";
+import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import {PayloadAction} from "@reduxjs/toolkit";
 
 export type LoginPageState = {
     email: string,
     password: string,
-    error: BasicHttpError | null
+    error: BasicHttpError<any> | null
 }
 
 export type LoginPageStateReducible = {
     email: string,
     password: string,
-    error: BasicHttpError | null
+    error: BasicHttpError<any> | null
 } | null | undefined
 
 enum SignUpPageDataActions {

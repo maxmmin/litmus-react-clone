@@ -1,4 +1,4 @@
-import {noInfoMessage} from "../../../util/HttpStatus";
+import {noInfoMessage} from "../../../util/apiRequest/BasicHttpError";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import {DateBuilder} from "../../../model/DateEntity";
 

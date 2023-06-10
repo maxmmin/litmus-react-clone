@@ -5,7 +5,7 @@
 import EntityService from "./EntityService";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
-import {BasicHttpError} from "../../../util/HttpStatus";
+import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
 import {buildUrl} from "../../../util/pureFunctions";
 
 class BasicEntityService<E> implements EntityService<E>{
@@ -26,7 +26,7 @@ class BasicEntityService<E> implements EntityService<E>{
             .authentication(accessToken)
             .fetch();
         if (!response.ok) {
-            throw new BasicHttpError(response.status, await BasicHttpError.getHttpErrorResponse(response));
+            throw await BasicHttpError.getHttpErrorFromResponse(response);
         } else {
             return await response.json().catch(()=>null) as E;
         }

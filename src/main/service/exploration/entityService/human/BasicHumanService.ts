@@ -1,5 +1,5 @@
 import HumanService from "./HumanService";
-import PagedData from "../../../../model/PagedData";
+import PagedData from "../../../../util/apiRequest/PagedData";
 import {FullName} from "../../FullName";
 import BasicEntityService from "../BasicEntityService";
 import appConfig from "../../../../config/appConfig";
@@ -7,6 +7,8 @@ import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestM
 import {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
 import {isEmpty} from "../../../../util/pureFunctions";
 import {Human} from "../../../../model/human/Human";
+import ErrorResponse from "../../../../util/apiRequest/ErrorResponse";
+import {BasicHttpError} from "../../../../util/apiRequest/BasicHttpError";
 
 export default class BasicHumanService<E extends Human> extends BasicEntityService<E> implements HumanService<E> {
 
@@ -30,6 +32,16 @@ export default class BasicHumanService<E extends Human> extends BasicEntityServi
             }
         }
         const response = await requestManager.fetch();
-        return await response.json() as PagedData<E>;
+        if (response.ok) {
+            return await response.json() as PagedData<E>
+        } else {
+            const error: ErrorResponse<ErrorResponse<any>>|null = await BasicHttpError.getHttpErrorFromResponse(response);
+            if (error) {
+                throw error;
+            } else {
+                throw new Error("Error " + response.status+" " + response.statusText)
+            }
+
+        }
     }
 }

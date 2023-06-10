@@ -1,9 +1,10 @@
 import {Action, Middleware} from "redux";
 import {isActionRejected, isActionFulfilled} from "../../util/pureFunctions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import {BasicHttpError, HttpStatus} from "../../util/HttpStatus";
+import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import Notification, {BasicNotification, BasicNotificationManager, notificationTypes} from "./Notification";
 import {MetaAction} from "./appStateReducer";
+import {HttpStatus} from "../../util/apiRequest/HttpStatus";
 
 const notificationManagerMiddleware: Middleware<{}, {}> = ({getState, dispatch}) => (
     next
@@ -15,23 +16,26 @@ const notificationManagerMiddleware: Middleware<{}, {}> = ({getState, dispatch})
             let notification: Notification | null = null;
 
             if (isActionRejected(action)) {
-                const httpError = (action as PayloadAction<BasicHttpError>).payload
+                const httpError = (action as PayloadAction<BasicHttpError<any>>).payload
 
                 if (httpError) {
+
+                    const title = httpError.title;
+
                     switch (httpError.status) {
                         case HttpStatus.BAD_REQUEST:
-                            notification = new BasicNotification(notificationTypes.ERROR, "Невірні дані були надіслані на сервер"+JSON.stringify(httpError.responseJson));
+                            notification = new BasicNotification(notificationTypes.ERROR, "Невірні дані були надіслані на сервер -> "+title);
                             break;
                         case HttpStatus.UNKNOWN_ERROR:
-                            notification = new BasicNotification(notificationTypes.ERROR, "Сталася невідома помилка:"+JSON.stringify(httpError.responseJson));
+                            notification = new BasicNotification(notificationTypes.ERROR, "Сталася невідома помилка -> "+title);
                             break;
                         case HttpStatus.NOT_FOUND:
                             break;
                         case HttpStatus.FORBIDDEN:
-                            notification = new BasicNotification( notificationTypes.ERROR, "Помилка доступу");
+                            notification = new BasicNotification( notificationTypes.ERROR, "Помилка доступу "+title);
                             break;
                         case (HttpStatus.UNAUTHENTICATED): {
-                            notification = new BasicNotification(notificationTypes.ERROR, "Помилка аутентифікації");
+                            notification = new BasicNotification(notificationTypes.ERROR, "Помилка аутентифікації "+title);
                             break;
                         }
                     }

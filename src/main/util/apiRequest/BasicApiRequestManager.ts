@@ -3,7 +3,7 @@ import appConfig from "../../config/appConfig";
 
 
 class BasicApiRequestManager implements ApiRequestManager {
-    private fetchUrl: string|null = null;
+    public fetchUrl: string|null = null;
     private authHeader = appConfig.authHeader;
     private init: RequestInit = this.getDefaultRequestInit();
 
@@ -17,10 +17,14 @@ class BasicApiRequestManager implements ApiRequestManager {
     }
 
     setQueryParam(key: string, value: string|null): ApiRequestManager {
+        let keyValue = `${key}=${value}`
         if (this.fetchUrl!==null) {
             if (this.fetchUrl.includes("?")) {
-                this.fetchUrl+=`&${key}=${value}`
+                keyValue="&"+keyValue;
+            } else {
+                keyValue = "?"+keyValue;
             }
+            this.fetchUrl+=keyValue;
             return this;
         } else throw new Error("could not set url param because url is null")
     }

@@ -2,7 +2,7 @@ import {Reducer} from "react";
 import SignUpPageDataActions, {LoginPageState, LoginPageStateReducible} from "./SignUpPageDataActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import AuthActions from "../auth/AuthActions";
-import {BasicHttpError} from "../../util/HttpStatus";
+import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 
 const initialState: LoginPageState = {
     email: "",
@@ -31,7 +31,7 @@ const signUpPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<Logi
 
                 const actionType = action.type.slice(0,-9)
 
-                const error = action.payload as unknown as BasicHttpError|undefined;
+                const error = action.payload as unknown as BasicHttpError<any>|undefined;
 
                 if (error?.status) {
                     switch (actionType) {
