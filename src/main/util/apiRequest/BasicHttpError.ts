@@ -1,6 +1,4 @@
 import ErrorResponse from "./ErrorResponse";
-import {types} from "sass";
-import Error = types.Error;
 export const noInfoMessage = "Інформація відсутня"
 
 class BasicHttpError<D> extends Error implements ErrorResponse<D> {
