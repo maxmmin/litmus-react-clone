@@ -61,7 +61,7 @@ class ExplorationServiceImpl implements ExplorationService {
         let msg = 'unknown error'
         if (err instanceof Error) {
             msg = err.message;
-        } else if ("status" in err && "detail" in err) {
+        } else if (err && "status" in err && "detail" in err) {
             const basicHttpError = err as ErrorResponse<any>;
             msg = `Error ${basicHttpError.status}: ${basicHttpError.title}`
         }

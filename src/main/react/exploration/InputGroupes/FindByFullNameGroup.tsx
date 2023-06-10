@@ -7,13 +7,14 @@ import store from "../../../redux/store";
 import EntityExplorationState from "../../../redux/exploration/types/EntityExplorationState";
 import HumanExplorationParams from "../../../redux/exploration/types/human/HumanExplorationParams";
 import {Entity} from "../../../model/Entity";
+import {Human} from "../../../model/human/Human";
 
 
 const FindByFullNameGroup = () => {
 
     const exploredEntity = useAppSelector(state => state.exploration.exploredEntity);
 
-    const stateManager: ExplorationStateManager<EntityExplorationState<any, HumanExplorationParams>>|undefined = useMemo(()=>{
+    const stateManager: ExplorationStateManager<EntityExplorationState<Human, HumanExplorationParams>>|undefined = useMemo(()=>{
         if (exploredEntity) {
             switch (exploredEntity) {
                 case Entity.USER: {

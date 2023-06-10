@@ -15,15 +15,30 @@ class BasicHttpError<D> extends Error implements ErrorResponse<D> {
     }
 
     static async getHttpErrorFromResponse(response: Response): Promise<ErrorResponse<any>|null> {
+        let status: number = -1;
+        let title: string = 'Unknown error';
+        let detail: any = null;
+
         try {
             const body = await response.json();
-            if ("title" in body && "status" in body) {
-                return body as ErrorResponse<any>;
-            } else return null;
-        }
+            console.log(body)
+            if ("status" in body) {
+                status = body["status"];
+            }
 
-        catch (e) {
-            return null;
+            if ("title" in body) {
+                title = body["title"];
+            } else if ("error" in body) {
+                title = body["error"];
+            }
+
+            if ("detail" in body) {
+                detail = body["detail"];
+            }
+
+        }
+        finally {
+            return {...new BasicHttpError(status,title,detail)}
         }
     }
 }

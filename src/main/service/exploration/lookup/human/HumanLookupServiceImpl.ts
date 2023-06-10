@@ -35,13 +35,7 @@ export default class HumanLookupServiceImpl<E extends Human> extends BasicEntity
         if (response.ok) {
             return await response.json() as PagedData<E>
         } else {
-            const error: ErrorResponse<ErrorResponse<any>>|null = await BasicHttpError.getHttpErrorFromResponse(response);
-            if (error) {
-                throw error;
-            } else {
-                throw new Error("Error " + response.status+" " + response.statusText)
-            }
-
+            throw await BasicHttpError.getHttpErrorFromResponse(response);
         }
     }
 }
