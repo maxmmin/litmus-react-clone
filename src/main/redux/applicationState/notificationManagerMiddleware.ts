@@ -5,6 +5,7 @@ import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import Notification, {BasicNotification, BasicNotificationManager, notificationTypes} from "./Notification";
 import {MetaAction} from "./appStateReducer";
 import {HttpStatus} from "../../util/apiRequest/HttpStatus";
+import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 
 const notificationManagerMiddleware: Middleware<{}, {}> = ({getState, dispatch}) => (
     next
@@ -16,7 +17,7 @@ const notificationManagerMiddleware: Middleware<{}, {}> = ({getState, dispatch})
             let notification: Notification | null = null;
 
             if (isActionRejected(action)) {
-                const httpError = (action as PayloadAction<BasicHttpError<any>>).payload
+                const httpError = (action as PayloadAction<ErrorResponse<any>>).payload
 
                 if (httpError) {
 

@@ -66,8 +66,6 @@ const ExplorationData = ({exploredEntity, state}: Props) => {
 
     const unPaged: boolean = isUnPaged(pagedResponse)
 
-    console.log(pagedResponse)
-
     return (
         <div className={"results-container"}>
             {unPaged?null:<Pagination results={pagedResponse.numberOfElements}/>}

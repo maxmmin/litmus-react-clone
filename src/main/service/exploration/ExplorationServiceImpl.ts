@@ -24,6 +24,10 @@ import JurPersonExplorationState from "../../redux/exploration/jurPerson/JurPers
 import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/ExplorationMode";
 import {Entity} from "../../redux/exploration/Entity";
 import PagedData, {UnPagedData} from "../../util/apiRequest/PagedData";
+import EntityExplorationState from "../../redux/exploration/EntityExplorationState";
+import EntityExplorationParams from "../../redux/exploration/EntityExplorationParams";
+import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 
 class UnsupportedModeError extends Error {
 
@@ -53,13 +57,17 @@ class ExplorationServiceImpl implements ExplorationService {
         }
     }
 
-    private handleError (err: any) {
+    private handleError (err: any): null {
         let msg = 'unknown error'
         if (err instanceof Error) {
             msg = err.message;
+        } else if ("status" in err && "detail" in err) {
+            const basicHttpError = err as ErrorResponse<any>;
+            msg = `Error ${basicHttpError.status}: ${basicHttpError.title}`
         }
         this.conditionalOutput(notificationTypes.ERROR, msg);
         console.error(err);
+        return null;
     }
     
     private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService): Promise<PagedData<Person>> {
@@ -89,20 +97,6 @@ class ExplorationServiceImpl implements ExplorationService {
         }
     }
 
-    private async updatePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService) {
-        try {
-            stateManager.enablePending();
-            // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
-            const requestParams = stateManager.getExplorationParams();
-            const pagedResponse: PagedData<Person> = await this.explorePersons(stateManager, service);
-            stateManager.updateData({response: pagedResponse, requestParams: requestParams});
-        } catch (e: any) {
-            this.handleError(e);
-        }
-        finally {
-            stateManager.disablePending();
-        }
-    }
 
     private async exploreUsers(stateManager: ExplorationStateManager<UserExplorationState>, service: UserService): Promise<PagedData<User>> {
         const modeId: number = stateManager.getExplorationParams().modeId;
@@ -132,22 +126,6 @@ class ExplorationServiceImpl implements ExplorationService {
         }
     }
 
-    private async updateUsers (stateManager: ExplorationStateManager<UserExplorationState>, service: UserService) {
-        try {
-            stateManager.enablePending();
-            // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
-            // @todo: 06.09 -MAYBE I SHOULD MADE ONLY 1 UPDATE ENTITY METHOD
-            const requestParams = stateManager.getExplorationState().params;
-            const pagedResponse: PagedData<User> = await this.exploreUsers(stateManager, service);
-            stateManager.updateData({response: pagedResponse, requestParams: requestParams});
-        } catch (e: any) {
-            this.handleError(e);
-        }
-        finally {
-            stateManager.disablePending();
-        }
-    }
-
 
     private async exploreJurPersons(stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService): Promise<PagedData<JurPerson>> {
         const modeId: number = stateManager.getExplorationParams().modeId;
@@ -172,21 +150,6 @@ class ExplorationServiceImpl implements ExplorationService {
 
     }
 
-    private async updateJurPersons (stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService) {
-        try {
-            stateManager.enablePending();
-            // todo: pending notification (IDEA! write condition for time -1 or null for only hand delete)
-            const requestParams = stateManager.getExplorationParams();
-            const response: PagedData<JurPerson> = await this.exploreJurPersons(stateManager, service);
-            stateManager.updateData({response, requestParams});
-        } catch (e: any) {
-            this.handleError(e)
-        }
-        finally {
-            stateManager.disablePending();
-        }
-    }
-
     private getAccessToken (): string {
         const token = this._store.getState().authentication?.accessToken;
         if (token) {
@@ -197,35 +160,55 @@ class ExplorationServiceImpl implements ExplorationService {
         }
     }
 
-    explore(entity: Entity) {
+    async explore(entity: Entity): Promise<void> {
+        let stateManager: ExplorationStateManager<EntityExplorationState<any, EntityExplorationParams>>;
+        let getData: ()=>Promise<PagedData<any>>;
+
         switch (entity) {
             case Entity.PERSON: {
-                const stateManager: ExplorationStateManager<PersonExplorationState> = ExplorationStateManager.getPersonManager(this._store);
+                const personManager = ExplorationStateManager.getPersonManager(this._store);
+                stateManager = personManager;
+
                 const service = new PersonServiceImpl(this.getAccessToken.bind(this));
 
-                //@todo add some logic to err handing
-                this.updatePersons(stateManager, service)
-                    .catch(this.handleError.bind(this));
+                getData = ()=>this.explorePersons(personManager, service)
                 
                 break;
             }
             case Entity.JUR_PERSON: {
-                const stateManager = ExplorationStateManager.getJurPersonManager(this._store);
+                const jurPersonManager = ExplorationStateManager.getJurPersonManager(this._store);
+                stateManager = jurPersonManager;
                 const service = new JurPersonServiceImpl(this.getAccessToken.bind(this));
 
-                this.updateJurPersons(stateManager, service)
-                    .catch(this.handleError.bind(this));
+                getData = ()=>this.exploreJurPersons(jurPersonManager, service)
 
                 break;
             }
             case Entity.USER: {
-                const stateManager = ExplorationStateManager.getUserManager(this._store);
+                const userManager = ExplorationStateManager.getUserManager(this._store);
+                stateManager = userManager;
                 const service = new UserServiceImpl(this.getAccessToken.bind(this));
 
-                this.updateUsers(stateManager, service)
-                    .catch(this.handleError.bind(this));
+                getData = ()=>this.exploreUsers(userManager, service);
+
+                break;
             }
+
+            default: throw new Error("unsupported entity: " + entity);
         }
+
+        stateManager = stateManager!;
+        stateManager.enablePending();
+
+        const requestParams = stateManager.getExplorationState().params;
+
+        const response = await getData().catch(this.handleError.bind(this));
+        if (response) {
+            stateManager.updateData({response: response, requestParams: requestParams});
+        } else {
+            stateManager.updateData(null);
+        }
+        stateManager.disablePending();
     }
 }
 

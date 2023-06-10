@@ -248,7 +248,7 @@ export function checkNotNull <T> (arg: T) {
 }
 
 export function isEmpty (str: string|undefined|null) {
-    return str!==null&&str!==undefined&&str.trim()===""
+    return !(Boolean(str)&&Boolean(str?.trim()))
 }
 
 export function buildUrl(...args: string[]): string {
