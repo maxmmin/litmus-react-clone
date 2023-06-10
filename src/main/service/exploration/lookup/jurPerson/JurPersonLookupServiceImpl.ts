@@ -1,12 +1,12 @@
-import JurPersonService from "./JurPersonService";
-import {JurPerson} from "../../../../../model/jurPerson/JurPerson";
-import appConfig from "../../../../../config/appConfig";
-import {HttpMethod} from "../../../../../util/apiRequest/ApiRequestManager";
-import BasicApiRequestManager from "../../../../../util/apiRequest/BasicApiRequestManager";
-import {BasicHttpError} from "../../../../../util/apiRequest/BasicHttpError";
-import BasicEntityService from "../../BasicEntityService";
+import JurPersonLookupService from "./JurPersonLookupService";
+import {JurPerson} from "../../../../model/jurPerson/JurPerson";
+import appConfig from "../../../../config/appConfig";
+import {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
+import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
+import {BasicHttpError} from "../../../../util/apiRequest/BasicHttpError";
+import BasicEntityLookupService from "../BasicLookupService";
 
-class JurPersonServiceImpl extends BasicEntityService<JurPerson> implements JurPersonService {
+class JurPersonLookupServiceImpl extends BasicEntityLookupService<JurPerson> implements JurPersonLookupService {
 
     constructor(getToken: ()=>string, apiMapping: string = appConfig.serverMappings.jurPersons) {
         super(apiMapping, getToken);
@@ -33,4 +33,4 @@ class JurPersonServiceImpl extends BasicEntityService<JurPerson> implements JurP
 
 }
 
-export default JurPersonServiceImpl;
+export default JurPersonLookupServiceImpl;

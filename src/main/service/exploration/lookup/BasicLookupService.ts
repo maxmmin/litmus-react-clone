@@ -2,13 +2,13 @@
  * E - entity
  * service which provides shared methods
  */
-import EntityService from "./EntityService";
+import LookupService from "./LookupService";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
 import {buildUrl} from "../../../util/pureFunctions";
 
-class BasicEntityService<E> implements EntityService<E>{
+class BasicEntityLookupService<E> implements LookupService<E>{
     protected readonly apiUrl: string;
     protected readonly getAccessToken: ()=>string;
 
@@ -33,4 +33,4 @@ class BasicEntityService<E> implements EntityService<E>{
     }
 }
 
-export default BasicEntityService;
+export default BasicEntityLookupService;

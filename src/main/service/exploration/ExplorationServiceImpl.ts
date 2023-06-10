@@ -1,16 +1,16 @@
 import ExplorationService from "./ExplorationService";
 import ExplorationStateManager from "../../redux/exploration/ExplorationStateManager";
 import store from "../../redux/store";
-import PersonServiceImpl from "./entityService/human/person/PersonServiceImpl";
-import JurPersonServiceImpl from "./entityService/human/jurPerson/JurPersonServiceImpl";
-import UserServiceImpl from "./entityService/user/UserServiceImpl";
+import PersonLookupServiceImpl from "./lookup/human/person/PersonLookupServiceImpl";
+import JurPersonLookupServiceImpl from "./lookup/jurPerson/JurPersonLookupServiceImpl";
+import UserLookupServiceImpl from "./lookup/human/user/UserLookupServiceImpl";
 import Person from "../../model/human/person/Person";
-import PersonService from "./entityService/human/person/PersonService";
+import PersonLookupService from "./lookup/human/person/PersonLookupService";
 import {checkNotNull} from "../../util/pureFunctions";
 import User from "../../model/human/user/User";
-import UserService from "./entityService/user/UserService";
+import UserLookupService from "./lookup/human/user/UserLookupService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import JurPersonService from "./entityService/human/jurPerson/JurPersonService";
+import JurPersonLookupService from "./lookup/jurPerson/JurPersonLookupService";
 import {
     BasicNotification,
     BasicNotificationManager,
@@ -70,7 +70,7 @@ class ExplorationServiceImpl implements ExplorationService {
         return null;
     }
     
-    private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonService): Promise<PagedData<Person>> {
+    private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonLookupService): Promise<PagedData<Person>> {
         const modeId = stateManager.getExplorationParams().modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         switch (mode) {
@@ -98,7 +98,7 @@ class ExplorationServiceImpl implements ExplorationService {
     }
 
 
-    private async exploreUsers(stateManager: ExplorationStateManager<UserExplorationState>, service: UserService): Promise<PagedData<User>> {
+    private async exploreUsers(stateManager: ExplorationStateManager<UserExplorationState>, service: UserLookupService): Promise<PagedData<User>> {
         const modeId: number = stateManager.getExplorationParams().modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
 
@@ -127,7 +127,7 @@ class ExplorationServiceImpl implements ExplorationService {
     }
 
 
-    private async exploreJurPersons(stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonService): Promise<PagedData<JurPerson>> {
+    private async exploreJurPersons(stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonLookupService): Promise<PagedData<JurPerson>> {
         const modeId: number = stateManager.getExplorationParams().modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
 
@@ -169,7 +169,7 @@ class ExplorationServiceImpl implements ExplorationService {
                 const personManager = ExplorationStateManager.getPersonManager(this._store);
                 stateManager = personManager;
 
-                const service = new PersonServiceImpl(this.getAccessToken.bind(this));
+                const service = new PersonLookupServiceImpl(this.getAccessToken.bind(this));
 
                 getData = ()=>this.explorePersons(personManager, service)
                 
@@ -178,7 +178,7 @@ class ExplorationServiceImpl implements ExplorationService {
             case Entity.JUR_PERSON: {
                 const jurPersonManager = ExplorationStateManager.getJurPersonManager(this._store);
                 stateManager = jurPersonManager;
-                const service = new JurPersonServiceImpl(this.getAccessToken.bind(this));
+                const service = new JurPersonLookupServiceImpl(this.getAccessToken.bind(this));
 
                 getData = ()=>this.exploreJurPersons(jurPersonManager, service)
 
@@ -187,7 +187,7 @@ class ExplorationServiceImpl implements ExplorationService {
             case Entity.USER: {
                 const userManager = ExplorationStateManager.getUserManager(this._store);
                 stateManager = userManager;
-                const service = new UserServiceImpl(this.getAccessToken.bind(this));
+                const service = new UserLookupServiceImpl(this.getAccessToken.bind(this));
 
                 getData = ()=>this.exploreUsers(userManager, service);
 

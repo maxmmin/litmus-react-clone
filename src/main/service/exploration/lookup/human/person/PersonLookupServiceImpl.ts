@@ -1,9 +1,9 @@
-import PersonService from "./PersonService";
+import PersonLookupService from "./PersonLookupService";
 import Person from "../../../../../model/human/person/Person";
 import appConfig from "../../../../../config/appConfig";
-import BasicHumanService from "../BasicHumanService";
+import HumanLookupServiceImpl from "../HumanLookupServiceImpl";
 
-class PersonServiceImpl extends BasicHumanService<Person> implements PersonService {
+class PersonLookupServiceImpl extends HumanLookupServiceImpl<Person> implements PersonLookupService {
 
     constructor(getToken: () => string, apiMapping: string = appConfig.serverMappings.persons) {
         super(apiMapping, getToken);
@@ -11,4 +11,4 @@ class PersonServiceImpl extends BasicHumanService<Person> implements PersonServi
 
 }
 
-export default PersonServiceImpl;
+export default PersonLookupServiceImpl;

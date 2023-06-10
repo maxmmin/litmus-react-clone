@@ -4,8 +4,8 @@
  */
 
 
-interface EntityService<E> {
+interface LookupService<E> {
     findById (id: string): Promise<E|null>;
 }
 
-export default EntityService;
+export default LookupService;

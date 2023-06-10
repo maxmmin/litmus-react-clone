@@ -1,11 +1,11 @@
 import {FullName} from "../../FullName";
 import PagedData from "../../../../util/apiRequest/PagedData";
 import {Human} from "../../../../model/human/Human";
-import EntityService from "../EntityService";
+import LookupService from "../LookupService";
 
 /**
  * E - entity can be searched by FullName
  */
-export default interface HumanService<E extends Human> extends EntityService<E> {
+export default interface HumanLookupService<E extends Human> extends LookupService<E> {
     findByFullName (fullName: FullName): Promise<PagedData<E>>;
 }
