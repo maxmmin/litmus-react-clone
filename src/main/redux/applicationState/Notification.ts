@@ -1,7 +1,9 @@
 import store, {AppDispatch} from "../store";
-import {addNotification, AppStateActions} from "./AppStateActions";
+import AppStateActions, {addNotification} from "./AppStateActions";
 import {ToastContent, ToastOptions, TypeOptions} from "react-toastify";
-import {useAppDispatch} from "../hooks";
+import {PayloadAction} from "@reduxjs/toolkit";
+import deepCopy, {isValid} from "../../util/pureFunctions";
+import React from "react";
 
 
 export type NotificationContent = ToastContent;
@@ -68,11 +70,18 @@ export class BasicNotificationManager implements NotificationManager {
         this.dispatch = dispatch;
     }
 
+    isValid(value: any) {
+        return typeof value === "string" || React.isValidElement(value);
+    }
+
     addNotification(notification: Notification): void {
-        this.dispatch({
-            type: this.ADD_NOTIFICATION,
-            payload: {...notification}
-        })
+        let content = notification.content;
+        if (!this.isValid(content)) {
+            console.log("invalid")
+            notification.content = JSON.stringify(content);
+        }
+        const action: PayloadAction<Notification> = {type: this.ADD_NOTIFICATION, payload: deepCopy(notification)};
+        this.dispatch(action)
     }
 
     clearNotifications(): void {
@@ -82,19 +91,19 @@ export class BasicNotificationManager implements NotificationManager {
     }
 
     error(message: string): void {
-        addNotification(new BasicNotification(notificationTypes.ERROR, message))
+        this.addNotification(new BasicNotification(notificationTypes.ERROR, message))
     }
 
     info(message: string): void {
-        addNotification(new BasicNotification(notificationTypes.INFO, message))
+        this.addNotification(new BasicNotification(notificationTypes.INFO, message))
     }
 
     success(message: string): void {
-        addNotification(new BasicNotification(notificationTypes.SUCCESS, message))
+        this.addNotification(new BasicNotification(notificationTypes.SUCCESS, message))
     }
 
     warning(message: string): void {
-        addNotification(new BasicNotification(notificationTypes.WARNING, message))
+        this.addNotification(new BasicNotification(notificationTypes.WARNING, message))
     }
 
 }

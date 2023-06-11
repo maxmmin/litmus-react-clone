@@ -8,7 +8,7 @@ import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateActions from "./AppStateActions";
 import AuthActions from "../auth/AuthActions";
-import {isFulfilled, isRejected, PayloadAction} from "@reduxjs/toolkit";
+import {PayloadAction} from "@reduxjs/toolkit";
 import Notification from "./Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 

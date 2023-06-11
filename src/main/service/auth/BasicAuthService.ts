@@ -38,3 +38,5 @@ class BasicAuthService implements AuthService {
     }
 
 }
+
+export default BasicAuthService;

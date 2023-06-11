@@ -22,6 +22,10 @@ type AppState = {
     notifications: Notification[]
 }
 
+/**
+ * Type is used for specifying should the state isRefresh or no while redux thunk is pending
+ * And should notification be added after it's resolving
+ */
 export type Meta = {
     shouldPendingGlobally?: boolean,
     shouldNotifyOnEnd?: boolean

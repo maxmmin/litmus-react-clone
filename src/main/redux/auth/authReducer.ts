@@ -16,15 +16,15 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
             return prevState;
         }
 
-        case AuthActions.REFRESH_AUTH: {
+        case AuthActions.SET_AUTH: {
             return action.payload;
         }
 
-        case `${AuthActions.REFRESH_AUTH}`: {
+        case `${AuthActions.SET_AUTH}`: {
             return action.payload;
         }
 
-        case `${AuthActions.REFRESH_AUTH}/fulfilled`: {
+        case `${AuthActions.SET_AUTH}/fulfilled`: {
             return {...action.payload};
         }
 
@@ -47,7 +47,7 @@ const errorHandle = (prevState: AuthenticationReducible, error: BasicHttpError<a
             case HttpStatus.UNAUTHENTICATED: {
 
                 if (prevState?.accessToken) {
-                    return {accessToken: null, refreshToken: prevState.refreshToken}
+                    return {accessToken: prevState.accessToken, refreshToken: prevState.refreshToken, expired: true}
                 }
 
                 return  null

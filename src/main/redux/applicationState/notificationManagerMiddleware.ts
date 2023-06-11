@@ -21,7 +21,11 @@ const notificationManagerMiddleware: Middleware<{}, {}> = ({getState, dispatch})
 
                 if (httpError) {
 
-                    const title = httpError.title;
+                    let title = httpError.title;
+
+                    if (typeof (title as any) !== "string") {
+                        title = JSON.stringify(title);
+                    }
 
                     switch (httpError.status) {
                         case HttpStatus.BAD_REQUEST:

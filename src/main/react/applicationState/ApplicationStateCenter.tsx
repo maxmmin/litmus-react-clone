@@ -1,6 +1,6 @@
 import Loader from "../loader/Loader";
 import {checkAndRefreshAuth, isValid, onWakeUp} from "../../util/pureFunctions";
-import React, {ReactNode, useEffect} from "react";
+import React, {ReactNode, useEffect, useMemo} from "react";
 import {useAppSelector} from "../../redux/hooks";
 import {refreshUserIdentity} from "../../redux/userIdentity/UserIdentityActions";
 import AuthActions from "../../redux/auth/AuthActions";
@@ -11,6 +11,11 @@ import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url"
 import {setMapsApiResponse} from "../../redux/applicationState/AppStateActions";
 import {ErrorBoundary} from "react-error-boundary";
 import NotificationCenter from "../notifications/NotificationCenter";
+import AuthenticationManager from "../../service/auth/AuthenticationManager";
+import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
+import {BasicNotificationManager} from "../../redux/applicationState/Notification";
+import BasicAuthService from "../../service/auth/BasicAuthService";
+import ApplicationStateManager from "../../service/appState/ApplicationStateManager";
 
 type Props = {
     children: ReactNode
@@ -31,15 +36,17 @@ const ApplicationStateCenter = ({children}: Props) => {
         region: gmapsRegionOptions.region!,
     });
 
+    const authenticationManager: AuthenticationManager = useMemo(()=>BasicAuthenticationManager.getBasicManager(store), [])
+
     useEffect(()=>{
         store.dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError?{...loadError}:null}))
     }, [isLoaded, loadError])
     // fix err if no internet
 
     useEffect(()=>{
-        store.dispatch({type: AuthActions.CHECK_AUTH})
+        authenticationManager.checkAndRefreshAuth();
 
-        if (isValid(authentication?.accessToken)) {
+        if (authenticationManager.isAuthActual()) {
             store.dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!}))
         }
     },[authentication])
@@ -48,7 +55,7 @@ const ApplicationStateCenter = ({children}: Props) => {
        const wakeUpCheckTimerId = onWakeUp(()=>{
            console.log("wake up")
            if (authentication) {
-               checkAndRefreshAuth(authentication, store.getState().timers, store.dispatch)
+               authenticationManager.checkAndRefreshAuth();
            }
        })
 

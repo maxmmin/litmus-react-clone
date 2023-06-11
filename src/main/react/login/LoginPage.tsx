@@ -1,13 +1,16 @@
-import React, {useRef} from 'react';
+import React, {useMemo, useRef} from 'react';
 import {signIn} from "../../redux/auth/AuthActions";
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Navigate} from "react-router-dom";
 import {LoginPageState, updateLoginPageState} from "../../redux/login/LoginPageDataActions";
+import AuthenticationManager from "../../service/auth/AuthenticationManager";
+import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
+import store from "../../redux/store";
 
 
-function SignInScreen() {
+function LoginPage() {
     const dispatch = useAppDispatch();
 
     const passwordInput = useRef<HTMLInputElement>(null)
@@ -24,13 +27,17 @@ function SignInScreen() {
 
     const error = pageData?.error;
 
-    if (authentication) {
-        return <Navigate to="/"/>
-    }
+    const authManager: AuthenticationManager = useMemo(()=>{
+        return BasicAuthenticationManager.getBasicManager(store)
+    }, [])
 
     const signInButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        dispatch(signIn({email: email!, password: password!, shouldPendingGlobally: true, shouldNotifyOnEnd: true}))
+        authManager.login();
+    }
+
+    if (authentication) {
+        return <Navigate to="/"/>
     }
 
     return (
@@ -89,4 +96,4 @@ function SignInScreen() {
     );
 }
 
-export default SignInScreen;
+export default LoginPage;

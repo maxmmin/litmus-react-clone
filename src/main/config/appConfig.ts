@@ -31,7 +31,7 @@ const serverMappings = Object.freeze({
     "jurPersons": buildUrl(apiRoot, entityDomains.JUR_PERSON),
     "getCurrentUser": buildUrl(authRoot),
     "refreshTokens": buildUrl(authRoot, "/refresh"),
-    "signIn": buildUrl(apiRoot, "/sign-in")
+    "signIn": buildUrl(authRoot, "/sign-in")
 })
 
 console.log(serverMappings)

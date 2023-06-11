@@ -9,9 +9,9 @@ import appConfig from "../../config/appConfig";
 
 enum AuthActions {
     SET_AUTH="SET_AUTH",
-    REFRESH_AUTH="REFRESH_AUTH",
     CLEAR_AUTH="CLEAR_AUTH",
-    CHECK_AUTH="CHECK_AUTH"
+    CHECK_AUTH="CHECK_AUTH",
+    "SET_EXPIRED"="SET_EXPIRED"
 }
 
 export default AuthActions;
@@ -20,7 +20,7 @@ type RefreshAccessTokenArg = MetaArg<{
     refreshToken: string
 } >
 
-export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.REFRESH_AUTH,
+export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.SET_AUTH,
     async ({refreshToken}, {rejectWithValue}) => {
         const response =  await fetch(appConfig.serverMappings.refreshTokens, {
             method: 'POST',
@@ -42,12 +42,12 @@ export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenAr
 
 export const setAuthentication = (auth: Authentication) : PayloadAction<AuthenticationReducible> => {
     return {
-        type: `${AuthActions.REFRESH_AUTH}`,
+        type: `${AuthActions.SET_AUTH}`,
         payload: auth
     }
 }
 
-export function clearAuthentication (): Action {
+export function clearAuthentication (): Action<AuthActions> {
     return {
         type: AuthActions.CLEAR_AUTH
     }
@@ -58,7 +58,7 @@ type SignInArg = MetaArg<{
     password: string
 }>
 
-export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.REFRESH_AUTH,
+export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.SET_AUTH,
     async ({email, password},{rejectWithValue}) => {
         const response = await fetch(appConfig.serverMappings.signIn, {
             method: 'POST',

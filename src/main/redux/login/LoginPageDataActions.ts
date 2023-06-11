@@ -8,11 +8,7 @@ export type LoginPageState = {
     error: ErrorResponse<any> | null
 }
 
-export type LoginPageStateReducible = {
-    email: string,
-    password: string,
-    error: BasicHttpError<any> | null
-} | null | undefined
+export type LoginPageStateReducible = LoginPageState | null | undefined
 
 enum LoginPageDataActions {
     SET_STATE="SET_STATE",

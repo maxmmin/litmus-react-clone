@@ -1,7 +1,6 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
 import React from 'react';
-import SignIn from "./react/signIn/SignInScreen";
 import Home from "./react/home/HomeScreen";
 import PrivateComponent, {ERROR_PAGE} from "./react/authorization/PrivateComponent";
 import {useAppDispatch, useAppSelector} from "./redux/hooks";
@@ -9,13 +8,14 @@ import store from "./redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import Explore from "./react/exploration/ExplorationScreen";
-import {AppStateActions,switchAppState} from "./redux/applicationState/AppStateActions";
+import AppStateActions, {switchAppState} from "./redux/applicationState/AppStateActions";
 import ApplicationStateCenter from "./react/applicationState/ApplicationStateCenter";
 import Creation from "./react/creation/CreationScreen";
 import appConfig, {routingLinks} from "./config/appConfig";
 import Role, {Permissions} from "./redux/userIdentity/Role";
 import {buildUrl} from "./util/pureFunctions";
 import {Entity} from "./model/Entity";
+import LoginPage from "./react/login/LoginPage";
 
 // @todo check if the refresh token expired
 
@@ -58,7 +58,7 @@ function App() {
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={Role.ADMIN.permissions}/>
                             }/>
 
-                            <Route path="/sign-in" element={<SignIn/>}/>
+                            <Route path="/sign-in" element={<LoginPage/>}/>
                         </Routes>
                     </div>
                 </ApplicationStateCenter>
