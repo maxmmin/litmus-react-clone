@@ -40,7 +40,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
         }
 
         case AuthActions.CLEAR_AUTH: {
-            return {...initialState, gmapsApiState: prevState.gmapsApiState}
+            return {...initialState, notifications: prevState.notifications, gmapsApiState: prevState.gmapsApiState}
         }
 
         case AppStateActions.SET_MAPS_API_RESPONSE: {

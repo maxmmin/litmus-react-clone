@@ -31,7 +31,7 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
         default: {
             if (action.type.endsWith("/rejected")) {
                 try {
-                        return errorHandle(prevState, action.payload as unknown as BasicHttpError<any>)
+                    return errorHandle(prevState, action.payload as unknown as BasicHttpError<any>)
                 } catch (e) {
                     console.log(e)
                 }

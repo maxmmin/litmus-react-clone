@@ -15,8 +15,8 @@ import TimersStateManager from "../timers/TimersStateManager";
 import ApiRequestManager, {HttpMethod} from "../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../config/appConfig";
-import {Action} from "redux";
 import BasicAuthService from "./BasicAuthService";
+import {HttpStatus} from "../../util/apiRequest/HttpStatus";
 
 class BasicAuthenticationManager implements AuthenticationManager {
     private readonly _store: typeof store;
@@ -24,6 +24,8 @@ class BasicAuthenticationManager implements AuthenticationManager {
     private readonly appStateManager: ApplicationStateManager;
     private readonly timersStateManager: TimersStateManager;
     private readonly authService: AuthService;
+
+    private static pending: boolean = false;
 
     constructor(_store: typeof store, notificationManager: NotificationManager, authService: AuthService, appStateManager: ApplicationStateManager, timersStateManager: TimersStateManager) {
         this._store = _store;
@@ -39,6 +41,9 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
         const authentication: Authentication | null  = await this.authService.getAuth({email, password})
             .catch(errorResponse => {
+                if (errorResponse instanceof BasicHttpError&&errorResponse.status===HttpStatus.UNAUTHENTICATED) {
+                    errorResponse = new BasicHttpError(HttpStatus.UNAUTHENTICATED, "Перевірте правильність введених данних")
+                }
                 const msg = getErrMessage(errorResponse) || 'Невідома помилка'
                 this.notificationManager.error(msg)
                 this.setLoginError(errorResponse);
@@ -58,10 +63,19 @@ class BasicAuthenticationManager implements AuthenticationManager {
         const auth = this.getAuth();
 
         if (auth) {
-            try {
-                if (this.isInvalid(auth.accessToken)||auth.expired) {
+                if (this.isAuthExpired()&&!BasicAuthenticationManager.pending) {
                     if (this.isValid(auth.refreshToken)) {
-                        await this.refreshAuth();
+                        try {
+                            await this.refreshAuth();
+                        }
+
+                        catch (e: any) {
+
+                        }
+
+                        finally {
+                            BasicAuthenticationManager.turnPendingOff();
+                        }
                     } else {
                         this.logout();
                     }
@@ -70,14 +84,6 @@ class BasicAuthenticationManager implements AuthenticationManager {
                 if (!this.timersStateManager.getAuthRefreshTimer()) {
                     this.planAuthRefresh();
                 }
-            }
-
-            catch (e: any) {
-                const errMsg: string = getErrMessage(e)||'Невідома помилка. Авторизуйтесь, будь ласка, заново';
-
-                this.notificationManager.error(errMsg);
-                this.logout();
-            }
         }
         else {
             if (this.timersStateManager.getAuthRefreshTimer()) {
@@ -87,46 +93,49 @@ class BasicAuthenticationManager implements AuthenticationManager {
     }
 
     logout(): void {
-        this._store.dispatch(clearAuthentication())
+        this._store.dispatch(clearAuthentication());
+        const timer = this.timersStateManager.getAuthRefreshTimer();
+        if (timer) {
+            window.clearTimeout(timer);
+            this.timersStateManager.setAuthRefreshTimer(null);
+        }
     }
 
     async refreshAuth(): Promise<void> {
+        if (!Boolean(0)) {
+            throw new Error("supper err; can u handle me")
+        }
+        BasicAuthenticationManager.turnPendingOn();
+
         const auth = this.getAuth();
 
-            if (!auth) throw new BasicHttpError(401,"trying to refresh auth while prev auth was null")
+        if (!auth) throw new BasicHttpError(401,"trying to refresh auth while prev auth was null")
 
-            const refreshToken = auth.refreshToken;
+        const refreshToken = auth.refreshToken;
 
-            if (!isValid(refreshToken)) {
-                throw new BasicHttpError(401, "Час дії refresh токену вичерпано. Будь ласка, автентифікуйтесь заново")
+        if (!isValid(refreshToken)) {
+            throw new BasicHttpError(401, "Час дії refresh токену вичерпано. Будь ласка, автентифікуйтесь заново")
+        }
+
+        const requestManager: ApiRequestManager = new BasicApiRequestManager();
+
+        const response: Response = await requestManager
+            .url(appConfig.serverMappings.refreshTokens)
+            .body(JSON.stringify({refreshToken: refreshToken}))
+            .method(HttpMethod.POST)
+            .fetch();
+
+        if (response.ok) {
+            const auth: Authentication = await response.json() as Authentication;
+            this.setAuth(auth)
+        } else {
+            let error: ErrorResponse<any>|null = await BasicHttpError.getHttpErrorFromResponse(response);
+            if (!error) {
+                error = new BasicHttpError(401, "Помилка автентифікації. Авторизуйтесь, будь ласка, заново")
             }
+            throw error;
+        }
 
-            const requestManager: ApiRequestManager = new BasicApiRequestManager();
-
-            const response: Response = await requestManager
-                .url(appConfig.serverMappings.refreshTokens)
-                .body(JSON.stringify({refreshToken: refreshToken}))
-                .method(HttpMethod.POST)
-                .fetch();
-
-            console.log(response.json());
-
-            if (response.ok) {
-                const auth: Authentication = await response.json() as Authentication;
-                this.setAuth(auth)
-            } else {
-                let error: ErrorResponse<any>|null = await BasicHttpError.getHttpErrorFromResponse(response);
-                if (!error) {
-                    error = new BasicHttpError(401, "Помилка автентифікації. Авторизуйтесь, будь ласка, заново")
-                }
-                throw error;
-            }
-
-    }
-
-    private setExpired () {
-        const action: Action<AuthActions> = {type: AuthActions.SET_EXPIRED}
-        this._store.dispatch(action);
     }
 
     private setAuth (auth: Authentication) {
@@ -147,19 +156,15 @@ class BasicAuthenticationManager implements AuthenticationManager {
         this._store.dispatch(action)
     }
 
-    private isValid (token: string | null | undefined): boolean {
+    private isValid (token: string): boolean {
         try {
             if (token) {
-                return !(jwtDecode<JwtPayload>(token).exp!*1000<Date.now());
+                return jwtDecode<JwtPayload>(token).exp!*1000>Date.now();
             }
         } catch (e) {
             console.error(e)
         }
         return false;
-    }
-
-    private isInvalid (token: string | null | undefined): boolean {
-        return !isValid(token);
     }
 
     private clearAuthRefreshTimer () {
@@ -195,7 +200,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         // this callback will fire when it will 1 minute before jwt expiring
         const timer = setTimeout(()=>{
             console.log("updating auth")
-            this.refreshAuth()
+            this.refreshAuth().catch(this.handleAuthRefreshErr.bind(this))
         }, refreshCallbackDelayInMs)
 
         this.timersStateManager.setAuthRefreshTimer(timer)
@@ -208,12 +213,31 @@ class BasicAuthenticationManager implements AuthenticationManager {
         } else return false;
     }
 
+    isAuthExpired(): boolean {
+        return !this.isAuthActual();
+    }
+
     static getBasicManager (_store: typeof store) {
         const notificationManager = new BasicNotificationManager(_store.dispatch);
         const authService = new BasicAuthService();
         const appStateManager = new ApplicationStateManager(_store);
         const timersStateManager = new TimersStateManager(_store);
         return new BasicAuthenticationManager(_store, notificationManager, authService, appStateManager, timersStateManager);
+    }
+
+    private static turnPendingOn () {
+        BasicAuthenticationManager.pending = true;
+    }
+
+    private static turnPendingOff () {
+        BasicAuthenticationManager.pending = false;
+    }
+
+    private handleAuthRefreshErr(e: any): void {
+        const errMsg: string = getErrMessage(e)||'Невідома помилка. Авторизуйтесь, будь ласка, заново';
+        console.error(e);
+        this.notificationManager.error(errMsg);
+        this.logout();
     }
 }
 
