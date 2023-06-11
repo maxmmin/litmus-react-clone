@@ -102,9 +102,6 @@ class BasicAuthenticationManager implements AuthenticationManager {
     }
 
     async refreshAuth(): Promise<void> {
-        if (!Boolean(0)) {
-            throw new Error("supper err; can u handle me")
-        }
         BasicAuthenticationManager.turnPendingOn();
 
         const auth = this.getAuth();
