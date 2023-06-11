@@ -3,12 +3,12 @@ import store from "../../redux/store";
 import {BasicNotificationManager, NotificationManager} from "../../redux/applicationState/Notification";
 import AuthService, {Credentials} from "./AuthService";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
-import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import {BasicHttpError, getErrMessage} from "../../util/apiRequest/BasicHttpError";
 import {PayloadAction} from "@reduxjs/toolkit";
 import LoginPageDataActions, {LoginPageState} from "../../redux/login/LoginPageDataActions";
 import Authentication, {AuthenticationReducible} from "../../redux/auth/Authentication";
 import AuthActions, {clearAuthentication} from "../../redux/auth/AuthActions";
-import {isValid} from "../../util/pureFunctions";
+import deepCopy, {isValid} from "../../util/pureFunctions";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import ApplicationStateManager from "../appState/ApplicationStateManager";
 import TimersStateManager from "../timers/TimersStateManager";
@@ -39,7 +39,8 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
         const authentication: Authentication | null  = await this.authService.getAuth({email, password})
             .catch(errorResponse => {
-                this.notificationManager.error(JSON.stringify(errorResponse))
+                const msg = getErrMessage(errorResponse) || 'Невідома помилка'
+                this.notificationManager.error(msg)
                 this.setLoginError(errorResponse);
                 return null;
             })
@@ -72,13 +73,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
             }
 
             catch (e: any) {
-                let errMsg: string;
-
-                if (e instanceof BasicHttpError) {
-                    errMsg = `Error ${e.status}: ${e.title}`
-                } else if (e instanceof Error) {
-                    errMsg = e.message;
-                }   else errMsg = 'Невідома помилка. Авторизуйтесь, будь ласка, заново'
+                const errMsg: string = getErrMessage(e)||'Невідома помилка. Авторизуйтесь, будь ласка, заново';
 
                 this.notificationManager.error(errMsg);
                 this.logout();
@@ -148,7 +143,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
     }
 
     private setLoginError (error: ErrorResponse<any>) {
-        const action: PayloadAction<Partial<LoginPageState>> = {type: LoginPageDataActions.UPDATE_STATE, payload: {error}}
+        const action: PayloadAction<Partial<LoginPageState>> = {type: LoginPageDataActions.UPDATE_STATE, payload: {error: deepCopy(error)}}
         this._store.dispatch(action)
     }
 

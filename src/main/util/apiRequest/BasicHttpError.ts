@@ -38,9 +38,17 @@ class BasicHttpError<D> extends Error implements ErrorResponse<D> {
 
         }
         finally {
-            return {...new BasicHttpError(status,title,detail)}
+            return new BasicHttpError(status,title,detail)
         }
     }
+}
+
+export const getErrMessage = (e: any): string|null => {
+    if (e instanceof BasicHttpError || ("title" in e && "status" in e)) {
+        return `Error ${e.status}: ${e.title}`
+    } else if (e instanceof Error) {
+        return  e.message;
+    }   else return null;
 }
 
 export {BasicHttpError};
