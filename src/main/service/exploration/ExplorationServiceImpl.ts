@@ -205,6 +205,7 @@ class ExplorationServiceImpl implements ExplorationService {
         const response = await getData().catch(this.handleError.bind(this));
         if (response) {
             stateManager.updateData({response: response, requestParams: requestParams});
+            this.conditionalOutput(notificationTypes.SUCCESS, "Success")
         } else {
             stateManager.updateData(null);
         }

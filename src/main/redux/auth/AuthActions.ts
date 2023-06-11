@@ -8,6 +8,7 @@ import {MetaArg} from "../applicationState/AppState";
 import appConfig from "../../config/appConfig";
 
 enum AuthActions {
+    SET_AUTH="SET_AUTH",
     REFRESH_AUTH="REFRESH_AUTH",
     CLEAR_AUTH="CLEAR_AUTH",
     CHECK_AUTH="CHECK_AUTH"

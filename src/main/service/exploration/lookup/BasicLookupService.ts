@@ -4,7 +4,7 @@
  */
 import LookupService from "./LookupService";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
-import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
+import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
 import {buildUrl} from "../../../util/pureFunctions";
 
@@ -18,7 +18,7 @@ class BasicEntityLookupService<E> implements LookupService<E>{
     }
 
     async findById(id: string): Promise<E> {
-        const requestManager = new BasicApiRequestManager();
+        const requestManager: ApiRequestManager = new BasicApiRequestManager();
         const accessToken = this.getAccessToken();
         const response = await requestManager
             .url(buildUrl(this.apiUrl, id))

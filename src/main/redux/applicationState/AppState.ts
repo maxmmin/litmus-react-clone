@@ -23,7 +23,7 @@ type AppState = {
 }
 
 export type Meta = {
-    shouldRefreshGlobally?: boolean,
+    shouldPendingGlobally?: boolean,
     shouldNotifyOnEnd?: boolean
 }
 

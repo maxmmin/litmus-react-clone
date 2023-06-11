@@ -16,24 +16,24 @@ import deepCopy from "../../util/pureFunctions";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<any>): S => {
     switch (action.type) {
-        case ExplorationCoreAction.UPDATE_EXPLORATION_STATE: {
+        case ExplorationCoreAction.SET_EXPLORATION_STATE: {
             return action.payload as S;
         }
-        case ExplorationCoreAction.UPDATE_EXPLORATION_DATA: {
+        case ExplorationCoreAction.SET_EXPLORATION_DATA: {
             const newData = action.payload as S["data"];
             return {...prevState, data: newData};
         }
-        case ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS: {
+        case ExplorationCoreAction.SET_EXPLORATION_PARAMS: {
             let params = action.payload as S["params"];
             return {...prevState, params};
         }
 
-        case ExplorationCoreAction.UPDATE_EXPLORATION_STATE_PENDING: {
+        case ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING: {
             const bool: boolean = action.payload as boolean;
             return {...prevState, isPending: bool} as S;
         }
 
-        case ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE: {
+        case ExplorationCoreAction.SET_EXPLORATION_PARAMS_MODE: {
             const selectedMode = action.payload as ExplorationMode;
             const modeId = selectedMode.id;
             if (!prevState.params.supportedModesIdList.includes(modeId)) {

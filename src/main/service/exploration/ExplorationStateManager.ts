@@ -79,35 +79,35 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
 
     updateState (state: S): void {
         this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_STATE],
+            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE],
             payload: deepCopy(state)
         })
     }
 
     updateParams (params: S['params']): void {
         this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS],
+            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_PARAMS],
             payload: deepCopy(params)
         })
     }
 
     updateData (data: S['data']): void {
         this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_DATA],
+            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_DATA],
             payload: deepCopy(data)
         })
     }
 
     enablePending (): void {
         this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_STATE_PENDING],
+            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING],
             payload: true
         })
     }
 
     disablePending (): void {
         this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_STATE_PENDING],
+            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING],
             payload: false
         })
     }
@@ -116,7 +116,7 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
         this.checkSupport(mode);
 
         this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS_MODE],
+            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_PARAMS_MODE],
             payload: deepCopy(mode)
         })
     }

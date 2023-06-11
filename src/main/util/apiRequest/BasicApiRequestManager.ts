@@ -8,7 +8,7 @@ class BasicApiRequestManager implements ApiRequestManager {
     private init: RequestInit = this.getDefaultRequestInit();
 
     private getDefaultRequestInit (): RequestInit {
-        return {headers: {}}
+        return {headers: {'Content-Type': 'application/json'}}
     }
 
     body(body: BodyInit): ApiRequestManager {
@@ -16,7 +16,7 @@ class BasicApiRequestManager implements ApiRequestManager {
         return this;
     }
 
-    setQueryParam(key: string, value: string|null): ApiRequestManager {
+    setQueryParam(key: string, value: string): ApiRequestManager {
         let keyValue = `${key}=${value}`
         if (this.fetchUrl!==null) {
             if (this.fetchUrl.includes("?")) {

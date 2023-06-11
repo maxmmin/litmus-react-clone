@@ -4,7 +4,7 @@ import {FullName} from "../../FullName";
 import BasicEntityLookupService from "../BasicLookupService";
 import appConfig from "../../../../config/appConfig";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
-import {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
+import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
 import {isEmpty} from "../../../../util/pureFunctions";
 import {Human} from "../../../../model/human/Human";
 import ErrorResponse from "../../../../util/apiRequest/ErrorResponse";
@@ -17,7 +17,7 @@ export default class HumanLookupServiceImpl<E extends Human> extends BasicEntity
     }
 
     async findByFullName(fullName: FullName): Promise<PagedData<E>> {
-        const requestManager = new BasicApiRequestManager();
+        const requestManager: ApiRequestManager = new BasicApiRequestManager();
 
         const accessToken = this.getAccessToken();
 
@@ -28,7 +28,7 @@ export default class HumanLookupServiceImpl<E extends Human> extends BasicEntity
 
         for (const key in fullName) {
             if (Object.hasOwn(fullName, key)&&!isEmpty(fullName[key])) {
-                requestManager.setQueryParam(key,fullName[key]);
+                requestManager.setQueryParam(key,fullName[key]!);
             }
         }
         const response = await requestManager.fetch();

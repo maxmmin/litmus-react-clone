@@ -1,7 +1,7 @@
 import JurPersonLookupService from "./JurPersonLookupService";
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import appConfig from "../../../../config/appConfig";
-import {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
+import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
 import {BasicHttpError} from "../../../../util/apiRequest/BasicHttpError";
 import BasicEntityLookupService from "../BasicLookupService";
@@ -13,7 +13,7 @@ class JurPersonLookupServiceImpl extends BasicEntityLookupService<JurPerson> imp
     }
 
     async findByName(name: string): Promise<JurPerson[]> {
-        const requestManager = new BasicApiRequestManager();
+        const requestManager: ApiRequestManager = new BasicApiRequestManager();
 
         const token = this.getAccessToken();
 

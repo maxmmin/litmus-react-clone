@@ -4,7 +4,7 @@ import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Navigate} from "react-router-dom";
-import {LoginPageState, updateLoginPageState} from "../../redux/signUp/SignUpPageDataActions";
+import {LoginPageState, updateLoginPageState} from "../../redux/login/LoginPageDataActions";
 
 
 function SignInScreen() {
@@ -30,7 +30,7 @@ function SignInScreen() {
 
     const signInButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        dispatch(signIn({email: email!, password: password!, shouldRefreshGlobally: true, shouldNotifyOnEnd: true}))
+        dispatch(signIn({email: email!, password: password!, shouldPendingGlobally: true, shouldNotifyOnEnd: true}))
     }
 
     return (

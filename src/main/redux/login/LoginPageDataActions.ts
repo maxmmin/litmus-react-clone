@@ -1,10 +1,11 @@
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import {PayloadAction} from "@reduxjs/toolkit";
+import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 
 export type LoginPageState = {
     email: string,
     password: string,
-    error: BasicHttpError<any> | null
+    error: ErrorResponse<any> | null
 }
 
 export type LoginPageStateReducible = {
@@ -13,16 +14,16 @@ export type LoginPageStateReducible = {
     error: BasicHttpError<any> | null
 } | null | undefined
 
-enum SignUpPageDataActions {
+enum LoginPageDataActions {
     SET_STATE="SET_STATE",
     UPDATE_STATE="UPDATE_STATE"
 }
 
-export default SignUpPageDataActions;
+export default LoginPageDataActions;
 
 export const updateLoginPageState = (valuesToBeUpdated: Partial<LoginPageState>): PayloadAction<Partial<LoginPageState>> => {
     return {
-        type: SignUpPageDataActions.UPDATE_STATE,
+        type: LoginPageDataActions.UPDATE_STATE,
         payload: valuesToBeUpdated
     }
 }

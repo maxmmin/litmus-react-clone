@@ -1,5 +1,5 @@
 import {Reducer} from "react";
-import SignUpPageDataActions, {LoginPageState, LoginPageStateReducible} from "./SignUpPageDataActions";
+import LoginPageDataActions, {LoginPageState, LoginPageStateReducible} from "./LoginPageDataActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import AuthActions from "../auth/AuthActions";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
@@ -10,13 +10,13 @@ const initialState: LoginPageState = {
     error: null
 }
 
-const signUpPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<LoginPageState>> = (prevState=initialState, action) => {
+const loginPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<LoginPageState>> = (prevState=initialState, action) => {
     switch (action.type) {
-        case SignUpPageDataActions.SET_STATE: {
+        case LoginPageDataActions.SET_STATE: {
             return action.payload;
         }
 
-        case SignUpPageDataActions.UPDATE_STATE: {
+        case LoginPageDataActions.UPDATE_STATE: {
             return {...prevState, ...action.payload!}
         }
 
@@ -49,4 +49,4 @@ const signUpPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<Logi
     }
 }
 
-export default signUpPageDataReducer
+export default loginPageDataReducer

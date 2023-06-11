@@ -16,7 +16,7 @@ import {PersistConfig} from "reduxjs-toolkit-persist/es/types";
 import storage from 'reduxjs-toolkit-persist/lib/storage'
 import userIdentityReducer from "./userIdentity/userIdentityReducer";
 import authenticationCheckMiddleware from "./auth/authenticationCheckMiddleware";
-import signUpPageDataReducer from "./signUp/signUpPageDataReducer";
+import loginPageDataReducer from "./login/LoginPageDataReducer";
 import creationParamsReducer from "./creation/creationParamsReducer";
 import timersReducer from "./timers/timersReducer";
 import notificationManagerMiddleware from "./applicationState/notificationManagerMiddleware";
@@ -33,7 +33,7 @@ const rootReducer = combineReducers({
     appState: appStateReducer,
     userIdentity: userIdentityReducer,
     exploration: explorationReducer,
-    loginPageState: signUpPageDataReducer,
+    loginPageState: loginPageDataReducer,
     creationParams: creationParamsReducer,
     timers: timersReducer
 } )
