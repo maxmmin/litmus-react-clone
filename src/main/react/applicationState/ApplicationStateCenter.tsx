@@ -47,7 +47,7 @@ const ApplicationStateCenter = ({children}: Props) => {
         authenticationManager.checkAndRefreshAuth();
 
         if (authenticationManager.isAuthActual()) {
-            store.dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!}))
+            store.dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!, notifyOnEnd: false, globalPending: false}))
         }
     },[authentication])
 

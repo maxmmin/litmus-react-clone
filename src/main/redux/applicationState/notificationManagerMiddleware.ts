@@ -10,7 +10,7 @@ import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 const notificationManagerMiddleware: Middleware<{}, {}> = () => (
     next
 ) => (action: Action) => {
-    if ((action as unknown as MetaAction).meta?.arg.shouldNotifyOnEnd) {
+    if ((action as unknown as MetaAction).meta?.arg.notifyOnEnd) {
         if (isActionFulfilled(action)||isActionRejected(action)) {
             const notificationManager = new BasicNotificationManager();
 

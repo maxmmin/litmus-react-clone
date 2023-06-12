@@ -9,13 +9,13 @@ import AuthActions from "../auth/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import Notification from "./Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
-import {Meta} from "../store";
+import {AsyncMeta} from "../store";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 
 export type MetaAction = {
     meta?: {
-        arg: Meta
+        arg: AsyncMeta
     }
 }
 
@@ -73,7 +73,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
             if (isActionPending(action)) {
                 const metaAction = action as unknown as MetaAction;
 
-                if (metaAction.meta?.arg.shouldPendingGlobally) {
+                if (metaAction.meta?.arg.globalPending) {
                     return {...prevState, isRefreshing: true}
                 }
             }

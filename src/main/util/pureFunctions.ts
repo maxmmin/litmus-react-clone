@@ -100,7 +100,7 @@ export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: Timers
         if (!isValid(auth?.accessToken!)) {
             if (auth?.refreshToken&&isValid(auth.refreshToken)) {
                 return dispatch(
-                    refreshAccessToken({refreshToken: auth.refreshToken, shouldPendingGlobally: false})
+                    refreshAccessToken({refreshToken: auth.refreshToken, globalPending: false, notifyOnEnd: false})
                 )
             } else {
                 return logOut(dispatch)
@@ -153,7 +153,7 @@ export const setAuthRefreshingTimer = (authentication: AuthenticationReducible, 
     // this callback will fire when it will 1 minute before jwt expiring
     return setTimeout(()=>{
         console.log("updating auth")
-        dispatch(refreshAccessToken({refreshToken: refreshToken, shouldPendingGlobally: false}))
+        dispatch(refreshAccessToken({refreshToken: refreshToken, globalPending: false, notifyOnEnd: false}))
     }, refreshCallbackDelayInMs)
 }
 
