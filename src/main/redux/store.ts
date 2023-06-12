@@ -69,4 +69,10 @@ export type AsyncMeta = {
     notifyOnEnd: boolean
 }
 
+export type MetaAction = {
+    meta: {
+        arg: MetaArg<any>
+    }
+}
+
 export type MetaArg<T> = T & AsyncMeta

@@ -9,15 +9,11 @@ import AuthActions from "../auth/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import Notification from "./Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
-import {AsyncMeta} from "../store";
+import {AsyncMeta, MetaAction} from "../store";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 
-export type MetaAction = {
-    meta?: {
-        arg: AsyncMeta
-    }
-}
+
 
 const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState = initialState, action) => {
 
