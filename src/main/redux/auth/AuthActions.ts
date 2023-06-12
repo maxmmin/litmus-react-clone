@@ -4,8 +4,8 @@ import JwtInfo from "./JwtInfo";
 import { BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import {Action} from "redux";
 import Authentication from "./Authentication";
-import {MetaArg} from "../applicationState/AppState";
 import appConfig from "../../config/appConfig";
+import {MetaArg} from "../store";
 
 enum AuthActions {
     SET_AUTH="SET_AUTH",

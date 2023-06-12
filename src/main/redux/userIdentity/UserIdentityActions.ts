@@ -3,8 +3,8 @@ import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import appConfig, {createAuthHeader} from "../../config/appConfig";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import {isValid} from "../../util/pureFunctions";
-import {MetaArg} from "../applicationState/AppState";
 import Role from "./Role";
+import {MetaArg} from "../store";
 
 enum UserIdentityActions {
     REFRESH_IDENTITY="REFRESH_IDENTITY",

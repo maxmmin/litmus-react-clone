@@ -1,8 +1,6 @@
 import AppState, {
     AppStateReducible,
-    GmapsApiResponse,
-    Meta,
-    MetaArg
+    GmapsApiResponse
 } from "./AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
@@ -11,6 +9,7 @@ import AuthActions from "../auth/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import Notification from "./Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
+import {Meta} from "../store";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 
