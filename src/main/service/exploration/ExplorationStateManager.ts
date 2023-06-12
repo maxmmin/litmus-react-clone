@@ -77,21 +77,21 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
         }
     }
 
-    updateState (state: S): void {
+    setState (state: S): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE],
             payload: deepCopy(state)
         })
     }
 
-    updateParams (params: S['params']): void {
+    setParams (params: S['params']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_PARAMS],
             payload: deepCopy(params)
         })
     }
 
-    updateData (data: S['data']): void {
+    setData (data: S['data']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_DATA],
             payload: deepCopy(data)

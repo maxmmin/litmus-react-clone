@@ -9,7 +9,7 @@ function NotificationCenter () {
     const notifications = useAppSelector(state => state.appState?.notifications);
 
     useEffect(()=>{
-        const notificationManager = new BasicNotificationManager(store.dispatch);
+        const notificationManager = new BasicNotificationManager();
 
         if (notifications&&notifications.length>0) {
             notifications?.forEach(notification => {

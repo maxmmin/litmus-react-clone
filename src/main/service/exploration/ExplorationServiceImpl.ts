@@ -26,7 +26,6 @@ import {Entity} from "../../model/Entity";
 import PagedData, {UnPagedData} from "../../util/apiRequest/PagedData";
 import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
 import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
-import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 
 class UnsupportedModeError extends Error {
@@ -47,7 +46,7 @@ class ExplorationServiceImpl implements ExplorationService {
         this._store = providedStore;
         this.shouldNotify = shouldNotify;
         if (shouldNotify) {
-            this.notificationManager = new BasicNotificationManager(providedStore.dispatch);
+            this.notificationManager = new BasicNotificationManager();
         }
     }
 
@@ -204,10 +203,10 @@ class ExplorationServiceImpl implements ExplorationService {
 
         const response = await getData().catch(this.handleError.bind(this));
         if (response) {
-            stateManager.updateData({response: response, requestParams: requestParams});
+            stateManager.setData({response: response, requestParams: requestParams});
             this.conditionalOutput(notificationTypes.SUCCESS, "Success")
         } else {
-            stateManager.updateData(null);
+            stateManager.setData(null);
         }
         stateManager.disablePending();
     }

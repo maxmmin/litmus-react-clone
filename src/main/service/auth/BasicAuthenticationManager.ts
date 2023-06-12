@@ -4,11 +4,8 @@ import {BasicNotificationManager, NotificationManager} from "../../redux/applica
 import AuthService, {Credentials} from "./AuthService";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 import {BasicHttpError, getErrMessage} from "../../util/apiRequest/BasicHttpError";
-import {PayloadAction} from "@reduxjs/toolkit";
-import LoginPageDataActions, {LoginPageState} from "../../redux/login/LoginPageDataActions";
-import Authentication, {AuthenticationReducible} from "../../redux/auth/Authentication";
-import AuthActions, {clearAuthentication} from "../../redux/auth/AuthActions";
-import deepCopy, {isValid} from "../../util/pureFunctions";
+import Authentication from "../../redux/auth/Authentication";
+import  {isValid} from "../../util/pureFunctions";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import ApplicationStateManager from "../appState/ApplicationStateManager";
 import TimersStateManager from "../timers/TimersStateManager";
@@ -17,9 +14,10 @@ import BasicApiRequestManager from "../../util/apiRequest/BasicApiRequestManager
 import appConfig from "../../config/appConfig";
 import BasicAuthService from "./BasicAuthService";
 import {HttpStatus} from "../../util/apiRequest/HttpStatus";
+import AuthenticationStateManager from "./AuthenticationStateManager";
 
 class BasicAuthenticationManager implements AuthenticationManager {
-    private readonly _store: typeof store;
+    private readonly authenticationStateManager: AuthenticationStateManager;
     private readonly notificationManager: NotificationManager;
     private readonly appStateManager: ApplicationStateManager;
     private readonly timersStateManager: TimersStateManager;
@@ -27,17 +25,17 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
     private static pending: boolean = false;
 
-    constructor(_store: typeof store, notificationManager: NotificationManager, authService: AuthService, appStateManager: ApplicationStateManager, timersStateManager: TimersStateManager) {
-        this._store = _store;
+    constructor(authStateManager: AuthenticationStateManager, notificationManager: NotificationManager, authService: AuthService, appStateManager: ApplicationStateManager, timersStateManager: TimersStateManager) {
+        this.authenticationStateManager = authStateManager;
         this.notificationManager = notificationManager;
         this.authService = authService;
         this.appStateManager = appStateManager;
         this.timersStateManager = timersStateManager;
     }
 
-    async login(): Promise<void> {
-        const {email, password}: Credentials = this._store.getState().loginPageState!;
+    async login({email, password}: Credentials): Promise<void> {
         this.appStateManager.enablePending();
+        BasicAuthenticationManager.turnPendingOn();
 
         const authentication: Authentication | null  = await this.authService.getAuth({email, password})
             .catch(errorResponse => {
@@ -46,31 +44,38 @@ class BasicAuthenticationManager implements AuthenticationManager {
                 }
                 const msg = getErrMessage(errorResponse) || 'Невідома помилка'
                 this.notificationManager.error(msg)
-                this.setLoginError(errorResponse);
                 return null;
+            })
+            .finally(()=>{
+                this.appStateManager.disablePending();
+                BasicAuthenticationManager.turnPendingOff();
             })
 
         if (authentication) {
-            this.setAuth(authentication);
+            this.authenticationStateManager.setAuth(authentication);
+            if (this.timersStateManager.getAuthRefreshTimer()) {
+                this.clearAuthRefreshTimer();
+            }
+            this.planAuthRefresh();
         }
 
-        this.appStateManager.disablePending();
-
     }
+    // @todo 12.10
+    // now if method checkAndRefreshAuth wont be invoked no more u will stay in ui even there is 401 error. Need to write global custom error handler
 
     async checkAndRefreshAuth(): Promise<void> {
 
-        const auth = this.getAuth();
+        const auth = this.authenticationStateManager.getAuth();
 
         if (auth) {
                 if (this.isAuthExpired()&&!BasicAuthenticationManager.pending) {
-                    if (this.isValid(auth.refreshToken)) {
+                    if (!this.isTokenExpired(auth.refreshToken)) {
                         try {
                             await this.refreshAuth();
                         }
 
                         catch (e: any) {
-
+                            this.handleAuthRefreshErr(e)
                         }
 
                         finally {
@@ -80,10 +85,6 @@ class BasicAuthenticationManager implements AuthenticationManager {
                         this.logout();
                     }
                 }
-
-                if (!this.timersStateManager.getAuthRefreshTimer()) {
-                    this.planAuthRefresh();
-                }
         }
         else {
             if (this.timersStateManager.getAuthRefreshTimer()) {
@@ -92,19 +93,10 @@ class BasicAuthenticationManager implements AuthenticationManager {
         }
     }
 
-    logout(): void {
-        this._store.dispatch(clearAuthentication());
-        const timer = this.timersStateManager.getAuthRefreshTimer();
-        if (timer) {
-            window.clearTimeout(timer);
-            this.timersStateManager.setAuthRefreshTimer(null);
-        }
-    }
-
     async refreshAuth(): Promise<void> {
         BasicAuthenticationManager.turnPendingOn();
 
-        const auth = this.getAuth();
+        const auth = this.authenticationStateManager.getAuth();
 
         if (!auth) throw new BasicHttpError(401,"trying to refresh auth while prev auth was null")
 
@@ -124,7 +116,13 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
         if (response.ok) {
             const auth: Authentication = await response.json() as Authentication;
-            this.setAuth(auth)
+            this.authenticationStateManager.setAuth(auth);
+
+            if (this.timersStateManager.getAuthRefreshTimer()) {
+                this.clearAuthRefreshTimer();
+            }
+
+            this.planAuthRefresh();
         } else {
             let error: ErrorResponse<any>|null = await BasicHttpError.getHttpErrorFromResponse(response);
             if (!error) {
@@ -135,28 +133,10 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
     }
 
-    private setAuth (auth: Authentication) {
-        auth.expired = false;
-        const action: PayloadAction<Authentication> = {
-            type: AuthActions.SET_AUTH,
-            payload: auth
-        }
-        this._store.dispatch(action)
-    }
-
-    private getAuth(): AuthenticationReducible {
-        return this._store.getState().authentication;
-    }
-
-    private setLoginError (error: ErrorResponse<any>) {
-        const action: PayloadAction<Partial<LoginPageState>> = {type: LoginPageDataActions.UPDATE_STATE, payload: {error: deepCopy(error)}}
-        this._store.dispatch(action)
-    }
-
-    private isValid (token: string): boolean {
+    private isTokenExpired (token: string): boolean {
         try {
             if (token) {
-                return jwtDecode<JwtPayload>(token).exp!*1000>Date.now();
+                return jwtDecode<JwtPayload>(token).exp!*1000<Date.now();
             }
         } catch (e) {
             console.error(e)
@@ -175,7 +155,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
     }
 
     private planAuthRefresh (): void {
-        const authentication = this.getAuth()!;
+        const authentication = this.authenticationStateManager.getAuth()!;
 
         const accessToken = authentication.accessToken;
 
@@ -188,11 +168,12 @@ class BasicAuthenticationManager implements AuthenticationManager {
             throw new Error("Error occurred while parsing jwt token")
         }
 
-        const refreshCallbackDelayInMs = expirationTimeInMs - Date.now() - 1000*60;
+        // time diff between token expiration and application token refresh(i update it earlier to prevent errors)
+        const difference = 1000*30;
 
-        const expDate = new Date(expirationTimeInMs-1000*60);
+        const refreshCallbackDelayInMs = expirationTimeInMs - Date.now() - difference;
 
-        console.log(`auth update planned in ${expDate.getHours()}:${expDate.getMinutes()}:${expDate.getSeconds()}`)
+        console.log(`auth update planned in ${new Date(expirationTimeInMs-difference).toLocaleTimeString()}`)
 
         // this callback will fire when it will 1 minute before jwt expiring
         const timer = setTimeout(()=>{
@@ -204,22 +185,25 @@ class BasicAuthenticationManager implements AuthenticationManager {
     }
 
     isAuthActual(): boolean {
-        const auth = this.getAuth();
+        const auth = this.authenticationStateManager.getAuth();
         if (auth) {
-            return !auth.expired&&this.isValid(auth.refreshToken);
+            return !auth.expired&&!this.isTokenExpired(auth.refreshToken);
         } else return false;
     }
+
+
 
     isAuthExpired(): boolean {
         return !this.isAuthActual();
     }
 
     static getBasicManager (_store: typeof store) {
-        const notificationManager = new BasicNotificationManager(_store.dispatch);
+        const notificationManager = new BasicNotificationManager();
         const authService = new BasicAuthService();
-        const appStateManager = new ApplicationStateManager(_store);
-        const timersStateManager = new TimersStateManager(_store);
-        return new BasicAuthenticationManager(_store, notificationManager, authService, appStateManager, timersStateManager);
+        const appStateManager = new ApplicationStateManager();
+        const timersStateManager = new TimersStateManager();
+        const authenticationStateManager = new AuthenticationStateManager();
+        return new BasicAuthenticationManager(authenticationStateManager, notificationManager, authService, appStateManager, timersStateManager);
     }
 
     private static turnPendingOn () {
@@ -231,10 +215,19 @@ class BasicAuthenticationManager implements AuthenticationManager {
     }
 
     private handleAuthRefreshErr(e: any): void {
-        const errMsg: string = getErrMessage(e)||'Невідома помилка. Авторизуйтесь, будь ласка, заново';
+        const errMsg: string = getErrMessage(e)||'Під час оновлення автентифікації виникла невідома помилка';
         console.error(e);
         this.notificationManager.error(errMsg);
-        this.logout();
+        this.authenticationStateManager.setExpired();
+    }
+
+    public logout(): void {
+        this.authenticationStateManager.clearAuth();
+        const timer = this.timersStateManager.getAuthRefreshTimer();
+        if (timer) {
+            window.clearTimeout(timer);
+            this.timersStateManager.setAuthRefreshTimer(null);
+        }
     }
 }
 

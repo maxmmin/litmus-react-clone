@@ -3,11 +3,7 @@ import {Action} from "redux";
 import AppStateActions from "../../redux/applicationState/AppStateActions";
 
 class ApplicationStateManager {
-    private readonly _store: typeof store;
-
-    constructor(_store: typeof store) {
-        this._store = _store;
-    }
+    private readonly _store: typeof store = store;
 
     enablePending (): void {
         const action: Action<AppStateActions> = {

@@ -8,11 +8,13 @@ import store from "../../../redux/store";
 const FindByIdGroup = () => {
     const entity = useAppSelector(state => state.exploration?.exploredEntity)
 
-    if (!entity) return null;
+    const stateManager = entity?ExplorationStateManager.getEntityManager(store, entity):null;
 
-    const stateManager = ExplorationStateManager.getEntityManager(store, entity);
+    const {id} = useAppSelector(() => stateManager?.getExplorationParams())||{}
 
-    const {id} = stateManager.getExplorationState().params;
+    if (!entity||!stateManager) {
+        return null;
+    }
 
     // useEffect(()=>{
     //     if (isNaN(+id!)) {
@@ -32,7 +34,7 @@ const FindByIdGroup = () => {
                 <Form.Label>ID</Form.Label>
                 <input autoComplete={"new-password"} onChange={e=>{
                     const prev = stateManager.getExplorationState().params;
-                    stateManager.updateParams({...prev, id: e.currentTarget.value});
+                    stateManager.setParams({...prev, id: e.currentTarget.value});
                 }} className={`id form-control`} value={id?id:''} type="text" placeholder="Введіть id"
                 onKeyDown={keyPressHandler}
                 />

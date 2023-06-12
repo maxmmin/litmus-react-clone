@@ -19,13 +19,7 @@ function LoginPage() {
 
     const authentication = useAppSelector(state => state.authentication);
 
-    const pageData = useAppSelector(state => state.loginPageState)
-
-    const email = pageData?.email;
-
-    const password = pageData?.password;
-
-    const error = pageData?.error;
+    const {email, password, error} = useAppSelector(state => state.loginPageState)||{};
 
     const authManager: AuthenticationManager = useMemo(()=>{
         return BasicAuthenticationManager.getBasicManager(store)
@@ -33,7 +27,9 @@ function LoginPage() {
 
     const signInButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        authManager.login();
+        const em = email as string;
+        const mail = password as string;
+        authManager.login({email: em, password: mail});
     }
 
     if (authentication) {

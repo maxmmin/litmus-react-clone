@@ -1,5 +1,7 @@
+import {Credentials} from "./AuthService";
+
 interface AuthenticationManager {
-    login (): void,
+    login (cred: Credentials): void,
     checkAndRefreshAuth(): void,
     refreshAuth (): void,
     isAuthActual(): boolean,

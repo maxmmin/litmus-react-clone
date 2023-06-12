@@ -2,12 +2,7 @@ import store from "../../redux/store";
 import {setAuthRefreshTimer, setTimers, Timers, TimersReducible} from "../../redux/timers/TimersActions";
 
 class TimersStateManager {
-    private _store: typeof store;
-
-
-    constructor(_store: typeof store) {
-        this._store = _store;
-    }
+    private readonly _store: typeof store = store;
 
     getTimers(): Timers {
         return this._store.getState().timers!;

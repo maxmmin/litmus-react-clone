@@ -7,12 +7,12 @@ import {MetaAction} from "./appStateReducer";
 import {HttpStatus} from "../../util/apiRequest/HttpStatus";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 
-const notificationManagerMiddleware: Middleware<{}, {}> = ({getState, dispatch}) => (
+const notificationManagerMiddleware: Middleware<{}, {}> = () => (
     next
 ) => (action: Action) => {
     if ((action as unknown as MetaAction).meta?.arg.shouldNotifyOnEnd) {
         if (isActionFulfilled(action)||isActionRejected(action)) {
-            const notificationManager = new BasicNotificationManager(dispatch);
+            const notificationManager = new BasicNotificationManager();
 
             let notification: Notification | null = null;
 

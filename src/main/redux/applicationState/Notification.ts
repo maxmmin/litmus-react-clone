@@ -60,15 +60,11 @@ export interface NotificationManager {
 }
 
 export class BasicNotificationManager implements NotificationManager {
-    private readonly dispatch: typeof store.dispatch;
+    private readonly dispatch: typeof store.dispatch = store.dispatch;
 
     private readonly ADD_NOTIFICATION: string = AppStateActions.ADD_NOTIFICATION;
 
     private readonly CLEAR_NOTIFICATIONS: string = AppStateActions.CLEAR_NOTIFICATIONS;
-
-    constructor(dispatch: AppDispatch) {
-        this.dispatch = dispatch;
-    }
 
     isValid(value: any) {
         return typeof value === "string" || React.isValidElement(value);
