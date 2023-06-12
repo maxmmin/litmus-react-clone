@@ -1,5 +1,5 @@
 import Authentication, {AuthenticationReducible} from "../../redux/auth/Authentication";
-import {PayloadAction} from "@reduxjs/toolkit";
+import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import AuthActions, {clearAuthentication} from "../../redux/auth/AuthActions";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 import LoginPageDataActions, {LoginPageState} from "../../redux/login/LoginPageDataActions";
@@ -17,13 +17,8 @@ class AuthenticationStateManager {
         }
     }
 
-    public setAuth (auth: Authentication) {
-        auth.expired = false;
-        const action: PayloadAction<Authentication> = {
-            type: AuthActions.SET_AUTH,
-            payload: auth
-        }
-        this._store.dispatch(action)
+    public authenticate (authThunk:  AsyncThunkAction<Authentication, any, any>) {
+        this._store.dispatch(authThunk)
     }
 
     public setExpired () {

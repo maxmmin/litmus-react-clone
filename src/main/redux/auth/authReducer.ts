@@ -16,15 +16,11 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
             return prevState;
         }
 
-        case AuthActions.SET_AUTH: {
+        case AuthActions.AUTHENTICATE: {
             return action.payload;
         }
 
-        case `${AuthActions.SET_AUTH}`: {
-            return action.payload;
-        }
-
-        case `${AuthActions.SET_AUTH}/fulfilled`: {
+        case `${AuthActions.AUTHENTICATE}/fulfilled`: {
             return {...action.payload};
         }
 

@@ -20,7 +20,7 @@ const loginPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<Login
             return {...prevState, ...action.payload!}
         }
 
-        case `${AuthActions.SET_AUTH}/fulfilled`: {
+        case `${AuthActions.AUTHENTICATE}/fulfilled`: {
             return initialState;
         }
 
@@ -35,7 +35,7 @@ const loginPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<Login
 
                 if (error?.status) {
                     switch (actionType) {
-                        case AuthActions.SET_AUTH: {
+                        case AuthActions.AUTHENTICATE: {
                             if (error.status===401) {
                                 return {...prev, error: error}
                             }

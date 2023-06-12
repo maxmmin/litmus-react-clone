@@ -13,7 +13,7 @@ const userIdentityReducer: Reducer<UserIdentityReducible, PayloadAction<UserIden
             return identityAction.payload;
         }
 
-        case `${AuthActions.SET_AUTH}/rejected`:
+        case `${AuthActions.AUTHENTICATE}/rejected`:
         case UserIdentityActions.CLEAR_IDENTITY:
         case AuthActions.CLEAR_AUTH: {
             return initialState;

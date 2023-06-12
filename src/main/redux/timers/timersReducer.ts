@@ -11,7 +11,7 @@ export const initState: TimersReducible = {
 const timersActionsReducer: Reducer<TimersReducible, PayloadAction<Timers>> = (prevState = initState, action) => {
     // check and clear timer before this.
     // ! one more check is placed inside handleError function
-    if (action.type.indexOf(AuthActions.SET_AUTH)>-1) {
+    if (action.type.indexOf(AuthActions.AUTHENTICATE)>-1) {
         if (prevState?.authRefreshTimerId) {
             clearTimeout(prevState.authRefreshTimerId)
         }
@@ -27,8 +27,8 @@ const timersActionsReducer: Reducer<TimersReducible, PayloadAction<Timers>> = (p
             return {...prevState, authRefreshTimerId: timerId}
         }
 
-        case `${AuthActions.SET_AUTH}/fulfilled`:
-        case `${AuthActions.SET_AUTH}/rejected`: {
+        case `${AuthActions.AUTHENTICATE}/fulfilled`:
+        case `${AuthActions.AUTHENTICATE}/rejected`: {
             return {...prevState, authRefreshTimerId: null}
         }
 

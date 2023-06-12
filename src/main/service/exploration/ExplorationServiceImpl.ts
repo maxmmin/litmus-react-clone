@@ -6,7 +6,7 @@ import JurPersonLookupServiceImpl from "./lookup/jurPerson/JurPersonLookupServic
 import UserLookupServiceImpl from "./lookup/human/user/UserLookupServiceImpl";
 import Person from "../../model/human/person/Person";
 import PersonLookupService from "./lookup/human/person/PersonLookupService";
-import {checkNotNull} from "../../util/pureFunctions";
+import {checkNotEmpty} from "../../util/pureFunctions";
 import User from "../../model/human/user/User";
 import UserLookupService from "./lookup/human/user/UserLookupService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
@@ -74,7 +74,7 @@ class ExplorationServiceImpl implements ExplorationService {
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
-                const id = checkNotNull(stateManager.getExplorationState().params.id);
+                const id = checkNotEmpty(stateManager.getExplorationState().params.id);
                 const content: Person[] = []
                 const person = await service.findById(id);
                 if (person) content.push(person);
@@ -82,7 +82,7 @@ class ExplorationServiceImpl implements ExplorationService {
             }
 
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
-                const lastName = checkNotNull(stateManager.getExplorationState().params.lastName);
+                const lastName = checkNotEmpty(stateManager.getExplorationState().params.lastName);
                 const middleName = stateManager.getExplorationState().params.middleName;
                 const firstName = stateManager.getExplorationState().params.firstName;
                 return await service.findByFullName({lastName, middleName, firstName}) as PagedData<Person>;
@@ -103,7 +103,7 @@ class ExplorationServiceImpl implements ExplorationService {
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
-                const id = checkNotNull(stateManager.getExplorationState().params.id);
+                const id = checkNotEmpty(stateManager.getExplorationState().params.id);
                 const content: User[] = [];
                 const user = await service.findById(id);
                 if (user) content.push(user);
@@ -111,7 +111,7 @@ class ExplorationServiceImpl implements ExplorationService {
             }
 
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
-                const lastName = checkNotNull(stateManager.getExplorationState().params.lastName);
+                const lastName = checkNotEmpty(stateManager.getExplorationState().params.lastName);
                 const middleName = stateManager.getExplorationState().params.middleName;
                 const firstName = stateManager.getExplorationState().params.firstName
                 return  await service.findByFullName({lastName, middleName, firstName})
@@ -132,7 +132,7 @@ class ExplorationServiceImpl implements ExplorationService {
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
-                const id = checkNotNull(stateManager.getExplorationState().params.id);
+                const id = checkNotEmpty(stateManager.getExplorationState().params.id);
                 const content: JurPerson[] = [];
                 const jurPerson = await service.findById(id);
                 if (jurPerson) {

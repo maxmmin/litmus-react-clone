@@ -8,10 +8,10 @@ import appConfig from "../../config/appConfig";
 import {MetaArg} from "../store";
 
 enum AuthActions {
-    SET_AUTH="SET_AUTH",
+    AUTHENTICATE="AUTHENTICATE",
     CLEAR_AUTH="CLEAR_AUTH",
     CHECK_AUTH="CHECK_AUTH",
-    "SET_EXPIRED"="SET_EXPIRED"
+    SET_EXPIRED="SET_EXPIRED"
 }
 
 export default AuthActions;
@@ -20,7 +20,7 @@ type RefreshAccessTokenArg = MetaArg<{
     refreshToken: string
 } >
 
-export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.SET_AUTH,
+export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.AUTHENTICATE,
     async ({refreshToken}, {rejectWithValue}) => {
         const response =  await fetch(appConfig.serverMappings.refreshTokens, {
             method: 'POST',
@@ -42,7 +42,7 @@ export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenAr
 
 export const setAuthentication = (auth: Authentication) : PayloadAction<AuthenticationReducible> => {
     return {
-        type: `${AuthActions.SET_AUTH}`,
+        type: `${AuthActions.AUTHENTICATE}`,
         payload: auth
     }
 }
@@ -58,7 +58,7 @@ type SignInArg = MetaArg<{
     password: string
 }>
 
-export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.SET_AUTH,
+export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.AUTHENTICATE,
     async ({email, password},{rejectWithValue}) => {
         const response = await fetch(appConfig.serverMappings.signIn, {
             method: 'POST',
