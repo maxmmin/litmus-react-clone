@@ -8,6 +8,11 @@ export enum ExplorationCoreAction{
 
 }
 
+export type ParsedAction = {
+    core: string,
+    domain: string
+} | null
+
 export class ExplorationTypedActions {
     public static readonly userDomain = "USER";
     public static readonly personDomain = "PERSON";
@@ -32,15 +37,16 @@ export class ExplorationTypedActions {
 
     private static getTypedAction(core: ExplorationCoreAction, type: string, delimiter: string = ExplorationTypedActions.delimiter) {
         if (core.indexOf(delimiter)>-1) throw new Error(`forbidden symbol in ${core}: ${delimiter}`)
-        return core+delimiter+type;
+        return type+delimiter+core;
     }
 
-    public static parseAction(typedAction: string, delimiter: string = ExplorationTypedActions.delimiter): [string, string] {
+    public static parseAction(typedAction: string, delimiter: string = ExplorationTypedActions.delimiter): ParsedAction|null {
         const parsedAction = typedAction.split(delimiter);
-        if (parsedAction.length!==2) {
-            return ["",""];
+        if (parsedAction.length!==2) return null;
+        else {
+            const [domain, core] = parsedAction;
+            return {domain: domain, core: core};
         }
-        return parsedAction as [string, string]
     }
 
     private constructor(domain: string) {

@@ -59,12 +59,13 @@ const personExplorationReducer: Reducer<PersonExplorationStateReducible, Payload
         // code-place for jur person specific actions
         // @todo write getClear action
         default: {
-            const [coreType, domain] = ExplorationTypedActions.parseAction(action.type);
-            if (domain===ExplorationTypedActions.personDomain) {
-                const coreAction: PayloadAction<any> = {...action, type: coreType}
+            const parsedAction = ExplorationTypedActions.parseAction(action.type);
+            if (parsedAction!==null&&parsedAction.domain===ExplorationTypedActions.personDomain) {
+                const coreAction: PayloadAction<any> = {...action, type: parsedAction.core}
                 return entityExplorationReducer(prevState, coreAction);
+            } else {
+                return prevState;
             }
-            else return prevState;
         }
     }
 }
@@ -79,12 +80,13 @@ const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, P
         // code-place for jur person specific actions
             // @todo write getClear action
         default: {
-            const [coreType, domain] = ExplorationTypedActions.parseAction(action.type);
-            if (domain===ExplorationTypedActions.jurPersonDomain) {
-                const coreAction: PayloadAction<any> = {...action, type: coreType}
+            const parsedAction = ExplorationTypedActions.parseAction(action.type);
+            if (parsedAction!==null&&parsedAction.domain===ExplorationTypedActions.jurPersonDomain) {
+                const coreAction: PayloadAction<any> = {...action, type: parsedAction.core}
                 return entityExplorationReducer(prevState, coreAction);
+            } else {
+                return prevState;
             }
-            else return prevState;
         }
     }
 }
@@ -99,12 +101,13 @@ const userExplorationReducer: Reducer<UserExplorationStateReducible, PayloadActi
         // code-place for jur person specific actions
         // @todo write getClear action
         default: {
-            const [coreType, domain] = ExplorationTypedActions.parseAction(action.type);
-            if (domain===ExplorationTypedActions.userDomain) {
-                const coreAction: PayloadAction<any> = {...action, type: coreType}
+            const parsedAction = ExplorationTypedActions.parseAction(action.type);
+            if (parsedAction!==null&&parsedAction.domain===ExplorationTypedActions.userDomain) {
+                const coreAction: PayloadAction<any> = {...action, type: parsedAction.core}
                 return entityExplorationReducer(prevState, coreAction);
+            } else {
+                return prevState;
             }
-            else return prevState;
         }
     }
 }
