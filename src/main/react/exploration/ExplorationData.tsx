@@ -46,7 +46,7 @@ type Props = {
 
 const ExplorationData = ({exploredEntity, state}: Props) => {
 
-    const manager = ExplorationStateManager.getEntityManager(store,exploredEntity);
+    const manager = ExplorationStateManager.getEntityManager(exploredEntity);
 
     const entity = manager.entity;
 

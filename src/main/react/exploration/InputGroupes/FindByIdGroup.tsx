@@ -8,7 +8,7 @@ import store from "../../../redux/store";
 const FindByIdGroup = () => {
     const entity = useAppSelector(state => state.exploration?.exploredEntity)
 
-    const stateManager = entity?ExplorationStateManager.getEntityManager(store, entity):null;
+    const stateManager = entity?ExplorationStateManager.getEntityManager(entity):null;
 
     const {id} = useAppSelector(() => stateManager?.getExplorationParams())||{}
 

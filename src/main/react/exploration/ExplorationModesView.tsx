@@ -38,7 +38,7 @@ const ExplorationModesView = () => {
 
     const explorationManager = useMemo<ExplorationStateManager<EntityExplorationState<any, any>>|undefined>(()=>{
        if (exploredEntity) {
-           return explorationStateManager.getEntityManager(store, exploredEntity)
+           return explorationStateManager.getEntityManager(exploredEntity)
        }
     }, [exploredEntity])
 

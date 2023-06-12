@@ -59,7 +59,7 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
         return new ExplorationStateManager<UserExplorationState>(Entity.USER, providedStore.dispatch,getState, ExplorationTypedActions.user);
     }
 
-    static getEntityManager(providedStore: typeof store, entity: Entity): ExplorationStateManager<EntityExplorationState<any, EntityExplorationParams>> {
+    static getEntityManager(entity: Entity, providedStore: typeof store = store): ExplorationStateManager<EntityExplorationState<any, EntityExplorationParams>> {
         switch (entity) {
             case Entity.PERSON: {
                 return ExplorationStateManager.getPersonManager(store);

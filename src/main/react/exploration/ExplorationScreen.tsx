@@ -107,7 +107,7 @@ const ExplorationScreen = () => {
        return null;
     }
 
-    const explorationStateManager = ExplorationStateManager.getEntityManager(store,exploredEntity);
+    const explorationStateManager = ExplorationStateManager.getEntityManager(exploredEntity);
 
     const explorationService = new ExplorationServiceImpl(store,true);
 

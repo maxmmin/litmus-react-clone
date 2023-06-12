@@ -8,7 +8,14 @@ import store from "../../redux/store";
 import {Action} from "redux";
 
 class AuthenticationStateManager {
-    private readonly _store = store;
+    private readonly _store: typeof store = store;
+
+
+    constructor(_store?: typeof store) {
+        if (_store) {
+            this._store = _store;
+        }
+    }
 
     public setAuth (auth: Authentication) {
         auth.expired = false;

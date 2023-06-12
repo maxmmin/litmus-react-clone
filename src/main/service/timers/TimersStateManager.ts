@@ -4,6 +4,13 @@ import {setAuthRefreshTimer, setTimers, Timers, TimersReducible} from "../../red
 class TimersStateManager {
     private readonly _store: typeof store = store;
 
+
+    constructor(_store?: typeof store) {
+        if (_store) {
+            this._store = _store;
+        }
+    }
+
     getTimers(): Timers {
         return this._store.getState().timers!;
     }
