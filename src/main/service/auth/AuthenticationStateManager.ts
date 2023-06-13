@@ -17,7 +17,7 @@ class AuthenticationStateManager {
         }
     }
 
-    public authenticate (authThunk:  AsyncThunkAction<Authentication, any, any>) {
+    public retrieveAuthentication (authThunk:  AsyncThunkAction<Authentication, any, any>) {
         return this._store.dispatch(authThunk);
     }
 
