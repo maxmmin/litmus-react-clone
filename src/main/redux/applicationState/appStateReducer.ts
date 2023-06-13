@@ -7,9 +7,11 @@ import {Action} from "redux";
 import AppStateActions from "./AppStateActions";
 import AuthActions from "../auth/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import Notification from "./Notification";
+import Notification, {BasicNotification, notificationTypes} from "./Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
-import {AsyncMeta, MetaAction} from "../store";
+import {FulfilledThunkAction, PendingThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
+import ErrorResponse from "../../util/apiRequest/ErrorResponse";
+import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 
@@ -65,20 +67,52 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
          * */
 
         default: {
+            // core meta
+            const metaAction = action as PossiblePendingThunkAction;
 
-            if (isActionPending(action)) {
-                const metaAction = action as unknown as MetaAction;
+            if (isActionPending(action)&&metaAction?.meta?.arg.globalPending) {
+                    return  {...prevState, isRefreshing: true}
+            }
 
-                if (metaAction.meta?.arg.globalPending) {
-                    return {...prevState, isRefreshing: true}
+            else if (metaAction.meta?.arg.globalPending&&isActionFulfilled(action)||isActionRejected(action)) {
+                let state = prevState;
+
+                if (prevState.isRefreshing) {
+                    state = {...prevState, isRefreshing: false};
                 }
+
+                if (isActionFulfilled(action)) {
+                    const fulfilledAction: FulfilledThunkAction = action as FulfilledThunkAction;
+                    if (fulfilledAction.meta.notify) {
+                        state = {...state}
+                        const msg = fulfilledAction.meta.successMessage?fulfilledAction.meta.successMessage:`Action ${action.type} was executed successfully`;
+                        const duration =  fulfilledAction.meta.duration;
+                        const notification = {...new BasicNotification(notificationTypes.SUCCESS, msg, duration)};
+                        state.notifications = [...state.notifications, notification]
+                    }
+                } else {
+                    state = {...state}
+                    const errorAction: RejectedThunkAction = action as RejectedThunkAction;
+                    const err: object = errorAction.payload;
+
+                    let errorResponse: ErrorResponse<any>;
+
+                    if (err && "status" in err && "detail" in err) {
+                        errorResponse = err as ErrorResponse<any>;
+                    } else {
+                        errorResponse = BasicHttpError.parseError(err);
+                    }
+
+                    const basicHttpErr = new BasicHttpError(errorResponse)
+
+                    const notification = {...new BasicNotification(notificationTypes.ERROR, basicHttpErr.getDescription())};
+                    state.notifications = [...state.notifications, notification];
+                }
+
+                return state;
             }
 
-            if (isActionFulfilled(action)||isActionRejected(action)) {
-                return  {...prevState, isRefreshing: false};
-            }
-
-            return prevState;
+            else return prevState;
         }
     }
 }

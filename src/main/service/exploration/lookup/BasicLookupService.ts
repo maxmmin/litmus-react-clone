@@ -26,7 +26,7 @@ class BasicEntityLookupService<E> implements LookupService<E>{
             .authentication(accessToken)
             .fetch();
         if (!response.ok) {
-            throw await BasicHttpError.getHttpErrorFromResponse(response);
+            throw await BasicHttpError.parseResponse(response);
         } else {
             return await response.json().catch(()=>null) as E;
         }

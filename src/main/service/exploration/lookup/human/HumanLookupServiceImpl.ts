@@ -35,7 +35,7 @@ export default class HumanLookupServiceImpl<E extends Human> extends BasicEntity
         if (response.ok) {
             return await response.json() as PagedData<E>
         } else {
-            throw await BasicHttpError.getHttpErrorFromResponse(response);
+            throw await BasicHttpError.parseResponse(response);
         }
     }
 }

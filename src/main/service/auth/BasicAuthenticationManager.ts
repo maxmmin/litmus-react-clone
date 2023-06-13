@@ -1,12 +1,13 @@
 import AuthenticationManager from "./AuthenticationManager";
-import store, {MetaArg} from "../../redux/store";
-import {BasicNotificationManager} from "../../redux/applicationState/Notification";
+import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
+import {BasicNotificationManager, NotificationManager} from "../../redux/applicationState/Notification";
 import AuthService, {Credentials} from "./AuthService";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import Authentication, {AuthenticationReducible} from "../../redux/auth/Authentication";
-import {checkNotEmpty, isEmpty, isValid} from "../../util/pureFunctions";
+import deepCopy, {checkNotEmpty, isEmpty, isValid} from "../../util/pureFunctions";
 import jwtDecode, {JwtPayload} from "jwt-decode";
+import ApplicationStateManager from "../appState/ApplicationStateManager";
 import TimersStateManager from "../timers/TimersStateManager";
 import ApiRequestManager, {HttpMethod} from "../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../util/apiRequest/BasicApiRequestManager";
@@ -31,33 +32,36 @@ class BasicAuthenticationManager implements AuthenticationManager {
     }
 
     async login({email, password}: Credentials): Promise<void> {
-        const arg: MetaArg<Credentials> = {email, password, globalPending: true, notifyOnEnd: true}
+        const arg: ThunkArg<Credentials> = {email, password, globalPending: true}
         this.authenticationStateManager.authenticate(this._loginThunk(arg))
     }
 
-    private _loginThunk = createAsyncThunk<Authentication, MetaArg<Credentials>>(AuthActions.AUTHENTICATE, async ({email, password}) => {
+    private _loginThunk = createAsyncThunk<Authentication, Credentials, LitmusAsyncThunkConfig>(AuthActions.AUTHENTICATE, async ({email, password}, {rejectWithValue, fulfillWithValue }) => {
         BasicAuthenticationManager.lock();
 
-        const authentication: Authentication  = await this.authService.getAuth({email, password})
-            .catch(errorResponse => {
-                let err: BasicHttpError<any>;
-                if (errorResponse instanceof BasicHttpError&&errorResponse.status===HttpStatus.UNAUTHENTICATED) {
-                    err = new BasicHttpError(HttpStatus.UNAUTHENTICATED, "Перевірте правильність введених данних")
-                } else {
-                    err = BasicHttpError.parseError(errorResponse);
-                }
-                throw err;
-            })
-            .finally(()=>{
-                BasicAuthenticationManager.unLock();
-            })
+        try {
+            const authentication: Authentication  = await this.authService.getAuth({email, password})
+            return fulfillWithValue(authentication, {notify: true, successMessage: "Ви успішно увійшли в акаунт"});
+        }
+        catch (thrownErr: any) {
+            let err: BasicHttpError<any>;
+            if ("status" in thrownErr&&"detail" in thrownErr&&thrownErr.status===HttpStatus.UNAUTHENTICATED) {
+                err = new BasicHttpError({status: HttpStatus.UNAUTHENTICATED, title: "Перевірте правильність введених данних", detail: null})
+            } else {
+                const errResp: ErrorResponse<any> = BasicHttpError.parseError(thrownErr);
+                err = new BasicHttpError<any>(errResp);
+            }
+            return rejectWithValue(deepCopy(err));
+        }
+        finally {
+            BasicAuthenticationManager.unLock();
+        }
 
-        return authentication;
     } )
     // @todo 12.10
     // now if method checkAndRefreshAuth wont be invoked no more u will stay in ui even there is 401 error. Need to write global custom error handler
 
-    async checkAndRefreshAuth(): Promise<void> {
+    checkAndRefreshAuth(): void {
 
         const auth = this.authenticationStateManager.getAuth();
 
@@ -83,23 +87,23 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
     refreshAuth(): void {
         const auth = checkNotEmpty(this.authenticationStateManager.getAuth());
-        const meta: MetaArg<Authentication> = {notifyOnEnd: false, globalPending: false, ...auth};
+        const meta: ThunkArg<Authentication> = {globalPending: false, ...auth};
         const authThunk = this._refreshAuthThunk(meta);
         this.authenticationStateManager.authenticate(authThunk);
     }
 
-    private _refreshAuthThunk = createAsyncThunk<Authentication, MetaArg<Authentication>>(AuthActions.AUTHENTICATE, async (arg)=>{
+    private _refreshAuthThunk = createAsyncThunk<Authentication, ThunkArg<Authentication>, LitmusAsyncThunkConfig>(AuthActions.AUTHENTICATE, async (arg,{rejectWithValue, fulfillWithValue})=>{
             BasicAuthenticationManager.lock();
 
             try {
                 const auth = this.authenticationStateManager.getAuth();
 
-                if (!auth) throw new BasicHttpError(401,"trying to refresh auth while prev auth was null")
+                if (!auth) throw new BasicHttpError({status: 401, title: "trying to refresh auth while prev auth was null}", detail: null});
 
                 const refreshToken = auth.refreshToken;
 
                 if (!isValid(refreshToken)) {
-                    throw new BasicHttpError(401, "Час дії refresh токену вичерпано. Будь ласка, автентифікуйтесь заново")
+                    throw new BasicHttpError({status: 401, title: "Час дії refresh токену вичерпано. Будь ласка, автентифікуйтесь заново", detail: null});
                 }
 
                 const requestManager: ApiRequestManager = new BasicApiRequestManager();
@@ -111,16 +115,19 @@ class BasicAuthenticationManager implements AuthenticationManager {
                     .fetch();
 
                 if (response.ok) {
-                    return await response.json() as Authentication;
+                    const auth: Authentication = await response.json() as Authentication;
+                    return fulfillWithValue(auth, {notify: false})
                 } else {
-                    let error: ErrorResponse<any>|null = await BasicHttpError.getHttpErrorFromResponse(response);
+                    let error: ErrorResponse<any>|null = await BasicHttpError.parseResponse(response);
                     if (!error) {
-                        error = new BasicHttpError(401, "Помилка автентифікації.")
+                        error = new BasicHttpError({status: 401, title: "Помилка автентифікації.", detail: null})
                     }
                     throw error;
                 }
             }
-
+            catch (e) {
+                return rejectWithValue(deepCopy(BasicHttpError.parseError(e)))
+            }
             finally {
                 BasicAuthenticationManager.unLock();
             }
@@ -185,14 +192,11 @@ class BasicAuthenticationManager implements AuthenticationManager {
         } else return false;
     }
 
-
-
     isAuthExpired(): boolean {
         return !this.isAuthActual();
     }
 
-    static getBasicManager (_store: typeof store) {
-        const notificationManager = new BasicNotificationManager();
+    static getBasicManager (_store: typeof store = store) {
         const authService = new BasicAuthService();
         const timersStateManager = new TimersStateManager();
         const authenticationStateManager = new AuthenticationStateManager();

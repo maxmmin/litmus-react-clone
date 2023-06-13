@@ -1,6 +1,6 @@
 import {Permissions} from "../redux/userIdentity/Role";
 import {AppDispatch} from "../redux/store";
-import {clearAuthentication, refreshAccessToken} from "../redux/auth/AuthActions";
+import {clearAuthentication} from "../redux/auth/AuthActions";
 import {AuthenticationReducible} from "../redux/auth/Authentication";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
@@ -95,30 +95,30 @@ export const getTableNameFromLocation = (pathName: string): Entity | null => {
     return pathsArray[pathsArray.length - 1].toUpperCase() as Entity | null;
 }
 
-export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {
-    if (auth) {
-        if (!isValid(auth?.accessToken!)) {
-            if (auth?.refreshToken&&isValid(auth.refreshToken)) {
-                return dispatch(
-                    refreshAccessToken({refreshToken: auth.refreshToken, globalPending: false, notifyOnEnd: false})
-                )
-            } else {
-                return logOut(dispatch)
-            }
-        }
-
-        if (!timers?.authRefreshTimerId&&auth?.accessToken&&auth.refreshToken) {
-            return dispatch(setTimers({authRefreshTimerId: setAuthRefreshingTimer(auth, dispatch)}))
-        }
-    }
-
-    if (!auth&&timers?.authRefreshTimerId) {
-        window.clearTimeout(timers.authRefreshTimerId)
-        dispatch(clearAuthRefreshTimer())
-    }
-
-    return;
-}
+// export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {
+//     if (auth) {
+//         if (!isValid(auth?.accessToken!)) {
+//             if (auth?.refreshToken&&isValid(auth.refreshToken)) {
+//                 return dispatch(
+//                     refreshAccessToken({refreshToken: auth.refreshToken, globalPending: false, notifyOnEnd: false})
+//                 )
+//             } else {
+//                 return logOut(dispatch)
+//             }
+//         }
+//
+//         if (!timers?.authRefreshTimerId&&auth?.accessToken&&auth.refreshToken) {
+//             return dispatch(setTimers({authRefreshTimerId: setAuthRefreshingTimer(auth, dispatch)}))
+//         }
+//     }
+//
+//     if (!auth&&timers?.authRefreshTimerId) {
+//         window.clearTimeout(timers.authRefreshTimerId)
+//         dispatch(clearAuthRefreshTimer())
+//     }
+//
+//     return;
+// }
 
 export function isValid(token: string | null | undefined): boolean {
         try {
@@ -131,31 +131,31 @@ export function isValid(token: string | null | undefined): boolean {
         return false;
 }
 
-export const setAuthRefreshingTimer = (authentication: AuthenticationReducible, dispatch: AppDispatch): NodeJS.Timer | null => {
-    const accessToken = authentication?.accessToken!;
-    const refreshToken = authentication?.refreshToken!;
-
-    let expirationTimeInMs;
-
-    try {
-        expirationTimeInMs = jwtDecode<JwtPayload>(accessToken).exp! * 1000;
-    } catch (e) {
-        console.log(e)
-        return null;
-    }
-
-    const refreshCallbackDelayInMs = expirationTimeInMs - Date.now() - 1000*60;
-
-    const expDate = new Date(expirationTimeInMs-1000*60);
-
-    console.log(`auth update planned in ${expDate.getHours()}:${expDate.getMinutes()}:${expDate.getSeconds()}`)
-
-    // this callback will fire when it will 1 minute before jwt expiring
-    return setTimeout(()=>{
-        console.log("updating auth")
-        dispatch(refreshAccessToken({refreshToken: refreshToken, globalPending: false, notifyOnEnd: false}))
-    }, refreshCallbackDelayInMs)
-}
+// export const setAuthRefreshingTimer = (authentication: AuthenticationReducible, dispatch: AppDispatch): NodeJS.Timer | null => {
+//     const accessToken = authentication?.accessToken!;
+//     const refreshToken = authentication?.refreshToken!;
+//
+//     let expirationTimeInMs;
+//
+//     try {
+//         expirationTimeInMs = jwtDecode<JwtPayload>(accessToken).exp! * 1000;
+//     } catch (e) {
+//         console.log(e)
+//         return null;
+//     }
+//
+//     const refreshCallbackDelayInMs = expirationTimeInMs - Date.now() - 1000*60;
+//
+//     const expDate = new Date(expirationTimeInMs-1000*60);
+//
+//     console.log(`auth update planned in ${expDate.getHours()}:${expDate.getMinutes()}:${expDate.getSeconds()}`)
+//
+//     // this callback will fire when it will 1 minute before jwt expiring
+//     return setTimeout(()=>{
+//         console.log("updating auth")
+//         dispatch(refreshAccessToken({refreshToken: refreshToken, globalPending: false, notifyOnEnd: false}))
+//     }, refreshCallbackDelayInMs)
+// }
 
 export const onWakeUp = (callback: Function): NodeJS.Timer => {
     const TIMEOUT = 20000;

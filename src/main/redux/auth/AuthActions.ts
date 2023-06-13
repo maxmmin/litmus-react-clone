@@ -5,7 +5,7 @@ import { BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import {Action} from "redux";
 import Authentication from "./Authentication";
 import appConfig from "../../config/appConfig";
-import {MetaArg} from "../store";
+import {ThunkArg} from "../store";
 
 enum AuthActions {
     AUTHENTICATE="AUTHENTICATE",
@@ -16,28 +16,28 @@ enum AuthActions {
 
 export default AuthActions;
 
-type RefreshAccessTokenArg = MetaArg<{
+type RefreshAccessTokenArg = ThunkArg<{
     refreshToken: string
 } >
 
-export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.AUTHENTICATE,
-    async ({refreshToken}, {rejectWithValue}) => {
-        const response =  await fetch(appConfig.serverMappings.refreshTokens, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({refreshToken: refreshToken})
-        });
-
-        const data = await response.json()
-
-        if (response.ok) {
-            return data;
-        }
-
-        return rejectWithValue({...new BasicHttpError(response.status, data)})
-    })
+// export const refreshAccessToken = createAsyncThunk<JwtInfo, RefreshAccessTokenArg>(AuthActions.AUTHENTICATE,
+//     async ({refreshToken}, {rejectWithValue}) => {
+//         const response =  await fetch(appConfig.serverMappings.refreshTokens, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({refreshToken: refreshToken})
+//         });
+//
+//         const data = await response.json()
+//
+//         if (response.ok) {
+//             return data;
+//         }
+//
+//         return rejectWithValue({...new BasicHttpError(response.status, data)})
+//     })
 
 
 export const setAuthentication = (auth: Authentication) : PayloadAction<AuthenticationReducible> => {
@@ -53,33 +53,33 @@ export function clearAuthentication (): Action<AuthActions> {
     }
 }
 
-type SignInArg = MetaArg<{
+type SignInArg = ThunkArg<{
     email: string,
     password: string
 }>
 
-export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.AUTHENTICATE,
-    async ({email, password},{rejectWithValue}) => {
-        const response = await fetch(appConfig.serverMappings.signIn, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                email, password
-            })
-        });
-
-
-
-        const errorResponse = await response.json();
-
-        if (response.ok) {
-            return errorResponse;
-        }
-
-
-        const error = new BasicHttpError(response.status, errorResponse);
-
-        return rejectWithValue({...error});
-    })
+// export const signIn = createAsyncThunk<JwtInfo,SignInArg>(AuthActions.AUTHENTICATE,
+//     async ({email, password},{rejectWithValue}) => {
+//         const response = await fetch(appConfig.serverMappings.signIn, {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({
+//                 email, password
+//             })
+//         });
+//
+//
+//
+//         const errorResponse = await response.json();
+//
+//         if (response.ok) {
+//             return errorResponse;
+//         }
+//
+//
+//         const error = new BasicHttpError(response.status, errorResponse);
+//
+//         return rejectWithValue({...error});
+//     })

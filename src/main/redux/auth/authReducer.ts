@@ -41,12 +41,9 @@ const errorHandle = (prevState: AuthenticationReducible, error: BasicHttpError<a
     if (error&&Object.hasOwn(error,'status')) {
         switch (error.status) {
             case HttpStatus.UNAUTHENTICATED: {
-
-                if (prevState?.accessToken) {
-                    return {accessToken: prevState.accessToken, refreshToken: prevState.refreshToken, expired: true}
-                }
-
-                return  null
+                if (prevState) {
+                    return {accessToken: prevState.accessToken, refreshToken: prevState.refreshToken, expired: true};
+                } else return prevState;
             }
 
             default: return prevState;

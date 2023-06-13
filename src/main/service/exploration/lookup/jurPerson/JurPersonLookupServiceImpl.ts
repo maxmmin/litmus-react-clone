@@ -24,7 +24,7 @@ class JurPersonLookupServiceImpl extends BasicEntityLookupService<JurPerson> imp
             .authentication(token)
             .fetch();
         if (!response.ok) {
-            throw await BasicHttpError.getHttpErrorFromResponse(response);
+            throw await BasicHttpError.parseResponse(response);
         } else {
             return await response.json() as JurPerson[];
         }

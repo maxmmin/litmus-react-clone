@@ -17,7 +17,7 @@ class BasicAuthService implements AuthService {
         if (response.ok) {
             return await response.json() as Authentication;
         } else {
-            throw await BasicHttpError.getHttpErrorFromResponse(response);
+            throw await BasicHttpError.parseResponse(response);
         }
     }
 
@@ -33,7 +33,7 @@ class BasicAuthService implements AuthService {
         if (response.ok) {
             return await response.json() as Authentication;
         } else {
-            throw await BasicHttpError.getHttpErrorFromResponse(response);
+            throw await BasicHttpError.parseResponse(response);
         }
     }
 

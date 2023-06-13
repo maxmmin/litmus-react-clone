@@ -1,20 +1,28 @@
 import ErrorResponse from "./ErrorResponse";
 export const noInfoMessage = "Інформація відсутня"
 
-class BasicHttpError<D> extends Error implements ErrorResponse<D> {
+class BasicHttpError<D extends object> extends Error implements ErrorResponse<D> {
     public readonly detail: D | null;
     public readonly status: number;
     public readonly title: string;
 
+    public getDescription () {
+        return `Error ${this.status}: ${this.title}`
+    };
 
-    constructor(status: number, title: string, detail: D | null = null) {
-        super("Error "+status+" "+title)
-        this.detail = detail;
-        this.status = status;
-        this.title = title;
+
+    constructor(errorResponse: ErrorResponse<D>) {
+        super("Error "+errorResponse.status+" "+errorResponse.title)
+        this.detail = errorResponse.detail;
+        this.status = errorResponse.status;
+        this.title = errorResponse.title;
     }
 
-    static async getHttpErrorFromResponse(response: Response): Promise<ErrorResponse<any>|null> {
+    static formErrorDescription(error: ErrorResponse<any>): string {
+        return `Error ${error.status}: ${error.title}`
+    }
+
+    static async parseResponse(response: Response): Promise<ErrorResponse<any>> {
         try {
             const body = await response.json();
 
@@ -26,7 +34,7 @@ class BasicHttpError<D> extends Error implements ErrorResponse<D> {
 
     }
 
-    static parseError(err: ErrorResponse<any>|null|undefined): BasicHttpError<any> {
+    static parseError(err: any): ErrorResponse<any> {
         let status: number = -1;
         let title: string = 'Unknown error';
         let detail: any = null;
@@ -46,17 +54,8 @@ class BasicHttpError<D> extends Error implements ErrorResponse<D> {
                 detail = err["detail"];
             }
         }
-
-        return new BasicHttpError(status, title, detail);
+        return {status, title, detail};
     }
-}
-
-export const getErrMessage = (e: any): string|null => {
-    if (e instanceof BasicHttpError || ("title" in e && "status" in e)) {
-        return `Error ${e.status}: ${e.title}`
-    } else if (e instanceof Error) {
-        return  e.message;
-    }   else return null;
 }
 
 export {BasicHttpError};

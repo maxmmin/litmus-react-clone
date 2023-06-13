@@ -4,7 +4,8 @@ import appConfig, {createAuthHeader} from "../../config/appConfig";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import {isValid} from "../../util/pureFunctions";
 import Role from "./Role";
-import {MetaArg} from "../store";
+import {ThunkArg} from "../store";
+import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 
 enum UserIdentityActions {
     REFRESH_IDENTITY="REFRESH_IDENTITY",
@@ -22,7 +23,7 @@ const setIdentity = (identity: UserIdentity): PayloadAction<UserIdentityReducibl
 
 type SuccessfulResponseType = {role: string}&UserIdentity
 
-type RefreshUserIdentityArg = MetaArg<{
+type RefreshUserIdentityArg = ThunkArg<{
     accessToken: string
 }>
 
@@ -30,7 +31,7 @@ export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIden
     async ({accessToken}, {rejectWithValue}) => {
 
     if (!isValid(accessToken)) {
-        return rejectWithValue({...new BasicHttpError(401, "Помилка аутентифікації. Невалідний accessToken")});
+        return rejectWithValue({...new BasicHttpError({status: 401, title: "Помилка аутентифікації. Невалідний accessToken", detail: null})});
     }
 
     const response = await fetch(appConfig.serverMappings.getCurrentUser,{
@@ -40,15 +41,14 @@ export const refreshUserIdentity = createAsyncThunk<UserIdentity,RefreshUserIden
         }
     })
 
-    const jsonData = await response.json();
-
     if (response.ok) {
-        const responseIdentity = jsonData as SuccessfulResponseType;
+        const responseIdentity = await response.json() as SuccessfulResponseType;
         const role = Role[responseIdentity.role]
         const identity: UserIdentity = {...responseIdentity, role: role.role, permissions: role.permissions}
         return identity;
+    } else {
+        const errResponse: ErrorResponse<any> = await BasicHttpError.parseResponse(response);
+        throw new BasicHttpError(errResponse);
     }
-
-    return rejectWithValue({...new BasicHttpError(response.status,  jsonData)})
 
 })

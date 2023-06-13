@@ -1,5 +1,5 @@
 import Loader from "../loader/Loader";
-import {checkAndRefreshAuth, isValid, onWakeUp} from "../../util/pureFunctions";
+import {onWakeUp} from "../../util/pureFunctions";
 import React, {ReactNode, useEffect, useMemo} from "react";
 import {useAppSelector} from "../../redux/hooks";
 import {refreshUserIdentity} from "../../redux/userIdentity/UserIdentityActions";
@@ -13,9 +13,6 @@ import {ErrorBoundary} from "react-error-boundary";
 import NotificationCenter from "../notifications/NotificationCenter";
 import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
-import {BasicNotificationManager} from "../../redux/applicationState/Notification";
-import BasicAuthService from "../../service/auth/BasicAuthService";
-import ApplicationStateManager from "../../service/appState/ApplicationStateManager";
 
 type Props = {
     children: ReactNode
@@ -47,7 +44,7 @@ const ApplicationStateCenter = ({children}: Props) => {
         authenticationManager.checkAndRefreshAuth();
 
         if (authenticationManager.isAuthActual()) {
-            store.dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!, notifyOnEnd: false, globalPending: false}))
+            store.dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!, globalPending: false}))
         }
     },[authentication])
 

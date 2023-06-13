@@ -18,7 +18,7 @@ class AuthenticationStateManager {
     }
 
     public authenticate (authThunk:  AsyncThunkAction<Authentication, any, any>) {
-        this._store.dispatch(authThunk)
+        return this._store.dispatch(authThunk);
     }
 
     public setExpired () {
