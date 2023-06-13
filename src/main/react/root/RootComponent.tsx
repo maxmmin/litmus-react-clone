@@ -2,7 +2,6 @@ import Loader from "../loader/Loader";
 import {onWakeUp} from "../../util/pureFunctions";
 import React, {ReactNode, useEffect, useMemo} from "react";
 import {useAppSelector} from "../../redux/hooks";
-import {refreshUserIdentity} from "../../redux/userIdentity/UserIdentityActions";
 import AuthActions from "../../redux/auth/AuthActions";
 import store from "../../redux/store";
 import {useLoadScript} from "@react-google-maps/api";
@@ -13,6 +12,9 @@ import {ErrorBoundary} from "react-error-boundary";
 import NotificationCenter from "../notifications/NotificationCenter";
 import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
+import UserIdentityManager from "../../service/userIdentity/UserIdentityManager";
+import UserIdentityServiceImpl from "../../service/userIdentity/UserIdentityServiceImpl";
+import UserIdentityManagerImpl from "../../service/userIdentity/UserIdentityManagerImpl";
 
 type Props = {
     children: ReactNode
@@ -20,7 +22,7 @@ type Props = {
 
 const libraries: Libraries = ["places"];
 
-const ApplicationStateCenter = ({children}: Props) => {
+const RootComponent = ({children}: Props) => {
 
     const authentication = useAppSelector(state => state.authentication)
 
@@ -35,6 +37,8 @@ const ApplicationStateCenter = ({children}: Props) => {
 
     const authenticationManager: AuthenticationManager = useMemo(()=>BasicAuthenticationManager.getBasicManager(store), [])
 
+    const userIdentityManager: UserIdentityManager = useMemo(()=>new UserIdentityManagerImpl(), []);
+
     useEffect(()=>{
         store.dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError?{...loadError}:null}))
     }, [isLoaded, loadError])
@@ -44,7 +48,7 @@ const ApplicationStateCenter = ({children}: Props) => {
         authenticationManager.checkAndRefreshAuth();
 
         if (authenticationManager.isAuthActual()) {
-            store.dispatch(refreshUserIdentity({accessToken: authentication!.accessToken!, globalPending: false}))
+            userIdentityManager.retrieveIdentity();
         }
     },[authentication])
 
@@ -74,4 +78,4 @@ const ApplicationStateCenter = ({children}: Props) => {
 
 }
 
-export default ApplicationStateCenter;
+export default RootComponent;

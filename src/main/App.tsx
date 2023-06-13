@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import Explore from "./react/exploration/ExplorationScreen";
 import AppStateActions, {switchAppState} from "./redux/applicationState/AppStateActions";
-import ApplicationStateCenter from "./react/applicationState/ApplicationStateCenter";
+import RootComponent from "./react/root/RootComponent";
 import Creation from "./react/creation/CreationScreen";
 import appConfig, {routingLinks} from "./config/appConfig";
 import Role, {Permissions} from "./redux/userIdentity/Role";
@@ -24,7 +24,7 @@ function App() {
 
   return (
             <BrowserRouter basename={"/"}>
-                <ApplicationStateCenter>
+                <RootComponent>
                     <div className={"wrapper"} onClick={e=>{
                         const appStore = store.getState();
                         const isMenuOpened = appStore.appState?.isHeaderMenuOpened;
@@ -61,7 +61,7 @@ function App() {
                             <Route path="/sign-in" element={<LoginPage/>}/>
                         </Routes>
                     </div>
-                </ApplicationStateCenter>
+                </RootComponent>
             </BrowserRouter>
       )
 }

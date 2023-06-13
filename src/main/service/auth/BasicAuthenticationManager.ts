@@ -11,21 +11,24 @@ import {HttpStatus} from "../../util/apiRequest/HttpStatus";
 import AuthenticationStateManager from "./AuthenticationStateManager";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import AuthActions from "../../redux/auth/AuthActions";
+import {BasicNotificationManager, NotificationManager} from "../../redux/applicationState/Notification";
 
 class BasicAuthenticationManager implements AuthenticationManager {
     private readonly authenticationStateManager: AuthenticationStateManager;
     private readonly timersStateManager: TimersStateManager;
     private readonly authService: AuthService;
+    private readonly notificationManager: NotificationManager;
 
     private static locked: boolean = false;
 
-    constructor(authStateManager: AuthenticationStateManager, authService: AuthService, timersStateManager: TimersStateManager) {
+    constructor(authStateManager: AuthenticationStateManager, authService: AuthService, timersStateManager: TimersStateManager, notificationManager: NotificationManager) {
         this.authenticationStateManager = authStateManager;
         this.authService = authService;
         this.timersStateManager = timersStateManager;
+        this.notificationManager = notificationManager;
     }
 
-    async login({email, password}: Credentials): Promise<void> {
+    login({email, password}: Credentials): void {
         const arg: ThunkArg<Credentials> = {email, password, globalPending: true}
         BasicAuthenticationManager.lock();
         this.authenticationStateManager.retrieveAuthentication(this._loginThunk(arg))
@@ -36,7 +39,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         return this.authService.getAuth({email, password});
 }
 
-    private _loginThunk = createAsyncThunk<Authentication, Credentials, LitmusAsyncThunkConfig>(AuthActions.AUTHENTICATE, async (credentials, {rejectWithValue, fulfillWithValue }) => {
+    _loginThunk = createAsyncThunk<Authentication, Credentials, LitmusAsyncThunkConfig>(AuthActions.AUTHENTICATE, async (credentials, {rejectWithValue, fulfillWithValue }) => {
 
         try {
             const authentication: Authentication  = await this._login(credentials)
@@ -58,10 +61,12 @@ class BasicAuthenticationManager implements AuthenticationManager {
         const auth = this.authenticationStateManager.getAuth();
 
         if (auth) {
+                console.log(auth)
                 if (this.isAuthExpired()&&!BasicAuthenticationManager.locked) {
                     if (!this.isTokenExpired(auth.refreshToken)) {
                         this.refreshAuth();
                     } else {
+                        this.notificationManager.error("Недійсні автентифікаційні дані. Увійдіть, будь ласка, заново.");
                         this.logout();
                     }
                 }
@@ -178,7 +183,8 @@ class BasicAuthenticationManager implements AuthenticationManager {
         const authService = new BasicAuthService();
         const timersStateManager = new TimersStateManager();
         const authenticationStateManager = new AuthenticationStateManager();
-        return new BasicAuthenticationManager(authenticationStateManager, authService, timersStateManager);
+        const notificationManager = new BasicNotificationManager();
+        return new BasicAuthenticationManager(authenticationStateManager, authService, timersStateManager, notificationManager);
     }
 
     private static lock () {

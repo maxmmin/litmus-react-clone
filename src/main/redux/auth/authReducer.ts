@@ -2,8 +2,9 @@ import AuthActions from "./AuthActions";
 import Authentication, {AuthenticationReducible} from "./Authentication";
 import {Reducer} from "react";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
-import {PayloadAction} from "@reduxjs/toolkit";
+import {isRejected, PayloadAction} from "@reduxjs/toolkit";
 import {HttpStatus} from "../../util/apiRequest/HttpStatus";
+import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 
 const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
 
@@ -24,33 +25,30 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
             return {...action.payload};
         }
 
+        case `${AuthActions.AUTHENTICATE}/rejected`: {
+            return null;
+        }
+
         default: {
-            if (action.type.endsWith("/rejected")) {
-                try {
-                    return errorHandle(prevState, action.payload as unknown as BasicHttpError<any>)
-                } catch (e) {
-                    console.log(e)
-                }
+            if (isRejected(action)) {
+                const errorResponse: ErrorResponse<any> = BasicHttpError.parseError(action.payload)
+                return errorHandle(prevState, errorResponse)
             }
-            return prevState;
+            else return prevState;
         }
     }
 }
 
-const errorHandle = (prevState: AuthenticationReducible, error: BasicHttpError<any>): AuthenticationReducible => {
-    if (error&&Object.hasOwn(error,'status')) {
-        switch (error.status) {
-            case HttpStatus.UNAUTHENTICATED: {
-                if (prevState) {
-                    return {accessToken: prevState.accessToken, refreshToken: prevState.refreshToken, expired: true};
-                } else return prevState;
-            }
-
-            default: return prevState;
+const errorHandle = (prevState: AuthenticationReducible, error: ErrorResponse<any>): AuthenticationReducible => {
+    switch (error.status) {
+        case HttpStatus.UNAUTHENTICATED: {
+            if (prevState) {
+                return {accessToken: prevState.accessToken, refreshToken: prevState.refreshToken, expired: true};
+            } else return prevState;
         }
-    }
 
-    return prevState
+        default: return prevState;
+    }
 }
 
 
