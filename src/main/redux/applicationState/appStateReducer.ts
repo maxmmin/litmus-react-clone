@@ -7,7 +7,7 @@ import {Action} from "redux";
 import AppStateActions from "./AppStateActions";
 import AuthActions from "../auth/AuthActions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import Notification, {BasicNotification, notificationTypes} from "./Notification";
+import Notification, {AppNotificationType, BasicNotification, notificationTypes} from "./Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 import {FulfilledThunkAction, PendingThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
@@ -87,7 +87,8 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                         state = {...state}
                         const msg = fulfilledAction.meta.successMessage?fulfilledAction.meta.successMessage:`Action ${action.type} was executed successfully`;
                         const duration =  fulfilledAction.meta.duration;
-                        const notification = {...new BasicNotification(notificationTypes.SUCCESS, msg, duration)};
+                        const type: AppNotificationType = fulfilledAction.meta.notificationType?fulfilledAction.meta.notificationType:'SUCCESS';
+                        const notification = {...new BasicNotification(type, msg, duration)};
                         state.notifications = [...state.notifications, notification]
                     }
                 } else {
@@ -105,7 +106,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
 
                     const basicHttpErr = new BasicHttpError(errorResponse)
 
-                    const notification = {...new BasicNotification(notificationTypes.ERROR, basicHttpErr.getDescription())};
+                    const notification = {...new BasicNotification('ERROR', basicHttpErr.getDescription())};
                     state.notifications = [...state.notifications, notification];
                 }
 

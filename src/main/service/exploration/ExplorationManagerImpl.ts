@@ -1,6 +1,6 @@
-import ExplorationService from "./ExplorationService";
+import ExplorationManager from "./ExplorationManager";
 import ExplorationStateManager from "./ExplorationStateManager";
-import store from "../../redux/store";
+import store, {LitmusAsyncThunkConfig, ThunkArg, ThunkMetaData} from "../../redux/store";
 import PersonLookupServiceImpl from "./lookup/human/person/PersonLookupServiceImpl";
 import JurPersonLookupServiceImpl from "./lookup/jurPerson/JurPersonLookupServiceImpl";
 import UserLookupServiceImpl from "./lookup/human/user/UserLookupServiceImpl";
@@ -12,10 +12,11 @@ import UserLookupService from "./lookup/human/user/UserLookupService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonLookupService from "./lookup/jurPerson/JurPersonLookupService";
 import {
+    AppNotificationType,
     BasicNotification,
     BasicNotificationManager,
     NotificationManager,
-    NotificationType, notificationTypes
+    notificationTypes
 } from "../../redux/applicationState/Notification";
 import PersonExplorationState from "../../redux/exploration/types/human/person/PersonExplorationState";
 import PersonExplorationParams from "../../redux/exploration/types/human/person/PersonExplorationParams";
@@ -27,6 +28,7 @@ import PagedData, {UnPagedData} from "../../util/apiRequest/PagedData";
 import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
 import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
+import {createAsyncThunk} from "@reduxjs/toolkit";
 
 class UnsupportedModeError extends Error {
 
@@ -35,7 +37,7 @@ class UnsupportedModeError extends Error {
     }
 }
 
-class ExplorationServiceImpl implements ExplorationService {
+class ExplorationManagerImpl implements ExplorationManager {
     private readonly _store: typeof store;
 
     private readonly notificationManager: NotificationManager|null = null;
@@ -50,7 +52,7 @@ class ExplorationServiceImpl implements ExplorationService {
         }
     }
 
-    private conditionalOutput(type: NotificationType,message: string) {
+    private conditionalOutput(type: AppNotificationType,message: string) {
         if (this.shouldNotify) {
             this.notificationManager!.addNotification(new BasicNotification(type, message));
         }
@@ -64,7 +66,7 @@ class ExplorationServiceImpl implements ExplorationService {
             const basicHttpError = err as ErrorResponse<any>;
             msg = `Error ${basicHttpError.status}: ${basicHttpError.title}`
         }
-        this.conditionalOutput(notificationTypes.ERROR, msg);
+        this.conditionalOutput('ERROR', msg);
         console.error(err);
         return null;
     }
@@ -204,12 +206,24 @@ class ExplorationServiceImpl implements ExplorationService {
         const response = await getData().catch(this.handleError.bind(this));
         if (response) {
             stateManager.setData({response: response, requestParams: requestParams});
-            this.conditionalOutput(notificationTypes.SUCCESS, "Success")
+            this.conditionalOutput('SUCCESS', "Success")
         } else {
             stateManager.setData(null);
         }
         stateManager.disablePending();
     }
+
+    buildExplorationThunk<T>(entityType: T, prefix: string, lookupMethod: ()=>Promise<PagedData<T>>, meta: ThunkMetaData) {
+        return createAsyncThunk<PagedData<T>,ThunkArg<any>, LitmusAsyncThunkConfig>(prefix,async (arg, {fulfillWithValue, rejectWithValue}) => {
+                try {
+                    const response: PagedData<T> = await lookupMethod();
+                    return fulfillWithValue(response, {notify: true});
+                } catch (e: any) {
+                    return rejectWithValue(e);
+                }
+            }
+        )
+    }
 }
 
-export default ExplorationServiceImpl;
+export default ExplorationManagerImpl;

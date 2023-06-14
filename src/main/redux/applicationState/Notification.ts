@@ -8,13 +8,17 @@ import React from "react";
 
 export type NotificationContent = ToastContent;
 export type NotificationOptions = ToastOptions;
-export type NotificationType = TypeOptions;
+type NotificationType = TypeOptions;
 
 /**
  * GET NOTIFICATIONS TYPE ONLY BY notificationTypes object for flexibility!
  */
-type AppNotificationType = "ERROR" | "WARNING" | "INFO" | "SUCCESS" | "DEFAULT"
+export type AppNotificationType = "ERROR" | "WARNING" | "INFO" | "SUCCESS" | "DEFAULT"
 
+/**
+ * AppNotificationType is type provided by application
+ * NotificationType is notification used for concrete notification library
+ */
 export const notificationTypes: Record<AppNotificationType, NotificationType> = {
     "ERROR": 'error',
     "WARNING": 'warning',
@@ -39,10 +43,10 @@ export class BasicNotification extends Notification {
     private static readonly _duration: number = 5000;
     private static readonly _pauseOnHover: boolean = true;
 
-    constructor(type: NotificationType, message: string, duration: number = BasicNotification._duration) {
+    constructor(type: AppNotificationType, message: string, duration: number = BasicNotification._duration) {
         const content: NotificationContent = message;
         const options: NotificationOptions = {
-            type: type,
+            type: notificationTypes[type],
             hideProgressBar: !BasicNotification._progress,
             pauseOnHover: BasicNotification._pauseOnHover,
             autoClose: duration
@@ -87,19 +91,19 @@ export class BasicNotificationManager implements NotificationManager {
     }
 
     error(message: string): void {
-        this.addNotification(new BasicNotification(notificationTypes.ERROR, message))
+        this.addNotification(new BasicNotification('ERROR', message))
     }
 
     info(message: string): void {
-        this.addNotification(new BasicNotification(notificationTypes.INFO, message))
+        this.addNotification(new BasicNotification('INFO', message))
     }
 
     success(message: string): void {
-        this.addNotification(new BasicNotification(notificationTypes.SUCCESS, message))
+        this.addNotification(new BasicNotification('SUCCESS', message))
     }
 
     warning(message: string): void {
-        this.addNotification(new BasicNotification(notificationTypes.WARNING, message))
+        this.addNotification(new BasicNotification('WARNING', message))
     }
 
 }

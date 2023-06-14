@@ -20,8 +20,6 @@ import apiLinks, {routingLinks} from "../../config/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
 import {CreationModalModes} from "../../redux/creation/CreationModalModes";
-import {BasicNotification, NotificationType, notificationTypes} from "../../redux/applicationState/Notification";
-import {addNotification} from "../../redux/applicationState/AppStateActions";
 
 
 export type CreationModalSettings = {

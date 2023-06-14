@@ -199,8 +199,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         this.authenticationStateManager.clearAuth();
         const timer = this.timersStateManager.getAuthRefreshTimer();
         if (timer) {
-            window.clearTimeout(timer);
-            this.timersStateManager.setAuthRefreshTimer(null);
+            this.clearAuthRefreshTimer();
         }
     }
 

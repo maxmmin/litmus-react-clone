@@ -22,6 +22,7 @@ import timersReducer from "./timers/timersReducer";
 import explorationReducer from "./exploration/explorationReducer";
 import ErrorResponse from "../util/apiRequest/ErrorResponse";
 import errLoggingMiddleware from "./log/errLoggingMiddleware";
+import {AppNotificationType, notificationTypes} from "./applicationState/Notification";
 
 
 const persistConfig: PersistConfig<any> = {
@@ -66,7 +67,7 @@ export type AppDispatch = typeof store.dispatch
  * Type is used for specifying should the state isRefresh or no while redux thunk is pending
  * And should notification be added after it's resolving
  */
-export type ThunkArgMeta = {
+export type ThunkMetaData = {
     globalPending: boolean
 }
 
@@ -85,13 +86,14 @@ export type RejectedThunkAction = PayloadAction<ErrorResponse<any>>
 export type FulfillMeta = {
     successMessage?: string,
     duration?: number,
-    notify: boolean
+    notify: boolean,
+    notificationType?: AppNotificationType
 }
 
 
 export type FulfilledThunkAction = Action&MetaAction<FulfillMeta>
 
-export type ThunkArg<T> = T & ThunkArgMeta
+export type ThunkArg<T> = T & ThunkMetaData
 
 export type LitmusAsyncThunkConfig = {
     state: RootState
