@@ -29,6 +29,8 @@ import EntityExplorationState from "../../redux/exploration/types/EntityExplorat
 import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 import {createAsyncThunk} from "@reduxjs/toolkit";
+import JurPersonExplorationParams from "../../redux/exploration/types/jurPerson/JurPersonExplorationParams";
+import UserExplorationParams from "../../redux/exploration/types/human/user/UserExplorationParams";
 
 class UnsupportedModeError extends Error {
 
@@ -71,12 +73,12 @@ class ExplorationManagerImpl implements ExplorationManager {
         return null;
     }
     
-    private async explorePersons(stateManager: ExplorationStateManager<PersonExplorationState>, service: PersonLookupService): Promise<PagedData<Person>> {
-        const modeId = stateManager.getExplorationParams().modeId;
+    private async explorePersons(explorationParams: UserExplorationParams, service: PersonLookupService): Promise<PagedData<Person>> {
+        const modeId = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
-                const id = checkNotEmpty(stateManager.getExplorationState().params.id);
+                const id = checkNotEmpty(explorationParams.id);
                 const content: Person[] = []
                 const person = await service.findById(id);
                 if (person) content.push(person);
@@ -84,9 +86,9 @@ class ExplorationManagerImpl implements ExplorationManager {
             }
 
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
-                const lastName = checkNotEmpty(stateManager.getExplorationState().params.lastName);
-                const middleName = stateManager.getExplorationState().params.middleName;
-                const firstName = stateManager.getExplorationState().params.firstName;
+                const lastName = checkNotEmpty(explorationParams.lastName);
+                const middleName = explorationParams.middleName;
+                const firstName = explorationParams.firstName;
                 return await service.findByFullName({lastName, middleName, firstName}) as PagedData<Person>;
             }
 
@@ -99,13 +101,13 @@ class ExplorationManagerImpl implements ExplorationManager {
     }
 
 
-    private async exploreUsers(stateManager: ExplorationStateManager<UserExplorationState>, service: UserLookupService): Promise<PagedData<User>> {
-        const modeId: number = stateManager.getExplorationParams().modeId;
+    private async exploreUsers(explorationParams: UserExplorationParams, service: UserLookupService): Promise<PagedData<User>> {
+        const modeId: number = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
-                const id = checkNotEmpty(stateManager.getExplorationState().params.id);
+                const id = checkNotEmpty(explorationParams.id);
                 const content: User[] = [];
                 const user = await service.findById(id);
                 if (user) content.push(user);
@@ -113,9 +115,9 @@ class ExplorationManagerImpl implements ExplorationManager {
             }
 
             case ExplorationMode[ExplorationModeName.BY_FULL_NAME]: {
-                const lastName = checkNotEmpty(stateManager.getExplorationState().params.lastName);
-                const middleName = stateManager.getExplorationState().params.middleName;
-                const firstName = stateManager.getExplorationState().params.firstName
+                const lastName = checkNotEmpty(explorationParams.lastName);
+                const middleName = explorationParams.middleName;
+                const firstName = explorationParams.firstName
                 return  await service.findByFullName({lastName, middleName, firstName})
             }
 
@@ -128,13 +130,13 @@ class ExplorationManagerImpl implements ExplorationManager {
     }
 
 
-    private async exploreJurPersons(stateManager: ExplorationStateManager<JurPersonExplorationState>, service: JurPersonLookupService): Promise<PagedData<JurPerson>> {
-        const modeId: number = stateManager.getExplorationParams().modeId;
+    private async exploreJurPersons(explorationParams: JurPersonExplorationParams, service: JurPersonLookupService): Promise<PagedData<JurPerson>> {
+        const modeId: number = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
 
         switch (mode) {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
-                const id = checkNotEmpty(stateManager.getExplorationState().params.id);
+                const id = checkNotEmpty(explorationParams.id);
                 const content: JurPerson[] = [];
                 const jurPerson = await service.findById(id);
                 if (jurPerson) {
@@ -172,7 +174,7 @@ class ExplorationManagerImpl implements ExplorationManager {
 
                 const service = new PersonLookupServiceImpl(this.getAccessToken.bind(this));
 
-                getData = ()=>this.explorePersons(personManager, service)
+                getData = ()=>this.explorePersons(personManager.getExplorationParams(), service)
                 
                 break;
             }
@@ -181,7 +183,7 @@ class ExplorationManagerImpl implements ExplorationManager {
                 stateManager = jurPersonManager;
                 const service = new JurPersonLookupServiceImpl(this.getAccessToken.bind(this));
 
-                getData = ()=>this.exploreJurPersons(jurPersonManager, service)
+                getData = ()=>this.exploreJurPersons(jurPersonManager.getExplorationParams(), service)
 
                 break;
             }
@@ -190,7 +192,7 @@ class ExplorationManagerImpl implements ExplorationManager {
                 stateManager = userManager;
                 const service = new UserLookupServiceImpl(this.getAccessToken.bind(this));
 
-                getData = ()=>this.exploreUsers(userManager, service);
+                getData = ()=>this.exploreUsers(userManager.getExplorationParams(), service);
 
                 break;
             }
@@ -199,7 +201,7 @@ class ExplorationManagerImpl implements ExplorationManager {
         }
 
         stateManager = stateManager!;
-        stateManager.enablePending();
+        stateManager.enableSectionPending();
 
         const requestParams = stateManager.getExplorationState().params;
 
@@ -213,7 +215,7 @@ class ExplorationManagerImpl implements ExplorationManager {
         stateManager.disablePending();
     }
 
-    buildExplorationThunk<T>(entityType: T, prefix: string, lookupMethod: ()=>Promise<PagedData<T>>, meta: ThunkMetaData) {
+    buildExplorationThunk<T>(entityType: T, prefix: string, lookupMethod: ()=>Promise<PagedData<T>>) {
         return createAsyncThunk<PagedData<T>,ThunkArg<any>, LitmusAsyncThunkConfig>(prefix,async (arg, {fulfillWithValue, rejectWithValue}) => {
                 try {
                     const response: PagedData<T> = await lookupMethod();

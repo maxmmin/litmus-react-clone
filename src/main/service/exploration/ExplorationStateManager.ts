@@ -98,7 +98,7 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
         })
     }
 
-    enablePending (): void {
+    enableSectionPending (): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING],
             payload: true
