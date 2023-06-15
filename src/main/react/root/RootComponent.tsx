@@ -26,6 +26,8 @@ const RootComponent = ({children}: Props) => {
 
     const authentication = useAppSelector(state => state.authentication)
 
+    const userIdentity = useAppSelector(state => state.userIdentity)
+
     const isRefreshing = useAppSelector(state => state.appState?.isRefreshing)
 
     const {isLoaded, loadError} = useLoadScript({
@@ -48,7 +50,8 @@ const RootComponent = ({children}: Props) => {
         authenticationManager.checkAndRefreshAuth();
 
         if (authenticationManager.isAuthActual()) {
-            userIdentityManager.retrieveIdentity();
+            const globalPending = !userIdentity;
+            userIdentityManager.retrieveIdentity(globalPending);
         }
     },[authentication])
 

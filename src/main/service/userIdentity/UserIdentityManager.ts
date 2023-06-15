@@ -1,7 +1,7 @@
 import UserIdentity from "../../redux/userIdentity/UserIdentity";
 
 interface UserIdentityManager {
-    retrieveIdentity (): void;
+    retrieveIdentity (globalPending: boolean): void;
 }
 
 export default UserIdentityManager;

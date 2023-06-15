@@ -26,8 +26,8 @@ class UserIdentityManagerImpl implements UserIdentityManager{
         this.identityService = identityService;
     }
 
-    retrieveIdentity (): void  {
-        const action: AsyncThunkAction<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig> = this._retrieveIdentityThunk({identityService: this.identityService, globalPending: false})
+    retrieveIdentity (globalPending: boolean = false): void  {
+        const action: AsyncThunkAction<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig> = this._retrieveIdentityThunk({identityService: this.identityService, globalPending: globalPending})
         this._store.dispatch(action);
     };
 
