@@ -1,6 +1,7 @@
 export enum ExplorationCoreAction{
     SET_EXPLORATION_STATE="SET_EXPLORATION_STATE",
     SET_EXPLORATION_PARAMS="SET_EXPLORATION_PARAMS",
+    RETRIEVE_DATA="RETRIEVE_DATA",
     SET_EXPLORATION_DATA="SET_EXPLORATION_DATA",
     SET_EXPLORATION_PARAMS_MODE="SET_EXPLORATION_PARAMS_MODE",
     SET_EXPLORATION_STATE_PENDING="SET_EXPLORATION_STATE_PENDING",
@@ -29,7 +30,7 @@ export class ExplorationTypedActions {
     public readonly [ExplorationCoreAction.SET_EXPLORATION_PARAMS_MODE]: string;
     public readonly [ExplorationCoreAction.SET_EXPLORATION_PARAMS]: string;
 
-    public readonly [ExplorationCoreAction.SET_EXPLORATION_DATA]: string;
+    public readonly [ExplorationCoreAction.RETRIEVE_DATA]: string;
 
     public readonly [ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING]: string;
 
@@ -56,7 +57,7 @@ export class ExplorationTypedActions {
         const UPDATE_PARAMS_CORE = ExplorationCoreAction.SET_EXPLORATION_PARAMS;
         this[UPDATE_PARAMS_CORE] = ExplorationTypedActions.getTypedAction(UPDATE_PARAMS_CORE, domain);
 
-        const UPDATE_DATA_CORE = ExplorationCoreAction.SET_EXPLORATION_DATA;
+        const UPDATE_DATA_CORE = ExplorationCoreAction.RETRIEVE_DATA;
         this[UPDATE_DATA_CORE] = ExplorationTypedActions.getTypedAction(UPDATE_DATA_CORE, domain);
 
         const UPDATE_PARAMS_MODE_CORE = ExplorationCoreAction.SET_EXPLORATION_PARAMS_MODE;

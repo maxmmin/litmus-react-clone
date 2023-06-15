@@ -74,10 +74,10 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                     return  {...prevState, isRefreshing: true}
             }
 
-            else if (metaAction.meta?.arg.globalPending&&isActionFulfilled(action)||isActionRejected(action)) {
+            else if (isActionFulfilled(action)||isActionRejected(action)) {
                 let state = prevState;
 
-                if (prevState.isRefreshing) {
+                if (prevState.isRefreshing&&metaAction.meta?.arg.globalPending) {
                     state = {...prevState, isRefreshing: false};
                 }
 

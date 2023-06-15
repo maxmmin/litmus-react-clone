@@ -1,12 +1,12 @@
-import ExplorationManager from "./ExplorationManager";
+import ExplorationService from "./ExplorationService";
 import ExplorationStateManager from "./ExplorationStateManager";
-import store, {LitmusAsyncThunkConfig, ThunkArg, ThunkMetaData} from "../../redux/store";
+import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import PersonLookupServiceImpl from "./lookup/human/person/PersonLookupServiceImpl";
 import JurPersonLookupServiceImpl from "./lookup/jurPerson/JurPersonLookupServiceImpl";
 import UserLookupServiceImpl from "./lookup/human/user/UserLookupServiceImpl";
 import Person from "../../model/human/person/Person";
 import PersonLookupService from "./lookup/human/person/PersonLookupService";
-import {checkNotEmpty} from "../../util/pureFunctions";
+import deepCopy, {checkNotEmpty} from "../../util/pureFunctions";
 import User from "../../model/human/user/User";
 import UserLookupService from "./lookup/human/user/UserLookupService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
@@ -15,22 +15,19 @@ import {
     AppNotificationType,
     BasicNotification,
     BasicNotificationManager,
-    NotificationManager,
-    notificationTypes
+    NotificationManager
 } from "../../redux/applicationState/Notification";
-import PersonExplorationState from "../../redux/exploration/types/human/person/PersonExplorationState";
 import PersonExplorationParams from "../../redux/exploration/types/human/person/PersonExplorationParams";
-import UserExplorationState from "../../redux/exploration/types/human/user/UserExplorationState";
-import JurPersonExplorationState from "../../redux/exploration/types/jurPerson/JurPersonExplorationState";
 import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/types/ExplorationMode";
 import {Entity} from "../../model/Entity";
 import PagedData, {UnPagedData} from "../../util/apiRequest/PagedData";
 import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
 import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
-import ErrorResponse from "../../util/apiRequest/ErrorResponse";
-import {createAsyncThunk} from "@reduxjs/toolkit";
+import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
 import JurPersonExplorationParams from "../../redux/exploration/types/jurPerson/JurPersonExplorationParams";
 import UserExplorationParams from "../../redux/exploration/types/human/user/UserExplorationParams";
+import {ExplorationCoreAction, ExplorationTypedActions} from "../../redux/exploration/ExplorationActions";
+import EntityExplorationData from "../../redux/exploration/types/EntityExplorationData";
 
 class UnsupportedModeError extends Error {
 
@@ -39,7 +36,7 @@ class UnsupportedModeError extends Error {
     }
 }
 
-class ExplorationManagerImpl implements ExplorationManager {
+class ExplorationServiceImpl implements ExplorationService {
     private readonly _store: typeof store;
 
     private readonly notificationManager: NotificationManager|null = null;
@@ -54,25 +51,6 @@ class ExplorationManagerImpl implements ExplorationManager {
         }
     }
 
-    private conditionalOutput(type: AppNotificationType,message: string) {
-        if (this.shouldNotify) {
-            this.notificationManager!.addNotification(new BasicNotification(type, message));
-        }
-    }
-
-    private handleError (err: any): null {
-        let msg = 'unknown error'
-        if (err instanceof Error) {
-            msg = err.message;
-        } else if (err && "status" in err && "detail" in err) {
-            const basicHttpError = err as ErrorResponse<any>;
-            msg = `Error ${basicHttpError.status}: ${basicHttpError.title}`
-        }
-        this.conditionalOutput('ERROR', msg);
-        console.error(err);
-        return null;
-    }
-    
     private async explorePersons(explorationParams: UserExplorationParams, service: PersonLookupService): Promise<PagedData<Person>> {
         const modeId = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
@@ -100,6 +78,18 @@ class ExplorationManagerImpl implements ExplorationManager {
         }
     }
 
+
+    private explorePersonsThunk = createAsyncThunk<EntityExplorationData<Person, PersonExplorationParams>,
+        ThunkArg<{params: PersonExplorationParams, service: PersonLookupService}>,
+        LitmusAsyncThunkConfig>(ExplorationTypedActions.person[ExplorationCoreAction.RETRIEVE_DATA],async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
+            try {
+                const response: PagedData<Person> = await this.explorePersons(params, service);
+                const exploredData: EntityExplorationData<Person, PersonExplorationParams> = {requestParams: params, response: response}
+                return fulfillWithValue(deepCopy(exploredData), {notify: this.shouldNotify});
+            } catch (e: any) {
+                return rejectWithValue(deepCopy(e));
+            }
+    })
 
     private async exploreUsers(explorationParams: UserExplorationParams, service: UserLookupService): Promise<PagedData<User>> {
         const modeId: number = explorationParams.modeId;
@@ -129,6 +119,18 @@ class ExplorationManagerImpl implements ExplorationManager {
         }
     }
 
+    private exploreUsersThunk = createAsyncThunk<EntityExplorationData<User, UserExplorationParams>,
+        ThunkArg<{params: UserExplorationParams, service: UserLookupService}>,
+        LitmusAsyncThunkConfig>(ExplorationTypedActions.user[ExplorationCoreAction.RETRIEVE_DATA],(async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
+        try {
+            const response: PagedData<User> = await this.exploreUsers(params, service);
+            const exploredData: EntityExplorationData<User, UserExplorationParams> = {requestParams: params, response: response}
+            return fulfillWithValue(deepCopy(exploredData), {notify: this.shouldNotify});
+        } catch (e: any) {
+            return rejectWithValue(deepCopy(e));
+        }
+    }))
+
 
     private async exploreJurPersons(explorationParams: JurPersonExplorationParams, service: JurPersonLookupService): Promise<PagedData<JurPerson>> {
         const modeId: number = explorationParams.modeId;
@@ -153,6 +155,18 @@ class ExplorationManagerImpl implements ExplorationManager {
 
     }
 
+    private exploreJurPersonsThunk = createAsyncThunk<EntityExplorationData<JurPerson, JurPersonExplorationParams>,
+        ThunkArg<{params: JurPersonExplorationParams, service: JurPersonLookupService}>,
+        LitmusAsyncThunkConfig>(ExplorationTypedActions.jurPerson[ExplorationCoreAction.RETRIEVE_DATA],(async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
+        try {
+            const response: PagedData<JurPerson> = await this.exploreJurPersons(params, service);
+            const exploredData: EntityExplorationData<JurPerson, JurPersonExplorationParams> = {requestParams: params, response: response}
+            return fulfillWithValue(deepCopy(exploredData), {notify: this.shouldNotify});
+        } catch (e: any) {
+            return rejectWithValue(deepCopy(e));
+        }
+    }))
+
     private getAccessToken (): string {
         const token = this._store.getState().authentication?.accessToken;
         if (token) {
@@ -165,7 +179,9 @@ class ExplorationManagerImpl implements ExplorationManager {
 
     async explore(entity: Entity): Promise<void> {
         let stateManager: ExplorationStateManager<EntityExplorationState<any, EntityExplorationParams>>;
-        let getData: ()=>Promise<PagedData<any>>;
+
+        let asyncThunk: AsyncThunkAction<EntityExplorationData<any, any>, any, any>;
+
 
         switch (entity) {
             case Entity.PERSON: {
@@ -174,25 +190,26 @@ class ExplorationManagerImpl implements ExplorationManager {
 
                 const service = new PersonLookupServiceImpl(this.getAccessToken.bind(this));
 
-                getData = ()=>this.explorePersons(personManager.getExplorationParams(), service)
-                
+                asyncThunk = this.explorePersonsThunk({params: personManager.getExplorationParams(), service: service, globalPending: false})
                 break;
             }
             case Entity.JUR_PERSON: {
                 const jurPersonManager = ExplorationStateManager.getJurPersonManager(this._store);
                 stateManager = jurPersonManager;
+
                 const service = new JurPersonLookupServiceImpl(this.getAccessToken.bind(this));
 
-                getData = ()=>this.exploreJurPersons(jurPersonManager.getExplorationParams(), service)
+                asyncThunk = this.exploreJurPersonsThunk({params: jurPersonManager.getExplorationParams(), service: service, globalPending: false})
 
                 break;
             }
             case Entity.USER: {
                 const userManager = ExplorationStateManager.getUserManager(this._store);
                 stateManager = userManager;
+
                 const service = new UserLookupServiceImpl(this.getAccessToken.bind(this));
 
-                getData = ()=>this.exploreUsers(userManager.getExplorationParams(), service);
+                asyncThunk = this.exploreUsersThunk({params: userManager.getExplorationParams(), service: service, globalPending: false})
 
                 break;
             }
@@ -200,32 +217,9 @@ class ExplorationManagerImpl implements ExplorationManager {
             default: throw new Error("unsupported entity: " + entity);
         }
 
-        stateManager = stateManager!;
-        stateManager.enableSectionPending();
-
-        const requestParams = stateManager.getExplorationState().params;
-
-        const response = await getData().catch(this.handleError.bind(this));
-        if (response) {
-            stateManager.setData({response: response, requestParams: requestParams});
-            this.conditionalOutput('SUCCESS', "Success")
-        } else {
-            stateManager.setData(null);
-        }
-        stateManager.disablePending();
+        stateManager.retrieveData(asyncThunk);
     }
 
-    buildExplorationThunk<T>(entityType: T, prefix: string, lookupMethod: ()=>Promise<PagedData<T>>) {
-        return createAsyncThunk<PagedData<T>,ThunkArg<any>, LitmusAsyncThunkConfig>(prefix,async (arg, {fulfillWithValue, rejectWithValue}) => {
-                try {
-                    const response: PagedData<T> = await lookupMethod();
-                    return fulfillWithValue(response, {notify: true});
-                } catch (e: any) {
-                    return rejectWithValue(e);
-                }
-            }
-        )
-    }
 }
 
-export default ExplorationManagerImpl;
+export default ExplorationServiceImpl;

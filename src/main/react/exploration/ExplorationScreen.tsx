@@ -16,8 +16,8 @@ import store from "../../redux/store";
 import ExplorationData from "./ExplorationData";
 import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
 import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
-import ExplorationManager from "../../service/exploration/ExplorationManager";
-import ExplorationManagerImpl from "../../service/exploration/ExplorationManagerImpl";
+import ExplorationService from "../../service/exploration/ExplorationService";
+import ExplorationServiceImpl from "../../service/exploration/ExplorationServiceImpl";
 
 /* btn isInputInvalid?'disabled':''*/
 
@@ -30,7 +30,7 @@ import ExplorationManagerImpl from "../../service/exploration/ExplorationManager
 // }
 
 
-function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplorationParams>> (explorationService: ExplorationManager, stateManager: ExplorationStateManager<S>) {
+function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplorationParams>> (explorationService: ExplorationService, stateManager: ExplorationStateManager<S>) {
     const entity = stateManager.entity;
     return (e: React.MouseEvent<HTMLButtonElement>) => {
        explorationService.explore(entity);
@@ -109,7 +109,7 @@ const ExplorationScreen = () => {
 
     const explorationStateManager = ExplorationStateManager.getEntityManager(exploredEntity);
 
-    const explorationService = new ExplorationManagerImpl(store,true);
+    const explorationService = new ExplorationServiceImpl(store,true);
 
     return (
        <PrivateComponentWrapper requiredPermissions={requiredPermissions} mode={"ERROR_PAGE"}>

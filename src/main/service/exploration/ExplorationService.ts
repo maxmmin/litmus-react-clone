@@ -1,7 +1,7 @@
 import {Entity} from "../../model/Entity";
 
-interface ExplorationManager {
+interface ExplorationService {
     explore(entity: Entity): void;
 }
 
-export default ExplorationManager;
+export default ExplorationService;

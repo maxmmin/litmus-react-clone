@@ -9,6 +9,7 @@ import EntityExplorationParams from "../../redux/exploration/types/EntityExplora
 import {Entity} from "../../model/Entity";
 import ExplorationMode from "../../redux/exploration/types/ExplorationMode";
 import deepCopy from "../../util/pureFunctions";
+import {AsyncThunkAction} from "@reduxjs/toolkit";
 
 /**
  * S - entityExplorationState
@@ -93,9 +94,13 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
 
     setData (data: S['data']): void {
         this.dispatch({
-            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_DATA],
+            type: this.actions[ExplorationCoreAction.RETRIEVE_DATA],
             payload: deepCopy(data)
         })
+    }
+
+    retrieveData(thunk: AsyncThunkAction<S["data"], any, any>) {
+        this.dispatch(thunk)
     }
 
     enableSectionPending (): void {
@@ -105,7 +110,7 @@ class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplo
         })
     }
 
-    disablePending (): void {
+    disableSectionPending (): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING],
             payload: false

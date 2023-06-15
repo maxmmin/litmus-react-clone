@@ -19,10 +19,21 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, EntityEx
         case ExplorationCoreAction.SET_EXPLORATION_STATE: {
             return action.payload as S;
         }
+
         case ExplorationCoreAction.SET_EXPLORATION_DATA: {
             const newData = action.payload as S["data"];
             return {...prevState, data: newData};
         }
+
+        case `${ExplorationCoreAction.RETRIEVE_DATA}/fulfilled`: {
+            const newData = action.payload as S["data"];
+            return {...prevState, data: newData, isPending: false};
+        }
+
+        case `${ExplorationCoreAction.RETRIEVE_DATA}/rejected`: {
+            return {...prevState, data: null, isPending: false};
+        }
+
         case ExplorationCoreAction.SET_EXPLORATION_PARAMS: {
             let params = action.payload as S["params"];
             return {...prevState, params};
