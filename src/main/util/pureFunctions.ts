@@ -13,7 +13,7 @@ import User from "../model/human/user/User";
 import Person from "../model/human/person/Person";
 import person from "../model/human/person/Person";
 import {JurPerson} from "../model/jurPerson/JurPerson";
-import {CreateJurPersonDto, CreatePersonDto, CreateUserDto} from "../redux/creation/CreationParamsActions";
+import {CreateJurPersonDto, CreatePersonDto, CreateUserDto} from "../redux/creation/CreationCoreActions";
 import {DateBuilder} from "../model/DateEntity";
 import {Action} from "redux";
 

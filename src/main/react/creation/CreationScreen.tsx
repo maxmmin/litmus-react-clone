@@ -9,7 +9,7 @@ import {useAppDispatch} from "../../redux/hooks";
 import {
     CreationParamsReducible,
     updateCreationParams
-} from "../../redux/creation/CreationParamsActions";
+} from "../../redux/creation/CreationCoreActions";
 import CreationInputSection from "./CreationInputSection";
 import {
     createEntity,
@@ -27,8 +27,6 @@ export type CreationModalSettings = {
 }   | null
 
 const Creation = () => {
-    const dispatch = useAppDispatch();
-
     const location = useLocation();
 
     const navigate = useNavigate();
@@ -41,7 +39,7 @@ const Creation = () => {
 
     useLayoutEffect(() => {
         if (entity) {
-            dispatch(updateCreationParams({table: entity}))
+            dispatch(updateCreationParams({selectedEntity: entity}))
         }
         /* eslint-disable-next-line */ // -f | DON'T DISABLE. LOCATION IS LOCAL STATE AND RELATIVE ENTITY SHOULD BE UPDATED ONLY ON IT'S CHANGE(no lookup change)
     }, [location])
@@ -52,7 +50,7 @@ const Creation = () => {
 
     const createButtonOnClick = async (creationParams: CreationParamsReducible, accessToken: string) => {
         if (creationParams) {
-            const table = creationParams.table;
+            const table = creationParams.selectedEntity;
             // @todo creation manager
             // const url = apiLinks[table]
             //

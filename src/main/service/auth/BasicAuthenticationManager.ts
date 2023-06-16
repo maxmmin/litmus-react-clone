@@ -106,7 +106,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         return  await this.authService.refreshAuth(refreshToken);
     }
 
-    private _refreshAuthThunk = createAsyncThunk<Authentication, ThunkArg<AuthenticationReducible>, LitmusAsyncThunkConfig>(AuthActions.AUTHENTICATE, async (arg,{rejectWithValue, fulfillWithValue})=>{
+    private _refreshAuthThunk = createAsyncThunk<Authentication, ThunkArg<Authentication>, LitmusAsyncThunkConfig>(AuthActions.AUTHENTICATE, async (arg,{rejectWithValue, fulfillWithValue})=>{
             try {
                 return fulfillWithValue(await this._refreshAuth(arg), {notify: false});
             }

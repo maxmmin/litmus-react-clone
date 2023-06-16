@@ -13,7 +13,6 @@ import NotificationCenter from "../notifications/NotificationCenter";
 import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 import UserIdentityManager from "../../service/userIdentity/UserIdentityManager";
-import UserIdentityServiceImpl from "../../service/userIdentity/UserIdentityServiceImpl";
 import UserIdentityManagerImpl from "../../service/userIdentity/UserIdentityManagerImpl";
 
 type Props = {

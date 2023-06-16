@@ -1,6 +1,6 @@
 /**
  * E - entity
- * service which provides shared methods
+ * creation which provides shared methods
  */
 import LookupService from "./LookupService";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";

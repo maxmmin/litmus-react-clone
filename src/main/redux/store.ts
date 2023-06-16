@@ -22,7 +22,7 @@ import timersReducer from "./timers/timersReducer";
 import explorationReducer from "./exploration/explorationReducer";
 import ErrorResponse from "../util/apiRequest/ErrorResponse";
 import errLoggingMiddleware from "./log/errLoggingMiddleware";
-import {AppNotificationType, notificationTypes} from "./applicationState/Notification";
+import {AppNotificationType} from "./applicationState/Notification";
 
 
 const persistConfig: PersistConfig<any> = {

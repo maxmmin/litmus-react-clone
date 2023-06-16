@@ -9,7 +9,7 @@ import {
     updatePassportData,
     updatePersonCreationParams,
     updatePersonSex
-} from "../../../redux/creation/CreationParamsActions";
+} from "../../../redux/creation/CreationCoreActions";
 import InputDate from "../../common/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
 import CreationGeoModal from "../geo/CreationGeoModal";

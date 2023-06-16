@@ -46,6 +46,10 @@ function App() {
                                 <Explore/>
                             }/>
 
+                            <Route path={buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')} element={
+                                <Creation/>
+                            }/>
+
                             <Route path={routingLinks.create[Entity.PERSON]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={Role.MODERATOR.permissions}/>
                             }/>

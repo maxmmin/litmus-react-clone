@@ -4,7 +4,7 @@ import React, { useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {Location} from "../../../model/Location";
-import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../redux/creation/CreationParamsActions";
+import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../redux/creation/CreationCoreActions";
 import {Entity} from "../../../model/Entity";
 
 type Props = {

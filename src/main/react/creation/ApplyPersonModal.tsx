@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../exploration/EntityTables/PersonInfoTable";
-import {addRelationship, updateJurPersonCreationParams} from "../../redux/creation/CreationParamsActions";
+import {addRelationship, updateJurPersonCreationParams} from "../../redux/creation/CreationCoreActions";
 import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./CreationScreen";

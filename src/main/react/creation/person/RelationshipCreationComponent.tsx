@@ -3,7 +3,7 @@ import {FloatingLabel, Form} from "react-bootstrap";
 import React from "react";
 import {CrossIcon} from "../../../util/icons";
 import {useAppDispatch} from "../../../redux/hooks";
-import {removeRelationship, updateRelationship} from "../../../redux/creation/CreationParamsActions";
+import {removeRelationship, updateRelationship} from "../../../redux/creation/CreationCoreActions";
 
 type Props = {
     relationship: Relationship
