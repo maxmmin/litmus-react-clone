@@ -8,22 +8,6 @@ import React from "react";
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
-function getInputGroupJsxByMode (mode: ExplorationMode): JSX.Element {
-    switch (mode) {
-        case (ExplorationMode.BY_FULL_NAME): {
-            return <FindByFullNameGroup/>
-        }
-
-        case (ExplorationMode.BY_ID): {
-            return <FindByIdGroup/>
-        }
-
-        default: {
-            throw new Error("unknown exploration mode value was provided")
-        }
-    }
-}
-
 export type ExplorationFormProps = {
     exploredEntity: Entity, isPending: boolean, onSubmit: (e: React.MouseEvent<HTMLButtonElement>)=>void
 }
@@ -53,7 +37,7 @@ function ExplorationInputForm ({exploredEntity, isPending, onSubmit}: Exploratio
         return (
             <div className="explore-page__input-group-container">
                 <Form className={"explore-input-group"}>
-                    { getInputGroupJsxByMode(explorationMode) }
+                    { explorationMode.jsx() }
 
                     <Button disabled={isPending} onClick={onSubmit} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
                         {isPending?"Завантаження...":"Пошук"}
