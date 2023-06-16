@@ -55,18 +55,18 @@ class CreationStateManagerImpl<P, S extends EntityCreationState<P>>  {
         return new CreationStateManagerImpl<UserCreationParams, EntityCreationState<UserCreationParams>>(store.dispatch, getState, CreationTypedActions.user);
     }
 
-    static getCreationEntityManager(entity: Entity, providedStore: typeof store = store): CreationStateManagerImpl<unknown, EntityCreationState<unknown>> {
+    static getEntityManager(entity: Entity, providedStore: typeof store = store): CreationStateManagerImpl<unknown, EntityCreationState<unknown>> {
         switch (entity) {
             case Entity.PERSON: {
-                return CreationStateManagerImpl.getPersonManager(store);
+                return CreationStateManagerImpl.getPersonManager(providedStore);
             }
 
             case Entity.JUR_PERSON: {
-                return CreationStateManagerImpl.getJurPersonManager(store);
+                return CreationStateManagerImpl.getJurPersonManager(providedStore);
             }
 
             case Entity.USER: {
-                return CreationStateManagerImpl.getUserManager(store);
+                return CreationStateManagerImpl.getUserManager(providedStore);
             }
 
             default: throw new Error("unsupported entity");

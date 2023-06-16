@@ -64,15 +64,15 @@ class ExplorationStateManagerImpl<S extends EntityExplorationState<any, EntityEx
     static getEntityManager(entity: Entity, providedStore: typeof store = store): ExplorationStateManagerImpl<EntityExplorationState<unknown, EntityExplorationParams>> {
         switch (entity) {
             case Entity.PERSON: {
-                return ExplorationStateManagerImpl.getPersonManager(store);
+                return ExplorationStateManagerImpl.getPersonManager(providedStore);
             }
 
             case Entity.JUR_PERSON: {
-                return ExplorationStateManagerImpl.getJurPersonManager(store);
+                return ExplorationStateManagerImpl.getJurPersonManager(providedStore);
             }
 
             case Entity.USER: {
-                return ExplorationStateManagerImpl.getUserManager(store);
+                return ExplorationStateManagerImpl.getUserManager(providedStore);
             }
 
             default: throw new Error("unsupported entity");
