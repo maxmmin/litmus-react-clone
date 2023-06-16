@@ -20,7 +20,7 @@ const CreateJurPerson = () => {
 
     const closeModal = () => setModalSettings(null)
 
-    const jurPersonCreationData = useAppSelector(state => state.creationParams?.jurPersonCreationData)
+    const jurPersonCreationData = useAppSelector(state => state.creation?.jurPersonCreationData)
 
     const {year, month, day} = jurPersonCreationData!.dateOfRegistration
 

@@ -1,12 +1,12 @@
-export default interface EntityCreationState<E> {
-    params: E
+export default interface EntityCreationState<P> {
+    params: P
 }
 
-export class BasicEntityCreationState<E> implements EntityCreationState<E> {
-    params: E;
+export class BasicEntityCreationState<P> implements EntityCreationState<P> {
+    params: P;
 
 
-    constructor(params: E) {
+    constructor(params: P) {
         this.params = params;
     }
 }

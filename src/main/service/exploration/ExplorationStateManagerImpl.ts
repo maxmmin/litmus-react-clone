@@ -16,7 +16,7 @@ import deepCopy from "../../util/deepCopy";
  * S - entityExplorationState
  * */
 class ExplorationStateManagerImpl<S extends EntityExplorationState<any, EntityExplorationParams>> implements ExplorationStateManager<S> {
-    private readonly dispatch;
+    private readonly dispatch: AppDispatch;
 
     private readonly actions: ExplorationTypedActions;
 
@@ -46,22 +46,22 @@ class ExplorationStateManagerImpl<S extends EntityExplorationState<any, EntityEx
         this.actions = actions;
     }
 
-    static getJurPersonManager (providedStore: typeof store): ExplorationStateManagerImpl<JurPersonExplorationState> {
+    static getJurPersonManager (providedStore: typeof store = store): ExplorationStateManagerImpl<JurPersonExplorationState> {
         const getState = ()=>providedStore.getState().exploration.jurPerson as JurPersonExplorationState
         return new ExplorationStateManagerImpl<JurPersonExplorationState>(Entity.JUR_PERSON, providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
     }
 
-    static getPersonManager (providedStore: typeof store): ExplorationStateManagerImpl<PersonExplorationState> {
+    static getPersonManager (providedStore: typeof store = store): ExplorationStateManagerImpl<PersonExplorationState> {
         const getState = ()=>providedStore.getState().exploration.person as PersonExplorationState;
         return new ExplorationStateManagerImpl<PersonExplorationState>(Entity.PERSON, providedStore.dispatch,getState, ExplorationTypedActions.person);
     }
 
-    static getUserManager (providedStore: typeof store): ExplorationStateManagerImpl<UserExplorationState> {
+    static getUserManager (providedStore: typeof store = store): ExplorationStateManagerImpl<UserExplorationState> {
         const getState = ()=>providedStore.getState().exploration.user as UserExplorationState;
         return new ExplorationStateManagerImpl<UserExplorationState>(Entity.USER, providedStore.dispatch,getState, ExplorationTypedActions.user);
     }
 
-    static getEntityManager(entity: Entity, providedStore: typeof store = store): ExplorationStateManagerImpl<EntityExplorationState<any, EntityExplorationParams>> {
+    static getEntityManager(entity: Entity, providedStore: typeof store = store): ExplorationStateManagerImpl<EntityExplorationState<unknown, EntityExplorationParams>> {
         switch (entity) {
             case Entity.PERSON: {
                 return ExplorationStateManagerImpl.getPersonManager(store);

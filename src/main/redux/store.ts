@@ -17,7 +17,7 @@ import storage from 'reduxjs-toolkit-persist/lib/storage'
 import userIdentityReducer from "./userIdentity/userIdentityReducer";
 import authenticationCheckMiddleware from "./auth/authenticationCheckMiddleware";
 import loginPageDataReducer from "./login/LoginPageDataReducer";
-import creationParamsReducer from "./creation/creationParamsReducer";
+import creationReducer from "./creation/creationParamsReducer";
 import timersReducer from "./timers/timersReducer";
 import explorationReducer from "./exploration/explorationReducer";
 import ErrorResponse from "../util/apiRequest/ErrorResponse";
@@ -37,7 +37,7 @@ const rootReducer = combineReducers({
     userIdentity: userIdentityReducer,
     exploration: explorationReducer,
     loginPageState: loginPageDataReducer,
-    creationParams: creationParamsReducer,
+    creation: creationReducer,
     timers: timersReducer
 } )
 

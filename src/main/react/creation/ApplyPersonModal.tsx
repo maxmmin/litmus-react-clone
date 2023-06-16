@@ -47,7 +47,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             const state = store.getState() as RootState;
             switch (modalSettings?.mode) {
                 case CreationModalModes.SET_OWNER: {
-                    const owner = state.creationParams?.jurPerson.owner;
+                    const owner = state.creation?.jurPerson.owner;
                     if (owner) {
                         setPerson(owner)
                     }
@@ -55,7 +55,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                 }
 
                 case CreationModalModes.SET_BEN_OWNER: {
-                    const benOwner = state.creationParams?.jurPersonCreationData.benOwner;
+                    const benOwner = state.creation?.jurPersonCreationData.benOwner;
                     if (benOwner) {
                         setPerson(benOwner)
                     }
@@ -165,7 +165,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                     note: "", person: person, relationType: null
                 }
 
-                const sourceRelObject = new RelationshipsLinkObject(store.getState().creationParams?.personCreationData.relationships);
+                const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.personCreationData.relationships);
 
                 if (sourceRelObject?.isPresent(relationship)) {
                     setSearchError(new SearchError("Дана особа вже присутня в списку відносин", null));

@@ -24,7 +24,7 @@ import {Entity} from "../../../model/Entity";
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
 
-    const creationPersonParams = useAppSelector(state => state.creationParams?.person?.params)
+    const creationPersonParams = useAppSelector(state => state.creation?.person?.params)
 
     const dispatch = useAppDispatch();
 

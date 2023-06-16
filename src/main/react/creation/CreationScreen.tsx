@@ -118,7 +118,7 @@ const Creation = () => {
                        <button onClick={event => {
                            event.preventDefault();
                            const state = store.getState();
-                           createButtonOnClick(state.creationParams, state.authentication?.accessToken!)
+                           createButtonOnClick(state.creation, state.authentication?.accessToken!)
                        }} className="creation-input-group__btn btn btn-primary">Створити</button>
                    </Form>
                </div>

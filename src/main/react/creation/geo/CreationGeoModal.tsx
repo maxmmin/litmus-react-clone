@@ -22,11 +22,11 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
     const geoLocation = useAppSelector(state => {
         switch (entity) {
             case Entity.JUR_PERSON: {
-                return state.creationParams?.jurPersonCreationData.location;
+                return state.creation?.jurPersonCreationData.location;
             }
 
             case Entity.PERSON: {
-                return state.creationParams?.personCreationData.location;
+                return state.creation?.personCreationData.location;
             }
         }
     })
