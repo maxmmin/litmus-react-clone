@@ -6,11 +6,6 @@ class CreationTypedActions {
     public static readonly person: CreationTypedActions = new CreationTypedActions(TypedActionsUtil.personDomain);
     public static readonly jurPerson: CreationTypedActions = new CreationTypedActions(TypedActionsUtil.jurPersonDomain);
 
-
-    public static readonly [CreationCoreActions.SET_CREATION_PARAMS]: string;
-    public static readonly [CreationCoreActions.UPDATE_CREATION_PARAMS]: string;
-
-
     public readonly [CreationCoreActions.SET_ENTITY_CREATION_PARAMS]: string;
     public readonly [CreationCoreActions.UPDATE_ENTITY_CREATION_PARAMS]: string;
 

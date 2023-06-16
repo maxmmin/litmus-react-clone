@@ -18,6 +18,7 @@ import EntityExplorationState from "../../redux/exploration/types/EntityExplorat
 import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
 import ExplorationService from "../../service/exploration/ExplorationService";
 import ExplorationServiceImpl from "../../service/exploration/ExplorationServiceImpl";
+import {getEntityByDomain} from "../../util/pureFunctions";
 
 /* btn isInputInvalid?'disabled':''*/
 
@@ -50,12 +51,7 @@ const ExplorationScreen = () => {
         let urlEntity: Entity|null = null;
 
         if (entityDomain) {
-            Object.entries(appConfig.entityDomains).forEach(([key, value])=>{
-                if (entityDomain===value) {
-                    urlEntity = Entity[key as Entity];
-                }
-            })
-
+            urlEntity = getEntityByDomain(entityDomain)
         }
 
         if (!urlEntity) {

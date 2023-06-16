@@ -4,22 +4,17 @@ import {Entity} from "../../model/Entity";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import {Permissions} from "../../redux/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
-import React, {ChangeEvent, useLayoutEffect, useMemo} from "react";
-import {useAppDispatch} from "../../redux/hooks";
-import {
-    CreationParamsReducible,
-    updateCreationParams
-} from "../../redux/creation/CreationCoreActions";
+import React, {ChangeEvent, useEffect, useMemo} from "react";
 import CreationInputSection from "./CreationInputSection";
 import {
-    createEntity,
-    getTableNameFromLocation
+    getEntityByDomain,
 } from "../../util/pureFunctions";
-import {useLocation} from "react-router";
+import {useLocation, useParams} from "react-router";
 import apiLinks, {routingLinks} from "../../config/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
 import {CreationModalModes} from "../../redux/creation/CreationModalModes";
+import appConfig from "../../config/appConfig";
 
 
 export type CreationModalSettings = {
@@ -35,16 +30,21 @@ const Creation = () => {
         navigate(event.currentTarget.value)
     }
 
-    const entity = useMemo<Entity|null>(()=>getTableNameFromLocation(location.pathname), [location])
+    const {entityDomain}: {entityDomain?: string} = useParams<{entityDomain: string}>();
 
-    useLayoutEffect(() => {
-        if (entity) {
-            dispatch(updateCreationParams({selectedEntity: entity}))
-        }
-        /* eslint-disable-next-line */ // -f | DON'T DISABLE. LOCATION IS LOCAL STATE AND RELATIVE ENTITY SHOULD BE UPDATED ONLY ON IT'S CHANGE(no lookup change)
+    const processedEntity: Entity|null = useMemo(()=>{
+        if (entityDomain) {
+            return getEntityByDomain(entityDomain);
+        } else return null;
     }, [location])
 
-    if (!entity) {
+    useEffect(() => {
+        if (!processedEntity) {
+            navigate(appConfig.applicationMappings.creation.default)
+        }
+    }, [location])
+
+    if (!processedEntity) {
         return null
     }
 
@@ -103,7 +103,7 @@ const Creation = () => {
                <div className="creation-page__create">
                        <div className="creation-page__create-select-wrapper">
                            <p style={{marginBottom: '10px'}}>Створити</p>
-                           <Form.Select className={"create__select"} value={routingLinks.create[entity]} onChange={handleSelectChange}>
+                           <Form.Select className={"create__select"} value={routingLinks.create[processedEntity]} onChange={handleSelectChange}>
                                <option value={routingLinks.create[Entity.PERSON]}>Фізичну особу</option>
                                <option value={routingLinks.create[Entity.JUR_PERSON]}>Юридичну особу</option>
                                <PrivateComponentWrapper requiredPermissions={[Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
@@ -113,7 +113,7 @@ const Creation = () => {
                        </div>
 
                    <Form className={"creation-input-group"}>
-                       <CreationInputSection table={entity!}/>
+                       <CreationInputSection entity={processedEntity}/>
 
                        <button onClick={event => {
                            event.preventDefault();
