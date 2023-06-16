@@ -1,18 +1,20 @@
 import store, {AppDispatch} from "../../redux/store";
 import CreationCoreActions, {
+    InitialJurPersonCreationParams,
+    InitialPersonCreationParams,
+    InitialUserCreationParams,
     JurPersonCreationParams,
-    PersonCreationParams, UserCreationParams
+    PersonCreationParams,
+    UserCreationParams
 } from "../../redux/creation/CreationCoreActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import CreationTypedAction from "../../redux/creation/CreationTypedActions";
 import EntityCreationState from "../../redux/creation/EntityCreationState";
 import {Entity} from "../../model/Entity";
-import JurPersonExplorationState from "../../redux/exploration/types/jurPerson/JurPersonExplorationState";
-import PersonExplorationState from "../../redux/exploration/types/human/person/PersonExplorationState";
-import UserExplorationState from "../../redux/exploration/types/human/user/UserExplorationState";
 import CreationTypedActions from "../../redux/creation/CreationTypedActions";
+import CreationStateManager from "./CreationStateManager";
 
-class CreationStateManagerImpl<P, S extends EntityCreationState<P>>  {
+class CreationStateManagerImpl<P, S extends EntityCreationState<P>> implements CreationStateManager<P,S> {
     private readonly dispatch: AppDispatch;
     private readonly getState: ()=>S;
     private readonly actions: CreationTypedAction;
@@ -45,12 +47,12 @@ class CreationStateManagerImpl<P, S extends EntityCreationState<P>>  {
         return new CreationStateManagerImpl<JurPersonCreationParams, EntityCreationState<JurPersonCreationParams>>(store.dispatch, getState, CreationTypedAction.jurPerson);
     }
 
-    static getPersonManager (providedStore: typeof store): CreationStateManagerImpl<PersonCreationParams, EntityCreationState<PersonCreationParams>> {
+    static getPersonManager (providedStore: typeof store = store): CreationStateManagerImpl<PersonCreationParams, EntityCreationState<PersonCreationParams>> {
         const getState = ()=>providedStore.getState().creation.person as EntityCreationState<PersonCreationParams>;
         return new CreationStateManagerImpl<PersonCreationParams, EntityCreationState<PersonCreationParams>>(store.dispatch, getState, CreationTypedActions.person);
     }
 
-    static getUserManager (providedStore: typeof store): CreationStateManagerImpl<UserCreationParams, EntityCreationState<UserCreationParams>> {
+    static getUserManager (providedStore: typeof store = store): CreationStateManagerImpl<UserCreationParams, EntityCreationState<UserCreationParams>> {
         const getState = ()=>providedStore.getState().creation.user as EntityCreationState<UserCreationParams>;
         return new CreationStateManagerImpl<UserCreationParams, EntityCreationState<UserCreationParams>>(store.dispatch, getState, CreationTypedActions.user);
     }
@@ -73,3 +75,5 @@ class CreationStateManagerImpl<P, S extends EntityCreationState<P>>  {
         }
     }
 }
+
+export default CreationStateManagerImpl;

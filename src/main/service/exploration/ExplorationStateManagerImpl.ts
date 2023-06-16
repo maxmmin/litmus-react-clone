@@ -15,7 +15,7 @@ import deepCopy from "../../util/deepCopy";
 /**
  * S - entityExplorationState
  * */
-class ExplorationStateManagerImpl<S extends EntityExplorationState<any, EntityExplorationParams>> implements ExplorationStateManager<S> {
+class ExplorationStateManagerImpl<S extends EntityExplorationState<unknown, EntityExplorationParams>> implements ExplorationStateManager<S> {
     private readonly dispatch: AppDispatch;
 
     private readonly actions: ExplorationTypedActions;

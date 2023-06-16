@@ -5,11 +5,6 @@ import {
 } from "../../../util/pureFunctions";
 import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import {
-    updatePassportData,
-    updatePersonCreationParams,
-    updatePersonSex
-} from "../../../redux/creation/CreationCoreActions";
 import InputDate from "../../common/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
 import CreationGeoModal from "../geo/CreationGeoModal";
@@ -20,6 +15,7 @@ import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 import PersonRelationships from "./PersonRelationships";
 import {Entity} from "../../../model/Entity";
+import CreationStateManagerImpl from "../../../service/creation/CreationStateManagerImpl";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -28,19 +24,17 @@ const CreatePerson = () => {
 
     const dispatch = useAppDispatch();
 
+    if (!creationPersonParams) {
+        throw new Error("createPersonDto was null but it shouldn't be")
+    }
+
     const {year, month, day} = creationPersonParams!.dateOfBirth;
 
     const passportData = creationPersonParams?.passportData;
 
     const relationships = creationPersonParams?.relationships;
 
-    if (!creationPersonParams) {
-        throw new Error("createPersonDto was null but it shouldn't be")
-    }
-
-    const setDate = (date: DateEntity) => {
-        dispatch(updatePersonCreationParams({dateOfBirth: date}))
-    }
+    const creationStateManager = CreationStateManagerImpl.getPersonManager();
 
     const closeModal = () => setModalSettings(null)
 
@@ -55,7 +49,7 @@ const CreatePerson = () => {
                     <input value={creationPersonParams.lastName} autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
                         onKeyDown={keyPressHandler}
                         onChange={e => {
-                            dispatch(updatePersonCreationParams({lastName: e.currentTarget.value}))
+                            creationStateManager.updateEntityCreationParams({lastName: e.currentTarget.value})
                             }
                         }
                     />
@@ -66,7 +60,7 @@ const CreatePerson = () => {
                 <input value={creationPersonParams.firstName} autoComplete={"new-password"} className={`firstName form-control`} type="text" placeholder="Введіть ім'я"
                     onKeyDown={keyPressHandler}
                        onChange={e => {
-                            dispatch(updatePersonCreationParams({firstName: e.currentTarget.value}))
+                           creationStateManager.updateEntityCreationParams({firstName: e.currentTarget.value})
                         }
                        }
                     />
@@ -77,7 +71,7 @@ const CreatePerson = () => {
                 <input value={creationPersonParams.middleName} autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
                     onKeyDown={keyPressHandler}
                        onChange={e => {
-                           dispatch(updatePersonCreationParams({middleName: e.currentTarget.value}))
+                           creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value})
                         }
                        }
                 />
@@ -88,7 +82,7 @@ const CreatePerson = () => {
 
                <div className="form-check">
                    <input className="form-check-input maleRadioBtn" type="radio" checked={creationPersonParams.sex===Sex.male} name="sex" onChange={()=>{
-                        dispatch(updatePersonSex(Sex.male))
+                       creationStateManager.updateEntityCreationParams({sex: Sex.male})
                    }}/>
                    <label className="form-check-label" htmlFor="maleRadioBtn">
                        Чоловіча
@@ -96,7 +90,7 @@ const CreatePerson = () => {
                </div>
                <div className="form-check">
                    <input className="form-check-input femaleRadioBtn" type="radio" checked={creationPersonParams.sex===Sex.female} name="sex" onChange={()=>{
-                       dispatch(updatePersonSex(Sex.female))
+                       creationStateManager.updateEntityCreationParams({sex: Sex.female})
                    }}/>
                    <label className="form-check-label" htmlFor="femaleRadioBtn">
                        Жіноча
@@ -109,7 +103,7 @@ const CreatePerson = () => {
                 <input value={passportData!.passportNumber} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
                        onKeyDown={keyPressHandler}
                        onChange={e => {
-                           dispatch(updatePassportData({passportNumber: e.currentTarget.value}))
+                           creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value})
                         }
                        }
                 />

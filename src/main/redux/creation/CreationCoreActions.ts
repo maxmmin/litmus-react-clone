@@ -21,7 +21,9 @@ enum RelationType {
 
 export default CreationCoreActions;
 
-export class PersonCreationParams implements Person {
+export interface PersonCreationParams extends Person {}
+
+export class InitialPersonCreationParams implements PersonCreationParams {
     dateOfBirth = {...new DateBuilder().build()};
     firstName = "";
     lastName = "";
@@ -32,7 +34,9 @@ export class PersonCreationParams implements Person {
     location = null;
 }
 
-export class UserCreationParams implements User {
+export interface UserCreationParams extends User {}
+
+export class InitialUserCreationParams implements UserCreationParams {
     email: string = "";
     firstName: string = "";
     lastName: string = "";
@@ -41,12 +45,13 @@ export class UserCreationParams implements User {
     role: RoleName = RoleName.USER;
 }
 
-export class JurPersonCreationParams implements JurPerson {
+export interface JurPersonCreationParams extends JurPerson {}
+
+export class InitialJurPersonCreationParams implements JurPersonCreationParams {
     benOwner: Person | null = null;
     dateOfRegistration: DateEntity = {...new DateBuilder().build()};
     edrpou: string = "";
     name: string = "";
     owner: Person | null = null;
     location: Location | null = null;
-
 }

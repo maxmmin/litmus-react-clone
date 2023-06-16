@@ -1,8 +1,8 @@
 import {Reducer} from "react";
 import CreationCoreActions, {
-    JurPersonCreationParams,
-    PersonCreationParams,
-    UserCreationParams
+    InitialJurPersonCreationParams,
+    InitialPersonCreationParams,
+    InitialUserCreationParams
 } from "./CreationCoreActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import CreationTypedActions from "./CreationTypedActions";
@@ -103,10 +103,10 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
     }
 }
 
-const initialPersonCreationParams = new PersonCreationParams()
-const initialPersonCreationState: EntityCreationState<PersonCreationParams> = deepCopy( new BasicEntityCreationState(initialPersonCreationParams));
+const initialPersonCreationParams = new InitialPersonCreationParams()
+const initialPersonCreationState: EntityCreationState<InitialPersonCreationParams> = deepCopy( new BasicEntityCreationState(initialPersonCreationParams));
 
-const personCreationStateReducer: Reducer<EntityCreationState<PersonCreationParams>|undefined, PayloadAction<PersonCreationParams>> = (prevState=initialPersonCreationState, action) => {
+const personCreationStateReducer: Reducer<EntityCreationState<InitialPersonCreationParams>|undefined, PayloadAction<InitialPersonCreationParams>> = (prevState=initialPersonCreationState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
         // code-place for jur person specific actions
@@ -122,10 +122,10 @@ const personCreationStateReducer: Reducer<EntityCreationState<PersonCreationPara
         }
     }
 }
-const initialJurPersonCreationParams = new JurPersonCreationParams()
-const initialJurPersonState: EntityCreationState<JurPersonCreationParams> = deepCopy(new BasicEntityCreationState(initialJurPersonCreationParams))
+const initialJurPersonCreationParams = new InitialJurPersonCreationParams()
+const initialJurPersonState: EntityCreationState<InitialJurPersonCreationParams> = deepCopy(new BasicEntityCreationState(initialJurPersonCreationParams))
 
-const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPersonCreationParams>|undefined, PayloadAction<PersonCreationParams>> = (prevState=initialJurPersonState, action) => {
+const jurPersonCreationStateReducer: Reducer<EntityCreationState<InitialJurPersonCreationParams>|undefined, PayloadAction<InitialPersonCreationParams>> = (prevState=initialJurPersonState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
         // code-place for jur person specific actions
@@ -142,10 +142,10 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPersonCreati
     }
 }
 
-const initialUserCreationParams = new UserCreationParams()
-const initialUserCreationState: EntityCreationState<UserCreationParams> = deepCopy(new BasicEntityCreationState(initialUserCreationParams));
+const initialUserCreationParams = new InitialUserCreationParams()
+const initialUserCreationState: EntityCreationState<InitialUserCreationParams> = deepCopy(new BasicEntityCreationState(initialUserCreationParams));
 
-const userCreationStateReducer: Reducer<EntityCreationState<UserCreationParams>|undefined, PayloadAction<PersonCreationParams>> = (prevState=initialUserCreationState, action) => {
+const userCreationStateReducer: Reducer<EntityCreationState<InitialUserCreationParams>|undefined, PayloadAction<InitialPersonCreationParams>> = (prevState=initialUserCreationState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
         default: {
