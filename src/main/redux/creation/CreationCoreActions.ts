@@ -4,7 +4,6 @@ import Person from "../../model/human/person/Person";
 import User from "../../model/human/user/User";
 import {RoleName} from "../userIdentity/Role";
 import DateEntity, {DateBuilder} from "../../model/DateEntity";
-import {EntityCreationState} from "./EntityCreationState";
 
 enum CreationCoreActions {
     SET_ENTITY_CREATION_PARAMS="SET_ENTITY_CREATION_PARAMS",
@@ -21,8 +20,6 @@ enum RelationType {
 }
 
 export default CreationCoreActions;
-
-export type EntityCreationStateReducible<E> = EntityCreationState<E>|undefined
 
 export class PersonCreationParams implements Person {
     dateOfBirth = {...new DateBuilder().build()};

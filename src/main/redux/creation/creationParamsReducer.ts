@@ -1,6 +1,5 @@
 import {Reducer} from "react";
 import CreationCoreActions, {
-    EntityCreationStateReducible,
     JurPersonCreationParams,
     PersonCreationParams,
     UserCreationParams
@@ -10,10 +9,10 @@ import CreationTypedActions from "./CreationTypedActions";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import {combineReducers} from "redux";
 import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
-import User from "../../model/human/user/User";
+import deepCopy from "../../util/deepCopy";
 
 
-const entityCreationReducer = <S extends EntityCreationState> (prevState: S, action: PayloadAction<unknown, string>): S => {
+const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
     switch (action.type) {
 
         case CreationCoreActions.UPDATE_ENTITY_CREATION_PARAMS: {
@@ -104,10 +103,10 @@ const entityCreationReducer = <S extends EntityCreationState> (prevState: S, act
     }
 }
 
-const initialPersonCreationParams = {...new PersonCreationParams()}
-const initialPersonCreationState: EntityCreationState<PersonCreationParams> = new BasicEntityCreationState(initialPersonCreationParams);
+const initialPersonCreationParams = new PersonCreationParams()
+const initialPersonCreationState: EntityCreationState<PersonCreationParams> = deepCopy( new BasicEntityCreationState(initialPersonCreationParams));
 
-const personCreationStateReducer: Reducer<EntityCreationStateReducible<PersonCreationParams>, PayloadAction<PersonCreationParams>> = (prevState=initialPersonCreationState, action) => {
+const personCreationStateReducer: Reducer<EntityCreationState<PersonCreationParams>|undefined, PayloadAction<PersonCreationParams>> = (prevState=initialPersonCreationState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
         // code-place for jur person specific actions
@@ -123,10 +122,10 @@ const personCreationStateReducer: Reducer<EntityCreationStateReducible<PersonCre
         }
     }
 }
-const initialJurPersonCreationParams = {...new JurPersonCreationParams()}
-const initialJurPersonState: EntityCreationState<JurPersonCreationParams> = new BasicEntityCreationState(initialJurPersonCreationParams)
+const initialJurPersonCreationParams = new JurPersonCreationParams()
+const initialJurPersonState: EntityCreationState<JurPersonCreationParams> = deepCopy(new BasicEntityCreationState(initialJurPersonCreationParams))
 
-const jurPersonCreationStateReducer: Reducer<EntityCreationStateReducible<JurPersonCreationParams>, PayloadAction<PersonCreationParams>> = (prevState=initialJurPersonState, action) => {
+const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPersonCreationParams>|undefined, PayloadAction<PersonCreationParams>> = (prevState=initialJurPersonState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
         // code-place for jur person specific actions
@@ -145,13 +144,12 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationStateReducible<JurPer
 
 export type UserCreationParamsReducible = UserCreationParams|undefined;
 
-const initialUserCreationParams = {...new UserCreationParams()}
-const initialUserCreationState: EntityCreationState<UserCreationParams> = new BasicEntityCreationState(initialUserCreationParams);
+const initialUserCreationParams = new UserCreationParams()
+const initialUserCreationState: EntityCreationState<UserCreationParams> = deepCopy(new BasicEntityCreationState(initialUserCreationParams));
 
-const userCreationStateReducer: Reducer<UserCreationParamsReducible, PayloadAction<PersonCreationParams>> = (prevState=initialUserCreationParams, action) => {
+const userCreationStateReducer: Reducer<EntityCreationState<UserCreationParams>|undefined, PayloadAction<PersonCreationParams>> = (prevState=initialUserCreationState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
-
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.userDomain) {
