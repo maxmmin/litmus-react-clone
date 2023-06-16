@@ -1,11 +1,10 @@
-import {PayloadAction} from "@reduxjs/toolkit";
 import {Location} from "../../model/Location";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import Person, {Relationship} from "../../model/human/person/Person";
+import Person from "../../model/human/person/Person";
 import User from "../../model/human/user/User";
 import {RoleName} from "../userIdentity/Role";
 import DateEntity, {DateBuilder} from "../../model/DateEntity";
-import {Entity} from "../../model/Entity";
+import {EntityCreationState} from "./EntityCreationState";
 
 enum CreationCoreActions {
     SET_ENTITY_CREATION_PARAMS="SET_ENTITY_CREATION_PARAMS",
@@ -22,6 +21,8 @@ enum RelationType {
 }
 
 export default CreationCoreActions;
+
+export type EntityCreationStateReducible<E> = EntityCreationState<E>|undefined
 
 export class PersonCreationParams implements Person {
     dateOfBirth = {...new DateBuilder().build()};
@@ -51,12 +52,4 @@ export class JurPersonCreationParams implements JurPerson {
     owner: Person | null = null;
     location: Location | null = null;
 
-}
-
-export type CreationParams = {
-    selectedEntity: Entity,
-    personCreationData: Person,
-    jurPersonCreationData: JurPerson,
-    userCreationData: User,
-    pending: boolean
 }

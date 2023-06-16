@@ -3,9 +3,9 @@ import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import AuthActions, {clearAuthentication} from "../../redux/auth/AuthActions";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 import LoginPageDataActions, {LoginPageState} from "../../redux/login/LoginPageDataActions";
-import deepCopy from "../../util/pureFunctions";
 import store from "../../redux/store";
 import {Action} from "redux";
+import deepCopy from "../../util/deepCopy";
 
 class AuthenticationStateManager {
     private readonly _store: typeof store = store;

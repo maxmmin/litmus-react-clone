@@ -3,7 +3,7 @@ import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import AuthService, {Credentials} from "./AuthService";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import Authentication, {AuthenticationReducible} from "../../redux/auth/Authentication";
-import deepCopy, {checkNotEmpty, isValid} from "../../util/pureFunctions";
+import {checkNotEmpty, isValid} from "../../util/pureFunctions";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import TimersStateManager from "../timers/TimersStateManager";
 import BasicAuthService from "./BasicAuthService";
@@ -12,6 +12,7 @@ import AuthenticationStateManager from "./AuthenticationStateManager";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import AuthActions from "../../redux/auth/AuthActions";
 import {BasicNotificationManager, NotificationManager} from "../../redux/applicationState/Notification";
+import deepCopy from "../../util/deepCopy";
 
 class BasicAuthenticationManager implements AuthenticationManager {
     private readonly authenticationStateManager: AuthenticationStateManager;

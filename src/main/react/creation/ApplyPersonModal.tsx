@@ -47,7 +47,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             const state = store.getState() as RootState;
             switch (modalSettings?.mode) {
                 case CreationModalModes.SET_OWNER: {
-                    const owner = state.creationParams?.jurPersonCreationData.owner;
+                    const owner = state.creationParams?.jurPerson.owner;
                     if (owner) {
                         setPerson(owner)
                     }

@@ -11,7 +11,6 @@ import User from "../model/human/user/User";
 import Person from "../model/human/person/Person";
 import person from "../model/human/person/Person";
 import {JurPerson} from "../model/jurPerson/JurPerson";
-import {CreateJurPersonDto, CreatePersonDto, CreateUserDto} from "../redux/creation/CreationCoreActions";
 import {DateBuilder} from "../model/DateEntity";
 import {Action} from "redux";
 
@@ -22,16 +21,16 @@ function checkAuthorization (neededRights: Permissions[], userRights: Permission
 }
 
 
-export const createEntity = (url: string, entity: CreateUserDto | CreatePersonDto | CreateJurPersonDto, accessToken: string): Promise<Response> => {
-    return fetch(url, {
-        headers: {
-            ...createAuthHeader(accessToken),
-            "content-type": "application/json"
-        },
-        method: 'POST',
-        body: JSON.stringify(entity)
-    })
-}
+// export const createEntity = (url: string, entity: CreateUserDto | CreatePersonDto | CreateJurPersonDto, accessToken: string): Promise<Response> => {
+//     return fetch(url, {
+//         headers: {
+//             ...createAuthHeader(accessToken),
+//             "content-type": "application/json"
+//         },
+//         method: 'POST',
+//         body: JSON.stringify(entity)
+//     })
+// }
 function logOut(dispatch: AppDispatch) {
     dispatch(clearAuthentication())
 }

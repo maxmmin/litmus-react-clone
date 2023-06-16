@@ -1,5 +1,6 @@
 import {Reducer} from "react";
 import CreationCoreActions, {
+    EntityCreationStateReducible,
     JurPersonCreationParams,
     PersonCreationParams,
     UserCreationParams
@@ -8,9 +9,11 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import CreationTypedActions from "./CreationTypedActions";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import {combineReducers} from "redux";
+import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
+import User from "../../model/human/user/User";
 
 
-const entityCreationReducer = <S> (prevState: S, action: PayloadAction<unknown, string>): S => {
+const entityCreationReducer = <S extends EntityCreationState> (prevState: S, action: PayloadAction<unknown, string>): S => {
     switch (action.type) {
 
         case CreationCoreActions.UPDATE_ENTITY_CREATION_PARAMS: {
@@ -101,11 +104,10 @@ const entityCreationReducer = <S> (prevState: S, action: PayloadAction<unknown, 
     }
 }
 
-export type PersonCreationParamsReducible = PersonCreationParams|undefined;
-
 const initialPersonCreationParams = {...new PersonCreationParams()}
+const initialPersonCreationState: EntityCreationState<PersonCreationParams> = new BasicEntityCreationState(initialPersonCreationParams);
 
-const personCreationParamsReducer: Reducer<PersonCreationParamsReducible, PayloadAction<PersonCreationParams>> = (prevState=initialPersonCreationParams, action) => {
+const personCreationStateReducer: Reducer<EntityCreationStateReducible<PersonCreationParams>, PayloadAction<PersonCreationParams>> = (prevState=initialPersonCreationState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
         // code-place for jur person specific actions
@@ -121,12 +123,10 @@ const personCreationParamsReducer: Reducer<PersonCreationParamsReducible, Payloa
         }
     }
 }
-
-export type JurPersonCreationParamsReducible = JurPersonCreationParams|undefined;
-
 const initialJurPersonCreationParams = {...new JurPersonCreationParams()}
+const initialJurPersonState: EntityCreationState<JurPersonCreationParams> = new BasicEntityCreationState(initialJurPersonCreationParams)
 
-const jurPersonCreationParamsReducer: Reducer<JurPersonCreationParamsReducible, PayloadAction<PersonCreationParams>> = (prevState=initialJurPersonCreationParams, action) => {
+const jurPersonCreationStateReducer: Reducer<EntityCreationStateReducible<JurPersonCreationParams>, PayloadAction<PersonCreationParams>> = (prevState=initialJurPersonState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
         // code-place for jur person specific actions
@@ -146,8 +146,9 @@ const jurPersonCreationParamsReducer: Reducer<JurPersonCreationParamsReducible, 
 export type UserCreationParamsReducible = UserCreationParams|undefined;
 
 const initialUserCreationParams = {...new UserCreationParams()}
+const initialUserCreationState: EntityCreationState<UserCreationParams> = new BasicEntityCreationState(initialUserCreationParams);
 
-const userCreationParamsReducer: Reducer<UserCreationParamsReducible, PayloadAction<PersonCreationParams>> = (prevState=initialUserCreationParams, action) => {
+const userCreationStateReducer: Reducer<UserCreationParamsReducible, PayloadAction<PersonCreationParams>> = (prevState=initialUserCreationParams, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
 
@@ -163,10 +164,10 @@ const userCreationParamsReducer: Reducer<UserCreationParamsReducible, PayloadAct
     }
 }
 
-const creationParamsReducer = combineReducers({
-    user: userCreationParamsReducer,
-    person: personCreationParamsReducer,
-    jurPerson: jurPersonCreationParamsReducer
+const CreationStateReducer = combineReducers({
+    user: userCreationStateReducer,
+    person: personCreationStateReducer,
+    jurPerson: jurPersonCreationStateReducer
 })
 
-export default creationParamsReducer;
+export default CreationStateReducer;
