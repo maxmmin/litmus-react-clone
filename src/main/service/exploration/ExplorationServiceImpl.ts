@@ -1,5 +1,5 @@
 import ExplorationService from "./ExplorationService";
-import ExplorationStateManager from "./ExplorationStateManager";
+import ExplorationStateManagerImpl from "./ExplorationStateManagerImpl";
 import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import PersonLookupServiceImpl from "./lookup/human/person/PersonLookupServiceImpl";
 import JurPersonLookupServiceImpl from "./lookup/jurPerson/JurPersonLookupServiceImpl";
@@ -178,14 +178,14 @@ class ExplorationServiceImpl implements ExplorationService {
     }
 
     async explore(entity: Entity): Promise<void> {
-        let stateManager: ExplorationStateManager<EntityExplorationState<any, EntityExplorationParams>>;
+        let stateManager: ExplorationStateManagerImpl<EntityExplorationState<any, EntityExplorationParams>>;
 
         let asyncThunk: AsyncThunkAction<EntityExplorationData<any, any>, any, any>;
 
 
         switch (entity) {
             case Entity.PERSON: {
-                const personManager = ExplorationStateManager.getPersonManager(this._store);
+                const personManager = ExplorationStateManagerImpl.getPersonManager(this._store);
                 stateManager = personManager;
 
                 const service = new PersonLookupServiceImpl(this.getAccessToken.bind(this));
@@ -194,7 +194,7 @@ class ExplorationServiceImpl implements ExplorationService {
                 break;
             }
             case Entity.JUR_PERSON: {
-                const jurPersonManager = ExplorationStateManager.getJurPersonManager(this._store);
+                const jurPersonManager = ExplorationStateManagerImpl.getJurPersonManager(this._store);
                 stateManager = jurPersonManager;
 
                 const service = new JurPersonLookupServiceImpl(this.getAccessToken.bind(this));
@@ -204,7 +204,7 @@ class ExplorationServiceImpl implements ExplorationService {
                 break;
             }
             case Entity.USER: {
-                const userManager = ExplorationStateManager.getUserManager(this._store);
+                const userManager = ExplorationStateManagerImpl.getUserManager(this._store);
                 stateManager = userManager;
 
                 const service = new UserLookupServiceImpl(this.getAccessToken.bind(this));

@@ -2,7 +2,7 @@ import Form from "react-bootstrap/Form";
 import React, {useMemo} from "react";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
-import ExplorationStateManager from "../../../service/exploration/ExplorationStateManager";
+import ExplorationStateManagerImpl from "../../../service/exploration/ExplorationStateManagerImpl";
 import store from "../../../redux/store";
 import EntityExplorationState from "../../../redux/exploration/types/EntityExplorationState";
 import HumanExplorationParams from "../../../redux/exploration/types/human/HumanExplorationParams";
@@ -14,14 +14,14 @@ const FindByFullNameGroup = () => {
 
     const exploredEntity = useAppSelector(state => state.exploration.exploredEntity);
 
-    const stateManager: ExplorationStateManager<EntityExplorationState<Human, HumanExplorationParams>>|undefined = useMemo(()=>{
+    const stateManager: ExplorationStateManagerImpl<EntityExplorationState<Human, HumanExplorationParams>>|undefined = useMemo(()=>{
         if (exploredEntity) {
             switch (exploredEntity) {
                 case Entity.USER: {
-                    return ExplorationStateManager.getUserManager(store);
+                    return ExplorationStateManagerImpl.getUserManager(store);
                 }
                 case Entity.PERSON: {
-                    return ExplorationStateManager.getPersonManager(store);
+                    return ExplorationStateManagerImpl.getPersonManager(store);
                 }
                 default: throw new Error("unsupported entity")
             }

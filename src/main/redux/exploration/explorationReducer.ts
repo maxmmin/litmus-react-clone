@@ -12,8 +12,8 @@ import UserExplorationParams from "./types/human/user/UserExplorationParams";
 import {Entity} from "../../model/Entity";
 import EntityExplorationParams from "./types/EntityExplorationParams";
 import ExplorationMode from "./types/ExplorationMode";
-import deepCopy from "../../util/pureFunctions";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
+import deepCopy from "../../util/deepCopy";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<unknown, string>): S => {
     switch (action.type) {
@@ -42,6 +42,11 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, EntityEx
         case ExplorationCoreAction.SET_EXPLORATION_PARAMS: {
             let params = action.payload as S["params"];
             return {...prevState, params};
+        }
+
+        case ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS: {
+            let params = action.payload as Partial<S["params"]>
+            return {...prevState, params: {...prevState.params, ...params}}
         }
 
         case ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING: {

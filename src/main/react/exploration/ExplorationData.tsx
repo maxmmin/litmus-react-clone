@@ -4,7 +4,7 @@ import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import UserInfoTable from "./EntityTables/UserInfoTable";
 import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../util/pureFunctions";
-import ExplorationStateManager from "../../service/exploration/ExplorationStateManager";
+import ExplorationStateManagerImpl from "../../service/exploration/ExplorationStateManagerImpl";
 import store from "../../redux/store";
 import PagedData, {isUnPaged} from "../../util/apiRequest/PagedData";
 import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
@@ -46,7 +46,7 @@ type Props = {
 
 const ExplorationData = ({exploredEntity, state}: Props) => {
 
-    const manager = ExplorationStateManager.getEntityManager(exploredEntity);
+    const manager = ExplorationStateManagerImpl.getEntityManager(exploredEntity);
 
     const entity = manager.entity;
 

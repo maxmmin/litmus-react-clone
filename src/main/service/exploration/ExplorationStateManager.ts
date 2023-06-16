@@ -1,141 +1,30 @@
-import store, {AppDispatch} from "../../redux/store";
-import {ExplorationCoreAction, ExplorationTypedActions} from "../../redux/exploration/ExplorationActions";
-import {setExploredEntityAction} from "../../redux/exploration/explorationReducer";
-import JurPersonExplorationState from "../../redux/exploration/types/jurPerson/JurPersonExplorationState";
-import PersonExplorationState from "../../redux/exploration/types/human/person/PersonExplorationState";
-import UserExplorationState from "../../redux/exploration/types/human/user/UserExplorationState";
 import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
 import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
-import {Entity} from "../../model/Entity";
-import ExplorationMode from "../../redux/exploration/types/ExplorationMode";
-import deepCopy from "../../util/pureFunctions";
+import {ExplorationCoreAction} from "../../redux/exploration/ExplorationActions";
 import {AsyncThunkAction} from "@reduxjs/toolkit";
+import ExplorationMode from "../../redux/exploration/types/ExplorationMode";
 
-/**
- * S - entityExplorationState
- * */
-class ExplorationStateManager <S extends EntityExplorationState<any, EntityExplorationParams>> {
-    private readonly dispatch;
+export default interface ExplorationStateManager <S extends EntityExplorationState<any, EntityExplorationParams>> {
+    getExplorationState: ()=>S;
 
-    private readonly actions: ExplorationTypedActions;
+    getExplorationData (): S["data"];
 
-    public readonly entity: Entity;
+    getExplorationParams(): S["params"];
 
-    static switchEntity (entity: Entity, dispatch: AppDispatch) {
-        dispatch({
-            type: setExploredEntityAction,
-            payload: entity
-        })
-    }
+    setState (state: S): void;
 
-    public getExplorationState: ()=>S;
+    updateParams (params: Partial<S['params']>): void;
 
-    public getExplorationData (): S["data"] {
-        return this.getExplorationState().data;
-    }
+    setParams (params: S['params']): void;
 
-    public getExplorationParams(): S["params"] {
-        return this.getExplorationState().params;
-    }
+    setData (data: S['data']): void;
 
-    private constructor(entity: Entity, dispatch: AppDispatch, getState: ()=>S, actions: ExplorationTypedActions) {
-        this.entity = entity;
-        this.dispatch = dispatch;
-        this.getExplorationState = getState;
-        this.actions = actions;
-    }
+    //@todo maybe make return promise of thunk dispatch
+    retrieveData(thunk: AsyncThunkAction<S["data"], any, any>): void
 
-    static getJurPersonManager (providedStore: typeof store): ExplorationStateManager<JurPersonExplorationState> {
-        const getState = ()=>providedStore.getState().exploration.jurPerson as JurPersonExplorationState
-        return new ExplorationStateManager<JurPersonExplorationState>(Entity.JUR_PERSON, providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
-    }
+    enableSectionPending (): void;
 
-    static getPersonManager (providedStore: typeof store): ExplorationStateManager<PersonExplorationState> {
-        const getState = ()=>providedStore.getState().exploration.person as PersonExplorationState;
-        return new ExplorationStateManager<PersonExplorationState>(Entity.PERSON, providedStore.dispatch,getState, ExplorationTypedActions.person);
-    }
+    disableSectionPending (): void;
 
-    static getUserManager (providedStore: typeof store): ExplorationStateManager<UserExplorationState> {
-        const getState = ()=>providedStore.getState().exploration.user as UserExplorationState;
-        return new ExplorationStateManager<UserExplorationState>(Entity.USER, providedStore.dispatch,getState, ExplorationTypedActions.user);
-    }
-
-    static getEntityManager(entity: Entity, providedStore: typeof store = store): ExplorationStateManager<EntityExplorationState<any, EntityExplorationParams>> {
-        switch (entity) {
-            case Entity.PERSON: {
-                return ExplorationStateManager.getPersonManager(store);
-            }
-
-            case Entity.JUR_PERSON: {
-                return ExplorationStateManager.getJurPersonManager(store);
-            }
-
-            case Entity.USER: {
-                return ExplorationStateManager.getUserManager(store);
-            }
-
-            default: throw new Error("unsupported entity");
-        }
-    }
-
-    setState (state: S): void {
-        this.dispatch({
-            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE],
-            payload: deepCopy(state)
-        })
-    }
-
-    setParams (params: S['params']): void {
-        this.dispatch({
-            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_PARAMS],
-            payload: deepCopy(params)
-        })
-    }
-
-    setData (data: S['data']): void {
-        this.dispatch({
-            type: this.actions[ExplorationCoreAction.RETRIEVE_DATA],
-            payload: deepCopy(data)
-        })
-    }
-
-    retrieveData(thunk: AsyncThunkAction<S["data"], any, any>) {
-        this.dispatch(thunk)
-    }
-
-    enableSectionPending (): void {
-        this.dispatch({
-            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING],
-            payload: true
-        })
-    }
-
-    disableSectionPending (): void {
-        this.dispatch({
-            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING],
-            payload: false
-        })
-    }
-
-    switchExplorationMode(mode: ExplorationMode): void {
-        this.checkSupport(mode);
-
-        this.dispatch({
-            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_PARAMS_MODE],
-            payload: deepCopy(mode)
-        })
-    }
-
-    checkSupport(mode: ExplorationMode) {
-        if (!this.supports(mode)) {
-            throw new Error("mode is not supported");
-        }
-    }
-
-    supports (mode: ExplorationMode) {
-        return this.getExplorationParams().supportedModesIdList.includes(mode.id);
-    }
-
+    switchExplorationMode(mode: ExplorationMode): void;
 }
-
-export default ExplorationStateManager;

@@ -11,7 +11,7 @@ import {useNavigate} from "react-router-dom";
 import appConfig from "../../config/appConfig";
 import {useLocation, useParams} from "react-router";
 import ExplorationInputForm from "./ExplorationInputForm";
-import ExplorationStateManager from "../../service/exploration/ExplorationStateManager";
+import ExplorationStateManagerImpl from "../../service/exploration/ExplorationStateManagerImpl";
 import store from "../../redux/store";
 import ExplorationData from "./ExplorationData";
 import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
@@ -31,7 +31,7 @@ import {getEntityByDomain} from "../../util/pureFunctions";
 // }
 
 
-function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplorationParams>> (explorationService: ExplorationService, stateManager: ExplorationStateManager<S>) {
+function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplorationParams>> (explorationService: ExplorationService, stateManager: ExplorationStateManagerImpl<S>) {
     const entity = stateManager.entity;
     return (e: React.MouseEvent<HTMLButtonElement>) => {
        explorationService.explore(entity);
@@ -59,7 +59,7 @@ const ExplorationScreen = () => {
                 navigate(appConfig.applicationMappings.exploration[exploredEntity])
             } else navigate(appConfig.applicationMappings.exploration.default);
         } else if (urlEntity!==exploredEntity) {
-            ExplorationStateManager.switchEntity(urlEntity, store.dispatch);
+            ExplorationStateManagerImpl.switchEntity(urlEntity, store.dispatch);
         }
     }, [location])
 
@@ -103,7 +103,7 @@ const ExplorationScreen = () => {
        return null;
     }
 
-    const explorationStateManager = ExplorationStateManager.getEntityManager(exploredEntity);
+    const explorationStateManager = ExplorationStateManagerImpl.getEntityManager(exploredEntity);
 
     const explorationService = new ExplorationServiceImpl(store,true);
 

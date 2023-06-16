@@ -1,15 +1,12 @@
 export default interface EntityCreationState<E> {
-    params: E,
-    isPending: boolean
+    params: E
 }
 
 export class BasicEntityCreationState<E> implements EntityCreationState<E> {
-    isPending: boolean;
     params: E;
 
 
-    constructor(params: E, isPending: boolean = false) {
-        this.isPending = isPending;
+    constructor(params: E) {
         this.params = params;
     }
 }

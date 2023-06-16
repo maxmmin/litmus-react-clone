@@ -3,6 +3,7 @@ import TypedActionsUtil from "../../util/TypedActionsUtil";
 export enum ExplorationCoreAction{
     SET_EXPLORATION_STATE="SET_EXPLORATION_STATE",
     SET_EXPLORATION_PARAMS="SET_EXPLORATION_PARAMS",
+    UPDATE_EXPLORATION_PARAMS="UPDATE_EXPLORATION_PARAMS",
     RETRIEVE_DATA="RETRIEVE_DATA",
     SET_EXPLORATION_DATA="SET_EXPLORATION_DATA",
     SET_EXPLORATION_PARAMS_MODE="SET_EXPLORATION_PARAMS_MODE",
@@ -30,6 +31,8 @@ export class ExplorationTypedActions {
 
     public readonly [ExplorationCoreAction.RETRIEVE_DATA]: string;
 
+    public readonly [ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS]: string;
+
     public readonly [ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING]: string;
 
     public readonly [ExplorationCoreAction.SET_EXPLORATION_DATA_RESULTS]: string;
@@ -52,6 +55,9 @@ export class ExplorationTypedActions {
 
         const UPDATE_DATA_RESULTS_CORE = ExplorationCoreAction.SET_EXPLORATION_DATA_RESULTS;
         this[UPDATE_DATA_RESULTS_CORE] = TypedActionsUtil.getTypedAction(UPDATE_DATA_RESULTS_CORE, domain)
+
+        const UPDATE_EXPLORATION_PARAMS = ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS;
+        this[UPDATE_EXPLORATION_PARAMS] = TypedActionsUtil.getTypedAction(UPDATE_EXPLORATION_PARAMS, domain);
     }
 
 }

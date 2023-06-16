@@ -3,12 +3,12 @@ import {Entity} from "../../model/Entity";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useMemo} from "react";
 import {useAppSelector} from "../../redux/hooks";
-import ExplorationStateManager from "../../service/exploration/ExplorationStateManager";
+import ExplorationStateManagerImpl from "../../service/exploration/ExplorationStateManagerImpl";
 import store from "../../redux/store";
 import PersonExplorationState from "../../redux/exploration/types/human/person/PersonExplorationState";
 import JurPersonExplorationState from "../../redux/exploration/types/jurPerson/JurPersonExplorationState";
 import UserExplorationState from "../../redux/exploration/types/human/user/UserExplorationState";
-import explorationStateManager from "../../service/exploration/ExplorationStateManager";
+import explorationStateManager from "../../service/exploration/ExplorationStateManagerImpl";
 import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
 import ExplorationMode from "../../redux/exploration/types/ExplorationMode";
 
@@ -36,7 +36,7 @@ const ExplorationModesView = () => {
         }
     })
 
-    const explorationManager = useMemo<ExplorationStateManager<EntityExplorationState<any, any>>|undefined>(()=>{
+    const explorationManager = useMemo<ExplorationStateManagerImpl<EntityExplorationState<any, any>>|undefined>(()=>{
        if (exploredEntity) {
            return explorationStateManager.getEntityManager(exploredEntity)
        }

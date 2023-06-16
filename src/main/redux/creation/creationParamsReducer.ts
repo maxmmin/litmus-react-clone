@@ -142,8 +142,6 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPersonCreati
     }
 }
 
-export type UserCreationParamsReducible = UserCreationParams|undefined;
-
 const initialUserCreationParams = new UserCreationParams()
 const initialUserCreationState: EntityCreationState<UserCreationParams> = deepCopy(new BasicEntityCreationState(initialUserCreationParams));
 
