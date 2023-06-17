@@ -2,7 +2,7 @@ import EntityExplorationParams from "./EntityExplorationParams";
 import EntityExplorationData from "./EntityExplorationData";
 
 /**
- * E - lookup type
+ * E - api type
  * P - params type
  */
 export default interface EntityExplorationState <E,P extends EntityExplorationParams> {

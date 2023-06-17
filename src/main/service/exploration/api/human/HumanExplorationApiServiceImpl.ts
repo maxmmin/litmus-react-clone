@@ -1,7 +1,7 @@
-import HumanLookupService from "./HumanLookupService";
+import HumanExplorationApiService from "./HumanExplorationApiService";
 import PagedData from "../../../../util/apiRequest/PagedData";
 import {FullName} from "../../FullName";
-import BasicEntityLookupService from "../BasicLookupService";
+import BasicEntityLookupService from "../BasicExplorationApiService";
 import appConfig from "../../../../config/appConfig";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
@@ -10,7 +10,7 @@ import {Human} from "../../../../model/human/Human";
 import ErrorResponse from "../../../../util/apiRequest/ErrorResponse";
 import {BasicHttpError} from "../../../../util/apiRequest/BasicHttpError";
 
-export default class HumanLookupServiceImpl<E extends Human> extends BasicEntityLookupService<E> implements HumanLookupService<E> {
+export default class HumanExplorationApiServiceImpl<E extends Human> extends BasicEntityLookupService<E> implements HumanExplorationApiService<E> {
 
     constructor(apiMapping: string = appConfig.serverMappings.users, getToken: () => string) {
         super(apiMapping, getToken);

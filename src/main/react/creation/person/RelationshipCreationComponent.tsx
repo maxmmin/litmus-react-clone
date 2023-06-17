@@ -3,13 +3,16 @@ import {FloatingLabel, Form} from "react-bootstrap";
 import React from "react";
 import {CrossIcon} from "../../../util/icons";
 import {useAppDispatch} from "../../../redux/hooks";
-import {removeRelationship, updateRelationship} from "../../../redux/creation/CreationCoreActions";
+import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
+import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 
 type Props = {
     relationship: Relationship
 }
 
 const RelationshipCreationComponent = ({relationship}: Props) => {
+    const personCreationStateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager();
+
     const personTo = relationship.person;
 
     const dispatch = useAppDispatch();
@@ -21,7 +24,7 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
         } catch (e) {
             relShip.relationType = null;
         }
-        dispatch(updateRelationship(relShip));
+       personCreationStateManager.updateRelationship(relShip)
     }
 
     const relType = relationship.relationType?relationship.relationType:undefined;

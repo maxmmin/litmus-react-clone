@@ -2,7 +2,7 @@
  * E - entity
  * creation which provides shared methods
  */
-import LookupService from "./LookupService";
+import LookupService from "./ExplorationApiService";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";

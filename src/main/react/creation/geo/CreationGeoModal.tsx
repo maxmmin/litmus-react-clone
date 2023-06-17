@@ -77,7 +77,7 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
         if (show) {
             setLocation(geoLocation!)
         }
-        /* eslint-disable-next-line */ // -f // set location of lookup on modal open
+        /* eslint-disable-next-line */ // -f // set location of api on modal open
     }, [show])
 
 

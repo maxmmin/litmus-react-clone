@@ -1,19 +1,17 @@
 import ExplorationService from "./ExplorationService";
 import ExplorationStateManagerImpl from "./stateManager/ExplorationStateManagerImpl";
 import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
-import PersonLookupServiceImpl from "./lookup/human/person/PersonLookupServiceImpl";
-import JurPersonLookupServiceImpl from "./lookup/jurPerson/JurPersonLookupServiceImpl";
-import UserLookupServiceImpl from "./lookup/human/user/UserLookupServiceImpl";
+import PersonLookupServiceImpl from "./api/human/person/PersonLookupServiceImpl";
+import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
+import UserLookupServiceImpl from "./api/human/user/UserLookupServiceImpl";
 import Person from "../../model/human/person/Person";
-import PersonLookupService from "./lookup/human/person/PersonLookupService";
-import deepCopy, {checkNotEmpty} from "../../util/pureFunctions";
+import PersonLookupService from "./api/human/person/PersonLookupService";
+import {checkNotEmpty} from "../../util/pureFunctions";
 import User from "../../model/human/user/User";
-import UserLookupService from "./lookup/human/user/UserLookupService";
+import UserLookupService from "./api/human/user/UserLookupService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import JurPersonLookupService from "./lookup/jurPerson/JurPersonLookupService";
+import JurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
 import {
-    AppNotificationType,
-    BasicNotification,
     BasicNotificationManager,
     NotificationManager
 } from "../../redux/applicationState/Notification";
@@ -28,6 +26,7 @@ import JurPersonExplorationParams from "../../redux/exploration/types/jurPerson/
 import UserExplorationParams from "../../redux/exploration/types/human/user/UserExplorationParams";
 import {ExplorationCoreAction, ExplorationTypedActions} from "../../redux/exploration/ExplorationActions";
 import EntityExplorationData from "../../redux/exploration/types/EntityExplorationData";
+import deepCopy from "../../util/deepCopy";
 
 class UnsupportedModeError extends Error {
 
@@ -132,7 +131,7 @@ class ExplorationServiceImpl implements ExplorationService {
     }))
 
 
-    private async exploreJurPersons(explorationParams: JurPersonExplorationParams, service: JurPersonLookupService): Promise<PagedData<JurPerson>> {
+    private async exploreJurPersons(explorationParams: JurPersonExplorationParams, service: JurPersonExplorationApiService): Promise<PagedData<JurPerson>> {
         const modeId: number = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
 
@@ -156,7 +155,7 @@ class ExplorationServiceImpl implements ExplorationService {
     }
 
     private exploreJurPersonsThunk = createAsyncThunk<EntityExplorationData<JurPerson, JurPersonExplorationParams>,
-        ThunkArg<{params: JurPersonExplorationParams, service: JurPersonLookupService}>,
+        ThunkArg<{params: JurPersonExplorationParams, service: JurPersonExplorationApiService}>,
         LitmusAsyncThunkConfig>(ExplorationTypedActions.jurPerson[ExplorationCoreAction.RETRIEVE_DATA],(async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
         try {
             const response: PagedData<JurPerson> = await this.exploreJurPersons(params, service);
@@ -197,7 +196,7 @@ class ExplorationServiceImpl implements ExplorationService {
                 const jurPersonManager = ExplorationStateManagerImpl.getJurPersonManager(this._store);
                 stateManager = jurPersonManager;
 
-                const service = new JurPersonLookupServiceImpl(this.getAccessToken.bind(this));
+                const service = new JurPersonExplorationApiServiceImpl(this.getAccessToken.bind(this));
 
                 asyncThunk = this.exploreJurPersonsThunk({params: jurPersonManager.getExplorationParams(), service: service, globalPending: false})
 

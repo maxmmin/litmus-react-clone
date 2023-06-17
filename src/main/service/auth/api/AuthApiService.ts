@@ -1,13 +1,13 @@
-import Authentication from "../../redux/auth/Authentication";
+import Authentication from "../../../redux/auth/Authentication";
 
 export type Credentials = {
     email: string,
     password: string
 }
 
-interface AuthService {
+interface AuthApiService {
     refreshAuth(refreshToken: string): Promise<Authentication>;
     getAuth(credentials: Credentials): Promise<Authentication>;
 }
 
-export default AuthService;
+export default AuthApiService;

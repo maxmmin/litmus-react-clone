@@ -1,9 +1,9 @@
 import PersonLookupService from "./PersonLookupService";
 import Person from "../../../../../model/human/person/Person";
 import appConfig from "../../../../../config/appConfig";
-import HumanLookupServiceImpl from "../HumanLookupServiceImpl";
+import HumanExplorationApiServiceImpl from "../HumanExplorationApiServiceImpl";
 
-class PersonLookupServiceImpl extends HumanLookupServiceImpl<Person> implements PersonLookupService {
+class PersonLookupServiceImpl extends HumanExplorationApiServiceImpl<Person> implements PersonLookupService {
 
     constructor(getToken: () => string, apiMapping: string = appConfig.serverMappings.persons) {
         super(apiMapping, getToken);

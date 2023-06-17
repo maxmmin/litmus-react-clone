@@ -31,7 +31,7 @@ const ExplorationModesView = () => {
                     return (state.exploration.user as UserExplorationState).params;
                 }
 
-                default: throw new Error("unknown lookup is in the state");
+                default: throw new Error("unknown api is in the state");
             }
         }
     })

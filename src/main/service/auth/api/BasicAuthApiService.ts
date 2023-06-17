@@ -1,11 +1,11 @@
-import AuthService, {Credentials} from "./AuthService";
-import ApiRequestManager, {HttpMethod} from "../../util/apiRequest/ApiRequestManager";
-import appConfig from "../../config/appConfig";
-import Authentication from "../../redux/auth/Authentication";
-import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
-import BasicApiRequestManager from "../../util/apiRequest/BasicApiRequestManager";
+import AuthApiService, {Credentials} from "./AuthApiService";
+import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
+import appConfig from "../../../config/appConfig";
+import Authentication from "../../../redux/auth/Authentication";
+import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
+import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 
-class BasicAuthService implements AuthService {
+class BasicAuthApiService implements AuthApiService {
     async getAuth(credentials: Credentials): Promise<Authentication> {
         const requestManager: ApiRequestManager = new BasicApiRequestManager();
         const response = await requestManager
@@ -39,4 +39,4 @@ class BasicAuthService implements AuthService {
 
 }
 
-export default BasicAuthService;
+export default BasicAuthApiService;

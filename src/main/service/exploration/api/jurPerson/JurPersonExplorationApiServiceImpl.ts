@@ -1,12 +1,12 @@
-import JurPersonLookupService from "./JurPersonLookupService";
+import JurPersonExplorationApiService from "./JurPersonExplorationApiService";
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import appConfig from "../../../../config/appConfig";
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
 import {BasicHttpError} from "../../../../util/apiRequest/BasicHttpError";
-import BasicEntityLookupService from "../BasicLookupService";
+import BasicEntityLookupService from "../BasicExplorationApiService";
 
-class JurPersonLookupServiceImpl extends BasicEntityLookupService<JurPerson> implements JurPersonLookupService {
+class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPerson> implements JurPersonExplorationApiService {
 
     constructor(getToken: ()=>string, apiMapping: string = appConfig.serverMappings.jurPersons) {
         super(apiMapping, getToken);
@@ -33,4 +33,4 @@ class JurPersonLookupServiceImpl extends BasicEntityLookupService<JurPerson> imp
 
 }
 
-export default JurPersonLookupServiceImpl;
+export default JurPersonExplorationApiServiceImpl;

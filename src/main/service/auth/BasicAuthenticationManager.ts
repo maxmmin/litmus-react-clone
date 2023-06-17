@@ -1,14 +1,14 @@
 import AuthenticationManager from "./AuthenticationManager";
 import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
-import AuthService, {Credentials} from "./AuthService";
+import AuthApiService, {Credentials} from "./api/AuthApiService";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import Authentication, {AuthenticationReducible} from "../../redux/auth/Authentication";
 import {checkNotEmpty, isValid} from "../../util/pureFunctions";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import TimersStateManager from "../timers/TimersStateManager";
-import BasicAuthService from "./BasicAuthService";
+import BasicAuthApiService from "./api/BasicAuthApiService";
 import {HttpStatus} from "../../util/apiRequest/HttpStatus";
-import AuthenticationStateManager from "./AuthenticationStateManager";
+import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import AuthActions from "../../redux/auth/AuthActions";
 import {BasicNotificationManager, NotificationManager} from "../../redux/applicationState/Notification";
@@ -17,12 +17,12 @@ import deepCopy from "../../util/deepCopy";
 class BasicAuthenticationManager implements AuthenticationManager {
     private readonly authenticationStateManager: AuthenticationStateManager;
     private readonly timersStateManager: TimersStateManager;
-    private readonly authService: AuthService;
+    private readonly authService: AuthApiService;
     private readonly notificationManager: NotificationManager;
 
     private static locked: boolean = false;
 
-    constructor(authStateManager: AuthenticationStateManager, authService: AuthService, timersStateManager: TimersStateManager, notificationManager: NotificationManager) {
+    constructor(authStateManager: AuthenticationStateManager, authService: AuthApiService, timersStateManager: TimersStateManager, notificationManager: NotificationManager) {
         this.authenticationStateManager = authStateManager;
         this.authService = authService;
         this.timersStateManager = timersStateManager;
@@ -181,7 +181,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
     }
 
     static getBasicManager (_store: typeof store = store) {
-        const authService = new BasicAuthService();
+        const authService = new BasicAuthApiService();
         const timersStateManager = new TimersStateManager();
         const authenticationStateManager = new AuthenticationStateManager();
         const notificationManager = new BasicNotificationManager();
