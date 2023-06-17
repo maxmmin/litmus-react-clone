@@ -11,7 +11,7 @@ import {useNavigate} from "react-router-dom";
 import appConfig from "../../config/appConfig";
 import {useLocation, useParams} from "react-router";
 import ExplorationInputForm from "./ExplorationInputForm";
-import ExplorationStateManagerImpl from "../../service/exploration/ExplorationStateManagerImpl";
+import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import store from "../../redux/store";
 import ExplorationData from "./ExplorationData";
 import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";

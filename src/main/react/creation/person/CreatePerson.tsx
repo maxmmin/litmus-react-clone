@@ -15,7 +15,7 @@ import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 import PersonRelationships from "./PersonRelationships";
 import {Entity} from "../../../model/Entity";
-import CreationStateManagerImpl from "../../../service/creation/CreationStateManagerImpl";
+import CreationStateManagerImpl from "../../../service/creation/stateManager/CreationStateManagerImpl";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);

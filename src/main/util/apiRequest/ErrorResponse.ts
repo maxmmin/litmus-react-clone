@@ -1,4 +1,4 @@
-interface ErrorResponse<T extends object> {
+interface ErrorResponse<T> {
     status: number;
     title: string;
     detail: T|null;

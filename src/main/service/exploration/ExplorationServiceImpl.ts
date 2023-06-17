@@ -1,5 +1,5 @@
 import ExplorationService from "./ExplorationService";
-import ExplorationStateManagerImpl from "./ExplorationStateManagerImpl";
+import ExplorationStateManagerImpl from "./stateManager/ExplorationStateManagerImpl";
 import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import PersonLookupServiceImpl from "./lookup/human/person/PersonLookupServiceImpl";
 import JurPersonLookupServiceImpl from "./lookup/jurPerson/JurPersonLookupServiceImpl";

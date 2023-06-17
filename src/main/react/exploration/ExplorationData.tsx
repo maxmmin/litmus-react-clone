@@ -4,7 +4,7 @@ import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import UserInfoTable from "./EntityTables/UserInfoTable";
 import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../util/pureFunctions";
-import ExplorationStateManagerImpl from "../../service/exploration/ExplorationStateManagerImpl";
+import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import store from "../../redux/store";
 import PagedData, {isUnPaged} from "../../util/apiRequest/PagedData";
 import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";

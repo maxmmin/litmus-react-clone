@@ -18,11 +18,11 @@ class BasicHttpError<D extends object> extends Error implements ErrorResponse<D>
         this.title = errorResponse.title;
     }
 
-    static formErrorDescription(error: ErrorResponse<any>): string {
+    static formErrorDescription(error: ErrorResponse<unknown>): string {
         return `Error ${error.status}: ${error.title}`
     }
 
-    static async parseResponse(response: Response): Promise<ErrorResponse<any>> {
+    static async parseResponse(response: Response): Promise<ErrorResponse<unknown>> {
         try {
             const body = await response.json();
 
@@ -34,7 +34,7 @@ class BasicHttpError<D extends object> extends Error implements ErrorResponse<D>
 
     }
 
-    static parseError(err: any): ErrorResponse<any> {
+    static parseError(err: any): ErrorResponse<unknown> {
         let status: number = -1;
         let title: string = 'Unknown error';
         let detail: any = null;

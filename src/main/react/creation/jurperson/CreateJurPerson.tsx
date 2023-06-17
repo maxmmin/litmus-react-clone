@@ -10,7 +10,7 @@ import Person from "../../../model/human/person/Person";
 import DateEntity, {DateBuilder} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
-import CreationStateManagerImpl from "../../../service/creation/CreationStateManagerImpl";
+import CreationStateManagerImpl from "../../../service/creation/stateManager/CreationStateManagerImpl";
 
 
 const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`

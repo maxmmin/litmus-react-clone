@@ -1,4 +1,4 @@
-import EntityCreationState from "../../redux/creation/EntityCreationState";
+import EntityCreationState from "../../../redux/creation/EntityCreationState";
 
 interface CreationStateManager<S extends EntityCreationState<unknown>> {
     setEntityCreationParams(params: S["params"]): void;

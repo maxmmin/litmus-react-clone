@@ -4,10 +4,10 @@ import UserIdentityActions from "../../redux/userIdentity/UserIdentityActions";
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
 import UserIdentity from "../../redux/userIdentity/UserIdentity";
 import UserIdentityService from "./UserIdentityService";
-import deepCopy from "../../util/pureFunctions";
 import UserIdentityManager from "./UserIdentityManager";
 import UserIdentityServiceImpl from "./UserIdentityServiceImpl";
 import AuthenticationStateManager from "../auth/AuthenticationStateManager";
+import deepCopy from "../../util/deepCopy";
 
 
 type RetrieveIdentityThunkArg = ThunkArg<{

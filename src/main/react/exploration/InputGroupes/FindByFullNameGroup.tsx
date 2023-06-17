@@ -2,7 +2,7 @@ import Form from "react-bootstrap/Form";
 import React, {useMemo} from "react";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
-import ExplorationStateManagerImpl from "../../../service/exploration/ExplorationStateManagerImpl";
+import ExplorationStateManagerImpl from "../../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import store from "../../../redux/store";
 import EntityExplorationState from "../../../redux/exploration/types/EntityExplorationState";
 import HumanExplorationParams from "../../../redux/exploration/types/human/HumanExplorationParams";

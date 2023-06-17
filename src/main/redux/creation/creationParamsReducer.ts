@@ -1,15 +1,18 @@
 import {Reducer} from "react";
-import CreationCoreActions, {
-    InitialJurPersonCreationParams,
-    InitialPersonCreationParams,
-    InitialUserCreationParams
-} from "./CreationCoreActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import CreationTypedActions from "./CreationTypedActions";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import {combineReducers} from "redux";
 import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
 import deepCopy from "../../util/deepCopy";
+import CreationCoreActions, {
+    initialJurPersonCreationParams,
+    initialPersonCreationParams, initialUserCreationParams,
+    JurPersonCreationParams, PersonCreationAction,
+    PersonCreationParams, UserCreationParams
+} from "./CreationCoreActions";
+import JurPersonCreationStateManagerImpl from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
+import {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
@@ -39,36 +42,7 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
         //     return {...prevState, personCreationData: {...prevState.personCreationData, ...(action.payload as unknown as Partial<Person>)}}
         // }
         //
-        // case CreationCoreActions.UPDATE_PERSON_SEX: {
-        //     return {...prevState, personCreationData: {...prevState.personCreationData, sex: action.payload as unknown as Sex}}
-        // }
-        //
-        // case CreationCoreActions.ADD_PERSON_RELATION: {
-        //     const relToAdd = (action.payload as unknown as Relationship);
-        //
-        //     const relationshipsLinkObject = new RelationshipsLinkObject(prevState.personCreationData.relationships);
-        //     relationshipsLinkObject.addRelationship(relToAdd);
-        //
-        //     return {...prevState, personCreationData: {...prevState.personCreationData, relationships: relationshipsLinkObject.relationships}}
-        // }
-        //
-        // case CreationCoreActions.REMOVE_PERSON_RELATION: {
-        //     const relToAdd = (action.payload as unknown as Relationship);
-        //
-        //     const relationshipsLinkObject = new RelationshipsLinkObject(prevState.personCreationData.relationships);
-        //     relationshipsLinkObject.removeRelationship(relToAdd);
-        //
-        //     return {...prevState, personCreationData: {...prevState.personCreationData, relationships: relationshipsLinkObject.relationships}}
-        // }
-        //
-        // case CreationCoreActions.UPDATE_PERSON_RELATION: {
-        //     const relToUpdate = (action.payload as unknown as Relationship);
-        //
-        //     const relationshipsLinkObject = new RelationshipsLinkObject(prevState.personCreationData.relationships);
-        //     relationshipsLinkObject.updateRelationship(relToUpdate);
-        //
-        //     return {...prevState, personCreationData: {...prevState.personCreationData, relationships: relationshipsLinkObject.relationships}}
-        // }
+
         //
         // case CreationCoreActions.UPDATE_PASSPORT_DATA: {
         //     const payload = action.payload as unknown as Partial<PassportData>;
@@ -103,14 +77,36 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
     }
 }
 
-const initialPersonCreationParams = new InitialPersonCreationParams()
-const initialPersonCreationState: EntityCreationState<InitialPersonCreationParams> = deepCopy( new BasicEntityCreationState(initialPersonCreationParams));
+const initialPersonCreationState: EntityCreationState<PersonCreationParams> = deepCopy( new BasicEntityCreationState(initialPersonCreationParams));
 
-const personCreationStateReducer: Reducer<EntityCreationState<InitialPersonCreationParams>|undefined, PayloadAction<InitialPersonCreationParams>> = (prevState=initialPersonCreationState, action) => {
-    const actions = CreationTypedActions.person;
+const personCreationStateReducer: Reducer<EntityCreationState<PersonCreationParams>|undefined, PayloadAction<PersonCreationParams>> = (prevState=initialPersonCreationState, action) => {
     switch (action.type) {
-        // code-place for jur person specific actions
-        // @todo write getClear action
+        case PersonCreationAction.ADD_PERSON_RELATION: {
+            const relToAdd = (action.payload as unknown as Relationship);
+
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.params.relationships);
+            relationshipsLinkObject.addRelationship(relToAdd);
+
+            return {...prevState, params: {...prevState.params, relationships: relationshipsLinkObject.relationships}}
+        }
+
+        case PersonCreationAction.REMOVE_PERSON_RELATION: {
+            const relToAdd = (action.payload as unknown as Relationship);
+
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.params.relationships);
+            relationshipsLinkObject.removeRelationship(relToAdd);
+
+            return {...prevState, params: {...prevState.params, relationships: relationshipsLinkObject.relationships}}
+        }
+
+        case PersonCreationAction.UPDATE_PERSON_RELATION: {
+            const relToUpdate = (action.payload as unknown as Relationship);
+
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.params.relationships);
+            relationshipsLinkObject.updateRelationship(relToUpdate);
+
+            return {...prevState, params: {...prevState.params, relationships: relationshipsLinkObject.relationships}}
+        }
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.personDomain) {
@@ -122,10 +118,9 @@ const personCreationStateReducer: Reducer<EntityCreationState<InitialPersonCreat
         }
     }
 }
-const initialJurPersonCreationParams = new InitialJurPersonCreationParams()
-const initialJurPersonState: EntityCreationState<InitialJurPersonCreationParams> = deepCopy(new BasicEntityCreationState(initialJurPersonCreationParams))
+const initialJurPersonState: EntityCreationState<JurPersonCreationParams> = deepCopy(new BasicEntityCreationState(initialJurPersonCreationParams))
 
-const jurPersonCreationStateReducer: Reducer<EntityCreationState<InitialJurPersonCreationParams>|undefined, PayloadAction<InitialPersonCreationParams>> = (prevState=initialJurPersonState, action) => {
+const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPersonCreationParams>|undefined, PayloadAction<JurPersonCreationParams>> = (prevState=initialJurPersonState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
         // code-place for jur person specific actions
@@ -142,10 +137,9 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationState<InitialJurPerso
     }
 }
 
-const initialUserCreationParams = new InitialUserCreationParams()
-const initialUserCreationState: EntityCreationState<InitialUserCreationParams> = deepCopy(new BasicEntityCreationState(initialUserCreationParams));
+const initialUserCreationState: EntityCreationState<UserCreationParams> = deepCopy(new BasicEntityCreationState(initialUserCreationParams));
 
-const userCreationStateReducer: Reducer<EntityCreationState<InitialUserCreationParams>|undefined, PayloadAction<InitialPersonCreationParams>> = (prevState=initialUserCreationState, action) => {
+const userCreationStateReducer: Reducer<EntityCreationState<UserCreationParams>|undefined, PayloadAction<UserCreationParams>> = (prevState=initialUserCreationState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
         default: {

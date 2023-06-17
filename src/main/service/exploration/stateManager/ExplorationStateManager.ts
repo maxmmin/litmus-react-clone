@@ -1,7 +1,7 @@
-import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
-import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
+import EntityExplorationState from "../../../redux/exploration/types/EntityExplorationState";
+import EntityExplorationParams from "../../../redux/exploration/types/EntityExplorationParams";
 import {AsyncThunkAction} from "@reduxjs/toolkit";
-import ExplorationMode from "../../redux/exploration/types/ExplorationMode";
+import ExplorationMode from "../../../redux/exploration/types/ExplorationMode";
 
 export default interface ExplorationStateManager <S extends EntityExplorationState<unknown, EntityExplorationParams>> {
     getExplorationState: ()=>S;

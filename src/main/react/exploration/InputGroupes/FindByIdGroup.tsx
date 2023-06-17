@@ -2,7 +2,7 @@ import Form from "react-bootstrap/Form";
 import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import ExplorationStateManagerImpl from "../../../service/exploration/ExplorationStateManagerImpl";
+import ExplorationStateManagerImpl from "../../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import store from "../../../redux/store";
 
 const FindByIdGroup = () => {

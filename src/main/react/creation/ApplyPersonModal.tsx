@@ -4,7 +4,6 @@ import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../exploration/EntityTables/PersonInfoTable";
-import {addRelationship, updateJurPersonCreationParams} from "../../redux/creation/CreationCoreActions";
 import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./CreationScreen";
@@ -47,7 +46,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             const state = store.getState() as RootState;
             switch (modalSettings?.mode) {
                 case CreationModalModes.SET_OWNER: {
-                    const owner = state.creation?.jurPerson.owner;
+                    const owner = state.creation?.jurPerson?.params.owner;
                     if (owner) {
                         setPerson(owner)
                     }
@@ -55,7 +54,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                 }
 
                 case CreationModalModes.SET_BEN_OWNER: {
-                    const benOwner = state.creation?.jurPersonCreationData.benOwner;
+                    const benOwner = state.creation?.jurPerson?.params.benOwner;
                     if (benOwner) {
                         setPerson(benOwner)
                     }
@@ -165,7 +164,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                     note: "", person: person, relationType: null
                 }
 
-                const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.personCreationData.relationships);
+                const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.params.relationships);
 
                 if (sourceRelObject?.isPresent(relationship)) {
                     setSearchError(new SearchError("Дана особа вже присутня в списку відносин", null));

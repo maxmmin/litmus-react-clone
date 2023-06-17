@@ -1,16 +1,16 @@
-import store, {AppDispatch} from "../../redux/store";
-import {ExplorationCoreAction, ExplorationTypedActions} from "../../redux/exploration/ExplorationActions";
-import {setExploredEntityAction} from "../../redux/exploration/explorationReducer";
-import JurPersonExplorationState from "../../redux/exploration/types/jurPerson/JurPersonExplorationState";
-import PersonExplorationState from "../../redux/exploration/types/human/person/PersonExplorationState";
-import UserExplorationState from "../../redux/exploration/types/human/user/UserExplorationState";
-import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
-import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
-import {Entity} from "../../model/Entity";
-import ExplorationMode from "../../redux/exploration/types/ExplorationMode";
+import store, {AppDispatch} from "../../../redux/store";
+import {ExplorationCoreAction, ExplorationTypedActions} from "../../../redux/exploration/ExplorationActions";
+import {setExploredEntityAction} from "../../../redux/exploration/explorationReducer";
+import JurPersonExplorationState from "../../../redux/exploration/types/jurPerson/JurPersonExplorationState";
+import PersonExplorationState from "../../../redux/exploration/types/human/person/PersonExplorationState";
+import UserExplorationState from "../../../redux/exploration/types/human/user/UserExplorationState";
+import EntityExplorationState from "../../../redux/exploration/types/EntityExplorationState";
+import EntityExplorationParams from "../../../redux/exploration/types/EntityExplorationParams";
+import {Entity} from "../../../model/Entity";
+import ExplorationMode from "../../../redux/exploration/types/ExplorationMode";
 import {AsyncThunkAction} from "@reduxjs/toolkit";
 import ExplorationStateManager from "./ExplorationStateManager";
-import deepCopy from "../../util/deepCopy";
+import deepCopy from "../../../util/deepCopy";
 
 /**
  * S - entityExplorationState
