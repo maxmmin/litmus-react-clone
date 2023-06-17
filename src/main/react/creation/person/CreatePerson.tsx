@@ -16,6 +16,8 @@ import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 import PersonRelationships from "./PersonRelationships";
 import {Entity} from "../../../model/Entity";
 import CreationStateManagerImpl from "../../../service/creation/stateManager/CreationStateManagerImpl";
+import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
+import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -34,7 +36,7 @@ const CreatePerson = () => {
 
     const relationships = creationPersonParams?.relationships;
 
-    const creationStateManager = CreationStateManagerImpl.getPersonManager();
+    const creationStateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager();
 
     const closeModal = () => setModalSettings(null)
 
@@ -114,7 +116,7 @@ const CreatePerson = () => {
                 <input  value={passportData!.passportSerial} autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
                        onKeyDown={keyPressHandler}
                         onChange={e => {
-                                dispatch(updatePassportData({passportSerial: e.currentTarget.value}))
+                                creationStateManager.updatePassportData({passportSerial: e.currentTarget.value})
                             }
                         }
                 />
@@ -125,7 +127,7 @@ const CreatePerson = () => {
                 <input value={passportData!.rnokppCode} autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
                        onKeyDown={inputBeforeDateContainerHandler}
                        onChange={e => {
-                           dispatch(updatePassportData({rnokppCode: e.currentTarget.value}))
+                           creationStateManager.updatePassportData({rnokppCode: e.currentTarget.value})
                         }
                        }
                 />
@@ -134,7 +136,7 @@ const CreatePerson = () => {
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Дата народження</Form.Label>
 
-                <InputDate date={new DateBuilder().setYear(year).setMonth(month).setDay(day).build()} setDate={setDate} className={"date-of-birth"}/>
+                <InputDate date={new DateBuilder().setYear(year).setMonth(month).setDay(day).build()} setDate={date => creationStateManager.updateEntityCreationParams({dateOfBirth: date})} className={"date-of-birth"}/>
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">

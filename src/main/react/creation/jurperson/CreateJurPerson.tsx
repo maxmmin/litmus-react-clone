@@ -11,6 +11,7 @@ import DateEntity, {DateBuilder} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
 import CreationStateManagerImpl from "../../../service/creation/stateManager/CreationStateManagerImpl";
+import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 
 
 const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
@@ -22,13 +23,11 @@ const CreateJurPerson = () => {
 
     const jurPersonCreationParams = useAppSelector(state => state.creation?.jurPerson?.params)
 
-    const dispatch = useAppDispatch();
-
     if (!jurPersonCreationParams) {
         throw new Error("createPersonDto was null but it shouldn't")
     }
 
-    const creationManager = CreationStateManagerImpl.getJurPersonManager();
+    const creationManager = CreationStateManagerFactory.getJurPersonManager();
 
     const {year, month, day} = jurPersonCreationParams.dateOfRegistration;
 

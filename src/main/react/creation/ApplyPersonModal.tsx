@@ -11,6 +11,11 @@ import {JurPerson} from "../../model/jurPerson/JurPerson";
 import Person, {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 import {getPersonFromResponse, isValid} from "../../util/pureFunctions";
 import {CreationModalModes} from "../../redux/creation/CreationModalModes";
+import CreationStateManagerFactory from "../../service/creation/stateManager/CreationStateManagerFactory";
+import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
+import CreationStateManager from "../../service/creation/stateManager/CreationStateManager";
+import {PersonCreationParams} from "../../redux/creation/CreationCoreActions";
+import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -147,6 +152,8 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
+                const stateManager: JurPersonCreationStateManager = CreationStateManagerFactory.getJurPersonManager();
+
                 const payload: Partial<JurPerson> = {}
 
                 if (modalSettings.mode===CreationModalModes.SET_OWNER) {
@@ -155,11 +162,13 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                     payload.benOwner = person;
                 }
 
-                dispatch(updateJurPersonCreationParams(payload))
+               stateManager.updateEntityCreationParams(payload);
                 break
             }
 
             case CreationModalModes.SET_RELATIONSHIP: {
+                const stateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager();
+                
                 const relationship: Relationship = {
                     note: "", person: person, relationType: null
                 }
@@ -171,7 +180,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                     return;
                 }
 
-                dispatch(addRelationship(relationship))
+                stateManager.addRelationship(relationship)
             }
         }
 
@@ -182,13 +191,14 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
+                const stateManager: JurPersonCreationStateManager = CreationStateManagerFactory.getJurPersonManager();
                 const payload: Partial<JurPerson> = {}
                 if (modalSettings.mode===CreationModalModes.SET_OWNER) {
                     payload.owner = null;
                 } else {
                     payload.benOwner = null;
                 }
-                dispatch(updateJurPersonCreationParams(payload))
+               stateManager.updateEntityCreationParams(payload);
                 break
             }
         }

@@ -2,10 +2,13 @@ import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import React from "react";
 import {useAppDispatch} from "../../../redux/hooks";
-import {updateUserCreationParams} from "../../../redux/creation/CreationCoreActions";
+import UserCreationStateManager from "../../../service/creation/stateManager/user/UserCreationStateManager";
+import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 
 const CreateUser = () => {
     const dispatch = useAppDispatch();
+
+    const creationStateManager: UserCreationStateManager = CreationStateManagerFactory.getUserManager();
     // todo: this section
     return (
         <>
@@ -14,7 +17,7 @@ const CreateUser = () => {
                 <input autoComplete={"new-password"} className={`email form-control`}  type="text" placeholder="Введіть EMAIL"
                        onKeyDown={keyPressHandler}
                        onChange={e=>{
-                           dispatch(updateUserCreationParams({email: e.currentTarget.value}))
+                           creationStateManager.updateEntityCreationParams({email: e.currentTarget.value});
                        }}
                 />
             </Form.Group>
@@ -24,7 +27,7 @@ const CreateUser = () => {
                 <input autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
                        onKeyDown={keyPressHandler}
                        onChange={e=>{
-                           dispatch(updateUserCreationParams({lastName: e.currentTarget.value}))
+                           creationStateManager.updateEntityCreationParams({lastName: e.currentTarget.value});
                        }}
                 />
             </Form.Group>
@@ -34,7 +37,7 @@ const CreateUser = () => {
                 <input autoComplete={"new-password"} className={`firstName form-control`} type="text" placeholder="Введіть ім'я"
                        onKeyDown={keyPressHandler}
                        onChange={e=>{
-                           dispatch(updateUserCreationParams({firstName: e.currentTarget.value}))
+                           creationStateManager.updateEntityCreationParams({firstName: e.currentTarget.value});
                        }}
                 />
             </Form.Group>
@@ -44,7 +47,7 @@ const CreateUser = () => {
                 <input autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
                        onKeyDown={keyPressHandler}
                        onChange={e=>{
-                           dispatch(updateUserCreationParams({middleName: e.currentTarget.value}))
+                           creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value});
                        }}
                 />
             </Form.Group>
@@ -54,7 +57,7 @@ const CreateUser = () => {
                 <input autoComplete={"new-password"} className={`passport-number form-control`} type="password" placeholder="Введіть пароль"
                        onKeyDown={keyPressHandler}
                        onChange={e=>{
-                           dispatch(updateUserCreationParams({password: e.currentTarget.value}))
+                           creationStateManager.updateEntityCreationParams({password: e.currentTarget.value});
                        }}
                 />
             </Form.Group>

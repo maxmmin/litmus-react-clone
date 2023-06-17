@@ -4,8 +4,11 @@ import React, { useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {Location} from "../../../model/Location";
-import {updateJurPersonCreationParams, updatePersonCreationParams} from "../../../redux/creation/CreationCoreActions";
 import {Entity} from "../../../model/Entity";
+import CreationStateManager from "../../../service/creation/stateManager/CreationStateManager";
+import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
+import EntityCreationState from "../../../redux/creation/EntityCreationState";
+import {JurPersonCreationParams, PersonCreationParams} from "../../../redux/creation/CreationCoreActions";
 
 type Props = {
     entity: Entity,
@@ -15,18 +18,18 @@ type Props = {
 
 const CreationGeoModal = ({entity, show, close}: Props) => {
 
-    const dispatch = useAppDispatch()
-
     const [location, setLocation] = useState<Location|null>(null)
+
+    const creationStateManager: CreationStateManager<EntityCreationState<unknown>> = CreationStateManagerFactory.getEntityManager(entity);
 
     const geoLocation = useAppSelector(state => {
         switch (entity) {
             case Entity.JUR_PERSON: {
-                return state.creation?.jurPersonCreationData.location;
+                return state.creation?.jurPerson?.params.location;
             }
 
             case Entity.PERSON: {
-                return state.creation?.personCreationData.location;
+                return state.creation?.person?.params.location;
             }
         }
     })
@@ -38,8 +41,16 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
     const clearGeo = () => {
         switch (entity) {
             case Entity.JUR_PERSON: {
-                dispatch(updateJurPersonCreationParams({location: null}))
+                (creationStateManager as CreationStateManager<EntityCreationState<JurPersonCreationParams>>).updateEntityCreationParams({location: null})
+                break;
             }
+
+            case Entity.PERSON: {
+                (creationStateManager as CreationStateManager<EntityCreationState<PersonCreationParams>>).updateEntityCreationParams({location: null})
+                break;
+            }
+
+            default: throw new Error("unsupported entity")
         }
         handleClose()
     }
@@ -48,12 +59,13 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
         if (location) {
             switch (entity) {
                 case Entity.JUR_PERSON: {
-                    dispatch(updateJurPersonCreationParams({location: location}))
+                    (creationStateManager as CreationStateManager<EntityCreationState<JurPersonCreationParams>>).updateEntityCreationParams({location: location})
+
                     break;
                 }
 
                 case Entity.PERSON: {
-                    dispatch(updatePersonCreationParams({location: location}))
+                    (creationStateManager as CreationStateManager<EntityCreationState<PersonCreationParams>>).updateEntityCreationParams({location: location})
                     break;
                 }
             }

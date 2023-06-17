@@ -11,9 +11,11 @@ import PersonCreationStateManager from "./person/PersonCreationStateManager";
 import PersonCreationStateManagerImpl from "./person/PersonCreationStateManagerImpl";
 import UserCreationStateManagerImpl from "./user/UserCreationStateManagerImpl";
 import JurPersonCreationStateManagerImpl from "./jurPerson/JurPersonCreationStateManagerImpl";
+import UserCreationStateManager from "./user/UserCreationStateManager";
+import JurPersonCreationStateManager from "./jurPerson/JurPersonCreationStateManager";
 
 class CreationStateManagerFactory {
-    static getJurPersonManager (providedStore: typeof store = store): CreationStateManagerImpl<EntityCreationState<JurPersonCreationParams>> {
+    static getJurPersonManager (providedStore: typeof store = store): JurPersonCreationStateManager {
         const getState = ()=>providedStore.getState().creation.jurPerson as EntityCreationState<JurPersonCreationParams>;
         return new CreationStateManagerImpl<EntityCreationState<JurPersonCreationParams>>(store.dispatch, getState, CreationTypedAction.jurPerson);
     }
@@ -22,7 +24,7 @@ class CreationStateManagerFactory {
         return new PersonCreationStateManagerImpl(providedStore);
     }
 
-    static getUserManager (providedStore: typeof store = store): CreationStateManagerImpl<EntityCreationState<UserCreationParams>> {
+    static getUserManager (providedStore: typeof store = store): UserCreationStateManager {
         return new UserCreationStateManagerImpl(providedStore);
     }
 
@@ -44,3 +46,5 @@ class CreationStateManagerFactory {
         }
     }
 }
+
+export default CreationStateManagerFactory;
