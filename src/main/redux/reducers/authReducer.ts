@@ -1,5 +1,5 @@
-import AuthAction from "./AuthAction";
-import Authentication, {AuthenticationReducible} from "./Authentication";
+import AuthAction from "../actions/AuthAction";
+import Authentication, {AuthenticationReducible} from "../types/auth/Authentication";
 import {Reducer} from "react";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import {isRejected, PayloadAction} from "@reduxjs/toolkit";

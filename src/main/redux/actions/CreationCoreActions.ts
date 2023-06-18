@@ -2,7 +2,7 @@ import {Location} from "../../model/Location";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import Person from "../../model/human/person/Person";
 import User from "../../model/human/user/User";
-import {RoleName} from "../userIdentity/Role";
+import {RoleName} from "../types/userIdentity/Role";
 import DateEntity, {DateBuilder} from "../../model/DateEntity";
 
 enum CreationCoreActions {

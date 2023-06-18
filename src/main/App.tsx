@@ -8,11 +8,11 @@ import store from "./redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import Explore from "./react/exploration/ExplorationScreen";
-import AppStateActions, {switchAppState} from "./redux/applicationState/AppStateActions";
+import AppStateAction, {switchAppState} from "./redux/actions/AppStateAction";
 import RootComponent from "./react/root/RootComponent";
 import Creation from "./react/creation/CreationScreen";
 import appConfig, {routingLinks} from "./config/appConfig";
-import Role, {Permissions} from "./redux/userIdentity/Role";
+import Role, {Permissions} from "./redux/types/userIdentity/Role";
 import {buildUrl} from "./util/pureFunctions";
 import {Entity} from "./model/Entity";
 import LoginPage from "./react/login/LoginPage";
@@ -30,7 +30,7 @@ function App() {
                         const isMenuOpened = appStore.appState?.isHeaderMenuOpened;
 
                         if (isMenuOpened) {
-                            dispatch(switchAppState(AppStateActions.HEADER_MENU_CLOSE))
+                            dispatch(switchAppState(AppStateAction.HEADER_MENU_CLOSE))
                         }
                         // @todo think about replace this
                     }}>

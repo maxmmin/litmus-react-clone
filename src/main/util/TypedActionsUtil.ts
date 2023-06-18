@@ -1,4 +1,4 @@
-import {ExplorationCoreAction, ParsedAction} from "../redux/exploration/ExplorationActions";
+import {ExplorationCoreAction, ParsedAction} from "../redux/actions/ExplorationActions";
 
 class TypedActionsUtil {
 

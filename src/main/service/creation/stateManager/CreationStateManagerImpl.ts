@@ -1,8 +1,8 @@
 import {AppDispatch, LitmusAsyncThunkConfig} from "../../../redux/store";
-import CreationCoreActions from "../../../redux/creation/CreationCoreActions";
+import CreationCoreActions from "../../../redux/actions/CreationCoreActions";
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
-import CreationTypedAction from "../../../redux/creation/CreationTypedActions";
-import EntityCreationState from "../../../redux/creation/EntityCreationState";
+import CreationTypedAction from "../../../redux/actions/CreationTypedActions";
+import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
 import CreationStateManager from "./CreationStateManager";
 
 class CreationStateManagerImpl<S extends EntityCreationState<unknown>> implements CreationStateManager<S> {

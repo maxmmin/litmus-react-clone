@@ -2,7 +2,7 @@ import Header from "../header/Header";
 import {Form} from "react-bootstrap";
 import {Entity} from "../../model/Entity";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
-import {Permissions} from "../../redux/userIdentity/Role";
+import {Permissions} from "../../redux/types/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import React, {ChangeEvent, useEffect, useMemo} from "react";
 import CreationInputSection from "./CreationInputSection";
@@ -13,7 +13,7 @@ import {useLocation, useParams} from "react-router";
 import apiLinks, {routingLinks} from "../../config/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
-import {CreationModalModes} from "../../redux/creation/CreationModalModes";
+import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import appConfig from "../../config/appConfig";
 
 

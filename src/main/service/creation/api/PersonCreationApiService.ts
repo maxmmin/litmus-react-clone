@@ -1,5 +1,5 @@
 import Person from "../../../model/human/person/Person";
-import {PersonCreationParams} from "../../../redux/creation/CreationCoreActions";
+import {PersonCreationParams} from "../../../redux/actions/CreationCoreActions";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";

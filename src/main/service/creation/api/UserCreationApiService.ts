@@ -1,4 +1,4 @@
-import {UserCreationParams} from "../../../redux/creation/CreationCoreActions";
+import {UserCreationParams} from "../../../redux/actions/CreationCoreActions";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";

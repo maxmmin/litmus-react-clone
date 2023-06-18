@@ -1,9 +1,9 @@
 import {Action} from "redux";
-import {GmapsApiResponse} from "./AppState";
+import {GmapsApiResponse} from "../types/applicationState/AppState";
 import {PayloadAction} from "@reduxjs/toolkit";
-import Notification from "./Notification";
+import Notification from "../types/applicationState/Notification";
 
-enum AppStateActions {
+enum AppStateAction {
     REFRESH_ON="REFRESH_ON",
     REFRESH_OFF="REFRESH_OFF",
     HEADER_MENU_TOGGLE="HEADER_MENU_TOGGLE",
@@ -17,9 +17,9 @@ enum AppStateActions {
     CLEAR_NOTIFICATIONS="CLEAR_NOTIFICATIONS"
 }
 
-export default AppStateActions;
+export default AppStateAction;
 
-export const switchAppState = (action: AppStateActions): Action<string> => {
+export const switchAppState = (action: AppStateAction): Action<string> => {
     return {
         type: action.toString()
     }
@@ -27,27 +27,27 @@ export const switchAppState = (action: AppStateActions): Action<string> => {
 
 export const setMapsApiResponse = (payload: GmapsApiResponse): PayloadAction<GmapsApiResponse> => {
     return {
-        type: AppStateActions.SET_MAPS_API_RESPONSE,
+        type: AppStateAction.SET_MAPS_API_RESPONSE,
         payload: payload
     }
 }
 
 export const setNotifications = (notifications: Notification[]): PayloadAction<Notification[]> => {
     return {
-        type: AppStateActions.SET_NOTIFICATIONS,
+        type: AppStateAction.SET_NOTIFICATIONS,
         payload: notifications
     }
 }
 
 export const addNotification = (notification: Notification): PayloadAction<Notification> => {
     return {
-        type: AppStateActions.ADD_NOTIFICATION,
+        type: AppStateAction.ADD_NOTIFICATION,
         payload: notification
     }
 }
 
 export const clearNotifications = (): Action => {
     return {
-        type: AppStateActions.CLEAR_NOTIFICATIONS
+        type: AppStateAction.CLEAR_NOTIFICATIONS
     }
 }

@@ -1,4 +1,4 @@
-import EntityCreationState from "../../../redux/creation/EntityCreationState";
+import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import {LitmusAsyncThunkConfig} from "../../../redux/store";
 

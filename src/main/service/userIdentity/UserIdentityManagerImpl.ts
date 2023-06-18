@@ -1,8 +1,8 @@
 import store, {AppDispatch, LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import {Action} from "redux";
-import UserIdentityActions from "../../redux/userIdentity/UserIdentityActions";
+import UserIdentityActions from "../../redux/actions/UserIdentityActions";
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
-import UserIdentity, {UserIdentityReducible} from "../../redux/userIdentity/UserIdentity";
+import UserIdentity, {UserIdentityReducible} from "../../redux/types/userIdentity/UserIdentity";
 import UserIdentityApiService from "./api/UserIdentityApiService";
 import UserIdentityManager from "./UserIdentityManager";
 import UserIdentityApiServiceImpl from "./api/UserIdentityApiServiceImpl";

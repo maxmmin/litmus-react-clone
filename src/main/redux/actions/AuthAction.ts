@@ -1,9 +1,9 @@
-import {AuthenticationReducible} from "./Authentication";
+import {AuthenticationReducible} from "../types/auth/Authentication";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import JwtInfo from "./JwtInfo";
+import JwtInfo from "../types/auth/JwtInfo";
 import { BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import {Action} from "redux";
-import Authentication from "./Authentication";
+import Authentication from "../types/auth/Authentication";
 import appConfig from "../../config/appConfig";
 import {ThunkArg} from "../store";
 

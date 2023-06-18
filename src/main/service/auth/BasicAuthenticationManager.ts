@@ -2,7 +2,7 @@ import AuthenticationManager from "./AuthenticationManager";
 import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import AuthApiService, {Credentials} from "./api/AuthApiService";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
-import Authentication, {AuthenticationReducible} from "../../redux/auth/Authentication";
+import Authentication, {AuthenticationReducible} from "../../redux/types/auth/Authentication";
 import {checkNotEmpty, isValid} from "../../util/pureFunctions";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import TimersStateManager from "../timers/TimersStateManager";
@@ -10,8 +10,8 @@ import BasicAuthApiService from "./api/BasicAuthApiService";
 import {HttpStatus} from "../../util/apiRequest/HttpStatus";
 import AuthenticationStateManagerImpl from "./stateManager/AuthenticationStateManagerImpl";
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import AuthAction from "../../redux/auth/AuthAction";
-import {BasicNotificationManager, NotificationManager} from "../../redux/applicationState/Notification";
+import AuthAction from "../../redux/actions/AuthAction";
+import {BasicNotificationManager, NotificationManager} from "../../redux/types/applicationState/Notification";
 import deepCopy from "../../util/deepCopy";
 import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
 
@@ -180,7 +180,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         return !this.isAuthActual();
     }
 
-    static getBasicManager (_store: typeof store) {
+    static getBasicManager (_store?: typeof store) {
         const authService = new BasicAuthApiService();
         const timersStateManager = TimersStateManager.getManager(_store);
         const authenticationStateManager = AuthenticationStateManagerImpl.getManager(_store);

@@ -12,7 +12,7 @@ import DateEntity, {DateBuilder} from "../../../model/DateEntity";
 import Sex from "../../../model/human/person/Sex";
 import {CrossIcon} from "../../../util/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
-import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
+import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import PersonRelationships from "./PersonRelationships";
 import {Entity} from "../../../model/Entity";
 import CreationStateManagerImpl from "../../../service/creation/stateManager/CreationStateManagerImpl";

@@ -1,7 +1,7 @@
 import {Reducer} from "react";
-import LoginPageDataActions, {LoginPageState, LoginPageStateReducible} from "./LoginPageDataActions";
+import LoginPageDataActions, {LoginPageState, LoginPageStateReducible} from "../actions/LoginPageDataActions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import AuthAction from "../auth/AuthAction";
+import AuthAction from "../actions/AuthAction";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 
 const initialState: LoginPageState = {

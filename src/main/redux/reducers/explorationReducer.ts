@@ -1,17 +1,17 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
-import EntityExplorationState from "./types/EntityExplorationState";
-import {ExplorationCoreAction, ExplorationTypedActions} from "./ExplorationActions";
+import EntityExplorationState from "../types/exploration/EntityExplorationState";
+import {ExplorationCoreAction, ExplorationTypedActions} from "../actions/ExplorationActions";
 import {combineReducers} from "redux";
-import PersonExplorationState from "./types/human/person/PersonExplorationState";
-import PersonExplorationParams from "./types/human/person/PersonExplorationParams";
-import JurPersonExplorationState from "./types/jurPerson/JurPersonExplorationState";
-import JurPersonExplorationParams from "./types/jurPerson/JurPersonExplorationParams";
-import UserExplorationState from "./types/human/user/UserExplorationState";
-import UserExplorationParams from "./types/human/user/UserExplorationParams";
+import PersonExplorationState from "../types/exploration/human/person/PersonExplorationState";
+import PersonExplorationParams from "../types/exploration/human/person/PersonExplorationParams";
+import JurPersonExplorationState from "../types/exploration/jurPerson/JurPersonExplorationState";
+import JurPersonExplorationParams from "../types/exploration/jurPerson/JurPersonExplorationParams";
+import UserExplorationState from "../types/exploration/human/user/UserExplorationState";
+import UserExplorationParams from "../types/exploration/human/user/UserExplorationParams";
 import {Entity} from "../../model/Entity";
-import EntityExplorationParams from "./types/EntityExplorationParams";
-import ExplorationMode from "./types/ExplorationMode";
+import EntityExplorationParams from "../types/exploration/EntityExplorationParams";
+import ExplorationMode from "../types/exploration/ExplorationMode";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import deepCopy from "../../util/deepCopy";
 

@@ -1,4 +1,4 @@
-import UserIdentity from "../../redux/userIdentity/UserIdentity";
+import UserIdentity from "../../redux/types/userIdentity/UserIdentity";
 
 interface UserIdentityManager {
     retrieveIdentity (globalPending: boolean): void;

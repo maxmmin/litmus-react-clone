@@ -8,7 +8,7 @@ import {CreationModalSettings} from "../CreationScreen";
 import InputDate from "../../common/InputDate";
 import Person from "../../../model/human/person/Person";
 import DateEntity, {DateBuilder} from "../../../model/DateEntity";
-import {CreationModalModes} from "../../../redux/creation/CreationModalModes";
+import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
 import CreationStateManagerImpl from "../../../service/creation/stateManager/CreationStateManagerImpl";
 import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";

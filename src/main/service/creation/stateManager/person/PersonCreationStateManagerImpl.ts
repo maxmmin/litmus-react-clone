@@ -1,11 +1,11 @@
-import {PersonCreationAction, PersonCreationParams} from "../../../../redux/creation/CreationCoreActions";
-import EntityCreationState from "../../../../redux/creation/EntityCreationState";
+import {PersonCreationAction, PersonCreationParams} from "../../../../redux/actions/CreationCoreActions";
+import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
 import CreationStateManagerImpl from "../CreationStateManagerImpl";
 import PersonCreationStateManager from "./PersonCreationStateManager";
 import {PassportData} from "../../../../model/human/person/PassportData";
 import {PayloadAction} from "@reduxjs/toolkit";
 import store, {AppDispatch} from "../../../../redux/store";
-import CreationTypedActions from "../../../../redux/creation/CreationTypedActions";
+import CreationTypedActions from "../../../../redux/actions/CreationTypedActions";
 import {Relationship} from "../../../../model/human/person/Person";
 
 class PersonCreationStateManagerImpl extends CreationStateManagerImpl<EntityCreationState<PersonCreationParams>> implements PersonCreationStateManager {

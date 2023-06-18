@@ -6,7 +6,7 @@ import store from "../../redux/store";
 import {useLoadScript} from "@react-google-maps/api";
 import appConfig, {gmapsRegionOptions} from "../../config/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
-import {setMapsApiResponse} from "../../redux/applicationState/AppStateActions";
+import {setMapsApiResponse} from "../../redux/actions/AppStateAction";
 import {ErrorBoundary} from "react-error-boundary";
 import NotificationCenter from "../notifications/NotificationCenter";
 import AuthenticationManager from "../../service/auth/AuthenticationManager";

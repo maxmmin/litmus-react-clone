@@ -6,7 +6,7 @@ import {useNavigate} from 'react-router-dom'
 import Header from "../header/Header";
 import appConfig from "../../config/appConfig";
 import {useAppSelector} from "../../redux/hooks";
-import Role, {RoleName} from "../../redux/userIdentity/Role";
+import Role, {RoleName} from "../../redux/types/userIdentity/Role";
 
 
 function HomeScreen () {

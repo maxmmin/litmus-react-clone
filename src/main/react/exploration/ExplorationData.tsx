@@ -7,7 +7,7 @@ import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from
 import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import store from "../../redux/store";
 import PagedData, {isUnPaged} from "../../util/apiRequest/PagedData";
-import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
+import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import {isPending} from "@reduxjs/toolkit";
 import Loader from "../loader/Loader";
 

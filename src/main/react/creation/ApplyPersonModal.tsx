@@ -10,11 +10,11 @@ import {CreationModalSettings} from "./CreationScreen";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import Person, {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 import {getPersonFromResponse, isValid} from "../../util/pureFunctions";
-import {CreationModalModes} from "../../redux/creation/CreationModalModes";
+import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import CreationStateManagerFactory from "../../service/creation/stateManager/CreationStateManagerFactory";
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import CreationStateManager from "../../service/creation/stateManager/CreationStateManager";
-import {PersonCreationParams} from "../../redux/creation/CreationCoreActions";
+import {PersonCreationParams} from "../../redux/actions/CreationCoreActions";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
 
 type Props = {

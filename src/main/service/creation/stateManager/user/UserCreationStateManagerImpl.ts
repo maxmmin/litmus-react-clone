@@ -1,10 +1,10 @@
 import {
     UserCreationParams
-} from "../../../../redux/creation/CreationCoreActions";
-import EntityCreationState from "../../../../redux/creation/EntityCreationState";
+} from "../../../../redux/actions/CreationCoreActions";
+import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
 import CreationStateManagerImpl from "../CreationStateManagerImpl";
 import store, {AppDispatch} from "../../../../redux/store";
-import CreationTypedActions from "../../../../redux/creation/CreationTypedActions";
+import CreationTypedActions from "../../../../redux/actions/CreationTypedActions";
 import UserCreationStateManager from "./UserCreationStateManager";
 
 class UserCreationStateManagerImpl extends CreationStateManagerImpl<EntityCreationState<UserCreationParams>> implements UserCreationStateManager {

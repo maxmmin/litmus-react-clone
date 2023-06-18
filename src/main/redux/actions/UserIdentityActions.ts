@@ -1,4 +1,4 @@
-import UserIdentity, {UserIdentityReducible} from "./UserIdentity";
+import UserIdentity, {UserIdentityReducible} from "../types/userIdentity/UserIdentity";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {ThunkArg} from "../store";
 

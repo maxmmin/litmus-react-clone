@@ -5,7 +5,7 @@ import CreationCoreActions, {
     JurPersonCreationParams,
     PersonCreationParams,
     UserCreationParams
-} from "../../redux/creation/CreationCoreActions";
+} from "../../redux/actions/CreationCoreActions";
 import PersonCreationApiService from "./api/PersonCreationApiService";
 import Person from "../../model/human/person/Person";
 import UserCreationApiService from "./api/UserCreationApiService";
@@ -17,8 +17,8 @@ import AuthenticationStateManager from "../auth/stateManager/AuthenticationState
 import CreationStateManagerFactory from "./stateManager/CreationStateManagerFactory";
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
 import deepCopy from "../../util/deepCopy";
-import EntityCreationState from "../../redux/creation/EntityCreationState";
-import CreationTypedActions from "../../redux/creation/CreationTypedActions";
+import EntityCreationState from "../../redux/types/creation/EntityCreationState";
+import CreationTypedActions from "../../redux/actions/CreationTypedActions";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import CreationStateManager from "./stateManager/CreationStateManager";

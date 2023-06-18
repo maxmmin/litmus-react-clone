@@ -4,7 +4,7 @@ import {
     setAuthRefreshTimer,
     setTimers,
     Timers
-} from "../../redux/timers/TimersActions";
+} from "../../redux/actions/TimersAction";
 
 class TimersStateManager {
     private readonly dispatch: AppDispatch;

@@ -1,7 +1,7 @@
 import {AsyncThunkAction, configureStore, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
-import authReducer from "./auth/authReducer";
-import appStateReducer from "./applicationState/appStateReducer";
+import authReducer from "./reducers/authReducer";
+import appStateReducer from "./reducers/appStateReducer";
 import {Action, combineReducers, Dispatch} from "redux"
 import {
     persistReducer,
@@ -14,15 +14,15 @@ import {
     REGISTER    }   from "reduxjs-toolkit-persist";
 import {PersistConfig} from "reduxjs-toolkit-persist/es/types";
 import storage from 'reduxjs-toolkit-persist/lib/storage'
-import userIdentityReducer from "./userIdentity/userIdentityReducer";
-import authenticationCheckMiddleware from "./auth/authenticationCheckMiddleware";
-import loginPageDataReducer from "./login/LoginPageDataReducer";
-import creationReducer from "./creation/creationStateReducer";
-import timersReducer from "./timers/timersReducer";
-import explorationReducer from "./exploration/explorationReducer";
+import userIdentityReducer from "./reducers/userIdentityReducer";
+import authenticationCheckMiddleware from "./middlewares/authenticationCheckMiddleware";
+import loginPageDataReducer from "./reducers/LoginPageDataReducer";
+import creationReducer from "./reducers/creationStateReducer";
+import timersReducer from "./reducers/timersReducer";
+import explorationReducer from "./reducers/explorationReducer";
 import ErrorResponse from "../util/apiRequest/ErrorResponse";
-import errLoggingMiddleware from "./log/errLoggingMiddleware";
-import {AppNotificationType} from "./applicationState/Notification";
+import errLoggingMiddleware from "./middlewares/errLoggingMiddleware";
+import {AppNotificationType} from "./types/applicationState/Notification";
 
 
 const persistConfig: PersistConfig<any> = {

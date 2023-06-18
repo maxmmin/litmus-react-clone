@@ -1,4 +1,4 @@
-import {JurPersonCreationParams} from "../../../redux/creation/CreationCoreActions";
+import {JurPersonCreationParams} from "../../../redux/actions/CreationCoreActions";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";

@@ -1,4 +1,4 @@
-import {RoleName} from "../../../redux/userIdentity/Role";
+import {RoleName} from "../../../redux/types/userIdentity/Role";
 
 interface User {
     id?: string;

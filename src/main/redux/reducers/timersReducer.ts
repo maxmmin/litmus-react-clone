@@ -1,7 +1,7 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
-import TimersActions, {Timers, TimersReducible} from "./TimersActions";
-import AuthAction from "../auth/AuthAction";
+import TimersAction, {Timers, TimersReducible} from "../actions/TimersAction";
+import AuthAction from "../actions/AuthAction";
 
 export const initState: TimersReducible = {
     authRefreshTimerId: null
@@ -18,11 +18,11 @@ const timersActionsReducer: Reducer<TimersReducible, PayloadAction<Timers>> = (p
     }
 
     switch (action.type) {
-        case TimersActions.SET_TIMERS: {
+        case TimersAction.SET_TIMERS: {
             return action.payload;
         }
 
-        case TimersActions.SET_AUTH_REFRESH_TIMER: {
+        case TimersAction.SET_AUTH_REFRESH_TIMER: {
             const timerId = action.payload as unknown as NodeJS.Timer|null;
             return {...prevState, authRefreshTimerId: timerId}
         }

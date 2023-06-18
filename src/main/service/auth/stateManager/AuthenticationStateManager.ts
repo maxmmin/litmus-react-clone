@@ -1,5 +1,5 @@
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
-import Authentication, {AuthenticationReducible} from "../../../redux/auth/Authentication";
+import Authentication, {AuthenticationReducible} from "../../../redux/types/auth/Authentication";
 import ErrorResponse from "../../../util/apiRequest/ErrorResponse";
 
 interface AuthenticationStateManager {

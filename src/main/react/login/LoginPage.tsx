@@ -3,7 +3,7 @@ import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Navigate} from "react-router-dom";
-import {LoginPageState, updateLoginPageState} from "../../redux/login/LoginPageDataActions";
+import {LoginPageState, updateLoginPageState} from "../../redux/actions/LoginPageDataActions";
 import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 import store from "../../redux/store";

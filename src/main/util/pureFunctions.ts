@@ -1,6 +1,6 @@
-import {Permissions} from "../redux/userIdentity/Role";
+import {Permissions} from "../redux/types/userIdentity/Role";
 import {AppDispatch} from "../redux/store";
-import {clearAuthentication} from "../redux/auth/AuthAction";
+import {clearAuthentication} from "../redux/actions/AuthAction";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
 import {getGeocode} from "use-places-autocomplete";

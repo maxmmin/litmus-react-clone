@@ -1,8 +1,8 @@
 import {Action, Middleware} from "redux";
-import AppState from "../applicationState/AppState";
-import {AuthenticationReducible} from "./Authentication";
-import AuthAction from "./AuthAction";
-import {TimersReducible} from "../timers/TimersActions";
+import AppState from "../types/applicationState/AppState";
+import {AuthenticationReducible} from "../types/auth/Authentication";
+import AuthAction from "../actions/AuthAction";
+import {TimersReducible} from "../actions/TimersAction";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 import GeneralAction from "../../react/GeneralAction";
 

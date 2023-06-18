@@ -1,10 +1,10 @@
 import store from "../../../redux/store";
-import EntityCreationState from "../../../redux/creation/EntityCreationState";
+import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
 import {
     JurPersonCreationParams,
     UserCreationParams
-} from "../../../redux/creation/CreationCoreActions";
-import CreationTypedAction from "../../../redux/creation/CreationTypedActions";
+} from "../../../redux/actions/CreationCoreActions";
+import CreationTypedAction from "../../../redux/actions/CreationTypedActions";
 import {Entity} from "../../../model/Entity";
 import CreationStateManagerImpl from "./CreationStateManagerImpl";
 import PersonCreationStateManager from "./person/PersonCreationStateManager";

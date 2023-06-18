@@ -1,20 +1,20 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
-import CreationTypedActions from "./CreationTypedActions";
+import CreationTypedActions from "../actions/CreationTypedActions";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import {combineReducers} from "redux";
-import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
+import EntityCreationState, {BasicEntityCreationState} from "../types/creation/EntityCreationState";
 import deepCopy from "../../util/deepCopy";
 import CreationCoreActions, {
     initialJurPersonCreationParams,
     initialPersonCreationParams, initialUserCreationParams,
     JurPersonCreationParams, PersonCreationAction,
     PersonCreationParams, UserCreationParams
-} from "./CreationCoreActions";
+} from "../actions/CreationCoreActions";
 import JurPersonCreationStateManagerImpl from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 import {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 import {PassportData} from "../../model/human/person/PassportData";
-import AuthAction from "../auth/AuthAction";
+import AuthAction from "../actions/AuthAction";
 import GeneralAction from "../../react/GeneralAction";
 
 

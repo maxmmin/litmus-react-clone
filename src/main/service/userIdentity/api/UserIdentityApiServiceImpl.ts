@@ -1,10 +1,10 @@
-import UserIdentity from "../../../redux/userIdentity/UserIdentity";
+import UserIdentity from "../../../redux/types/userIdentity/UserIdentity";
 import UserIdentityApiService from "./UserIdentityApiService";
 import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
 import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
-import Role from "../../../redux/userIdentity/Role";
+import Role from "../../../redux/types/userIdentity/Role";
 
 class UserIdentityApiServiceImpl implements UserIdentityApiService {
 

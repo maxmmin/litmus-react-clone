@@ -1,7 +1,7 @@
 import AuthApiService, {Credentials} from "./AuthApiService";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import appConfig from "../../../config/appConfig";
-import Authentication from "../../../redux/auth/Authentication";
+import Authentication from "../../../redux/types/auth/Authentication";
 import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 

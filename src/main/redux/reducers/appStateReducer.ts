@@ -1,13 +1,13 @@
 import AppState, {
     AppStateReducible,
     GmapsApiResponse
-} from "./AppState";
+} from "../types/applicationState/AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
-import AppStateActions from "./AppStateActions";
-import AuthAction from "../auth/AuthAction";
+import AppStateAction from "../actions/AppStateAction";
+import AuthAction from "../actions/AuthAction";
 import {PayloadAction} from "@reduxjs/toolkit";
-import Notification, {AppNotificationType, BasicNotification, notificationTypes} from "./Notification";
+import Notification, {AppNotificationType, BasicNotification, notificationTypes} from "../types/applicationState/Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 import {FulfilledThunkAction, PendingThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
@@ -21,19 +21,19 @@ const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, 
 const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState = initialState, action) => {
 
     switch (action.type) {
-        case AppStateActions.REFRESH_ON: {
+        case AppStateAction.REFRESH_ON: {
             return {...prevState, isRefreshing: true}
         }
 
-        case AppStateActions.REFRESH_OFF: {
+        case AppStateAction.REFRESH_OFF: {
             return { ...prevState, isRefreshing: false}
         }
 
-        case AppStateActions.HEADER_MENU_TOGGLE: {
+        case AppStateAction.HEADER_MENU_TOGGLE: {
             return {...prevState, isHeaderMenuOpened: !prevState!.isHeaderMenuOpened}
         }
 
-        case AppStateActions.HEADER_MENU_CLOSE: {
+        case AppStateAction.HEADER_MENU_CLOSE: {
             return {...prevState, isHeaderMenuOpened: false}
         }
 
@@ -42,7 +42,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
             return {...initialState, notifications: prevState.notifications, gmapsApiState: prevState.gmapsApiState}
         }
 
-        case AppStateActions.SET_MAPS_API_RESPONSE: {
+        case AppStateAction.SET_MAPS_API_RESPONSE: {
             const gmapsResponseAction = action as PayloadAction<GmapsApiResponse>
             return {...prevState, gmapsApiState: gmapsResponseAction.payload}
         }
@@ -51,17 +51,17 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
          * Notification manager actions
          */
 
-        case AppStateActions.SET_NOTIFICATIONS: {
+        case AppStateAction.SET_NOTIFICATIONS: {
             const notifications: Notification[] = (action as PayloadAction<Notification[]>).payload;
             return {...prevState, notifications: notifications};
         }
 
-        case AppStateActions.ADD_NOTIFICATION: {
+        case AppStateAction.ADD_NOTIFICATION: {
             const notification = (action as PayloadAction<Notification>).payload;
             return {...prevState, notifications: [...prevState.notifications, notification]};
         }
 
-        case AppStateActions.CLEAR_NOTIFICATIONS: {
+        case AppStateAction.CLEAR_NOTIFICATIONS: {
             return {...prevState, notifications: []}
         }
 

@@ -14,18 +14,18 @@ import JurPersonExplorationApiService from "./api/jurPerson/JurPersonExploration
 import {
     BasicNotificationManager,
     NotificationManager
-} from "../../redux/applicationState/Notification";
-import PersonExplorationParams from "../../redux/exploration/types/human/person/PersonExplorationParams";
-import ExplorationMode, {ExplorationModeName} from "../../redux/exploration/types/ExplorationMode";
+} from "../../redux/types/applicationState/Notification";
+import PersonExplorationParams from "../../redux/types/exploration/human/person/PersonExplorationParams";
+import ExplorationMode, {ExplorationModeName} from "../../redux/types/exploration/ExplorationMode";
 import {Entity} from "../../model/Entity";
 import PagedData, {UnPagedData} from "../../util/apiRequest/PagedData";
-import EntityExplorationState from "../../redux/exploration/types/EntityExplorationState";
-import EntityExplorationParams from "../../redux/exploration/types/EntityExplorationParams";
+import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
+import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
-import JurPersonExplorationParams from "../../redux/exploration/types/jurPerson/JurPersonExplorationParams";
-import UserExplorationParams from "../../redux/exploration/types/human/user/UserExplorationParams";
-import {ExplorationCoreAction, ExplorationTypedActions} from "../../redux/exploration/ExplorationActions";
-import EntityExplorationData from "../../redux/exploration/types/EntityExplorationData";
+import JurPersonExplorationParams from "../../redux/types/exploration/jurPerson/JurPersonExplorationParams";
+import UserExplorationParams from "../../redux/types/exploration/human/user/UserExplorationParams";
+import {ExplorationCoreAction, ExplorationTypedActions} from "../../redux/actions/ExplorationActions";
+import EntityExplorationData from "../../redux/types/exploration/EntityExplorationData";
 import deepCopy from "../../util/deepCopy";
 import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
@@ -57,7 +57,7 @@ class ExplorationServiceImpl implements ExplorationService {
         this._store = providedStore;
         this.shouldNotify = shouldNotify;
         if (shouldNotify) {
-            this.notificationManager = new BasicNotificationManager();
+            this.notificationManager = BasicNotificationManager.getManager(providedStore);
         }
         if (authStateManager) {
             this.authStateManager = authStateManager;

@@ -7,8 +7,8 @@ import {Location} from "../../../model/Location";
 import {Entity} from "../../../model/Entity";
 import CreationStateManager from "../../../service/creation/stateManager/CreationStateManager";
 import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
-import EntityCreationState from "../../../redux/creation/EntityCreationState";
-import {JurPersonCreationParams, PersonCreationParams} from "../../../redux/creation/CreationCoreActions";
+import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
+import {JurPersonCreationParams, PersonCreationParams} from "../../../redux/actions/CreationCoreActions";
 
 type Props = {
     entity: Entity,

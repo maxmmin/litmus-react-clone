@@ -1,6 +1,6 @@
 import CreationStateManager from "../CreationStateManager";
-import {PersonCreationParams} from "../../../../redux/creation/CreationCoreActions";
-import EntityCreationState from "../../../../redux/creation/EntityCreationState";
+import {PersonCreationParams} from "../../../../redux/actions/CreationCoreActions";
+import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
 import {PassportData} from "../../../../model/human/person/PassportData";
 import {Relationship, RelationshipsLinkObject} from "../../../../model/human/person/Person";
 

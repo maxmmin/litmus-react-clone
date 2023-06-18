@@ -1,10 +1,10 @@
-import store, {AppDispatch} from "../store";
-import AppStateActions, {addNotification} from "./AppStateActions";
+import store, {AppDispatch} from "../../store";
+import AppStateAction, {addNotification} from "../../actions/AppStateAction";
 import {ToastContent, ToastOptions, TypeOptions} from "react-toastify";
 import {PayloadAction} from "@reduxjs/toolkit";
 import React from "react";
-import deepCopy from "../../util/deepCopy";
-import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
+import deepCopy from "../../../util/deepCopy";
+import BasicAuthenticationManager from "../../../service/auth/BasicAuthenticationManager";
 
 
 export type NotificationContent = ToastContent;
@@ -67,16 +67,16 @@ export interface NotificationManager {
 export class BasicNotificationManager implements NotificationManager {
     private readonly dispatch: AppDispatch;
 
-    private readonly ADD_NOTIFICATION: string = AppStateActions.ADD_NOTIFICATION;
+    private readonly ADD_NOTIFICATION: string = AppStateAction.ADD_NOTIFICATION;
 
-    private readonly CLEAR_NOTIFICATIONS: string = AppStateActions.CLEAR_NOTIFICATIONS;
+    private readonly CLEAR_NOTIFICATIONS: string = AppStateAction.CLEAR_NOTIFICATIONS;
 
 
     constructor(dispatch: AppDispatch) {
         this.dispatch = dispatch;
     }
 
-    static getManager(_store: typeof store): BasicNotificationManager {
+    static getManager(_store: typeof store = store): BasicNotificationManager {
         return new BasicNotificationManager(_store.dispatch)
     }
 

@@ -1,7 +1,7 @@
-import {UserIdentityReducible} from "./UserIdentity";
+import {UserIdentityReducible} from "../types/userIdentity/UserIdentity";
 import {Reducer} from "react";
-import UserIdentityActions from "./UserIdentityActions";
-import AuthAction from "../auth/AuthAction";
+import UserIdentityActions from "../actions/UserIdentityActions";
+import AuthAction from "../actions/AuthAction";
 import {PayloadAction} from "@reduxjs/toolkit";
 import GeneralAction from "../../react/GeneralAction";
 

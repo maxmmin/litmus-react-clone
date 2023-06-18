@@ -1,4 +1,4 @@
-import Authentication from "../../../redux/auth/Authentication";
+import Authentication from "../../../redux/types/auth/Authentication";
 
 export type Credentials = {
     email: string,
