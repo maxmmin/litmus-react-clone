@@ -189,9 +189,9 @@ class ExplorationServiceImpl implements ExplorationService {
     }))
 
     explore(entity: Entity): void {
-        let stateManager: ExplorationStateManagerImpl<EntityExplorationState<any, EntityExplorationParams>>;
+        let stateManager: ExplorationStateManagerImpl<EntityExplorationState<unknown, EntityExplorationParams>>;
 
-        let asyncThunk: AsyncThunkAction<EntityExplorationData<any, any>, any, any>;
+        let asyncThunk: AsyncThunkAction<EntityExplorationData<unknown, EntityExplorationParams>, unknown, LitmusAsyncThunkConfig>;
 
         switch (entity) {
             case Entity.PERSON: {
