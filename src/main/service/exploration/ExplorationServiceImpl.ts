@@ -31,6 +31,7 @@ import AuthenticationStateManager from "../auth/stateManager/AuthenticationState
 import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
+import ExplorationStateManager from "./stateManager/ExplorationStateManager";
 
 class UnsupportedModeError extends Error {
 
@@ -189,7 +190,7 @@ class ExplorationServiceImpl implements ExplorationService {
     }))
 
     explore(entity: Entity): void {
-        let stateManager: ExplorationStateManagerImpl<EntityExplorationState<unknown, EntityExplorationParams>>;
+        let stateManager: ExplorationStateManager<EntityExplorationState<unknown, EntityExplorationParams>>;
 
         let asyncThunk: AsyncThunkAction<EntityExplorationData<unknown, EntityExplorationParams>, unknown, LitmusAsyncThunkConfig>;
 

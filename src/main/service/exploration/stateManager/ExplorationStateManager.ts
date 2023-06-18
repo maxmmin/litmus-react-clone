@@ -19,7 +19,6 @@ export default interface ExplorationStateManager <S extends EntityExplorationSta
 
     setData (data: S['data']): void;
 
-    //@todo maybe make return promise of thunk dispatch
     retrieveData(thunk: AsyncThunkAction<S["data"], unknown, LitmusAsyncThunkConfig>): Promise<PayloadAction<unknown, string, unknown>>
 
     enableSectionPending (): void;
