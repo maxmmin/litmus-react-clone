@@ -1,4 +1,4 @@
-import AuthActions from "./AuthActions";
+import AuthAction from "./AuthAction";
 import Authentication, {AuthenticationReducible} from "./Authentication";
 import {Reducer} from "react";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
@@ -9,23 +9,23 @@ import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
 
     switch (action.type) {
-        case AuthActions.CLEAR_AUTH: {
+        case AuthAction.CLEAR_AUTH: {
             return null;
         }
 
-        case AuthActions.CHECK_AUTH: {
+        case AuthAction.CHECK_AUTH: {
             return prevState;
         }
 
-        case AuthActions.AUTHENTICATE: {
+        case AuthAction.AUTHENTICATE: {
             return action.payload;
         }
 
-        case `${AuthActions.AUTHENTICATE}/fulfilled`: {
+        case `${AuthAction.AUTHENTICATE}/fulfilled`: {
             return {...action.payload};
         }
 
-        case `${AuthActions.AUTHENTICATE}/rejected`: {
+        case `${AuthAction.AUTHENTICATE}/rejected`: {
             return null;
         }
 

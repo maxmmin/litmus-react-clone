@@ -1,13 +1,14 @@
-import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
+import store, {AppDispatch, LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import {Action} from "redux";
 import UserIdentityActions from "../../redux/userIdentity/UserIdentityActions";
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
-import UserIdentity from "../../redux/userIdentity/UserIdentity";
+import UserIdentity, {UserIdentityReducible} from "../../redux/userIdentity/UserIdentity";
 import UserIdentityApiService from "./api/UserIdentityApiService";
 import UserIdentityManager from "./UserIdentityManager";
-import UserIdentityServiceImpl from "./api/UserIdentityServiceImpl";
+import UserIdentityApiServiceImpl from "./api/UserIdentityApiServiceImpl";
 import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
 import deepCopy from "../../util/deepCopy";
+import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
 
 
 type RetrieveIdentityThunkArg = ThunkArg<{
@@ -15,20 +16,24 @@ type RetrieveIdentityThunkArg = ThunkArg<{
 }>
 
 class UserIdentityManagerImpl implements UserIdentityManager{
-    private readonly _store: typeof store;
+    private readonly dispatch: AppDispatch;
+    private readonly getState: () => UserIdentityReducible;
+
     private readonly identityService: UserIdentityApiService;
 
-    constructor(_store: typeof store = store, identityService?: UserIdentityApiService) {
-        this._store = _store;
-        if (!identityService) {
-            identityService = new UserIdentityServiceImpl(()=>new AuthenticationStateManagerImpl().getAuth()!.accessToken)
-        }
+    constructor(dispatch: AppDispatch, getState: ()=>UserIdentityReducible, identityService: UserIdentityApiService) {
+        this.dispatch = dispatch;
+        this.getState = getState;
         this.identityService = identityService;
+    }
+
+    static getManager (service: UserIdentityApiService, _store: typeof store): UserIdentityManagerImpl {
+        return new UserIdentityManagerImpl(_store.dispatch, ()=>_store.getState().userIdentity, service)
     }
 
     retrieveIdentity (globalPending: boolean = false): void  {
         const action: AsyncThunkAction<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig> = this._retrieveIdentityThunk({identityService: this.identityService, globalPending: globalPending})
-        this._store.dispatch(action);
+        this.dispatch(action);
     };
 
     public _retrieveIdentityThunk = createAsyncThunk<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig>(UserIdentityActions.RETRIEVE_IDENTITY, async ({identityService}, {fulfillWithValue, rejectWithValue})=>{
@@ -43,7 +48,7 @@ class UserIdentityManagerImpl implements UserIdentityManager{
 
     public clearIdentity () {
         const action: Action<UserIdentityActions> = {type: UserIdentityActions.CLEAR_IDENTITY}
-        this._store.dispatch(action);
+        this.dispatch(action);
     }
 }
 

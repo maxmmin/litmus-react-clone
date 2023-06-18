@@ -13,6 +13,8 @@ import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 import UserIdentityManager from "../../service/userIdentity/UserIdentityManager";
 import UserIdentityManagerImpl from "../../service/userIdentity/UserIdentityManagerImpl";
+import UserIdentityApiService from "../../service/userIdentity/api/UserIdentityApiService";
+import UserIdentityApiServiceImpl from "../../service/userIdentity/api/UserIdentityApiServiceImpl";
 
 type Props = {
     children: ReactNode
@@ -37,7 +39,10 @@ const RootComponent = ({children}: Props) => {
 
     const authenticationManager: AuthenticationManager = useMemo(()=>BasicAuthenticationManager.getBasicManager(store), [])
 
-    const userIdentityManager: UserIdentityManager = useMemo(()=>new UserIdentityManagerImpl(), []);
+    const userIdentityManager: UserIdentityManager = useMemo<UserIdentityManager>(()=>{
+        const service: UserIdentityApiService = new UserIdentityApiServiceImpl(()=>store.getState().authentication?.accessToken!);
+        return UserIdentityManagerImpl.getManager(service, store);
+    }, []);
 
     useEffect(()=>{
         store.dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError?{...loadError}:null}))

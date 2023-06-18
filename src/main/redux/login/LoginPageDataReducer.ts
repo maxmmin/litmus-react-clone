@@ -1,7 +1,7 @@
 import {Reducer} from "react";
 import LoginPageDataActions, {LoginPageState, LoginPageStateReducible} from "./LoginPageDataActions";
 import {PayloadAction} from "@reduxjs/toolkit";
-import AuthActions from "../auth/AuthActions";
+import AuthAction from "../auth/AuthAction";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 
 const initialState: LoginPageState = {
@@ -20,7 +20,7 @@ const loginPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<Login
             return {...prevState, ...action.payload!}
         }
 
-        case `${AuthActions.AUTHENTICATE}/fulfilled`: {
+        case `${AuthAction.AUTHENTICATE}/fulfilled`: {
             return initialState;
         }
 
@@ -35,7 +35,7 @@ const loginPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<Login
 
                 if (error?.status) {
                     switch (actionType) {
-                        case AuthActions.AUTHENTICATE: {
+                        case AuthAction.AUTHENTICATE: {
                             if (error.status===401) {
                                 return {...prev, error: error}
                             }

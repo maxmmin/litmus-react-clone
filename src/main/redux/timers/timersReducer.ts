@@ -1,7 +1,7 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
 import TimersActions, {Timers, TimersReducible} from "./TimersActions";
-import AuthActions from "../auth/AuthActions";
+import AuthAction from "../auth/AuthAction";
 
 export const initState: TimersReducible = {
     authRefreshTimerId: null
@@ -11,7 +11,7 @@ export const initState: TimersReducible = {
 const timersActionsReducer: Reducer<TimersReducible, PayloadAction<Timers>> = (prevState = initState, action) => {
     // check and clear timer before this.
     // ! one more check is placed inside handleError function
-    if (action.type.indexOf(AuthActions.AUTHENTICATE)>-1) {
+    if (action.type.indexOf(AuthAction.AUTHENTICATE)>-1) {
         if (prevState?.authRefreshTimerId) {
             clearTimeout(prevState.authRefreshTimerId)
         }
@@ -27,8 +27,8 @@ const timersActionsReducer: Reducer<TimersReducible, PayloadAction<Timers>> = (p
             return {...prevState, authRefreshTimerId: timerId}
         }
 
-        case `${AuthActions.AUTHENTICATE}/fulfilled`:
-        case `${AuthActions.AUTHENTICATE}/rejected`: {
+        case `${AuthAction.AUTHENTICATE}/fulfilled`:
+        case `${AuthAction.AUTHENTICATE}/rejected`: {
             return {...prevState, authRefreshTimerId: null}
         }
 

@@ -5,13 +5,14 @@ import AppState, {
 import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateActions from "./AppStateActions";
-import AuthActions from "../auth/AuthActions";
+import AuthAction from "../auth/AuthAction";
 import {PayloadAction} from "@reduxjs/toolkit";
 import Notification, {AppNotificationType, BasicNotification, notificationTypes} from "./Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 import {FulfilledThunkAction, PendingThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import GeneralAction from "../../react/GeneralAction";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 
@@ -36,7 +37,8 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
             return {...prevState, isHeaderMenuOpened: false}
         }
 
-        case AuthActions.CLEAR_AUTH: {
+
+        case GeneralAction.RESET_DATA: {
             return {...initialState, notifications: prevState.notifications, gmapsApiState: prevState.gmapsApiState}
         }
 

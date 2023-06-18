@@ -14,7 +14,8 @@ import CreationCoreActions, {
 import JurPersonCreationStateManagerImpl from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 import {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 import {PassportData} from "../../model/human/person/PassportData";
-import AuthActions from "../auth/AuthActions";
+import AuthAction from "../auth/AuthAction";
+import GeneralAction from "../../react/GeneralAction";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
@@ -73,7 +74,7 @@ const personCreationStateReducer: Reducer<EntityCreationState<PersonCreationPara
             return {...prevState, params: {...prevState.params, passportData}}
         }
 
-        case AuthActions.CLEAR_AUTH: {
+        case GeneralAction.RESET_DATA: {
             return initialPersonCreationState;
         }
 
@@ -96,7 +97,7 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPersonCreati
         // code-place for jur person specific actions
         // @todo write getClear action
 
-        case AuthActions.CLEAR_AUTH: {
+        case GeneralAction.RESET_DATA: {
             return initialJurPersonState
         }
 
@@ -117,7 +118,7 @@ const initialUserCreationState: EntityCreationState<UserCreationParams> = deepCo
 const userCreationStateReducer: Reducer<EntityCreationState<UserCreationParams>|undefined, PayloadAction<UserCreationParams>> = (prevState=initialUserCreationState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
-        case AuthActions.CLEAR_AUTH: {
+        case GeneralAction.RESET_DATA: {
             return initialUserCreationState
         }
 

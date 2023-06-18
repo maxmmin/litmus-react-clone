@@ -1,30 +1,43 @@
-import store from "../../redux/store";
-import {setAuthRefreshTimer, setTimers, Timers, TimersReducible} from "../../redux/timers/TimersActions";
+import store, {AppDispatch} from "../../redux/store";
+import {
+    clearAuthRefreshTimer,
+    setAuthRefreshTimer,
+    setTimers,
+    Timers
+} from "../../redux/timers/TimersActions";
 
 class TimersStateManager {
-    private readonly _store: typeof store = store;
+    private readonly dispatch: AppDispatch;
+    private readonly getState: ()=>Timers;
 
 
-    constructor(_store?: typeof store) {
-        if (_store) {
-            this._store = _store;
-        }
+    constructor(dispatch: AppDispatch, getState: ()=>Timers) {
+        this.dispatch = dispatch;
+        this.getState = getState;
     }
 
+    static getManager(_store: typeof store = store): TimersStateManager {
+        return new TimersStateManager(_store.dispatch, ()=>_store.getState().timers!)
+}
+
     getTimers(): Timers {
-        return this._store.getState().timers!;
+        return this.getState();
     }
 
     setTimers (timers: Timers): void {
-        this._store.dispatch(setTimers(timers));
+        this.dispatch(setTimers(timers));
     }
 
     setAuthRefreshTimer(timerId: NodeJS.Timer|null): void {
-        this._store.dispatch(setAuthRefreshTimer(timerId))
+        this.dispatch(setAuthRefreshTimer(timerId))
     }
 
     getAuthRefreshTimer(): NodeJS.Timer|null|undefined {
         return this.getTimers().authRefreshTimerId;
+    }
+
+    clearAuthRefreshTimer(): void {
+        this.dispatch(clearAuthRefreshTimer());
     }
 }
 

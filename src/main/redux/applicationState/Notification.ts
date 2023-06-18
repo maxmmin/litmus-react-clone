@@ -4,6 +4,7 @@ import {ToastContent, ToastOptions, TypeOptions} from "react-toastify";
 import {PayloadAction} from "@reduxjs/toolkit";
 import React from "react";
 import deepCopy from "../../util/deepCopy";
+import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 
 
 export type NotificationContent = ToastContent;
@@ -64,11 +65,20 @@ export interface NotificationManager {
 }
 
 export class BasicNotificationManager implements NotificationManager {
-    private readonly dispatch: typeof store.dispatch = store.dispatch;
+    private readonly dispatch: AppDispatch;
 
     private readonly ADD_NOTIFICATION: string = AppStateActions.ADD_NOTIFICATION;
 
     private readonly CLEAR_NOTIFICATIONS: string = AppStateActions.CLEAR_NOTIFICATIONS;
+
+
+    constructor(dispatch: AppDispatch) {
+        this.dispatch = dispatch;
+    }
+
+    static getManager(_store: typeof store): BasicNotificationManager {
+        return new BasicNotificationManager(_store.dispatch)
+    }
 
     isValid(value: any) {
         return typeof value === "string" || React.isValidElement(value);

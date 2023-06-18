@@ -10,7 +10,7 @@ import BasicAuthApiService from "./api/BasicAuthApiService";
 import {HttpStatus} from "../../util/apiRequest/HttpStatus";
 import AuthenticationStateManagerImpl from "./stateManager/AuthenticationStateManagerImpl";
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import AuthActions from "../../redux/auth/AuthActions";
+import AuthAction from "../../redux/auth/AuthAction";
 import {BasicNotificationManager, NotificationManager} from "../../redux/applicationState/Notification";
 import deepCopy from "../../util/deepCopy";
 import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
@@ -41,7 +41,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         return this.authService.getAuth({email, password});
 }
 
-    _loginThunk = createAsyncThunk<Authentication, Credentials, LitmusAsyncThunkConfig>(AuthActions.AUTHENTICATE, async (credentials, {rejectWithValue, fulfillWithValue }) => {
+    _loginThunk = createAsyncThunk<Authentication, Credentials, LitmusAsyncThunkConfig>(AuthAction.AUTHENTICATE, async (credentials, {rejectWithValue, fulfillWithValue }) => {
 
         try {
             const authentication: Authentication  = await this._login(credentials)
@@ -107,7 +107,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         return  await this.authService.refreshAuth(refreshToken);
     }
 
-    private _refreshAuthThunk = createAsyncThunk<Authentication, ThunkArg<Authentication>, LitmusAsyncThunkConfig>(AuthActions.AUTHENTICATE, async (arg,{rejectWithValue, fulfillWithValue})=>{
+    private _refreshAuthThunk = createAsyncThunk<Authentication, ThunkArg<Authentication>, LitmusAsyncThunkConfig>(AuthAction.AUTHENTICATE, async (arg, {rejectWithValue, fulfillWithValue})=>{
             try {
                 return fulfillWithValue(await this._refreshAuth(arg), {notify: false});
             }
@@ -133,7 +133,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         const timerId = this.timersStateManager.getAuthRefreshTimer();
         if (timerId) {
             window.clearTimeout(timerId);
-            this.timersStateManager.setAuthRefreshTimer(null);
+            this.timersStateManager.clearAuthRefreshTimer();
         } else {
             throw new Error("auth timer is not set")
         }
@@ -180,11 +180,11 @@ class BasicAuthenticationManager implements AuthenticationManager {
         return !this.isAuthActual();
     }
 
-    static getBasicManager (_store: typeof store = store) {
+    static getBasicManager (_store: typeof store) {
         const authService = new BasicAuthApiService();
-        const timersStateManager = new TimersStateManager();
-        const authenticationStateManager = new AuthenticationStateManagerImpl();
-        const notificationManager = new BasicNotificationManager();
+        const timersStateManager = TimersStateManager.getManager(_store);
+        const authenticationStateManager = AuthenticationStateManagerImpl.getManager(_store);
+        const notificationManager = BasicNotificationManager.getManager(_store);
         return new BasicAuthenticationManager(authenticationStateManager, authService, timersStateManager, notificationManager);
     }
 

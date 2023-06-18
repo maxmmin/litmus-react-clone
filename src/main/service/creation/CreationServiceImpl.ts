@@ -1,4 +1,4 @@
-import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
+import store, {AppDispatch, LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import CreationService from "./CreationService";
 import {Entity} from "../../model/Entity";
 import CreationCoreActions, {
@@ -23,8 +23,13 @@ import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
 import CreationStateManager from "./stateManager/CreationStateManager";
 
+type CreationStore = ReturnType<typeof store.getState>["creation"]
+
 class CreationServiceImpl implements CreationService {
-    private readonly _store: typeof store;
+    private readonly getState: ()=>CreationStore;
+    private readonly dispatch: AppDispatch;
+
+
     private readonly authStateManager: AuthenticationStateManager;
 
     private handleErr (e: unknown): ErrorResponse<unknown> {
@@ -85,9 +90,10 @@ class CreationServiceImpl implements CreationService {
         }
     })
 
-    constructor(authStateManager: AuthenticationStateManager = new AuthenticationStateManagerImpl(), _store: typeof store) {
-        this._store = _store;
-        this.authStateManager = authStateManager;
+    constructor(dispatch: AppDispatch, getState: ()=>CreationStore, authStateManager: AuthenticationStateManager) {
+      this.dispatch = dispatch;
+      this.getState = getState;
+      this.authStateManager = authStateManager;
     }
 
     create(entity: Entity): void {
@@ -98,7 +104,7 @@ class CreationServiceImpl implements CreationService {
 
         switch (entity) {
             case Entity.PERSON: {
-                const personManager = CreationStateManagerFactory.getPersonManager(this._store);
+                const personManager = CreationStateManagerFactory.getPersonManager();
                 stateManager = personManager;
 
                 const service = new PersonCreationApiService(this.getAccessToken);
@@ -107,7 +113,7 @@ class CreationServiceImpl implements CreationService {
                 break;
             }
             case Entity.JUR_PERSON: {
-                const jurPersonManager = CreationStateManagerFactory.getJurPersonManager(this._store);
+                const jurPersonManager = CreationStateManagerFactory.getJurPersonManager();
                 stateManager = jurPersonManager;
 
                 const service = new JurPersonCreationApiService(this.getAccessToken.bind(this));
@@ -117,7 +123,7 @@ class CreationServiceImpl implements CreationService {
                 break;
             }
             case Entity.USER: {
-                const userManager = CreationStateManagerFactory.getUserManager(this._store);
+                const userManager = CreationStateManagerFactory.getUserManager();
                 stateManager = userManager;
 
                 const service = new UserCreationApiService(this.getAccessToken.bind(this));

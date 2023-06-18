@@ -6,7 +6,7 @@ import appConfig from "../../../config/appConfig";
 import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
 import Role from "../../../redux/userIdentity/Role";
 
-class UserIdentityServiceImpl implements UserIdentityApiService {
+class UserIdentityApiServiceImpl implements UserIdentityApiService {
 
     getToken: ()=>string;
 
@@ -36,4 +36,4 @@ class UserIdentityServiceImpl implements UserIdentityApiService {
     }
 }
 
-export default UserIdentityServiceImpl;
+export default UserIdentityApiServiceImpl;

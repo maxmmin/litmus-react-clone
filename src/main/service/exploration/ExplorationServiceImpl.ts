@@ -62,7 +62,7 @@ class ExplorationServiceImpl implements ExplorationService {
         if (authStateManager) {
             this.authStateManager = authStateManager;
         } else {
-            this.authStateManager = new AuthenticationStateManagerImpl(providedStore);
+            this.authStateManager = AuthenticationStateManagerImpl.getManager();
         }
     }
 

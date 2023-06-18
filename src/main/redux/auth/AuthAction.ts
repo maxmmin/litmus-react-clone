@@ -7,14 +7,14 @@ import Authentication from "./Authentication";
 import appConfig from "../../config/appConfig";
 import {ThunkArg} from "../store";
 
-enum AuthActions {
+enum AuthAction {
     AUTHENTICATE="AUTHENTICATE",
     CLEAR_AUTH="CLEAR_AUTH",
     CHECK_AUTH="CHECK_AUTH",
     SET_EXPIRED="SET_EXPIRED"
 }
 
-export default AuthActions;
+export default AuthAction;
 
 type RefreshAccessTokenArg = ThunkArg<{
     refreshToken: string
@@ -42,14 +42,14 @@ type RefreshAccessTokenArg = ThunkArg<{
 
 export const setAuthentication = (auth: Authentication) : PayloadAction<AuthenticationReducible> => {
     return {
-        type: `${AuthActions.AUTHENTICATE}`,
+        type: `${AuthAction.AUTHENTICATE}`,
         payload: auth
     }
 }
 
-export function clearAuthentication (): Action<AuthActions> {
+export function clearAuthentication (): Action<AuthAction> {
     return {
-        type: AuthActions.CLEAR_AUTH
+        type: AuthAction.CLEAR_AUTH
     }
 }
 
