@@ -14,6 +14,7 @@ import EntityExplorationParams from "../types/exploration/EntityExplorationParam
 import ExplorationMode from "../types/exploration/ExplorationMode";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import deepCopy from "../../util/deepCopy";
+import GeneralAction from "../../react/GeneralAction";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<unknown, string>): S => {
     switch (action.type) {
@@ -79,6 +80,10 @@ const personExplorationReducer: Reducer<PersonExplorationStateReducible, Payload
     switch (action.type) {
         // code-place for jur person specific actions
         // @todo write getClear action
+        case GeneralAction.RESET_DATA: {
+            return initialPersonExplorationState;
+        }
+
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.personDomain) {
@@ -99,7 +104,10 @@ type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
 const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, PayloadAction<unknown>> = (prevState=initialJurPersonExplorationState, action) => {
     switch (action.type) {
         // code-place for jur person specific actions
-            // @todo write getClear action
+        case GeneralAction.RESET_DATA: {
+            return initialJurPersonExplorationState
+        }
+
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.jurPersonDomain) {
@@ -121,6 +129,11 @@ const userExplorationReducer: Reducer<UserExplorationStateReducible, PayloadActi
     switch (action.type) {
         // code-place for jur person specific actions
         // @todo write getClear action
+
+        case GeneralAction.RESET_DATA: {
+            return initialUserExplorationState
+        }
+
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.userDomain) {
