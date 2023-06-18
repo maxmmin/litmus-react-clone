@@ -3,7 +3,7 @@ import {Reducer} from "react";
 import UserIdentityActions from "../actions/UserIdentityActions";
 import AuthAction from "../actions/AuthAction";
 import {PayloadAction} from "@reduxjs/toolkit";
-import GeneralAction from "../../react/GeneralAction";
+import GeneralAction from "../GeneralAction";
 
 const initialState = null;
 

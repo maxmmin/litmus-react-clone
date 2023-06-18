@@ -4,7 +4,7 @@ import {AuthenticationReducible} from "../types/auth/Authentication";
 import AuthAction from "../actions/AuthAction";
 import {TimersReducible} from "../actions/TimersAction";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
-import GeneralAction from "../../react/GeneralAction";
+import GeneralAction from "../GeneralAction";
 
 
 type PartedStoreType = {

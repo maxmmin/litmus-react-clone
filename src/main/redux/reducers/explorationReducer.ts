@@ -14,7 +14,7 @@ import EntityExplorationParams from "../types/exploration/EntityExplorationParam
 import ExplorationMode from "../types/exploration/ExplorationMode";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import deepCopy from "../../util/deepCopy";
-import GeneralAction from "../../react/GeneralAction";
+import GeneralAction from "../GeneralAction";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<unknown, string>): S => {
     switch (action.type) {

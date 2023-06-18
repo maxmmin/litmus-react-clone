@@ -21,7 +21,7 @@ function NotificationCenter () {
 
     return (
         <>
-            <ToastContainer/>
+            <ToastContainer position={'top-left'}/>
         </>
     );
 }

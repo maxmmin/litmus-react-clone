@@ -12,7 +12,7 @@ import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/p
 import {FulfilledThunkAction, PendingThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
 import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
-import GeneralAction from "../../react/GeneralAction";
+import GeneralAction from "../GeneralAction";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 

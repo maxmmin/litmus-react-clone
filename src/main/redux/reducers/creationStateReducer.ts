@@ -15,7 +15,7 @@ import JurPersonCreationStateManagerImpl from "../../service/creation/stateManag
 import {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 import {PassportData} from "../../model/human/person/PassportData";
 import AuthAction from "../actions/AuthAction";
-import GeneralAction from "../../react/GeneralAction";
+import GeneralAction from "../GeneralAction";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
