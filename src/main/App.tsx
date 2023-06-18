@@ -9,13 +9,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import Explore from "./react/exploration/ExplorationScreen";
 import AppStateAction, {switchAppState} from "./redux/actions/AppStateAction";
-import RootComponent from "./react/root/RootComponent";
+import AuthComponent from "./react/auth/AuthComponent";
 import Creation from "./react/creation/CreationScreen";
 import appConfig, {routingLinks} from "./config/appConfig";
 import Role, {Permissions} from "./redux/types/userIdentity/Role";
 import {buildUrl} from "./util/pureFunctions";
 import {Entity} from "./model/Entity";
 import LoginPage from "./react/login/LoginPage";
+import NotificationCenter from "./react/notifications/NotificationCenter";
+import {ErrorBoundary} from "react-error-boundary";
 
 // @todo check if the refresh token expired
 
@@ -23,8 +25,10 @@ function App() {
     const dispatch = useAppDispatch();
 
   return (
+      <ErrorBoundary fallback={<h1>Something went wrong...</h1>}>
+            <NotificationCenter/>
             <BrowserRouter basename={"/"}>
-                <RootComponent>
+                <AuthComponent>
                     <div className={"wrapper"} onClick={e=>{
                         const appStore = store.getState();
                         const isMenuOpened = appStore.appState?.isHeaderMenuOpened;
@@ -33,7 +37,7 @@ function App() {
                             dispatch(switchAppState(AppStateAction.HEADER_MENU_CLOSE))
                         }
                         // @todo think about replace this
-                    }}>
+                        }}>
                         <Routes>
                             <Route path={"/"} element={
                                 <PrivateComponent mode={"ERROR_PAGE"} component={<Home/>} requiredPermissions={[Permissions.DATA_READ]}/>
@@ -66,8 +70,9 @@ function App() {
                             <Route path="/sign-in" element={<LoginPage/>}/>
                         </Routes>
                     </div>
-                </RootComponent>
+                </AuthComponent>
             </BrowserRouter>
+      </ErrorBoundary>
       )
 }
 

@@ -22,7 +22,7 @@ type Props = {
 
 const libraries: Libraries = ["places"];
 
-const RootComponent = ({children}: Props) => {
+const AuthComponent = ({children}: Props) => {
 
     const authentication = useAppSelector(state => state.authentication)
 
@@ -73,15 +73,12 @@ const RootComponent = ({children}: Props) => {
 
     return (
         <>
-            <ErrorBoundary fallback={<h1>Something went wrong...</h1>}>
-                <NotificationCenter/>
-                {
-                    isRefreshing ? <Loader/> : <>{children}</>
-                }
-            </ErrorBoundary>
+            {
+                isRefreshing ? <Loader/> : <>{children}</>
+            }
         </>
     )
 
 }
 
-export default RootComponent;
+export default AuthComponent;
