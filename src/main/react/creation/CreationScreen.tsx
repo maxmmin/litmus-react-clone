@@ -30,7 +30,6 @@ const Creation = () => {
     const navigate = useNavigate();
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
-        console.log(event.currentTarget.value)
         navigate(event.currentTarget.value)
     }
 

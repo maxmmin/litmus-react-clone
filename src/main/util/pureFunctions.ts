@@ -92,24 +92,24 @@ export const getTableNameFromLocation = (pathName: string): Entity | null => {
     return pathsArray[pathsArray.length - 1].toUpperCase() as Entity | null;
 }
 
-// export const checkAndRefreshAuth = (auth: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {
-//     if (auth) {
-//         if (!isValid(auth?.accessToken!)) {
-//             if (auth?.refreshToken&&isValid(auth.refreshToken)) {
+// export const checkAndRefreshAuth = (core: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {
+//     if (core) {
+//         if (!isValid(core?.accessToken!)) {
+//             if (core?.refreshToken&&isValid(core.refreshToken)) {
 //                 return dispatch(
-//                     refreshAccessToken({refreshToken: auth.refreshToken, globalPending: false, notifyOnEnd: false})
+//                     refreshAccessToken({refreshToken: core.refreshToken, globalPending: false, notifyOnEnd: false})
 //                 )
 //             } else {
 //                 return logOut(dispatch)
 //             }
 //         }
 //
-//         if (!timers?.authRefreshTimerId&&auth?.accessToken&&auth.refreshToken) {
-//             return dispatch(setTimers({authRefreshTimerId: setAuthRefreshingTimer(auth, dispatch)}))
+//         if (!timers?.authRefreshTimerId&&core?.accessToken&&core.refreshToken) {
+//             return dispatch(setTimers({authRefreshTimerId: setAuthRefreshingTimer(core, dispatch)}))
 //         }
 //     }
 //
-//     if (!auth&&timers?.authRefreshTimerId) {
+//     if (!core&&timers?.authRefreshTimerId) {
 //         window.clearTimeout(timers.authRefreshTimerId)
 //         dispatch(clearAuthRefreshTimer())
 //     }
@@ -145,11 +145,11 @@ export function isValid(token: string | null | undefined): boolean {
 //
 //     const expDate = new Date(expirationTimeInMs-1000*60);
 //
-//     console.log(`auth update planned in ${expDate.getHours()}:${expDate.getMinutes()}:${expDate.getSeconds()}`)
+//     console.log(`core update planned in ${expDate.getHours()}:${expDate.getMinutes()}:${expDate.getSeconds()}`)
 //
 //     // this callback will fire when it will 1 minute before jwt expiring
 //     return setTimeout(()=>{
-//         console.log("updating auth")
+//         console.log("updating core")
 //         dispatch(refreshAccessToken({refreshToken: refreshToken, globalPending: false, notifyOnEnd: false}))
 //     }, refreshCallbackDelayInMs)
 // }

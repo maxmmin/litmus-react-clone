@@ -7,8 +7,6 @@ import {useLoadScript} from "@react-google-maps/api";
 import appConfig, {gmapsRegionOptions} from "../../config/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
 import {setMapsApiResponse} from "../../redux/actions/AppStateAction";
-import {ErrorBoundary} from "react-error-boundary";
-import NotificationCenter from "../notifications/NotificationCenter";
 import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 import UserIdentityManager from "../../service/userIdentity/UserIdentityManager";
@@ -22,7 +20,7 @@ type Props = {
 
 const libraries: Libraries = ["places"];
 
-const AuthComponent = ({children}: Props) => {
+const LitmusCore = ({children}: Props) => {
 
     const authentication = useAppSelector(state => state.authentication)
 
@@ -81,4 +79,4 @@ const AuthComponent = ({children}: Props) => {
 
 }
 
-export default AuthComponent;
+export default LitmusCore;

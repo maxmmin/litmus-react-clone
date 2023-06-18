@@ -96,7 +96,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
     }
     
     private async _refreshAuth(auth: AuthenticationReducible): Promise<Authentication> {
-        if (!auth) throw new BasicHttpError({status: 401, title: "trying to refresh auth while prev auth was null}", detail: null});
+        if (!auth) throw new BasicHttpError({status: 401, title: "trying to refresh core while prev core was null}", detail: null});
 
         const refreshToken = auth.refreshToken;
 
@@ -135,7 +135,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
             window.clearTimeout(timerId);
             this.timersStateManager.clearAuthRefreshTimer();
         } else {
-            throw new Error("auth timer is not set")
+            throw new Error("core timer is not set")
         }
     }
 
@@ -162,7 +162,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
         // this callback will fire when it will 1 minute before jwt expiring
         const timer = setTimeout(()=>{
-            console.log("updating auth")
+            console.log("updating core")
             this.refreshAuth();
         }, refreshCallbackDelayInMs)
 

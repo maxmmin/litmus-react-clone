@@ -28,7 +28,7 @@ export const setAuthRefreshTimer = (timerId: NodeJS.Timer|null): PayloadAction<N
 }
 
 export const clearAuthRefreshTimer = (): PayloadAction<Partial<Timers>> => {
-    console.log("auth callback cleared")
+    console.log("core callback cleared")
     return {
         type: TimersAction.SET_TIMERS,
         payload: {

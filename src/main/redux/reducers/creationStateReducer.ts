@@ -11,10 +11,8 @@ import CreationCoreActions, {
     JurPersonCreationParams, PersonCreationAction,
     PersonCreationParams, UserCreationParams
 } from "../actions/CreationCoreActions";
-import JurPersonCreationStateManagerImpl from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 import {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 import {PassportData} from "../../model/human/person/PassportData";
-import AuthAction from "../actions/AuthAction";
 import GeneralAction from "../GeneralAction";
 import {Entity} from "../../model/Entity";
 
@@ -23,12 +21,13 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
     switch (action.type) {
 
         case CreationCoreActions.UPDATE_ENTITY_CREATION_PARAMS: {
-            const params: Partial<S> = action.payload as Partial<S>;
-            return {...prevState, ...params}
+            const params: Partial<S["params"]> = action.payload as Partial<S["params"]>;
+            return {...prevState, params: {...prevState.params!, ...params}}
         }
 
         case CreationCoreActions.SET_ENTITY_CREATION_PARAMS: {
-            return action.payload as S;
+            const params: Partial<S["params"]> = action.payload as Partial<S["params"]>;
+            return {...prevState, params: {...params}};
         }
 
         default: {
@@ -70,9 +69,8 @@ const personCreationStateReducer: Reducer<EntityCreationState<PersonCreationPara
 
         case PersonCreationAction.UPDATE_PASSPORT_DATA: {
             const payload = action.payload as unknown as Partial<PassportData>;
-
             let passportData: PassportData = Object.assign({},prevState.params.passportData, payload);
-            return {...prevState, params: {...prevState.params, passportData}}
+            return {...prevState, params: {...prevState.params, passportData: passportData}}
         }
 
         case GeneralAction.RESET_DATA: {

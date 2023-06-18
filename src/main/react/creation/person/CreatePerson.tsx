@@ -24,8 +24,6 @@ const CreatePerson = () => {
 
     const creationPersonParams = useAppSelector(state => state.creation?.person?.params)
 
-    const dispatch = useAppDispatch();
-
     if (!creationPersonParams) {
         throw new Error("createPersonDto was null but it shouldn't be")
     }
@@ -105,7 +103,7 @@ const CreatePerson = () => {
                 <input value={passportData!.passportNumber} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
                        onKeyDown={keyPressHandler}
                        onChange={e => {
-                           creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value})
+                           creationStateManager.updatePassportData({passportNumber: e.currentTarget.value})
                         }
                        }
                 />

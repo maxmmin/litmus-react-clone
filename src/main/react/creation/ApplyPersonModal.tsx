@@ -101,7 +101,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         }
 
         if (isIdValid&&isValid(accessToken)) {
-            // TODO: Maybe write additional checkup for auth, add global error handler and Authentication error: 05/09
+            // TODO: Maybe write additional checkup for core, add global error handler and Authentication error: 05/09
             setPending(true)
             const timerID = setTimeout(()=>fetchPerson(accessToken!,id),250)
             setRequestTimerId(timerID)

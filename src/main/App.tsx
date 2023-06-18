@@ -9,7 +9,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './css/index.scss';
 import Explore from "./react/exploration/ExplorationScreen";
 import AppStateAction, {switchAppState} from "./redux/actions/AppStateAction";
-import AuthComponent from "./react/auth/AuthComponent";
+import LitmusCore from "./react/core/LitmusCore";
 import Creation from "./react/creation/CreationScreen";
 import appConfig, {routingLinks} from "./config/appConfig";
 import Role, {Permissions} from "./redux/types/userIdentity/Role";
@@ -28,7 +28,7 @@ function App() {
       <ErrorBoundary fallback={<h1>Something went wrong...</h1>}>
             <NotificationCenter/>
             <BrowserRouter basename={"/"}>
-                <AuthComponent>
+                <LitmusCore>
                     <div className={"wrapper"} onClick={e=>{
                         const appStore = store.getState();
                         const isMenuOpened = appStore.appState?.isHeaderMenuOpened;
@@ -70,7 +70,7 @@ function App() {
                             <Route path="/sign-in" element={<LoginPage/>}/>
                         </Routes>
                     </div>
-                </AuthComponent>
+                </LitmusCore>
             </BrowserRouter>
       </ErrorBoundary>
       )
