@@ -41,7 +41,7 @@ export default class Notification {
 
 export class BasicNotification extends Notification {
     private static readonly _progress: boolean = true;
-    private static readonly _duration: number = 5000;
+    private static readonly _duration: number = 2500;
     private static readonly _pauseOnHover: boolean = true;
 
     constructor(type: AppNotificationType, message: string, duration: number = BasicNotification._duration) {
@@ -50,7 +50,7 @@ export class BasicNotification extends Notification {
             type: notificationTypes[type],
             hideProgressBar: !BasicNotification._progress,
             pauseOnHover: BasicNotification._pauseOnHover,
-            autoClose: duration
+            autoClose: duration>0?duration:false
         };
         super(content, options);
     }
