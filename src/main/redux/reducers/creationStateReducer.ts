@@ -16,6 +16,7 @@ import {Relationship, RelationshipsLinkObject} from "../../model/human/person/Pe
 import {PassportData} from "../../model/human/person/PassportData";
 import AuthAction from "../actions/AuthAction";
 import GeneralAction from "../GeneralAction";
+import {Entity} from "../../model/Entity";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
@@ -134,10 +135,22 @@ const userCreationStateReducer: Reducer<EntityCreationState<UserCreationParams>|
     }
 }
 
+export const setEmergingEntityAction = "SET_CREATING_ENTITY"
+const initialEntity = Entity.PERSON;
+
+const emergingEntityReducer:  Reducer<Entity|undefined, PayloadAction<Entity>> = (prevState=initialEntity, action) => {
+    if (action.type===setEmergingEntityAction) {
+        return action.payload;
+    } else {
+        return prevState;
+    }
+}
+
 const CreationStateReducer = combineReducers({
     user: userCreationStateReducer,
     person: personCreationStateReducer,
-    jurPerson: jurPersonCreationStateReducer
+    jurPerson: jurPersonCreationStateReducer,
+    emergingEntity: emergingEntityReducer
 })
 
 export default CreationStateReducer;

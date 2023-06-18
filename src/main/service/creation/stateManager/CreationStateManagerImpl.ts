@@ -4,6 +4,9 @@ import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import CreationTypedAction from "../../../redux/actions/CreationTypedActions";
 import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
 import CreationStateManager from "./CreationStateManager";
+import {Entity} from "../../../model/Entity";
+import {setExploredEntityAction} from "../../../redux/reducers/explorationStateReducer";
+import {setEmergingEntityAction} from "../../../redux/reducers/creationStateReducer";
 
 class CreationStateManagerImpl<S extends EntityCreationState<unknown>> implements CreationStateManager<S> {
     protected readonly dispatch: AppDispatch;
@@ -15,6 +18,13 @@ class CreationStateManagerImpl<S extends EntityCreationState<unknown>> implement
         this.dispatch = dispatch;
         this.getState = getState;
         this.actions = actions;
+    }
+
+    static switchEntity (entity: Entity, dispatch: AppDispatch) {
+        dispatch({
+            type: setEmergingEntityAction,
+            payload: entity
+        })
     }
 
     getCreationParams(): S["params"] {

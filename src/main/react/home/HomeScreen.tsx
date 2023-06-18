@@ -17,6 +17,8 @@ function HomeScreen () {
 
     const exploredEntity = useAppSelector(state => state.exploration.exploredEntity)
 
+    const emergingEntity = useAppSelector(state => state.creation.emergingEntity)
+
     const actionOnClick = (event: React.MouseEvent) => {
         const actionPath = event.currentTarget.getAttribute("itemprop")
         if (actionPath) {
@@ -40,7 +42,7 @@ function HomeScreen () {
                         </div>
                     </div>
                     <PrivateComponentWrapper mode={NO_OUTPUT} requiredPermissions={Role[RoleName.MODERATOR].permissions}>
-                        <div itemProp={appConfig.applicationMappings.exploration.root} className="homepage-actions__action" onClick={actionOnClick}>
+                        <div itemProp={appConfig.applicationMappings.creation[emergingEntity!]} className="homepage-actions__action" onClick={actionOnClick}>
                             <div className="homepage-actions__icon-container">
                                 <AddUserIcon className='homepage-actions__icon'/>
                                 <h4 className="homepage-actions__title">Додати</h4>

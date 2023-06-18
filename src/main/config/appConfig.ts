@@ -40,7 +40,7 @@ const personExplorationMapping = buildUrl(explorationRoot, entityDomains.PERSON)
 
 const creationRoot = "/create";
 
-const personCreationMapping = buildUrl(explorationRoot, entityDomains.PERSON)
+const personCreationMapping = buildUrl(creationRoot, entityDomains.PERSON)
 
 const applicationMappings = Object.freeze({
     exploration: {
@@ -53,9 +53,9 @@ const applicationMappings = Object.freeze({
     creation: {
         default: personCreationMapping,
         root: creationRoot,
-        createPersons: personCreationMapping,
-        createJurPersons: buildUrl(creationRoot, entityDomains.USER),
-        createUsers: buildUrl(creationRoot, entityDomains.USER)
+        [Entity.PERSON]: personCreationMapping,
+        [Entity.JUR_PERSON]: buildUrl(creationRoot, entityDomains.JUR_PERSON),
+        [Entity.USER]: buildUrl(creationRoot, entityDomains.USER)
     }
 })
 
@@ -83,7 +83,7 @@ export const routingLinks = {
         [Entity.JUR_PERSON]: `/explore/${Entity.JUR_PERSON.toLowerCase()}`,
         [Entity.USER]: `/explore/${Entity.USER.toLowerCase()}`
     },
-    create: {
+    creation: {
         [Entity.PERSON]: `/create/${Entity.PERSON.toLowerCase()}`,
         [Entity.JUR_PERSON]: `/create/${Entity.JUR_PERSON.toLowerCase()}`,
         [Entity.USER]: `/create/${Entity.USER.toLowerCase()}`

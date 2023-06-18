@@ -55,15 +55,15 @@ function App() {
                                 <Creation/>
                             }/>
 
-                            <Route path={routingLinks.create[Entity.PERSON]} element={
+                            <Route path={routingLinks.creation[Entity.PERSON]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={Role.MODERATOR.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.create[Entity.JUR_PERSON]} element={
+                            <Route path={routingLinks.creation[Entity.JUR_PERSON]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={Role.MODERATOR.permissions}/>
                             }/>
 
-                            <Route path={routingLinks.create[Entity.USER]} element={
+                            <Route path={routingLinks.creation[Entity.USER]} element={
                                 <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={Role.ADMIN.permissions}/>
                             }/>
 

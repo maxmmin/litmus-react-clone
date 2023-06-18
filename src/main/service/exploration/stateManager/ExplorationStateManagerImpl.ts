@@ -1,6 +1,6 @@
 import store, {AppDispatch, LitmusAsyncThunkConfig} from "../../../redux/store";
 import {ExplorationCoreAction, ExplorationTypedActions} from "../../../redux/actions/ExplorationActions";
-import {setExploredEntityAction} from "../../../redux/reducers/explorationReducer";
+import {setExploredEntityAction} from "../../../redux/reducers/explorationStateReducer";
 import JurPersonExplorationState from "../../../redux/types/exploration/jurPerson/JurPersonExplorationState";
 import PersonExplorationState from "../../../redux/types/exploration/human/person/PersonExplorationState";
 import UserExplorationState from "../../../redux/types/exploration/human/user/UserExplorationState";

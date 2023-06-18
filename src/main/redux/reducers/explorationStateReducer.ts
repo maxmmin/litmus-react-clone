@@ -158,11 +158,11 @@ const exploredEntityReducer:  Reducer<Entity|undefined, PayloadAction<Entity>> =
     }
 }
 
-const explorationReducer = combineReducers({
+const explorationStateReducer = combineReducers({
     person: personExplorationReducer,
     jurPerson: jurPersonExplorationReducer,
     user: userExplorationReducer,
     exploredEntity: exploredEntityReducer
 })
 
-export default explorationReducer;
+export default explorationStateReducer;

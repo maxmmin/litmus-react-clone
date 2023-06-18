@@ -19,7 +19,7 @@ import authenticationCheckMiddleware from "./middlewares/authenticationCheckMidd
 import loginPageDataReducer from "./reducers/LoginPageDataReducer";
 import creationReducer from "./reducers/creationStateReducer";
 import timersReducer from "./reducers/timersReducer";
-import explorationReducer from "./reducers/explorationReducer";
+import explorationStateReducer from "./reducers/explorationStateReducer";
 import ErrorResponse from "../rest/ErrorResponse";
 import errLoggingMiddleware from "./middlewares/errLoggingMiddleware";
 import {AppNotificationType} from "./types/applicationState/Notification";
@@ -35,7 +35,7 @@ const rootReducer = combineReducers({
     authentication: authReducer,
     appState: appStateReducer,
     userIdentity: userIdentityReducer,
-    exploration: explorationReducer,
+    exploration: explorationStateReducer,
     loginPageState: loginPageDataReducer,
     creation: creationReducer,
     timers: timersReducer

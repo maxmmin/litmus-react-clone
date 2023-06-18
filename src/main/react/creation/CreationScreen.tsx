@@ -15,6 +15,9 @@ import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import appConfig from "../../config/appConfig";
+import {useAppSelector} from "../../redux/hooks";
+import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
+import CreationStateManagerImpl from "../../service/creation/stateManager/CreationStateManagerImpl";
 
 
 export type CreationModalSettings = {
@@ -27,26 +30,29 @@ const Creation = () => {
     const navigate = useNavigate();
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
+        console.log(event.currentTarget.value)
         navigate(event.currentTarget.value)
     }
 
     const {entityDomain}: {entityDomain?: string} = useParams<{entityDomain: string}>();
 
-    const processedEntity: Entity|null = useMemo(()=>{
-        if (entityDomain) {
-            return getEntityByDomain(entityDomain);
-        } else return null;
-    }, [location])
+    const emergingEntity = useAppSelector(state => state.creation.emergingEntity);
 
     useEffect(() => {
-        if (!processedEntity) {
-            navigate(appConfig.applicationMappings.creation.default)
+        let urlEntity: Entity|null = null;
+
+        if (entityDomain) {
+            urlEntity = getEntityByDomain(entityDomain)
+        }
+
+        if (!urlEntity) {
+            if (emergingEntity) {
+                navigate(appConfig.applicationMappings.creation[emergingEntity])
+            } else navigate(appConfig.applicationMappings.creation.default);
+        } else if (urlEntity!==emergingEntity) {
+            CreationStateManagerImpl.switchEntity(urlEntity, store.dispatch);
         }
     }, [location])
-
-    if (!processedEntity) {
-        return null
-    }
 
     // const createButtonOnClick = async (creationParams: CreationParamsReducible, accessToken: string) => {
     //     if (creationParams) {
@@ -94,6 +100,7 @@ const Creation = () => {
     //
     // }
     // // @todo DO VALIDATION
+    if (!emergingEntity) return null;
 
     return (
         <div className="creation-page">
@@ -103,17 +110,17 @@ const Creation = () => {
                <div className="creation-page__create">
                        <div className="creation-page__create-select-wrapper">
                            <p style={{marginBottom: '10px'}}>Створити</p>
-                           <Form.Select className={"create__select"} value={routingLinks.create[processedEntity]} onChange={handleSelectChange}>
-                               <option value={routingLinks.create[Entity.PERSON]}>Фізичну особу</option>
-                               <option value={routingLinks.create[Entity.JUR_PERSON]}>Юридичну особу</option>
+                           <Form.Select className={"create__select"} value={appConfig.applicationMappings.creation[emergingEntity]} onChange={handleSelectChange}>
+                               <option value={appConfig.applicationMappings.creation[Entity.PERSON]}>Фізичну особу</option>
+                               <option value={appConfig.applicationMappings.creation[Entity.JUR_PERSON]}>Юридичну особу</option>
                                <PrivateComponentWrapper requiredPermissions={[Permissions.USERS_WRITE]} mode={NO_OUTPUT}>
-                                   <option value={routingLinks.create[Entity.USER]}>Користувача</option>
+                                   <option value={appConfig.applicationMappings.creation[Entity.USER]}>Користувача</option>
                                </PrivateComponentWrapper>
                            </Form.Select>
                        </div>
 
                    <Form className={"creation-input-group"}>
-                       <CreationInputSection entity={processedEntity}/>
+                       <CreationInputSection entity={emergingEntity}/>
 
                        <button onClick={event => {
                            event.preventDefault();
