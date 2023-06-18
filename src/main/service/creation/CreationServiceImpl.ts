@@ -19,8 +19,8 @@ import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
 import deepCopy from "../../util/deepCopy";
 import EntityCreationState from "../../redux/types/creation/EntityCreationState";
 import CreationTypedActions from "../../redux/actions/CreationTypedActions";
-import ErrorResponse from "../../util/apiRequest/ErrorResponse";
-import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import ErrorResponse from "../../rest/ErrorResponse";
+import {BasicHttpError} from "../../error/BasicHttpError";
 import CreationStateManager from "./stateManager/CreationStateManager";
 
 type CreationStore = ReturnType<typeof store.getState>["creation"]

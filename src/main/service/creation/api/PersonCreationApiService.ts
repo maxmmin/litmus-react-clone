@@ -3,7 +3,7 @@ import {PersonCreationParams} from "../../../redux/actions/CreationCoreActions";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
-import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
+import {BasicHttpError} from "../../../error/BasicHttpError";
 import CreationApiService from "./CreationApiService";
 
 class PersonCreationApiService implements CreationApiService<Person, PersonCreationParams> {

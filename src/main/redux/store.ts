@@ -20,7 +20,7 @@ import loginPageDataReducer from "./reducers/LoginPageDataReducer";
 import creationReducer from "./reducers/creationStateReducer";
 import timersReducer from "./reducers/timersReducer";
 import explorationReducer from "./reducers/explorationReducer";
-import ErrorResponse from "../util/apiRequest/ErrorResponse";
+import ErrorResponse from "../rest/ErrorResponse";
 import errLoggingMiddleware from "./middlewares/errLoggingMiddleware";
 import {AppNotificationType} from "./types/applicationState/Notification";
 

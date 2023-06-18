@@ -1,7 +1,7 @@
 import {AuthenticationReducible} from "../types/auth/Authentication";
 import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
 import JwtInfo from "../types/auth/JwtInfo";
-import { BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import { BasicHttpError} from "../../error/BasicHttpError";
 import {Action} from "redux";
 import Authentication from "../types/auth/Authentication";
 import appConfig from "../../config/appConfig";

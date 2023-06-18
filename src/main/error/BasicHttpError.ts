@@ -1,4 +1,4 @@
-import ErrorResponse from "./ErrorResponse";
+import ErrorResponse from "../rest/ErrorResponse";
 export const noInfoMessage = "Інформація відсутня"
 
 class BasicHttpError<D extends object> extends Error implements ErrorResponse<D> {

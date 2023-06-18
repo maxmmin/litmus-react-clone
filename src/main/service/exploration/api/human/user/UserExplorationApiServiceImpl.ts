@@ -6,7 +6,7 @@ import appConfig from "../../../../../config/appConfig";
 import BasicApiRequestManager from "../../../../../util/apiRequest/BasicApiRequestManager";
 import {HttpMethod} from "../../../../../util/apiRequest/ApiRequestManager";
 import {isEmpty} from "../../../../../util/pureFunctions";
-import PagedData from "../../../../../util/apiRequest/PagedData";
+import PagedData from "../../../../../rest/PagedData";
 import HumanExplorationApiServiceImpl from "../HumanExplorationApiServiceImpl";
 
 class UserExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<User> implements UserExplorationApiService {

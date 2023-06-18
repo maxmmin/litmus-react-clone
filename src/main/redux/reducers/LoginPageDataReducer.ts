@@ -2,7 +2,7 @@ import {Reducer} from "react";
 import LoginPageDataActions, {LoginPageState, LoginPageStateReducible} from "../actions/LoginPageDataActions";
 import {PayloadAction} from "@reduxjs/toolkit";
 import AuthAction from "../actions/AuthAction";
-import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import {BasicHttpError} from "../../error/BasicHttpError";
 
 const initialState: LoginPageState = {
     email: "",

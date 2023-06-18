@@ -1,5 +1,5 @@
 import {FullName} from "../../FullName";
-import PagedData from "../../../../util/apiRequest/PagedData";
+import PagedData from "../../../../rest/PagedData";
 import {Human} from "../../../../model/human/Human";
 import LookupService from "../ExplorationApiService";
 

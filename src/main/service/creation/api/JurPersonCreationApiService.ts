@@ -2,7 +2,7 @@ import {JurPersonCreationParams} from "../../../redux/actions/CreationCoreAction
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
-import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
+import {BasicHttpError} from "../../../error/BasicHttpError";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import CreationApiService from "./CreationApiService";
 

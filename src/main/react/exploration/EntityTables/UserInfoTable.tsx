@@ -1,4 +1,4 @@
-import {noInfoMessage} from "../../../util/apiRequest/BasicHttpError";
+import {noInfoMessage} from "../../../error/BasicHttpError";
 import User from "../../../model/human/user/User";
 
 type Props = {

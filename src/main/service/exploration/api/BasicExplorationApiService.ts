@@ -5,7 +5,7 @@
 import LookupService from "./ExplorationApiService";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
-import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
+import {BasicHttpError} from "../../../error/BasicHttpError";
 import {buildUrl} from "../../../util/pureFunctions";
 
 class BasicEntityLookupService<E> implements LookupService<E>{

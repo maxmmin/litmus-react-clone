@@ -10,8 +10,8 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import Notification, {AppNotificationType, BasicNotification, notificationTypes} from "../types/applicationState/Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 import {FulfilledThunkAction, PendingThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
-import ErrorResponse from "../../util/apiRequest/ErrorResponse";
-import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import ErrorResponse from "../../rest/ErrorResponse";
+import {BasicHttpError} from "../../error/BasicHttpError";
 import GeneralAction from "../GeneralAction";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}

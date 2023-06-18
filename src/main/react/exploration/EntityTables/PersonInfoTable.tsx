@@ -1,4 +1,4 @@
-import {noInfoMessage} from "../../../util/apiRequest/BasicHttpError";
+import {noInfoMessage} from "../../../error/BasicHttpError";
 import Person from "../../../model/human/person/Person";
 import {DateBuilder} from "../../../model/DateEntity";
 

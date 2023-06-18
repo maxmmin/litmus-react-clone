@@ -1,7 +1,7 @@
 import Authentication, {AuthenticationReducible} from "../../../redux/types/auth/Authentication";
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import AuthAction, {clearAuthentication} from "../../../redux/actions/AuthAction";
-import ErrorResponse from "../../../util/apiRequest/ErrorResponse";
+import ErrorResponse from "../../../rest/ErrorResponse";
 import LoginPageDataActions, {LoginPageState} from "../../../redux/actions/LoginPageDataActions";
 import store, {AppDispatch} from "../../../redux/store";
 import {Action} from "redux";

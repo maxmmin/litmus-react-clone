@@ -1,5 +1,5 @@
 import HumanExplorationApiService from "./HumanExplorationApiService";
-import PagedData from "../../../../util/apiRequest/PagedData";
+import PagedData from "../../../../rest/PagedData";
 import {FullName} from "../../FullName";
 import BasicEntityLookupService from "../BasicExplorationApiService";
 import appConfig from "../../../../config/appConfig";
@@ -7,8 +7,8 @@ import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestM
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
 import {isEmpty} from "../../../../util/pureFunctions";
 import {Human} from "../../../../model/human/Human";
-import ErrorResponse from "../../../../util/apiRequest/ErrorResponse";
-import {BasicHttpError} from "../../../../util/apiRequest/BasicHttpError";
+import ErrorResponse from "../../../../rest/ErrorResponse";
+import {BasicHttpError} from "../../../../error/BasicHttpError";
 
 export default class HumanExplorationApiServiceImpl<E extends Human> extends BasicEntityLookupService<E> implements HumanExplorationApiService<E> {
 

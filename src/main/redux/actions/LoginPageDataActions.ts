@@ -1,6 +1,6 @@
-import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import {BasicHttpError} from "../../error/BasicHttpError";
 import {PayloadAction} from "@reduxjs/toolkit";
-import ErrorResponse from "../../util/apiRequest/ErrorResponse";
+import ErrorResponse from "../../rest/ErrorResponse";
 
 export type LoginPageState = {
     email: string,

@@ -18,7 +18,7 @@ import {
 import PersonExplorationParams from "../../redux/types/exploration/human/person/PersonExplorationParams";
 import ExplorationMode, {ExplorationModeName} from "../../redux/types/exploration/ExplorationMode";
 import {Entity} from "../../model/Entity";
-import PagedData, {UnPagedData} from "../../util/apiRequest/PagedData";
+import PagedData, {UnPagedData} from "../../rest/PagedData";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
@@ -29,8 +29,8 @@ import EntityExplorationData from "../../redux/types/exploration/EntityExplorati
 import deepCopy from "../../util/deepCopy";
 import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
-import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
-import ErrorResponse from "../../util/apiRequest/ErrorResponse";
+import {BasicHttpError} from "../../error/BasicHttpError";
+import ErrorResponse from "../../rest/ErrorResponse";
 import ExplorationStateManager from "./stateManager/ExplorationStateManager";
 
 class UnsupportedModeError extends Error {

@@ -1,10 +1,10 @@
 import AuthAction from "../actions/AuthAction";
 import Authentication, {AuthenticationReducible} from "../types/auth/Authentication";
 import {Reducer} from "react";
-import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import {BasicHttpError} from "../../error/BasicHttpError";
 import {isRejected, PayloadAction} from "@reduxjs/toolkit";
-import {HttpStatus} from "../../util/apiRequest/HttpStatus";
-import ErrorResponse from "../../util/apiRequest/ErrorResponse";
+import {HttpStatus} from "../../rest/HttpStatus";
+import ErrorResponse from "../../rest/ErrorResponse";
 
 const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
 

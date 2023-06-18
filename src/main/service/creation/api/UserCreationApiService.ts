@@ -2,7 +2,7 @@ import {UserCreationParams} from "../../../redux/actions/CreationCoreActions";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
-import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
+import {BasicHttpError} from "../../../error/BasicHttpError";
 import User from "../../../model/human/user/User";
 import CreationApiService from "./CreationApiService";
 

@@ -3,7 +3,7 @@ import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import appConfig from "../../../../config/appConfig";
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
-import {BasicHttpError} from "../../../../util/apiRequest/BasicHttpError";
+import {BasicHttpError} from "../../../../error/BasicHttpError";
 import BasicEntityLookupService from "../BasicExplorationApiService";
 
 class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPerson> implements JurPersonExplorationApiService {
