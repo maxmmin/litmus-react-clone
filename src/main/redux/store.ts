@@ -17,7 +17,7 @@ import storage from 'reduxjs-toolkit-persist/lib/storage'
 import userIdentityReducer from "./userIdentity/userIdentityReducer";
 import authenticationCheckMiddleware from "./auth/authenticationCheckMiddleware";
 import loginPageDataReducer from "./login/LoginPageDataReducer";
-import creationReducer from "./creation/creationParamsReducer";
+import creationReducer from "./creation/creationStateReducer";
 import timersReducer from "./timers/timersReducer";
 import explorationReducer from "./exploration/explorationReducer";
 import ErrorResponse from "../util/apiRequest/ErrorResponse";

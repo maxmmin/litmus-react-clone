@@ -13,6 +13,8 @@ import CreationCoreActions, {
 } from "./CreationCoreActions";
 import JurPersonCreationStateManagerImpl from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 import {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
+import {PassportData} from "../../model/human/person/PassportData";
+import AuthActions from "../auth/AuthActions";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
@@ -26,50 +28,6 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
         case CreationCoreActions.SET_ENTITY_CREATION_PARAMS: {
             return action.payload as S;
         }
-
-        // /**
-        //  *  jur person specified
-        //  */
-        // case CreationCoreActions.UPDATE_JUR_PERSON_CREATION_DATA: {
-        //     return {...prevState, jurPersonCreationData: {...prevState.jurPersonCreationData, ...(action.payload as unknown as Partial<JurPerson>)}}
-        // }
-        //
-        //
-        // /**
-        //  *  person specified
-        //  */
-        // case CreationCoreActions.UPDATE_PERSON_CREATION_DATA: {
-        //     return {...prevState, personCreationData: {...prevState.personCreationData, ...(action.payload as unknown as Partial<Person>)}}
-        // }
-        //
-
-        //
-        // case CreationCoreActions.UPDATE_PASSPORT_DATA: {
-        //     const payload = action.payload as unknown as Partial<PassportData>;
-        //
-        //     let passportData: PassportData = Object.assign({},prevState.personCreationData.passportData, payload);
-        //     return {...prevState, personCreationData: {...prevState.personCreationData, passportData}}
-        // }
-        //
-        // /**
-        //  *  user specified
-        //  */
-        //
-        // case CreationCoreActions.UPDATE_USER_CREATION_DATA: {
-        //     return {...prevState, userCreationData: {...prevState.userCreationData, ...(action.payload as unknown as Partial<User>)}}
-        // }
-        //
-        // /**
-        //  *  non-business-logic
-        //  */
-        // case AuthActions.CLEAR_AUTH: {
-        //     return initialState
-        // }
-        //
-        // case CreationCoreActions.SET_CREATION_PENDING: {
-        //     const act = action as unknown as PayloadAction<boolean>
-        //     return {...prevState, pending: act.payload}
-        // }
 
         default: {
             return prevState;
@@ -107,6 +65,18 @@ const personCreationStateReducer: Reducer<EntityCreationState<PersonCreationPara
 
             return {...prevState, params: {...prevState.params, relationships: relationshipsLinkObject.relationships}}
         }
+
+        case PersonCreationAction.UPDATE_PASSPORT_DATA: {
+            const payload = action.payload as unknown as Partial<PassportData>;
+
+            let passportData: PassportData = Object.assign({},prevState.params.passportData, payload);
+            return {...prevState, params: {...prevState.params, passportData}}
+        }
+
+        case AuthActions.CLEAR_AUTH: {
+            return initialPersonCreationState;
+        }
+
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.personDomain) {
@@ -125,6 +95,11 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPersonCreati
     switch (action.type) {
         // code-place for jur person specific actions
         // @todo write getClear action
+
+        case AuthActions.CLEAR_AUTH: {
+            return initialJurPersonState
+        }
+
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.jurPersonDomain) {
@@ -142,6 +117,10 @@ const initialUserCreationState: EntityCreationState<UserCreationParams> = deepCo
 const userCreationStateReducer: Reducer<EntityCreationState<UserCreationParams>|undefined, PayloadAction<UserCreationParams>> = (prevState=initialUserCreationState, action) => {
     const actions = CreationTypedActions.person;
     switch (action.type) {
+        case AuthActions.CLEAR_AUTH: {
+            return initialUserCreationState
+        }
+
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.userDomain) {
