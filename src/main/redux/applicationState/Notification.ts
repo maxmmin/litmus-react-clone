@@ -2,8 +2,8 @@ import store, {AppDispatch} from "../store";
 import AppStateActions, {addNotification} from "./AppStateActions";
 import {ToastContent, ToastOptions, TypeOptions} from "react-toastify";
 import {PayloadAction} from "@reduxjs/toolkit";
-import deepCopy, {isValid} from "../../util/pureFunctions";
 import React from "react";
+import deepCopy from "../../util/deepCopy";
 
 
 export type NotificationContent = ToastContent;

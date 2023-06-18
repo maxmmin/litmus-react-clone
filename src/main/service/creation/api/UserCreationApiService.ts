@@ -7,13 +7,22 @@ import User from "../../../model/human/user/User";
 import CreationApiService from "./CreationApiService";
 
 class UserCreationApiService implements CreationApiService<User, UserCreationParams> {
+    private readonly getAccessToken: ()=>string;
+
+    constructor(getAccessToken: () => string) {
+        this.getAccessToken = getAccessToken;
+    }
+
     async create(params: UserCreationParams): Promise<User> {
         const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
+
+        const accessToken = this.getAccessToken();
 
         const response: Response = await apiRequestManager
             .url(appConfig.serverMappings.users)
             .method(HttpMethod.POST)
             .body(JSON.stringify(params))
+            .authentication(accessToken)
             .fetch();
 
         if (response.ok) {

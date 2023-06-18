@@ -2,7 +2,6 @@ import Loader from "../loader/Loader";
 import {onWakeUp} from "../../util/pureFunctions";
 import React, {ReactNode, useEffect, useMemo} from "react";
 import {useAppSelector} from "../../redux/hooks";
-import AuthActions from "../../redux/auth/AuthActions";
 import store from "../../redux/store";
 import {useLoadScript} from "@react-google-maps/api";
 import appConfig, {gmapsRegionOptions} from "../../config/appConfig";

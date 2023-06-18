@@ -48,52 +48,52 @@ const Creation = () => {
         return null
     }
 
-    const createButtonOnClick = async (creationParams: CreationParamsReducible, accessToken: string) => {
-        if (creationParams) {
-            const table = creationParams.selectedEntity;
-            // @todo creation manager
-            // const url = apiLinks[table]
-            //
-            // let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
-            //
-            // switch (table) {
-            //     case Entity.JUR_PERSON: {
-            //         const creationData = creationParams.jurPersonCreationData;
-            //         body = getCreateJurPersonDto(creationData);
-            //         break;
-            //     }
-            //
-            //     case Entity.PERSON: {
-            //         const creationData = creationParams.personCreationData;
-            //         body = getCreatePersonDto(creationData)
-            //         break;
-            //     }
-            //
-            //     case Entity.USER: {
-            //         const creationData = creationParams.userCreationData;
-            //         body = getCreateUserDto(creationData);
-            //         break;
-            //     }
-            // }
-
-            // if (url && body) {
-            //         let type: NotificationType;
-            //
-            //         const response = await createEntity(url, body, accessToken);
-            //
-            //         if (response.ok) {
-            //             type = notificationTypes.SUCCESS;
-            //         } else type = notificationTypes.ERROR;
-            //
-            //         const message: object = await response.json();
-            //
-            //         dispatch(addNotification({...new BasicNotification(type, JSON.stringify(message))}));
-            // }
-
-        }
-
-    }
-    // @todo DO VALIDATION
+    // const createButtonOnClick = async (creationParams: CreationParamsReducible, accessToken: string) => {
+    //     if (creationParams) {
+    //         const table = creationParams.selectedEntity;
+    //         // @todo creation manager
+    //         // const url = apiLinks[table]
+    //         //
+    //         // let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
+    //         //
+    //         // switch (table) {
+    //         //     case Entity.JUR_PERSON: {
+    //         //         const creationData = creationParams.jurPersonCreationData;
+    //         //         body = getCreateJurPersonDto(creationData);
+    //         //         break;
+    //         //     }
+    //         //
+    //         //     case Entity.PERSON: {
+    //         //         const creationData = creationParams.personCreationData;
+    //         //         body = getCreatePersonDto(creationData)
+    //         //         break;
+    //         //     }
+    //         //
+    //         //     case Entity.USER: {
+    //         //         const creationData = creationParams.userCreationData;
+    //         //         body = getCreateUserDto(creationData);
+    //         //         break;
+    //         //     }
+    //         // }
+    //
+    //         // if (url && body) {
+    //         //         let type: NotificationType;
+    //         //
+    //         //         const response = await createEntity(url, body, accessToken);
+    //         //
+    //         //         if (response.ok) {
+    //         //             type = notificationTypes.SUCCESS;
+    //         //         } else type = notificationTypes.ERROR;
+    //         //
+    //         //         const message: object = await response.json();
+    //         //
+    //         //         dispatch(addNotification({...new BasicNotification(type, JSON.stringify(message))}));
+    //         // }
+    //
+    //     }
+    //
+    // }
+    // // @todo DO VALIDATION
 
     return (
         <div className="creation-page">
@@ -118,7 +118,7 @@ const Creation = () => {
                        <button onClick={event => {
                            event.preventDefault();
                            const state = store.getState();
-                           createButtonOnClick(state.creation, state.authentication?.accessToken!)
+                           // createButtonOnClick(state.creation, state.authentication?.accessToken!)
                        }} className="creation-input-group__btn btn btn-primary">Створити</button>
                    </Form>
                </div>

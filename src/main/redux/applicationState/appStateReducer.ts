@@ -94,20 +94,22 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                 } else {
                     state = {...state}
                     const errorAction: RejectedThunkAction = action as RejectedThunkAction;
-                    const err: object = errorAction.payload;
+                    if (errorAction.meta.notify) {
+                        const err: object = errorAction.payload;
 
-                    let errorResponse: ErrorResponse<any>;
+                        let errorResponse: ErrorResponse<any>;
 
-                    if (err && "status" in err && "detail" in err) {
-                        errorResponse = err as ErrorResponse<any>;
-                    } else {
-                        errorResponse = BasicHttpError.parseError(err);
+                        if (err && "status" in err && "detail" in err) {
+                            errorResponse = err as ErrorResponse<any>;
+                        } else {
+                            errorResponse = BasicHttpError.parseError(err);
+                        }
+
+                        const basicHttpErr = new BasicHttpError(errorResponse)
+
+                        const notification = {...new BasicNotification('ERROR', basicHttpErr.getDescription())};
+                        state.notifications = [...state.notifications, notification];
                     }
-
-                    const basicHttpErr = new BasicHttpError(errorResponse)
-
-                    const notification = {...new BasicNotification('ERROR', basicHttpErr.getDescription())};
-                    state.notifications = [...state.notifications, notification];
                 }
 
                 return state;

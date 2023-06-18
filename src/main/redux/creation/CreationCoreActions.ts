@@ -8,6 +8,7 @@ import DateEntity, {DateBuilder} from "../../model/DateEntity";
 enum CreationCoreActions {
     SET_ENTITY_CREATION_PARAMS="SET_ENTITY_CREATION_PARAMS",
     UPDATE_ENTITY_CREATION_PARAMS="UPDATE_CREATION_PARAMS",
+    CREATE_ENTITY="CREATE_ENTITY"
 }
 
 export enum PersonCreationAction {

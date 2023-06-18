@@ -6,7 +6,7 @@ import UserIdentity from "../../redux/userIdentity/UserIdentity";
 import UserIdentityApiService from "./api/UserIdentityApiService";
 import UserIdentityManager from "./UserIdentityManager";
 import UserIdentityServiceImpl from "./api/UserIdentityServiceImpl";
-import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
+import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
 import deepCopy from "../../util/deepCopy";
 
 
@@ -21,7 +21,7 @@ class UserIdentityManagerImpl implements UserIdentityManager{
     constructor(_store: typeof store = store, identityService?: UserIdentityApiService) {
         this._store = _store;
         if (!identityService) {
-            identityService = new UserIdentityServiceImpl(()=>new AuthenticationStateManager().getAuth()!.accessToken)
+            identityService = new UserIdentityServiceImpl(()=>new AuthenticationStateManagerImpl().getAuth()!.accessToken)
         }
         this.identityService = identityService;
     }
@@ -37,7 +37,7 @@ class UserIdentityManagerImpl implements UserIdentityManager{
             return fulfillWithValue(userIdentity, {notify: false});
         }
         catch (e: any) {
-            return rejectWithValue(deepCopy(e));
+            return rejectWithValue(deepCopy(e), {notify: true});
         }
     })
 

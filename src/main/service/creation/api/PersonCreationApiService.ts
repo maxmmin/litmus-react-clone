@@ -7,13 +7,22 @@ import {BasicHttpError} from "../../../util/apiRequest/BasicHttpError";
 import CreationApiService from "./CreationApiService";
 
 class PersonCreationApiService implements CreationApiService<Person, PersonCreationParams> {
+    private readonly getAccessToken: ()=>string;
+
+    constructor(getAccessToken: () => string) {
+        this.getAccessToken = getAccessToken;
+    }
+
     async create(params: PersonCreationParams): Promise<Person> {
         const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
+
+        const accessToken = this.getAccessToken();
 
         const response: Response = await apiRequestManager
             .url(appConfig.serverMappings.persons)
             .method(HttpMethod.POST)
             .body(JSON.stringify(params))
+            .authentication(accessToken)
             .fetch();
 
         if (response.ok) {

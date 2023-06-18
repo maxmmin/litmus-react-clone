@@ -38,6 +38,25 @@ function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplora
     }
 }
 
+function getRequiredPermissions(exploredEntity: Entity|undefined) {
+    let requiredPermissions: Permissions[];
+
+    switch (exploredEntity) {
+        case Entity.PERSON:
+            requiredPermissions = Role[RoleName.USER].permissions;
+            break;
+        case Entity.JUR_PERSON:
+            requiredPermissions = Role[RoleName.USER].permissions;
+            break;
+        case Entity.USER:
+            requiredPermissions = Role[RoleName.ADMIN].permissions;
+            break;
+        default: throw new Error("no permissions for such entity defined");
+    }
+
+    return requiredPermissions;
+}
+
 const ExplorationScreen = () => {
     const location = useLocation();
 
@@ -77,30 +96,14 @@ const ExplorationScreen = () => {
         }   else return undefined;
     })
 
-    let requiredPermissions: Permissions[] = Role[RoleName.USER].permissions;
-    {
-        if (exploredEntity) {
-            switch (exploredEntity) {
-                case Entity.PERSON:
-                    requiredPermissions = Role[RoleName.USER].permissions;
-                    break;
-                case Entity.JUR_PERSON:
-                    requiredPermissions = Role[RoleName.USER].permissions;
-                    break;
-                case Entity.USER:
-                    requiredPermissions = Role[RoleName.ADMIN].permissions;
-                    break;
-                default: requiredPermissions = Role[RoleName.USER].permissions;
-            }
-        }
+    if (!exploredEntity||!explorationState) {
+       return null;
     }
+
+    let requiredPermissions: Permissions[] = getRequiredPermissions(exploredEntity);
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
         navigate(event.currentTarget.value)
-    }
-
-    if (!exploredEntity||!explorationState) {
-       return null;
     }
 
     const explorationStateManager = ExplorationStateManagerImpl.getEntityManager(exploredEntity);

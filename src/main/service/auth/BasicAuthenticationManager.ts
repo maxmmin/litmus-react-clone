@@ -8,11 +8,12 @@ import jwtDecode, {JwtPayload} from "jwt-decode";
 import TimersStateManager from "../timers/TimersStateManager";
 import BasicAuthApiService from "./api/BasicAuthApiService";
 import {HttpStatus} from "../../util/apiRequest/HttpStatus";
-import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
+import AuthenticationStateManagerImpl from "./stateManager/AuthenticationStateManagerImpl";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import AuthActions from "../../redux/auth/AuthActions";
 import {BasicNotificationManager, NotificationManager} from "../../redux/applicationState/Notification";
 import deepCopy from "../../util/deepCopy";
+import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
 
 class BasicAuthenticationManager implements AuthenticationManager {
     private readonly authenticationStateManager: AuthenticationStateManager;
@@ -50,7 +51,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
             if ("status" in thrownErr&&"detail" in thrownErr&&thrownErr.status===HttpStatus.UNAUTHENTICATED) {
                 thrownErr = new BasicHttpError({status: HttpStatus.UNAUTHENTICATED, title: "Невірні облікові дані", detail: null})
             }
-            return rejectWithValue(deepCopy(thrownErr));
+            return rejectWithValue(deepCopy(thrownErr), {notify: true});
         }}
 
      )
@@ -62,7 +63,6 @@ class BasicAuthenticationManager implements AuthenticationManager {
         const auth = this.authenticationStateManager.getAuth();
 
         if (auth) {
-                console.log(auth)
                 if (this.isAuthExpired()&&!BasicAuthenticationManager.locked) {
                     if (!this.isTokenExpired(auth.refreshToken)) {
                         this.refreshAuth();
@@ -112,7 +112,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
                 return fulfillWithValue(await this._refreshAuth(arg), {notify: false});
             }
             catch (e: any) {
-                return rejectWithValue(deepCopy(e))
+                return rejectWithValue(deepCopy(e), {notify: true})
             }
 
         }
@@ -183,7 +183,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
     static getBasicManager (_store: typeof store = store) {
         const authService = new BasicAuthApiService();
         const timersStateManager = new TimersStateManager();
-        const authenticationStateManager = new AuthenticationStateManager();
+        const authenticationStateManager = new AuthenticationStateManagerImpl();
         const notificationManager = new BasicNotificationManager();
         return new BasicAuthenticationManager(authenticationStateManager, authService, timersStateManager, notificationManager);
     }

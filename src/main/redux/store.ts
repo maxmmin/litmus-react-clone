@@ -81,8 +81,6 @@ export type PendingThunkAction<P> = MetaAction<{
 
 export type PossiblePendingThunkAction = Partial<PendingThunkAction<any>>
 
-export type RejectedThunkAction = PayloadAction<ErrorResponse<any>>
-
 export type FulfillMeta = {
     successMessage?: string,
     duration?: number,
@@ -90,8 +88,13 @@ export type FulfillMeta = {
     notificationType?: AppNotificationType
 }
 
+export type RejectedMeta = {
+    notify: boolean
+}
 
 export type FulfilledThunkAction = Action&MetaAction<FulfillMeta>
+
+export type RejectedThunkAction = PayloadAction<ErrorResponse<any>>&MetaAction<RejectedMeta>
 
 export type ThunkArg<T> = T & ThunkMetaData
 
@@ -103,5 +106,5 @@ export type LitmusAsyncThunkConfig = {
     serializedErrorType?: unknown
     pendingMeta?: unknown
     fulfilledMeta: FulfillMeta
-    rejectedMeta?: unknown
+    rejectedMeta: RejectedMeta
 }

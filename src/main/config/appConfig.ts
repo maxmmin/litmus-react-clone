@@ -34,8 +34,6 @@ const serverMappings = Object.freeze({
     "signIn": buildUrl(authRoot, "/sign-in")
 })
 
-console.log(serverMappings)
-
 const explorationRoot = "/explore";
 
 const personExplorationMapping = buildUrl(explorationRoot, entityDomains.PERSON)

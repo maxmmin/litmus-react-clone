@@ -1,4 +1,4 @@
-import store, {AppDispatch} from "../../../redux/store";
+import store, {AppDispatch, LitmusAsyncThunkConfig} from "../../../redux/store";
 import {ExplorationCoreAction, ExplorationTypedActions} from "../../../redux/exploration/ExplorationActions";
 import {setExploredEntityAction} from "../../../redux/exploration/explorationReducer";
 import JurPersonExplorationState from "../../../redux/exploration/types/jurPerson/JurPersonExplorationState";
@@ -8,7 +8,7 @@ import EntityExplorationState from "../../../redux/exploration/types/EntityExplo
 import EntityExplorationParams from "../../../redux/exploration/types/EntityExplorationParams";
 import {Entity} from "../../../model/Entity";
 import ExplorationMode from "../../../redux/exploration/types/ExplorationMode";
-import {AsyncThunkAction} from "@reduxjs/toolkit";
+import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import ExplorationStateManager from "./ExplorationStateManager";
 import deepCopy from "../../../util/deepCopy";
 
@@ -108,8 +108,8 @@ class ExplorationStateManagerImpl<S extends EntityExplorationState<unknown, Enti
         })
     }
 
-    retrieveData(thunk: AsyncThunkAction<S["data"], any, any>) {
-        this.dispatch(thunk)
+    retrieveData(thunk: AsyncThunkAction<S["data"], unknown, LitmusAsyncThunkConfig>):  Promise<PayloadAction<unknown, string, unknown>> {
+        return this.dispatch(thunk);
     }
 
     enableSectionPending (): void {

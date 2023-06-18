@@ -1,14 +1,14 @@
 import ExplorationService from "./ExplorationService";
 import ExplorationStateManagerImpl from "./stateManager/ExplorationStateManagerImpl";
 import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
-import PersonLookupServiceImpl from "./api/human/person/PersonLookupServiceImpl";
+import PersonExplorationApiServiceImpl from "./api/human/person/PersonExplorationApiServiceImpl";
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
-import UserLookupServiceImpl from "./api/human/user/UserLookupServiceImpl";
+import UserExplorationApiServiceImpl from "./api/human/user/UserExplorationApiServiceImpl";
 import Person from "../../model/human/person/Person";
-import PersonLookupService from "./api/human/person/PersonLookupService";
+import PersonExplorationApiService from "./api/human/person/PersonExplorationApiService";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import User from "../../model/human/user/User";
-import UserLookupService from "./api/human/user/UserLookupService";
+import UserExplorationApiService from "./api/human/user/UserExplorationApiService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
 import {
@@ -27,6 +27,10 @@ import UserExplorationParams from "../../redux/exploration/types/human/user/User
 import {ExplorationCoreAction, ExplorationTypedActions} from "../../redux/exploration/ExplorationActions";
 import EntityExplorationData from "../../redux/exploration/types/EntityExplorationData";
 import deepCopy from "../../util/deepCopy";
+import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
+import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
+import {BasicHttpError} from "../../util/apiRequest/BasicHttpError";
+import ErrorResponse from "../../util/apiRequest/ErrorResponse";
 
 class UnsupportedModeError extends Error {
 
@@ -42,15 +46,33 @@ class ExplorationServiceImpl implements ExplorationService {
 
     private readonly shouldNotify: boolean;
 
-    constructor(providedStore: typeof store, shouldNotify: boolean = true) {
+    private readonly authStateManager: AuthenticationStateManager;
+
+    private getAccessToken = (function (this: ExplorationServiceImpl) {
+        return this.authStateManager.getAuth()!.accessToken;
+    }).bind(this)
+
+    constructor(providedStore: typeof store,shouldNotify: boolean = true, authStateManager?: AuthenticationStateManager) {
         this._store = providedStore;
         this.shouldNotify = shouldNotify;
         if (shouldNotify) {
             this.notificationManager = new BasicNotificationManager();
         }
+        if (authStateManager) {
+            this.authStateManager = authStateManager;
+        } else {
+            this.authStateManager = new AuthenticationStateManagerImpl(providedStore);
+        }
     }
 
-    private async explorePersons(explorationParams: UserExplorationParams, service: PersonLookupService): Promise<PagedData<Person>> {
+    private handleErr(e: unknown): ErrorResponse<unknown> {
+        console.error(e);
+        const error = BasicHttpError.parseError(e);
+        return deepCopy(error);
+    }
+
+
+    private async explorePersons(explorationParams: UserExplorationParams, service: PersonExplorationApiService): Promise<PagedData<Person>> {
         const modeId = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         switch (mode) {
@@ -79,18 +101,18 @@ class ExplorationServiceImpl implements ExplorationService {
 
 
     private explorePersonsThunk = createAsyncThunk<EntityExplorationData<Person, PersonExplorationParams>,
-        ThunkArg<{params: PersonExplorationParams, service: PersonLookupService}>,
+        ThunkArg<{params: PersonExplorationParams, service: PersonExplorationApiService}>,
         LitmusAsyncThunkConfig>(ExplorationTypedActions.person[ExplorationCoreAction.RETRIEVE_DATA],async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
             try {
                 const response: PagedData<Person> = await this.explorePersons(params, service);
                 const exploredData: EntityExplorationData<Person, PersonExplorationParams> = {requestParams: params, response: response}
                 return fulfillWithValue(deepCopy(exploredData), {notify: this.shouldNotify});
-            } catch (e: any) {
-                return rejectWithValue(deepCopy(e));
+            } catch (e: unknown) {
+                return rejectWithValue(this.handleErr(e), {notify: true});
             }
     })
 
-    private async exploreUsers(explorationParams: UserExplorationParams, service: UserLookupService): Promise<PagedData<User>> {
+    private async exploreUsers(explorationParams: UserExplorationParams, service: UserExplorationApiService): Promise<PagedData<User>> {
         const modeId: number = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
 
@@ -119,14 +141,14 @@ class ExplorationServiceImpl implements ExplorationService {
     }
 
     private exploreUsersThunk = createAsyncThunk<EntityExplorationData<User, UserExplorationParams>,
-        ThunkArg<{params: UserExplorationParams, service: UserLookupService}>,
+        ThunkArg<{params: UserExplorationParams, service: UserExplorationApiService}>,
         LitmusAsyncThunkConfig>(ExplorationTypedActions.user[ExplorationCoreAction.RETRIEVE_DATA],(async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
         try {
             const response: PagedData<User> = await this.exploreUsers(params, service);
             const exploredData: EntityExplorationData<User, UserExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: this.shouldNotify});
-        } catch (e: any) {
-            return rejectWithValue(deepCopy(e));
+        } catch (e: unknown) {
+            return rejectWithValue(this.handleErr(e), {notify: true});
         }
     }))
 
@@ -161,33 +183,22 @@ class ExplorationServiceImpl implements ExplorationService {
             const response: PagedData<JurPerson> = await this.exploreJurPersons(params, service);
             const exploredData: EntityExplorationData<JurPerson, JurPersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: this.shouldNotify});
-        } catch (e: any) {
-            return rejectWithValue(deepCopy(e));
+        } catch (e: unknown) {
+            return rejectWithValue(this.handleErr(e), {notify: true});
         }
     }))
 
-    private getAccessToken (): string {
-        const token = this._store.getState().authentication?.accessToken;
-        if (token) {
-            //@todo: rewrite it with isvalid
-            return token;
-        } else {
-            throw new Error("null token")
-        }
-    }
-
-    async explore(entity: Entity): Promise<void> {
+    explore(entity: Entity): void {
         let stateManager: ExplorationStateManagerImpl<EntityExplorationState<any, EntityExplorationParams>>;
 
         let asyncThunk: AsyncThunkAction<EntityExplorationData<any, any>, any, any>;
-
 
         switch (entity) {
             case Entity.PERSON: {
                 const personManager = ExplorationStateManagerImpl.getPersonManager(this._store);
                 stateManager = personManager;
 
-                const service = new PersonLookupServiceImpl(this.getAccessToken.bind(this));
+                const service = new PersonExplorationApiServiceImpl(this.getAccessToken);
 
                 asyncThunk = this.explorePersonsThunk({params: personManager.getExplorationParams(), service: service, globalPending: false})
                 break;
@@ -196,7 +207,7 @@ class ExplorationServiceImpl implements ExplorationService {
                 const jurPersonManager = ExplorationStateManagerImpl.getJurPersonManager(this._store);
                 stateManager = jurPersonManager;
 
-                const service = new JurPersonExplorationApiServiceImpl(this.getAccessToken.bind(this));
+                const service = new JurPersonExplorationApiServiceImpl(this.getAccessToken);
 
                 asyncThunk = this.exploreJurPersonsThunk({params: jurPersonManager.getExplorationParams(), service: service, globalPending: false})
 
@@ -206,7 +217,7 @@ class ExplorationServiceImpl implements ExplorationService {
                 const userManager = ExplorationStateManagerImpl.getUserManager(this._store);
                 stateManager = userManager;
 
-                const service = new UserLookupServiceImpl(this.getAccessToken.bind(this));
+                const service = new UserExplorationApiServiceImpl(this.getAccessToken);
 
                 asyncThunk = this.exploreUsersThunk({params: userManager.getExplorationParams(), service: service, globalPending: false})
 
@@ -216,7 +227,7 @@ class ExplorationServiceImpl implements ExplorationService {
             default: throw new Error("unsupported entity: " + entity);
         }
 
-        stateManager.retrieveData(asyncThunk);
+        stateManager.retrieveData(asyncThunk).catch(console.error);
     }
 
 }

@@ -32,6 +32,7 @@ function App() {
                         if (isMenuOpened) {
                             dispatch(switchAppState(AppStateActions.HEADER_MENU_CLOSE))
                         }
+                        // @todo think about replace this
                     }}>
                         <Routes>
                             <Route path={"/"} element={

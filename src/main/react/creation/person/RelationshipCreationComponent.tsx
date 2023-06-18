@@ -63,7 +63,7 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
                         onChange={e => {
                             const relShip = {...relationship};
                             relShip.note = e.currentTarget.value;
-                            dispatch(updateRelationship(relShip));
+                            personCreationStateManager.updateRelationship(relShip);
                         }}
                     />
                 </FloatingLabel>
@@ -71,7 +71,8 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
 
             <div className="create-relation__remove-btn-wrapper">
                 <button className="create-relation__remove-btn" onClick={()=>{
-                    dispatch(removeRelationship(relationship))
+                    personCreationStateManager.removeRelationship(relationship);
+
                 }}>
                     <CrossIcon className={"create-relation__remove-btn-icon"} color={"grey"}/>
                 </button>

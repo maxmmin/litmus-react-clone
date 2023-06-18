@@ -1,4 +1,4 @@
-import UserLookupService from "./UserLookupService";
+import UserExplorationApiService from "./UserExplorationApiService";
 import {FullName} from "../../../FullName";
 import User from "../../../../../model/human/user/User";
 import BasicEntityLookupService from "../../BasicExplorationApiService";
@@ -9,7 +9,7 @@ import {isEmpty} from "../../../../../util/pureFunctions";
 import PagedData from "../../../../../util/apiRequest/PagedData";
 import HumanExplorationApiServiceImpl from "../HumanExplorationApiServiceImpl";
 
-class UserLookupServiceImpl extends HumanExplorationApiServiceImpl<User> implements UserLookupService {
+class UserExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<User> implements UserExplorationApiService {
 
     constructor(getToken: () => string, apiMapping: string = appConfig.serverMappings.users) {
         super(apiMapping, getToken);
@@ -17,4 +17,4 @@ class UserLookupServiceImpl extends HumanExplorationApiServiceImpl<User> impleme
 
 }
 
-export default UserLookupServiceImpl;
+export default UserExplorationApiServiceImpl;

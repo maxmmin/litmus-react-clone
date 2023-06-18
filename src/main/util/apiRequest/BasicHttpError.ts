@@ -48,6 +48,8 @@ class BasicHttpError<D extends object> extends Error implements ErrorResponse<D>
                 title = err["title"];
             } else if ("error" in err) {
                 title = err["error"];
+            }   else if ("message" in err) {
+                title = err.message;
             }
 
             if ("detail" in err) {

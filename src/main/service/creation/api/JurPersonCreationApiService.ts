@@ -7,13 +7,22 @@ import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import CreationApiService from "./CreationApiService";
 
 class JurPersonCreationApiService implements CreationApiService<JurPerson, JurPersonCreationParams> {
+    private readonly getAccessToken: ()=>string;
+
+    constructor(getAccessToken: () => string) {
+        this.getAccessToken = getAccessToken;
+    }
+
     async create(params: JurPersonCreationParams): Promise<JurPerson> {
         const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
+
+        const accessToken = this.getAccessToken();
 
         const response: Response = await apiRequestManager
             .url(appConfig.serverMappings.jurPersons)
             .method(HttpMethod.POST)
             .body(JSON.stringify(params))
+            .authentication(accessToken)
             .fetch();
 
         if (response.ok) {

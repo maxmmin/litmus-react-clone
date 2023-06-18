@@ -1,7 +1,7 @@
 import User from "../../../../../model/human/user/User";
 import HumanExplorationApiService from "../HumanExplorationApiService";
 
-interface UserLookupService extends HumanExplorationApiService<User> {
+interface UserExplorationApiService extends HumanExplorationApiService<User> {
 }
 
-export default UserLookupService;
+export default UserExplorationApiService;
