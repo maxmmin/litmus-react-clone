@@ -1,14 +1,14 @@
-import {PersonCreationAction, PersonCreationParams} from "../../../../redux/actions/CreationCoreActions";
+import {PersonCreationAction} from "../../../../redux/actions/CreationCoreAction";
 import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
 import CreationStateManagerImpl from "../CreationStateManagerImpl";
 import PersonCreationStateManager from "./PersonCreationStateManager";
 import {PayloadAction} from "@reduxjs/toolkit";
 import store, {AppDispatch} from "../../../../redux/store";
 import CreationTypedActions from "../../../../redux/actions/CreationTypedActions";
-import {Relationship} from "../../../../model/human/person/Person";
-import {CreationPassportData} from "../../../../model/human/person/PassportData";
+import Person, {Relationship} from "../../../../model/human/person/Person";
+import PassportData from "../../../../model/human/person/PassportData";
 
-class PersonCreationStateManagerImpl extends CreationStateManagerImpl<EntityCreationState<PersonCreationParams>> implements PersonCreationStateManager {
+class PersonCreationStateManagerImpl extends CreationStateManagerImpl<EntityCreationState<Person>> implements PersonCreationStateManager {
 
 
     constructor(_store: typeof store, actions: CreationTypedActions = CreationTypedActions.person) {
@@ -17,8 +17,8 @@ class PersonCreationStateManagerImpl extends CreationStateManagerImpl<EntityCrea
         super(dispatch, getState, actions);
     }
 
-    updatePassportData = (data: Partial<CreationPassportData>): void => {
-        const action: PayloadAction<Partial<CreationPassportData>, PersonCreationAction> = {
+    updatePassportData = (data: Partial<PassportData>): void => {
+        const action: PayloadAction<Partial<PassportData>, PersonCreationAction> = {
             type: PersonCreationAction.UPDATE_PASSPORT_DATA,
             payload: data
         }

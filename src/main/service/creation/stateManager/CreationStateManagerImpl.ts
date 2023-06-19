@@ -1,5 +1,5 @@
 import {AppDispatch, LitmusAsyncThunkConfig} from "../../../redux/store";
-import CreationCoreActions from "../../../redux/actions/CreationCoreActions";
+import CreationCoreAction from "../../../redux/actions/CreationCoreAction";
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import CreationTypedAction from "../../../redux/actions/CreationTypedActions";
 import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
@@ -41,7 +41,7 @@ class CreationStateManagerImpl<S extends EntityCreationState<unknown>> implement
 
     public setEntityCreationParams(entityCreationParams: S["params"]) {
         const action: PayloadAction<S["params"]> = {
-            type: this.actions[CreationCoreActions.SET_ENTITY_CREATION_PARAMS],
+            type: this.actions[CreationCoreAction.SET_ENTITY_CREATION_PARAMS],
             payload: entityCreationParams
         }
         this.dispatch(action);

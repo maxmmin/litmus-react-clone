@@ -1,10 +1,11 @@
 import CreationStateManager from "../CreationStateManager";
-import {PersonCreationParams} from "../../../../redux/actions/CreationCoreActions";
 import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
-import {Relationship} from "../../../../model/human/person/Person";
-import {CreationPassportData} from "../../../../model/human/person/PassportData";
+import Person, {Relationship} from "../../../../model/human/person/Person";
 
-interface PersonCreationStateManager extends CreationStateManager<EntityCreationState<PersonCreationParams>> {
+class CreationPassportData {
+}
+
+interface PersonCreationStateManager extends CreationStateManager<EntityCreationState<Person>> {
     updatePassportData: (data: Partial<CreationPassportData>) => void;
 
     addRelationship: (relationship: Relationship) => void;

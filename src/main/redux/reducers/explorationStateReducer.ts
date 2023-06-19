@@ -1,7 +1,6 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
 import EntityExplorationState from "../types/exploration/EntityExplorationState";
-import {ExplorationCoreAction, ExplorationTypedActions} from "../actions/ExplorationActions";
 import {combineReducers} from "redux";
 import PersonExplorationState from "../types/exploration/human/person/PersonExplorationState";
 import PersonExplorationParams from "../types/exploration/human/person/PersonExplorationParams";
@@ -15,6 +14,8 @@ import ExplorationMode from "../types/exploration/ExplorationMode";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import deepCopy from "../../util/deepCopy";
 import GeneralAction from "../GeneralAction";
+import {ExplorationTypedActions} from "../actions/ExplorationTypedActions";
+import {ExplorationCoreAction} from "../actions/ExplorationActions";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<unknown, string>): S => {
     switch (action.type) {

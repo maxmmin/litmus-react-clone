@@ -1,8 +1,8 @@
 import CreationStateManager from "../CreationStateManager";
-import {UserCreationParams} from "../../../../redux/actions/CreationCoreActions";
 import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
+import User from "../../../../model/human/user/User";
 
-interface UserCreationStateManager extends CreationStateManager<EntityCreationState<UserCreationParams>> {
+interface UserCreationStateManager extends CreationStateManager<EntityCreationState<User>> {
 }
 
 export default UserCreationStateManager;

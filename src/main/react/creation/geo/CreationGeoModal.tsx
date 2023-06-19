@@ -2,14 +2,16 @@ import SelectGeoComponent from "./SelectGeoComponent";
 import {Modal} from "react-bootstrap";
 import React, { useEffect, useState} from "react";
 import Button from "react-bootstrap/Button";
-import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {useAppSelector} from "../../../redux/hooks";
 import {Location} from "../../../model/Location";
 import {Entity} from "../../../model/Entity";
 import CreationStateManager from "../../../service/creation/stateManager/CreationStateManager";
 import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
-import {JurPersonCreationParams, PersonCreationParams} from "../../../redux/actions/CreationCoreActions";
 import store from "../../../redux/store";
+import {JurPerson} from "../../../model/jurPerson/JurPerson";
+import Person from "../../../model/human/person/Person";
+
 
 type Props = {
     entity: Entity,
@@ -42,12 +44,12 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
     const clearGeo = () => {
         switch (entity) {
             case Entity.JUR_PERSON: {
-                (creationStateManager as CreationStateManager<EntityCreationState<JurPersonCreationParams>>).updateEntityCreationParams({location: null})
+                (creationStateManager as CreationStateManager<EntityCreationState<JurPerson>>).updateEntityCreationParams({location: null})
                 break;
             }
 
             case Entity.PERSON: {
-                (creationStateManager as CreationStateManager<EntityCreationState<PersonCreationParams>>).updateEntityCreationParams({location: null})
+                (creationStateManager as CreationStateManager<EntityCreationState<Person>>).updateEntityCreationParams({location: null})
                 break;
             }
 
@@ -60,13 +62,13 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
         if (location) {
             switch (entity) {
                 case Entity.JUR_PERSON: {
-                    (creationStateManager as CreationStateManager<EntityCreationState<JurPersonCreationParams>>).updateEntityCreationParams({location: location})
+                    (creationStateManager as CreationStateManager<EntityCreationState<JurPerson>>).updateEntityCreationParams({location: location})
 
                     break;
                 }
 
                 case Entity.PERSON: {
-                    (creationStateManager as CreationStateManager<EntityCreationState<PersonCreationParams>>).updateEntityCreationParams({location: location})
+                    (creationStateManager as CreationStateManager<EntityCreationState<Person>>).updateEntityCreationParams({location: location})
                     break;
                 }
             }

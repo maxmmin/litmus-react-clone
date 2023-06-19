@@ -3,34 +3,30 @@ import Pagination from 'react-bootstrap/Pagination';
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import UserInfoTable from "./EntityTables/UserInfoTable";
-import {getJurPersonFromEntity, getPersonFromResponse, getUserFromResponse} from "../../util/pureFunctions";
 import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
-import store from "../../redux/store";
 import PagedData, {isUnPaged} from "../../rest/PagedData";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
-import {isPending} from "@reduxjs/toolkit";
 import Loader from "../loader/Loader";
+import Person from "../../model/human/person/Person";
+import {JurPerson} from "../../model/jurPerson/JurPerson";
+import User from "../../model/human/user/User";
 
-const getProcessedResults = (entity: Entity, results: any[]) => {
+const getProcessedResults = (entity: Entity, data: unknown[]) => {
     switch (entity) {
         case Entity.PERSON: {
-            return results.map(entity=>{
-                const person = getPersonFromResponse(entity);
-
+            return (data as Person[]).map(person=>{
                 return <PersonInfoTable key={person.id} person={person}/>
             })
         }
 
         case Entity.JUR_PERSON: {
-            return results.map(entity=>{
-                const jurPerson = getJurPersonFromEntity(entity);
+            return (data as JurPerson[]).map(jurPerson=>{
                 return <JurPersonInfoTable jurPerson={jurPerson} key={jurPerson.id}/>
             })
         }
 
         case Entity.USER: {
-            return results.map(entity=>{
-                const user = getUserFromResponse(entity);
+            return (data as User[]).map(user=>{
                 return <UserInfoTable user={user} key={user.id}/>
             })
         }
@@ -60,7 +56,7 @@ const ExplorationData = ({exploredEntity, state}: Props) => {
 
     if (!data) return null;
 
-    const pagedResponse: PagedData<any> = data.response;
+    const pagedResponse: PagedData<unknown> = data.response;
 
     const {content, totalElements} = pagedResponse;
 

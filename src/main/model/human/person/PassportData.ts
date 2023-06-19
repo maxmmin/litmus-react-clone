@@ -3,9 +3,3 @@ export default interface PassportData {
     passportNumber: string|null;
     rnokppCode: string|null;
 }
-
-export type CreationPassportData = {
-    passportSerial: string;
-    passportNumber: string;
-    rnokppCode: string;
-}

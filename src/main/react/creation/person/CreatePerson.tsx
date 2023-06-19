@@ -50,7 +50,7 @@ const CreatePerson = () => {
                     <input value={creationPersonParams.lastName} autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
                         onKeyDown={keyPressHandler}
                         onChange={e => {
-                            creationStateManager.updateEntityCreationParams({lastName: e.currentTarget.value})
+                                creationStateManager.updateEntityCreationParams({lastName: e.currentTarget.value})
                             }
                         }
                     />

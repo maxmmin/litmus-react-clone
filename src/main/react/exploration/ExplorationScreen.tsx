@@ -20,15 +20,6 @@ import ExplorationService from "../../service/exploration/ExplorationService";
 import ExplorationServiceImpl from "../../service/exploration/ExplorationServiceImpl";
 import {getEntityByDomain} from "../../util/pureFunctions";
 
-/* btn isInputInvalid?'disabled':''*/
-
-// const search = (e: React.MouseEvent<HTMLButtonElement>, dispatch: AppDispatch) => {
-//     e.preventDefault();
-//
-//     if (exploredEntity) {
-//         dispatch(refreshResultsThunk({table: exploredEntity, shouldRefreshGlobally: false}))
-//     }
-// }
 
 
 function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplorationParams>> (explorationService: ExplorationService, stateManager: ExplorationStateManagerImpl<S>) {

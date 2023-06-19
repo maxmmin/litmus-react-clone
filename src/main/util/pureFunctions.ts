@@ -191,39 +191,6 @@ export const preventEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     }
 }
 
-export const getPersonFromResponse = (obj: object): Person => {
-    /** need to use spread operator to not mutate redux state **/
-    const person = {...obj} as person;
-
-    if ('dateOfBirth' in obj) {
-        const date = obj.dateOfBirth as string;
-        if (date) {
-            person.dateOfBirth = new DateBuilder().buildFromString(date);
-        }
-    }
-
-    return person;
-}
-
-export const getJurPersonFromEntity = (obj: object): JurPerson => {
-    // @ts-ignore
-    const date = obj.dateOfRegistration as string;
-    /** need to use spread operator to not mutate redux state **/
-    const jurPerson = {...obj} as JurPerson
-
-    if ('dateOfRegistration' in obj) {
-        const date = obj.dateOfRegistration as string;
-        jurPerson.dateOfRegistration = new DateBuilder().buildFromString(date);
-    }
-
-    return jurPerson;
-}
-
-export const getUserFromResponse = (obj: object): User => {
-    /** need to use spread operator to not mutate redux state **/
-    return  {...obj} as User;
-}
-
 export const isActionRejected = (action: Action<String>) => {
     return action.type.endsWith("/rejected");
 }

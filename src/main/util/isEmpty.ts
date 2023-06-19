@@ -24,4 +24,8 @@ export function isEmpty(obj: unknown): boolean {
     return isObjEmpty;
 }
 
+export function hasContent (obj: unknown) {
+    return !isEmpty(obj);
+}
+
 export default isEmpty;

@@ -1,11 +1,7 @@
 import store, {AppDispatch, LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import CreationService from "./CreationService";
 import {Entity} from "../../model/Entity";
-import CreationCoreActions, {
-    JurPersonCreationParams,
-    PersonCreationParams,
-    UserCreationParams
-} from "../../redux/actions/CreationCoreActions";
+import CreationCoreAction from "../../redux/actions/CreationCoreAction";
 import PersonCreationApiService from "./api/PersonCreationApiService";
 import Person from "../../model/human/person/Person";
 import UserCreationApiService from "./api/UserCreationApiService";
@@ -22,14 +18,26 @@ import CreationTypedActions from "../../redux/actions/CreationTypedActions";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {BasicHttpError} from "../../error/BasicHttpError";
 import CreationStateManager from "./stateManager/CreationStateManager";
+import CreationDtoMapper from "./mapper/CreationDtoMapper";
+import JurPersonCreationDtoMapper from "./mapper/JurPersonCreationDtoMapper";
+import JurPersonCreationApiDto from "./mapper/dto/JurPersonCreationApiDto";
+import UserCreationApiDto from "./mapper/dto/UserCreationApiDto";
+import PersonCreationApiDto from "./mapper/dto/PersonCreationApiDto";
+import PersonCreationDtoMapper from "./mapper/PersonCreationDtoMapper";
+import UserCreationDtoMapper from "./mapper/UserCreationDtoMapper";
 
 type CreationStore = ReturnType<typeof store.getState>["creation"]
+
+type Mappers = {
+    user: CreationDtoMapper<User, UserCreationApiDto>,
+    person: CreationDtoMapper<Person, PersonCreationApiDto>,
+    jurPerson: CreationDtoMapper<JurPerson, JurPersonCreationApiDto>
+}
 
 class CreationServiceImpl implements CreationService {
     private readonly getState: ()=>CreationStore;
     private readonly dispatch: AppDispatch;
-
-
+    private readonly mappers: Mappers;
     private readonly authStateManager: AuthenticationStateManager;
 
     private handleErr (e: unknown): ErrorResponse<unknown> {
@@ -42,15 +50,16 @@ class CreationServiceImpl implements CreationService {
         return this.authStateManager.getAuth()!.accessToken;
     }).bind(this)
 
-    private async createPerson (params: PersonCreationParams, service: PersonCreationApiService): Promise<Person> {
-        return await service.create(params);
+    private async createPerson (person: Person, service: PersonCreationApiService): Promise<Person> {
+        const personCreationDto: PersonCreationApiDto = this.mappers.person.creationParamsToCreationDto(person);
+        return await service.create(personCreationDto);
     }
 
     private createPersonThunk = createAsyncThunk<Person,
-        ThunkArg<{params: PersonCreationParams, service: PersonCreationApiService}>,
-        LitmusAsyncThunkConfig>(CreationTypedActions.person[CreationCoreActions.CREATE_ENTITY],async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
+        ThunkArg<{emergingPerson: Person, service: PersonCreationApiService}>,
+        LitmusAsyncThunkConfig>(CreationTypedActions.person[CreationCoreAction.CREATE_ENTITY],async ({emergingPerson,service}, {rejectWithValue, fulfillWithValue}) => {
         try {
-            const person: Person = await this.createPerson(params, service);
+            const person: Person = await this.createPerson(emergingPerson, service);
             // @todo write link
             return fulfillWithValue(deepCopy(person), {notify: true});
         } catch (e: unknown) {
@@ -58,15 +67,16 @@ class CreationServiceImpl implements CreationService {
         }
     })
 
-    private async createUser (params: UserCreationParams, service: UserCreationApiService): Promise<User> {
-        return await service.create(params);
+    private async createUser (user: User, service: UserCreationApiService): Promise<User> {
+        const userCreationDto: UserCreationApiDto = this.mappers.user.creationParamsToCreationDto(user);
+        return await service.create(userCreationDto);
     }
 
     private createUserThunk = createAsyncThunk<User,
-        ThunkArg<{params: UserCreationParams, service: UserCreationApiService}>,
-        LitmusAsyncThunkConfig>(CreationTypedActions.user[CreationCoreActions.CREATE_ENTITY],async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
+        ThunkArg<{emergingUser: User, service: UserCreationApiService}>,
+        LitmusAsyncThunkConfig>(CreationTypedActions.user[CreationCoreAction.CREATE_ENTITY],async ({emergingUser,service}, {rejectWithValue, fulfillWithValue}) => {
         try {
-            const user: User = await this.createUser(params, service);
+            const user: User = await this.createUser(emergingUser, service);
             // @todo write link
             return fulfillWithValue(deepCopy(user), {notify: true});
         } catch (e: unknown) {
@@ -74,13 +84,14 @@ class CreationServiceImpl implements CreationService {
         }
     })
 
-    private async createJurPerson (params: JurPersonCreationParams, service: JurPersonCreationApiService): Promise<JurPerson> {
-        return await service.create(params);
+    private async createJurPerson (params: JurPerson, service: JurPersonCreationApiService): Promise<JurPerson> {
+        const dto: JurPersonCreationApiDto = this.mappers.jurPerson.creationParamsToCreationDto(params);
+        return await service.create(dto);
     }
 
     private createJurPersonThunk = createAsyncThunk<JurPerson,
-        ThunkArg<{params: JurPersonCreationParams, service: JurPersonCreationApiService}>,
-        LitmusAsyncThunkConfig>(CreationTypedActions.jurPerson[CreationCoreActions.CREATE_ENTITY],async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
+        ThunkArg<{params: JurPerson, service: JurPersonCreationApiService}>,
+        LitmusAsyncThunkConfig>(CreationTypedActions.jurPerson[CreationCoreAction.CREATE_ENTITY],async ({params,service}, {rejectWithValue, fulfillWithValue}) => {
         try {
             const jurPerson: JurPerson = await this.createJurPerson(params, service);
             // @todo write link
@@ -90,17 +101,25 @@ class CreationServiceImpl implements CreationService {
         }
     })
 
-    constructor(dispatch: AppDispatch, getState: ()=>CreationStore, authStateManager: AuthenticationStateManager) {
+    constructor(dispatch: AppDispatch, getState: ()=>CreationStore, authStateManager: AuthenticationStateManager, mappers: Mappers) {
       this.dispatch = dispatch;
       this.getState = getState;
       this.authStateManager = authStateManager;
+      this.mappers = mappers;
     }
 
-    static getInstance(_store: typeof store, authStateManager?: AuthenticationStateManager) {
+    static getInstance(_store: typeof store, authStateManager?: AuthenticationStateManager, mappers?: Mappers) {
         if (!authStateManager) {
             authStateManager = AuthenticationStateManagerImpl.getManager(_store);
         }
-        return new CreationServiceImpl(_store.dispatch, ()=>_store.getState().creation,authStateManager)
+        if (!mappers) {
+            mappers = {
+                jurPerson: new JurPersonCreationDtoMapper(),
+                person: new PersonCreationDtoMapper(),
+                user: new UserCreationDtoMapper()
+            };
+        }
+        return new CreationServiceImpl(_store.dispatch, ()=>_store.getState().creation,authStateManager, mappers)
     }
 
     create(entity: Entity): void {
@@ -116,7 +135,7 @@ class CreationServiceImpl implements CreationService {
 
                 const service = new PersonCreationApiService(this.getAccessToken);
 
-                asyncThunk = this.createPersonThunk({params: personManager.getCreationParams(), service: service, globalPending: false})
+                asyncThunk = this.createPersonThunk({emergingPerson: personManager.getCreationParams(), service: service, globalPending: false})
                 break;
             }
             case Entity.JUR_PERSON: {
@@ -135,7 +154,7 @@ class CreationServiceImpl implements CreationService {
 
                 const service = new UserCreationApiService(this.getAccessToken);
 
-                asyncThunk = this.createUserThunk({params: userManager.getCreationParams(), service: service, globalPending: false})
+                asyncThunk = this.createUserThunk({emergingUser: userManager.getCreationParams(), service: service, globalPending: false})
 
                 break;
             }

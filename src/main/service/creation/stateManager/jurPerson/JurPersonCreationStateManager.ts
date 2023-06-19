@@ -1,8 +1,8 @@
 import CreationStateManager from "../CreationStateManager";
 import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
-import {JurPersonCreationParams} from "../../../../redux/actions/CreationCoreActions";
+import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 
-interface JurPersonCreationStateManager extends CreationStateManager<EntityCreationState<JurPersonCreationParams>> {
+interface JurPersonCreationStateManager extends CreationStateManager<EntityCreationState<JurPerson>> {
 }
 
 export default JurPersonCreationStateManager;

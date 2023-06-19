@@ -1,5 +1,5 @@
 import store, {AppDispatch, LitmusAsyncThunkConfig} from "../../../redux/store";
-import {ExplorationCoreAction, ExplorationTypedActions} from "../../../redux/actions/ExplorationActions";
+import {ExplorationCoreAction} from "../../../redux/actions/ExplorationActions";
 import {setExploredEntityAction} from "../../../redux/reducers/explorationStateReducer";
 import JurPersonExplorationState from "../../../redux/types/exploration/jurPerson/JurPersonExplorationState";
 import PersonExplorationState from "../../../redux/types/exploration/human/person/PersonExplorationState";
@@ -11,6 +11,7 @@ import ExplorationMode from "../../../redux/types/exploration/ExplorationMode";
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import ExplorationStateManager from "./ExplorationStateManager";
 import deepCopy from "../../../util/deepCopy";
+import {ExplorationTypedActions} from "../../../redux/actions/ExplorationTypedActions";
 
 /**
  * S - entityExplorationState

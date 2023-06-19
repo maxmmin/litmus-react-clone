@@ -1,4 +1,7 @@
-import {ExplorationCoreAction, ParsedAction} from "../redux/actions/ExplorationActions";
+export type ParsedAction = {
+    core: string,
+    domain: string
+} | null
 
 class TypedActionsUtil {
 

@@ -24,7 +24,7 @@ import EntityExplorationParams from "../../redux/types/exploration/EntityExplora
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
 import JurPersonExplorationParams from "../../redux/types/exploration/jurPerson/JurPersonExplorationParams";
 import UserExplorationParams from "../../redux/types/exploration/human/user/UserExplorationParams";
-import {ExplorationCoreAction, ExplorationTypedActions} from "../../redux/actions/ExplorationActions";
+import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
 import EntityExplorationData from "../../redux/types/exploration/EntityExplorationData";
 import deepCopy from "../../util/deepCopy";
 import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
@@ -32,6 +32,7 @@ import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationS
 import {BasicHttpError} from "../../error/BasicHttpError";
 import ErrorResponse from "../../rest/ErrorResponse";
 import ExplorationStateManager from "./stateManager/ExplorationStateManager";
+import {ExplorationTypedActions} from "../../redux/actions/ExplorationTypedActions";
 
 class UnsupportedModeError extends Error {
 
@@ -81,6 +82,7 @@ class ExplorationServiceImpl implements ExplorationService {
                 const id = checkNotEmpty(explorationParams.id);
                 const content: Person[] = []
                 const person = await service.findById(id);
+                console.log(person)
                 if (person) content.push(person);
                 return new UnPagedData(content);
             }
