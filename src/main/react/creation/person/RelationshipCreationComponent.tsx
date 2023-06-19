@@ -5,13 +5,14 @@ import {CrossIcon} from "../../../util/icons";
 import {useAppDispatch} from "../../../redux/hooks";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
+import store from "../../../redux/store";
 
 type Props = {
     relationship: Relationship
 }
 
 const RelationshipCreationComponent = ({relationship}: Props) => {
-    const personCreationStateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager();
+    const personCreationStateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager(store);
 
     const personTo = relationship.person;
 

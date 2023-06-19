@@ -9,6 +9,7 @@ import CreationStateManager from "../../../service/creation/stateManager/Creatio
 import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
 import {JurPersonCreationParams, PersonCreationParams} from "../../../redux/actions/CreationCoreActions";
+import store from "../../../redux/store";
 
 type Props = {
     entity: Entity,
@@ -20,7 +21,7 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
 
     const [location, setLocation] = useState<Location|null>(null)
 
-    const creationStateManager: CreationStateManager<EntityCreationState<unknown>> = CreationStateManagerFactory.getEntityManager(entity);
+    const creationStateManager: CreationStateManager<EntityCreationState<unknown>> = CreationStateManagerFactory.getEntityManager(entity, store);
 
     const geoLocation = useAppSelector(state => {
         switch (entity) {

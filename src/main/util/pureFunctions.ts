@@ -5,7 +5,7 @@ import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
 import {getGeocode} from "use-places-autocomplete";
 import Geo from "../model/Geo";
-import appConfig, {createAuthHeader, gmapsRegionOptions} from "../config/appConfig";
+import appConfig, {gmapsRegionOptions} from "../config/appConfig";
 import {Entity} from "../model/Entity";
 import User from "../model/human/user/User";
 import Person from "../model/human/person/Person";
@@ -244,10 +244,6 @@ export function checkNotEmpty <T> (arg: T) {
     } else return arg;
 }
 
-export function isEmpty (str: string|undefined|null) {
-    return !(Boolean(str)&&Boolean(str?.trim()))
-}
-
 export function buildUrl(...args: string[]): string {
     return args.map((part, index)=>{
         if (part.endsWith("/")) {
@@ -259,6 +255,7 @@ export function buildUrl(...args: string[]): string {
         return part;
     }).join("/")
 }
+
 
 export function getEntityByDomain (domain: string): Entity|null {
     let entity: Entity|null = null;

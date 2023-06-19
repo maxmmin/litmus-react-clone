@@ -76,7 +76,7 @@ export class BasicNotificationManager implements NotificationManager {
         this.dispatch = dispatch;
     }
 
-    static getManager(_store: typeof store = store): BasicNotificationManager {
+    static getManager(_store: typeof store): BasicNotificationManager {
         return new BasicNotificationManager(_store.dispatch)
     }
 

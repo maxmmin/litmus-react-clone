@@ -1,13 +1,23 @@
 import ErrorResponse from "../rest/ErrorResponse";
 export const noInfoMessage = "Інформація відсутня"
 
-class BasicHttpError<D extends object> extends Error implements ErrorResponse<D> {
+class BasicHttpError<D> extends Error implements ErrorResponse<D> {
     public readonly detail: D | null;
     public readonly status: number;
     public readonly title: string;
 
     public getDescription () {
-        return `Error ${this.status}: ${this.title}`
+        let detail: string|null = null;
+
+        if (this.detail && typeof this.detail === 'string') {
+            detail = this.detail;
+        }
+
+        let msg = `Error ${this.status}: ${this.title}`;
+
+        if (detail) msg+=` - ${detail.toLowerCase()}`;
+
+        return msg;
     };
 
 

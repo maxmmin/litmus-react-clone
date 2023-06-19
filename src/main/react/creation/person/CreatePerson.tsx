@@ -18,6 +18,7 @@ import {Entity} from "../../../model/Entity";
 import CreationStateManagerImpl from "../../../service/creation/stateManager/CreationStateManagerImpl";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
+import store from "../../../redux/store";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -34,7 +35,7 @@ const CreatePerson = () => {
 
     const relationships = creationPersonParams?.relationships;
 
-    const creationStateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager();
+    const creationStateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager(store);
 
     const closeModal = () => setModalSettings(null)
 
@@ -100,7 +101,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Номер паспорта</Form.Label>
-                <input value={passportData!.passportNumber} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
+                <input value={passportData!.passportNumber!} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
                        onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updatePassportData({passportNumber: e.currentTarget.value})
@@ -111,7 +112,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Серія паспорта</Form.Label>
-                <input  value={passportData!.passportSerial} autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
+                <input  value={passportData!.passportSerial!} autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
                        onKeyDown={keyPressHandler}
                         onChange={e => {
                                 creationStateManager.updatePassportData({passportSerial: e.currentTarget.value})
@@ -122,7 +123,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>РНОКПП</Form.Label>
-                <input value={passportData!.rnokppCode} autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
+                <input value={passportData!.rnokppCode!} autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
                        onKeyDown={inputBeforeDateContainerHandler}
                        onChange={e => {
                            creationStateManager.updatePassportData({rnokppCode: e.currentTarget.value})

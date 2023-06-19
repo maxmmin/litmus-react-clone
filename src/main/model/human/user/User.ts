@@ -1,7 +1,7 @@
 import {RoleName} from "../../../redux/types/userIdentity/Role";
 
 interface User {
-    id?: string;
+    id: string;
 
     email: string;
 

@@ -1,9 +1,9 @@
-import {Location} from "../../model/Location";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
-import Person from "../../model/human/person/Person";
-import User from "../../model/human/user/User";
+import Person, {Relationship} from "../../model/human/person/Person";
 import {RoleName} from "../types/userIdentity/Role";
 import DateEntity, {DateBuilder} from "../../model/DateEntity";
+import Sex from "../../model/human/person/Sex";
+import {Location} from "../../model/Location";
+import {CreationPassportData} from "../../model/human/person/PassportData";
 
 enum CreationCoreActions {
     SET_ENTITY_CREATION_PARAMS="SET_ENTITY_CREATION_PARAMS",
@@ -20,7 +20,16 @@ export enum PersonCreationAction {
 
 export default CreationCoreActions;
 
-export interface PersonCreationParams extends Person {}
+export interface PersonCreationParams {
+    firstName: string;
+    middleName: string;
+    lastName: string;
+    relationships: Relationship[],
+    sex: Sex | null;
+    passportData: CreationPassportData;
+    dateOfBirth: DateEntity;
+    location: Location | null
+}
 
 export const initialPersonCreationParams: PersonCreationParams = {
     dateOfBirth: {...new DateBuilder().build()},
@@ -33,7 +42,19 @@ export const initialPersonCreationParams: PersonCreationParams = {
     location: null
 }
 
-export interface UserCreationParams extends User {}
+export interface UserCreationParams {
+    email: string;
+
+    firstName: string;
+
+    middleName: string;
+
+    lastName: string;
+
+    password: string
+
+    role: RoleName;
+}
 
 export const initialUserCreationParams: UserCreationParams = {
     email: "",
@@ -44,7 +65,14 @@ export const initialUserCreationParams: UserCreationParams = {
     role: RoleName.USER
 }
 
-export interface JurPersonCreationParams extends JurPerson {}
+export interface JurPersonCreationParams {
+    name: string;
+    edrpou: string;
+    dateOfRegistration: DateEntity;
+    owner: Person | null;
+    benOwner: Person | null;
+    location: Location | null;
+}
 
 export const initialJurPersonCreationParams: JurPersonCreationParams = {
     benOwner: null,

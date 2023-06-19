@@ -5,10 +5,10 @@ import BasicEntityLookupService from "../BasicExplorationApiService";
 import appConfig from "../../../../config/appConfig";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
-import {isEmpty} from "../../../../util/pureFunctions";
 import {Human} from "../../../../model/human/Human";
 import ErrorResponse from "../../../../rest/ErrorResponse";
 import {BasicHttpError} from "../../../../error/BasicHttpError";
+import {isEmpty} from "../../../../util/isEmpty";
 
 export default class HumanExplorationApiServiceImpl<E extends Human> extends BasicEntityLookupService<E> implements HumanExplorationApiService<E> {
 

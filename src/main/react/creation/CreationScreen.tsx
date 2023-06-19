@@ -18,6 +18,8 @@ import appConfig from "../../config/appConfig";
 import {useAppSelector} from "../../redux/hooks";
 import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import CreationStateManagerImpl from "../../service/creation/stateManager/CreationStateManagerImpl";
+import CreationService from "../../service/creation/CreationService";
+import CreationServiceImpl from "../../service/creation/CreationServiceImpl";
 
 
 export type CreationModalSettings = {
@@ -53,53 +55,10 @@ const Creation = () => {
         }
     }, [location])
 
-    // const createButtonOnClick = async (creationParams: CreationParamsReducible, accessToken: string) => {
-    //     if (creationParams) {
-    //         const table = creationParams.selectedEntity;
-    //         // @todo creation manager
-    //         // const url = apiLinks[table]
-    //         //
-    //         // let body: CreateJurPersonDto | CreatePersonDto | CreateUserDto | null = null
-    //         //
-    //         // switch (table) {
-    //         //     case Entity.JUR_PERSON: {
-    //         //         const creationData = creationParams.jurPersonCreationData;
-    //         //         body = getCreateJurPersonDto(creationData);
-    //         //         break;
-    //         //     }
-    //         //
-    //         //     case Entity.PERSON: {
-    //         //         const creationData = creationParams.personCreationData;
-    //         //         body = getCreatePersonDto(creationData)
-    //         //         break;
-    //         //     }
-    //         //
-    //         //     case Entity.USER: {
-    //         //         const creationData = creationParams.userCreationData;
-    //         //         body = getCreateUserDto(creationData);
-    //         //         break;
-    //         //     }
-    //         // }
-    //
-    //         // if (url && body) {
-    //         //         let type: NotificationType;
-    //         //
-    //         //         const response = await createEntity(url, body, accessToken);
-    //         //
-    //         //         if (response.ok) {
-    //         //             type = notificationTypes.SUCCESS;
-    //         //         } else type = notificationTypes.ERROR;
-    //         //
-    //         //         const message: object = await response.json();
-    //         //
-    //         //         dispatch(addNotification({...new BasicNotification(type, JSON.stringify(message))}));
-    //         // }
-    //
-    //     }
-    //
-    // }
-    // // @todo DO VALIDATION
+
     if (!emergingEntity) return null;
+
+    const creationService: CreationService = CreationServiceImpl.getInstance(store);
 
     return (
         <div className="creation-page">
@@ -118,14 +77,13 @@ const Creation = () => {
                            </Form.Select>
                        </div>
 
-                   <Form className={"creation-input-group"}>
+                   <Form onSubmit={e=>{
+                       e.preventDefault();
+                       creationService.create(emergingEntity);
+                   }} className={"creation-input-group"}>
                        <CreationInputSection entity={emergingEntity}/>
 
-                       <button onClick={event => {
-                           event.preventDefault();
-                           const state = store.getState();
-                           // createButtonOnClick(state.creation, state.authentication?.accessToken!)
-                       }} className="creation-input-group__btn btn btn-primary">Створити</button>
+                       <button type={"submit"} className="creation-input-group__btn btn btn-primary">Створити</button>
                    </Form>
                </div>
             </main>

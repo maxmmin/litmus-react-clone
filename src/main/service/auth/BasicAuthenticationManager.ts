@@ -162,7 +162,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
         // this callback will fire when it will 1 minute before jwt expiring
         const timer = setTimeout(()=>{
-            console.log("updating core")
+            console.log("updating auth")
             this.refreshAuth();
         }, refreshCallbackDelayInMs)
 
@@ -180,7 +180,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         return !this.isAuthActual();
     }
 
-    static getBasicManager (_store?: typeof store) {
+    static getBasicManager (_store: typeof store) {
         const authService = new BasicAuthApiService();
         const timersStateManager = TimersStateManager.getManager(_store);
         const authenticationStateManager = AuthenticationStateManagerImpl.getManager(_store);

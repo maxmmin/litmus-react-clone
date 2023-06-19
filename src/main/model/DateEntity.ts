@@ -33,8 +33,8 @@ export class DateBuilder {
         return this;
     }
 
-    buildStringFrom (date: DateEntity): string {
-        return this.setYear(date.year).setMonth(date.month).setDay(date.day).buildStringDate();
+    static buildStringFrom (date: DateEntity): string {
+        return new DateBuilder().setYear(date.year).setMonth(date.month).setDay(date.day).buildStringDate();
     }
 
     buildStringDate (): string {

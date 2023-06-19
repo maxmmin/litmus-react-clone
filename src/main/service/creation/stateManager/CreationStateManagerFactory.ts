@@ -15,20 +15,19 @@ import UserCreationStateManager from "./user/UserCreationStateManager";
 import JurPersonCreationStateManager from "./jurPerson/JurPersonCreationStateManager";
 
 class CreationStateManagerFactory {
-    static getJurPersonManager (providedStore: typeof store = store): JurPersonCreationStateManager {
-        const getState = ()=>providedStore.getState().creation.jurPerson as EntityCreationState<JurPersonCreationParams>;
-        return new CreationStateManagerImpl<EntityCreationState<JurPersonCreationParams>>(store.dispatch, getState, CreationTypedAction.jurPerson);
+    static getJurPersonManager (providedStore: typeof store): JurPersonCreationStateManager {
+        return new JurPersonCreationStateManagerImpl(providedStore);
     }
 
-    static getPersonManager (providedStore: typeof store = store): PersonCreationStateManager {
+    static getPersonManager (providedStore: typeof store): PersonCreationStateManager {
         return new PersonCreationStateManagerImpl(providedStore);
     }
 
-    static getUserManager (providedStore: typeof store = store): UserCreationStateManager {
+    static getUserManager (providedStore: typeof store): UserCreationStateManager {
         return new UserCreationStateManagerImpl(providedStore);
     }
 
-    static getEntityManager(entity: Entity, providedStore: typeof store = store): CreationStateManagerImpl<EntityCreationState<unknown>> {
+    static getEntityManager(entity: Entity, providedStore: typeof store): CreationStateManagerImpl<EntityCreationState<unknown>> {
         switch (entity) {
             case Entity.PERSON: {
                 return new PersonCreationStateManagerImpl(providedStore);

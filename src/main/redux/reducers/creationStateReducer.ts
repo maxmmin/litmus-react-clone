@@ -12,9 +12,9 @@ import CreationCoreActions, {
     PersonCreationParams, UserCreationParams
 } from "../actions/CreationCoreActions";
 import {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
-import {PassportData} from "../../model/human/person/PassportData";
 import GeneralAction from "../GeneralAction";
 import {Entity} from "../../model/Entity";
+import {CreationPassportData} from "../../model/human/person/PassportData";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
@@ -68,8 +68,8 @@ const personCreationStateReducer: Reducer<EntityCreationState<PersonCreationPara
         }
 
         case PersonCreationAction.UPDATE_PASSPORT_DATA: {
-            const payload = action.payload as unknown as Partial<PassportData>;
-            let passportData: PassportData = Object.assign({},prevState.params.passportData, payload);
+            const payload = action.payload as unknown as Partial<CreationPassportData>;
+            let passportData: CreationPassportData = Object.assign({},prevState.params.passportData, payload);
             return {...prevState, params: {...prevState.params, passportData: passportData}}
         }
 

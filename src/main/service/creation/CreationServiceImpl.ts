@@ -38,9 +38,9 @@ class CreationServiceImpl implements CreationService {
         return deepCopy(error);
     }
 
-    private getAccessToken () {
+    private getAccessToken = (function (this: CreationServiceImpl) {
         return this.authStateManager.getAuth()!.accessToken;
-    }
+    }).bind(this)
 
     private async createPerson (params: PersonCreationParams, service: PersonCreationApiService): Promise<Person> {
         return await service.create(params);
@@ -96,6 +96,13 @@ class CreationServiceImpl implements CreationService {
       this.authStateManager = authStateManager;
     }
 
+    static getInstance(_store: typeof store, authStateManager?: AuthenticationStateManager) {
+        if (!authStateManager) {
+            authStateManager = AuthenticationStateManagerImpl.getManager(_store);
+        }
+        return new CreationServiceImpl(_store.dispatch, ()=>_store.getState().creation,authStateManager)
+    }
+
     create(entity: Entity): void {
 
         let stateManager: CreationStateManager<EntityCreationState<unknown>>;
@@ -104,7 +111,7 @@ class CreationServiceImpl implements CreationService {
 
         switch (entity) {
             case Entity.PERSON: {
-                const personManager = CreationStateManagerFactory.getPersonManager();
+                const personManager = CreationStateManagerFactory.getPersonManager(store);
                 stateManager = personManager;
 
                 const service = new PersonCreationApiService(this.getAccessToken);
@@ -113,20 +120,20 @@ class CreationServiceImpl implements CreationService {
                 break;
             }
             case Entity.JUR_PERSON: {
-                const jurPersonManager = CreationStateManagerFactory.getJurPersonManager();
+                const jurPersonManager = CreationStateManagerFactory.getJurPersonManager(store);
                 stateManager = jurPersonManager;
 
-                const service = new JurPersonCreationApiService(this.getAccessToken.bind(this));
+                const service = new JurPersonCreationApiService(this.getAccessToken);
 
                 asyncThunk = this.createJurPersonThunk({params: jurPersonManager.getCreationParams(), service: service, globalPending: false})
 
                 break;
             }
             case Entity.USER: {
-                const userManager = CreationStateManagerFactory.getUserManager();
+                const userManager = CreationStateManagerFactory.getUserManager(store);
                 stateManager = userManager;
 
-                const service = new UserCreationApiService(this.getAccessToken.bind(this));
+                const service = new UserCreationApiService(this.getAccessToken);
 
                 asyncThunk = this.createUserThunk({params: userManager.getCreationParams(), service: service, globalPending: false})
 

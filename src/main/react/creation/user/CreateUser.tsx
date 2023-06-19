@@ -4,11 +4,12 @@ import React from "react";
 import {useAppDispatch} from "../../../redux/hooks";
 import UserCreationStateManager from "../../../service/creation/stateManager/user/UserCreationStateManager";
 import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
+import store from "../../../redux/store";
 
 const CreateUser = () => {
     const dispatch = useAppDispatch();
 
-    const creationStateManager: UserCreationStateManager = CreationStateManagerFactory.getUserManager();
+    const creationStateManager: UserCreationStateManager = CreationStateManagerFactory.getUserManager(store);
     // todo: this section
     return (
         <>

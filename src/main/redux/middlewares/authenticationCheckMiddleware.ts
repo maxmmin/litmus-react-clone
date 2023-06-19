@@ -5,6 +5,7 @@ import AuthAction from "../actions/AuthAction";
 import {TimersReducible} from "../actions/TimersAction";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 import GeneralAction from "../GeneralAction";
+import store from "../store";
 
 
 type PartedStoreType = {
@@ -17,7 +18,7 @@ const authenticationCheckMiddleware: Middleware<{}, PartedStoreType> = ({ getSta
     next
 ) => (action: Action) => {
     if (action.type===AuthAction.CHECK_AUTH) {
-        BasicAuthenticationManager.getBasicManager().checkAndRefreshAuth();
+        BasicAuthenticationManager.getBasicManager(store).checkAndRefreshAuth();
     } else if (action.type===AuthAction.CLEAR_AUTH) {
         dispatch({type: GeneralAction.RESET_DATA})
     }

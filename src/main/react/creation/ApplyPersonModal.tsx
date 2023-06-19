@@ -125,7 +125,6 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                 throw new Error(`Особу з ідентифікатором ${id} не знайдено`)
             }
         } catch (e: unknown) {
-            console.error(e)
             const err = BasicHttpError.parseError(e);
             setSearchError(err);
         }
@@ -148,7 +147,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
-                const stateManager: JurPersonCreationStateManager = CreationStateManagerFactory.getJurPersonManager();
+                const stateManager: JurPersonCreationStateManager = CreationStateManagerFactory.getJurPersonManager(store);
 
                 const payload: Partial<JurPerson> = {}
 
@@ -163,7 +162,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             }
 
             case CreationModalModes.SET_RELATIONSHIP: {
-                const stateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager();
+                const stateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager(store);
                 
                 const relationship: Relationship = {
                     note: "", person: person, relationType: null
@@ -192,7 +191,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
-                const stateManager: JurPersonCreationStateManager = CreationStateManagerFactory.getJurPersonManager();
+                const stateManager: JurPersonCreationStateManager = CreationStateManagerFactory.getJurPersonManager(store);
                 const payload: Partial<JurPerson> = {}
                 if (modalSettings.mode===CreationModalModes.SET_OWNER) {
                     payload.owner = null;

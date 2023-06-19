@@ -1,10 +1,10 @@
 import {Location} from "../../Location";
-import {PassportData} from "./PassportData";
 import DateEntity from "../../DateEntity";
 import Sex from "./Sex";
+import PassportData from "./PassportData";
 
 type Person = {
-    id?: string;
+    id: string;
     firstName: string;
     middleName: string;
     lastName: string;

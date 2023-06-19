@@ -1,7 +1,6 @@
 import CreationStateManager from "../CreationStateManager";
 import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
-import {JurPersonCreationParams, PersonCreationParams} from "../../../../redux/actions/CreationCoreActions";
-import {PassportData} from "../../../../model/human/person/PassportData";
+import {JurPersonCreationParams} from "../../../../redux/actions/CreationCoreActions";
 
 interface JurPersonCreationStateManager extends CreationStateManager<EntityCreationState<JurPersonCreationParams>> {
 }

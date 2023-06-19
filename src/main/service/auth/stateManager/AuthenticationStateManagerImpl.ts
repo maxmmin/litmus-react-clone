@@ -18,7 +18,7 @@ class AuthenticationStateManagerImpl implements AuthenticationStateManager{
         this.getState = getState;
     }
 
-    static getManager(_store: typeof store = store): AuthenticationStateManagerImpl {
+    static getManager(_store: typeof store): AuthenticationStateManagerImpl {
         return new AuthenticationStateManagerImpl(_store.dispatch, ()=>_store.getState().authentication)
     }
 

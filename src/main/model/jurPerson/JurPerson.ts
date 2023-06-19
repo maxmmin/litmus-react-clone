@@ -3,7 +3,7 @@ import Person from "../human/person/Person";
 import DateEntity from "../DateEntity";
 
 export type JurPerson = {
-    id?: string;
+    id: string;
     name: string;
     edrpou: string;
     dateOfRegistration: DateEntity;
