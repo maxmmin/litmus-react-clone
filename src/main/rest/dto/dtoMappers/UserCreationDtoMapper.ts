@@ -1,12 +1,12 @@
 import CreationDtoMapper from "./CreationDtoMapper";
 import User from "../../../model/human/user/User";
-import UserCreationApiDto from "./dto/UserCreationApiDto";
-import PersonRequestApiDto from "./dto/PersonCreationApiDto";
+import UserRequestDto from "../user/UserRequestDto";
 import {hasContent} from "../../../util/isEmpty";
+import UserResponseDto from "../user/UserResponseDto";
 
-class UserCreationDtoMapper implements CreationDtoMapper<User, UserCreationApiDto> {
-    creationParamsToCreationDto(emergingUser: User): UserCreationApiDto {
-        const dto: UserCreationApiDto = {}
+class UserCreationDtoMapper implements CreationDtoMapper<User, UserRequestDto, UserResponseDto> {
+    mapToRequestDto(emergingUser: User): UserRequestDto {
+        const dto: UserRequestDto = {}
 
         if (hasContent(emergingUser.firstName)) {
             dto.firstName = emergingUser.firstName;
@@ -28,12 +28,26 @@ class UserCreationDtoMapper implements CreationDtoMapper<User, UserCreationApiDt
             dto.email = emergingUser.email;
         }
 
-        if (hasContent(emergingUser.role)) {
+        if (emergingUser.role) {
             dto.role = emergingUser.role;
         }
 
         return dto;
     }
+
+    mapToResponseDto(exploredEntityDto: UserResponseDto): User {
+        return {
+            email: exploredEntityDto.email,
+            id: exploredEntityDto.id,
+            firstName: exploredEntityDto.firstName,
+            middleName: exploredEntityDto.middleName,
+            lastName: exploredEntityDto.lastName,
+            password: exploredEntityDto.password,
+            role: exploredEntityDto.role
+        }
+    }
+
+
 
 }
 

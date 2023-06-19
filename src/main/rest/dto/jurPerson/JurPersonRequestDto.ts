@@ -1,6 +1,6 @@
-import {Location} from "../../../../model/Location";
+import {Location} from "../../../model/Location";
 
-export default interface JurPersonCreationApiDto {
+export default interface JurPersonRequestDto {
     benOwnerId?: string,
     dateOfRegistration?:  string,
     edrpou?:  string,

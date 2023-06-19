@@ -4,16 +4,16 @@ import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestMana
 import appConfig from "../../../config/appConfig";
 import {BasicHttpError} from "../../../error/BasicHttpError";
 import CreationApiService from "./CreationApiService";
-import PersonCreationApiDto from "../mapper/dto/PersonCreationApiDto";
+import PersonRequestDto from "../../../rest/dto/person/PersonRequestDto";
 
-class PersonCreationApiService implements CreationApiService<Person, PersonCreationApiDto> {
+class PersonCreationApiService implements CreationApiService<Person, PersonRequestDto> {
     private readonly getAccessToken: ()=>string;
 
     constructor(getAccessToken: () => string) {
         this.getAccessToken = getAccessToken;
     }
 
-    async create(dto: PersonCreationApiDto): Promise<Person> {
+    async create(dto: PersonRequestDto): Promise<Person> {
         const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
 
         const accessToken = this.getAccessToken();

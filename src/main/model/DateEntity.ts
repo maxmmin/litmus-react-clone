@@ -12,6 +12,8 @@ export default class DateEntity {
 }
 
 export class DateBuilder {
+    private static readonly separator = "-";
+
     private day: string = '';
 
     private month: string = '';
@@ -41,8 +43,8 @@ export class DateBuilder {
         return `${this.year}-${this.month}-${this.day}`
     }
 
-    buildFromString (date: string): DateEntity {
-        const [year, month, day] = date.split("-")
+    static buildFromString (date: string): DateEntity {
+        const [year, month, day] = date.split(DateBuilder.separator)
         return {year, month, day};
     }
 

@@ -5,17 +5,17 @@ import {BasicHttpError} from "../../../error/BasicHttpError";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import CreationApiService from "./CreationApiService";
 import {Location} from "../../../model/Location";
-import JurPersonCreationApiDto from "../mapper/dto/JurPersonCreationApiDto";
+import JurPersonRequestDto from "../../../rest/dto/jurPerson/JurPersonRequestDto";
 
 
-class JurPersonCreationApiService implements CreationApiService<JurPerson, JurPersonCreationApiDto> {
+class JurPersonCreationApiService implements CreationApiService<JurPerson, JurPersonRequestDto> {
     private readonly getAccessToken: ()=>string;
 
     constructor(getAccessToken: () => string) {
         this.getAccessToken = getAccessToken;
     }
 
-    async create(creationDto: JurPersonCreationApiDto): Promise<JurPerson> {
+    async create(creationDto: JurPersonRequestDto): Promise<JurPerson> {
         const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
 
         const accessToken = this.getAccessToken();

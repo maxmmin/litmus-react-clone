@@ -29,7 +29,7 @@ const CreatePerson = () => {
         throw new Error("createPersonDto was null but it shouldn't be")
     }
 
-    const {year, month, day} = creationPersonParams!.dateOfBirth;
+    const {year, month, day} = creationPersonParams!.dateOfBirth||{day: "", month: "", year: ""};
 
     const passportData = creationPersonParams?.passportData;
 
@@ -69,7 +69,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Ім'я по-батькові</Form.Label>
-                <input value={creationPersonParams.middleName} autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+                <input value={creationPersonParams.middleName?creationPersonParams.middleName:""} autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
                     onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value})

@@ -18,20 +18,23 @@ import CreationTypedActions from "../../redux/actions/CreationTypedActions";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {BasicHttpError} from "../../error/BasicHttpError";
 import CreationStateManager from "./stateManager/CreationStateManager";
-import CreationDtoMapper from "./mapper/CreationDtoMapper";
-import JurPersonCreationDtoMapper from "./mapper/JurPersonCreationDtoMapper";
-import JurPersonCreationApiDto from "./mapper/dto/JurPersonCreationApiDto";
-import UserCreationApiDto from "./mapper/dto/UserCreationApiDto";
-import PersonCreationApiDto from "./mapper/dto/PersonCreationApiDto";
-import PersonCreationDtoMapper from "./mapper/PersonCreationDtoMapper";
-import UserCreationDtoMapper from "./mapper/UserCreationDtoMapper";
+import CreationDtoMapper from "../../rest/dto/dtoMappers/CreationDtoMapper";
+import JurPersonCreationDtoMapper from "../../rest/dto/dtoMappers/JurPersonCreationDtoMapper";
+import JurPersonRequestDto from "../../rest/dto/jurPerson/JurPersonRequestDto";
+import UserRequestDto from "../../rest/dto/user/UserRequestDto";
+import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
+import PersonCreationDtoMapper from "../../rest/dto/dtoMappers/PersonCreationDtoMapper";
+import UserCreationDtoMapper from "../../rest/dto/dtoMappers/UserCreationDtoMapper";
+import UserResponseDto from "../../rest/dto/user/UserResponseDto";
+import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
+import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
 
 type CreationStore = ReturnType<typeof store.getState>["creation"]
 
 type Mappers = {
-    user: CreationDtoMapper<User, UserCreationApiDto>,
-    person: CreationDtoMapper<Person, PersonCreationApiDto>,
-    jurPerson: CreationDtoMapper<JurPerson, JurPersonCreationApiDto>
+    user: CreationDtoMapper<User, UserRequestDto, UserResponseDto>,
+    person: CreationDtoMapper<Person, PersonRequestDto, PersonResponseDto>,
+    jurPerson: CreationDtoMapper<JurPerson, JurPersonRequestDto, JurPersonResponseDto>
 }
 
 class CreationServiceImpl implements CreationService {
@@ -51,7 +54,7 @@ class CreationServiceImpl implements CreationService {
     }).bind(this)
 
     private async createPerson (person: Person, service: PersonCreationApiService): Promise<Person> {
-        const personCreationDto: PersonCreationApiDto = this.mappers.person.creationParamsToCreationDto(person);
+        const personCreationDto: PersonRequestDto = this.mappers.person.mapToRequestDto(person);
         return await service.create(personCreationDto);
     }
 
@@ -68,7 +71,7 @@ class CreationServiceImpl implements CreationService {
     })
 
     private async createUser (user: User, service: UserCreationApiService): Promise<User> {
-        const userCreationDto: UserCreationApiDto = this.mappers.user.creationParamsToCreationDto(user);
+        const userCreationDto: UserRequestDto = this.mappers.user.mapToRequestDto(user);
         return await service.create(userCreationDto);
     }
 
@@ -85,7 +88,7 @@ class CreationServiceImpl implements CreationService {
     })
 
     private async createJurPerson (params: JurPerson, service: JurPersonCreationApiService): Promise<JurPerson> {
-        const dto: JurPersonCreationApiDto = this.mappers.jurPerson.creationParamsToCreationDto(params);
+        const dto: JurPersonRequestDto = this.mappers.jurPerson.mapToRequestDto(params);
         return await service.create(dto);
     }
 

@@ -1,6 +1,6 @@
-import {RoleName} from "../../../../redux/types/userIdentity/Role";
+import {RoleName} from "../../../redux/types/userIdentity/Role";
 
-export default interface UserCreationApiDto {
+export default interface UserRequestDto {
     email?: string;
 
     firstName?: string;

@@ -2,16 +2,17 @@ import {Location} from "../../Location";
 import DateEntity from "../../DateEntity";
 import Sex from "./Sex";
 import PassportData from "./PassportData";
+import {Human} from "../Human";
 
-type Person = {
+interface Person extends Human {
     id: string;
     firstName: string;
-    middleName: string;
+    middleName: string|null;
     lastName: string;
     relationships: Relationship[],
     sex: Sex | null;
     passportData: PassportData | null;
-    dateOfBirth: DateEntity;
+    dateOfBirth: DateEntity | null;
     location: Location | null
 }
 

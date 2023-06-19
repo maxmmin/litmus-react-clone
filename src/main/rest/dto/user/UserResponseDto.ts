@@ -1,7 +1,6 @@
 import {RoleName} from "../../../redux/types/userIdentity/Role";
-import {Human} from "../Human";
 
-interface User extends Human {
+type UserResponseDto = {
     id: string;
 
     email: string;
@@ -15,7 +14,6 @@ interface User extends Human {
     password: string
 
     role: RoleName;
-
 }
 
-export default User;
+export default UserResponseDto;

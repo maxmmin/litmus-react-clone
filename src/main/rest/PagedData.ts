@@ -1,3 +1,5 @@
+import appConfig from "../config/appConfig";
+
 export default interface PagedData<E> {
     content: E[];
 
@@ -40,7 +42,7 @@ export class UnPagedData<E> implements PagedData<E>{
 }
 
 export function isUnPaged(response: PagedData<any>) {
-    const unPagedFlag = "unPaged"
-    return Object.hasOwn(response,unPagedFlag)&&(response as any)[unPagedFlag]===true
+    const unPaged = response as UnPagedData<unknown>;
+    return unPaged.unPaged;
 }
 

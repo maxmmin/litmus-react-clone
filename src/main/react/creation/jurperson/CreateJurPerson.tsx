@@ -29,7 +29,7 @@ const CreateJurPerson = () => {
 
     const creationManager = CreationStateManagerFactory.getJurPersonManager(store);
 
-    const {year, month, day} = jurPersonCreationParams.dateOfRegistration;
+    const {year, month, day} = jurPersonCreationParams.dateOfRegistration||{year: '', month: '', day: ''};
 
     return (
         <>
@@ -51,7 +51,7 @@ const CreateJurPerson = () => {
 
                 <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>ЄДРПОУ</Form.Label>
-                    <input value={jurPersonCreationParams.edrpou} autoComplete={"new-password"} className={`edrpou form-control`} type="text" placeholder="Введіть ЄДРПОУ"
+                    <input value={jurPersonCreationParams.edrpou?jurPersonCreationParams.edrpou:''} autoComplete={"new-password"} className={`edrpou form-control`} type="text" placeholder="Введіть ЄДРПОУ"
                            onKeyDown={keyPressHandler}
                            onChange={e=>{
                                creationManager.updateEntityCreationParams({edrpou: e.currentTarget.value});
