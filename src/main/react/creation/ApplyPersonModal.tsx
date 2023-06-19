@@ -20,6 +20,10 @@ import PersonExplorationApiServiceImpl
 import {BasicHttpError} from "../../error/BasicHttpError";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
+import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
+import CreationDtoMapper from "../../rest/dto/dtoMappers/CreationDtoMapper";
+import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
+import {basicMappers} from "../../rest/dto/dtoMappers/DtoMappers";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -106,19 +110,20 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         if (isIdValid&&isValid(accessToken)) {
             // TODO: Maybe write additional checkup for core, add global error handler and Authentication error: 05/09
             setPending(true)
-            const timerID = setTimeout(()=>fetchPerson(accessToken!,stringId),250)
+            const timerID = setTimeout(()=>fetchPerson(accessToken!,stringId, basicMappers.personMapper),250)
             setRequestTimerId(timerID)
         }
 
     }
 
-    const fetchPerson = async (accessToken: string, id: string) => {
+    const fetchPerson = async (accessToken: string, id: string, mapper: CreationDtoMapper<Person, PersonRequestDto, PersonResponseDto>) => {
         const personService: PersonExplorationApiService = new PersonExplorationApiServiceImpl(()=>accessToken);
 
         setPending(true)
 
         try {
-            const person = await personService.findById(id);
+            const personResponseDto: PersonResponseDto|null = await personService.findById(id);
+            const person: Person|null = personResponseDto?mapper.mapToEntity(personResponseDto):null;
             //@todo я выбрасываю ошибку внутри или оно нормально обрабатывает? заменить search error моей нормальной ошибкой
             setPerson(person)
             if (!person) {

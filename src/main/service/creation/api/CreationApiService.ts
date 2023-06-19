@@ -1,9 +1,9 @@
 /**
- * E - entity
- * D - create request DTO
+ * Q - entity request DTO
+ * R - entity response DTO
  */
-interface CreationApiService<E, D> {
-    create (params: D): Promise<E>;
+interface CreationApiService<Q, R> {
+    create (params: Q): Promise<R>;
 }
 
 export default CreationApiService;

@@ -33,6 +33,9 @@ import {BasicHttpError} from "../../error/BasicHttpError";
 import ErrorResponse from "../../rest/ErrorResponse";
 import ExplorationStateManager from "./stateManager/ExplorationStateManager";
 import {ExplorationTypedActions} from "../../redux/actions/ExplorationTypedActions";
+import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
+import {basicMappers, DtoMappers} from "../../rest/dto/dtoMappers/DtoMappers";
+import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 
 class UnsupportedModeError extends Error {
 
@@ -48,23 +51,29 @@ class ExplorationServiceImpl implements ExplorationService {
 
     private readonly shouldNotify: boolean;
 
+    private readonly mappers: DtoMappers;
+
     private readonly authStateManager: AuthenticationStateManager;
 
     private getAccessToken = (function (this: ExplorationServiceImpl) {
         return this.authStateManager.getAuth()!.accessToken;
     }).bind(this)
 
-    constructor(providedStore: typeof store,shouldNotify: boolean = true, authStateManager?: AuthenticationStateManager) {
+    constructor(providedStore: typeof store, shouldNotify: boolean = true, mappers: DtoMappers, authStateManager: AuthenticationStateManager) {
         this._store = providedStore;
         this.shouldNotify = shouldNotify;
         if (shouldNotify) {
             this.notificationManager = BasicNotificationManager.getManager(providedStore);
         }
-        if (authStateManager) {
-            this.authStateManager = authStateManager;
-        } else {
-            this.authStateManager = AuthenticationStateManagerImpl.getManager(this._store);
+        this.mappers = mappers;
+        this.authStateManager = authStateManager;
+    }
+
+    static getInstance(providedStore: typeof store = store, shouldNotify: boolean = true, mappers: DtoMappers = basicMappers, authStateManager?: AuthenticationStateManager): ExplorationServiceImpl {
+        if (!authStateManager) {
+            authStateManager = AuthenticationStateManagerImpl.getManager(providedStore);
         }
+        return new ExplorationServiceImpl(store, shouldNotify, mappers, authStateManager)
     }
 
     private handleErr(e: unknown): ErrorResponse<unknown> {
@@ -81,9 +90,11 @@ class ExplorationServiceImpl implements ExplorationService {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotEmpty(explorationParams.id);
                 const content: Person[] = []
-                const person = await service.findById(id);
-                console.log(person)
-                if (person) content.push(person);
+                const personResponseDto: PersonResponseDto|null = await service.findById(id);
+                if (personResponseDto) {
+                    const person: Person = this.mappers.personMapper.mapToEntity(personResponseDto);
+                    content.push(person)
+                };
                 return new UnPagedData(content);
             }
 
@@ -164,8 +175,9 @@ class ExplorationServiceImpl implements ExplorationService {
             case ExplorationMode[ExplorationModeName.BY_ID]: {
                 const id = checkNotEmpty(explorationParams.id);
                 const content: JurPerson[] = [];
-                const jurPerson = await service.findById(id);
-                if (jurPerson) {
+                const jurPersonDto: JurPersonResponseDto|null = await service.findById(id);
+                if (jurPersonDto) {
+                    const jurPerson = this.mappers.jurPersonMapper.mapToEntity(jurPersonDto);
                     content.push(jurPerson)
                 }
                 return new UnPagedData(content);

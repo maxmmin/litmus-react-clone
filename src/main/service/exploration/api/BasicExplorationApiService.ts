@@ -8,7 +8,7 @@ import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequest
 import {BasicHttpError} from "../../../error/BasicHttpError";
 import {buildUrl} from "../../../util/pureFunctions";
 
-class BasicEntityLookupService<E> implements LookupService<E>{
+class BasicEntityLookupService<P> implements LookupService<P>{
     protected readonly apiUrl: string;
     protected readonly getAccessToken: ()=>string;
 
@@ -17,7 +17,7 @@ class BasicEntityLookupService<E> implements LookupService<E>{
         this.getAccessToken = getToken;
     }
 
-    async findById(id: string): Promise<E> {
+    async findById(id: string): Promise<P> {
         const requestManager: ApiRequestManager = new BasicApiRequestManager();
         const accessToken = this.getAccessToken();
         const response = await requestManager
@@ -28,7 +28,7 @@ class BasicEntityLookupService<E> implements LookupService<E>{
         if (!response.ok) {
             throw await BasicHttpError.parseResponse(response);
         } else {
-            return await response.json().catch(()=>null) as E;
+            return await response.json().catch(()=>null) as P;
         }
     }
 }

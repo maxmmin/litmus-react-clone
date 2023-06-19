@@ -36,7 +36,7 @@ class JurPersonCreationDtoMapper implements CreationDtoMapper<JurPerson, JurPers
         return dto;
     }
 
-    mapToResponseDto(exploredEntityDto: JurPersonResponseDto): JurPerson {
+    mapToEntity(exploredEntityDto: JurPersonResponseDto): JurPerson {
         const jurPerson: JurPerson = {
             id: exploredEntityDto.id,
             name: exploredEntityDto.name,

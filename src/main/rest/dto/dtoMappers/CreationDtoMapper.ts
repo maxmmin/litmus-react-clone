@@ -5,7 +5,7 @@
 
 interface CreationDtoMapper<E, Q, P> {
     mapToRequestDto: (emergingEntity: E) => Q;
-    mapToResponseDto: (exploredEntityDto: P) => E;
+    mapToEntity: (exploredEntityDto: P) => E;
 }
 
 export default CreationDtoMapper;

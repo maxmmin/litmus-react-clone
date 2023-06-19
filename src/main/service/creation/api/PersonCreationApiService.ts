@@ -5,15 +5,16 @@ import appConfig from "../../../config/appConfig";
 import {BasicHttpError} from "../../../error/BasicHttpError";
 import CreationApiService from "./CreationApiService";
 import PersonRequestDto from "../../../rest/dto/person/PersonRequestDto";
+import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
 
-class PersonCreationApiService implements CreationApiService<Person, PersonRequestDto> {
+class PersonCreationApiService implements CreationApiService<PersonRequestDto, PersonResponseDto> {
     private readonly getAccessToken: ()=>string;
 
     constructor(getAccessToken: () => string) {
         this.getAccessToken = getAccessToken;
     }
 
-    async create(dto: PersonRequestDto): Promise<Person> {
+    async create(dto: PersonRequestDto): Promise<PersonResponseDto> {
         const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
 
         const accessToken = this.getAccessToken();
@@ -26,7 +27,7 @@ class PersonCreationApiService implements CreationApiService<Person, PersonReque
             .fetch();
 
         if (response.ok) {
-            return await response.json() as Person;
+            return await response.json() as PersonResponseDto;
         } else {
             throw await BasicHttpError.parseResponse(response);
         }

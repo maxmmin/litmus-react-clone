@@ -2,20 +2,19 @@ import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequest
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
 import {BasicHttpError} from "../../../error/BasicHttpError";
-import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import CreationApiService from "./CreationApiService";
-import {Location} from "../../../model/Location";
 import JurPersonRequestDto from "../../../rest/dto/jurPerson/JurPersonRequestDto";
+import JurPersonResponseDto from "../../../rest/dto/jurPerson/JurPersonResponseDto";
 
 
-class JurPersonCreationApiService implements CreationApiService<JurPerson, JurPersonRequestDto> {
+class JurPersonCreationApiService implements CreationApiService<JurPersonRequestDto, JurPersonResponseDto> {
     private readonly getAccessToken: ()=>string;
 
     constructor(getAccessToken: () => string) {
         this.getAccessToken = getAccessToken;
     }
 
-    async create(creationDto: JurPersonRequestDto): Promise<JurPerson> {
+    async create(creationDto: JurPersonRequestDto): Promise<JurPersonResponseDto> {
         const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
 
         const accessToken = this.getAccessToken();
@@ -28,7 +27,7 @@ class JurPersonCreationApiService implements CreationApiService<JurPerson, JurPe
             .fetch();
 
         if (response.ok) {
-            return await response.json() as JurPerson;
+            return await response.json() as JurPersonResponseDto;
         } else {
             throw await BasicHttpError.parseResponse(response);
         }

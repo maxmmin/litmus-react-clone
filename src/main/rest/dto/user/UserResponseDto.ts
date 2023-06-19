@@ -1,6 +1,6 @@
 import {RoleName} from "../../../redux/types/userIdentity/Role";
 
-type UserResponseDto = {
+interface UserResponseDto {
     id: string;
 
     email: string;

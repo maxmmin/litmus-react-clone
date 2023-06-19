@@ -5,14 +5,17 @@ import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequ
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
 import {BasicHttpError} from "../../../../error/BasicHttpError";
 import BasicEntityLookupService from "../BasicExplorationApiService";
+import PagedData from "../../../../rest/PagedData";
+import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
+import jurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
 
-class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPerson> implements JurPersonExplorationApiService {
+class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPersonResponseDto> implements JurPersonExplorationApiService {
 
     constructor(getToken: ()=>string, apiMapping: string = appConfig.serverMappings.jurPersons) {
         super(apiMapping, getToken);
     }
 
-    async findByName(name: string): Promise<JurPerson[]> {
+    async findByName(name: string): Promise<PagedData<JurPersonResponseDto>> {
         const requestManager: ApiRequestManager = new BasicApiRequestManager();
 
         const token = this.getAccessToken();
@@ -26,7 +29,7 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPer
         if (!response.ok) {
             throw await BasicHttpError.parseResponse(response);
         } else {
-            return await response.json() as JurPerson[];
+            return await response.json() as PagedData<JurPersonResponseDto>;
         }
     }
 

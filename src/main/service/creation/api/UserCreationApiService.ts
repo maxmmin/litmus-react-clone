@@ -2,18 +2,18 @@ import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequest
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
 import {BasicHttpError} from "../../../error/BasicHttpError";
-import User from "../../../model/human/user/User";
 import CreationApiService from "./CreationApiService";
 import UserRequestDto from "../../../rest/dto/user/UserRequestDto";
+import UserResponseDto from "../../../rest/dto/user/UserResponseDto";
 
-class UserCreationApiService implements CreationApiService<User, UserRequestDto> {
+class UserCreationApiService implements CreationApiService<UserRequestDto, UserResponseDto> {
     private readonly getAccessToken: ()=>string;
 
     constructor(getAccessToken: () => string) {
         this.getAccessToken = getAccessToken;
     }
 
-    async create(dto: UserRequestDto): Promise<User> {
+    async create(dto: UserRequestDto): Promise<UserResponseDto> {
         const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
 
         const accessToken = this.getAccessToken();
@@ -26,7 +26,7 @@ class UserCreationApiService implements CreationApiService<User, UserRequestDto>
             .fetch();
 
         if (response.ok) {
-            return await response.json() as User;
+            return await response.json() as UserResponseDto;
         } else {
             throw await BasicHttpError.parseResponse(response);
         }

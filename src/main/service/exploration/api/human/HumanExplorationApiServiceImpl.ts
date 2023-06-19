@@ -5,18 +5,16 @@ import BasicEntityLookupService from "../BasicExplorationApiService";
 import appConfig from "../../../../config/appConfig";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
-import {Human} from "../../../../model/human/Human";
-import ErrorResponse from "../../../../rest/ErrorResponse";
 import {BasicHttpError} from "../../../../error/BasicHttpError";
 import {isEmpty} from "../../../../util/isEmpty";
 
-export default class HumanExplorationApiServiceImpl<E extends Human> extends BasicEntityLookupService<E> implements HumanExplorationApiService<E> {
+export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookupService<P> implements HumanExplorationApiService<P> {
 
     constructor(apiMapping: string = appConfig.serverMappings.users, getToken: () => string) {
         super(apiMapping, getToken);
     }
 
-    async findByFullName(fullName: FullName): Promise<PagedData<E>> {
+    async findByFullName(fullName: FullName): Promise<PagedData<P>> {
         const requestManager: ApiRequestManager = new BasicApiRequestManager();
 
         const accessToken = this.getAccessToken();
@@ -33,7 +31,7 @@ export default class HumanExplorationApiServiceImpl<E extends Human> extends Bas
         }
         const response = await requestManager.fetch();
         if (response.ok) {
-            return await response.json() as PagedData<E>
+            return await response.json() as PagedData<P>
         } else {
             throw await BasicHttpError.parseResponse(response);
         }

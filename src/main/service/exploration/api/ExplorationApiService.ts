@@ -1,11 +1,11 @@
 /**
- * E - entity
+ * P - response dto
  * Service which provides work with REST API
  */
 
 
-interface LookupService<E> {
-    findById (id: string): Promise<E|null>;
+interface LookupService<P> {
+    findById (id: string): Promise<P|null>;
 }
 
 export default LookupService;

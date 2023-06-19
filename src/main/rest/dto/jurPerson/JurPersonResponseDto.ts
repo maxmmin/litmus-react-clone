@@ -1,8 +1,7 @@
-import DateEntity from "../../../model/DateEntity";
 import Person from "../../../model/human/person/Person";
 import {Location} from "../../../model/Location";
 
-type JurPersonResponseDto = {
+interface JurPersonResponseDto {
     id: string;
     name: string;
     edrpou?: string;

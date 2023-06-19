@@ -82,7 +82,7 @@ class PersonCreationDtoMapper implements CreationDtoMapper<Person, PersonRequest
     }
 
 
-    mapToResponseDto(retrievedEntityDto: PersonResponseDto): Person {
+    mapToEntity(retrievedEntityDto: PersonResponseDto): Person {
         let passportData: PassportData|null;
 
         if (retrievedEntityDto.passportData) {

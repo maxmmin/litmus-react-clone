@@ -2,13 +2,10 @@ import {Location} from "../../Location";
 import DateEntity from "../../DateEntity";
 import Sex from "./Sex";
 import PassportData from "./PassportData";
-import {Human} from "../Human";
+import Human from "../Human";
 
 interface Person extends Human {
     id: string;
-    firstName: string;
-    middleName: string|null;
-    lastName: string;
     relationships: Relationship[],
     sex: Sex | null;
     passportData: PassportData | null;

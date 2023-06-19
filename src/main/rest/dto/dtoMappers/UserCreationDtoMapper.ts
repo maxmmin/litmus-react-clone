@@ -35,7 +35,7 @@ class UserCreationDtoMapper implements CreationDtoMapper<User, UserRequestDto, U
         return dto;
     }
 
-    mapToResponseDto(exploredEntityDto: UserResponseDto): User {
+    mapToEntity(exploredEntityDto: UserResponseDto): User {
         return {
             email: exploredEntityDto.email,
             id: exploredEntityDto.id,

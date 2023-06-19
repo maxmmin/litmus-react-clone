@@ -99,7 +99,7 @@ const ExplorationScreen = () => {
 
     const explorationStateManager = ExplorationStateManagerImpl.getEntityManager(exploredEntity);
 
-    const explorationService = new ExplorationServiceImpl(store,true);
+    const explorationService = ExplorationServiceImpl.getInstance(store, true);
 
     return (
        <PrivateComponentWrapper requiredPermissions={requiredPermissions} mode={"ERROR_PAGE"}>

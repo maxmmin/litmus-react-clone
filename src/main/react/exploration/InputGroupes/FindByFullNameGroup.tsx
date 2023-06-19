@@ -7,7 +7,7 @@ import store from "../../../redux/store";
 import EntityExplorationState from "../../../redux/types/exploration/EntityExplorationState";
 import HumanExplorationParams from "../../../redux/types/exploration/human/HumanExplorationParams";
 import {Entity} from "../../../model/Entity";
-import {Human} from "../../../model/human/Human";
+import Human from "../../../model/human/Human";
 
 
 const FindByFullNameGroup = () => {

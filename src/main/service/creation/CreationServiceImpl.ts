@@ -18,29 +18,20 @@ import CreationTypedActions from "../../redux/actions/CreationTypedActions";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {BasicHttpError} from "../../error/BasicHttpError";
 import CreationStateManager from "./stateManager/CreationStateManager";
-import CreationDtoMapper from "../../rest/dto/dtoMappers/CreationDtoMapper";
-import JurPersonCreationDtoMapper from "../../rest/dto/dtoMappers/JurPersonCreationDtoMapper";
 import JurPersonRequestDto from "../../rest/dto/jurPerson/JurPersonRequestDto";
 import UserRequestDto from "../../rest/dto/user/UserRequestDto";
 import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
-import PersonCreationDtoMapper from "../../rest/dto/dtoMappers/PersonCreationDtoMapper";
-import UserCreationDtoMapper from "../../rest/dto/dtoMappers/UserCreationDtoMapper";
 import UserResponseDto from "../../rest/dto/user/UserResponseDto";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
+import {basicMappers, DtoMappers} from "../../rest/dto/dtoMappers/DtoMappers";
 
 type CreationStore = ReturnType<typeof store.getState>["creation"]
-
-type Mappers = {
-    user: CreationDtoMapper<User, UserRequestDto, UserResponseDto>,
-    person: CreationDtoMapper<Person, PersonRequestDto, PersonResponseDto>,
-    jurPerson: CreationDtoMapper<JurPerson, JurPersonRequestDto, JurPersonResponseDto>
-}
 
 class CreationServiceImpl implements CreationService {
     private readonly getState: ()=>CreationStore;
     private readonly dispatch: AppDispatch;
-    private readonly mappers: Mappers;
+    private readonly mappers: DtoMappers;
     private readonly authStateManager: AuthenticationStateManager;
 
     private handleErr (e: unknown): ErrorResponse<unknown> {
@@ -54,8 +45,9 @@ class CreationServiceImpl implements CreationService {
     }).bind(this)
 
     private async createPerson (person: Person, service: PersonCreationApiService): Promise<Person> {
-        const personCreationDto: PersonRequestDto = this.mappers.person.mapToRequestDto(person);
-        return await service.create(personCreationDto);
+        const personCreationDto: PersonRequestDto = this.mappers.personMapper.mapToRequestDto(person);
+        const personResponseDto: PersonResponseDto = await service.create(personCreationDto);
+        return this.mappers.personMapper.mapToEntity(personResponseDto);
     }
 
     private createPersonThunk = createAsyncThunk<Person,
@@ -71,8 +63,9 @@ class CreationServiceImpl implements CreationService {
     })
 
     private async createUser (user: User, service: UserCreationApiService): Promise<User> {
-        const userCreationDto: UserRequestDto = this.mappers.user.mapToRequestDto(user);
-        return await service.create(userCreationDto);
+        const userCreationDto: UserRequestDto = this.mappers.userMapper.mapToRequestDto(user);
+        const responseDto: UserResponseDto = await service.create(userCreationDto);
+        return this.mappers.userMapper.mapToEntity(responseDto);
     }
 
     private createUserThunk = createAsyncThunk<User,
@@ -88,8 +81,9 @@ class CreationServiceImpl implements CreationService {
     })
 
     private async createJurPerson (params: JurPerson, service: JurPersonCreationApiService): Promise<JurPerson> {
-        const dto: JurPersonRequestDto = this.mappers.jurPerson.mapToRequestDto(params);
-        return await service.create(dto);
+        const dto: JurPersonRequestDto = this.mappers.jurPersonMapper.mapToRequestDto(params);
+        const jurPersonResponseDto: JurPersonResponseDto = await service.create(dto);
+        return this.mappers.jurPersonMapper.mapToEntity(jurPersonResponseDto);
     }
 
     private createJurPersonThunk = createAsyncThunk<JurPerson,
@@ -104,23 +98,16 @@ class CreationServiceImpl implements CreationService {
         }
     })
 
-    constructor(dispatch: AppDispatch, getState: ()=>CreationStore, authStateManager: AuthenticationStateManager, mappers: Mappers) {
+    constructor(dispatch: AppDispatch, getState: ()=>CreationStore, authStateManager: AuthenticationStateManager, mappers: DtoMappers) {
       this.dispatch = dispatch;
       this.getState = getState;
       this.authStateManager = authStateManager;
       this.mappers = mappers;
     }
 
-    static getInstance(_store: typeof store, authStateManager?: AuthenticationStateManager, mappers?: Mappers) {
+    static getInstance(_store: typeof store, authStateManager?: AuthenticationStateManager, mappers: DtoMappers = basicMappers) {
         if (!authStateManager) {
             authStateManager = AuthenticationStateManagerImpl.getManager(_store);
-        }
-        if (!mappers) {
-            mappers = {
-                jurPerson: new JurPersonCreationDtoMapper(),
-                person: new PersonCreationDtoMapper(),
-                user: new UserCreationDtoMapper()
-            };
         }
         return new CreationServiceImpl(_store.dispatch, ()=>_store.getState().creation,authStateManager, mappers)
     }

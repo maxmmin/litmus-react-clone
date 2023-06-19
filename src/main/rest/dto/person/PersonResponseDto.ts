@@ -3,8 +3,8 @@ import PassportData from "../../../model/human/person/PassportData";
 import {Location} from "../../../model/Location";
 import {Relationship} from "../../../model/human/person/Person";
 
-type PersonResponseDto = {
-    id: string,
+interface PersonResponseDto {
+    id: string;
     firstName: string;
     middleName?: string|null;
     lastName: string;
