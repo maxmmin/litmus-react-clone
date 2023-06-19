@@ -2,15 +2,14 @@ import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import React, {useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
-import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import {useAppSelector} from "../../../redux/hooks";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../CreationScreen";
 import InputDate from "../../common/InputDate";
 import Person from "../../../model/human/person/Person";
-import DateEntity, {DateBuilder} from "../../../model/DateEntity";
+import {DateBuilder} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
-import CreationStateManagerImpl from "../../../service/creation/stateManager/CreationStateManagerImpl";
 import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 
 

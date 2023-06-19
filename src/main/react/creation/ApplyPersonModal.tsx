@@ -2,20 +2,24 @@ import React, {useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
+import {useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../exploration/EntityTables/PersonInfoTable";
 import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./CreationScreen";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import Person, {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
-import {getPersonFromResponse, isValid} from "../../util/pureFunctions";
+import {isValid} from "../../util/pureFunctions";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import CreationStateManagerFactory from "../../service/creation/stateManager/CreationStateManagerFactory";
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
-import CreationStateManager from "../../service/creation/stateManager/CreationStateManager";
-import {PersonCreationParams} from "../../redux/actions/CreationCoreActions";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
+import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
+import PersonExplorationApiServiceImpl
+    from "../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
+import {BasicHttpError} from "../../error/BasicHttpError";
+import ErrorResponse from "../../rest/ErrorResponse";
+import {HttpStatus} from "../../rest/HttpStatus";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -30,11 +34,9 @@ const whitelist: Array<CreationModalModes> = [CreationModalModes.SET_BEN_OWNER, 
 
 function ApplyPersonModal ({modalSettings, close}: Props) {
 
-    const dispatch = useAppDispatch();
-
     const accessToken = useAppSelector(state => state.authentication?.accessToken)
 
-    const [searchError, setSearchError] = useState<SearchError|null>(null);
+    const [searchError, setSearchError] = useState<ErrorResponse<unknown>|null>(null);
 
     const [person, setPerson] = useState<Person|null>(null);
     /**
@@ -88,13 +90,14 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             return;
         }
 
-        const id = +e.currentTarget.value;
+        const stringId = e.currentTarget.value;
+        const id = +stringId;
 
         // local variable to know if new input valid before setState work
         let isIdValid = false;
 
         if (isNaN(id)) {
-            setSearchError(new SearchError("Невалідний ідентифікатор", null));
+            setSearchError({detail: null, status: HttpStatus.UNKNOWN_ERROR, title: "Невалідний ідентифікатор"});
         } else {
             setSearchError(null);
             isIdValid = true;
@@ -103,36 +106,29 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         if (isIdValid&&isValid(accessToken)) {
             // TODO: Maybe write additional checkup for core, add global error handler and Authentication error: 05/09
             setPending(true)
-            const timerID = setTimeout(()=>fetchPerson(accessToken!,id),250)
+            const timerID = setTimeout(()=>fetchPerson(accessToken!,stringId),250)
             setRequestTimerId(timerID)
         }
 
     }
 
-    const fetchPerson = async (accessToken: string, id: number) => {
-        setPending(true)
-        // @todo w my manager
-        // const response = await fetch(`${apiLinks[Entity.PERSON]}/${id}`, {
-        //     headers: {
-        //         ...createAuthHeader(accessToken)
-        //     }
-        // });
+    const fetchPerson = async (accessToken: string, id: string) => {
+        const personService: PersonExplorationApiService = new PersonExplorationApiServiceImpl(()=>accessToken);
 
-        // let responsePerson: Person | null = null;
-        //
-        // try {
-        //     responsePerson = getPersonFromResponse(await response.json());
-        //
-        //     if (response.ok&&responsePerson) {
-        //         setPerson(responsePerson)
-        //     } else {
-        //         setPerson(null)
-        //     }
-        //
-        // } catch (e) {
-        //     // set search error if response was with no content
-        //     setSearchError(new SearchError(`Особу з ідентифікатором ${id} не знайдено`, response));
-        // }
+        setPending(true)
+
+        try {
+            const person = await personService.findById(id);
+            //@todo я выбрасываю ошибку внутри или оно нормально обрабатывает? заменить search error моей нормальной ошибкой
+            setPerson(person)
+            if (!person) {
+                throw new Error(`Особу з ідентифікатором ${id} не знайдено`)
+            }
+        } catch (e: unknown) {
+            console.error(e)
+            const err = BasicHttpError.parseError(e);
+            setSearchError(err);
+        }
 
         setPending(false)
     }
@@ -176,7 +172,12 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                 const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.params.relationships);
 
                 if (sourceRelObject?.isPresent(relationship)) {
-                    setSearchError(new SearchError("Дана особа вже присутня в списку відносин", null));
+                    const err: ErrorResponse<null> = {
+                        title: "Дана особа вже присутня в списку відносин",
+                        status: HttpStatus.UNKNOWN_ERROR,
+                        detail: null
+                    }
+                    setSearchError(err);
                     return;
                 }
 
@@ -252,7 +253,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                             </div>
 
                             {searchError?
-                                <p className="apply-person-modal__error-description">{searchError.message}</p>
+                                <p className="apply-person-modal__error-description">{searchError.title}</p>
                                 :
                                 null
                             }
@@ -286,22 +287,3 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 export default ApplyPersonModal;
 
 
-class SearchError extends Error {
-    private readonly _response: Response|null;
-    private readonly _message: string;
-
-    constructor(message: string, response: Response|null) {
-        super(message);
-        this._response = response;
-        this._message = message;
-    }
-
-
-    get response(): Response|null {
-        return this._response;
-    }
-
-    get message(): string {
-        return this._message;
-    }
-}
