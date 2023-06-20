@@ -1,6 +1,6 @@
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
-import CreationTypedActions from "../actions/CreationTypedActions";
+import CreationTypedAction from "../actions/CreationTypedAction";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import {combineReducers} from "redux";
 import EntityCreationState, {BasicEntityCreationState} from "../types/creation/EntityCreationState";
@@ -22,13 +22,13 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
     switch (action.type) {
 
         case CreationCoreAction.UPDATE_ENTITY_CREATION_PARAMS: {
-            const params: Partial<S["params"]> = action.payload as Partial<S["params"]>;
-            return {...prevState, params: {...prevState.params!, ...params}}
+            const params: Partial<S["emergingEntity"]> = action.payload as Partial<S["emergingEntity"]>;
+            return {...prevState, emergingEntity: {...prevState.emergingEntity!, ...params}}
         }
 
         case CreationCoreAction.SET_ENTITY_CREATION_PARAMS: {
-            const params: Partial<S["params"]> = action.payload as Partial<S["params"]>;
-            return {...prevState, params: {...params}};
+            const params: Partial<S["emergingEntity"]> = action.payload as Partial<S["emergingEntity"]>;
+            return {...prevState, emergingEntity: {...params}};
         }
 
         default: {
@@ -45,34 +45,34 @@ const personCreationStateReducer: Reducer<EntityCreationState<
         case PersonCreationAction.ADD_PERSON_RELATION: {
             const relToAdd = (action.payload as unknown as Relationship);
 
-            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.params.relationships);
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.addRelationship(relToAdd);
 
-            return {...prevState, params: {...prevState.params, relationships: relationshipsLinkObject.relationships}}
+            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationships: relationshipsLinkObject.relationships}}
         }
 
         case PersonCreationAction.REMOVE_PERSON_RELATION: {
             const relToAdd = (action.payload as unknown as Relationship);
 
-            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.params.relationships);
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.removeRelationship(relToAdd);
 
-            return {...prevState, params: {...prevState.params, relationships: relationshipsLinkObject.relationships}}
+            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationships: relationshipsLinkObject.relationships}}
         }
 
         case PersonCreationAction.UPDATE_PERSON_RELATION: {
             const relToUpdate = (action.payload as unknown as Relationship);
 
-            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.params.relationships);
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.updateRelationship(relToUpdate);
 
-            return {...prevState, params: {...prevState.params, relationships: relationshipsLinkObject.relationships}}
+            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationships: relationshipsLinkObject.relationships}}
         }
 
         case PersonCreationAction.UPDATE_PASSPORT_DATA: {
             const payload = action.payload as unknown as Partial<PassportData>;
-            let passportData: PassportData = Object.assign({},prevState.params.passportData, payload);
-            return {...prevState, params: {...prevState.params, passportData: passportData}}
+            let passportData: PassportData = Object.assign({},prevState.emergingEntity.passportData, payload);
+            return {...prevState, emergingEntity: {...prevState.emergingEntity, passportData: passportData}}
         }
 
         case GeneralAction.RESET_DATA: {
@@ -93,7 +93,7 @@ const personCreationStateReducer: Reducer<EntityCreationState<
 const initialJurPersonState: EntityCreationState<JurPerson> = deepCopy(new BasicEntityCreationState(initialJurPersonCreationParams))
 
 const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPerson>|undefined, PayloadAction<JurPerson>> = (prevState=initialJurPersonState, action) => {
-    const actions = CreationTypedActions.person;
+    const actions = CreationTypedAction.person;
     switch (action.type) {
         // code-place for jur person specific actions
         // @todo write getClear action
@@ -117,7 +117,7 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPerson>|unde
 const initialUserCreationState: EntityCreationState<User> = deepCopy(new BasicEntityCreationState(initialUserCreationParams));
 
 const userCreationStateReducer: Reducer<EntityCreationState<User>|undefined, PayloadAction<User>> = (prevState=initialUserCreationState, action) => {
-    const actions = CreationTypedActions.person;
+    const actions = CreationTypedAction.person;
     switch (action.type) {
         case GeneralAction.RESET_DATA: {
             return initialUserCreationState

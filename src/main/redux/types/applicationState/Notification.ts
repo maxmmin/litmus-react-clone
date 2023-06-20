@@ -5,6 +5,7 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import React from "react";
 import deepCopy from "../../../util/deepCopy";
 import BasicAuthenticationManager from "../../../service/auth/BasicAuthenticationManager";
+import {injectable} from "inversify";
 
 
 export type NotificationContent = ToastContent;
@@ -64,6 +65,7 @@ export interface NotificationManager {
     addNotification(notification: Notification): void
 }
 
+@injectable()
 export class BasicNotificationManager implements NotificationManager {
     private readonly dispatch: AppDispatch;
 

@@ -2,12 +2,12 @@ import EntityCreationState from "../../../redux/types/creation/EntityCreationSta
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import {LitmusAsyncThunkConfig} from "../../../redux/store";
 
-interface CreationStateManager<S extends EntityCreationState<unknown>> {
+interface CreationStateManager<E,S extends EntityCreationState<E>> {
     getCreationState(): S;
     create(thunk: AsyncThunkAction<unknown, unknown, LitmusAsyncThunkConfig>): Promise<PayloadAction<unknown, string, unknown>>;
-    getCreationParams(): S["params"];
-    setEntityCreationParams(params: S["params"]): void;
-    updateEntityCreationParams(params: Partial<S["params"]>): void;
+    getCreationParams(): S["emergingEntity"];
+    setEntityCreationParams(params: S["emergingEntity"]): void;
+    updateEntityCreationParams(params: Partial<S["emergingEntity"]>): void;
 }
 
 export default CreationStateManager;

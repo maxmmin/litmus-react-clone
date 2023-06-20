@@ -1,11 +1,13 @@
 import {DateBuilder} from "../../../model/DateEntity";
 import isEmpty, {hasContent} from "../../../util/isEmpty";
-import CreationDtoMapper from "./CreationDtoMapper";
+import DtoMapper from "./DtoMapper";
 import JurPersonRequestDto from "../jurPerson/JurPersonRequestDto";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../jurPerson/JurPersonResponseDto";
+import {injectable} from "inversify";
 
-class JurPersonCreationDtoMapper implements CreationDtoMapper<JurPerson, JurPersonRequestDto, JurPersonResponseDto>{
+@injectable()
+class JurPersonDtoMapper implements DtoMapper<JurPersonRequestDto, JurPerson, JurPersonResponseDto>{
     public mapToRequestDto (emergingEntity: JurPerson): JurPersonRequestDto {
         const dto: Partial<JurPersonRequestDto> = {};
 
@@ -53,4 +55,4 @@ class JurPersonCreationDtoMapper implements CreationDtoMapper<JurPerson, JurPers
 
 }
 
-export default JurPersonCreationDtoMapper;
+export default JurPersonDtoMapper;

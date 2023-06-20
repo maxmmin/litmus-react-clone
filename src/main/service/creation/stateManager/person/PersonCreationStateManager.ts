@@ -5,7 +5,8 @@ import Person, {Relationship} from "../../../../model/human/person/Person";
 class CreationPassportData {
 }
 
-interface PersonCreationStateManager extends CreationStateManager<EntityCreationState<Person>> {
+interface PersonCreationStateManager extends CreationStateManager<Person, EntityCreationState<Person>> {
+
     updatePassportData: (data: Partial<CreationPassportData>) => void;
 
     addRelationship: (relationship: Relationship) => void;

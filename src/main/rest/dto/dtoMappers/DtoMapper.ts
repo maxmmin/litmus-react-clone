@@ -1,11 +1,12 @@
 /**
+ * Q - request dto
  * E - entity
- * D - request dto
+ * P - response dto
  */
 
-interface CreationDtoMapper<E, Q, P> {
+interface DtoMapper<Q, E, P> {
     mapToRequestDto: (emergingEntity: E) => Q;
     mapToEntity: (exploredEntityDto: P) => E;
 }
 
-export default CreationDtoMapper;
+export default DtoMapper;

@@ -19,11 +19,16 @@ import CreationStateManagerImpl from "../../../service/creation/stateManager/Cre
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 import store from "../../../redux/store";
+import container from "../../../inversify/inversify.config";
+import CreationStateManager from "../../../service/creation/stateManager/CreationStateManager";
+import Person from "../../../model/human/person/Person";
+import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
+import IOC_TYPES from "../../../inversify/IOC_TYPES";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
 
-    const creationPersonParams = useAppSelector(state => state.creation?.person?.params)
+    const creationPersonParams = useAppSelector(state => state.creation?.person?.emergingEntity)
 
     if (!creationPersonParams) {
         throw new Error("createPersonDto was null but it shouldn't be")
@@ -35,7 +40,7 @@ const CreatePerson = () => {
 
     const relationships = creationPersonParams?.relationships;
 
-    const creationStateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager(store);
+    const creationStateManager: PersonCreationStateManager = container.get<PersonCreationStateManager>(IOC_TYPES.PersonCreationStateManager);
 
     const closeModal = () => setModalSettings(null)
 

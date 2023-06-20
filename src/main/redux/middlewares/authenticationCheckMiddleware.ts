@@ -6,6 +6,9 @@ import {TimersReducible} from "../actions/TimersAction";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 import GeneralAction from "../GeneralAction";
 import store from "../store";
+import container from "../../inversify/inversify.config";
+import AuthenticationManager from "../../service/auth/AuthenticationManager";
+import IOC_TYPES from "../../inversify/IOC_TYPES";
 
 
 type PartedStoreType = {
@@ -18,7 +21,7 @@ const authenticationCheckMiddleware: Middleware<{}, PartedStoreType> = ({ getSta
     next
 ) => (action: Action) => {
     if (action.type===AuthAction.CHECK_AUTH) {
-        BasicAuthenticationManager.getBasicManager(store).checkAndRefreshAuth();
+        container.get<AuthenticationManager>(IOC_TYPES.AuthManager).checkAndRefreshAuth();
     } else if (action.type===AuthAction.CLEAR_AUTH) {
         dispatch({type: GeneralAction.RESET_DATA})
     }

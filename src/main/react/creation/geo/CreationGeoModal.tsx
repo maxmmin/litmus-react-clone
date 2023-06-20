@@ -23,16 +23,16 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
 
     const [location, setLocation] = useState<Location|null>(null)
 
-    const creationStateManager: CreationStateManager<EntityCreationState<unknown>> = CreationStateManagerFactory.getEntityManager(entity, store);
+    const creationStateManager: CreationStateManager<unknown,EntityCreationState<unknown>> = CreationStateManagerFactory.getEntityManager(entity, store);
 
     const geoLocation = useAppSelector(state => {
         switch (entity) {
             case Entity.JUR_PERSON: {
-                return state.creation?.jurPerson?.params.location;
+                return state.creation?.jurPerson?.emergingEntity.location;
             }
 
             case Entity.PERSON: {
-                return state.creation?.person?.params.location;
+                return state.creation?.person?.emergingEntity.location;
             }
         }
     })
@@ -44,12 +44,12 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
     const clearGeo = () => {
         switch (entity) {
             case Entity.JUR_PERSON: {
-                (creationStateManager as CreationStateManager<EntityCreationState<JurPerson>>).updateEntityCreationParams({location: null})
+                (creationStateManager as CreationStateManager<JurPerson,EntityCreationState<JurPerson>>).updateEntityCreationParams({location: null})
                 break;
             }
 
             case Entity.PERSON: {
-                (creationStateManager as CreationStateManager<EntityCreationState<Person>>).updateEntityCreationParams({location: null})
+                (creationStateManager as CreationStateManager<Person, EntityCreationState<Person>>).updateEntityCreationParams({location: null})
                 break;
             }
 
@@ -62,13 +62,13 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
         if (location) {
             switch (entity) {
                 case Entity.JUR_PERSON: {
-                    (creationStateManager as CreationStateManager<EntityCreationState<JurPerson>>).updateEntityCreationParams({location: location})
+                    (creationStateManager as CreationStateManager<JurPerson, EntityCreationState<JurPerson>>).updateEntityCreationParams({location: location})
 
                     break;
                 }
 
                 case Entity.PERSON: {
-                    (creationStateManager as CreationStateManager<EntityCreationState<Person>>).updateEntityCreationParams({location: location})
+                    (creationStateManager as CreationStateManager<Person, EntityCreationState<Person>>).updateEntityCreationParams({location: location})
                     break;
                 }
             }

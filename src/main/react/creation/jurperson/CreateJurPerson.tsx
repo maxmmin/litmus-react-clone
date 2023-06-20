@@ -21,7 +21,7 @@ const CreateJurPerson = () => {
 
     const closeModal = () => setModalSettings(null)
 
-    const jurPersonCreationParams = useAppSelector(state => state.creation?.jurPerson?.params)
+    const jurPersonCreationParams = useAppSelector(state => state.creation?.jurPerson?.emergingEntity)
 
     if (!jurPersonCreationParams) {
         throw new Error("createPersonDto was null but it shouldn't")

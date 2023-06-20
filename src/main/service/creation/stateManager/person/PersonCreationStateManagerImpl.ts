@@ -4,14 +4,14 @@ import CreationStateManagerImpl from "../CreationStateManagerImpl";
 import PersonCreationStateManager from "./PersonCreationStateManager";
 import {PayloadAction} from "@reduxjs/toolkit";
 import store, {AppDispatch} from "../../../../redux/store";
-import CreationTypedActions from "../../../../redux/actions/CreationTypedActions";
 import Person, {Relationship} from "../../../../model/human/person/Person";
+import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import PassportData from "../../../../model/human/person/PassportData";
 
-class PersonCreationStateManagerImpl extends CreationStateManagerImpl<EntityCreationState<Person>> implements PersonCreationStateManager {
+class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person, EntityCreationState<Person>> implements PersonCreationStateManager {
 
 
-    constructor(_store: typeof store, actions: CreationTypedActions = CreationTypedActions.person) {
+    constructor(_store: typeof store, actions: CreationTypedAction = CreationTypedAction.person) {
         const dispatch: AppDispatch = _store.dispatch;
         const getState = ()=>_store.getState().creation.person!;
         super(dispatch, getState, actions);

@@ -5,20 +5,18 @@ import {
     setTimers,
     Timers
 } from "../../redux/actions/TimersAction";
+import {inject, injectable} from "inversify";
+import IOC_TYPES from "../../inversify/IOC_TYPES";
 
+@injectable()
 class TimersStateManager {
     private readonly dispatch: AppDispatch;
     private readonly getState: ()=>Timers;
 
-
-    constructor(dispatch: AppDispatch, getState: ()=>Timers) {
-        this.dispatch = dispatch;
-        this.getState = getState;
+    constructor(@inject(IOC_TYPES.Store) _store: typeof store) {
+        this.dispatch = _store.dispatch;
+        this.getState = ()=>_store.getState().timers!;
     }
-
-    static getManager(_store: typeof store = store): TimersStateManager {
-        return new TimersStateManager(_store.dispatch, ()=>_store.getState().timers!)
-}
 
     getTimers(): Timers {
         return this.getState();

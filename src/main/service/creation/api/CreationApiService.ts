@@ -3,7 +3,7 @@
  * R - entity response DTO
  */
 interface CreationApiService<Q, R> {
-    create (params: Q): Promise<R>;
+    create (requestDto: Q): Promise<R>;
 }
 
 export default CreationApiService;

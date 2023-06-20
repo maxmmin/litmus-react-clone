@@ -14,7 +14,10 @@ import AuthAction from "../../redux/actions/AuthAction";
 import {BasicNotificationManager, NotificationManager} from "../../redux/types/applicationState/Notification";
 import deepCopy from "../../util/deepCopy";
 import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
+import {inject, injectable} from "inversify";
+import IOC_TYPES from "../../inversify/IOC_TYPES";
 
+@injectable()
 class BasicAuthenticationManager implements AuthenticationManager {
     private readonly authenticationStateManager: AuthenticationStateManager;
     private readonly timersStateManager: TimersStateManager;
@@ -23,7 +26,10 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
     private static locked: boolean = false;
 
-    constructor(authStateManager: AuthenticationStateManager, authService: AuthApiService, timersStateManager: TimersStateManager, notificationManager: NotificationManager) {
+    constructor(@inject(IOC_TYPES.AuthStateManager) authStateManager: AuthenticationStateManager,
+                @inject(IOC_TYPES.AuthApiService) authService: AuthApiService,
+                @inject(IOC_TYPES.TimersStateManager) timersStateManager: TimersStateManager,
+                @inject(IOC_TYPES.NotificationsManager) notificationManager: NotificationManager) {
         this.authenticationStateManager = authStateManager;
         this.authService = authService;
         this.timersStateManager = timersStateManager;
@@ -178,14 +184,6 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
     isAuthExpired(): boolean {
         return !this.isAuthActual();
-    }
-
-    static getBasicManager (_store: typeof store) {
-        const authService = new BasicAuthApiService();
-        const timersStateManager = TimersStateManager.getManager(_store);
-        const authenticationStateManager = AuthenticationStateManagerImpl.getManager(_store);
-        const notificationManager = BasicNotificationManager.getManager(_store);
-        return new BasicAuthenticationManager(authenticationStateManager, authService, timersStateManager, notificationManager);
     }
 
     private static lock () {

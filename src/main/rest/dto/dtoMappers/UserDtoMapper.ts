@@ -1,10 +1,12 @@
-import CreationDtoMapper from "./CreationDtoMapper";
+import DtoMapper from "./DtoMapper";
 import User from "../../../model/human/user/User";
 import UserRequestDto from "../user/UserRequestDto";
 import {hasContent} from "../../../util/isEmpty";
 import UserResponseDto from "../user/UserResponseDto";
+import {injectable} from "inversify";
 
-class UserCreationDtoMapper implements CreationDtoMapper<User, UserRequestDto, UserResponseDto> {
+@injectable()
+class UserDtoMapper implements DtoMapper<UserRequestDto, User, UserResponseDto> {
     mapToRequestDto(emergingUser: User): UserRequestDto {
         const dto: UserRequestDto = {}
 
@@ -51,4 +53,4 @@ class UserCreationDtoMapper implements CreationDtoMapper<User, UserRequestDto, U
 
 }
 
-export default UserCreationDtoMapper;
+export default UserDtoMapper;

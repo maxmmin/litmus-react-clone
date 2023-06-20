@@ -7,7 +7,9 @@ import store, {AppDispatch} from "../../../redux/store";
 import {Action} from "redux";
 import deepCopy from "../../../util/deepCopy";
 import AuthenticationStateManager from "./AuthenticationStateManager";
+import {injectable} from "inversify";
 
+@injectable()
 class AuthenticationStateManagerImpl implements AuthenticationStateManager{
     private readonly dispatch: AppDispatch;
     private readonly getState:()=>AuthenticationReducible;

@@ -21,9 +21,9 @@ import {BasicHttpError} from "../../error/BasicHttpError";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
-import CreationDtoMapper from "../../rest/dto/dtoMappers/CreationDtoMapper";
+import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
-import {basicMappers} from "../../rest/dto/dtoMappers/DtoMappers";
+import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -57,7 +57,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             const state = store.getState() as RootState;
             switch (modalSettings?.mode) {
                 case CreationModalModes.SET_OWNER: {
-                    const owner = state.creation?.jurPerson?.params.owner;
+                    const owner = state.creation?.jurPerson?.emergingEntity.owner;
                     if (owner) {
                         setPerson(owner)
                     }
@@ -65,7 +65,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                 }
 
                 case CreationModalModes.SET_BEN_OWNER: {
-                    const benOwner = state.creation?.jurPerson?.params.benOwner;
+                    const benOwner = state.creation?.jurPerson?.emergingEntity.benOwner;
                     if (benOwner) {
                         setPerson(benOwner)
                     }
@@ -110,13 +110,13 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         if (isIdValid&&isValid(accessToken)) {
             // TODO: Maybe write additional checkup for core, add global error handler and Authentication error: 05/09
             setPending(true)
-            const timerID = setTimeout(()=>fetchPerson(accessToken!,stringId, basicMappers.personMapper),250)
+            const timerID = setTimeout(()=>fetchPerson(accessToken!,stringId, new PersonDtoMapper()),250)
             setRequestTimerId(timerID)
         }
 
     }
 
-    const fetchPerson = async (accessToken: string, id: string, mapper: CreationDtoMapper<Person, PersonRequestDto, PersonResponseDto>) => {
+    const fetchPerson = async (accessToken: string, id: string, mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>) => {
         const personService: PersonExplorationApiService = new PersonExplorationApiServiceImpl(()=>accessToken);
 
         setPending(true)
@@ -173,7 +173,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                     note: "", person: person, relationType: null
                 }
 
-                const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.params.relationships);
+                const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.emergingEntity.relationships);
 
                 if (sourceRelObject?.isPresent(relationship)) {
                     const err: ErrorResponse<null> = {

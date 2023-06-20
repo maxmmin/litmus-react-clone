@@ -1,7 +1,10 @@
-import {Entity} from "../../model/Entity";
 
-interface CreationService {
-    create (entity: Entity): void;
+/**
+ * E - entity
+ */
+
+interface CreationService<E> {
+    createEntity(emergedEntity: E): void;
 }
 
 export default CreationService;

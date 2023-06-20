@@ -6,12 +6,15 @@ import {BasicHttpError} from "../../../error/BasicHttpError";
 import CreationApiService from "./CreationApiService";
 import PersonRequestDto from "../../../rest/dto/person/PersonRequestDto";
 import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
+import AuthenticationStateManager from "../../auth/stateManager/AuthenticationStateManager";
+import {inject} from "inversify";
+import IOC_TYPES from "../../../inversify/IOC_TYPES";
 
 class PersonCreationApiService implements CreationApiService<PersonRequestDto, PersonResponseDto> {
     private readonly getAccessToken: ()=>string;
 
-    constructor(getAccessToken: () => string) {
-        this.getAccessToken = getAccessToken;
+    constructor(@inject(IOC_TYPES.AuthStateManager) authStateManager: AuthenticationStateManager) {
+        this.getAccessToken = ()=>authStateManager.getAuth()!.accessToken;
     }
 
     async create(dto: PersonRequestDto): Promise<PersonResponseDto> {
