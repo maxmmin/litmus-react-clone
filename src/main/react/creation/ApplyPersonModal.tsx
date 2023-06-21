@@ -25,6 +25,8 @@ import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import container from "../../inversify/inversify.config";
 import CreationStateManager from "../../service/creation/stateManager/CreationStateManager";
+import IOC_TYPES from "../../inversify/IOC_TYPES";
+import PersonExplorationStateManager from "../../service/exploration/stateManager/person/PersonExplorationStateManager";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -153,7 +155,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
-                const stateManager: JurPersonCreationStateManager = container.get<CreationStateManager<any, any>>();
+                const stateManager: JurPersonCreationStateManager = container.get<JurPersonCreationStateManager>(IOC_TYPES.JurPersonCreationStateManager);
 
                 const payload: Partial<JurPerson> = {}
 
@@ -168,7 +170,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             }
 
             case CreationModalModes.SET_RELATIONSHIP: {
-                const stateManager: PersonCreationStateManager = CreationStateManagerFactory.getPersonManager(store);
+                const stateManager: PersonCreationStateManager = container.get<PersonCreationStateManager>(IOC_TYPES.PersonCreationStateManager);
                 
                 const relationship: Relationship = {
                     note: "", person: person, relationType: null
