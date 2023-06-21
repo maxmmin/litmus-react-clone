@@ -13,9 +13,9 @@ import CreationStateManager from "./stateManager/CreationStateManager";
 class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto, EntityCreationState<User>> {
 
     constructor(
-        @inject(IOC_TYPES.UserDtoMapper) mapper: DtoMapper<UserRequestDto, User, UserResponseDto>,
-        @inject(IOC_TYPES.UserCreationApiService) apiService: CreationApiService<UserRequestDto, UserResponseDto>,
-        @inject(IOC_TYPES.UserCreationStateManager) creationStateManager: CreationStateManager<User, EntityCreationState<User>>) {
+        @inject(IOC_TYPES.mappers.UserDtoMapper) mapper: DtoMapper<UserRequestDto, User, UserResponseDto>,
+        @inject(IOC_TYPES.creation.apiServices.UserCreationApiService) apiService: CreationApiService<UserRequestDto, UserResponseDto>,
+        @inject(IOC_TYPES.creation.stateManagers.UserCreationStateManager) creationStateManager: CreationStateManager<User, EntityCreationState<User>>) {
         super(mapper, apiService, creationStateManager);
     }
 }

@@ -11,6 +11,9 @@ import UserExplorationState from "../../redux/types/exploration/human/user/UserE
 import explorationStateManager from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
+import getExplorationStateManagerByEntity, {
+    UnknownExplorationStateManager
+} from "../../inversify/getExplorationStateManagerByEntity";
 
 
 const ExplorationModesView = () => {
@@ -36,9 +39,9 @@ const ExplorationModesView = () => {
         }
     })
 
-    const explorationManager = useMemo<ExplorationStateManagerImpl<EntityExplorationState<any, any>>|undefined>(()=>{
+    const explorationManager = useMemo<UnknownExplorationStateManager|undefined>(()=>{
        if (exploredEntity) {
-           return explorationStateManager.getEntityManager(exploredEntity)
+           return getExplorationStateManagerByEntity(exploredEntity)
        }
     }, [exploredEntity])
 

@@ -58,7 +58,7 @@ const Creation = () => {
 
     if (!emergingEntity) return null;
 
-    const creationService: CreationService = CreationServiceImpl.getInstance(store);
+    const creationService: CreationService = getEntittyCration
 
     return (
         <div className="creation-page">

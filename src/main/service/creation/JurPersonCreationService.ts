@@ -12,9 +12,9 @@ import CreationStateManager from "./stateManager/CreationStateManager";
 @injectable()
 class JurPersonCreationService extends CreationServiceImpl<JurPersonRequestDto, JurPerson, JurPersonResponseDto, EntityCreationState<JurPerson>> {
 
-    constructor(@inject(IOC_TYPES.JurPersonDtoMapper) mapper: DtoMapper<JurPersonRequestDto, JurPerson, JurPersonResponseDto>,
-                @inject(IOC_TYPES.JurPersonCreationApiService) apiService: CreationApiService<JurPersonRequestDto, JurPersonResponseDto>,
-                @inject(IOC_TYPES.JurPersonCreationStateManager) creationStateManager: CreationStateManager<JurPerson, EntityCreationState<JurPerson>>) {
+    constructor(@inject(IOC_TYPES.mappers.JurPersonDtoMapper) mapper: DtoMapper<JurPersonRequestDto, JurPerson, JurPersonResponseDto>,
+                @inject(IOC_TYPES.creation.apiServices.JurPersonCreationApiService) apiService: CreationApiService<JurPersonRequestDto, JurPersonResponseDto>,
+                @inject(IOC_TYPES.creation.stateManagers.JurPersonCreationStateManager) creationStateManager: CreationStateManager<JurPerson, EntityCreationState<JurPerson>>) {
         super(mapper, apiService, creationStateManager);
     }
 }

@@ -1,4 +1,4 @@
-interface EntityExplorationService<> {
+interface EntityExplorationService {
     explore(): void;
 }
 

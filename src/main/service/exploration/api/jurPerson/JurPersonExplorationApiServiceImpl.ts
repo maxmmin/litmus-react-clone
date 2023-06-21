@@ -14,7 +14,7 @@ import AuthenticationStateManager from "../../../auth/stateManager/Authenticatio
 @injectable()
 class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPersonResponseDto> implements JurPersonExplorationApiService {
 
-    constructor(@inject(IOC_TYPES.AuthStateManager) authStateManager: AuthenticationStateManager) {
+    constructor(@inject(IOC_TYPES.auth.AuthStateManager) authStateManager: AuthenticationStateManager) {
         super(()=>authStateManager.getAuth()!.accessToken, appConfig.serverMappings.jurPersons);
     }
 

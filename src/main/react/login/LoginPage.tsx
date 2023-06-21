@@ -7,6 +7,8 @@ import {LoginPageState, updateLoginPageState} from "../../redux/actions/LoginPag
 import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 import store from "../../redux/store";
+import container from "../../inversify/inversify.config";
+import IOC_TYPES from "../../inversify/IOC_TYPES";
 
 
 function LoginPage() {
@@ -21,7 +23,7 @@ function LoginPage() {
     const {email, password, error} = useAppSelector(state => state.loginPageState)||{};
 
     const authManager: AuthenticationManager = useMemo(()=>{
-        return BasicAuthenticationManager.getBasicManager(store)
+        return container.get<AuthenticationManager>(IOC_TYPES.auth.AuthManager);
     }, [])
 
     const signInButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {

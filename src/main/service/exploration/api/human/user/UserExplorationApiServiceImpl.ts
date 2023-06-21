@@ -9,7 +9,7 @@ import AuthenticationStateManager from "../../../../auth/stateManager/Authentica
 @injectable()
 class UserExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<UserResponseDto> implements UserExplorationApiService {
 
-    constructor(@inject(IOC_TYPES.AuthStateManager) authStateManager: AuthenticationStateManager) {
+    constructor(@inject(IOC_TYPES.auth.AuthStateManager) authStateManager: AuthenticationStateManager) {
         super(()=>authStateManager.getAuth()!.accessToken, appConfig.serverMappings.users);
     }
 

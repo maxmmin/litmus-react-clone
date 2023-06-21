@@ -29,9 +29,9 @@ class UserExplorationService implements ExplorationService {
     private readonly service: UserExplorationApiService;
 
 
-    constructor(@inject(IOC_TYPES.UserExplorationStateManager) stateManager: ExplorationStateManager<unknown, EntityExplorationState<User, UserExplorationParams>>,
-                @inject(IOC_TYPES.UserExplorationService) service: UserExplorationApiService,
-                @inject(IOC_TYPES.UserDtoMapper) mapper: DtoMapper<unknown, User, UserResponseDto>) {
+    constructor(@inject(IOC_TYPES.exploration.stateManagers.UserExplorationStateManager) stateManager: ExplorationStateManager<unknown, EntityExplorationState<User, UserExplorationParams>>,
+                @inject(IOC_TYPES.exploration.UserExplorationService) service: UserExplorationApiService,
+                @inject(IOC_TYPES.mappers.UserDtoMapper) mapper: DtoMapper<unknown, User, UserResponseDto>) {
         this.stateManager = stateManager;
         this.service = service;
         this.mapper = mapper;

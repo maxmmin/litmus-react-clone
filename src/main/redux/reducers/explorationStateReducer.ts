@@ -6,7 +6,7 @@ import PersonExplorationState from "../types/exploration/human/person/PersonExpl
 import PersonExplorationParams from "../types/exploration/human/person/PersonExplorationParams";
 import BasicJurPersonExplorationState from "../types/exploration/jurPerson/JurPersonExplorationState";
 import BasicJurPersonExplorationParams from "../types/exploration/jurPerson/BasicJurPersonExplorationParams";
-import UserExplorationState from "../types/exploration/human/user/UserExplorationState";
+import UserExplorationState, {BasicUserExplorationState} from "../types/exploration/human/user/UserExplorationState";
 import UserExplorationParams from "../types/exploration/human/user/UserExplorationParams";
 import {Entity} from "../../model/Entity";
 import EntityExplorationParams from "../types/exploration/EntityExplorationParams";
@@ -121,7 +121,7 @@ const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, P
     }
 }
 
-const initialUserExplorationState = deepCopy(new UserExplorationState( new UserExplorationParams()));
+const initialUserExplorationState = deepCopy(new BasicUserExplorationState( new UserExplorationParams()));
 
 type UserExplorationStateReducible = UserExplorationState | undefined;
 

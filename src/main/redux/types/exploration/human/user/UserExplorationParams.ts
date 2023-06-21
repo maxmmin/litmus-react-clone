@@ -2,11 +2,11 @@ import ExplorationMode from "../../ExplorationMode";
 import BasicHumanExplorationParams from "../BasicHumanExplorationParams";
 import HumanExplorationParams from "../HumanExplorationParams";
 
-interface UserExplorationParams extends HumanExplorationParams {
+export default interface UserExplorationParams extends HumanExplorationParams {
     email: string|null
 }
 
-class BasicUserExplorationParams extends BasicHumanExplorationParams implements UserExplorationParams {
+export class BasicUserExplorationParams extends BasicHumanExplorationParams implements UserExplorationParams {
     public static supportedModesIdList: number[] = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME]).map(mode => mode.id);
     public readonly supportedModesIdList: number[] = BasicUserExplorationParams.supportedModesIdList;
     readonly modeId: number = this.supportedModesIdList[0];
@@ -22,5 +22,3 @@ class BasicUserExplorationParams extends BasicHumanExplorationParams implements 
         }
     }
 }
-
-export default UserExplorationParams;

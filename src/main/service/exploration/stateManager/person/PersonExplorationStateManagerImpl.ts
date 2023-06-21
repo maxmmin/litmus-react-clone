@@ -10,7 +10,7 @@ import PersonExplorationStateManager from "./PersonExplorationStateManager";
 
 @injectable()
 class PersonExplorationStateManagerImpl extends ExplorationStateManagerImpl<Person, PersonExplorationState> implements PersonExplorationStateManager {
-    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.PersonExplorationTypedAction) actions: ExplorationTypedAction) {
+    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.exploration.typedActions.PersonExplorationTypedAction) actions: ExplorationTypedAction) {
         super(_store.dispatch, ()=>_store.getState().exploration.person!, actions);
     }
 }

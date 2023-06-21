@@ -12,7 +12,7 @@ import AuthenticationStateManager from "../../auth/stateManager/AuthenticationSt
 class UserCreationApiService implements CreationApiService<UserRequestDto, UserResponseDto> {
     private readonly getAccessToken: ()=>string;
 
-    constructor(@inject(IOC_TYPES.AuthStateManager) authManager: AuthenticationStateManager) {
+    constructor(@inject(IOC_TYPES.auth.AuthStateManager) authManager: AuthenticationStateManager) {
         this.getAccessToken = ()=>authManager.getAuth()!.accessToken;
     }
 

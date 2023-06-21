@@ -10,7 +10,7 @@ import IOC_TYPES from "../../../../inversify/IOC_TYPES";
 @injectable()
 class UserCreationStateManagerImpl extends CreationStateManagerImpl<User,EntityCreationState<User>> implements UserCreationStateManager {
 
-    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.UserCreationTypedAction) actions: CreationTypedAction) {
+    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.creation.typedActions.UserCreationTypedAction) actions: CreationTypedAction) {
         const dispatch: AppDispatch = _store.dispatch;
         const getState = ()=>_store.getState().creation.user!;
         super(dispatch, getState, actions);

@@ -31,9 +31,9 @@ class JurPersonExplorationService implements ExplorationService {
     private readonly service: JurPersonExplorationApiService;
 
 
-    constructor(@inject(IOC_TYPES.JurPersonExplorationStateManager) stateManager: ExplorationStateManager<JurPerson, EntityExplorationState<JurPerson, BasicJurPersonExplorationParams>>,
-                @inject(IOC_TYPES.JurPersonExplorationApiService) service: JurPersonExplorationApiService,
-                @inject(IOC_TYPES.JurPersonDtoMapper) mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
+    constructor(@inject(IOC_TYPES.exploration.stateManagers.JurPersonExplorationStateManager) stateManager: ExplorationStateManager<JurPerson, EntityExplorationState<JurPerson, BasicJurPersonExplorationParams>>,
+                @inject(IOC_TYPES.exploration.apiServices.JurPersonExplorationApiService) service: JurPersonExplorationApiService,
+                @inject(IOC_TYPES.mappers.JurPersonDtoMapper) mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
         this.mapper = mapper;
         this.stateManager = stateManager;
         this.service = service;

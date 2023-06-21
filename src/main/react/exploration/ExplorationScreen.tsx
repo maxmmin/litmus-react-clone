@@ -17,15 +17,10 @@ import ExplorationData from "./ExplorationData";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import {getEntityByDomain} from "../../util/pureFunctions";
+import getEntityExplorationService from "../../inversify/getEntityExplorationService";
+import ExplorationService from "../../service/exploration/ExplorationService";
 
 
-
-function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplorationParams>> (entity: Entity) {
-    const entity = stateManager.entity;
-    return (e: React.MouseEvent<HTMLButtonElement>) => {
-       explorationService.explore(entity);
-    }
-}
 
 function getRequiredPermissions(exploredEntity: Entity|undefined) {
     let requiredPermissions: Permissions[];
@@ -95,9 +90,7 @@ const ExplorationScreen = () => {
         navigate(event.currentTarget.value)
     }
 
-    const explorationStateManager = ExplorationStateManagerImpl.getEntityManager(exploredEntity);
-
-    const explorationService = ExplorationServiceImpl.getInstance(store, true);
+    const explorationService = getEntityExplorationService(exploredEntity);
 
     return (
        <PrivateComponentWrapper requiredPermissions={requiredPermissions} mode={"ERROR_PAGE"}>
@@ -117,7 +110,9 @@ const ExplorationScreen = () => {
 
                        <ExplorationModeSelectContainer/>
 
-                       <ExplorationInputForm onSubmit={getOnSubmitCallback(explorationService, explorationStateManager)} isPending={Boolean(explorationState?.isPending)} exploredEntity={exploredEntity}/>
+                       <ExplorationInputForm onSubmit={(e: React.MouseEvent<HTMLButtonElement>) => {
+                           explorationService.explore();
+                       }} isPending={Boolean(explorationState?.isPending)} exploredEntity={exploredEntity}/>
 
                    </div>
 

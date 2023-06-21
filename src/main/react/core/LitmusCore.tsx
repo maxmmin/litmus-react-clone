@@ -13,6 +13,8 @@ import UserIdentityManager from "../../service/userIdentity/UserIdentityManager"
 import UserIdentityManagerImpl from "../../service/userIdentity/UserIdentityManagerImpl";
 import UserIdentityApiService from "../../service/userIdentity/api/UserIdentityApiService";
 import UserIdentityApiServiceImpl from "../../service/userIdentity/api/UserIdentityApiServiceImpl";
+import container from "../../inversify/inversify.config";
+import IOC_TYPES from "../../inversify/IOC_TYPES";
 
 type Props = {
     children: ReactNode
@@ -35,7 +37,7 @@ const LitmusCore = ({children}: Props) => {
         region: gmapsRegionOptions.region!,
     });
 
-    const authenticationManager: AuthenticationManager = useMemo(()=>BasicAuthenticationManager.getBasicManager(store), [])
+    const authenticationManager: AuthenticationManager = container.get<AuthenticationManager>(IOC_TYPES.auth.AuthManager);
 
     const userIdentityManager: UserIdentityManager = useMemo<UserIdentityManager>(()=>{
         const service: UserIdentityApiService = new UserIdentityApiServiceImpl(()=>store.getState().authentication?.accessToken!);

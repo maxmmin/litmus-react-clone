@@ -10,7 +10,7 @@ import UserExplorationStateManager from "./UserExplorationStateManager";
 @injectable()
 class UserExplorationStateManagerImpl extends ExplorationStateManagerImpl<User,UserExplorationState> implements UserExplorationStateManager{
 
-    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.UserExplorationTypedAction) actions: ExplorationTypedAction) {
+    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.exploration.typedActions.UserExplorationTypedAction) actions: ExplorationTypedAction) {
         super(_store.dispatch, ()=>_store.getState().exploration.user!, actions);
     }
 }

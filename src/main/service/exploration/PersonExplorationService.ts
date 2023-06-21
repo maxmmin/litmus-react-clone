@@ -28,9 +28,9 @@ class PersonExplorationService implements ExplorationService {
     private readonly service: PersonExplorationApiService;
 
 
-    constructor(@inject(IOC_TYPES.PersonExplorationStateManager) stateManager: PersonExplorationStateManager,
-                @inject(IOC_TYPES.PersonExplorationApiService) service: PersonExplorationApiService,
-                @inject(IOC_TYPES.PersonDtoMapper) mapper: DtoMapper<unknown, Person, PersonResponseDto>) {
+    constructor(@inject(IOC_TYPES.exploration.stateManagers.PersonExplorationStateManager) stateManager: PersonExplorationStateManager,
+                @inject(IOC_TYPES.exploration.apiServices.PersonExplorationApiService) service: PersonExplorationApiService,
+                @inject(IOC_TYPES.mappers.PersonDtoMapper) mapper: DtoMapper<unknown, Person, PersonResponseDto>) {
         this.mapper = mapper;
         this.stateManager = stateManager;
         this.service = service;

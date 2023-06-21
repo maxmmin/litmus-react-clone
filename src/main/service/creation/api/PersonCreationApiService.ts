@@ -13,7 +13,7 @@ import IOC_TYPES from "../../../inversify/IOC_TYPES";
 class PersonCreationApiService implements CreationApiService<PersonRequestDto, PersonResponseDto> {
     private readonly getAccessToken: ()=>string;
 
-    constructor(@inject(IOC_TYPES.AuthStateManager) authStateManager: AuthenticationStateManager) {
+    constructor(@inject(IOC_TYPES.auth.AuthStateManager) authStateManager: AuthenticationStateManager) {
         this.getAccessToken = ()=>authStateManager.getAuth()!.accessToken;
     }
 

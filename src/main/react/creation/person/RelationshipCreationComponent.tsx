@@ -4,7 +4,6 @@ import React from "react";
 import {CrossIcon} from "../../../util/icons";
 import {useAppDispatch} from "../../../redux/hooks";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
-import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 import store from "../../../redux/store";
 
 type Props = {
