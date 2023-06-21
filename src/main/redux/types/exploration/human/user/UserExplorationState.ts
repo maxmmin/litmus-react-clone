@@ -3,7 +3,9 @@ import UserExplorationParams from "./UserExplorationParams";
 import EntityExplorationState from "../../EntityExplorationState";
 import EntityExplorationData from "../../EntityExplorationData";
 
-export default class UserExplorationState implements EntityExplorationState<User, UserExplorationParams> {
+export default interface UserExplorationState extends EntityExplorationState<User, UserExplorationParams> {}
+
+export class BasicUserExplorationState implements EntityExplorationState<User, UserExplorationParams> {
     readonly data: EntityExplorationData<User, UserExplorationParams>|null;
     isPending: boolean;
     readonly params: UserExplorationParams;

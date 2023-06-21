@@ -10,8 +10,8 @@ import {isEmpty} from "../../../../util/isEmpty";
 
 export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookupService<P> implements HumanExplorationApiService<P> {
 
-    constructor(apiMapping: string = appConfig.serverMappings.users, getToken: () => string) {
-        super(apiMapping, getToken);
+    constructor(getToken: () => string, apiMapping: string) {
+        super(getToken, apiMapping);
     }
 
     async findByFullName(fullName: FullName): Promise<PagedData<P>> {

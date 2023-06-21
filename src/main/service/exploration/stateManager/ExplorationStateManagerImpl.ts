@@ -1,27 +1,26 @@
 import store, {AppDispatch, LitmusAsyncThunkConfig} from "../../../redux/store";
 import {ExplorationCoreAction} from "../../../redux/actions/ExplorationActions";
 import {setExploredEntityAction} from "../../../redux/reducers/explorationStateReducer";
-import JurPersonExplorationState from "../../../redux/types/exploration/jurPerson/JurPersonExplorationState";
+import BasicJurPersonExplorationState from "../../../redux/types/exploration/jurPerson/JurPersonExplorationState";
 import PersonExplorationState from "../../../redux/types/exploration/human/person/PersonExplorationState";
 import UserExplorationState from "../../../redux/types/exploration/human/user/UserExplorationState";
 import EntityExplorationState from "../../../redux/types/exploration/EntityExplorationState";
 import EntityExplorationParams from "../../../redux/types/exploration/EntityExplorationParams";
-import {Entity} from "../../../model/Entity";
 import ExplorationMode from "../../../redux/types/exploration/ExplorationMode";
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import ExplorationStateManager from "./ExplorationStateManager";
 import deepCopy from "../../../util/deepCopy";
-import {ExplorationTypedActions} from "../../../redux/actions/ExplorationTypedActions";
+import {ExplorationTypedAction} from "../../../redux/actions/ExplorationTypedAction";
+import {Entity} from "../../../model/Entity";
 
 /**
+ * E - entity
  * S - entityExplorationState
  * */
-class ExplorationStateManagerImpl<S extends EntityExplorationState<unknown, EntityExplorationParams>> implements ExplorationStateManager<S> {
+class ExplorationStateManagerImpl<E,S extends EntityExplorationState<E, EntityExplorationParams>> implements ExplorationStateManager<E,S> {
     private readonly dispatch: AppDispatch;
 
-    private readonly actions: ExplorationTypedActions;
-
-    public readonly entity: Entity;
+    private readonly actions: ExplorationTypedAction;
 
     static switchEntity (entity: Entity, dispatch: AppDispatch) {
         dispatch({
@@ -40,44 +39,10 @@ class ExplorationStateManagerImpl<S extends EntityExplorationState<unknown, Enti
         return this.getExplorationState().params;
     }
 
-    private constructor(entity: Entity, dispatch: AppDispatch, getState: ()=>S, actions: ExplorationTypedActions) {
-        this.entity = entity;
+    public constructor(dispatch: AppDispatch, getState: ()=>S, actions: ExplorationTypedAction) {
         this.dispatch = dispatch;
         this.getExplorationState = getState;
         this.actions = actions;
-    }
-
-    static getJurPersonManager (providedStore: typeof store = store): ExplorationStateManagerImpl<JurPersonExplorationState> {
-        const getState = ()=>providedStore.getState().exploration.jurPerson as JurPersonExplorationState
-        return new ExplorationStateManagerImpl<JurPersonExplorationState>(Entity.JUR_PERSON, providedStore.dispatch, getState,  ExplorationTypedActions.jurPerson);
-    }
-
-    static getPersonManager (providedStore: typeof store = store): ExplorationStateManagerImpl<PersonExplorationState> {
-        const getState = ()=>providedStore.getState().exploration.person as PersonExplorationState;
-        return new ExplorationStateManagerImpl<PersonExplorationState>(Entity.PERSON, providedStore.dispatch,getState, ExplorationTypedActions.person);
-    }
-
-    static getUserManager (providedStore: typeof store = store): ExplorationStateManagerImpl<UserExplorationState> {
-        const getState = ()=>providedStore.getState().exploration.user as UserExplorationState;
-        return new ExplorationStateManagerImpl<UserExplorationState>(Entity.USER, providedStore.dispatch,getState, ExplorationTypedActions.user);
-    }
-
-    static getEntityManager(entity: Entity, providedStore: typeof store = store): ExplorationStateManagerImpl<EntityExplorationState<unknown, EntityExplorationParams>> {
-        switch (entity) {
-            case Entity.PERSON: {
-                return ExplorationStateManagerImpl.getPersonManager(providedStore);
-            }
-
-            case Entity.JUR_PERSON: {
-                return ExplorationStateManagerImpl.getJurPersonManager(providedStore);
-            }
-
-            case Entity.USER: {
-                return ExplorationStateManagerImpl.getUserManager(providedStore);
-            }
-
-            default: throw new Error("unsupported entity");
-        }
     }
 
     setState (state: S): void {

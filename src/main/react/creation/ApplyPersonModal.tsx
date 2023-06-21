@@ -11,7 +11,6 @@ import {JurPerson} from "../../model/jurPerson/JurPerson";
 import Person, {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 import {isValid} from "../../util/pureFunctions";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
-import CreationStateManagerFactory from "../../service/creation/stateManager/CreationStateManagerFactory";
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
 import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
@@ -24,6 +23,8 @@ import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
+import container from "../../inversify/inversify.config";
+import CreationStateManager from "../../service/creation/stateManager/CreationStateManager";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -152,7 +153,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
-                const stateManager: JurPersonCreationStateManager = CreationStateManagerFactory.getJurPersonManager(store);
+                const stateManager: JurPersonCreationStateManager = container.get<CreationStateManager<any, any>>();
 
                 const payload: Partial<JurPerson> = {}
 

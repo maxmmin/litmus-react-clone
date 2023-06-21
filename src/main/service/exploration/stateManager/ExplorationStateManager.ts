@@ -4,7 +4,7 @@ import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import ExplorationMode from "../../../redux/types/exploration/ExplorationMode";
 import {LitmusAsyncThunkConfig} from "../../../redux/store";
 
-export default interface ExplorationStateManager <S extends EntityExplorationState<unknown, EntityExplorationParams>> {
+export default interface ExplorationStateManager <E, S extends EntityExplorationState<E, EntityExplorationParams>> {
     getExplorationState: ()=>S;
 
     getExplorationData (): S["data"];

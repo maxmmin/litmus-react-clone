@@ -6,7 +6,7 @@ import {useAppSelector} from "../../redux/hooks";
 import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import store from "../../redux/store";
 import PersonExplorationState from "../../redux/types/exploration/human/person/PersonExplorationState";
-import JurPersonExplorationState from "../../redux/types/exploration/jurPerson/JurPersonExplorationState";
+import BasicJurPersonExplorationState from "../../redux/types/exploration/jurPerson/JurPersonExplorationState";
 import UserExplorationState from "../../redux/types/exploration/human/user/UserExplorationState";
 import explorationStateManager from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
@@ -24,7 +24,7 @@ const ExplorationModesView = () => {
                 }
 
                 case Entity.JUR_PERSON: {
-                    return (state.exploration.jurPerson as JurPersonExplorationState).params;
+                    return (state.exploration.jurPerson as BasicJurPersonExplorationState).params;
                 }
 
                 case Entity.USER: {

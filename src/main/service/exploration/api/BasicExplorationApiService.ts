@@ -12,7 +12,7 @@ class BasicEntityLookupService<P> implements LookupService<P>{
     protected readonly apiUrl: string;
     protected readonly getAccessToken: ()=>string;
 
-    constructor(apiUrl: string, getToken: ()=>string) {
+    constructor(getToken: ()=>string, apiUrl: string) {
         this.apiUrl = apiUrl;
         this.getAccessToken = getToken;
     }

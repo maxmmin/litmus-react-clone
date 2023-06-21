@@ -16,6 +16,10 @@ const IOC_TYPES = {
     UserCreationStateManager: Symbol("UserCreationStateManager"),
     PersonCreationStateManager: Symbol("PersonCreationStateManager"),
 
+    PersonCreationTypedAction: Symbol("PersonCreationTypedAction"),
+    JurPersonCreationTypedAction: Symbol("JurPersonCreationTypedAction"),
+    UserCreationTypedAction: Symbol("UserCreationTypedAction"),
+
     PersonCreationService: Symbol("PersonCreationService"),
     JurPersonCreationService: Symbol("JurPersonCreationService"),
     UserCreationService: Symbol("UserCreationService"),
@@ -24,13 +28,26 @@ const IOC_TYPES = {
 
     NotificationsManager: Symbol("NotificationsManager"),
 
-    PersonCreationTypedAction: Symbol("PersonCreationTypedAction"),
-    JurPersonCreationTypedAction: Symbol("JurPersonCreationTypedAction"),
-    UserCreationTypedAction: Symbol("UserCreationTypedAction"),
+    PersonExplorationTypedAction: Symbol("PersonExplorationTypedAction"),
+    UserExplorationTypedAction: Symbol("UserExplorationTypedAction"),
+    JurPersonExplorationTypedAction: Symbol("JurPersonExplorationTypedAction"),
 
-    ExplorationApiService: Symbol("ExplorationApiService"),
-    ExplorationStateManager: Symbol("ExplorationStateManager"),
-    ExplorationService: Symbol("ExplorationService"),
+    UserExplorationStateManager: Symbol("UserExplorationStateManager"),
+    PersonExplorationStateManager: Symbol("PersonExplorationStateManager"),
+    JurPersonExplorationStateManager: Symbol("JurPersonExplorationStateManager"),
+
+    PersonExplorationApiService: Symbol("PersonExplorationApiService"),
+    UserExplorationApiService: Symbol("UserExplorationApiService"),
+    JurPersonExplorationApiService: Symbol("JurPersonExplorationApiService"),
+
+    UserExplorationService: Symbol("UserExplorationService"),
+    PersonExplorationService: Symbol("PersonExplorationService"),
+    JurPersonExplorationService: Symbol("JurPersonExplorationService"),
+
+
+    // ExplorationApiService: Symbol("ExplorationApiService"),
+    // ExplorationStateManager: Symbol("ExplorationStateManager"),
+    // ExplorationService: Symbol("ExplorationService"),
     // @todo timers state manager
     UserIdentityApiService: Symbol("UserIdentityApiService"),
     UserIdentityManager: Symbol("UserIdentityManager")

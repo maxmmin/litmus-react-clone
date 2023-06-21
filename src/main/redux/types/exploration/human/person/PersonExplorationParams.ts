@@ -1,9 +1,12 @@
 import ExplorationMode from "../../ExplorationMode";
 import BasicHumanExplorationParams from "../BasicHumanExplorationParams";
+import HumanExplorationParams from "../HumanExplorationParams";
 
-export default class PersonExplorationParams extends BasicHumanExplorationParams {
+interface PersonExplorationParams extends HumanExplorationParams {};
+
+export class BasicPersonExplorationParams extends BasicHumanExplorationParams {
     public static supportedModesIdList: number[] = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME]).map(mode => mode.id);
-    public readonly supportedModesIdList: number[] = PersonExplorationParams.supportedModesIdList;
+    public readonly supportedModesIdList: number[] = BasicPersonExplorationParams.supportedModesIdList;
     readonly modeId: number = this.supportedModesIdList[0];
 
     constructor(mode?: ExplorationMode, i?: number, id?: string, firstName?: string, middleName?: string, lastName?: string) {
@@ -13,3 +16,5 @@ export default class PersonExplorationParams extends BasicHumanExplorationParams
         }
     }
 }
+
+export default PersonExplorationParams;

@@ -1,5 +1,4 @@
 import JurPersonExplorationApiService from "./JurPersonExplorationApiService";
-import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import appConfig from "../../../../config/appConfig";
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
@@ -8,11 +7,15 @@ import BasicEntityLookupService from "../BasicExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
 import jurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
+import {inject, injectable} from "inversify";
+import IOC_TYPES from "../../../../inversify/IOC_TYPES";
+import AuthenticationStateManager from "../../../auth/stateManager/AuthenticationStateManager";
 
+@injectable()
 class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPersonResponseDto> implements JurPersonExplorationApiService {
 
-    constructor(getToken: ()=>string, apiMapping: string = appConfig.serverMappings.jurPersons) {
-        super(apiMapping, getToken);
+    constructor(@inject(IOC_TYPES.AuthStateManager) authStateManager: AuthenticationStateManager) {
+        super(()=>authStateManager.getAuth()!.accessToken, appConfig.serverMappings.jurPersons);
     }
 
     async findByName(name: string): Promise<PagedData<JurPersonResponseDto>> {

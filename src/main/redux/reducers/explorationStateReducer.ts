@@ -4,8 +4,8 @@ import EntityExplorationState from "../types/exploration/EntityExplorationState"
 import {combineReducers} from "redux";
 import PersonExplorationState from "../types/exploration/human/person/PersonExplorationState";
 import PersonExplorationParams from "../types/exploration/human/person/PersonExplorationParams";
-import JurPersonExplorationState from "../types/exploration/jurPerson/JurPersonExplorationState";
-import JurPersonExplorationParams from "../types/exploration/jurPerson/JurPersonExplorationParams";
+import BasicJurPersonExplorationState from "../types/exploration/jurPerson/JurPersonExplorationState";
+import BasicJurPersonExplorationParams from "../types/exploration/jurPerson/BasicJurPersonExplorationParams";
 import UserExplorationState from "../types/exploration/human/user/UserExplorationState";
 import UserExplorationParams from "../types/exploration/human/user/UserExplorationParams";
 import {Entity} from "../../model/Entity";
@@ -14,7 +14,7 @@ import ExplorationMode from "../types/exploration/ExplorationMode";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import deepCopy from "../../util/deepCopy";
 import GeneralAction from "../GeneralAction";
-import {ExplorationTypedActions} from "../actions/ExplorationTypedActions";
+import {ExplorationTypedAction} from "../actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../actions/ExplorationActions";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<unknown, string>): S => {
@@ -77,7 +77,7 @@ const initialPersonExplorationState = deepCopy(new PersonExplorationState(new Pe
 type PersonExplorationStateReducible = PersonExplorationState | undefined;
 
 const personExplorationReducer: Reducer<PersonExplorationStateReducible, PayloadAction<unknown>> = (prevState=initialPersonExplorationState, action) => {
-    const actions = ExplorationTypedActions.person;
+    const actions = ExplorationTypedAction.person;
     switch (action.type) {
         // code-place for jur person specific actions
         // @todo write getClear action
@@ -98,9 +98,9 @@ const personExplorationReducer: Reducer<PersonExplorationStateReducible, Payload
 }
 
 
-const initialJurPersonExplorationState = deepCopy(new JurPersonExplorationState(new JurPersonExplorationParams()))
+const initialJurPersonExplorationState = deepCopy(new BasicJurPersonExplorationState(new BasicJurPersonExplorationParams()))
 
-type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
+type JurPersonExplorationStateReducible = BasicJurPersonExplorationState | undefined;
 
 const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, PayloadAction<unknown>> = (prevState=initialJurPersonExplorationState, action) => {
     switch (action.type) {
@@ -126,7 +126,7 @@ const initialUserExplorationState = deepCopy(new UserExplorationState( new UserE
 type UserExplorationStateReducible = UserExplorationState | undefined;
 
 const userExplorationReducer: Reducer<UserExplorationStateReducible, PayloadAction<unknown>> = (prevState= initialUserExplorationState, action) => {
-    const actions = ExplorationTypedActions.user;
+    const actions = ExplorationTypedAction.user;
     switch (action.type) {
         // code-place for jur person specific actions
         // @todo write getClear action

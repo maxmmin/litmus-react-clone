@@ -41,6 +41,31 @@ import TimersStateManager from "../service/timers/TimersStateManager";
 import {BasicNotificationManager, NotificationManager} from "../redux/types/applicationState/Notification";
 import store from "../redux/store";
 import CreationTypedAction from "../redux/actions/CreationTypedAction";
+import {ExplorationTypedAction} from "../redux/actions/ExplorationTypedAction";
+import ExplorationService from "../service/exploration/ExplorationService";
+import ExplorationStateManager from "../service/exploration/stateManager/ExplorationStateManager";
+import EntityExplorationState from "../redux/types/exploration/EntityExplorationState";
+import PersonExplorationParams from "../redux/types/exploration/human/person/PersonExplorationParams";
+import PersonExplorationStateManagerImpl from "../service/exploration/stateManager/person/PersonExplorationStateManagerImpl";
+import BasicJurPersonExplorationState from "../redux/types/exploration/jurPerson/JurPersonExplorationState";
+import BasicJurPersonExplorationParams from "../redux/types/exploration/jurPerson/BasicJurPersonExplorationParams";
+import JurPersonExplorationStateManagerImpl from "../service/exploration/stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
+import UserExplorationParams from "../redux/types/exploration/human/user/UserExplorationParams";
+import UserExplorationStateManagerImpl from "../service/exploration/stateManager/user/UserExplorationStateManagerImpl";
+import UserExplorationService from "../service/exploration/UserExplorationService";
+import PersonExplorationService from "../service/exploration/PersonExplorationService";
+import JurPersonExplorationService from "../service/exploration/JurPersonExplorationService";
+import PersonExplorationApiService from "../service/exploration/api/human/person/PersonExplorationApiService";
+import PersonExplorationApiServiceImpl from "../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
+import JurPersonExplorationApiService from "../service/exploration/api/jurPerson/JurPersonExplorationApiService";
+import JurPersonExplorationApiServiceImpl
+    from "../service/exploration/api/jurPerson/JurPersonExplorationApiServiceImpl";
+import UserExplorationApiService from "../service/exploration/api/human/user/UserExplorationApiService";
+import UserExplorationApiServiceImpl from "../service/exploration/api/human/user/UserExplorationApiServiceImpl";
+import PersonExplorationStateManager from "../service/exploration/stateManager/person/PersonExplorationStateManager";
+import JurPersonExplorationStateManager
+    from "../service/exploration/stateManager/jurPerson/JurPersonExplorationStateManager";
+import UserExplorationStateManager from "../service/exploration/stateManager/user/UserExplorationStateManager";
 
 const container = new Container();
 
@@ -62,13 +87,29 @@ container.bind<PersonCreationStateManager>(IOC_TYPES.PersonCreationStateManager)
 container.bind<JurPersonCreationStateManager>(IOC_TYPES.JurPersonCreationStateManager).to(JurPersonCreationStateManagerImpl);
 container.bind<UserCreationStateManager>(IOC_TYPES.UserCreationStateManager).to(UserCreationStateManagerImpl);
 
-container.bind<CreationService<Person>>(IOC_TYPES.PersonCreationService).to(PersonCreationService);
-container.bind<CreationService<JurPerson>>(IOC_TYPES.JurPersonCreationService).to(JurPersonCreationService)
-container.bind<CreationService<User>>(IOC_TYPES.UserCreationService).to(UserCreationService);
+container.bind<CreationService>(IOC_TYPES.PersonCreationService).to(PersonCreationService);
+container.bind<CreationService>(IOC_TYPES.JurPersonCreationService).to(JurPersonCreationService)
+container.bind<CreationService>(IOC_TYPES.UserCreationService).to(UserCreationService);
 
 container.bind<CreationTypedAction>(IOC_TYPES.JurPersonCreationTypedAction).toConstantValue(CreationTypedAction.jurPerson)
 container.bind<CreationTypedAction>(IOC_TYPES.PersonCreationTypedAction).toConstantValue(CreationTypedAction.person);
 container.bind<CreationTypedAction>(IOC_TYPES.UserCreationTypedAction).toConstantValue(CreationTypedAction.user)
+
+container.bind<ExplorationTypedAction>(IOC_TYPES.UserExplorationTypedAction).toConstantValue(ExplorationTypedAction.user);
+container.bind<ExplorationTypedAction>(IOC_TYPES.PersonExplorationTypedAction).toConstantValue(ExplorationTypedAction.person);
+container.bind<ExplorationTypedAction>(IOC_TYPES.JurPersonExplorationTypedAction).toConstantValue(ExplorationTypedAction.jurPerson);
+
+container.bind<PersonExplorationStateManager>(IOC_TYPES.PersonExplorationStateManager).to(PersonExplorationStateManagerImpl);
+container.bind<JurPersonExplorationStateManager>(IOC_TYPES.JurPersonExplorationTypedAction).to(JurPersonExplorationStateManagerImpl)
+container.bind<UserExplorationStateManager>(IOC_TYPES.UserExplorationStateManager).to(UserExplorationStateManagerImpl);
+
+container.bind<PersonExplorationApiService>(IOC_TYPES.PersonExplorationApiService).to(PersonExplorationApiServiceImpl);
+container.bind<JurPersonExplorationApiService>(IOC_TYPES.JurPersonExplorationApiService).to(JurPersonExplorationApiServiceImpl);
+container.bind<UserExplorationApiService>(IOC_TYPES.UserExplorationApiService).to(UserExplorationApiServiceImpl);
+
+container.bind<ExplorationService>(IOC_TYPES.UserExplorationService).to(UserExplorationService);
+container.bind<ExplorationService>(IOC_TYPES.PersonExplorationService).to(PersonExplorationService);
+container.bind<ExplorationService>(IOC_TYPES.JurPersonExplorationService).to(JurPersonExplorationService)
 
 container.bind<TimersStateManager>(IOC_TYPES.TimersStateManager).to(TimersStateManager);
 container.bind<NotificationManager>(IOC_TYPES.NotificationsManager).to(BasicNotificationManager);

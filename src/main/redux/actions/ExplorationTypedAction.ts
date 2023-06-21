@@ -1,11 +1,11 @@
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import {ExplorationCoreAction} from "./ExplorationActions";
 
-export class ExplorationTypedActions {
+export class ExplorationTypedAction {
 
-    public static readonly user: ExplorationTypedActions = new ExplorationTypedActions(TypedActionsUtil.userDomain);
-    public static readonly person: ExplorationTypedActions = new ExplorationTypedActions(TypedActionsUtil.personDomain);
-    public static readonly jurPerson: ExplorationTypedActions = new ExplorationTypedActions(TypedActionsUtil.jurPersonDomain);
+    public static readonly user: ExplorationTypedAction = new ExplorationTypedAction(TypedActionsUtil.userDomain);
+    public static readonly person: ExplorationTypedAction = new ExplorationTypedAction(TypedActionsUtil.personDomain);
+    public static readonly jurPerson: ExplorationTypedAction = new ExplorationTypedAction(TypedActionsUtil.jurPersonDomain);
 
 
     public readonly [ExplorationCoreAction.SET_EXPLORATION_STATE]: string;

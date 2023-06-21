@@ -25,7 +25,7 @@ type CreationStore = ReturnType<typeof store.getState>["creation"]
  * P - response dto
  * S - creationState
  */
-class CreationServiceImpl<RequestDto,E,ResponseDto,S extends EntityCreationState<E>> implements CreationService<E> {
+class CreationServiceImpl<RequestDto,E,ResponseDto,S extends EntityCreationState<E>> implements CreationService {
 
     private mapper: DtoMapper<RequestDto, E, ResponseDto>;
     private apiService: CreationApiService<RequestDto, ResponseDto>;
@@ -37,7 +37,8 @@ class CreationServiceImpl<RequestDto,E,ResponseDto,S extends EntityCreationState
         this.creationStateManager = creationStateManager;
     }
 
-    createEntity(emergedEntity: E): void {
+    createEntity(): void {
+        const emergedEntity = this.creationStateManager.getCreationState().emergingEntity;
         this.creationStateManager.create.bind(this)(this.createEntityThunk({globalPending: false, emergingEntity: emergedEntity})).catch(console.error)
     }
 

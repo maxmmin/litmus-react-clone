@@ -7,11 +7,14 @@ import store, {AppDispatch} from "../../../../redux/store";
 import Person, {Relationship} from "../../../../model/human/person/Person";
 import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import PassportData from "../../../../model/human/person/PassportData";
+import {inject, injectable} from "inversify";
+import IOC_TYPES from "../../../../inversify/IOC_TYPES";
 
+@injectable()
 class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person, EntityCreationState<Person>> implements PersonCreationStateManager {
 
 
-    constructor(_store: typeof store, actions: CreationTypedAction = CreationTypedAction.person) {
+    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.PersonCreationTypedAction) actions: CreationTypedAction) {
         const dispatch: AppDispatch = _store.dispatch;
         const getState = ()=>_store.getState().creation.person!;
         super(dispatch, getState, actions);

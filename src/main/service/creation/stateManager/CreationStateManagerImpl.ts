@@ -13,7 +13,6 @@ class CreationStateManagerImpl<E,S extends EntityCreationState<E>> implements Cr
     protected readonly getState: ()=>S;
     protected readonly actions: CreationTypedAction;
 
-
     constructor(dispatch: AppDispatch, getState: () => S, actions: CreationTypedAction) {
         this.dispatch = dispatch;
         this.getState = getState;

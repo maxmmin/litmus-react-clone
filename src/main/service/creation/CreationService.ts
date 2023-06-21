@@ -3,8 +3,8 @@
  * E - entity
  */
 
-interface CreationService<E> {
-    createEntity(emergedEntity: E): void;
+interface CreationService {
+    createEntity(): void;
 }
 
 export default CreationService;

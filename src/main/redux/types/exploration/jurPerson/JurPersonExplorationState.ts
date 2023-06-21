@@ -1,15 +1,16 @@
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
-import JurPersonExplorationParams from "./JurPersonExplorationParams";
+import BasicJurPersonExplorationParams from "./BasicJurPersonExplorationParams";
 import EntityExplorationState from "../EntityExplorationState";
 import EntityExplorationData from "../EntityExplorationData";
 
-export default class JurPersonExplorationState implements EntityExplorationState<JurPerson, JurPersonExplorationParams> {
-    readonly data: EntityExplorationData<JurPerson, JurPersonExplorationParams>|null;
+export default interface JurPersonExplorationState extends EntityExplorationState<JurPerson, BasicJurPersonExplorationParams> {};
+
+export class JurPersonExplorationState implements JurPersonExplorationState {
+    readonly data: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams>|null;
     isPending: boolean;
-    readonly params: JurPersonExplorationParams;
+    readonly params: BasicJurPersonExplorationParams;
 
-
-    constructor(params: JurPersonExplorationParams, data: EntityExplorationData<JurPerson, JurPersonExplorationParams>|null=null, isPending: boolean = false) {
+    constructor(params: BasicJurPersonExplorationParams, data: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams>|null=null, isPending: boolean = false) {
         this.data = data;
         this.isPending = isPending;
         this.params = params;
