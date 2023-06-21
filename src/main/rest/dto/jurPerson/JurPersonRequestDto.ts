@@ -1,4 +1,4 @@
-import {Location} from "../../../model/Location";
+import {GeoLocation} from "../../../model/GeoLocation";
 
 export default interface JurPersonRequestDto {
     benOwnerId?: string,
@@ -6,5 +6,5 @@ export default interface JurPersonRequestDto {
     edrpou?:  string,
     name?: string,
     ownerId?: string,
-    location?: Location
+    location?: GeoLocation
 }

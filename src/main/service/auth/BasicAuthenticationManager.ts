@@ -26,8 +26,8 @@ class BasicAuthenticationManager implements AuthenticationManager {
 
     private static locked: boolean = false;
 
-    constructor(@inject(IOC_TYPES.AuthStateManager) authStateManager: AuthenticationStateManager,
-                @inject(IOC_TYPES.AuthApiService) authService: AuthApiService,
+    constructor(@inject(IOC_TYPES.auth.AuthStateManager) authStateManager: AuthenticationStateManager,
+                @inject(IOC_TYPES.auth.AuthApiService) authService: AuthApiService,
                 @inject(IOC_TYPES.TimersStateManager) timersStateManager: TimersStateManager,
                 @inject(IOC_TYPES.NotificationsManager) notificationManager: NotificationManager) {
         this.authenticationStateManager = authStateManager;

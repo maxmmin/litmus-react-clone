@@ -1,6 +1,6 @@
 import {RelationType} from "../../../model/human/person/Person";
 import Sex from "../../../model/human/person/Sex";
-import {Location} from "../../../model/Location";
+import {GeoLocation} from "../../../model/GeoLocation";
 
 export type RelationshipRequestDto = {
     personId?: string,
@@ -22,5 +22,5 @@ export default interface PersonRequestDto {
     sex?: Sex;
     passportData?: PassportDataRequestDto;
     dateOfBirth?: string;
-    location?: Location
+    location?: GeoLocation
 }

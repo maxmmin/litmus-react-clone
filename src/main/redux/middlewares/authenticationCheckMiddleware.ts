@@ -21,7 +21,7 @@ const authenticationCheckMiddleware: Middleware<{}, PartedStoreType> = ({ getSta
     next
 ) => (action: Action) => {
     if (action.type===AuthAction.CHECK_AUTH) {
-        container.get<AuthenticationManager>(IOC_TYPES.AuthManager).checkAndRefreshAuth();
+        container.get<AuthenticationManager>(IOC_TYPES.auth.AuthManager).checkAndRefreshAuth();
     } else if (action.type===AuthAction.CLEAR_AUTH) {
         dispatch({type: GeneralAction.RESET_DATA})
     }

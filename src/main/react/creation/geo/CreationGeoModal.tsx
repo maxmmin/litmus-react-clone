@@ -1,16 +1,16 @@
 import SelectGeoComponent from "./SelectGeoComponent";
 import {Modal} from "react-bootstrap";
-import React, { useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import Button from "react-bootstrap/Button";
 import {useAppSelector} from "../../../redux/hooks";
-import {Location} from "../../../model/Location";
+import {GeoLocation} from "../../../model/GeoLocation";
 import {Entity} from "../../../model/Entity";
-import CreationStateManager from "../../../service/creation/stateManager/CreationStateManager";
-import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
-import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
-import store from "../../../redux/store";
-import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import Person from "../../../model/human/person/Person";
+import JurPersonCreationStateManager
+    from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
+import container from "../../../inversify/inversify.config";
+import IOC_TYPES from "../../../inversify/IOC_TYPES";
+import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
+import GeoStateManager from "../../../service/creation/stateManager/GeoStateManager";
 
 
 type Props = {
@@ -21,57 +21,34 @@ type Props = {
 
 const CreationGeoModal = ({entity, show, close}: Props) => {
 
-    const [location, setLocation] = useState<Location|null>(null)
+    const [location, setLocation] = useState<GeoLocation|null>(null)
 
-    const creationStateManager: CreationStateManager<unknown,EntityCreationState<unknown>> = CreationStateManagerFactory.getEntityManager(entity, store);
-
-    const geoLocation = useAppSelector(state => {
+    const stateManager: GeoStateManager = useMemo<PersonCreationStateManager|JurPersonCreationStateManager>(()=>{
         switch (entity) {
             case Entity.JUR_PERSON: {
-                return state.creation?.jurPerson?.emergingEntity.location;
+                return container.get<JurPersonCreationStateManager>(IOC_TYPES.creation.stateManagers.JurPersonCreationStateManager);
             }
-
             case Entity.PERSON: {
-                return state.creation?.person?.emergingEntity.location;
+                return container.get<PersonCreationStateManager>(IOC_TYPES.creation.stateManagers.PersonCreationStateManager);
             }
+            default: throw new Error("unsupported entity")
         }
-    })
+    }, [entity])
+
+    const geoLocation = useAppSelector(state => stateManager.getLocation())
 
     const handleClose = () => {
         close()
     }
 
     const clearGeo = () => {
-        switch (entity) {
-            case Entity.JUR_PERSON: {
-                (creationStateManager as CreationStateManager<JurPerson,EntityCreationState<JurPerson>>).updateEntityCreationParams({location: null})
-                break;
-            }
-
-            case Entity.PERSON: {
-                (creationStateManager as CreationStateManager<Person, EntityCreationState<Person>>).updateEntityCreationParams({location: null})
-                break;
-            }
-
-            default: throw new Error("unsupported entity")
-        }
+        stateManager.clearLocation();
         handleClose()
     }
 
     const applyGeo = () => {
         if (location) {
-            switch (entity) {
-                case Entity.JUR_PERSON: {
-                    (creationStateManager as CreationStateManager<JurPerson, EntityCreationState<JurPerson>>).updateEntityCreationParams({location: location})
-
-                    break;
-                }
-
-                case Entity.PERSON: {
-                    (creationStateManager as CreationStateManager<Person, EntityCreationState<Person>>).updateEntityCreationParams({location: location})
-                    break;
-                }
-            }
+            stateManager.updateLocation(location)
             handleClose()
         }
     }

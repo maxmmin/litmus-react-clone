@@ -9,15 +9,28 @@ import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import PassportData from "../../../../model/human/person/PassportData";
 import {inject, injectable} from "inversify";
 import IOC_TYPES from "../../../../inversify/IOC_TYPES";
+import {GeoLocation} from "../../../../model/GeoLocation";
 
 @injectable()
 class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person, EntityCreationState<Person>> implements PersonCreationStateManager {
 
 
-    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.PersonCreationTypedAction) actions: CreationTypedAction) {
+    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.creation.typedActions.PersonCreationTypedAction) actions: CreationTypedAction) {
         const dispatch: AppDispatch = _store.dispatch;
         const getState = ()=>_store.getState().creation.person!;
         super(dispatch, getState, actions);
+    }
+
+    clearLocation(): void {
+        this.updateLocation(null);
+    }
+
+    updateLocation(location: GeoLocation|null): void {
+        this.updateEntityCreationParams({location: location})
+    }
+
+    getLocation (): GeoLocation | null {
+        return this.getCreationParams().location;
     }
 
     updatePassportData = (data: Partial<PassportData>): void => {

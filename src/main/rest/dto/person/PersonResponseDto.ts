@@ -1,6 +1,6 @@
 import Sex from "../../../model/human/person/Sex";
 import PassportData from "../../../model/human/person/PassportData";
-import {Location} from "../../../model/Location";
+import {GeoLocation} from "../../../model/GeoLocation";
 import {Relationship} from "../../../model/human/person/Person";
 
 interface PersonResponseDto {
@@ -12,7 +12,7 @@ interface PersonResponseDto {
     sex: Sex;
     passportData?: Partial<PassportData> | null;
     dateOfBirth?: string | null;
-    location?: Location | null
+    location?: GeoLocation | null
 }
 
 export default PersonResponseDto;

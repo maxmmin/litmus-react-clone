@@ -3,13 +3,13 @@ import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureF
 import React from "react";
 import {useAppDispatch} from "../../../redux/hooks";
 import UserCreationStateManager from "../../../service/creation/stateManager/user/UserCreationStateManager";
-import CreationStateManagerFactory from "../../../service/creation/stateManager/CreationStateManagerFactory";
 import store from "../../../redux/store";
+import container from "../../../inversify/inversify.config";
+import IOC_TYPES from "../../../inversify/IOC_TYPES";
 
 const CreateUser = () => {
-    const dispatch = useAppDispatch();
 
-    const creationStateManager: UserCreationStateManager = CreationStateManagerFactory.getUserManager(store);
+    const creationStateManager: UserCreationStateManager = container.get<UserCreationStateManager>(IOC_TYPES.creation.stateManagers.UserCreationStateManager);
     // todo: this section
     return (
         <>

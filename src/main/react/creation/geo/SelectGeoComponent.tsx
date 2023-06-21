@@ -1,5 +1,5 @@
 import React, {Dispatch, SetStateAction } from "react";
-import {Location} from "../../../model/Location";
+import {GeoLocation} from "../../../model/GeoLocation";
 import { GoogleMap, Marker } from "@react-google-maps/api";
 import Geo from "../../../model/Geo";
 import PlacesAutocomplete from "./PlacesAutocomplete";
@@ -14,8 +14,8 @@ const defaultMapPosition: Geo = {
 
 
 type LocationProps = {
-    location: Location|null,
-    setLocation: Dispatch<SetStateAction<Location|null>>
+    location: GeoLocation|null,
+    setLocation: Dispatch<SetStateAction<GeoLocation|null>>
 }
 
 const SelectGeoComponent = ({location, setLocation}: LocationProps) => {

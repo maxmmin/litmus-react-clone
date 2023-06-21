@@ -1,5 +1,5 @@
 import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
-import {Location} from "../../../model/Location";
+import {GeoLocation} from "../../../model/GeoLocation";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import {Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover} from "@reach/combobox";
 import {geocode} from "../../../util/pureFunctions";
@@ -8,7 +8,7 @@ import {gmapsRegionOptions} from "../../../config/appConfig";
 
 type AutocompleteProps = {
     address: string,
-    setLocation: Dispatch<SetStateAction<Location | null>>;
+    setLocation: Dispatch<SetStateAction<GeoLocation | null>>;
 }
 
 const PlacesAutocomplete = ({address,setLocation}: AutocompleteProps) => {

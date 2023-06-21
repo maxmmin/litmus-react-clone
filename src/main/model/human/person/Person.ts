@@ -1,4 +1,4 @@
-import {Location} from "../../Location";
+import {GeoLocation} from "../../GeoLocation";
 import DateEntity from "../../DateEntity";
 import Sex from "./Sex";
 import PassportData from "./PassportData";
@@ -10,7 +10,7 @@ interface Person extends Human {
     sex: Sex | null;
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
-    location: Location | null
+    location: GeoLocation | null
 }
 
 export const getFullName = (person: Person) => {

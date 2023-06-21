@@ -1,6 +1,6 @@
 import Header from "../header/Header";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useEffect, useRef} from "react";
+import React, {ChangeEvent, useEffect} from "react";
 import {Entity} from "../../model/Entity";
 import ExplorationModeSelectContainer from "./ExplorationModesView";
 import {useAppSelector} from "../../redux/hooks";
@@ -16,13 +16,11 @@ import store from "../../redux/store";
 import ExplorationData from "./ExplorationData";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
-import ExplorationService from "../../service/exploration/ExplorationService";
-import ExplorationServiceImpl from "../../service/exploration/ExplorationServiceImpl";
 import {getEntityByDomain} from "../../util/pureFunctions";
 
 
 
-function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplorationParams>> (explorationService: ExplorationService, stateManager: ExplorationStateManagerImpl<S>) {
+function getOnSubmitCallback<S extends EntityExplorationState<any, EntityExplorationParams>> (entity: Entity) {
     const entity = stateManager.entity;
     return (e: React.MouseEvent<HTMLButtonElement>) => {
        explorationService.explore(entity);
@@ -73,7 +71,7 @@ const ExplorationScreen = () => {
         }
     }, [location])
 
-    const explorationState = useAppSelector<EntityExplorationState<any, any>|undefined>(state => {
+    const explorationState = useAppSelector<EntityExplorationState<unknown, EntityExplorationParams>|undefined>(state => {
         if (exploredEntity) {
             switch (exploredEntity) {
                 case Entity.PERSON:

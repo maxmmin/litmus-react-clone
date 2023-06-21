@@ -120,7 +120,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     }
 
     const fetchPerson = async (accessToken: string, id: string, mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>) => {
-        const personService: PersonExplorationApiService = new PersonExplorationApiServiceImpl(()=>accessToken);
+        const personService: PersonExplorationApiService = container.get<PersonExplorationApiService>(IOC_TYPES.exploration.apiServices.PersonExplorationApiService);
 
         setPending(true)
 
@@ -155,7 +155,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
-                const stateManager: JurPersonCreationStateManager = container.get<JurPersonCreationStateManager>(IOC_TYPES.JurPersonCreationStateManager);
+                const stateManager: JurPersonCreationStateManager = container.get<JurPersonCreationStateManager>(IOC_TYPES.creation.stateManagers.JurPersonCreationStateManager);
 
                 const payload: Partial<JurPerson> = {}
 
@@ -170,7 +170,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             }
 
             case CreationModalModes.SET_RELATIONSHIP: {
-                const stateManager: PersonCreationStateManager = container.get<PersonCreationStateManager>(IOC_TYPES.PersonCreationStateManager);
+                const stateManager: PersonCreationStateManager = container.get<PersonCreationStateManager>(IOC_TYPES.creation.stateManagers.PersonCreationStateManager);
                 
                 const relationship: Relationship = {
                     note: "", person: person, relationType: null
@@ -199,7 +199,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
-                const stateManager: JurPersonCreationStateManager = CreationStateManagerFactory.getJurPersonManager(store);
+                const stateManager: JurPersonCreationStateManager = container.get<JurPersonCreationStateManager>(IOC_TYPES.creation.stateManagers.JurPersonCreationStateManager);
                 const payload: Partial<JurPerson> = {}
                 if (modalSettings.mode===CreationModalModes.SET_OWNER) {
                     payload.owner = null;

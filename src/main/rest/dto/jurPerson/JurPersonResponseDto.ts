@@ -1,5 +1,5 @@
 import Person from "../../../model/human/person/Person";
-import {Location} from "../../../model/Location";
+import {GeoLocation} from "../../../model/GeoLocation";
 
 interface JurPersonResponseDto {
     id: string;
@@ -8,7 +8,7 @@ interface JurPersonResponseDto {
     dateOfRegistration?: string;
     owner?: Person | null;
     benOwner?: Person | null;
-    location?: Location | null;
+    location?: GeoLocation | null;
 }
 
 export default JurPersonResponseDto;

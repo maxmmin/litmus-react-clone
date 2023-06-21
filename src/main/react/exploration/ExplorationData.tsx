@@ -42,10 +42,6 @@ type Props = {
 
 const ExplorationData = ({exploredEntity, state}: Props) => {
 
-    const manager = ExplorationStateManagerImpl.getEntityManager(exploredEntity);
-
-    const entity = manager.entity;
-
     if (state.isPending) {
         return <div style={{margin: '50px auto 0px', maxWidth: '100px'}}>
             <Loader/>
@@ -66,7 +62,7 @@ const ExplorationData = ({exploredEntity, state}: Props) => {
         <div className={"results-container"}>
             {unPaged?null:<Pagination results={pagedResponse.numberOfElements}/>}
             <h4>Результатів: {totalElements}</h4>
-            {getProcessedResults(entity, content)}
+            {getProcessedResults(exploredEntity, content)}
         </div>
     )
 }

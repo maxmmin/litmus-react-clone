@@ -1,4 +1,4 @@
-import {Location} from "../Location";
+import {GeoLocation} from "../GeoLocation";
 import Person from "../human/person/Person";
 import DateEntity from "../DateEntity";
 
@@ -9,5 +9,5 @@ export type JurPerson = {
     dateOfRegistration: DateEntity|null;
     owner: Person | null;
     benOwner: Person | null;
-    location: Location | null;
+    location: GeoLocation | null;
 }
