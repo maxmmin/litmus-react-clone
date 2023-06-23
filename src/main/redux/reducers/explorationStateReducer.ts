@@ -2,12 +2,16 @@ import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
 import EntityExplorationState from "../types/exploration/EntityExplorationState";
 import {combineReducers} from "redux";
-import PersonExplorationState from "../types/exploration/human/person/PersonExplorationState";
-import PersonExplorationParams from "../types/exploration/human/person/PersonExplorationParams";
-import BasicJurPersonExplorationState from "../types/exploration/jurPerson/JurPersonExplorationState";
+import PersonExplorationState, {
+    BasicPersonExplorationState
+} from "../types/exploration/human/person/PersonExplorationState";
+import PersonExplorationParams, {
+    BasicPersonExplorationParams
+} from "../types/exploration/human/person/PersonExplorationParams";
+import {BasicJurPersonExplorationState} from "../types/exploration/jurPerson/JurPersonExplorationState";
 import BasicJurPersonExplorationParams from "../types/exploration/jurPerson/BasicJurPersonExplorationParams";
 import UserExplorationState, {BasicUserExplorationState} from "../types/exploration/human/user/UserExplorationState";
-import UserExplorationParams from "../types/exploration/human/user/UserExplorationParams";
+import UserExplorationParams, {BasicUserExplorationParams} from "../types/exploration/human/user/UserExplorationParams";
 import {Entity} from "../../model/Entity";
 import EntityExplorationParams from "../types/exploration/EntityExplorationParams";
 import ExplorationMode from "../types/exploration/ExplorationMode";
@@ -16,6 +20,7 @@ import deepCopy from "../../util/deepCopy";
 import GeneralAction from "../GeneralAction";
 import {ExplorationTypedAction} from "../actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../actions/ExplorationActions";
+import {BasicPersonCreationState} from "../types/creation/PersonCreationState";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<unknown, string>): S => {
     switch (action.type) {
@@ -72,7 +77,7 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, EntityEx
     }
 }
 
-const initialPersonExplorationState = deepCopy(new PersonExplorationState(new PersonExplorationParams()));
+const initialPersonExplorationState = deepCopy(new BasicPersonExplorationState(new BasicPersonExplorationParams()));
 
 type PersonExplorationStateReducible = PersonExplorationState | undefined;
 
@@ -121,7 +126,7 @@ const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, P
     }
 }
 
-const initialUserExplorationState = deepCopy(new BasicUserExplorationState( new UserExplorationParams()));
+const initialUserExplorationState = deepCopy(new BasicUserExplorationState( new BasicUserExplorationParams()));
 
 type UserExplorationStateReducible = UserExplorationState | undefined;
 

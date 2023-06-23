@@ -4,22 +4,22 @@ import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import ExplorationMode from "../../../redux/types/exploration/ExplorationMode";
 import {LitmusAsyncThunkConfig} from "../../../redux/store";
 
-export default interface ExplorationStateManager <E, S extends EntityExplorationState<E, EntityExplorationParams>> {
-    getExplorationState: ()=>S;
+export default interface ExplorationStateManager <E, P extends EntityExplorationParams> {
+    getExplorationState: ()=>EntityExplorationState<E, P>;
 
-    getExplorationData (): S["data"];
+    getExplorationData (): EntityExplorationState<E, P>["data"];
 
-    getExplorationParams(): S["params"];
+    getExplorationParams(): P;
 
-    setState (state: S): void;
+    setState (state: EntityExplorationState<E, P>): void;
 
-    updateParams (params: Partial<S['params']>): void;
+    updateParams (params: Partial<EntityExplorationState<E, P>['params']>): void;
 
-    setParams (params: S['params']): void;
+    setParams (params: EntityExplorationState<E, P>['params']): void;
 
-    setData (data: S['data']): void;
+    setData (data: EntityExplorationState<E, P>['data']): void;
 
-    retrieveData(thunk: AsyncThunkAction<S["data"], unknown, LitmusAsyncThunkConfig>): Promise<PayloadAction<unknown, string, unknown>>
+    retrieveData(thunk: AsyncThunkAction<EntityExplorationState<E, P>["data"], unknown, LitmusAsyncThunkConfig>): Promise<PayloadAction<unknown, string, unknown>>
 
     enableSectionPending (): void;
 

@@ -1,22 +1,18 @@
-import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import {Entity} from "../../model/Entity";
 import {Form} from "react-bootstrap";
 import React, {ChangeEvent, useMemo} from "react";
 import {useAppSelector} from "../../redux/hooks";
-import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
-import store from "../../redux/store";
 import PersonExplorationState from "../../redux/types/exploration/human/person/PersonExplorationState";
 import BasicJurPersonExplorationState from "../../redux/types/exploration/jurPerson/JurPersonExplorationState";
 import UserExplorationState from "../../redux/types/exploration/human/user/UserExplorationState";
-import explorationStateManager from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
-import getExplorationStateManagerByEntity, {
-    UnknownExplorationStateManager
-} from "../../inversify/getExplorationStateManagerByEntity";
+import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
+import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 
 
-const ExplorationModesView = () => {
+
+const ExplorationModesView = ({explorationStateManager}: {explorationStateManager: ExplorationStateManager<unknown, EntityExplorationParams>}) => {
     const exploredEntity = useAppSelector<Entity|undefined>(state => state.exploration.exploredEntity);
 
     const explorationParams = useAppSelector<EntityExplorationParams|undefined>(state => {
@@ -39,12 +35,6 @@ const ExplorationModesView = () => {
         }
     })
 
-    const explorationManager = useMemo<UnknownExplorationStateManager|undefined>(()=>{
-       if (exploredEntity) {
-           return getExplorationStateManagerByEntity(exploredEntity)
-       }
-    }, [exploredEntity])
-
     const explorationMode: ExplorationMode|null = explorationParams?ExplorationMode.getModeById(explorationParams.modeId):null;
 
     const explorationModes: ExplorationMode[]|null = explorationParams?explorationParams.supportedModesIdList.map(ExplorationMode.getModeById):null;
@@ -55,7 +45,7 @@ const ExplorationModesView = () => {
         const mode = explorationModes![modeIndex];
 
         if (mode) {
-            explorationManager!.switchExplorationMode(mode);
+            explorationStateManager.switchExplorationMode(mode);
             return;
         } else throw new Error("unknown mode");
     }

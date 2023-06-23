@@ -8,20 +8,26 @@ import EntityExplorationState from "../../../redux/types/exploration/EntityExplo
 import HumanExplorationParams from "../../../redux/types/exploration/human/HumanExplorationParams";
 import {Entity} from "../../../model/Entity";
 import Human from "../../../model/human/Human";
+import HumanExplorationStateManager from "../../../service/exploration/stateManager/HumanExplorationStateManager";
+import container from "../../../inversify/inversify.config";
+import UserExplorationStateManager from "../../../service/exploration/stateManager/user/UserExplorationStateManager";
+import IOC_TYPES from "../../../inversify/IOC_TYPES";
+import PersonExplorationStateManager
+    from "../../../service/exploration/stateManager/person/PersonExplorationStateManager";
 
 
 const FindByFullNameGroup = () => {
 
     const exploredEntity = useAppSelector(state => state.exploration.exploredEntity);
 
-    const stateManager: ExplorationStateManagerImpl<EntityExplorationState<Human, HumanExplorationParams>>|undefined = useMemo(()=>{
+    const stateManager: HumanExplorationStateManager<Human, HumanExplorationParams>|undefined = useMemo(()=>{
         if (exploredEntity) {
             switch (exploredEntity) {
                 case Entity.USER: {
-                    return ExplorationStateManagerImpl.getUserManager(store);
+                    return container.get<UserExplorationStateManager>(IOC_TYPES.exploration.stateManagers.UserExplorationStateManager);
                 }
                 case Entity.PERSON: {
-                    return ExplorationStateManagerImpl.getPersonManager(store);
+                    return container.get<PersonExplorationStateManager>(IOC_TYPES.exploration.stateManagers.PersonExplorationStateManager);
                 }
                 default: throw new Error("unsupported entity")
             }

@@ -4,11 +4,12 @@ import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import ExplorationStateManagerImpl from "../../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import store from "../../../redux/store";
+import {getEntityExplorationStateManager} from "../../../inversify/getEntityExplorationService";
 
 const FindByIdGroup = () => {
     const entity = useAppSelector(state => state.exploration?.exploredEntity)
 
-    const stateManager = entity?ExplorationStateManagerImpl.getEntityManager(entity):null;
+    const stateManager = entity?getEntityExplorationStateManager(entity):null;
 
     const {id} = useAppSelector(() => stateManager?.getExplorationParams())||{}
 

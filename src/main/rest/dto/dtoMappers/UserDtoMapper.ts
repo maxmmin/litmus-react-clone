@@ -11,15 +11,15 @@ class UserDtoMapper implements DtoMapper<UserRequestDto, User, UserResponseDto> 
         const dto: UserRequestDto = {}
 
         if (hasContent(emergingUser.firstName)) {
-            dto.firstName = emergingUser.firstName;
+            dto.firstName = emergingUser.firstName!;
         }
 
         if (hasContent(emergingUser.middleName)) {
-            dto.middleName = emergingUser.middleName;
+            dto.middleName = emergingUser.middleName!;
         }
 
         if (hasContent(emergingUser.lastName)) {
-            dto.lastName = emergingUser.lastName;
+            dto.lastName = emergingUser.lastName!;
         }
 
         if (hasContent(emergingUser.password)) {

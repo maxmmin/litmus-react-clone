@@ -21,17 +21,18 @@ import JurPersonExplorationApiService from "./api/jurPerson/JurPersonExploration
 import {inject, injectable} from "inversify";
 import UnsupportedModeError from "./UnsupportedModeError";
 import IOC_TYPES from "../../inversify/IOC_TYPES";
+import JurPersonExplorationParams from "../../redux/types/exploration/jurPerson/JurPersonExplorationParams";
 
 type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) => Promise<PagedData<JurPerson>>;
 
 @injectable()
 class JurPersonExplorationService implements ExplorationService {
     private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>;
-    private readonly stateManager: ExplorationStateManager<JurPerson, EntityExplorationState<JurPerson, BasicJurPersonExplorationParams>>
+    private readonly stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>
     private readonly service: JurPersonExplorationApiService;
 
 
-    constructor(@inject(IOC_TYPES.exploration.stateManagers.JurPersonExplorationStateManager) stateManager: ExplorationStateManager<JurPerson, EntityExplorationState<JurPerson, BasicJurPersonExplorationParams>>,
+    constructor(@inject(IOC_TYPES.exploration.stateManagers.JurPersonExplorationStateManager) stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>,
                 @inject(IOC_TYPES.exploration.apiServices.JurPersonExplorationApiService) service: JurPersonExplorationApiService,
                 @inject(IOC_TYPES.mappers.JurPersonDtoMapper) mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
         this.mapper = mapper;

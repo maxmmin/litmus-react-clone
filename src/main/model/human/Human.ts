@@ -1,7 +1,7 @@
 interface Human {
-    firstName: string,
+    firstName: string|null,
     middleName: string|null,
-    lastName: string
+    lastName: string|null
 }
 
 export default Human;

@@ -4,22 +4,20 @@ import {Entity} from "../../model/Entity";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import {Permissions} from "../../redux/types/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
-import React, {ChangeEvent, useEffect, useMemo} from "react";
+import React, {ChangeEvent, useEffect} from "react";
 import CreationInputSection from "./CreationInputSection";
 import {
     getEntityByDomain,
 } from "../../util/pureFunctions";
 import {useLocation, useParams} from "react-router";
-import apiLinks, {routingLinks} from "../../config/appConfig";
 import {useNavigate} from "react-router-dom";
 import store from "../../redux/store";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import appConfig from "../../config/appConfig";
 import {useAppSelector} from "../../redux/hooks";
-import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import CreationStateManagerImpl from "../../service/creation/stateManager/CreationStateManagerImpl";
 import CreationService from "../../service/creation/CreationService";
-import CreationServiceImpl from "../../service/creation/CreationServiceImpl";
+import getEntityCreationService from "../../inversify/getEntityCreationService";
 
 
 export type CreationModalSettings = {
@@ -58,7 +56,7 @@ const Creation = () => {
 
     if (!emergingEntity) return null;
 
-    const creationService: CreationService = getEntittyCration
+    const creationService: CreationService = getEntityCreationService(emergingEntity);
 
     return (
         <div className="creation-page">
@@ -79,7 +77,7 @@ const Creation = () => {
 
                    <Form onSubmit={e=>{
                        e.preventDefault();
-                       creationService.create(emergingEntity);
+                       creationService.createEntity();
                    }} className={"creation-input-group"}>
                        <CreationInputSection entity={emergingEntity}/>
 

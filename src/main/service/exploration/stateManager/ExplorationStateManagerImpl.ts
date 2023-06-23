@@ -14,7 +14,7 @@ import {Entity} from "../../../model/Entity";
  * E - entity
  * S - entityExplorationState
  * */
-class ExplorationStateManagerImpl<E,S extends EntityExplorationState<E, EntityExplorationParams>> implements ExplorationStateManager<E,S> {
+class ExplorationStateManagerImpl<E,P extends EntityExplorationParams> implements ExplorationStateManager<E,P> {
     private readonly dispatch: AppDispatch;
 
     private readonly actions: ExplorationTypedAction;
@@ -26,37 +26,37 @@ class ExplorationStateManagerImpl<E,S extends EntityExplorationState<E, EntityEx
         })
     }
 
-    public getExplorationState: ()=>S;
+    public getExplorationState: ()=>EntityExplorationState<E, P>;
 
-    public getExplorationData (): S["data"] {
+    public getExplorationData (): EntityExplorationState<E, P>["data"] {
         return this.getExplorationState().data;
     }
 
-    public getExplorationParams(): S["params"] {
+    public getExplorationParams(): EntityExplorationState<E, P>["params"] {
         return this.getExplorationState().params;
     }
 
-    public constructor(dispatch: AppDispatch, getState: ()=>S, actions: ExplorationTypedAction) {
+    public constructor(dispatch: AppDispatch, getState: ()=>EntityExplorationState<E, P>, actions: ExplorationTypedAction) {
         this.dispatch = dispatch;
         this.getExplorationState = getState;
         this.actions = actions;
     }
 
-    setState (state: S): void {
+    setState (state: EntityExplorationState<E, P>): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE],
             payload: deepCopy(state)
         })
     }
 
-    setParams (params: S['params']): void {
+    setParams (params: EntityExplorationState<E, P>['params']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_PARAMS],
             payload: deepCopy(params)
         })
     }
 
-    updateParams (params: Partial<S['params']>): void {
+    updateParams (params: Partial<EntityExplorationState<E, P>['params']>): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS],
             payload: deepCopy(params)
@@ -64,14 +64,14 @@ class ExplorationStateManagerImpl<E,S extends EntityExplorationState<E, EntityEx
     }
 
 
-    setData (data: S['data']): void {
+    setData (data: EntityExplorationState<E, P>['data']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.RETRIEVE_DATA],
             payload: deepCopy(data)
         })
     }
 
-    retrieveData(thunk: AsyncThunkAction<S["data"], unknown, LitmusAsyncThunkConfig>):  Promise<PayloadAction<unknown, string, unknown>> {
+    retrieveData(thunk: AsyncThunkAction<EntityExplorationState<E, P>["data"], unknown, LitmusAsyncThunkConfig>):  Promise<PayloadAction<unknown, string, unknown>> {
         return this.dispatch(thunk);
     }
 

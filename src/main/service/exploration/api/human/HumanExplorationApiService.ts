@@ -1,6 +1,6 @@
-import {FullName} from "../../FullName";
 import PagedData from "../../../../rest/PagedData";
 import LookupService from "../ExplorationApiService";
+import FullName from "../../FullName";
 
 /**
  * E - entity can be searched by FullName

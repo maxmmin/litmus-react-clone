@@ -1,5 +1,5 @@
-export type FullName = {
-    [firstName: string]: string|null,
+export default interface FullName {
+    firstName: string|null,
     middleName: string|null,
     lastName: string
 }

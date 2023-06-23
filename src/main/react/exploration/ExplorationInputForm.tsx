@@ -1,9 +1,7 @@
 import {useAppSelector} from "../../redux/hooks";
 import {RootState} from "../../redux/store";
 import {Entity} from "../../model/Entity";
-import ExplorationMode, {ExplorationModeName} from "../../redux/types/exploration/ExplorationMode";
-import FindByFullNameGroup from "./InputGroupes/FindByFullNameGroup";
-import FindByIdGroup from "./InputGroupes/FindByIdGroup";
+import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
 import React from "react";
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";

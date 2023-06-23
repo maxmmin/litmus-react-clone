@@ -25,11 +25,11 @@ type UserExplorationCallbackType = (params: UserExplorationParams, service: User
 @injectable()
 class UserExplorationService implements ExplorationService {
     private readonly mapper: DtoMapper<unknown, User, UserResponseDto>;
-    private readonly stateManager: ExplorationStateManager<User, EntityExplorationState<User, UserExplorationParams>>
+    private readonly stateManager: ExplorationStateManager<User, UserExplorationParams>
     private readonly service: UserExplorationApiService;
 
 
-    constructor(@inject(IOC_TYPES.exploration.stateManagers.UserExplorationStateManager) stateManager: ExplorationStateManager<unknown, EntityExplorationState<User, UserExplorationParams>>,
+    constructor(@inject(IOC_TYPES.exploration.stateManagers.UserExplorationStateManager) stateManager: ExplorationStateManager<User, UserExplorationParams>,
                 @inject(IOC_TYPES.exploration.UserExplorationService) service: UserExplorationApiService,
                 @inject(IOC_TYPES.mappers.UserDtoMapper) mapper: DtoMapper<unknown, User, UserResponseDto>) {
         this.stateManager = stateManager;
@@ -85,7 +85,7 @@ class UserExplorationService implements ExplorationService {
         ThunkArg<{params: UserExplorationParams}>,
         LitmusAsyncThunkConfig>(ExplorationTypedAction.user[ExplorationCoreAction.RETRIEVE_DATA],(async ({params}, {rejectWithValue, fulfillWithValue}) => {
         try {
-            const response: PagedData<UserResponseDto> = await this.exploreUponMode(params);
+            const response: PagedData<User> = await this.exploreUponMode(params);
             const exploredData: EntityExplorationData<User, UserExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {

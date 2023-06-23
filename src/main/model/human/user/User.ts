@@ -6,8 +6,6 @@ interface User extends Human {
 
     email: string;
 
-    middleName: string;
-
     password: string
 
     role: RoleName;

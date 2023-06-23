@@ -28,6 +28,8 @@ const CreatePerson = () => {
         throw new Error("createPersonDto was null but it shouldn't be")
     }
 
+    const {firstName, middleName, lastName} = creationPersonParams;
+
     const {year, month, day} = creationPersonParams!.dateOfBirth||{day: "", month: "", year: ""};
 
     const passportData = creationPersonParams?.passportData;
@@ -46,7 +48,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Прізвище</Form.Label>
-                    <input value={creationPersonParams.lastName} autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
+                    <input value={lastName?lastName:""} autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
                         onKeyDown={keyPressHandler}
                         onChange={e => {
                                 creationStateManager.updateEntityCreationParams({lastName: e.currentTarget.value})
@@ -57,7 +59,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Ім'я</Form.Label>
-                <input value={creationPersonParams.firstName} autoComplete={"new-password"} className={`firstName form-control`} type="text" placeholder="Введіть ім'я"
+                <input value={firstName?firstName:""} autoComplete={"new-password"} className={`firstName form-control`} type="text" placeholder="Введіть ім'я"
                     onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updateEntityCreationParams({firstName: e.currentTarget.value})
@@ -68,7 +70,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Ім'я по-батькові</Form.Label>
-                <input value={creationPersonParams.middleName?creationPersonParams.middleName:""} autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+                <input value={middleName?middleName:""} autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
                     onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value})

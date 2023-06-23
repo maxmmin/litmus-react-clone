@@ -17,8 +17,12 @@ import ExplorationData from "./ExplorationData";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import {getEntityByDomain} from "../../util/pureFunctions";
-import getEntityExplorationService from "../../inversify/getEntityExplorationService";
+import getEntityExplorationService, {
+    getEntityExplorationStateManager
+} from "../../inversify/getEntityExplorationService";
 import ExplorationService from "../../service/exploration/ExplorationService";
+import EntityExplorationService from "../../service/exploration/ExplorationService";
+import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
 
 
 
@@ -84,6 +88,8 @@ const ExplorationScreen = () => {
        return null;
     }
 
+    const stateManager: ExplorationStateManager<unknown, EntityExplorationParams> = getEntityExplorationStateManager(exploredEntity);
+
     let requiredPermissions: Permissions[] = getRequiredPermissions(exploredEntity);
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -108,7 +114,7 @@ const ExplorationScreen = () => {
                            </PrivateComponentWrapper>
                        </Form.Select>
 
-                       <ExplorationModeSelectContainer/>
+                       <ExplorationModeSelectContainer explorationStateManager={stateManager}/>
 
                        <ExplorationInputForm onSubmit={(e: React.MouseEvent<HTMLButtonElement>) => {
                            explorationService.explore();
