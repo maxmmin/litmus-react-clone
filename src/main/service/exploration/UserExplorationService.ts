@@ -2,7 +2,6 @@ import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import PagedData, {UnPagedData} from "../../rest/PagedData";
 import ExplorationService from "./ExplorationService";
 import ExplorationStateManager from "./stateManager/ExplorationStateManager";
-import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
 import {createAsyncThunk} from "@reduxjs/toolkit";
@@ -24,17 +23,10 @@ type UserExplorationCallbackType = (params: UserExplorationParams, service: User
 
 @injectable()
 class UserExplorationService implements ExplorationService {
-    private readonly mapper: DtoMapper<unknown, User, UserResponseDto>;
-    private readonly stateManager: ExplorationStateManager<User, UserExplorationParams>
-    private readonly service: UserExplorationApiService;
 
-
-    constructor(@inject(IOC_TYPES.exploration.stateManagers.UserExplorationStateManager) stateManager: ExplorationStateManager<User, UserExplorationParams>,
-                @inject(IOC_TYPES.exploration.UserExplorationService) service: UserExplorationApiService,
-                @inject(IOC_TYPES.mappers.UserDtoMapper) mapper: DtoMapper<unknown, User, UserResponseDto>) {
-        this.stateManager = stateManager;
-        this.service = service;
-        this.mapper = mapper;
+    constructor(@inject(IOC_TYPES.exploration.stateManagers.UserExplorationStateManager) private readonly stateManager: ExplorationStateManager<User, UserExplorationParams>,
+                @inject(IOC_TYPES.exploration.UserExplorationService) private readonly service: UserExplorationApiService,
+                @inject(IOC_TYPES.mappers.UserDtoMapper) private readonly mapper: DtoMapper<unknown, User, UserResponseDto>) {
     }
 
     private exploreByIdCallback: UserExplorationCallbackType = async (params, service, mapper) => {

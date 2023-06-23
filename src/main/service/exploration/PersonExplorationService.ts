@@ -23,17 +23,10 @@ type PersonExplorationCallbackType = (params: PersonExplorationParams, service: 
 
 @injectable()
 class PersonExplorationService implements ExplorationService {
-    private readonly mapper: DtoMapper<unknown, Person, PersonResponseDto>;
-    private readonly stateManager: PersonExplorationStateManager
-    private readonly service: PersonExplorationApiService;
 
-
-    constructor(@inject(IOC_TYPES.exploration.stateManagers.PersonExplorationStateManager) stateManager: PersonExplorationStateManager,
-                @inject(IOC_TYPES.exploration.apiServices.PersonExplorationApiService) service: PersonExplorationApiService,
-                @inject(IOC_TYPES.mappers.PersonDtoMapper) mapper: DtoMapper<unknown, Person, PersonResponseDto>) {
-        this.mapper = mapper;
-        this.stateManager = stateManager;
-        this.service = service;
+    constructor(@inject(IOC_TYPES.exploration.stateManagers.PersonExplorationStateManager) private readonly stateManager: PersonExplorationStateManager,
+                @inject(IOC_TYPES.exploration.apiServices.PersonExplorationApiService) private readonly service: PersonExplorationApiService,
+                @inject(IOC_TYPES.mappers.PersonDtoMapper) private readonly mapper: DtoMapper<unknown, Person, PersonResponseDto>) {
     }
 
     private exploreByIdCallback: PersonExplorationCallbackType = async (params, service, mapper) => {

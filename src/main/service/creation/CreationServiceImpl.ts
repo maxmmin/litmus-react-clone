@@ -1,16 +1,10 @@
-import store, {AppDispatch, LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
+import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import CreationService from "./CreationService";
-import Person from "../../model/human/person/Person";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import CreationTypedAction from "../../redux/actions/CreationTypedAction";
 import CreationCoreAction from "../../redux/actions/CreationCoreAction";
-import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
-import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import deepCopy from "../../util/deepCopy";
 import handleCreationError from "./handleCreationError";
-import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
-import JurPersonCreationApiService from "./api/JurPersonCreationApiService";
-import JurPersonCreationStateManager from "./stateManager/jurPerson/JurPersonCreationStateManager";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";

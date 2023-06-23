@@ -1,17 +1,17 @@
+
+
 import AuthenticationManager from "./AuthenticationManager";
-import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
+import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import AuthApiService, {Credentials} from "./api/AuthApiService";
 import {BasicHttpError} from "../../error/BasicHttpError";
 import Authentication, {AuthenticationReducible} from "../../redux/types/auth/Authentication";
 import {checkNotEmpty, isValid} from "../../util/pureFunctions";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import TimersStateManager from "../timers/TimersStateManager";
-import BasicAuthApiService from "./api/BasicAuthApiService";
 import {HttpStatus} from "../../rest/HttpStatus";
-import AuthenticationStateManagerImpl from "./stateManager/AuthenticationStateManagerImpl";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import AuthAction from "../../redux/actions/AuthAction";
-import {BasicNotificationManager, NotificationManager} from "../../redux/types/applicationState/Notification";
+import {NotificationManager} from "../../redux/types/applicationState/Notification";
 import deepCopy from "../../util/deepCopy";
 import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
 import {inject, injectable} from "inversify";
@@ -19,21 +19,13 @@ import IOC_TYPES from "../../inversify/IOC_TYPES";
 
 @injectable()
 class BasicAuthenticationManager implements AuthenticationManager {
-    private readonly authenticationStateManager: AuthenticationStateManager;
-    private readonly timersStateManager: TimersStateManager;
-    private readonly authService: AuthApiService;
-    private readonly notificationManager: NotificationManager;
 
     private static locked: boolean = false;
 
-    constructor(@inject(IOC_TYPES.auth.AuthStateManager) authStateManager: AuthenticationStateManager,
-                @inject(IOC_TYPES.auth.AuthApiService) authService: AuthApiService,
-                @inject(IOC_TYPES.TimersStateManager) timersStateManager: TimersStateManager,
-                @inject(IOC_TYPES.NotificationsManager) notificationManager: NotificationManager) {
-        this.authenticationStateManager = authStateManager;
-        this.authService = authService;
-        this.timersStateManager = timersStateManager;
-        this.notificationManager = notificationManager;
+    constructor(@inject(IOC_TYPES.auth.AuthStateManager) private readonly authenticationStateManager: AuthenticationStateManager,
+                @inject(IOC_TYPES.auth.AuthApiService) private readonly authService: AuthApiService,
+                @inject(IOC_TYPES.TimersStateManager) private readonly timersStateManager: TimersStateManager,
+                @inject(IOC_TYPES.NotificationsManager) private readonly notificationManager: NotificationManager) {
     }
 
     login({email, password}: Credentials): void {

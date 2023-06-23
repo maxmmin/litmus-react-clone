@@ -27,17 +27,10 @@ type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams
 
 @injectable()
 class JurPersonExplorationService implements ExplorationService {
-    private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>;
-    private readonly stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>
-    private readonly service: JurPersonExplorationApiService;
 
-
-    constructor(@inject(IOC_TYPES.exploration.stateManagers.JurPersonExplorationStateManager) stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>,
-                @inject(IOC_TYPES.exploration.apiServices.JurPersonExplorationApiService) service: JurPersonExplorationApiService,
-                @inject(IOC_TYPES.mappers.JurPersonDtoMapper) mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
-        this.mapper = mapper;
-        this.stateManager = stateManager;
-        this.service = service;
+    constructor(@inject(IOC_TYPES.exploration.stateManagers.JurPersonExplorationStateManager) private readonly stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>,
+                @inject(IOC_TYPES.exploration.apiServices.JurPersonExplorationApiService) private readonly service: JurPersonExplorationApiService,
+                @inject(IOC_TYPES.mappers.JurPersonDtoMapper) private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
     }
 
     private exploreByIdCallback: JurPersonExplorationCallbackType = async (params, service, mapper) => {

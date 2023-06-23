@@ -15,10 +15,10 @@ import {GeoLocation} from "../../../../model/GeoLocation";
 class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person, EntityCreationState<Person>> implements PersonCreationStateManager {
 
 
-    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.creation.typedActions.PersonCreationTypedAction) actions: CreationTypedAction) {
+    constructor(@inject(IOC_TYPES.Store) private readonly _store: typeof store, @inject(IOC_TYPES.creation.typedActions.PersonCreationTypedAction) private readonly _actions: CreationTypedAction) {
         const dispatch: AppDispatch = _store.dispatch;
         const getState = ()=>_store.getState().creation.person!;
-        super(dispatch, getState, actions);
+        super(dispatch, getState, _actions);
     }
 
     clearLocation(): void {

@@ -10,12 +10,10 @@ import IOC_TYPES from "../../inversify/IOC_TYPES";
 
 @injectable()
 class TimersStateManager {
-    private readonly dispatch: AppDispatch;
-    private readonly getState: ()=>Timers;
+    private readonly dispatch: AppDispatch = store.dispatch;
+    private readonly getState: ()=>Timers = ()=>store.getState().timers!;
 
-    constructor(@inject(IOC_TYPES.Store) _store: typeof store) {
-        this.dispatch = _store.dispatch;
-        this.getState = ()=>_store.getState().timers!;
+    constructor(@inject(IOC_TYPES.Store) private readonly _store: typeof store) {
     }
 
     getTimers(): Timers {

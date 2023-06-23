@@ -11,8 +11,8 @@ import JurPersonExplorationParams from "../../../../redux/types/exploration/jurP
 
 @injectable()
 class JurPersonExplorationStateManagerImpl extends ExplorationStateManagerImpl<JurPerson, JurPersonExplorationParams> implements JurPersonExplorationStateManager{
-    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.exploration.typedActions.JurPersonExplorationTypedAction) actions: ExplorationTypedAction) {
-        super(_store.dispatch, ()=>_store.getState().exploration.jurPerson!, actions);
+    constructor(@inject(IOC_TYPES.Store) private readonly _store: typeof store, @inject(IOC_TYPES.exploration.typedActions.JurPersonExplorationTypedAction) private readonly _actions: ExplorationTypedAction) {
+        super(_store.dispatch, ()=>_store.getState().exploration.jurPerson!, _actions);
     }
 }
 

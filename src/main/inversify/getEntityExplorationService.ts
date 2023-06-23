@@ -12,7 +12,6 @@ import JurPersonExplorationStateManager
     from "../service/exploration/stateManager/jurPerson/JurPersonExplorationStateManager";
 import PersonExplorationStateManager from "../service/exploration/stateManager/person/PersonExplorationStateManager";
 import UserExplorationStateManager from "../service/exploration/stateManager/user/UserExplorationStateManager";
-
 const entityExplorationServiceMap: Map<Entity, ExplorationService> = new Map<Entity, EntityExplorationService>();
 
 entityExplorationServiceMap.set(Entity.USER, container.get<UserExplorationService>(IOC_TYPES.exploration.UserExplorationService));

@@ -10,10 +10,10 @@ import {GeoLocation} from "../../../../model/GeoLocation";
 
 @injectable()
 class JurPersonCreationStateManagerImpl extends CreationStateManagerImpl<JurPerson, EntityCreationState<JurPerson>> implements JurPersonCreationStateManager {
-    constructor(@inject(IOC_TYPES.Store)_store: typeof store, @inject(IOC_TYPES.creation.typedActions.JurPersonCreationTypedAction) actions: CreationTypedAction) {
+    constructor(@inject(IOC_TYPES.Store) private readonly _store: typeof store, @inject(IOC_TYPES.creation.typedActions.JurPersonCreationTypedAction) private readonly _actions: CreationTypedAction) {
         const dispatch: AppDispatch = _store.dispatch;
         const getState = () => _store.getState().creation.jurPerson!;
-        super(dispatch, getState, actions);
+        super(dispatch, getState, _actions);
     }
 
     clearLocation(): void {

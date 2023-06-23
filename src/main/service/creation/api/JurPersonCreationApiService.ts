@@ -11,10 +11,9 @@ import AuthenticationStateManager from "../../auth/stateManager/AuthenticationSt
 
 
 class JurPersonCreationApiService implements CreationApiService<JurPersonRequestDto, JurPersonResponseDto> {
-    private readonly getAccessToken: ()=>string;
+    private readonly getAccessToken: ()=>string = ()=>this.authStateManager.getAuth()!.accessToken;
 
-    constructor(@inject(IOC_TYPES.auth.AuthStateManager) authStateManager: AuthenticationStateManager) {
-        this.getAccessToken = ()=>authStateManager.getAuth()!.accessToken;
+    constructor(@inject(IOC_TYPES.auth.AuthStateManager) private readonly authStateManager: AuthenticationStateManager) {
     }
 
     async create(creationDto: JurPersonRequestDto): Promise<JurPersonResponseDto> {

@@ -1,3 +1,5 @@
+import 'reflect-metadata';
+
 import {Container} from "inversify";
 import AuthApiService from "../service/auth/api/AuthApiService";
 import IOC_TYPES from "./IOC_TYPES";
@@ -36,7 +38,7 @@ import PersonCreationService from "../service/creation/PersonCreationService";
 import JurPersonCreationService from "../service/creation/JurPersonCreationService";
 import UserCreationService from "../service/creation/UserCreationService";
 import TimersStateManager from "../service/timers/TimersStateManager";
-import {BasicNotificationManager, NotificationManager} from "../redux/types/applicationState/Notification";
+import {NotificationManager} from "../redux/types/applicationState/Notification";
 import store from "../redux/store";
 import CreationTypedAction from "../redux/actions/CreationTypedAction";
 import {ExplorationTypedAction} from "../redux/actions/ExplorationTypedAction";
@@ -58,6 +60,7 @@ import PersonExplorationStateManager from "../service/exploration/stateManager/p
 import JurPersonExplorationStateManager
     from "../service/exploration/stateManager/jurPerson/JurPersonExplorationStateManager";
 import UserExplorationStateManager from "../service/exploration/stateManager/user/UserExplorationStateManager";
+import {BasicNotificationManager} from "../redux/types/applicationState/BasicNotificationManager";
 
 const container: Container = new Container();
 

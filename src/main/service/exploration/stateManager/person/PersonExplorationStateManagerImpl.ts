@@ -12,8 +12,8 @@ import PersonExplorationParams from "../../../../redux/types/exploration/human/p
 
 @injectable()
 class PersonExplorationStateManagerImpl extends ExplorationStateManagerImpl<Person, PersonExplorationParams> implements PersonExplorationStateManager {
-    constructor(@inject(IOC_TYPES.Store) _store: typeof store, @inject(IOC_TYPES.exploration.typedActions.PersonExplorationTypedAction) actions: ExplorationTypedAction) {
-        super(_store.dispatch, ()=>_store.getState().exploration.person!, actions);
+    constructor(@inject(IOC_TYPES.Store) private readonly _store: typeof store, @inject(IOC_TYPES.exploration.typedActions.PersonExplorationTypedAction) private readonly _actions: ExplorationTypedAction) {
+        super(_store.dispatch, ()=>_store.getState().exploration.person!, _actions);
     }
 
     getFirstName(): UserExplorationParams["firstName"] {

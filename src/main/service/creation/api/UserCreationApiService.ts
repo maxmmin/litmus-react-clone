@@ -10,10 +10,9 @@ import IOC_TYPES from "../../../inversify/IOC_TYPES";
 import AuthenticationStateManager from "../../auth/stateManager/AuthenticationStateManager";
 
 class UserCreationApiService implements CreationApiService<UserRequestDto, UserResponseDto> {
-    private readonly getAccessToken: ()=>string;
+    private readonly getAccessToken: ()=>string = ()=>this.authStateManager.getAuth()!.accessToken;
 
-    constructor(@inject(IOC_TYPES.auth.AuthStateManager) authManager: AuthenticationStateManager) {
-        this.getAccessToken = ()=>authManager.getAuth()!.accessToken;
+    constructor(@inject(IOC_TYPES.auth.AuthStateManager) private readonly authStateManager: AuthenticationStateManager) {
     }
 
     async create(dto: UserRequestDto): Promise<UserResponseDto> {

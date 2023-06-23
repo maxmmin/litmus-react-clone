@@ -9,8 +9,8 @@ import IOC_TYPES from "../../../../../inversify/IOC_TYPES";
 @injectable()
 class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<PersonResponseDto> implements PersonExplorationApiService {
 
-    constructor(@inject(IOC_TYPES.auth.AuthStateManager) authStateManager: AuthenticationStateManager) {
-        super(()=>authStateManager.getAuth()!.accessToken, appConfig.serverMappings.persons);
+    constructor(@inject(IOC_TYPES.auth.AuthStateManager) private readonly _authStateManager: AuthenticationStateManager) {
+        super(()=>_authStateManager.getAuth()!.accessToken, appConfig.serverMappings.persons);
     }
 
 }
