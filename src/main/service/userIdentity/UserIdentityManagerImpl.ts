@@ -27,8 +27,8 @@ class UserIdentityManagerImpl implements UserIdentityManager{
         this.identityService = identityService;
     }
 
-    static getManager (service: UserIdentityApiService, _store: typeof store): UserIdentityManagerImpl {
-        return new UserIdentityManagerImpl(_store.dispatch, ()=>_store.getState().userIdentity, service)
+    static getInstance (service: UserIdentityApiService = UserIdentityApiServiceImpl.getInstance()): UserIdentityManagerImpl {
+        return new UserIdentityManagerImpl(store.dispatch, ()=>store.getState().userIdentity, service)
     }
 
     retrieveIdentity (globalPending: boolean = false): void  {

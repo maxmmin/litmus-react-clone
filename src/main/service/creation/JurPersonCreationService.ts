@@ -18,16 +18,16 @@ import JurPersonCreationStateManagerImpl from "./stateManager/jurPerson/JurPerso
 
 class JurPersonCreationService extends CreationServiceImpl<JurPersonRequestDto, JurPerson, JurPersonResponseDto> {
 
-    constructor(mapper: DtoMapper<JurPersonRequestDto, JurPerson, JurPersonResponseDto>,
-                apiService: CreationApiService<JurPersonRequestDto, JurPersonResponseDto>,
-                creationStateManager: JurPersonCreationStateManager) {
-        super(mapper, apiService, creationStateManager);
+    constructor(apiService: CreationApiService<JurPersonRequestDto, JurPersonResponseDto>,
+                creationStateManager: JurPersonCreationStateManager,
+                mapper: DtoMapper<JurPersonRequestDto, JurPerson, JurPersonResponseDto>) {
+        super(apiService, creationStateManager, mapper);
     }
 
-    public static getInstance(mapper: DtoMapper<JurPersonRequestDto, JurPerson, JurPersonResponseDto> = new JurPersonDtoMapper(),
-                              apiService: CreationApiService<JurPersonRequestDto, JurPersonResponseDto> = JurPersonCreationApiService.getInstance(),
-                              stateManager: JurPersonCreationStateManager = new JurPersonCreationStateManagerImpl()): JurPersonCreationService {
-        return  new JurPersonCreationService(mapper, apiService, stateManager);
+    public static getInstance(apiService: CreationApiService<JurPersonRequestDto, JurPersonResponseDto> = JurPersonCreationApiService.getInstance(),
+                              stateManager: JurPersonCreationStateManager = new JurPersonCreationStateManagerImpl(),
+                              mapper: DtoMapper<JurPersonRequestDto, JurPerson, JurPersonResponseDto> = new JurPersonDtoMapper()): JurPersonCreationService {
+        return  new JurPersonCreationService(apiService, stateManager, mapper);
     }
 }
 

@@ -22,7 +22,9 @@ class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
     private apiService: CreationApiService<RequestDto, ResponseDto>;
     private creationStateManager: CreationStateManager<E>;
 
-    constructor(mapper: DtoMapper<RequestDto, E, ResponseDto>, apiService: CreationApiService<RequestDto, ResponseDto>, creationStateManager: CreationStateManager<E>) {
+    constructor(apiService: CreationApiService<RequestDto, ResponseDto>,
+                creationStateManager: CreationStateManager<E>,
+                mapper: DtoMapper<RequestDto, E, ResponseDto>) {
         this.mapper = mapper;
         this.apiService = apiService;
         this.creationStateManager = creationStateManager;

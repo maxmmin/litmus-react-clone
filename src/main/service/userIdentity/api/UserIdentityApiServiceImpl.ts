@@ -5,6 +5,9 @@ import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestMana
 import appConfig from "../../../config/appConfig";
 import {BasicHttpError} from "../../../error/BasicHttpError";
 import Role from "../../../redux/types/userIdentity/Role";
+import AuthenticationStateManager from "../../auth/stateManager/AuthenticationStateManager";
+import BasicAuthenticationManager from "../../auth/BasicAuthenticationManager";
+import AuthenticationStateManagerImpl from "../../auth/stateManager/AuthenticationStateManagerImpl";
 
 class UserIdentityApiServiceImpl implements UserIdentityApiService {
 
@@ -12,6 +15,11 @@ class UserIdentityApiServiceImpl implements UserIdentityApiService {
 
     constructor(getToken: ()=>string) {
         this.getToken = getToken;
+    }
+
+    public static getInstance(authManager: AuthenticationStateManager = new AuthenticationStateManagerImpl): UserIdentityApiServiceImpl {
+        const getToken = () => authManager.getAuth()!.accessToken;
+        return new UserIdentityApiServiceImpl(getToken);
     }
 
     async retrieveIdentity (): Promise<UserIdentity> {

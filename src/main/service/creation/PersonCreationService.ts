@@ -15,16 +15,16 @@ import PersonCreationStateManagerImpl from "./stateManager/person/PersonCreation
 
 class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto> {
 
-    constructor(mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>,
-                apiService: CreationApiService<PersonRequestDto, PersonResponseDto>,
-                creationStateManager: PersonCreationStateManager) {
-        super(mapper, apiService, creationStateManager);
+    constructor(apiService: CreationApiService<PersonRequestDto, PersonResponseDto>,
+                creationStateManager: PersonCreationStateManager,
+                mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>) {
+        super(apiService, creationStateManager,mapper);
     }
 
-    public static getInstance(mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto> = new PersonDtoMapper(),
-                              apiService: CreationApiService<PersonRequestDto, PersonResponseDto> = PersonCreationApiService.getInstance(),
-                              stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl()): PersonCreationService {
-        return  new PersonCreationService(mapper, apiService, stateManager);
+    public static getInstance(apiService: CreationApiService<PersonRequestDto, PersonResponseDto> = PersonCreationApiService.getInstance(),
+                              stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl(),
+                              mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto> = new PersonDtoMapper()): PersonCreationService {
+        return  new PersonCreationService(apiService, stateManager, mapper);
     }
 }
 
