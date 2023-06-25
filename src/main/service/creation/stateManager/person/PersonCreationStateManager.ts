@@ -6,7 +6,7 @@ import GeoStateManager from "../GeoStateManager";
 class CreationPassportData {
 }
 
-interface PersonCreationStateManager extends CreationStateManager<Person, EntityCreationState<Person>>, GeoStateManager {
+interface PersonCreationStateManager extends CreationStateManager<Person>, GeoStateManager {
 
     updatePassportData: (data: Partial<CreationPassportData>) => void;
 

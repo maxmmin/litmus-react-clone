@@ -4,18 +4,27 @@ import Person from "../../model/human/person/Person";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import EntityCreationState from "../../redux/types/creation/EntityCreationState";
 import CreationApiService from "./api/CreationApiService";
-import {inject, injectable} from "inversify";
+
 import IOC_TYPES from "../../inversify/IOC_TYPES";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationStateManager from "./stateManager/CreationStateManager";
+import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
+import PersonCreationApiService from "./api/PersonCreationApiService";
+import PersonCreationStateManager from "./stateManager/person/PersonCreationStateManager";
+import PersonCreationStateManagerImpl from "./stateManager/person/PersonCreationStateManagerImpl";
 
-@injectable()
-class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto, EntityCreationState<Person>> {
+class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto> {
 
-    constructor(@inject(IOC_TYPES.mappers.PersonDtoMapper) private readonly _mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>,
-                @inject(IOC_TYPES.creation.apiServices.PersonCreationApiService) private readonly _apiService: CreationApiService<PersonRequestDto, PersonResponseDto>,
-                @inject(IOC_TYPES.creation.stateManagers.PersonCreationStateManager) private readonly _creationStateManager: CreationStateManager<Person, EntityCreationState<Person>>) {
-        super(_mapper, _apiService, _creationStateManager);
+    constructor(mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>,
+                apiService: CreationApiService<PersonRequestDto, PersonResponseDto>,
+                creationStateManager: PersonCreationStateManager) {
+        super(mapper, apiService, creationStateManager);
+    }
+
+    public static getInstance(mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto> = new PersonDtoMapper(),
+                              apiService: CreationApiService<PersonRequestDto, PersonResponseDto> = PersonCreationApiService.getInstance(),
+                              stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl()): PersonCreationService {
+        return  new PersonCreationService(mapper, apiService, stateManager);
     }
 }
 

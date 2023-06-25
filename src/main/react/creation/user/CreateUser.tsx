@@ -1,15 +1,13 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import React from "react";
-import {useAppDispatch} from "../../../redux/hooks";
 import UserCreationStateManager from "../../../service/creation/stateManager/user/UserCreationStateManager";
-import store from "../../../redux/store";
-import container from "../../../inversify/inversify.config";
-import IOC_TYPES from "../../../inversify/IOC_TYPES";
+import UserCreationStateManagerImpl from "../../../service/creation/stateManager/user/UserCreationStateManagerImpl";
+
 
 const CreateUser = () => {
 
-    const creationStateManager: UserCreationStateManager = container.get<UserCreationStateManager>(IOC_TYPES.creation.stateManagers.UserCreationStateManager);
+    const creationStateManager: UserCreationStateManager = new UserCreationStateManagerImpl();
     // todo: this section
     return (
         <>

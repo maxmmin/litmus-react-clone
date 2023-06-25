@@ -9,17 +9,10 @@ import store, {AppDispatch} from "../../../redux/store";
 import {Action} from "redux";
 import deepCopy from "../../../util/deepCopy";
 import AuthenticationStateManager from "./AuthenticationStateManager";
-import {inject, injectable} from "inversify";
-import IOC_TYPES from "../../../inversify/IOC_TYPES";
 
-@injectable()
 class AuthenticationStateManagerImpl implements AuthenticationStateManager{
-    private readonly dispatch: AppDispatch = this._store.dispatch;
-    private readonly getState:()=>AuthenticationReducible = ()=>this._store.getState().authentication;
-
-
-    constructor(@inject(IOC_TYPES.Store) private readonly _store: typeof store) {}
-
+    private readonly dispatch: AppDispatch = store.dispatch;
+    private readonly getState:()=>AuthenticationReducible = ()=>store.getState().authentication;
 
     public retrieveAuthentication (authThunk:  AsyncThunkAction<Authentication, any, any>):  Promise<PayloadAction<Authentication, string, {arg: any, requestId: string, requestStatus: "fulfilled"}, never> | PayloadAction<unknown, string, unknown, unknown>> {
        return this.dispatch(authThunk);

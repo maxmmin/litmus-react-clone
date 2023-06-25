@@ -5,9 +5,8 @@ import Person, {Relationship} from "../../../model/human/person/Person";
 import PassportData from "../../../model/human/person/PassportData";
 import {DateBuilder} from "../../../model/DateEntity";
 import PersonResponseDto from "../person/PersonResponseDto";
-import {injectable} from "inversify";
 
-@injectable()
+
 class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonResponseDto> {
     mapToRequestDto(emergingPerson: Person): PersonRequestDto {
         const dto: PersonRequestDto = {}

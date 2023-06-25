@@ -94,7 +94,7 @@ class ExplorationStateManagerImpl<E,P extends EntityExplorationParams> implement
 
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_PARAMS_MODE],
-            payload: deepCopy(mode)
+            payload: mode.id
         })
     }
 

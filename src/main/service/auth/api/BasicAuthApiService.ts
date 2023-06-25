@@ -6,9 +6,7 @@ import appConfig from "../../../config/appConfig";
 import Authentication from "../../../redux/types/auth/Authentication";
 import {BasicHttpError} from "../../../error/BasicHttpError";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
-import {injectable} from "inversify";
 
-@injectable()
 class BasicAuthApiService implements AuthApiService {
     async getAuth(credentials: Credentials): Promise<Authentication> {
         const requestManager: ApiRequestManager = new BasicApiRequestManager();

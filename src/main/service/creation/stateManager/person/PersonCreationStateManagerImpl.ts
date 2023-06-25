@@ -7,18 +7,17 @@ import store, {AppDispatch} from "../../../../redux/store";
 import Person, {Relationship} from "../../../../model/human/person/Person";
 import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import PassportData from "../../../../model/human/person/PassportData";
-import {inject, injectable} from "inversify";
+
 import IOC_TYPES from "../../../../inversify/IOC_TYPES";
 import {GeoLocation} from "../../../../model/GeoLocation";
 
-@injectable()
-class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person, EntityCreationState<Person>> implements PersonCreationStateManager {
+class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person> implements PersonCreationStateManager {
 
 
-    constructor(@inject(IOC_TYPES.Store) private readonly _store: typeof store, @inject(IOC_TYPES.creation.typedActions.PersonCreationTypedAction) private readonly _actions: CreationTypedAction) {
-        const dispatch: AppDispatch = _store.dispatch;
-        const getState = ()=>_store.getState().creation.person!;
-        super(dispatch, getState, _actions);
+    constructor() {
+        const dispatch: AppDispatch = store.dispatch;
+        const getState = ()=>store.getState().creation.person!;
+        super(dispatch, getState, CreationTypedAction.person);
     }
 
     clearLocation(): void {

@@ -1,5 +1,3 @@
-
-
 import AuthenticationManager from "./AuthenticationManager";
 import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import AuthApiService, {Credentials} from "./api/AuthApiService";
@@ -14,18 +12,27 @@ import AuthAction from "../../redux/actions/AuthAction";
 import {NotificationManager} from "../../redux/types/applicationState/Notification";
 import deepCopy from "../../util/deepCopy";
 import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
-import {inject, injectable} from "inversify";
-import IOC_TYPES from "../../inversify/IOC_TYPES";
+import AuthenticationStateManagerImpl from "./stateManager/AuthenticationStateManagerImpl";
+import BasicAuthApiService from "./api/BasicAuthApiService";
+import {BasicNotificationManager} from "../../redux/types/applicationState/BasicNotificationManager";
 
-@injectable()
 class BasicAuthenticationManager implements AuthenticationManager {
 
     private static locked: boolean = false;
 
-    constructor(@inject(IOC_TYPES.auth.AuthStateManager) private readonly authenticationStateManager: AuthenticationStateManager,
-                @inject(IOC_TYPES.auth.AuthApiService) private readonly authService: AuthApiService,
-                @inject(IOC_TYPES.TimersStateManager) private readonly timersStateManager: TimersStateManager,
-                @inject(IOC_TYPES.NotificationsManager) private readonly notificationManager: NotificationManager) {
+    constructor(private readonly authenticationStateManager: AuthenticationStateManager,
+                private readonly authService: AuthApiService,
+                private readonly timersStateManager: TimersStateManager,
+                private readonly notificationManager: NotificationManager) {
+    }
+
+    public static getInstance (): BasicAuthenticationManager {
+        const authStateManager = new AuthenticationStateManagerImpl();
+        const authService = new BasicAuthApiService();
+        const timersStateManager = new TimersStateManager();
+        const notificationManager = new BasicNotificationManager();
+
+        return new BasicAuthenticationManager(authStateManager, authService, timersStateManager, notificationManager)
     }
 
     login({email, password}: Credentials): void {

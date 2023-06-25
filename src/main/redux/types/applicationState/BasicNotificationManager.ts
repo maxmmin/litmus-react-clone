@@ -1,4 +1,3 @@
-import {injectable} from "inversify";
 import store, {AppDispatch} from "../../store";
 import AppStateAction from "../../actions/AppStateAction";
 import React from "react";
@@ -6,22 +5,12 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import deepCopy from "../../../util/deepCopy";
 import Notification, {BasicNotification, NotificationManager} from "./Notification";
 
-@injectable()
 export class BasicNotificationManager implements NotificationManager {
-    private readonly dispatch: AppDispatch;
+    private readonly dispatch: AppDispatch = store.dispatch;
 
     private readonly ADD_NOTIFICATION: string = AppStateAction.ADD_NOTIFICATION;
 
     private readonly CLEAR_NOTIFICATIONS: string = AppStateAction.CLEAR_NOTIFICATIONS;
-
-
-    constructor(dispatch: AppDispatch) {
-        this.dispatch = dispatch;
-    }
-
-    static getManager(_store: typeof store): BasicNotificationManager {
-        return new BasicNotificationManager(_store.dispatch)
-    }
 
     isValid(value: any) {
         return typeof value === "string" || React.isValidElement(value);

@@ -4,16 +4,16 @@ import React from "react";
 import {CrossIcon} from "../../../util/icons";
 import {useAppDispatch} from "../../../redux/hooks";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
-import store from "../../../redux/store";
-import container from "../../../inversify/inversify.config";
-import IOC_TYPES from "../../../inversify/IOC_TYPES";
+import PersonCreationStateManagerImpl
+    from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
+
 
 type Props = {
     relationship: Relationship
 }
 
 const RelationshipCreationComponent = ({relationship}: Props) => {
-    const personCreationStateManager: PersonCreationStateManager = container.get<PersonCreationStateManager>(IOC_TYPES.creation.stateManagers.PersonCreationStateManager);
+    const personCreationStateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl();
 
     const personTo = relationship.person;
 

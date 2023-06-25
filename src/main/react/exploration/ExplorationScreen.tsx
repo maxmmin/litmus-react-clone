@@ -20,8 +20,6 @@ import {getEntityByDomain} from "../../util/pureFunctions";
 import getEntityExplorationService, {
     getEntityExplorationStateManager
 } from "../../inversify/getEntityExplorationService";
-import ExplorationService from "../../service/exploration/ExplorationService";
-import EntityExplorationService from "../../service/exploration/ExplorationService";
 import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
 
 

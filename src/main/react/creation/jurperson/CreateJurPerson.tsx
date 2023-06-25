@@ -10,11 +10,11 @@ import Person from "../../../model/human/person/Person";
 import {DateBuilder} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
-import store from "../../../redux/store";
-import container from "../../../inversify/inversify.config";
 import JurPersonCreationStateManager
     from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import IOC_TYPES from "../../../inversify/IOC_TYPES";
+import JurPersonCreationStateManagerImpl
+    from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 
 
 const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
@@ -30,7 +30,7 @@ const CreateJurPerson = () => {
         throw new Error("createPersonDto was null but it shouldn't")
     }
 
-    const creationManager = container.get<JurPersonCreationStateManager>(IOC_TYPES.creation.stateManagers.JurPersonCreationStateManager);
+    const creationManager = new JurPersonCreationStateManagerImpl();
 
     const {year, month, day} = jurPersonCreationParams.dateOfRegistration||{year: '', month: '', day: ''};
 

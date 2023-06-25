@@ -2,18 +2,14 @@ import Form from "react-bootstrap/Form";
 import React, {useMemo} from "react";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
-import ExplorationStateManagerImpl from "../../../service/exploration/stateManager/ExplorationStateManagerImpl";
-import store from "../../../redux/store";
-import EntityExplorationState from "../../../redux/types/exploration/EntityExplorationState";
 import HumanExplorationParams from "../../../redux/types/exploration/human/HumanExplorationParams";
 import {Entity} from "../../../model/Entity";
 import Human from "../../../model/human/Human";
 import HumanExplorationStateManager from "../../../service/exploration/stateManager/HumanExplorationStateManager";
-import container from "../../../inversify/inversify.config";
-import UserExplorationStateManager from "../../../service/exploration/stateManager/user/UserExplorationStateManager";
-import IOC_TYPES from "../../../inversify/IOC_TYPES";
-import PersonExplorationStateManager
-    from "../../../service/exploration/stateManager/person/PersonExplorationStateManager";
+import UserExplorationStateManagerImpl
+    from "../../../service/exploration/stateManager/user/UserExplorationStateManagerImpl";
+import PersonExplorationStateManagerImpl
+    from "../../../service/exploration/stateManager/person/PersonExplorationStateManagerImpl";
 
 
 const FindByFullNameGroup = () => {
@@ -24,10 +20,10 @@ const FindByFullNameGroup = () => {
         if (exploredEntity) {
             switch (exploredEntity) {
                 case Entity.USER: {
-                    return container.get<UserExplorationStateManager>(IOC_TYPES.exploration.stateManagers.UserExplorationStateManager);
+                    return new UserExplorationStateManagerImpl();
                 }
                 case Entity.PERSON: {
-                    return container.get<PersonExplorationStateManager>(IOC_TYPES.exploration.stateManagers.PersonExplorationStateManager);
+                    return new PersonExplorationStateManagerImpl();
                 }
                 default: throw new Error("unsupported entity")
             }

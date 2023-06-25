@@ -3,7 +3,7 @@ import EntityCreationState from "../../../../redux/types/creation/EntityCreation
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import GeoStateManager from "../GeoStateManager";
 
-interface JurPersonCreationStateManager extends CreationStateManager<JurPerson, EntityCreationState<JurPerson>>, GeoStateManager {
+interface JurPersonCreationStateManager extends CreationStateManager<JurPerson>, GeoStateManager {
 }
 
 export default JurPersonCreationStateManager;

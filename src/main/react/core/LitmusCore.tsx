@@ -8,13 +8,12 @@ import appConfig, {gmapsRegionOptions} from "../../config/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
 import {setMapsApiResponse} from "../../redux/actions/AppStateAction";
 import AuthenticationManager from "../../service/auth/AuthenticationManager";
-import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 import UserIdentityManager from "../../service/userIdentity/UserIdentityManager";
 import UserIdentityManagerImpl from "../../service/userIdentity/UserIdentityManagerImpl";
 import UserIdentityApiService from "../../service/userIdentity/api/UserIdentityApiService";
 import UserIdentityApiServiceImpl from "../../service/userIdentity/api/UserIdentityApiServiceImpl";
-import container from "../../inversify/inversify.config";
 import IOC_TYPES from "../../inversify/IOC_TYPES";
+import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
 
 type Props = {
     children: ReactNode
@@ -37,7 +36,7 @@ const LitmusCore = ({children}: Props) => {
         region: gmapsRegionOptions.region!,
     });
 
-    const authenticationManager: AuthenticationManager = container.get<AuthenticationManager>(IOC_TYPES.auth.AuthManager);
+    const authenticationManager: AuthenticationManager = BasicAuthenticationManager.getInstance();
 
     const userIdentityManager: UserIdentityManager = useMemo<UserIdentityManager>(()=>{
         const service: UserIdentityApiService = new UserIdentityApiServiceImpl(()=>store.getState().authentication?.accessToken!);

@@ -7,10 +7,12 @@ import {GeoLocation} from "../../../model/GeoLocation";
 import {Entity} from "../../../model/Entity";
 import JurPersonCreationStateManager
     from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
-import container from "../../../inversify/inversify.config";
-import IOC_TYPES from "../../../inversify/IOC_TYPES";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import GeoStateManager from "../../../service/creation/stateManager/GeoStateManager";
+import JurPersonCreationStateManagerImpl
+    from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
+import PersonCreationStateManagerImpl
+    from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
 
 
 type Props = {
@@ -26,10 +28,10 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
     const stateManager: GeoStateManager = useMemo<PersonCreationStateManager|JurPersonCreationStateManager>(()=>{
         switch (entity) {
             case Entity.JUR_PERSON: {
-                return container.get<JurPersonCreationStateManager>(IOC_TYPES.creation.stateManagers.JurPersonCreationStateManager);
+                return new JurPersonCreationStateManagerImpl();
             }
             case Entity.PERSON: {
-                return container.get<PersonCreationStateManager>(IOC_TYPES.creation.stateManagers.PersonCreationStateManager);
+                return new PersonCreationStateManagerImpl();
             }
             default: throw new Error("unsupported entity")
         }

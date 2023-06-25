@@ -5,15 +5,14 @@ import CreationTypedAction from "../../../redux/actions/CreationTypedAction";
 import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
 import CreationStateManager from "./CreationStateManager";
 import {Entity} from "../../../model/Entity";
-import {setExploredEntityAction} from "../../../redux/reducers/explorationStateReducer";
 import {setEmergingEntityAction} from "../../../redux/reducers/creationStateReducer";
 
-class CreationStateManagerImpl<E,S extends EntityCreationState<E>> implements CreationStateManager<E,S> {
+class CreationStateManagerImpl<E> implements CreationStateManager<E> {
     protected readonly dispatch: AppDispatch;
-    protected readonly getState: ()=>S;
+    protected readonly getState: ()=>EntityCreationState<E>;
     protected readonly actions: CreationTypedAction;
 
-    constructor(dispatch: AppDispatch, getState: () => S, actions: CreationTypedAction) {
+    constructor(dispatch: AppDispatch, getState: () => EntityCreationState<E>, actions: CreationTypedAction) {
         this.dispatch = dispatch;
         this.getState = getState;
         this.actions = actions;
@@ -26,11 +25,11 @@ class CreationStateManagerImpl<E,S extends EntityCreationState<E>> implements Cr
         })
     }
 
-    getCreationParams(): S["emergingEntity"] {
+    getCreationParams(): EntityCreationState<E>["emergingEntity"] {
         return this.getState().emergingEntity;
     }
 
-    getCreationState(): S {
+    getCreationState(): EntityCreationState<E> {
         return this.getState();
     }
 
@@ -38,16 +37,16 @@ class CreationStateManagerImpl<E,S extends EntityCreationState<E>> implements Cr
         return this.dispatch(thunk);
     }
 
-    public setEntityCreationParams(entityCreationParams: S["emergingEntity"]) {
-        const action: PayloadAction<S["emergingEntity"]> = {
+    public setEntityCreationParams(entityCreationParams: EntityCreationState<E>["emergingEntity"]) {
+        const action: PayloadAction<EntityCreationState<E>["emergingEntity"]> = {
             type: this.actions[CreationCoreAction.SET_ENTITY_CREATION_PARAMS],
             payload: entityCreationParams
         }
         this.dispatch(action);
     }
 
-    public updateEntityCreationParams(entityCreationParams: Partial<S["emergingEntity"]>) {
-        const action: PayloadAction<Partial<S["emergingEntity"]>> = {
+    public updateEntityCreationParams(entityCreationParams: Partial<EntityCreationState<E>["emergingEntity"]>) {
+        const action: PayloadAction<Partial<EntityCreationState<E>["emergingEntity"]>> = {
             type: this.actions["UPDATE_CREATION_PARAMS"],
             payload: entityCreationParams
         }

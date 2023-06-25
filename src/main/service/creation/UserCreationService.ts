@@ -3,20 +3,27 @@ import UserRequestDto from "../../rest/dto/user/UserRequestDto";
 import User from "../../model/human/user/User";
 import UserResponseDto from "../../rest/dto/user/UserResponseDto";
 import EntityCreationState from "../../redux/types/creation/EntityCreationState";
-import {inject, injectable} from "inversify";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
-import IOC_TYPES from "../../inversify/IOC_TYPES";
 import CreationApiService from "./api/CreationApiService";
-import CreationStateManager from "./stateManager/CreationStateManager";
+import UserDtoMapper from "../../rest/dto/dtoMappers/UserDtoMapper";
+import UserCreationApiService from "./api/UserCreationApiService";
+import UserCreationStateManagerImpl from "./stateManager/user/UserCreationStateManagerImpl";
+import UserCreationStateManager from "./stateManager/user/UserCreationStateManager";
 
-@injectable()
-class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto, EntityCreationState<User>> {
+class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto> {
 
     constructor(
-        @inject(IOC_TYPES.mappers.UserDtoMapper) private readonly _mapper: DtoMapper<UserRequestDto, User, UserResponseDto>,
-        @inject(IOC_TYPES.creation.apiServices.UserCreationApiService) private readonly _apiService: CreationApiService<UserRequestDto, UserResponseDto>,
-        @inject(IOC_TYPES.creation.stateManagers.UserCreationStateManager) private readonly _creationStateManager: CreationStateManager<User, EntityCreationState<User>>) {
-        super(_mapper, _apiService, _creationStateManager);
+        mapper: DtoMapper<UserRequestDto, User, UserResponseDto>,
+        apiService: CreationApiService<UserRequestDto, UserResponseDto>,
+        creationStateManager: UserCreationStateManager) {
+        super(mapper, apiService, creationStateManager);
+    }
+
+    public static getInstance(): UserCreationService {
+        const mapper = new UserDtoMapper();
+        const apiService = UserCreationApiService.getInstance();
+        const stateManager = new UserCreationStateManagerImpl();
+        return  new UserCreationService(mapper, apiService, stateManager);
     }
 }
 

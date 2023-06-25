@@ -1,4 +1,4 @@
-import store, {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
+import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import CreationService from "./CreationService";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import CreationTypedAction from "../../redux/actions/CreationTypedAction";
@@ -8,10 +8,7 @@ import handleCreationError from "./handleCreationError";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
-import EntityCreationState from "../../redux/types/creation/EntityCreationState";
 
-
-type CreationStore = ReturnType<typeof store.getState>["creation"]
 
 /**
  * Q - requestDto
@@ -19,13 +16,13 @@ type CreationStore = ReturnType<typeof store.getState>["creation"]
  * P - response dto
  * S - creationState
  */
-class CreationServiceImpl<RequestDto,E,ResponseDto,S extends EntityCreationState<E>> implements CreationService {
+class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
 
     private mapper: DtoMapper<RequestDto, E, ResponseDto>;
     private apiService: CreationApiService<RequestDto, ResponseDto>;
-    private creationStateManager: CreationStateManager<E,S>;
+    private creationStateManager: CreationStateManager<E>;
 
-    constructor(mapper: DtoMapper<RequestDto, E, ResponseDto>, apiService: CreationApiService<RequestDto, ResponseDto>, creationStateManager: CreationStateManager<E, S>) {
+    constructor(mapper: DtoMapper<RequestDto, E, ResponseDto>, apiService: CreationApiService<RequestDto, ResponseDto>, creationStateManager: CreationStateManager<E>) {
         this.mapper = mapper;
         this.apiService = apiService;
         this.creationStateManager = creationStateManager;

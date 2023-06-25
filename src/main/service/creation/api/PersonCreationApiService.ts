@@ -7,13 +7,18 @@ import CreationApiService from "./CreationApiService";
 import PersonRequestDto from "../../../rest/dto/person/PersonRequestDto";
 import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
 import AuthenticationStateManager from "../../auth/stateManager/AuthenticationStateManager";
-import {inject} from "inversify";
+
 import IOC_TYPES from "../../../inversify/IOC_TYPES";
+import AuthenticationStateManagerImpl from "../../auth/stateManager/AuthenticationStateManagerImpl";
 
 class PersonCreationApiService implements CreationApiService<PersonRequestDto, PersonResponseDto> {
     private readonly getAccessToken: ()=>string = ()=>this.authStateManager.getAuth()!.accessToken;
 
-    constructor(@inject(IOC_TYPES.auth.AuthStateManager) private readonly authStateManager: AuthenticationStateManager) {
+    constructor(private readonly authStateManager: AuthenticationStateManager) {
+    }
+
+    public static getInstance (authManager: AuthenticationStateManager = new AuthenticationStateManagerImpl()): PersonCreationApiService {
+        return new PersonCreationApiService(authManager);
     }
 
     async create(dto: PersonRequestDto): Promise<PersonResponseDto> {

@@ -14,8 +14,6 @@ import {CreationModalModes} from "../../redux/types/creation/CreationModalModes"
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
 import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
-import PersonExplorationApiServiceImpl
-    from "../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import {BasicHttpError} from "../../error/BasicHttpError";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
@@ -23,10 +21,12 @@ import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
-import container from "../../inversify/inversify.config";
-import CreationStateManager from "../../service/creation/stateManager/CreationStateManager";
 import IOC_TYPES from "../../inversify/IOC_TYPES";
-import PersonExplorationStateManager from "../../service/exploration/stateManager/person/PersonExplorationStateManager";
+import JurPersonCreationStateManagerImpl
+    from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
+import PersonCreationStateManagerImpl from "../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
+import PersonExplorationApiServiceImpl
+    from "../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -120,7 +120,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     }
 
     const fetchPerson = async (accessToken: string, id: string, mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>) => {
-        const personService: PersonExplorationApiService = container.get<PersonExplorationApiService>(IOC_TYPES.exploration.apiServices.PersonExplorationApiService);
+        const personService: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance();
 
         setPending(true)
 
@@ -155,7 +155,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
-                const stateManager: JurPersonCreationStateManager = container.get<JurPersonCreationStateManager>(IOC_TYPES.creation.stateManagers.JurPersonCreationStateManager);
+                const stateManager: JurPersonCreationStateManager = new JurPersonCreationStateManagerImpl();
 
                 const payload: Partial<JurPerson> = {}
 
@@ -170,7 +170,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             }
 
             case CreationModalModes.SET_RELATIONSHIP: {
-                const stateManager: PersonCreationStateManager = container.get<PersonCreationStateManager>(IOC_TYPES.creation.stateManagers.PersonCreationStateManager);
+                const stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl();
                 
                 const relationship: Relationship = {
                     note: "", person: person, relationType: null
@@ -199,7 +199,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         switch (modalSettings?.mode) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
-                const stateManager: JurPersonCreationStateManager = container.get<JurPersonCreationStateManager>(IOC_TYPES.creation.stateManagers.JurPersonCreationStateManager);
+                const stateManager: JurPersonCreationStateManager = new JurPersonCreationStateManagerImpl();
                 const payload: Partial<JurPerson> = {}
                 if (modalSettings.mode===CreationModalModes.SET_OWNER) {
                     payload.owner = null;

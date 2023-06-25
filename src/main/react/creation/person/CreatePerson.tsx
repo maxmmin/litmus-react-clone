@@ -16,8 +16,9 @@ import {CreationModalModes} from "../../../redux/types/creation/CreationModalMod
 import PersonRelationships from "./PersonRelationships";
 import {Entity} from "../../../model/Entity";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
-import container from "../../../inversify/inversify.config";
 import IOC_TYPES from "../../../inversify/IOC_TYPES";
+import PersonCreationStateManagerImpl
+    from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -36,7 +37,7 @@ const CreatePerson = () => {
 
     const relationships = creationPersonParams?.relationships;
 
-    const creationStateManager: PersonCreationStateManager = container.get<PersonCreationStateManager>(IOC_TYPES.creation.stateManagers.PersonCreationStateManager);
+    const creationStateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl();
 
     const closeModal = () => setModalSettings(null)
 

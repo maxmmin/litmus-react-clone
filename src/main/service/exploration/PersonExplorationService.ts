@@ -14,19 +14,27 @@ import {checkNotEmpty} from "../../util/pureFunctions";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import handleCreationError from "../creation/handleCreationError";
-import {inject, injectable} from "inversify";
+
 import IOC_TYPES from "../../inversify/IOC_TYPES";
 import UnsupportedModeError from "./UnsupportedModeError";
 import PersonExplorationStateManager from "./stateManager/person/PersonExplorationStateManager";
+import PersonExplorationStateManagerImpl from "./stateManager/person/PersonExplorationStateManagerImpl";
+import PersonExplorationApiServiceImpl from "./api/human/person/PersonExplorationApiServiceImpl";
+import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 
 type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: DtoMapper<unknown, Person, PersonResponseDto>) => Promise<PagedData<Person>>;
 
-@injectable()
 class PersonExplorationService implements ExplorationService {
 
-    constructor(@inject(IOC_TYPES.exploration.stateManagers.PersonExplorationStateManager) private readonly stateManager: PersonExplorationStateManager,
-                @inject(IOC_TYPES.exploration.apiServices.PersonExplorationApiService) private readonly service: PersonExplorationApiService,
-                @inject(IOC_TYPES.mappers.PersonDtoMapper) private readonly mapper: DtoMapper<unknown, Person, PersonResponseDto>) {
+    constructor(private readonly stateManager: PersonExplorationStateManager,
+                private readonly service: PersonExplorationApiService,
+                private readonly mapper: DtoMapper<unknown, Person, PersonResponseDto>) {
+    }
+
+    public static getInstance (stateManager: PersonExplorationStateManager = new PersonExplorationStateManagerImpl(),
+                               service: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance(),
+                               mapper: DtoMapper<unknown, Person, PersonResponseDto> = new PersonDtoMapper()): PersonExplorationService {
+       return new PersonExplorationService(stateManager, service, mapper)
     }
 
     private exploreByIdCallback: PersonExplorationCallbackType = async (params, service, mapper) => {

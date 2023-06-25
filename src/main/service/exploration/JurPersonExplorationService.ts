@@ -18,19 +18,29 @@ import jurPersonExplorationApiService from "./api/jurPerson/JurPersonExploration
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import JurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
-import {inject, injectable} from "inversify";
+
 import UnsupportedModeError from "./UnsupportedModeError";
 import IOC_TYPES from "../../inversify/IOC_TYPES";
 import JurPersonExplorationParams from "../../redux/types/exploration/jurPerson/JurPersonExplorationParams";
+import JurPersonExplorationStateManager from "./stateManager/jurPerson/JurPersonExplorationStateManager";
+import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
+import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
+import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
 
 type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) => Promise<PagedData<JurPerson>>;
 
-@injectable()
 class JurPersonExplorationService implements ExplorationService {
 
-    constructor(@inject(IOC_TYPES.exploration.stateManagers.JurPersonExplorationStateManager) private readonly stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>,
-                @inject(IOC_TYPES.exploration.apiServices.JurPersonExplorationApiService) private readonly service: JurPersonExplorationApiService,
-                @inject(IOC_TYPES.mappers.JurPersonDtoMapper) private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
+    constructor(private readonly stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>,
+                private readonly service: JurPersonExplorationApiService,
+                private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
+    }
+
+    public static getInstance(stateManager: JurPersonExplorationStateManager = new JurPersonExplorationStateManagerImpl(),
+                       service: JurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance(),
+                       mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto> = new JurPersonDtoMapper()
+                    ) {
+        return new JurPersonExplorationService(stateManager,service,mapper)
     }
 
     private exploreByIdCallback: JurPersonExplorationCallbackType = async (params, service, mapper) => {
@@ -70,7 +80,7 @@ class JurPersonExplorationService implements ExplorationService {
 
     private exploreJurPersonsThunk = createAsyncThunk<EntityExplorationData<JurPerson, BasicJurPersonExplorationParams>,
         ThunkArg<{params: BasicJurPersonExplorationParams}>,
-        LitmusAsyncThunkConfig>(ExplorationTypedAction.user[ExplorationCoreAction.RETRIEVE_DATA],(async ({params}, {rejectWithValue, fulfillWithValue}) => {
+        LitmusAsyncThunkConfig>(ExplorationTypedAction.jurPerson[ExplorationCoreAction.RETRIEVE_DATA],(async ({params}, {rejectWithValue, fulfillWithValue}) => {
         try {
             const response: PagedData<JurPerson> = await this.exploreUponMode(params);
             const exploredData: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams> = {requestParams: params, response: response}

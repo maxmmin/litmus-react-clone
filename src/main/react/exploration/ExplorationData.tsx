@@ -41,7 +41,6 @@ type Props = {
 }
 
 const ExplorationData = ({exploredEntity, state}: Props) => {
-
     if (state.isPending) {
         return <div style={{margin: '50px auto 0px', maxWidth: '100px'}}>
             <Loader/>

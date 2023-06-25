@@ -1,7 +1,6 @@
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import PagedData, {UnPagedData} from "../../rest/PagedData";
 import ExplorationService from "./ExplorationService";
-import ExplorationStateManager from "./stateManager/ExplorationStateManager";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
 import {createAsyncThunk} from "@reduxjs/toolkit";
@@ -15,18 +14,27 @@ import handleCreationError from "../creation/handleCreationError";
 import UserExplorationApiService from "./api/human/user/UserExplorationApiService";
 import User from "../../model/human/user/User";
 import UserResponseDto from "../../rest/dto/user/UserResponseDto";
-import {inject, injectable} from "inversify";
-import IOC_TYPES from "../../inversify/IOC_TYPES";
 import UnsupportedModeError from "./UnsupportedModeError";
+import UserExplorationStateManager from "./stateManager/user/UserExplorationStateManager";
+import UserExplorationStateManagerImpl from "./stateManager/user/UserExplorationStateManagerImpl";
+import UserExplorationApiServiceImpl from "./api/human/user/UserExplorationApiServiceImpl";
+import UserDtoMapper from "../../rest/dto/dtoMappers/UserDtoMapper";
 
 type UserExplorationCallbackType = (params: UserExplorationParams, service: UserExplorationApiService, mapper: DtoMapper<unknown, User, UserResponseDto>) => Promise<PagedData<User>>;
 
-@injectable()
+
 class UserExplorationService implements ExplorationService {
 
-    constructor(@inject(IOC_TYPES.exploration.stateManagers.UserExplorationStateManager) private readonly stateManager: ExplorationStateManager<User, UserExplorationParams>,
-                @inject(IOC_TYPES.exploration.UserExplorationService) private readonly service: UserExplorationApiService,
-                @inject(IOC_TYPES.mappers.UserDtoMapper) private readonly mapper: DtoMapper<unknown, User, UserResponseDto>) {
+    constructor(private readonly stateManager: UserExplorationStateManager,
+                private readonly service: UserExplorationApiService,
+                private readonly mapper: DtoMapper<unknown, User, UserResponseDto>) {
+    }
+
+    public static getInstance (stateManager: UserExplorationStateManager = new UserExplorationStateManagerImpl(),
+                               service: UserExplorationApiService = UserExplorationApiServiceImpl.getInstance(),
+                               mapper: DtoMapper<unknown, User, UserResponseDto> = new UserDtoMapper()
+                                ): UserExplorationService {
+        return new UserExplorationService(stateManager,service,mapper)
     }
 
     private exploreByIdCallback: UserExplorationCallbackType = async (params, service, mapper) => {

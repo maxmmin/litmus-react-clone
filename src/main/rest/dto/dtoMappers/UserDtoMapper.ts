@@ -3,9 +3,8 @@ import User from "../../../model/human/user/User";
 import UserRequestDto from "../user/UserRequestDto";
 import {hasContent} from "../../../util/isEmpty";
 import UserResponseDto from "../user/UserResponseDto";
-import {injectable} from "inversify";
 
-@injectable()
+
 class UserDtoMapper implements DtoMapper<UserRequestDto, User, UserResponseDto> {
     mapToRequestDto(emergingUser: User): UserRequestDto {
         const dto: UserRequestDto = {}
