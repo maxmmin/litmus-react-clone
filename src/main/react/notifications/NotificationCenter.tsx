@@ -8,9 +8,9 @@ import {LitmusServiceContext} from "../App";
 function NotificationCenter () {
     const notifications = useAppSelector(state => state.appState?.notifications);
 
-    useEffect(()=>{
-        const notificationManager = useContext(LitmusServiceContext).notification.manager;
+    const notificationManager = useContext(LitmusServiceContext).notification.manager;
 
+    useEffect(()=>{
         if (notifications&&notifications.length>0) {
             notifications?.forEach(notification => {
                 toast(notification.content, notification.options)
