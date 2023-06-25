@@ -2,7 +2,6 @@ import {useAppSelector} from "../../redux/hooks";
 import {useContext, useEffect} from "react";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import {BasicNotificationManager} from "../../redux/types/applicationState/BasicNotificationManager";
 import {LitmusServiceContext} from "../App";
 
 function NotificationCenter () {

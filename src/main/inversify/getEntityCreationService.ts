@@ -1,14 +1,12 @@
 import {Entity} from "../model/Entity";
 import CreationService from "../service/creation/CreationService";
-import UserCreationService from "../service/creation/UserCreationService";
-import PersonCreationService from "../service/creation/PersonCreationService";
-import JurPersonCreationService from "../service/creation/JurPersonCreationService";
+import serviceContext from "../react/serviceContext";
 
 const entityCreationServiceMap: Map<Entity, CreationService> = new Map<Entity, CreationService>();
 
-entityCreationServiceMap.set(Entity.USER, UserCreationService.getInstance());
-entityCreationServiceMap.set(Entity.PERSON, PersonCreationService.getInstance());
-entityCreationServiceMap.set(Entity.JUR_PERSON,JurPersonCreationService.getInstance());
+entityCreationServiceMap.set(Entity.USER, serviceContext.creation.service.user);
+entityCreationServiceMap.set(Entity.PERSON, serviceContext.creation.service.person);
+entityCreationServiceMap.set(Entity.JUR_PERSON, serviceContext.creation.service.jurPerson);
 
 export default function getEntityCreationService (entity: Entity): CreationService {
     const service: CreationService|undefined = entityCreationServiceMap.get(entity);

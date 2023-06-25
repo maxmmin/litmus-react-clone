@@ -8,6 +8,7 @@ import handleCreationError from "./handleCreationError";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
+import creationStateManager from "./stateManager/CreationStateManager";
 
 
 /**
@@ -32,7 +33,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
 
     createEntity(): void {
         const emergedEntity = this.creationStateManager.getCreationState().emergingEntity;
-        this.creationStateManager.create.bind(this)(this.createEntityThunk({globalPending: false, emergingEntity: emergedEntity})).catch(console.error)
+        this.creationStateManager.create(this.createEntityThunk({globalPending: false, emergingEntity: emergedEntity})).catch(console.error)
     }
 
     private createEntityThunk = createAsyncThunk<E,
