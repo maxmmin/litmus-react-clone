@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from './main/App';
+import App from './main/react/App';
 import reportWebVitals from './reportWebVitals';
 import {Provider} from "react-redux";
 import store, {persistor} from "./main/redux/store";

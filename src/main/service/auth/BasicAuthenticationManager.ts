@@ -26,13 +26,11 @@ class BasicAuthenticationManager implements AuthenticationManager {
                 private readonly notificationManager: NotificationManager) {
     }
 
-    public static getInstance (): BasicAuthenticationManager {
-        const authStateManager = new AuthenticationStateManagerImpl();
-        const authService = new BasicAuthApiService();
-        const timersStateManager = new TimersStateManager();
-        const notificationManager = new BasicNotificationManager();
-
-        return new BasicAuthenticationManager(authStateManager, authService, timersStateManager, notificationManager)
+    public static getInstance (authStateManager: AuthenticationStateManager = new AuthenticationStateManagerImpl(),
+                               authApiService: AuthApiService = new BasicAuthApiService(),
+                               timersStateManager = new TimersStateManager(),
+                               notificationManager = new BasicNotificationManager()): BasicAuthenticationManager {
+        return new BasicAuthenticationManager(authStateManager, authApiService, timersStateManager, notificationManager)
     }
 
     login({email, password}: Credentials): void {

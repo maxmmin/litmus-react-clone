@@ -1,31 +1,34 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
-import React from 'react';
-import Home from "./react/home/HomeScreen";
-import PrivateComponent, {ERROR_PAGE} from "./react/authorization/PrivateComponent";
-import {useAppDispatch, useAppSelector} from "./redux/hooks";
-import store from "./redux/store";
+import React, {createContext} from 'react';
+import Home from "./home/HomeScreen";
+import PrivateComponent, {ERROR_PAGE} from "./authorization/PrivateComponent";
+import {useAppDispatch, useAppSelector} from "../redux/hooks";
+import store from "../redux/store";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './css/index.scss';
-import Explore from "./react/exploration/ExplorationScreen";
-import AppStateAction, {switchAppState} from "./redux/actions/AppStateAction";
-import LitmusCore from "./react/core/LitmusCore";
-import Creation from "./react/creation/CreationScreen";
-import appConfig, {routingLinks} from "./config/appConfig";
-import Role, {Permissions} from "./redux/types/userIdentity/Role";
-import {buildUrl} from "./util/pureFunctions";
-import {Entity} from "./model/Entity";
-import LoginPage from "./react/login/LoginPage";
-import NotificationCenter from "./react/notifications/NotificationCenter";
+import '../css/index.scss';
+import Explore from "./exploration/ExplorationScreen";
+import AppStateAction, {switchAppState} from "../redux/actions/AppStateAction";
+import LitmusCore from "./LitmusCore";
+import Creation from "./creation/CreationScreen";
+import appConfig, {routingLinks} from "../config/appConfig";
+import Role, {Permissions} from "../redux/types/userIdentity/Role";
+import {buildUrl} from "../util/pureFunctions";
+import {Entity} from "../model/Entity";
+import LoginPage from "./login/LoginPage";
+import NotificationCenter from "./notifications/NotificationCenter";
 import {ErrorBoundary} from "react-error-boundary";
+import serviceContext from "./serviceContext";
 
-// @todo check if the refresh token expired
+export const LitmusServiceContext = createContext(serviceContext);
 
 function App() {
     const dispatch = useAppDispatch();
 
-  return (
-      <ErrorBoundary fallback={<h1>Something went wrong...</h1>}>
+    const reactServiceContext = React.createContext(serviceContext);
+
+    return (
+        <ErrorBoundary fallback={<h1>Something went wrong...</h1>}>
             <NotificationCenter/>
             <BrowserRouter basename={"/"}>
                 <LitmusCore>
@@ -37,7 +40,7 @@ function App() {
                             dispatch(switchAppState(AppStateAction.HEADER_MENU_CLOSE))
                         }
                         // @todo think about replace this
-                        }}>
+                    }}>
                         <Routes>
                             <Route path={"/"} element={
                                 <PrivateComponent mode={"ERROR_PAGE"} component={<Home/>} requiredPermissions={[Permissions.DATA_READ]}/>
@@ -72,8 +75,8 @@ function App() {
                     </div>
                 </LitmusCore>
             </BrowserRouter>
-      </ErrorBoundary>
-      )
+        </ErrorBoundary>
+    )
 }
 
 export default App;

@@ -1,19 +1,15 @@
-import Loader from "../loader/Loader";
-import {onWakeUp} from "../../util/pureFunctions";
-import React, {ReactNode, useEffect, useMemo} from "react";
-import {useAppSelector} from "../../redux/hooks";
-import store from "../../redux/store";
+import Loader from "./loader/Loader";
+import {onWakeUp} from "../util/pureFunctions";
+import React, {ReactNode, useContext, useEffect, useMemo} from "react";
+import {useAppSelector} from "../redux/hooks";
+import store from "../redux/store";
 import {useLoadScript} from "@react-google-maps/api";
-import appConfig, {gmapsRegionOptions} from "../../config/appConfig";
+import appConfig, {gmapsRegionOptions} from "../config/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
-import {setMapsApiResponse} from "../../redux/actions/AppStateAction";
-import AuthenticationManager from "../../service/auth/AuthenticationManager";
-import UserIdentityManager from "../../service/userIdentity/UserIdentityManager";
-import UserIdentityManagerImpl from "../../service/userIdentity/UserIdentityManagerImpl";
-import UserIdentityApiService from "../../service/userIdentity/api/UserIdentityApiService";
-import UserIdentityApiServiceImpl from "../../service/userIdentity/api/UserIdentityApiServiceImpl";
-import IOC_TYPES from "../../inversify/IOC_TYPES";
-import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
+import {setMapsApiResponse} from "../redux/actions/AppStateAction";
+import AuthenticationManager from "../service/auth/AuthenticationManager";
+import UserIdentityManager from "../service/userIdentity/UserIdentityManager";
+import {LitmusServiceContext} from "./App";
 
 type Props = {
     children: ReactNode
@@ -22,6 +18,10 @@ type Props = {
 const libraries: Libraries = ["places"];
 
 const LitmusCore = ({children}: Props) => {
+
+    const userIdentityManager: UserIdentityManager = useContext(LitmusServiceContext).userIdentity.manager;
+
+    const authenticationManager: AuthenticationManager = useContext(LitmusServiceContext).auth.manager;
 
     const authentication = useAppSelector(state => state.authentication)
 
@@ -36,12 +36,6 @@ const LitmusCore = ({children}: Props) => {
         region: gmapsRegionOptions.region!,
     });
 
-    const authenticationManager: AuthenticationManager = BasicAuthenticationManager.getInstance();
-
-    const userIdentityManager: UserIdentityManager = useMemo<UserIdentityManager>(()=>{
-        const service: UserIdentityApiService = new UserIdentityApiServiceImpl(()=>store.getState().authentication?.accessToken!);
-        return UserIdentityManagerImpl.getManager(service, store);
-    }, []);
 
     useEffect(()=>{
         store.dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError?{...loadError}:null}))

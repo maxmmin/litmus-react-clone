@@ -1,4 +1,4 @@
-import React, {useMemo, useRef} from 'react';
+import React, {useContext, useMemo, useRef} from 'react';
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -6,6 +6,7 @@ import {Navigate} from "react-router-dom";
 import {LoginPageState, updateLoginPageState} from "../../redux/actions/LoginPageDataActions";
 import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
+import {LitmusServiceContext} from "../App";
 
 
 
@@ -20,9 +21,7 @@ function LoginPage() {
 
     const {email, password, error} = useAppSelector(state => state.loginPageState)||{};
 
-    const authManager: AuthenticationManager = useMemo(()=>{
-        return BasicAuthenticationManager.getInstance();
-    }, [])
+    const authManager: AuthenticationManager = useContext(LitmusServiceContext).auth.manager
 
     const signInButtonHandler = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();

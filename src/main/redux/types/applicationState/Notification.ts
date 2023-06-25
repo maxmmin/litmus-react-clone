@@ -56,5 +56,6 @@ export interface NotificationManager {
     info(message: string): void;
     warning(message: string): void;
     addNotification(notification: Notification): void
+    clearNotifications(): void;
 }
 

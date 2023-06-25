@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
@@ -21,12 +21,10 @@ import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
-import IOC_TYPES from "../../inversify/IOC_TYPES";
 import JurPersonCreationStateManagerImpl
     from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 import PersonCreationStateManagerImpl from "../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
-import PersonExplorationApiServiceImpl
-    from "../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
+import {LitmusServiceContext} from "../App";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -119,8 +117,10 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     }
 
+    const personApiService = useContext(LitmusServiceContext).exploration.apiService.person
+
     const fetchPerson = async (accessToken: string, id: string, mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>) => {
-        const personService: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance();
+        const personService: PersonExplorationApiService = personApiService;
 
         setPending(true)
 
