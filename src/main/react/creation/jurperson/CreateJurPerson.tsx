@@ -10,9 +10,6 @@ import Person from "../../../model/human/person/Person";
 import {DateBuilder} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
-import JurPersonCreationStateManager
-    from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
-
 import JurPersonCreationStateManagerImpl
     from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 

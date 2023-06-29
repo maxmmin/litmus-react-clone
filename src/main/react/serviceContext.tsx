@@ -49,12 +49,31 @@ import UserIdentityManager from "../service/userIdentity/UserIdentityManager";
 import UserIdentityApiServiceImpl from "../service/userIdentity/api/UserIdentityApiServiceImpl";
 import UserIdentityManagerImpl from "../service/userIdentity/UserIdentityManagerImpl";
 import PersonCreationService from "../service/creation/PersonCreationService";
-import CreationService from "../service/creation/CreationService";
 import UserCreationService from "../service/creation/UserCreationService";
 import JurPersonCreationService from "../service/creation/JurPersonCreationService";
 import ApplicationStateManager from "../service/appState/ApplicationStateManager";
 import {NotificationManager} from "../redux/types/applicationState/Notification";
 import {BasicNotificationManager} from "../redux/types/applicationState/BasicNotificationManager";
+import PersonExplorationValidationServiceImpl
+    from "../service/exploration/validation/human/person/PersonExplorationValidationServiceImpl";
+import UserExplorationValidationServiceImpl
+    from "../service/exploration/validation/human/user/UserExplorationValidationServiceImpl";
+import JurPersonExplorationValidationServiceImpl
+    from "../service/exploration/validation/jurPerson/JurPersonExplorationValidationServiceImpl";
+import PersonExplorationValidationService
+    from "../service/exploration/validation/human/person/PersonExplorationValidationService";
+import JurPersonExplorationValidationService
+    from "../service/exploration/validation/jurPerson/JurPersonExplorationValidationService";
+import UserExplorationValidationService
+    from "../service/exploration/validation/human/user/UserExplorationValidationService";
+import UserDtoMapper from "../rest/dto/dtoMappers/UserDtoMapper";
+import PersonDtoMapper from "../rest/dto/dtoMappers/PersonDtoMapper";
+import JurPersonDtoMapper from "../rest/dto/dtoMappers/JurPersonDtoMapper";
+import userDtoMapper from "../rest/dto/dtoMappers/UserDtoMapper";
+
+const dtoUserMapper = new UserDtoMapper();
+const dtoPersonMapper = new PersonDtoMapper();
+const dtoJurPersonMapper = new JurPersonDtoMapper();
 
 type AuthContext = {
     stateManager: AuthenticationStateManager
@@ -79,6 +98,11 @@ type ExplorationContext = {
         jurPerson: JurPersonExplorationApiService,
         user: UserExplorationApiService
     },
+    validation: {
+        person: PersonExplorationValidationService,
+        jurPerson: JurPersonExplorationValidationService,
+        user: UserExplorationValidationService
+    }
     service: {
         jurPerson: JurPersonExplorationService,
         person: PersonExplorationService,
@@ -94,6 +118,10 @@ const personExplorationApiService = PersonExplorationApiServiceImpl.getInstance(
 const jurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance(authContext.stateManager);
 const userExplorationApiService = UserExplorationApiServiceImpl.getInstance(authContext.stateManager);
 
+const personExplorationValidationService = new PersonExplorationValidationServiceImpl();
+const userExplorationValidationService = new UserExplorationValidationServiceImpl();
+const jurPersonExplorationValidationService = new JurPersonExplorationValidationServiceImpl();
+
 const explorationContext: ExplorationContext = {
     stateManagers: {
         person: personExplorationStateManager,
@@ -105,10 +133,15 @@ const explorationContext: ExplorationContext = {
         user: userExplorationApiService,
         jurPerson: jurPersonExplorationApiService
     },
+    validation: {
+      person: personExplorationValidationService,
+      jurPerson: jurPersonExplorationValidationService,
+      user: userExplorationValidationService
+    },
     service: {
-        user: UserExplorationService.getInstance(userExplorationStateManager,userExplorationApiService),
-        person: PersonExplorationService.getInstance(personExplorationStateManager, personExplorationApiService),
-        jurPerson: JurPersonExplorationService.getInstance(jurPersonExplorationStateManager, jurPersonExplorationApiService)
+        user: UserExplorationService.getInstance(userExplorationStateManager,userExplorationApiService, dtoUserMapper, userExplorationValidationService),
+        person: PersonExplorationService.getInstance(personExplorationStateManager, personExplorationApiService, dtoPersonMapper, personExplorationValidationService),
+        jurPerson: JurPersonExplorationService.getInstance(jurPersonExplorationStateManager, jurPersonExplorationApiService, dtoJurPersonMapper,jurPersonExplorationValidationService)
     }
 }
 
