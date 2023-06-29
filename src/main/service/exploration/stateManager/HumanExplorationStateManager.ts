@@ -1,6 +1,5 @@
 import ExplorationStateManager from "./ExplorationStateManager";
 import HumanExplorationParams from "../../../redux/types/exploration/human/HumanExplorationParams";
-import EntityExplorationState from "../../../redux/types/exploration/EntityExplorationState";
 import Human from "../../../model/human/Human";
 
 export default interface HumanExplorationStateManager<E extends Human, P extends HumanExplorationParams>

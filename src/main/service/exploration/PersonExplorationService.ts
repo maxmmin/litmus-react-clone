@@ -13,7 +13,7 @@ import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
-import handleError from "../creation/handleError";
+import handleCreationError from "../creation/handleCreationError";
 
 
 import UnsupportedModeError from "./UnsupportedModeError";
@@ -23,7 +23,7 @@ import PersonExplorationApiServiceImpl from "./api/human/person/PersonExploratio
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonExplorationValidationService from "./validation/human/person/PersonExplorationValidationService";
 import PersonExplorationValidationServiceImpl from "./validation/human/person/PersonExplorationValidationServiceImpl";
-import ExplorationValidationError from "./validation/ValidationError";
+import ValidationError from "../../error/ValidationError";
 
 type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: DtoMapper<unknown, Person, PersonResponseDto>) => Promise<PagedData<Person>>;
 
@@ -45,7 +45,7 @@ class PersonExplorationService implements ExplorationService {
     private exploreByIdCallback: PersonExplorationCallbackType = async (params, service, mapper) => {
         const errors = this.validationService.validateId(params);
         if (errors) {
-            throw new ExplorationValidationError(errors);
+            throw new ValidationError(errors);
         }
         const id = checkNotEmpty(params.id);
         const content: Person[] = []
@@ -60,7 +60,7 @@ class PersonExplorationService implements ExplorationService {
     private exploreByFullNameCallback: PersonExplorationCallbackType = async (params, service, mapper) => {
         const errors = this.validationService.validateFullName(params);
         if (errors) {
-            throw new ExplorationValidationError(errors);
+            throw new ValidationError(errors);
         }
         const lastName = checkNotEmpty(params.lastName);
         const middleName = params.middleName;
@@ -102,10 +102,10 @@ class PersonExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<Person, PersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            if (e instanceof ExplorationValidationError) {
+            if (e instanceof ValidationError) {
                 this.stateManager.setValidationErrors(e.errors)
             }
-            return rejectWithValue(handleError(e), {notify: true});
+            return rejectWithValue(handleCreationError(e), {notify: true});
         }
     }))
 

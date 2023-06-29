@@ -1,8 +1,7 @@
-import EntityExplorationParams from "../../../redux/types/exploration/EntityExplorationParams";
-import ErrorResponse from "../../../rest/ErrorResponse";
-import {HttpStatus} from "../../../rest/HttpStatus";
+import ErrorResponse from "../rest/ErrorResponse";
+import {HttpStatus} from "../rest/HttpStatus";
 
-export default class ValidationError<P extends EntityExplorationParams> extends Error implements ErrorResponse<Partial<Record<keyof P, string>>>{
+export default class ValidationError<P> extends Error implements ErrorResponse<Partial<Record<keyof P, string>>>{
     errors: Partial<Record<keyof P, string>>;
 
     detail: Partial<Record<keyof P, string>> | null;

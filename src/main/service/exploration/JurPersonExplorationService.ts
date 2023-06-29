@@ -12,7 +12,7 @@ import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
 import deepCopy from "../../util/deepCopy";
-import handleError from "../creation/handleError";
+import handleCreationError from "../creation/handleCreationError";
 import BasicJurPersonExplorationParams from "../../redux/types/exploration/jurPerson/BasicJurPersonExplorationParams";
 import jurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
@@ -29,7 +29,7 @@ import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplora
 import JurPersonExplorationValidationService from "./validation/jurPerson/JurPersonExplorationValidationService";
 import JurPersonExplorationValidationServiceImpl
     from "./validation/jurPerson/JurPersonExplorationValidationServiceImpl";
-import ExplorationValidationError from "./validation/ValidationError";
+import ValidationError from "../../error/ValidationError";
 
 type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) => Promise<PagedData<JurPerson>>;
 
@@ -52,7 +52,7 @@ class JurPersonExplorationService implements ExplorationService {
     private exploreByIdCallback: JurPersonExplorationCallbackType = async (params, service, mapper) => {
         const errors = this.validationService.validateId(params);
         if (errors) {
-            throw new ExplorationValidationError(errors);
+            throw new ValidationError(errors);
         }
         //@todo write the way to get all entities
         const id = checkNotEmpty(params.id);
@@ -96,10 +96,10 @@ class JurPersonExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            if (e instanceof ExplorationValidationError) {
+            if (e instanceof ValidationError) {
                 this.stateManager.setValidationErrors(e.errors)
             }
-            return rejectWithValue(handleError(e), {notify: true});
+            return rejectWithValue(handleCreationError(e), {notify: true});
         }
     }))
 

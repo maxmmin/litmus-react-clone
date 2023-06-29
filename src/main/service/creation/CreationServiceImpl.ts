@@ -4,7 +4,7 @@ import {createAsyncThunk} from "@reduxjs/toolkit";
 import CreationTypedAction from "../../redux/actions/CreationTypedAction";
 import CreationCoreAction from "../../redux/actions/CreationCoreAction";
 import deepCopy from "../../util/deepCopy";
-import handleError from "./handleError";
+import handleCreationError from "./handleCreationError";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
@@ -45,7 +45,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
             const entity: E = this.mapper.mapToEntity(responseDto);
             return fulfillWithValue(deepCopy(entity), {notify: true});
         } catch (e: unknown) {
-            return rejectWithValue(handleError(e), {notify: true});
+            return rejectWithValue(handleCreationError(e), {notify: true});
         }
     })
 
