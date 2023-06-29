@@ -19,34 +19,6 @@ export enum PersonCreationAction {
 
 export default CreationCoreAction;
 
-export const initialPersonCreationParams: Person = {
-    id: '-1',
-    dateOfBirth: {...new DateBuilder().build()},
-    firstName: "",
-    lastName: "",
-    middleName: "",
-    relationships: [],
-    sex: null,
-    passportData: {passportSerial: "", passportNumber: "", rnokppCode: ""},
-    location: null
-}
 
-export const initialUserCreationParams: User = {
-    id: '-1',
-    email: "",
-    firstName:  "",
-    lastName: "",
-    middleName: "",
-    password: "",
-    role: RoleName.USER
-}
 
-export const initialJurPersonCreationParams: JurPerson = {
-    id: '-1',
-    benOwner: null,
-    dateOfRegistration:  {...new DateBuilder().build()},
-    edrpou:  "",
-    name: "",
-    owner: null,
-    location: null
-}
+

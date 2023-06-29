@@ -3,11 +3,9 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import CreationTypedAction from "../actions/CreationTypedAction";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import {combineReducers} from "redux";
-import EntityCreationState, {BasicEntityCreationState} from "../types/creation/EntityCreationState";
+import EntityCreationState from "../types/creation/EntityCreationState";
 import deepCopy from "../../util/deepCopy";
 import CreationCoreAction, {
-    initialJurPersonCreationParams,
-    initialPersonCreationParams, initialUserCreationParams,
     PersonCreationAction
 } from "../actions/CreationCoreAction";
 import Person, {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
@@ -16,6 +14,9 @@ import {Entity} from "../../model/Entity";
 import PassportData from "../../model/human/person/PassportData";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import User from "../../model/human/user/User";
+import UserCreationState, {BasicUserCreationState} from "../types/creation/UserCreationState";
+import JurPersonCreationState, {BasicJurPersonCreationState} from "../types/creation/JurPersonCreationState";
+import PersonCreationState, {BasicPersonCreationState} from "../types/creation/PersonCreationState";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
@@ -37,7 +38,7 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
     }
 }
 
-const initialPersonCreationState: EntityCreationState<Person> = deepCopy( new BasicEntityCreationState(initialPersonCreationParams));
+const initialPersonCreationState: PersonCreationState = deepCopy(new BasicPersonCreationState());
 
 const personCreationStateReducer: Reducer<EntityCreationState<
     Person>|undefined, PayloadAction<Person>> = (prevState=initialPersonCreationState, action) => {
@@ -90,7 +91,7 @@ const personCreationStateReducer: Reducer<EntityCreationState<
         }
     }
 }
-const initialJurPersonState: EntityCreationState<JurPerson> = deepCopy(new BasicEntityCreationState(initialJurPersonCreationParams))
+const initialJurPersonState: JurPersonCreationState = deepCopy(new BasicJurPersonCreationState())
 
 const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPerson>|undefined, PayloadAction<JurPerson>> = (prevState=initialJurPersonState, action) => {
     const actions = CreationTypedAction.person;
@@ -114,7 +115,7 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPerson>|unde
     }
 }
 
-const initialUserCreationState: EntityCreationState<User> = deepCopy(new BasicEntityCreationState(initialUserCreationParams));
+const initialUserCreationState: UserCreationState = deepCopy(new BasicUserCreationState());
 
 const userCreationStateReducer: Reducer<EntityCreationState<User>|undefined, PayloadAction<User>> = (prevState=initialUserCreationState, action) => {
     const actions = CreationTypedAction.person;
