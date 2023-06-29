@@ -14,33 +14,17 @@ import ExplorationInputForm from "./ExplorationInputForm";
 import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import store from "../../redux/store";
 import ExplorationData from "./ExplorationData";
-import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import {getEntityByDomain} from "../../util/pureFunctions";
-import getEntityExplorationService, {
-    getEntityExplorationStateManager
-} from "../../util/getEntityExplorationService";
+import getEntityExplorationService, {getEntityExplorationStateManager} from "../../util/getEntityExplorationService";
 import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
+import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 
 
-
-function getRequiredPermissions(exploredEntity: Entity|undefined) {
-    let requiredPermissions: Permissions[];
-
-    switch (exploredEntity) {
-        case Entity.PERSON:
-            requiredPermissions = Role[RoleName.USER].permissions;
-            break;
-        case Entity.JUR_PERSON:
-            requiredPermissions = Role[RoleName.USER].permissions;
-            break;
-        case Entity.USER:
-            requiredPermissions = Role[RoleName.ADMIN].permissions;
-            break;
-        default: throw new Error("no permissions for such entity defined");
-    }
-
-    return requiredPermissions;
+function getRequiredExplorationPermissions(exploredEntity: Entity|undefined) {
+    if (exploredEntity===Entity.USER) {
+        return Role[RoleName.ADMIN].permissions;
+    } else return Role[RoleName.USER].permissions
 }
 
 const ExplorationScreen = () => {
@@ -68,33 +52,21 @@ const ExplorationScreen = () => {
         }
     }, [location])
 
-    const explorationState = useAppSelector<EntityExplorationState<unknown, EntityExplorationParams>|undefined>(state => {
-        if (exploredEntity) {
-            switch (exploredEntity) {
-                case Entity.PERSON:
-                    return state.exploration.person;
-                case Entity.JUR_PERSON:
-                    return state.exploration.jurPerson;
-                case Entity.USER:
-                    return state.exploration.user;
-                default: throw new Error("unknown entity: "+exploredEntity);
-            }
-        }   else return undefined;
-    })
-
-    if (!exploredEntity||!explorationState) {
+    if (!exploredEntity) {
        return null;
     }
 
-    const stateManager: ExplorationStateManager<unknown, EntityExplorationParams> = getEntityExplorationStateManager(exploredEntity);
-
-    let requiredPermissions: Permissions[] = getRequiredPermissions(exploredEntity);
+    let requiredPermissions: Permissions[] = getRequiredExplorationPermissions(exploredEntity);
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
         navigate(event.currentTarget.value)
     }
 
+    const stateManager: ExplorationStateManager<unknown, EntityExplorationParams> = getEntityExplorationStateManager(exploredEntity);
+
     const explorationService = getEntityExplorationService(exploredEntity);
+
+    const explorationState: EntityExplorationState<unknown, EntityExplorationParams> = stateManager.getExplorationState();
 
     return (
        <PrivateComponentWrapper requiredPermissions={requiredPermissions} mode={"ERROR_PAGE"}>
