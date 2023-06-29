@@ -20,7 +20,7 @@ import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto"
 import JurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
 
 import UnsupportedModeError from "./UnsupportedModeError";
-import IOC_TYPES from "../../inversify/IOC_TYPES";
+
 import JurPersonExplorationParams from "../../redux/types/exploration/jurPerson/JurPersonExplorationParams";
 import JurPersonExplorationStateManager from "./stateManager/jurPerson/JurPersonExplorationStateManager";
 import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPersonExplorationStateManagerImpl";

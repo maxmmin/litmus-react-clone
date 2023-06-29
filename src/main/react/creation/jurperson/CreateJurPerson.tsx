@@ -12,7 +12,7 @@ import {CreationModalModes} from "../../../redux/types/creation/CreationModalMod
 import {Entity} from "../../../model/Entity";
 import JurPersonCreationStateManager
     from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
-import IOC_TYPES from "../../../inversify/IOC_TYPES";
+
 import JurPersonCreationStateManagerImpl
     from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 

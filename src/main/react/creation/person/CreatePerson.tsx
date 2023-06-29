@@ -16,7 +16,7 @@ import {CreationModalModes} from "../../../redux/types/creation/CreationModalMod
 import PersonRelationships from "./PersonRelationships";
 import {Entity} from "../../../model/Entity";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
-import IOC_TYPES from "../../../inversify/IOC_TYPES";
+
 import PersonCreationStateManagerImpl
     from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
 

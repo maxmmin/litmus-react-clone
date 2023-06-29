@@ -8,7 +8,6 @@ import Person, {Relationship} from "../../../../model/human/person/Person";
 import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import PassportData from "../../../../model/human/person/PassportData";
 
-import IOC_TYPES from "../../../../inversify/IOC_TYPES";
 import {GeoLocation} from "../../../../model/GeoLocation";
 
 class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person> implements PersonCreationStateManager {

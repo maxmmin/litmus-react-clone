@@ -15,7 +15,7 @@ import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import handleCreationError from "../creation/handleCreationError";
 
-import IOC_TYPES from "../../inversify/IOC_TYPES";
+
 import UnsupportedModeError from "./UnsupportedModeError";
 import PersonExplorationStateManager from "./stateManager/person/PersonExplorationStateManager";
 import PersonExplorationStateManagerImpl from "./stateManager/person/PersonExplorationStateManagerImpl";

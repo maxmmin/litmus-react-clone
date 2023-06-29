@@ -6,7 +6,7 @@ import CreationApiService from "./CreationApiService";
 import UserRequestDto from "../../../rest/dto/user/UserRequestDto";
 import UserResponseDto from "../../../rest/dto/user/UserResponseDto";
 
-import IOC_TYPES from "../../../inversify/IOC_TYPES";
+
 import AuthenticationStateManager from "../../auth/stateManager/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "../../auth/stateManager/AuthenticationStateManagerImpl";
 

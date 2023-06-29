@@ -8,7 +8,7 @@ import PersonRequestDto from "../../../rest/dto/person/PersonRequestDto";
 import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
 import AuthenticationStateManager from "../../auth/stateManager/AuthenticationStateManager";
 
-import IOC_TYPES from "../../../inversify/IOC_TYPES";
+
 import AuthenticationStateManagerImpl from "../../auth/stateManager/AuthenticationStateManagerImpl";
 
 class PersonCreationApiService implements CreationApiService<PersonRequestDto, PersonResponseDto> {

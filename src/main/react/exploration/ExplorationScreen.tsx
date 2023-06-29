@@ -19,7 +19,7 @@ import EntityExplorationParams from "../../redux/types/exploration/EntityExplora
 import {getEntityByDomain} from "../../util/pureFunctions";
 import getEntityExplorationService, {
     getEntityExplorationStateManager
-} from "../../inversify/getEntityExplorationService";
+} from "../../util/getEntityExplorationService";
 import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
 
 

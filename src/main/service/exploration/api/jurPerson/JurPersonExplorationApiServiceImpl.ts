@@ -7,12 +7,8 @@ import BasicEntityLookupService from "../BasicExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
 import jurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
-
-import IOC_TYPES from "../../../../inversify/IOC_TYPES";
 import AuthenticationStateManager from "../../../auth/stateManager/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "../../../auth/stateManager/AuthenticationStateManagerImpl";
-import JurPersonExplorationStateManagerImpl from "../../stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
-
 class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPersonResponseDto> implements JurPersonExplorationApiService {
 
     constructor(authStateManager: AuthenticationStateManager) {

@@ -17,7 +17,7 @@ import appConfig from "../../config/appConfig";
 import {useAppSelector} from "../../redux/hooks";
 import CreationStateManagerImpl from "../../service/creation/stateManager/CreationStateManagerImpl";
 import CreationService from "../../service/creation/CreationService";
-import getEntityCreationService from "../../inversify/getEntityCreationService";
+import getEntityCreationService from "../../util/getEntityCreationService";
 
 
 export type CreationModalSettings = {

@@ -11,11 +11,12 @@ import PersonExplorationStateManagerImpl
 import JurPersonExplorationStateManagerImpl
     from "../service/exploration/stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
 import UserExplorationStateManagerImpl from "../service/exploration/stateManager/user/UserExplorationStateManagerImpl";
+import serviceContext from "../react/serviceContext";
 const entityExplorationServiceMap: Map<Entity, ExplorationService> = new Map<Entity, EntityExplorationService>();
 
-entityExplorationServiceMap.set(Entity.USER, UserExplorationService.getInstance());
-entityExplorationServiceMap.set(Entity.PERSON, PersonExplorationService.getInstance());
-entityExplorationServiceMap.set(Entity.JUR_PERSON, JurPersonExplorationService.getInstance());
+entityExplorationServiceMap.set(Entity.USER, serviceContext.exploration.service.user);
+entityExplorationServiceMap.set(Entity.PERSON, serviceContext.exploration.service.person);
+entityExplorationServiceMap.set(Entity.JUR_PERSON, serviceContext.exploration.service.jurPerson);
 
 export default function getEntityExplorationService(entity: Entity): ExplorationService {
     const explorationService = entityExplorationServiceMap.get(entity);
@@ -27,9 +28,9 @@ export default function getEntityExplorationService(entity: Entity): Exploration
 const entityExplorationStateManagerMap: Map<Entity, ExplorationStateManager<unknown, EntityExplorationParams>>
     = new Map<Entity, ExplorationStateManager<unknown, EntityExplorationParams>>();
 
-entityExplorationStateManagerMap.set(Entity.PERSON, new PersonExplorationStateManagerImpl());
-entityExplorationStateManagerMap.set(Entity.JUR_PERSON, new JurPersonExplorationStateManagerImpl());
-entityExplorationStateManagerMap.set(Entity.USER, new UserExplorationStateManagerImpl());
+entityExplorationStateManagerMap.set(Entity.PERSON, serviceContext.exploration.stateManagers.person);
+entityExplorationStateManagerMap.set(Entity.JUR_PERSON, serviceContext.exploration.stateManagers.user);
+entityExplorationStateManagerMap.set(Entity.USER, serviceContext.exploration.stateManagers.jurPerson);
 
 export function getEntityExplorationStateManager(entity: Entity): ExplorationStateManager<unknown,EntityExplorationParams> {
     const manager:  ExplorationStateManager<unknown,EntityExplorationParams>|undefined =  entityExplorationStateManagerMap.get(entity)

@@ -6,7 +6,7 @@ import {
     Timers
 } from "../../redux/actions/TimersAction";
 
-import IOC_TYPES from "../../inversify/IOC_TYPES";
+
 
 class TimersStateManager {
     private readonly dispatch: AppDispatch = store.dispatch;

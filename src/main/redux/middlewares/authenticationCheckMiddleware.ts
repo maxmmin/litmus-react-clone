@@ -4,13 +4,8 @@ import {AuthenticationReducible} from "../types/auth/Authentication";
 import AuthAction from "../actions/AuthAction";
 import {TimersReducible} from "../actions/TimersAction";
 import GeneralAction from "../GeneralAction";
-import AuthenticationManager from "../../service/auth/AuthenticationManager";
-import IOC_TYPES from "../../inversify/IOC_TYPES";
 import BasicAuthenticationManager from "../../service/auth/BasicAuthenticationManager";
-import {LitmusServiceContext} from "../../react/App";
-import {useContext} from "react";
-import serviceContext from "../../react/serviceContext";
-import AuthenticationStateManagerImpl from "../../service/auth/stateManager/AuthenticationStateManagerImpl";
+
 
 
 type PartedStoreType = {
