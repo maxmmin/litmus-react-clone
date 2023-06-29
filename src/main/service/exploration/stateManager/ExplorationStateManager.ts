@@ -25,5 +25,7 @@ export default interface ExplorationStateManager <E, P extends EntityExploration
 
     disableSectionPending (): void;
 
+    setValidationErrors(errors: Partial<Record<keyof P, string>>): void;
+
     switchExplorationMode(mode: ExplorationMode): void;
 }

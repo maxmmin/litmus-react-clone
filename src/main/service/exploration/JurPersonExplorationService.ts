@@ -12,7 +12,7 @@ import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
 import deepCopy from "../../util/deepCopy";
-import handleCreationError from "../creation/handleCreationError";
+import handleError from "../creation/handleError";
 import BasicJurPersonExplorationParams from "../../redux/types/exploration/jurPerson/BasicJurPersonExplorationParams";
 import jurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
@@ -26,6 +26,10 @@ import JurPersonExplorationStateManager from "./stateManager/jurPerson/JurPerson
 import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
+import JurPersonExplorationValidationService from "./validation/jurPerson/JurPersonExplorationValidationService";
+import JurPersonExplorationValidationServiceImpl
+    from "./validation/jurPerson/JurPersonExplorationValidationServiceImpl";
+import ExplorationValidationError from "./validation/ValidationError";
 
 type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) => Promise<PagedData<JurPerson>>;
 
@@ -33,17 +37,23 @@ class JurPersonExplorationService implements ExplorationService {
 
     constructor(private readonly stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>,
                 private readonly service: JurPersonExplorationApiService,
-                private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
+                private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>,
+                private readonly validationService: JurPersonExplorationValidationService) {
     }
 
     public static getInstance(stateManager: JurPersonExplorationStateManager = new JurPersonExplorationStateManagerImpl(),
                        service: JurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance(),
-                       mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto> = new JurPersonDtoMapper()
+                       mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto> = new JurPersonDtoMapper(),
+                       validationService: JurPersonExplorationValidationService = new JurPersonExplorationValidationServiceImpl()
                     ) {
-        return new JurPersonExplorationService(stateManager,service,mapper)
+        return new JurPersonExplorationService(stateManager,service,mapper, validationService)
     }
 
     private exploreByIdCallback: JurPersonExplorationCallbackType = async (params, service, mapper) => {
+        const errors = this.validationService.validateId(params);
+        if (errors) {
+            throw new ExplorationValidationError(errors);
+        }
         const id = checkNotEmpty(params.id);
         const content: JurPerson[] = []
         const jurPersonResponseDto: JurPersonResponseDto|null = await service.findById(id);
@@ -57,7 +67,6 @@ class JurPersonExplorationService implements ExplorationService {
     private callbackMap: Map<ExplorationMode, JurPersonExplorationCallbackType>
         = new Map<ExplorationMode, JurPersonExplorationCallbackType>(
         [
-            [ExplorationMode.BY_FULL_NAME, this.exploreByIdCallback],
             [ExplorationMode.BY_ID, this.exploreByIdCallback]
         ],
     )
@@ -66,7 +75,7 @@ class JurPersonExplorationService implements ExplorationService {
         this.stateManager.retrieveData(this.exploreJurPersonsThunk({params: this.stateManager.getExplorationParams(), globalPending: false})).catch(console.error)
     }
 
-    private async exploreUponMode (explorationParams: BasicJurPersonExplorationParams): Promise<PagedData<JurPerson>> {
+    private async exploreUponMode (explorationParams: JurPersonExplorationParams): Promise<PagedData<JurPerson>> {
         const modeId = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         const callback = this.callbackMap.get(mode);
@@ -86,7 +95,10 @@ class JurPersonExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            return rejectWithValue(handleCreationError(e), {notify: true});
+            if (e instanceof ExplorationValidationError) {
+                this.stateManager.setValidationErrors(e.errors)
+            }
+            return rejectWithValue(handleError(e), {notify: true});
         }
     }))
 

@@ -13,7 +13,7 @@ import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
-import handleCreationError from "../creation/handleCreationError";
+import handleError from "../creation/handleError";
 
 
 import UnsupportedModeError from "./UnsupportedModeError";
@@ -21,6 +21,9 @@ import PersonExplorationStateManager from "./stateManager/person/PersonExplorati
 import PersonExplorationStateManagerImpl from "./stateManager/person/PersonExplorationStateManagerImpl";
 import PersonExplorationApiServiceImpl from "./api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
+import PersonExplorationValidationService from "./validation/human/person/PersonExplorationValidationService";
+import PersonExplorationValidationServiceImpl from "./validation/human/person/PersonExplorationValidationServiceImpl";
+import ExplorationValidationError from "./validation/ValidationError";
 
 type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: DtoMapper<unknown, Person, PersonResponseDto>) => Promise<PagedData<Person>>;
 
@@ -28,16 +31,22 @@ class PersonExplorationService implements ExplorationService {
 
     constructor(private readonly stateManager: PersonExplorationStateManager,
                 private readonly service: PersonExplorationApiService,
-                private readonly mapper: DtoMapper<unknown, Person, PersonResponseDto>) {
+                private readonly mapper: DtoMapper<unknown, Person, PersonResponseDto>,
+                private readonly validationService: PersonExplorationValidationService) {
     }
 
     public static getInstance (stateManager: PersonExplorationStateManager = new PersonExplorationStateManagerImpl(),
                                service: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance(),
-                               mapper: DtoMapper<unknown, Person, PersonResponseDto> = new PersonDtoMapper()): PersonExplorationService {
-       return new PersonExplorationService(stateManager, service, mapper)
+                               mapper: DtoMapper<unknown, Person, PersonResponseDto> = new PersonDtoMapper(),
+                               validationService: PersonExplorationValidationService = new PersonExplorationValidationServiceImpl()): PersonExplorationService {
+       return new PersonExplorationService(stateManager, service, mapper, validationService);
     }
 
     private exploreByIdCallback: PersonExplorationCallbackType = async (params, service, mapper) => {
+        const errors = this.validationService.validateId(params);
+        if (errors) {
+            throw new ExplorationValidationError(errors);
+        }
         const id = checkNotEmpty(params.id);
         const content: Person[] = []
         const personResponseDto: PersonResponseDto|null = await service.findById(id);
@@ -49,6 +58,10 @@ class PersonExplorationService implements ExplorationService {
     }
 
     private exploreByFullNameCallback: PersonExplorationCallbackType = async (params, service, mapper) => {
+        const errors = this.validationService.validateFullName(params);
+        if (errors) {
+            throw new ExplorationValidationError(errors);
+        }
         const lastName = checkNotEmpty(params.lastName);
         const middleName = params.middleName;
         const firstName = params.firstName;
@@ -89,7 +102,10 @@ class PersonExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<Person, PersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            return rejectWithValue(handleCreationError(e), {notify: true});
+            if (e instanceof ExplorationValidationError) {
+                this.stateManager.setValidationErrors(e.errors)
+            }
+            return rejectWithValue(handleError(e), {notify: true});
         }
     }))
 

@@ -1,6 +1,5 @@
-import ExplorationValidationService from "../../ExplorationValidationService";
-import UserExplorationParams from "../../../../../redux/types/exploration/human/user/UserExplorationParams";
+import HumanExplorationValidationService from "../HumanExplorationValidationService";
 
-export default interface UserExplorationValidationService extends ExplorationValidationService<UserExplorationParams> {
+export default interface UserExplorationValidationService extends HumanExplorationValidationService {
 
 }

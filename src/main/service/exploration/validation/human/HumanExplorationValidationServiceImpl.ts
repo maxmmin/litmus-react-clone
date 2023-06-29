@@ -10,14 +10,32 @@ class HumanExplorationValidationServiceImpl extends BasicExplorationValidationSe
     private static readonly LAST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
 
     validate(params: HumanExplorationParams): Partial<Record<keyof HumanExplorationParams, string>> {
-        const idValidated = super.validate(params);
+        const baseValidation = super.validate(params);
         return {
-            ...idValidated,
+            ...baseValidation,
             firstName: this.isFirstNameValid(params.firstName),
             middleName: this.isMiddleNameValid(params.middleName),
             lastName: this.isLastNameValid(params.lastName)
         };
     }
+
+    validateFullName(params: HumanExplorationParams): Partial<Record<keyof HumanExplorationParams, string>>|null {
+        const bindingRes = {
+            firstName: this.isFirstNameValid(params.firstName),
+            middleName: this.isMiddleNameValid(params.middleName),
+            lastName: this.isLastNameValid(params.lastName)
+        };
+
+        if (this.hasErrors(bindingRes)) {
+            return {
+                firstName: this.isFirstNameValid(params.firstName),
+                middleName: this.isMiddleNameValid(params.middleName),
+                lastName: this.isLastNameValid(params.lastName)
+            }
+        }
+        else return null;
+    }
+
 
     isFirstNameValid(firstName: HumanExplorationParams["firstName"]): string|undefined {
         if (firstName) {

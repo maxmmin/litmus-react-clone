@@ -8,7 +8,7 @@ import PersonExplorationState, {
 import PersonExplorationParams, {
     BasicPersonExplorationParams
 } from "../types/exploration/human/person/PersonExplorationParams";
-import {BasicJurPersonExplorationState} from "../types/exploration/jurPerson/JurPersonExplorationState";
+import JurPersonExplorationState, {BasicJurPersonExplorationState} from "../types/exploration/jurPerson/JurPersonExplorationState";
 import BasicJurPersonExplorationParams from "../types/exploration/jurPerson/BasicJurPersonExplorationParams";
 import UserExplorationState, {BasicUserExplorationState} from "../types/exploration/human/user/UserExplorationState";
 import {BasicUserExplorationParams} from "../types/exploration/human/user/UserExplorationParams";
@@ -54,6 +54,10 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, EntityEx
             return {...prevState, params: {...prevState.params, ...params}}
         }
 
+        case ExplorationCoreAction.SET_EXPLORATION_VALIDATION_ERRORS: {
+            return {...prevState, validationErrors: action.payload}
+        }
+
         case ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING: {
             const bool: boolean = action.payload as boolean;
             return {...prevState, isPending: bool} as S;
@@ -74,7 +78,7 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, EntityEx
     }
 }
 
-const initialPersonExplorationState = deepCopy(new BasicPersonExplorationState(new BasicPersonExplorationParams()));
+const initialPersonExplorationState = deepCopy(new BasicPersonExplorationState());
 
 type PersonExplorationStateReducible = PersonExplorationState | undefined;
 
@@ -100,9 +104,9 @@ const personExplorationReducer: Reducer<PersonExplorationStateReducible, Payload
 }
 
 
-const initialJurPersonExplorationState = deepCopy(new BasicJurPersonExplorationState(new BasicJurPersonExplorationParams()))
+const initialJurPersonExplorationState = deepCopy(new BasicJurPersonExplorationState())
 
-type JurPersonExplorationStateReducible = BasicJurPersonExplorationState | undefined;
+type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
 
 const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, PayloadAction<unknown>> = (prevState=initialJurPersonExplorationState, action) => {
     switch (action.type) {
@@ -123,7 +127,7 @@ const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, P
     }
 }
 
-const initialUserExplorationState = deepCopy(new BasicUserExplorationState( new BasicUserExplorationParams()));
+const initialUserExplorationState = deepCopy(new BasicUserExplorationState());
 
 type UserExplorationStateReducible = UserExplorationState | undefined;
 

@@ -1,18 +1,14 @@
 import User from "../../../../../model/human/user/User";
-import UserExplorationParams from "./UserExplorationParams";
+import UserExplorationParams, {BasicUserExplorationParams} from "./UserExplorationParams";
 import EntityExplorationState from "../../EntityExplorationState";
 import EntityExplorationData from "../../EntityExplorationData";
 
 export default interface UserExplorationState extends EntityExplorationState<User, UserExplorationParams> {}
 
 export class BasicUserExplorationState implements EntityExplorationState<User, UserExplorationParams> {
-    readonly data: EntityExplorationData<User, UserExplorationParams>|null;
-    isPending: boolean;
-    readonly params: UserExplorationParams;
+    readonly data: EntityExplorationData<User, UserExplorationParams>|null = null;
+    isPending: boolean = false;
+    readonly params: UserExplorationParams = new BasicUserExplorationParams();
+    validationErrors: Partial<Record<keyof UserExplorationParams, string>> = {};
 
-    constructor(params: UserExplorationParams, data: EntityExplorationData<User, UserExplorationParams>|null=null, isPending: boolean = false) {
-        this.data = data;
-        this.isPending = isPending;
-        this.params = params;
-    }
 }

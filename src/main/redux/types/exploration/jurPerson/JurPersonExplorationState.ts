@@ -9,13 +9,8 @@ export default interface JurPersonExplorationState extends EntityExplorationStat
 }
 
 export class BasicJurPersonExplorationState implements JurPersonExplorationState {
-    readonly data: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams>|null;
-    isPending: boolean;
-    readonly params: BasicJurPersonExplorationParams;
-
-    constructor(params: BasicJurPersonExplorationParams, data: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams>|null=null, isPending: boolean = false) {
-        this.data = data;
-        this.isPending = isPending;
-        this.params = params;
-    }
+    readonly data: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams>|null = null;
+    readonly isPending: boolean = false;
+    readonly params: JurPersonExplorationParams = new BasicJurPersonExplorationParams();
+    readonly validationErrors: Partial<Record<keyof JurPersonExplorationParams, string>> = {};
 }

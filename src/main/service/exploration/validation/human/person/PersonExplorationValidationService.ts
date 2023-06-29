@@ -1,6 +1,5 @@
-import ExplorationValidationService from "../../ExplorationValidationService";
-import PersonExplorationParams from "../../../../../redux/types/exploration/human/person/PersonExplorationParams";
+import HumanExplorationValidationService from "../HumanExplorationValidationService";
 
-export default interface PersonExplorationValidationService extends ExplorationValidationService<PersonExplorationParams> {
+export default interface PersonExplorationValidationService extends HumanExplorationValidationService {
 
 }

@@ -49,6 +49,15 @@ class ExplorationStateManagerImpl<E,P extends EntityExplorationParams> implement
         })
     }
 
+    setValidationErrors(errors: Partial<Record<keyof P, string>>): void {
+        this.dispatch({
+            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_VALIDATION_ERRORS],
+            payload: errors
+        })
+    }
+
+
+
     setParams (params: EntityExplorationState<E, P>['params']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_PARAMS],

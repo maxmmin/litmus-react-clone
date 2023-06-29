@@ -21,6 +21,8 @@ export class ExplorationTypedAction {
 
     public readonly [ExplorationCoreAction.SET_EXPLORATION_DATA_RESULTS]: string;
 
+    public readonly [ExplorationCoreAction.SET_EXPLORATION_VALIDATION_ERRORS]: string;
+
     private constructor(domain: string) {
         const UPDATE_STATE_CORE = ExplorationCoreAction.SET_EXPLORATION_STATE;
         this[UPDATE_STATE_CORE] = TypedActionsUtil.getTypedAction(UPDATE_STATE_CORE, domain);
@@ -38,10 +40,13 @@ export class ExplorationTypedAction {
         this[UPDATE_DATA_PENDING_CORE] = TypedActionsUtil.getTypedAction(UPDATE_DATA_PENDING_CORE, domain);
 
         const UPDATE_DATA_RESULTS_CORE = ExplorationCoreAction.SET_EXPLORATION_DATA_RESULTS;
-        this[UPDATE_DATA_RESULTS_CORE] = TypedActionsUtil.getTypedAction(UPDATE_DATA_RESULTS_CORE, domain)
+        this[UPDATE_DATA_RESULTS_CORE] = TypedActionsUtil.getTypedAction(UPDATE_DATA_RESULTS_CORE, domain);
 
         const UPDATE_EXPLORATION_PARAMS = ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS;
         this[UPDATE_EXPLORATION_PARAMS] = TypedActionsUtil.getTypedAction(UPDATE_EXPLORATION_PARAMS, domain);
+
+        const SET_EXPLORATION_VALIDATION_ERRORS = ExplorationCoreAction.SET_EXPLORATION_VALIDATION_ERRORS;
+        this[SET_EXPLORATION_VALIDATION_ERRORS] = TypedActionsUtil.getTypedAction(SET_EXPLORATION_VALIDATION_ERRORS, domain);
     }
 
 }
