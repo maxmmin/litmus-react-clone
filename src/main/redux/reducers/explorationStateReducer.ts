@@ -5,13 +5,8 @@ import {combineReducers} from "redux";
 import PersonExplorationState, {
     BasicPersonExplorationState
 } from "../types/exploration/human/person/PersonExplorationState";
-import PersonExplorationParams, {
-    BasicPersonExplorationParams
-} from "../types/exploration/human/person/PersonExplorationParams";
 import JurPersonExplorationState, {BasicJurPersonExplorationState} from "../types/exploration/jurPerson/JurPersonExplorationState";
-import BasicJurPersonExplorationParams from "../types/exploration/jurPerson/BasicJurPersonExplorationParams";
 import UserExplorationState, {BasicUserExplorationState} from "../types/exploration/human/user/UserExplorationState";
-import {BasicUserExplorationParams} from "../types/exploration/human/user/UserExplorationParams";
 import {Entity} from "../../model/Entity";
 import EntityExplorationParams from "../types/exploration/EntityExplorationParams";
 import TypedActionsUtil from "../../util/TypedActionsUtil";

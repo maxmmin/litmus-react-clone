@@ -1,5 +1,6 @@
 import EntityExplorationParams from "./EntityExplorationParams";
 import EntityExplorationData from "./EntityExplorationData";
+import {ValidationErrors} from "../../../service/ValidationErrors";
 
 /**
  * E - entity
@@ -7,7 +8,7 @@ import EntityExplorationData from "./EntityExplorationData";
  */
 export default interface EntityExplorationState <E,P extends EntityExplorationParams> {
     params: P,
-    validationErrors: Partial<Record<keyof P, string>>
+    validationErrors: ValidationErrors<P>
     isPending: boolean,
     data: EntityExplorationData<E, P>|null
 }
