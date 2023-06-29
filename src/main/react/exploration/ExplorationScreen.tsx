@@ -52,21 +52,21 @@ const ExplorationScreen = () => {
         }
     }, [location])
 
-    if (!exploredEntity) {
+    const stateManager: ExplorationStateManager<unknown, EntityExplorationParams>|undefined = exploredEntity?getEntityExplorationStateManager(exploredEntity):undefined;
+
+    const explorationState: EntityExplorationState<unknown, EntityExplorationParams>|undefined = useAppSelector(()=>stateManager?.getExplorationState());
+
+    if (!exploredEntity||!explorationState||!stateManager) {
        return null;
     }
+
+    const explorationService = getEntityExplorationService(exploredEntity);
 
     let requiredPermissions: Permissions[] = getRequiredExplorationPermissions(exploredEntity);
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
         navigate(event.currentTarget.value)
     }
-
-    const stateManager: ExplorationStateManager<unknown, EntityExplorationParams> = getEntityExplorationStateManager(exploredEntity);
-
-    const explorationService = getEntityExplorationService(exploredEntity);
-
-    const explorationState: EntityExplorationState<unknown, EntityExplorationParams> = stateManager.getExplorationState();
 
     return (
        <PrivateComponentWrapper requiredPermissions={requiredPermissions} mode={"ERROR_PAGE"}>

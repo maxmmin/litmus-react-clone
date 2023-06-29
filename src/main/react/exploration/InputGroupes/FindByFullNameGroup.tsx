@@ -10,6 +10,7 @@ import UserExplorationStateManagerImpl
     from "../../../service/exploration/stateManager/user/UserExplorationStateManagerImpl";
 import PersonExplorationStateManagerImpl
     from "../../../service/exploration/stateManager/person/PersonExplorationStateManagerImpl";
+import {hasFullNameErrors} from "../../../service/exploration/validation/BasicExplorationValidationService";
 
 
 const FindByFullNameGroup = () => {
@@ -34,6 +35,8 @@ const FindByFullNameGroup = () => {
 
     const {firstName, middleName, lastName} = explorationParams||{};
 
+    const validationErrors = useAppSelector(state => stateManager?.getValidationErrors())!;
+
     if (!stateManager) return null;
 
     return (
@@ -41,28 +44,40 @@ const FindByFullNameGroup = () => {
             <Form.Group className="mb-3">
                 <Form.Label>Прізвище</Form.Label>
                 <input autoComplete={"new-password"} value={lastName?lastName:""} onChange={e=>{
+                    if (validationErrors.lastName) {
+                        stateManager.updateValidationErrors({lastName: undefined})
+                    }
                     stateManager.updateParams({lastName: e.currentTarget.value})
-                }} className={`last-name form-control`}  type="text" placeholder="Введіть прізвище"
+                }} className={`last-name form-control ${validationErrors.lastName?"is-invalid":""}`}  type="text" placeholder="Введіть прізвище"
                 onKeyDown={keyPressHandler}
                 />
+                {validationErrors.lastName?<p className={"error-text error-text_input-tip"}>{validationErrors.lastName}</p>:null}
             </Form.Group>
 
             <Form.Group className="mb-3">
                 <Form.Label>Ім'я</Form.Label>
                 <input autoComplete={"new-password"} value={firstName?firstName:""}  onChange={e=>{
+                    if (validationErrors.firstName) {
+                        stateManager.updateValidationErrors({firstName: undefined});
+                    }
                     stateManager.updateParams({firstName: e.currentTarget.value})
-                }} className={`first-name form-control`} type="text" placeholder="Введіть ім'я"
+                }} className={`first-name form-control ${validationErrors.firstName?"is-invalid":""}`} type="text" placeholder="Введіть ім'я"
                        onKeyDown={keyPressHandler}
                 />
+                {validationErrors.firstName?<p className={"error-text error-text_input-tip"}>{validationErrors.firstName}</p>:null}
             </Form.Group>
 
             <Form.Group className="mb-3">
                 <Form.Label>Ім'я по-батькові</Form.Label>
                 <input autoComplete={"new-password"} value={middleName?middleName:""}  onChange={e=>{
+                    if (validationErrors.middleName) {
+                        stateManager.updateValidationErrors({middleName: undefined})
+                    }
                     stateManager.updateParams({middleName: e.currentTarget.value})
-                }} className={`middle-name form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+                }} className={`middle-name form-control ${validationErrors.middleName?"is-invalid":""}`} type="text" placeholder="Введіть ім'я по-батькові"
                 onKeyDown={keyPressHandler}
                 />
+                {validationErrors.middleName?<p className={"error-text error-text_input-tip"}>{validationErrors.middleName}</p>:null}
             </Form.Group>
         </>
     )

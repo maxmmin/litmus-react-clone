@@ -51,6 +51,11 @@ img {
   color: $md-sys-color-error-light;
 }
 
+.error-text_input-tip {
+  font-size: 14px;
+  margin-top: 7px;
+}
+
 .btn.btn-primary:active {
   background: $md-sys-color-primary-light;
   opacity: 0.9;

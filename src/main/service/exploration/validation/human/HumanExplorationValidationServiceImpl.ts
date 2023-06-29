@@ -44,7 +44,7 @@ class HumanExplorationValidationServiceImpl extends BasicExplorationValidationSe
             }
 
             if (!HumanExplorationValidationServiceImpl.FIRST_NAME_REGEXP.test(firstName)) {
-                return "Введіть ім'я у коректному форматі"
+                return "Некоректний формат імені"
             }
         }
     }
@@ -56,7 +56,7 @@ class HumanExplorationValidationServiceImpl extends BasicExplorationValidationSe
             }
 
             if (!HumanExplorationValidationServiceImpl.MIDDLE_NAME_REGEXP.test(middleName)) {
-                return "Введіть ім'я по-батькові у коректному форматі"
+                return "Некоректний формат ім'я по-батькові"
             }
         }
     }
@@ -64,11 +64,11 @@ class HumanExplorationValidationServiceImpl extends BasicExplorationValidationSe
     isLastNameValid(lastName: HumanExplorationParams["lastName"]): string|undefined {
         if (lastName) {
             if (lastName?.length<3||lastName?.length>32) {
-                return "Довжина прізвища повина бути між 3 та 32 символами"
+                return "Довжина прізвища повина бути між 3 та 32"
             }
 
             if (!HumanExplorationValidationServiceImpl.LAST_NAME_REGEXP.test(lastName)) {
-                return "Введіть ім'я по-батькові у коректному форматі"
+                return "Некоректний формат прізвища"
             }
         } else return "Поле обов'язкове до заповнення"
     }

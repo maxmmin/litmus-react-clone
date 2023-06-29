@@ -29,8 +29,8 @@ const entityExplorationStateManagerMap: Map<Entity, ExplorationStateManager<unkn
     = new Map<Entity, ExplorationStateManager<unknown, EntityExplorationParams>>();
 
 entityExplorationStateManagerMap.set(Entity.PERSON, serviceContext.exploration.stateManagers.person);
-entityExplorationStateManagerMap.set(Entity.JUR_PERSON, serviceContext.exploration.stateManagers.user);
-entityExplorationStateManagerMap.set(Entity.USER, serviceContext.exploration.stateManagers.jurPerson);
+entityExplorationStateManagerMap.set(Entity.JUR_PERSON, serviceContext.exploration.stateManagers.jurPerson);
+entityExplorationStateManagerMap.set(Entity.USER, serviceContext.exploration.stateManagers.user);
 
 export function getEntityExplorationStateManager(entity: Entity): ExplorationStateManager<unknown,EntityExplorationParams> {
     const manager:  ExplorationStateManager<unknown,EntityExplorationParams>|undefined =  entityExplorationStateManagerMap.get(entity)

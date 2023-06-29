@@ -1,9 +1,7 @@
 import Form from "react-bootstrap/Form";
-import React, {useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import React from "react";
+import {useAppSelector} from "../../../redux/hooks";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import ExplorationStateManagerImpl from "../../../service/exploration/stateManager/ExplorationStateManagerImpl";
-import store from "../../../redux/store";
 import {getEntityExplorationStateManager} from "../../../util/getEntityExplorationService";
 
 const FindByIdGroup = () => {
@@ -11,33 +9,27 @@ const FindByIdGroup = () => {
 
     const stateManager = entity?getEntityExplorationStateManager(entity):null;
 
+    const validationErrors = useAppSelector(state => stateManager?.getValidationErrors()!);
+
     const {id} = useAppSelector(() => stateManager?.getExplorationParams())||{}
 
     if (!entity||!stateManager) {
         return null;
     }
 
-    // useEffect(()=>{
-    //     if (isNaN(+id!)) {
-    //         if (!isInvalid) {
-    //             dispatch(updateExplorationParams({isInvalid: true}))
-    //         }
-    //     } else if (isInvalid) {
-    //         dispatch(updateExplorationParams({isInvalid: false}))
-    //     }
-    // },[id, isInvalid])
-
-
-    // ${isInvalid?"is-invalid":""}`}
     return (
         <>
             <Form.Group className="mb-3">
                 <Form.Label>ID</Form.Label>
                 <input autoComplete={"new-password"} onChange={e=>{
+                    if (validationErrors.id) {
+                        stateManager.updateValidationErrors({id: undefined})
+                    }
                     stateManager.updateParams({id: e.currentTarget.value});
-                }} className={`id form-control`} value={id?id:''} type="text" placeholder="Введіть id"
+                }} className={`id form-control ${validationErrors.id?"is-invalid":""}`} value={id?id:''} type="text" placeholder="Введіть id"
                 onKeyDown={keyPressHandler}
                 />
+                {validationErrors.id?<p className={"error-text error-text_input-tip"}>{validationErrors.id}</p>:null}
             </Form.Group>
         </>
     )

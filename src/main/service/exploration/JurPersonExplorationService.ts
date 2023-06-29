@@ -54,6 +54,7 @@ class JurPersonExplorationService implements ExplorationService {
         if (errors) {
             throw new ExplorationValidationError(errors);
         }
+        //@todo write the way to get all entities
         const id = checkNotEmpty(params.id);
         const content: JurPerson[] = []
         const jurPersonResponseDto: JurPersonResponseDto|null = await service.findById(id);

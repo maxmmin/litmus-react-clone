@@ -1,5 +1,6 @@
 import ExplorationValidationService from "./ExplorationValidationService";
 import EntityExplorationParams from "../../../redux/types/exploration/EntityExplorationParams";
+import HumanExplorationParams from "../../../redux/types/exploration/human/HumanExplorationParams";
 
 export default class BasicExplorationValidationService implements ExplorationValidationService<EntityExplorationParams> {
     validate(explorationParams: EntityExplorationParams): Partial<Record<keyof EntityExplorationParams, string>> {
@@ -24,5 +25,16 @@ export default class BasicExplorationValidationService implements ExplorationVal
     hasErrors (bindingResult: object) {
         return  Object.values(bindingResult).some(element=>element!==undefined);
     }
+}
 
+export function hasErrors (bindingResult: object) {
+    return  Object.values(bindingResult).some(element=>element!==undefined);
+}
+
+export function hasIdErrors (bindingResult: Partial<Record<keyof EntityExplorationParams, string>>) {
+    return !!bindingResult.id;
+}
+
+export function hasFullNameErrors(bindingResult:Partial<Record<keyof HumanExplorationParams, string>>) {
+    return Boolean(bindingResult.firstName||bindingResult.middleName||bindingResult.lastName);
 }

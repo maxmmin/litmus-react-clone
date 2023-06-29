@@ -48,7 +48,6 @@ const ExplorationData = ({exploredEntity, state}: Props) => {
     }
 
     const data = state.data;
-
     if (!data) return null;
 
     const pagedResponse: PagedData<unknown> = data.response;

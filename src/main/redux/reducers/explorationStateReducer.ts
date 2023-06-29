@@ -58,6 +58,10 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, EntityEx
             return {...prevState, validationErrors: action.payload}
         }
 
+        case ExplorationCoreAction.UPDATE_EXPLORATION_VALIDATION_ERRORS: {
+            return {...prevState, validationErrors: {...prevState.validationErrors, ...(action.payload as object)}}
+        }
+
         case ExplorationCoreAction.SET_EXPLORATION_STATE_PENDING: {
             const bool: boolean = action.payload as boolean;
             return {...prevState, isPending: bool} as S;

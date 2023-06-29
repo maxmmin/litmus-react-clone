@@ -1,4 +1,9 @@
 import React from "react";
+import PersonExplorationParams from "./human/person/PersonExplorationParams";
+import {
+    hasFullNameErrors,
+    hasIdErrors
+} from "../../../service/exploration/validation/BasicExplorationValidationService";
 
 /**
  * class used for fast access for all exploration modes.
@@ -7,15 +12,18 @@ export default class ExplorationMode {
     private static lastId: number = 0;
     private static readonly modes: ExplorationMode[] = []
 
-    public static readonly BY_FULL_NAME: ExplorationMode = new ExplorationMode("За ФІО");
-    public static readonly BY_ID: ExplorationMode = new ExplorationMode("За ID");
+    public static readonly BY_FULL_NAME: ExplorationMode = new ExplorationMode("За ФІО", hasFullNameErrors);
+    public static readonly BY_ID: ExplorationMode = new ExplorationMode("За ID", hasIdErrors);
 
     public readonly id: number;
     public readonly title: string;
 
-    private constructor(title: string) {
+    public readonly hasErrors: (er: Partial<Record<keyof PersonExplorationParams, string>>)=>boolean
+
+    private constructor(title: string, hasErrors: (er: Partial<Record<keyof PersonExplorationParams, string>>)=>boolean) {
         this.id = ExplorationMode.lastId++;
         this.title = title;
+        this.hasErrors=hasErrors;
         ExplorationMode.modes.push(this);
     }
 
