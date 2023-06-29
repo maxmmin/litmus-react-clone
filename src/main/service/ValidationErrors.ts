@@ -1,0 +1,1 @@
+export type ValidationErrors<E> = Partial<Record<keyof E, string>>

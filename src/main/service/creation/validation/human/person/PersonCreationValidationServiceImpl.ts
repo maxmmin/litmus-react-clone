@@ -1,11 +1,12 @@
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
 import PersonCreationValidationService from "./PersonCreationValidationService";
-import HumanExplorationParams from "../../../../../redux/types/exploration/human/HumanExplorationParams";
-import PersonExplorationParams from "../../../../../redux/types/exploration/human/person/PersonExplorationParams";
+import Person from "../../../../../model/human/person/Person";
+import {ValidationErrors} from "../../../../ValidationErrors";
+import Human from "../../../../../model/human/Human";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl implements PersonCreationValidationService {
-    validate(params: HumanExplorationParams): Partial<Record<keyof PersonExplorationParams, string>> {
-        const bindingResult: Partial<Record<keyof PersonExplorationParams, string>> = super.validate(params);
+    validate(params: Person): ValidationErrors<Person> {
+        const bindingResult: ValidationErrors<Human> = super.validate(params);
         return bindingResult;
     }
 }

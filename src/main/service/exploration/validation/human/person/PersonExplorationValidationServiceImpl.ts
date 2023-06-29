@@ -1,10 +1,10 @@
 import HumanExplorationValidationServiceImpl from "../HumanExplorationValidationServiceImpl";
 import PersonExplorationValidationService from "./PersonExplorationValidationService";
-import HumanExplorationParams from "../../../../../redux/types/exploration/human/HumanExplorationParams";
 import PersonExplorationParams from "../../../../../redux/types/exploration/human/person/PersonExplorationParams";
+import {ValidationErrors} from "../../../../ValidationErrors";
 
 class PersonExplorationValidationServiceImpl extends HumanExplorationValidationServiceImpl implements PersonExplorationValidationService {
-    validate(params: HumanExplorationParams): Partial<Record<keyof PersonExplorationParams, string>> {
+    validate(params: PersonExplorationParams): ValidationErrors<PersonExplorationParams> {
         const bindingResult: Partial<Record<keyof PersonExplorationParams, string>> = super.validate(params);
         return bindingResult;
     }

@@ -1,6 +1,7 @@
 import HumanCreationValidationService from "./HumanCreationValidationService";
 import Human from "../../../../model/human/Human";
 import {hasErrors} from "../../../exploration/validation/BasicExplorationValidationService";
+import {ValidationErrors} from "../../../ValidationErrors";
 
 class HumanCreationValidationServiceImpl implements HumanCreationValidationService {
     private static readonly FIRST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
@@ -9,7 +10,7 @@ class HumanCreationValidationServiceImpl implements HumanCreationValidationServi
 
     private static readonly LAST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
 
-    validate(model: Human): Partial<Record<keyof Human, string>> {
+    validate(model: Human): ValidationErrors<Human> {
         return {
             firstName: this.isFirstNameValid(model.firstName),
             middleName: this.isMiddleNameValid(model.middleName),
@@ -17,7 +18,7 @@ class HumanCreationValidationServiceImpl implements HumanCreationValidationServi
         };
     }
 
-    validateFullName(model: Human): Partial<Record<keyof Human, string>>|null {
+    validateFullName(model: Human): ValidationErrors<Human>|null {
         const bindingRes = {
             firstName: this.isFirstNameValid(model.firstName),
             middleName: this.isMiddleNameValid(model.middleName),
