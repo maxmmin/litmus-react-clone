@@ -80,9 +80,9 @@ type ExplorationContext = {
         user: UserExplorationApiService
     },
     service: {
-        jurPerson: ExplorationService,
-        person: ExplorationService,
-        user: ExplorationService
+        jurPerson: JurPersonExplorationService,
+        person: PersonExplorationService,
+        user: UserExplorationService
     }
 }
 
@@ -124,9 +124,9 @@ type CreationContext = {
         user: CreationApiService<UserRequestDto, UserResponseDto>
     },
     service: {
-        person: CreationService,
-        user: CreationService,
-        jurPerson: CreationService
+        person: PersonCreationService,
+        user: UserCreationService,
+        jurPerson: JurPersonCreationService
     }
 }
 
