@@ -8,6 +8,8 @@ import UserDtoMapper from "../../rest/dto/dtoMappers/UserDtoMapper";
 import UserCreationApiService from "./api/UserCreationApiService";
 import UserCreationStateManagerImpl from "./stateManager/user/UserCreationStateManagerImpl";
 import UserCreationStateManager from "./stateManager/user/UserCreationStateManager";
+import UserCreationValidationService from "./validation/human/user/UserCreationValidationService";
+import UserCreationValidationServiceImpl from "./validation/human/user/UserCreationValidationServiceImpl";
 
 
 class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto> {
@@ -15,14 +17,16 @@ class UserCreationService extends CreationServiceImpl<UserRequestDto, User, User
     constructor(
         apiService: CreationApiService<UserRequestDto, UserResponseDto>,
         creationStateManager: UserCreationStateManager,
-        mapper: DtoMapper<UserRequestDto, User, UserResponseDto>) {
-        super(apiService, creationStateManager, mapper);
+        mapper: DtoMapper<UserRequestDto, User, UserResponseDto>,
+        validationService: UserCreationValidationService) {
+        super(apiService, creationStateManager, mapper, validationService);
     }
 
     public static getInstance(apiService: CreationApiService<UserRequestDto, UserResponseDto> = UserCreationApiService.getInstance(),
                               stateManager: UserCreationStateManager = new UserCreationStateManagerImpl(),
-                              mapper: DtoMapper<UserRequestDto, User, UserResponseDto> = new UserDtoMapper()): UserCreationService {
-        return  new UserCreationService(apiService, stateManager, mapper);
+                              mapper: DtoMapper<UserRequestDto, User, UserResponseDto> = new UserDtoMapper(),
+                              validationService: UserCreationValidationService = new UserCreationValidationServiceImpl()): UserCreationService {
+        return  new UserCreationService(apiService, stateManager, mapper, validationService);
     }
 }
 

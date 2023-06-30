@@ -1,6 +1,6 @@
-import JurPersonExplorationParams from "../../../../redux/types/exploration/jurPerson/JurPersonExplorationParams";
 import ValidationService from "../../../ValidationService";
+import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 
-export default interface JurPersonCreationValidationService extends ValidationService<JurPersonExplorationParams> {
+export default interface JurPersonCreationValidationService extends ValidationService<JurPerson> {
 
 }
