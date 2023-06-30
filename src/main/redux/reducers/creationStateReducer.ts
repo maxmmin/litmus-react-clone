@@ -17,6 +17,7 @@ import User from "../../model/human/user/User";
 import UserCreationState, {BasicUserCreationState} from "../types/creation/UserCreationState";
 import JurPersonCreationState, {BasicJurPersonCreationState} from "../types/creation/JurPersonCreationState";
 import PersonCreationState, {BasicPersonCreationState} from "../types/creation/PersonCreationState";
+import {ValidationErrors} from "../../service/ValidationErrors";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
@@ -25,6 +26,14 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
         case CreationCoreAction.UPDATE_ENTITY_CREATION_PARAMS: {
             const params: Partial<S["emergingEntity"]> = action.payload as Partial<S["emergingEntity"]>;
             return {...prevState, emergingEntity: {...prevState.emergingEntity!, ...params}}
+        }
+
+        case CreationCoreAction.SET_ENTITY_VALIDATION_ERRORS: {
+            return {...prevState, validationErrors: action.payload}
+        }
+
+        case CreationCoreAction.UPDATE_ENTITY_VALIDATION_ERRORS: {
+            return {...prevState, validationErrors: {...prevState.validationErrors, ...(action.payload as ValidationErrors<S["emergingEntity"]>)}}
         }
 
         case CreationCoreAction.SET_ENTITY_CREATION_PARAMS: {
