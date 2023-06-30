@@ -5,7 +5,7 @@ import {
 } from "../../../util/pureFunctions";
 import React, {useState} from "react";
 import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
-import InputDate from "../../common/InputDate";
+import InputDate from "../../sharedComponents/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import DateEntity, {DateBuilder} from "../../../model/DateEntity";
@@ -19,11 +19,14 @@ import PersonCreationStateManager from "../../../service/creation/stateManager/p
 
 import PersonCreationStateManagerImpl
     from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
+import InputError from "../../sharedComponents/InputError";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
 
     const creationPersonParams = useAppSelector(state => state.creation?.person?.emergingEntity)
+
+    const validationErrors = useAppSelector(state => state.creation.person?.validationErrors)
 
     if (!creationPersonParams) {
         throw new Error("createPersonDto was null but it shouldn't be")
@@ -56,6 +59,7 @@ const CreatePerson = () => {
                             }
                         }
                     />
+                <InputError error={validationErrors?.lastName}/>
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
@@ -66,7 +70,8 @@ const CreatePerson = () => {
                            creationStateManager.updateEntityCreationParams({firstName: e.currentTarget.value})
                         }
                        }
-                    />
+                />
+                <InputError error={validationErrors?.firstName}/>
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
@@ -78,6 +83,7 @@ const CreatePerson = () => {
                         }
                        }
                 />
+                <InputError error={validationErrors?.middleName}/>
             </Form.Group>
 
            <Form.Group className="mb-3 creation-input-group__item">
@@ -99,6 +105,7 @@ const CreatePerson = () => {
                        Жіноча
                    </label>
                </div>
+               <InputError error={validationErrors?.sex}/>
            </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
@@ -110,6 +117,7 @@ const CreatePerson = () => {
                         }
                        }
                 />
+                <InputError error={validationErrors?.passportData}/>
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">

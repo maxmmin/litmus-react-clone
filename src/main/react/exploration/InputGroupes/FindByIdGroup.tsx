@@ -3,6 +3,7 @@ import React from "react";
 import {useAppSelector} from "../../../redux/hooks";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {getEntityExplorationStateManager} from "../../../util/getEntityExplorationService";
+import InputError from "../../sharedComponents/InputError";
 
 const FindByIdGroup = () => {
     const entity = useAppSelector(state => state.exploration?.exploredEntity)
@@ -29,7 +30,7 @@ const FindByIdGroup = () => {
                 }} className={`id form-control ${validationErrors.id?"is-invalid":""}`} value={id?id:''} type="text" placeholder="Введіть id"
                 onKeyDown={keyPressHandler}
                 />
-                {validationErrors.id?<p className={"error-text error-text_input-tip"}>{validationErrors.id}</p>:null}
+                <InputError error={validationErrors.id}/>
             </Form.Group>
         </>
     )

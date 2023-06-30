@@ -5,7 +5,7 @@ import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppSelector} from "../../../redux/hooks";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../CreationScreen";
-import InputDate from "../../common/InputDate";
+import InputDate from "../../sharedComponents/InputDate";
 import Person from "../../../model/human/person/Person";
 import {DateBuilder} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";

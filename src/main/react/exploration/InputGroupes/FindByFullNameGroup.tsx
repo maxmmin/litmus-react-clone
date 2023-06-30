@@ -10,7 +10,7 @@ import UserExplorationStateManagerImpl
     from "../../../service/exploration/stateManager/user/UserExplorationStateManagerImpl";
 import PersonExplorationStateManagerImpl
     from "../../../service/exploration/stateManager/person/PersonExplorationStateManagerImpl";
-import {hasFullNameErrors} from "../../../service/exploration/validation/BasicExplorationValidationService";
+import InputError from "../../sharedComponents/InputError";
 
 
 const FindByFullNameGroup = () => {
@@ -51,7 +51,7 @@ const FindByFullNameGroup = () => {
                 }} className={`last-name form-control ${validationErrors.lastName?"is-invalid":""}`}  type="text" placeholder="Введіть прізвище"
                 onKeyDown={keyPressHandler}
                 />
-                {validationErrors.lastName?<p className={"error-text error-text_input-tip"}>{validationErrors.lastName}</p>:null}
+                <InputError error={validationErrors.lastName}/>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -64,7 +64,7 @@ const FindByFullNameGroup = () => {
                 }} className={`first-name form-control ${validationErrors.firstName?"is-invalid":""}`} type="text" placeholder="Введіть ім'я"
                        onKeyDown={keyPressHandler}
                 />
-                {validationErrors.firstName?<p className={"error-text error-text_input-tip"}>{validationErrors.firstName}</p>:null}
+                <InputError error={validationErrors.firstName}/>
             </Form.Group>
 
             <Form.Group className="mb-3">
@@ -77,7 +77,7 @@ const FindByFullNameGroup = () => {
                 }} className={`middle-name form-control ${validationErrors.middleName?"is-invalid":""}`} type="text" placeholder="Введіть ім'я по-батькові"
                 onKeyDown={keyPressHandler}
                 />
-                {validationErrors.middleName?<p className={"error-text error-text_input-tip"}>{validationErrors.middleName}</p>:null}
+                <InputError error={validationErrors.middleName}/>
             </Form.Group>
         </>
     )
