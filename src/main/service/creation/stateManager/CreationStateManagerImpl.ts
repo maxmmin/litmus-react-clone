@@ -6,6 +6,7 @@ import EntityCreationState from "../../../redux/types/creation/EntityCreationSta
 import CreationStateManager from "./CreationStateManager";
 import {Entity} from "../../../model/Entity";
 import {setEmergingEntityAction} from "../../../redux/reducers/creationStateReducer";
+import {ValidationErrors} from "../../ValidationErrors";
 
 class CreationStateManagerImpl<E> implements CreationStateManager<E> {
     protected readonly dispatch: AppDispatch;
@@ -16,6 +17,24 @@ class CreationStateManagerImpl<E> implements CreationStateManager<E> {
         this.dispatch = dispatch;
         this.getState = getState;
         this.actions = actions;
+    }
+
+    getValidationErrors(): ValidationErrors<E> {
+        return this.getState().validationErrors;
+    }
+
+    setValidationErrors(errors: ValidationErrors<E>): void {
+        this.dispatch({
+            type: this.actions["SET_ENTITY_VALIDATION_ERRORS"],
+            payload: errors
+        })
+    }
+
+    updateValidationErrors(errors: ValidationErrors<E>): void {
+        this.dispatch({
+            type: this.actions["UPDATE_ENTITY_VALIDATION_ERRORS"],
+            payload: errors
+        })
     }
 
     static switchEntity (entity: Entity, dispatch: AppDispatch) {

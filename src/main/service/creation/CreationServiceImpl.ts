@@ -8,7 +8,6 @@ import handleCreationError from "./handleCreationError";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
-import creationStateManager from "./stateManager/CreationStateManager";
 
 
 /**
