@@ -3,19 +3,19 @@ import Human from "../../../../model/human/Human";
 import {hasErrors} from "../../../exploration/validation/BasicExplorationValidationService";
 import {ValidationErrors} from "../../../ValidationErrors";
 
-class HumanCreationValidationServiceImpl implements HumanCreationValidationService {
+class HumanCreationValidationServiceImpl<E extends Human, R=E> implements HumanCreationValidationService<E,R> {
     private static readonly FIRST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
 
     private static readonly MIDDLE_NAME_REGEXP = new RegExp("^[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']{3,32}$");
 
     private static readonly LAST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
 
-    validate(model: Human): ValidationErrors<Human> {
+    validate(model: E): ValidationErrors<R> {
         return {
             firstName: this.isFirstNameValid(model.firstName),
             middleName: this.isMiddleNameValid(model.middleName),
             lastName: this.isLastNameValid(model.lastName)
-        };
+        } as ValidationErrors<R>;
     }
 
     validateFullName(model: Human): ValidationErrors<Human>|null {

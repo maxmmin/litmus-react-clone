@@ -5,8 +5,8 @@ import {ValidationErrors} from "../../../../ValidationErrors";
 import User from "../../../../../model/human/user/User";
 
 
-class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl implements UserCreationValidationService {
-    validate(model: Human): ValidationErrors<User> {
+class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<User> implements UserCreationValidationService {
+    validate(model: User): ValidationErrors<User> {
         const bindingResult: ValidationErrors<Human> = super.validate(model);
         return {
             ...bindingResult
