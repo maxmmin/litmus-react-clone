@@ -11,6 +11,7 @@ import {DateBuilder} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
 import {LitmusServiceContext} from "../../App";
+import InputError from "../../sharedComponents/InputError";
 
 
 const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
@@ -23,6 +24,8 @@ const CreateJurPerson = () => {
     const closeModal = () => setModalSettings(null)
 
     const jurPersonCreationParams = useAppSelector(state => state.creation?.jurPerson?.emergingEntity)
+
+    const validationErrors = useAppSelector(state => state.creation.jurPerson?.validationErrors);
 
     if (!jurPersonCreationParams) {
         throw new Error("createPersonDto was null but it shouldn't")
@@ -39,22 +42,24 @@ const CreateJurPerson = () => {
 
                 <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Назва</Form.Label>
-                    <input value={jurPersonCreationParams.name} autoComplete={"new-password"} className={`name form-control`} type="text" placeholder="Введіть назву юридичної особи"
+                    <input value={jurPersonCreationParams.name} autoComplete={"new-password"} className={`name form-control ${validationErrors?.name?'is-invalid':''}`} type="text" placeholder="Введіть назву юридичної особи"
                            onKeyDown={keyPressHandler}
                            onChange={e=>{
                                creationManager.updateEntityCreationParams({name: e.currentTarget.value});
                            }}
                     />
+                    <InputError error={validationErrors?.name}/>
                 </Form.Group>
 
                 <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>ЄДРПОУ</Form.Label>
-                    <input value={jurPersonCreationParams.edrpou?jurPersonCreationParams.edrpou:''} autoComplete={"new-password"} className={`edrpou form-control`} type="text" placeholder="Введіть ЄДРПОУ"
+                    <input value={jurPersonCreationParams.edrpou?jurPersonCreationParams.edrpou:''} autoComplete={"new-password"} className={`${validationErrors?.edrpou?'is-invalid':''} edrpou form-control`} type="text" placeholder="Введіть ЄДРПОУ"
                            onKeyDown={keyPressHandler}
                            onChange={e=>{
                                creationManager.updateEntityCreationParams({edrpou: e.currentTarget.value});
                            }}
                     />
+                    <InputError error={validationErrors?.edrpou}/>
                 </Form.Group>
 
                 <Form.Group className="mb-3 creation-input-group__item">
@@ -80,8 +85,9 @@ const CreateJurPerson = () => {
                 <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Дата реєстрації юридичної особи</Form.Label>
 
-                    <InputDate date={new DateBuilder().setDay(day).setMonth(month).setYear(year).build()} setDate={date=>creationManager.updateEntityCreationParams({dateOfRegistration: date})} className={"date-of-registration"}/>
+                    <InputDate inputPrefix={validationErrors?.dateOfRegistration?'is-invalid':''} date={new DateBuilder().setDay(day).setMonth(month).setYear(year).build()} setDate={date=>creationManager.updateEntityCreationParams({dateOfRegistration: date})} className={"date-of-registration"}/>
 
+                    <InputError error={validationErrors?.dateOfRegistration}/>
                 </Form.Group>
 
                 <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
