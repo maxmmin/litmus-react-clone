@@ -1,8 +1,9 @@
 import HumanCreationValidationService from "../HumanCreationValidationService";
 import Person from "../../../../../model/human/person/Person";
+import {ValidationErrors} from "../../../../ValidationErrors";
 
-export type PersonValidationErrors = Omit<Person, "passportData"|"dateOfBirth">&{passportSerial: string, passportNumber: string, rnokppCode: string}
+export type PersonValidationObject = Omit<Person, "passportData">&{passportSerial: string, passportNumber: string, rnokppCode: string}
 
-export default interface PersonCreationValidationService extends HumanCreationValidationService<Person, PersonValidationErrors> {
-
+export default interface PersonCreationValidationService extends HumanCreationValidationService<Person, PersonValidationObject> {
+    validatePassportData(model: Person): ValidationErrors<PersonValidationObject>;
 }

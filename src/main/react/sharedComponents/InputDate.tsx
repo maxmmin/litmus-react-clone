@@ -5,14 +5,15 @@ import DateEntity from "../../model/DateEntity";
 type DateProps = {
     date: DateEntity,
     setDate: (date: DateEntity)=>void,
-    className?: string
+    className?: string,
+    inputPrefix?: string
 }
 
-const InputDate = ({date, setDate, className}: DateProps) => {
+const InputDate = ({date, setDate, className, inputPrefix=""}: DateProps) => {
     const {year, month, day} = date;
 
     return <div className={`date-container ${className?className:""}`}>
-        <input value={day} autoComplete={"new-password"} className={`date-container__item date-container__item_day form-control`} type="text" placeholder="DD"
+        <input value={day} autoComplete={"new-password"} className={`date-container__item date-container__item_day form-control ${inputPrefix}`} type="text" placeholder="DD"
                onKeyDown={preventEnter}
                onChange={e => {
                    setDate({year, month, day: e.currentTarget.value})
@@ -22,7 +23,7 @@ const InputDate = ({date, setDate, className}: DateProps) => {
                }}
         />
 
-        <input value={month} autoComplete={"new-password"} className={`date-container__item date-container__item_month form-control`} type="text" placeholder="MM"
+        <input value={month} autoComplete={"new-password"} className={`date-container__item date-container__item_month form-control ${inputPrefix}`} type="text" placeholder="MM"
                onKeyDown={preventEnter}
                onChange={e => {
                    setDate({day, month: e.currentTarget.value, year})
@@ -32,7 +33,7 @@ const InputDate = ({date, setDate, className}: DateProps) => {
                }}
         />
 
-        <input value={year} autoComplete={"new-password"} className={`date-container__item date-container__item_year form-control`} type="text" placeholder="YYYY"
+        <input value={year} autoComplete={"new-password"} className={`date-container__item date-container__item_year form-control ${inputPrefix}`} type="text" placeholder="YYYY"
                onChange={e => {
                    setDate({year: e.currentTarget.value, month, day})
                    if (e.currentTarget.value.length>3) {

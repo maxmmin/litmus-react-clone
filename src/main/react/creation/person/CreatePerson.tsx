@@ -52,9 +52,9 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Прізвище</Form.Label>
-                    <input value={lastName?lastName:""} autoComplete={"new-password"} className={`lastName form-control`}  type="text" placeholder="Введіть прізвище"
-                        onKeyDown={keyPressHandler}
-                        onChange={e => {
+                    <input value={lastName?lastName:""} autoComplete={"new-password"} className={`lastName form-control ${validationErrors?.lastName?'is-invalid':''}`} type="text" placeholder="Введіть прізвище"
+                           onKeyDown={keyPressHandler}
+                           onChange={e => {
                                 creationStateManager.updateEntityCreationParams({lastName: e.currentTarget.value})
                             }
                         }
@@ -64,7 +64,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Ім'я</Form.Label>
-                <input value={firstName?firstName:""} autoComplete={"new-password"} className={`firstName form-control`} type="text" placeholder="Введіть ім'я"
+                <input value={firstName?firstName:""} autoComplete={"new-password"} className={`firstName form-control ${validationErrors?.firstName?'is-invalid':''}`} type="text" placeholder="Введіть ім'я"
                     onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updateEntityCreationParams({firstName: e.currentTarget.value})
@@ -76,7 +76,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Ім'я по-батькові</Form.Label>
-                <input value={middleName?middleName:""} autoComplete={"new-password"} className={`middleName form-control`} type="text" placeholder="Введіть ім'я по-батькові"
+                <input value={middleName?middleName:""} autoComplete={"new-password"} className={`middleName form-control ${validationErrors?.middleName?'is-invalid':''}`} type="text" placeholder="Введіть ім'я по-батькові"
                     onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value})
@@ -110,42 +110,45 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Номер паспорта</Form.Label>
-                <input value={passportData!.passportNumber!} autoComplete={"new-password"} className={`passport-number form-control`} type="text" placeholder="Введіть номер паспорта"
+                <input value={passportData!.passportNumber!} autoComplete={"new-password"} className={`passport-number form-control ${validationErrors?.passportNumber?'is-invalid':''}`} type="text" placeholder="Введіть номер паспорта"
                        onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updatePassportData({passportNumber: e.currentTarget.value})
                         }
                        }
                 />
-                <InputError error={validationErrors?.passportData}/>
+                <InputError error={validationErrors?.passportNumber}/>
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Серія паспорта</Form.Label>
-                <input  value={passportData!.passportSerial!} autoComplete={"new-password"} className={`passport-serial form-control`} type="text" placeholder="Введіть серію паспорта"
+                <input  value={passportData!.passportSerial!} autoComplete={"new-password"} className={`passport-serial form-control ${validationErrors?.passportSerial?'is-invalid':''}`} type="text" placeholder="Введіть серію паспорта"
                        onKeyDown={keyPressHandler}
                         onChange={e => {
                                 creationStateManager.updatePassportData({passportSerial: e.currentTarget.value})
                             }
                         }
                 />
+                <InputError error={validationErrors?.passportSerial}/>
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>РНОКПП</Form.Label>
-                <input value={passportData!.rnokppCode!} autoComplete={"new-password"} className={`rnokpp-code form-control`} type="text" placeholder="Введіть РНОКПП"
+                <input value={passportData!.rnokppCode!} autoComplete={"new-password"} className={`rnokpp-code form-control ${validationErrors?.rnokppCode?'is-invalid':''}`} type="text" placeholder="Введіть РНОКПП"
                        onKeyDown={inputBeforeDateContainerHandler}
                        onChange={e => {
                            creationStateManager.updatePassportData({rnokppCode: e.currentTarget.value})
                         }
                        }
                 />
+                <InputError error={validationErrors?.rnokppCode}/>
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Дата народження</Form.Label>
 
                 <InputDate date={new DateBuilder().setYear(year).setMonth(month).setDay(day).build()} setDate={date => creationStateManager.updateEntityCreationParams({dateOfBirth: date})} className={"date-of-birth"}/>
+                <InputError error={validationErrors?.dateOfBirth}/>
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">

@@ -1,8 +1,11 @@
 import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
 import Person from "../../../model/human/person/Person";
 import {DateBuilder} from "../../../model/DateEntity";
+import {
+    PersonValidationObject
+} from "../../../service/creation/validation/human/person/PersonCreationValidationService";
 
-export default interface PersonCreationState extends EntityCreationState<Person>{}
+export default interface PersonCreationState extends EntityCreationState<Person, PersonValidationObject>{}
 
 export const initialPersonCreationParams: Person = {
     id: '-1',
@@ -16,7 +19,7 @@ export const initialPersonCreationParams: Person = {
     location: null
 }
 
-export class BasicPersonCreationState extends BasicEntityCreationState<Person> implements PersonCreationState {
+export class BasicPersonCreationState extends BasicEntityCreationState<Person, PersonValidationObject> implements PersonCreationState {
 
     constructor() {
         super(initialPersonCreationParams, {});
