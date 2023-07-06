@@ -3,12 +3,12 @@ import {
     inputBeforeDateContainerHandler,
     inputGroupsKeyPressHandler as keyPressHandler
 } from "../../../util/pureFunctions";
-import React, {useState} from "react";
-import {useAppDispatch, useAppSelector} from "../../../redux/hooks";
+import React, {useContext, useState} from "react";
+import {useAppSelector} from "../../../redux/hooks";
 import InputDate from "../../sharedComponents/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
 import CreationGeoModal from "../geo/CreationGeoModal";
-import DateEntity, {DateBuilder} from "../../../model/DateEntity";
+import {DateBuilder} from "../../../model/DateEntity";
 import Sex from "../../../model/human/person/Sex";
 import {CrossIcon} from "../../../util/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
@@ -16,13 +16,13 @@ import {CreationModalModes} from "../../../redux/types/creation/CreationModalMod
 import PersonRelationships from "./PersonRelationships";
 import {Entity} from "../../../model/Entity";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
-
-import PersonCreationStateManagerImpl
-    from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
 import InputError from "../../sharedComponents/InputError";
+import {LitmusServiceContext} from "../../App";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
+
+    const creationStateManager: PersonCreationStateManager = useContext(LitmusServiceContext).creation.stateManagers.person;
 
     const creationPersonParams = useAppSelector(state => state.creation?.person?.emergingEntity)
 
@@ -39,8 +39,6 @@ const CreatePerson = () => {
     const passportData = creationPersonParams?.passportData;
 
     const relationships = creationPersonParams?.relationships;
-
-    const creationStateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl();
 
     const closeModal = () => setModalSettings(null)
 
