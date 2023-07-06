@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import React, {useState} from "react";
+import React, {useContext, useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppSelector} from "../../../redux/hooks";
 import CreationGeoModal from "../geo/CreationGeoModal";
@@ -10,14 +10,15 @@ import Person from "../../../model/human/person/Person";
 import {DateBuilder} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
-import JurPersonCreationStateManagerImpl
-    from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
+import {LitmusServiceContext} from "../../App";
 
 
 const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
 
 const CreateJurPerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
+
+    const creationManager = useContext(LitmusServiceContext).creation.stateManagers.jurPerson;
 
     const closeModal = () => setModalSettings(null)
 
@@ -27,8 +28,6 @@ const CreateJurPerson = () => {
         throw new Error("createPersonDto was null but it shouldn't")
     }
 
-    const creationManager = new JurPersonCreationStateManagerImpl();
-
     const {year, month, day} = jurPersonCreationParams.dateOfRegistration||{year: '', month: '', day: ''};
 
     return (
@@ -37,7 +36,6 @@ const CreateJurPerson = () => {
             
             <CreationGeoModal entity={Entity.JUR_PERSON} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
 
-            <>
 
                 <Form.Group className="mb-3 creation-input-group__item">
                     <Form.Label>Назва</Form.Label>
@@ -96,7 +94,6 @@ const CreateJurPerson = () => {
                     />
                 </Form.Group>
 
-            </>
         </>
 )
 }
