@@ -28,7 +28,8 @@ import {AppNotificationType} from "./types/applicationState/Notification";
 const persistConfig: PersistConfig<any> = {
     storage,
     key: "root",
-    whitelist: ['authentication']
+    whitelist: ['authentication'],
+    timeout: 1000
 }
 
 const rootReducer = combineReducers({
