@@ -35,7 +35,7 @@ const Creation = () => {
 
     const {entityDomain}: {entityDomain?: string} = useParams<{entityDomain: string}>();
 
-    const emergingEntity = useAppSelector(state => state.creation.emergingEntity);
+    const emergingEntity = useAppSelector(state => state.creation.selectedEntity);
 
     useEffect(() => {
         let urlEntity: Entity|null = null;

@@ -21,7 +21,7 @@ import {ValidationErrors} from "../../service/ValidationErrors";
 import {PersonValidationObject} from "../../service/creation/validation/human/person/PersonCreationValidationService";
 
 
-const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>): S => {
+const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>, initialState: S): S => {
     switch (action.type) {
 
         case CreationCoreAction.UPDATE_ENTITY_CREATION_PARAMS: {
@@ -40,6 +40,11 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
         case CreationCoreAction.SET_ENTITY_CREATION_PARAMS: {
             const params: Partial<S["emergingEntity"]> = action.payload as Partial<S["emergingEntity"]>;
             return {...prevState, emergingEntity: {...params}};
+        }
+
+        case `${CreationCoreAction.CREATE_ENTITY}/fulfilled`:
+        case GeneralAction.RESET_DATA: {
+            return initialState;
         }
 
         default: {
@@ -86,15 +91,13 @@ const personCreationStateReducer: Reducer<EntityCreationState<
             return {...prevState, emergingEntity: {...prevState.emergingEntity, passportData: passportData}}
         }
 
-        case GeneralAction.RESET_DATA: {
-            return initialPersonCreationState;
-        }
-
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.personDomain) {
                 const coreAction: PayloadAction<any> = {...action, type: parsedAction.core}
-                return entityCreationReducer(prevState, coreAction);
+                return entityCreationReducer(prevState, coreAction, initialPersonCreationState);
+            } else if (action.type===GeneralAction.RESET_DATA) {
+                return entityCreationReducer(prevState, action, initialPersonCreationState);
             } else {
                 return prevState;
             }
@@ -109,15 +112,14 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPerson>|unde
         // code-place for jur person specific actions
         // @todo write getClear action
 
-        case GeneralAction.RESET_DATA: {
-            return initialJurPersonState
-        }
 
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.jurPersonDomain) {
                 const coreAction: PayloadAction<any> = {...action, type: parsedAction.core}
-                return entityCreationReducer(prevState, coreAction);
+                return entityCreationReducer(prevState, coreAction, initialJurPersonState);
+            } else if (action.type===GeneralAction.RESET_DATA) {
+                return entityCreationReducer(prevState, action, initialJurPersonState);
             } else {
                 return prevState;
             }
@@ -130,15 +132,14 @@ const initialUserCreationState: UserCreationState = deepCopy(new BasicUserCreati
 const userCreationStateReducer: Reducer<EntityCreationState<User>|undefined, PayloadAction<User>> = (prevState=initialUserCreationState, action) => {
     const actions = CreationTypedAction.person;
     switch (action.type) {
-        case GeneralAction.RESET_DATA: {
-            return initialUserCreationState
-        }
 
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.userDomain) {
                 const coreAction: PayloadAction<any> = {...action, type: parsedAction.core}
-                return entityCreationReducer(prevState, coreAction);
+                return entityCreationReducer(prevState, coreAction, initialUserCreationState);
+            } else if (action.type===GeneralAction.RESET_DATA) {
+                return entityCreationReducer(prevState, action, initialUserCreationState);
             } else {
                 return prevState;
             }
@@ -146,12 +147,14 @@ const userCreationStateReducer: Reducer<EntityCreationState<User>|undefined, Pay
     }
 }
 
-export const setEmergingEntityAction = "SET_CREATING_ENTITY"
+export const selectEmergingEntityAction = "SET_CREATING_ENTITY"
 const initialEntity = Entity.PERSON;
 
-const emergingEntityReducer:  Reducer<Entity|undefined, PayloadAction<Entity>> = (prevState=initialEntity, action) => {
-    if (action.type===setEmergingEntityAction) {
+const emergingEntitySelectReducer:  Reducer<Entity|undefined, PayloadAction<Entity>> = (prevState=initialEntity, action) => {
+    if (action.type===selectEmergingEntityAction) {
         return action.payload;
+    } else if (action.type===GeneralAction.RESET_DATA) {
+        return initialEntity;
     } else {
         return prevState;
     }
@@ -161,7 +164,7 @@ const CreationStateReducer = combineReducers({
     user: userCreationStateReducer,
     person: personCreationStateReducer,
     jurPerson: jurPersonCreationStateReducer,
-    emergingEntity: emergingEntityReducer
+    selectedEntity: emergingEntitySelectReducer
 })
 
 export default CreationStateReducer;

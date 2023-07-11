@@ -17,7 +17,7 @@ function HomeScreen () {
 
     const exploredEntity = useAppSelector(state => state.exploration.exploredEntity)
 
-    const emergingEntity = useAppSelector(state => state.creation.emergingEntity)
+    const emergingEntity = useAppSelector(state => state.creation.selectedEntity)
 
     const actionOnClick = (event: React.MouseEvent) => {
         const actionPath = event.currentTarget.getAttribute("itemprop")

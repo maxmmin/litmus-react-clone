@@ -43,7 +43,8 @@ class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
 
     private createEntityThunk = createAsyncThunk<E,
         ThunkArg<{emergingEntity: E}>,
-        LitmusAsyncThunkConfig>(CreationTypedAction.person[CreationCoreAction.CREATE_ENTITY],async ({emergingEntity}, {rejectWithValue, fulfillWithValue}) => {
+        // think about this
+        LitmusAsyncThunkConfig>(this.creationStateManager.ac.person[CreationCoreAction.CREATE_ENTITY],async ({emergingEntity}, {rejectWithValue, fulfillWithValue}) => {
         try {
             const errors = this.validationService.validate(emergingEntity);
             if (hasErrors(errors)) {

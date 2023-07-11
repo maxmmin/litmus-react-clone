@@ -5,13 +5,13 @@ import CreationTypedAction from "../../../redux/actions/CreationTypedAction";
 import EntityCreationState from "../../../redux/types/creation/EntityCreationState";
 import CreationStateManager from "./CreationStateManager";
 import {Entity} from "../../../model/Entity";
-import {setEmergingEntityAction} from "../../../redux/reducers/creationStateReducer";
+import {selectEmergingEntityAction} from "../../../redux/reducers/creationStateReducer";
 import {ValidationErrors} from "../../ValidationErrors";
 
 class CreationStateManagerImpl<E> implements CreationStateManager<E> {
     protected readonly dispatch: AppDispatch;
     protected readonly getState: ()=>EntityCreationState<E>;
-    protected readonly actions: CreationTypedAction;
+    public readonly actions: CreationTypedAction;
 
     constructor(dispatch: AppDispatch, getState: () => EntityCreationState<E>, actions: CreationTypedAction) {
         this.dispatch = dispatch;
@@ -39,7 +39,7 @@ class CreationStateManagerImpl<E> implements CreationStateManager<E> {
 
     static switchEntity (entity: Entity, dispatch: AppDispatch) {
         dispatch({
-            type: setEmergingEntityAction,
+            type: selectEmergingEntityAction,
             payload: entity
         })
     }
