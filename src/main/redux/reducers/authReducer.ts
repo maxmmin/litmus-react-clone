@@ -26,12 +26,14 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
         }
 
         case `${AuthAction.AUTHENTICATE}/rejected`: {
-            return null;
+            const err: ErrorResponse<unknown> = BasicHttpError.parseError(action.payload);
+            if (err.status===401) return null
+                else return prevState;
         }
 
         default: {
             if (isRejected(action)) {
-                const errorResponse: ErrorResponse<any> = BasicHttpError.parseError(action.payload)
+                const errorResponse: ErrorResponse<unknown> = BasicHttpError.parseError(action.payload)
                 return errorHandle(prevState, errorResponse)
             }
             else return prevState;
