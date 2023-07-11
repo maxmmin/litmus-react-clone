@@ -2,8 +2,10 @@ import EntityCreationState from "../../../redux/types/creation/EntityCreationSta
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import {LitmusAsyncThunkConfig} from "../../../redux/store";
 import {ValidationErrors} from "../../ValidationErrors";
+import CreationTypedAction from "../../../redux/actions/CreationTypedAction";
 
 interface CreationStateManager<E> {
+    getCreationActions(): CreationTypedAction;
     getCreationState(): EntityCreationState<E>;
     getValidationErrors(): ValidationErrors<E>;
     setValidationErrors(errors: ValidationErrors<E>): void;

@@ -11,12 +11,16 @@ import {ValidationErrors} from "../../ValidationErrors";
 class CreationStateManagerImpl<E> implements CreationStateManager<E> {
     protected readonly dispatch: AppDispatch;
     protected readonly getState: ()=>EntityCreationState<E>;
-    public readonly actions: CreationTypedAction;
+    protected readonly actions: CreationTypedAction;
 
     constructor(dispatch: AppDispatch, getState: () => EntityCreationState<E>, actions: CreationTypedAction) {
         this.dispatch = dispatch;
         this.getState = getState;
         this.actions = actions;
+    }
+
+    getCreationActions(): CreationTypedAction {
+        return this.actions;
     }
 
     getValidationErrors(): ValidationErrors<E> {

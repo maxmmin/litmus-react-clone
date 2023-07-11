@@ -1,8 +1,6 @@
 import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import CreationService from "./CreationService";
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import CreationTypedAction from "../../redux/actions/CreationTypedAction";
-import CreationCoreAction from "../../redux/actions/CreationCoreAction";
 import deepCopy from "../../util/deepCopy";
 import handleCreationError from "./handleCreationError";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
@@ -11,6 +9,7 @@ import CreationStateManager from "./stateManager/CreationStateManager";
 import ValidationService from "../ValidationService";
 import {hasErrors} from "../exploration/validation/BasicExplorationValidationService";
 import ValidationError from "../../error/ValidationError";
+import CreationCoreAction from "../../redux/actions/CreationCoreAction";
 
 
 /**
@@ -21,10 +20,10 @@ import ValidationError from "../../error/ValidationError";
  */
 class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
 
-    private mapper: DtoMapper<RequestDto, E, ResponseDto>;
-    private apiService: CreationApiService<RequestDto, ResponseDto>;
-    private creationStateManager: CreationStateManager<E>;
-    private validationService: ValidationService<E>
+    private readonly mapper: DtoMapper<RequestDto, E, ResponseDto>;
+    private readonly apiService: CreationApiService<RequestDto, ResponseDto>;
+    private readonly creationStateManager: CreationStateManager<E>;
+    private readonly validationService: ValidationService<E>
 
     constructor(apiService: CreationApiService<RequestDto, ResponseDto>,
                 creationStateManager: CreationStateManager<E>,
@@ -38,13 +37,14 @@ class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
 
     createEntity(): void {
         const emergedEntity = this.creationStateManager.getCreationState().emergingEntity;
-        this.creationStateManager.create(this.createEntityThunk({globalPending: false, emergingEntity: emergedEntity})).catch(console.error)
+        const prefix = this.creationStateManager.getCreationActions()[CreationCoreAction.CREATE_ENTITY];
+        const thunkAction = this.createEntityThunk(prefix)({emergingEntity: emergedEntity, globalPending: false});
+        this.creationStateManager.create(thunkAction).catch(console.error);
     }
 
-    private createEntityThunk = createAsyncThunk<E,
+    private createEntityThunk = (prefix: string) => createAsyncThunk<E,
         ThunkArg<{emergingEntity: E}>,
-        // think about this
-        LitmusAsyncThunkConfig>(this.creationStateManager.ac.person[CreationCoreAction.CREATE_ENTITY],async ({emergingEntity}, {rejectWithValue, fulfillWithValue}) => {
+        LitmusAsyncThunkConfig>(prefix,async ({emergingEntity}, {rejectWithValue, fulfillWithValue}) => {
         try {
             const errors = this.validationService.validate(emergingEntity);
             if (hasErrors(errors)) {
