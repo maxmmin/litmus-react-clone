@@ -25,8 +25,6 @@ export const LitmusServiceContext = createContext(serviceContext);
 function App() {
     const dispatch = useAppDispatch();
 
-    const reactServiceContext = React.createContext(serviceContext);
-
     return (
         <ErrorBoundary fallback={<h1>Something went wrong...</h1>}>
             <NotificationCenter/>
