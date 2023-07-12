@@ -39,7 +39,7 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
             dto.location = emergingPerson.location;
         }
 
-        if (emergingPerson.dateOfBirth) {
+        if (emergingPerson.dateOfBirth&&hasContent(emergingPerson.dateOfBirth)) {
             dto.dateOfBirth = DateBuilder.buildStringFrom(emergingPerson.dateOfBirth)
         }
 

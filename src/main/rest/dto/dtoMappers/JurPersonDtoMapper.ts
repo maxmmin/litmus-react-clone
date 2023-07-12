@@ -25,7 +25,7 @@ class JurPersonDtoMapper implements DtoMapper<JurPersonRequestDto, JurPerson, Ju
             dto.location = emergingEntity.location!;
         }
 
-        if (hasContent(emergingEntity.dateOfRegistration)) {
+        if (emergingEntity.dateOfRegistration&&hasContent(emergingEntity.dateOfRegistration)) {
             dto.dateOfRegistration = DateBuilder.buildStringFrom(emergingEntity.dateOfRegistration!);
         }
 
