@@ -4,6 +4,12 @@ import {ValidationErrors} from "../../../../ValidationErrors";
 
 export type PersonValidationObject = Omit<Person, "passportData">&{passportSerial: string, passportNumber: string, rnokppCode: string}
 
-export default interface PersonCreationValidationService extends HumanCreationValidationService<Person, PersonValidationObject> {
+export type ServerPersonValidationObject = Omit<ValidationErrors<Person>, 'passportData'>&{
+    'passportData.passportSerial': string,
+    'passportData.passportNumber': string,
+    'passportData.rnokppCode': string
+}
+
+export default interface PersonCreationValidationService extends HumanCreationValidationService<Person, PersonValidationObject, ServerPersonValidationObject> {
     validatePassportData(model: Person): ValidationErrors<PersonValidationObject>;
 }

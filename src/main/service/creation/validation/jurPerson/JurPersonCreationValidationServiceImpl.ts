@@ -7,6 +7,11 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
         const bindingResult: ValidationErrors<JurPerson> = {};
         return bindingResult;
     }
+
+    formValidationErrors(response: ValidationErrors<JurPerson>): ValidationErrors<JurPerson> {
+        return {...response};
+    }
+
 }
 
 export default JurPersonCreationValidationServiceImpl;

@@ -12,6 +12,19 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
             ...bindingResult
         };
     }
+
+
+    isMiddleNameValid(middleName: Human["middleName"]): string | undefined {
+        if (middleName) {
+            return super.isMiddleNameValid(middleName);
+        } else return "Поле обов'язкове до заповнення";
+    }
+
+    formValidationErrors(response: ValidationErrors<User>): ValidationErrors<User> {
+        return {...response};
+    }
+
+
 }
 
 export default UserCreationValidationServiceImpl;

@@ -61,8 +61,8 @@ class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
                 this.creationStateManager.setValidationErrors(e.errors);
             } else if (Object.hasOwn(e as object, "status")&&(e as ErrorResponse<unknown>).status===HttpStatus.UNPROCESSABLE_ENTITY) {
                 const validationResponse = e as ValidationResponse<unknown>
-                e = new ValidationError(validationResponse.detail.validationErrors);
-                this.creationStateManager.setValidationErrors(validationResponse.detail.validationErrors);
+                const validationErrors = this.validationService.formValidationErrors(validationResponse.detail.validationErrors);
+                this.creationStateManager.setValidationErrors(validationErrors);
             }
 
             return rejectWithValue(handleCreationError(e), {notify: true});

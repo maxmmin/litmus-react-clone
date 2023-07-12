@@ -3,12 +3,14 @@ import Human from "../../../../model/human/Human";
 import {hasErrors} from "../../../exploration/validation/BasicExplorationValidationService";
 import {ValidationErrors} from "../../../ValidationErrors";
 
-class HumanCreationValidationServiceImpl<E extends Human, R=E> implements HumanCreationValidationService<E,R> {
+abstract class HumanCreationValidationServiceImpl<E extends Human, R=E, S=R> implements HumanCreationValidationService<E,R,S> {
     private static readonly FIRST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
 
     private static readonly MIDDLE_NAME_REGEXP = new RegExp("^[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']{3,32}$");
 
     private static readonly LAST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
+
+    abstract formValidationErrors(response: ValidationErrors<S>): ValidationErrors<R>;
 
     validate(model: E): ValidationErrors<R> {
         return {
@@ -45,7 +47,7 @@ class HumanCreationValidationServiceImpl<E extends Human, R=E> implements HumanC
             if (!HumanCreationValidationServiceImpl.FIRST_NAME_REGEXP.test(firstName)) {
                 return "Некоректний формат імені"
             }
-        }
+        } else return "Поле обов'язкове до заповнення"
     }
 
     isMiddleNameValid(middleName: Human["middleName"]): string|undefined {

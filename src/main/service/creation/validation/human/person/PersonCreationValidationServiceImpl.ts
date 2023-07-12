@@ -1,16 +1,29 @@
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
-import PersonCreationValidationService, {PersonValidationObject} from "./PersonCreationValidationService";
+import PersonCreationValidationService, {
+    PersonValidationObject,
+    ServerPersonValidationObject
+} from "./PersonCreationValidationService";
 import Person from "../../../../../model/human/person/Person";
 import {ValidationErrors} from "../../../../ValidationErrors";
 import Human from "../../../../../model/human/Human";
 
-class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<Person, PersonValidationObject> implements PersonCreationValidationService {
+class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<Person, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
     validate(params: Person): ValidationErrors<PersonValidationObject> {
         let bindingResult: ValidationErrors<Human> = super.validate(params);
         const passportErrors = this.validatePassportData(params);
         bindingResult = {...bindingResult, ...passportErrors};
         return bindingResult;
     }
+
+    formValidationErrors(response: ValidationErrors<ServerPersonValidationObject>): ValidationErrors<PersonValidationObject> {
+        const personValidationObject: ValidationErrors<PersonValidationObject> = {...response};
+        personValidationObject.passportSerial = response["passportData.passportSerial"];
+        personValidationObject.passportNumber = response["passportData.passportNumber"];
+        personValidationObject.rnokppCode = response["passportData.rnokppCode"];
+        return personValidationObject;
+    }
+
+
 
     validatePassportData(model: Person): ValidationErrors<PersonValidationObject> {
         const bindingResult: ValidationErrors<PersonValidationObject> = {};

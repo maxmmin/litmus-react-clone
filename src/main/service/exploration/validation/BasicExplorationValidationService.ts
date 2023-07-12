@@ -8,6 +8,10 @@ export default class BasicExplorationValidationService implements ExplorationVal
         return  {id: this.testId(explorationParams.id)};
     }
 
+    formValidationErrors(response: ValidationErrors<EntityExplorationParams>): ValidationErrors<EntityExplorationParams> {
+        return {...response};
+    }
+
     private testId (id: EntityExplorationParams["id"]): string|undefined {
         if (id) {
             if (isNaN(+id)) {
