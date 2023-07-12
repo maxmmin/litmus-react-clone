@@ -8,8 +8,10 @@ import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
 import ValidationService from "../ValidationService";
 import {hasErrors} from "../exploration/validation/BasicExplorationValidationService";
-import ValidationError from "../../error/ValidationError";
+import ValidationError, {ValidationResponse} from "../../error/ValidationError";
 import CreationCoreAction from "../../redux/actions/CreationCoreAction";
+import {HttpStatus} from "../../rest/HttpStatus";
+import ErrorResponse from "../../rest/ErrorResponse";
 
 
 /**
@@ -55,9 +57,14 @@ class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
             const entity: E = this.mapper.mapToEntity(responseDto);
             return fulfillWithValue(deepCopy(entity), {notify: true});
         } catch (e: unknown) {
-            if (e instanceof ValidationError) {
+            if (e instanceof ValidationError<unknown>) {
                 this.creationStateManager.setValidationErrors(e.errors);
+            } else if (Object.hasOwn(e as object, "status")&&(e as ErrorResponse<unknown>).status===HttpStatus.UNPROCESSABLE_ENTITY) {
+                const validationResponse = e as ValidationResponse<unknown>
+                e = new ValidationError(validationResponse.detail.validationErrors);
+                this.creationStateManager.setValidationErrors(validationResponse.detail.validationErrors);
             }
+
             return rejectWithValue(handleCreationError(e), {notify: true});
         }
     })

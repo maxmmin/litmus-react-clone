@@ -1,5 +1,12 @@
 import ErrorResponse from "../rest/ErrorResponse";
 import {HttpStatus} from "../rest/HttpStatus";
+import {ValidationErrors} from "../service/ValidationErrors";
+
+export type ValidationResponse<E> = {
+    detail: {
+        validationErrors: ValidationErrors<E>
+    }
+}
 
 export default class ValidationError<P> extends Error implements ErrorResponse<Partial<Record<keyof P, string>>>{
     errors: Partial<Record<keyof P, string>>;

@@ -44,28 +44,29 @@ class BasicHttpError<D> extends Error implements ErrorResponse<D> {
 
     }
 
-    static parseError(err: any): ErrorResponse<unknown> {
+    static parseError(err: unknown): ErrorResponse<unknown> {
         let status: number = -1;
         let title: string = 'Unknown error';
-        let detail: any = null;
+        let detail: unknown = null;
 
-        if (err) {
+        if (err&&typeof err === "object") {
             if ("status" in err) {
-                status = err["status"];
+                status = err["status"] as number;
             }
 
             if ("title" in err) {
-                title = err["title"];
+                title = err["title"] as string;
             } else if ("error" in err) {
-                title = err["error"];
+                title = err["error"] as string;
             }   else if ("message" in err) {
-                title = err.message;
+                title = err.message as string;
             }
 
             if ("detail" in err) {
                 detail = err["detail"];
             }
         }
+
         return {status, title, detail};
     }
 }

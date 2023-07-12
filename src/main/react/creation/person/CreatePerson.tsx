@@ -145,7 +145,7 @@ const CreatePerson = () => {
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Дата народження</Form.Label>
 
-                <InputDate date={new DateBuilder().setYear(year).setMonth(month).setDay(day).build()} setDate={date => creationStateManager.updateEntityCreationParams({dateOfBirth: date})} className={"date-of-birth"}/>
+                <InputDate inputPrefix={validationErrors?.dateOfBirth?"is-invalid":undefined} date={new DateBuilder().setYear(year).setMonth(month).setDay(day).build()} setDate={date => creationStateManager.updateEntityCreationParams({dateOfBirth: date})} className={"date-of-birth"}/>
                 <InputError error={validationErrors?.dateOfBirth}/>
             </Form.Group>
 
