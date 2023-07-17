@@ -1,19 +1,24 @@
-import {Relationship} from "../../../model/human/person/Person";
+import {Relationship, RelationshipsLinkObject} from "../../../model/human/person/Person";
 import RelationshipCreationComponent from "./RelationshipCreationComponent";
-import {ValidationErrors} from "../../../service/ValidationErrors";
-import {
-    PersonValidationObject, RelationShipValidationObject
-} from "../../../service/creation/validation/human/person/PersonCreationValidationService";
+import {useContext} from "react";
+import {LitmusServiceContext} from "../../App";
 
-type props = {relationships: Relationship[], validationErrors: RelationShipValidationObject[]}
+type props = {relationships: Relationship[]}
 
 const PersonRelationships = ({relationships}: props) => {
+    const validationService = useContext(LitmusServiceContext).creation.validation.person;
+    const stateManager = useContext(LitmusServiceContext).creation.stateManagers.person;
     return (
             <>
                 {
                     relationships.map(relation => {
                         return (
-                            <RelationshipCreationComponent key={relation.person.id} relationship={relation}/>
+                            <RelationshipCreationComponent
+                                validationService={validationService}
+                                key={relation.person.id}
+                                relationship={relation}
+                                stateManager={stateManager}
+                            />
                         )
                     })
                 }

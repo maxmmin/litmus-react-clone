@@ -17,6 +17,12 @@ interface PersonCreationStateManager extends CreationStateManager<Person, Person
 
     getRelationshipsValidationErrors (): RelationShipValidationObject[];
 
+    setRelationshipValidationErrors(relationship: RelationShipValidationObject): void;
+
+    getRelationshipValidationErrors(rel: Relationship): RelationShipValidationObject;
+
+    updateRelationshipValidationErrors(relationship: RelationShipValidationObject): void;
+
     updatePassportData: (data: Partial<CreationPassportData>) => void;
 
     addRelationship: (relationship: Relationship) => void;

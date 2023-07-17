@@ -205,7 +205,7 @@ const CreatePerson = () => {
                 <div className={`create-relationships-section__relations ${relationships!.length>0?'':'empty'}`}>
                     {
                         relationships!.length>0?
-                            <PersonRelationships validationErrors={validationErrors?.relationships?validationErrors.relationships:[]} relationships={creationPersonParams.relationships}/>
+                            <PersonRelationships relationships={creationPersonParams.relationships}/>
                             :
                             <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
                     }

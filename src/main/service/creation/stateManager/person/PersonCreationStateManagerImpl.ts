@@ -24,6 +24,15 @@ class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person, Pe
         super(dispatch, getState, CreationTypedAction.person);
     }
 
+    updateRelationshipValidationErrors(relObject: RelationShipValidationObject): void {
+        const relationShipValidationErrors: RelationShipValidationObject[] = [...this.getValidationErrors().relationships];
+        const relObjectInd: number = relationShipValidationErrors.findIndex(obj=>RelationshipsLinkObject.checkIsEqual(obj.relationship,relObject.relationship));
+        if (relObjectInd===-1) throw new Error("no such validation object");
+        const prev = relationShipValidationErrors[relObjectInd];
+        relationShipValidationErrors.splice(relObjectInd,1,{...prev, ...relObject});
+        this.updateValidationErrors({relationships: relationShipValidationErrors})
+    }
+
     getRelationshipsValidationErrors(): RelationShipValidationObject[] {
         return this.getValidationErrors().relationships;
     }

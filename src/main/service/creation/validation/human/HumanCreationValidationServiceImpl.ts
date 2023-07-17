@@ -2,6 +2,7 @@ import HumanCreationValidationService from "./HumanCreationValidationService";
 import Human from "../../../../model/human/Human";
 import {ValidationErrors} from "../../../ValidationErrors";
 
+
 abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationErrors<E>, S=R> implements HumanCreationValidationService<E,R,S> {
     private static readonly FIRST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
 

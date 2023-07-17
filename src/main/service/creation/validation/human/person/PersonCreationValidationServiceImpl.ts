@@ -1,21 +1,45 @@
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
 import PersonCreationValidationService, {
-    PersonValidationObject,
+    PersonValidationObject, RelationShipValidationObject,
     ServerPersonValidationObject
 } from "./PersonCreationValidationService";
-import Person from "../../../../../model/human/person/Person";
+import Person, {Relationship} from "../../../../../model/human/person/Person";
 import {ValidationErrors} from "../../../../ValidationErrors";
 import Human from "../../../../../model/human/Human";
-import DateEntity, {DateEntityTool} from "../../../../../model/DateEntity";
+import {DateEntityTool} from "../../../../../model/DateEntity";
 import {hasContent} from "../../../../../util/isEmpty";
+import {allowedSymbolsRegExp} from "../../../../../util/regExps";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<Person, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
+
     validate(params: Person): PersonValidationObject {
         let fullNameResult: ValidationErrors<Human> = super.validateFullName(params);
         const passportErrors = this.validatePassportData(params);
         const sexErr = this.validateSex(params);
         const dateErr = this.validateDateOfBirth(params);
-        const bindingResult: PersonValidationObject = {...fullNameResult, ...passportErrors, ...sexErr, ...dateErr, relationships: []};
+        const relationShipsErrors = this.validateRelationships(params)
+        const bindingResult: PersonValidationObject = {...fullNameResult, ...passportErrors, ...sexErr, ...dateErr, relationships: relationShipsErrors};
+        return bindingResult;
+    }
+
+    validateRelationships(model: Person): RelationShipValidationObject[] {
+        return model.relationships.map(this.validateRelationship);
+    }
+
+    validateRelationship(relationship: Relationship): RelationShipValidationObject {
+        const bindingResult: RelationShipValidationObject = {relationship: relationship};
+        if (relationship) {
+            if (relationship.note) {
+                const noteTest = allowedSymbolsRegExp.test(relationship.note);
+                if (!noteTest) {
+                    bindingResult.note = "Поле містить службові символи";
+                }
+
+                if (!relationship.relationType) {
+                    bindingResult.relationType = "Вкажіть тип відносин";
+                }
+            }
+        }
         return bindingResult;
     }
 
@@ -30,8 +54,6 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
     }
 
 
-
-
     validateSex(model: Person): Partial<PersonValidationObject> {
         const personValidationObject: Partial<PersonValidationObject> = {};
 
@@ -41,8 +63,6 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         }
         return personValidationObject;
     }
-
-
 
     mapServerValidationErrors(response: ServerPersonValidationObject): PersonValidationObject {
         const personValidationObject: PersonValidationObject = {...response, relationships: []};

@@ -1,23 +1,35 @@
 import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../model/human/person/Person";
 import {FloatingLabel, Form} from "react-bootstrap";
-import React from "react";
+import React, {useMemo} from "react";
 import {CrossIcon} from "../../../util/icons";
-import {useAppDispatch} from "../../../redux/hooks";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import PersonCreationStateManagerImpl
     from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
+import PersonCreationValidationService, {
+    RelationShipValidationObject
+} from "../../../service/creation/validation/human/person/PersonCreationValidationService";
+import InputError from "../../sharedComponents/InputError";
+import {useSelector} from "react-redux";
 
 
 type Props = {
-    relationship: Relationship
+    relationship: Relationship,
+    validationService: PersonCreationValidationService,
+    stateManager: PersonCreationStateManager
 }
 
-const RelationshipCreationComponent = ({relationship}: Props) => {
+const RelationshipCreationComponent = ({relationship, validationService, stateManager}: Props) => {
     const personCreationStateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl();
 
     const personTo = relationship.person;
 
-    const dispatch = useAppDispatch();
+    const validationObject = useSelector(()=>{
+        try {
+            return stateManager.getRelationshipValidationErrors(relationship);
+        } catch (e) {
+            return {relationship: relationship} as RelationShipValidationObject
+        }
+    })
 
     const handleSelectChange = (e: React.SyntheticEvent<HTMLSelectElement>) => {
         const relShip: Relationship = {...relationship};
@@ -57,7 +69,7 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
             <div className="create-relation__note">
                 <FloatingLabel className={"create-relation__floating-label-container"} controlId="create-relation__note-text-area-id" label="Нотатка">
                     <Form.Control
-                        className={"create-relation__note-textarea fw-light"}
+                        className={`create-relation__note-textarea fw-light ${validationObject.note?"is-invalid":""}`}
                         as="textarea"
                         placeholder="Залишіть нотатку"
                         style={{ height: '100px' }}
@@ -66,9 +78,13 @@ const RelationshipCreationComponent = ({relationship}: Props) => {
                             const relShip = {...relationship};
                             relShip.note = e.currentTarget.value;
                             personCreationStateManager.updateRelationship(relShip);
+                            if (validationObject.note&&!validationService.validateRelationship(relationship).note) {
+                                stateManager.updateRelationshipValidationErrors({relationship: relationship, note: undefined})
+                            }
                         }}
                     />
                 </FloatingLabel>
+                <InputError error={validationObject.note}/>
             </div>
 
             <div className="create-relation__remove-btn-wrapper">
