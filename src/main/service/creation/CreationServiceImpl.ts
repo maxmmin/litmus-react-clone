@@ -12,25 +12,27 @@ import ValidationError, {ValidationResponse} from "../../error/ValidationError";
 import CreationCoreAction from "../../redux/actions/CreationCoreAction";
 import {HttpStatus} from "../../rest/HttpStatus";
 import ErrorResponse from "../../rest/ErrorResponse";
+import {ValidationErrors} from "../ValidationErrors";
 
 
 /**
  * Q - requestDto
  * E - entity
  * P - response dto
- * S - creationState
+ * V - validation object
+ * S - server validation type
  */
-class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
+class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationErrors<E>,S extends object=V> implements CreationService {
 
     private readonly mapper: DtoMapper<RequestDto, E, ResponseDto>;
     private readonly apiService: CreationApiService<RequestDto, ResponseDto>;
-    private readonly creationStateManager: CreationStateManager<E>;
-    private readonly validationService: ValidationService<E>
+    private readonly creationStateManager: CreationStateManager<E,V>;
+    private readonly validationService: ValidationService<E,V,S>
 
     constructor(apiService: CreationApiService<RequestDto, ResponseDto>,
-                creationStateManager: CreationStateManager<E>,
+                creationStateManager: CreationStateManager<E,V>,
                 mapper: DtoMapper<RequestDto, E, ResponseDto>,
-                validationService: ValidationService<E>) {
+                validationService: ValidationService<E, V, S>) {
         this.mapper = mapper;
         this.apiService = apiService;
         this.creationStateManager = creationStateManager;
@@ -60,8 +62,8 @@ class CreationServiceImpl<RequestDto,E,ResponseDto> implements CreationService {
             if (e instanceof ValidationError<unknown>) {
                 this.creationStateManager.setValidationErrors(e.errors);
             } else if (Object.hasOwn(e as object, "status")&&(e as ErrorResponse<unknown>).status===HttpStatus.UNPROCESSABLE_ENTITY) {
-                const validationResponse = e as ValidationResponse<unknown>
-                const validationErrors = this.validationService.formValidationErrors(validationResponse.detail.validationErrors);
+                const validationResponse = e as ValidationResponse<S>
+                const validationErrors = this.validationService.mapServerValidationErrors(validationResponse.detail.validationErrors);
                 this.creationStateManager.setValidationErrors(validationErrors);
             }
 

@@ -3,7 +3,7 @@ import PersonRequestDto , {PassportDataRequestDto, RelationshipRequestDto} from 
 import {hasContent} from "../../../util/isEmpty";
 import Person, {Relationship} from "../../../model/human/person/Person";
 import PassportData from "../../../model/human/person/PassportData";
-import {DateBuilder} from "../../../model/DateEntity";
+import {DateEntityTool} from "../../../model/DateEntity";
 import PersonResponseDto from "../person/PersonResponseDto";
 
 
@@ -40,7 +40,7 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
         }
 
         if (emergingPerson.dateOfBirth&&hasContent(emergingPerson.dateOfBirth)) {
-            dto.dateOfBirth = DateBuilder.buildStringFrom(emergingPerson.dateOfBirth)
+            dto.dateOfBirth = DateEntityTool.getStringFrom(emergingPerson.dateOfBirth)
         }
 
         return dto;
@@ -103,7 +103,7 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
             middleName: retrievedEntityDto.middleName?retrievedEntityDto.middleName:null,
             lastName: retrievedEntityDto.lastName,
             relationships: retrievedEntityDto.relationships?retrievedEntityDto.relationships:[],
-            dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateBuilder.buildFromString(retrievedEntityDto.dateOfBirth):null
+            dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null
         };
 
         return person;

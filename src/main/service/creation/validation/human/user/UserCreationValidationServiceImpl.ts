@@ -7,7 +7,7 @@ import User from "../../../../../model/human/user/User";
 
 class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<User> implements UserCreationValidationService {
     validate(model: User): ValidationErrors<User> {
-        const bindingResult: ValidationErrors<Human> = super.validate(model);
+        const bindingResult: ValidationErrors<Human> = super.validateFullName(model);
         return {
             ...bindingResult
         };
@@ -20,7 +20,7 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
         } else return "Поле обов'язкове до заповнення";
     }
 
-    formValidationErrors(response: ValidationErrors<User>): ValidationErrors<User> {
+    mapServerValidationErrors(response: ValidationErrors<User>): ValidationErrors<User> {
         return {...response};
     }
 

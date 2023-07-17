@@ -1,6 +1,6 @@
 import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import {DateBuilder} from "../../../model/DateEntity";
+import {DateEntityTool} from "../../../model/DateEntity";
 
 export default interface JurPersonCreationState extends EntityCreationState<JurPerson> {
 
@@ -9,7 +9,7 @@ export default interface JurPersonCreationState extends EntityCreationState<JurP
 export const initialJurPersonCreationParams: JurPerson = {
     id: '-1',
     benOwner: null,
-    dateOfRegistration:  {...new DateBuilder().build()},
+    dateOfRegistration:  {...new DateEntityTool().build()},
     edrpou:  "",
     name: "",
     owner: null,

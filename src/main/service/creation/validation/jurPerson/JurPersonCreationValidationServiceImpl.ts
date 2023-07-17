@@ -8,7 +8,7 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
         return bindingResult;
     }
 
-    formValidationErrors(response: ValidationErrors<JurPerson>): ValidationErrors<JurPerson> {
+    mapServerValidationErrors(response: ValidationErrors<JurPerson>): ValidationErrors<JurPerson> {
         return {...response};
     }
 

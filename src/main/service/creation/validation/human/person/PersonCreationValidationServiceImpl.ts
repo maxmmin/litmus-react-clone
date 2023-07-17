@@ -6,27 +6,54 @@ import PersonCreationValidationService, {
 import Person from "../../../../../model/human/person/Person";
 import {ValidationErrors} from "../../../../ValidationErrors";
 import Human from "../../../../../model/human/Human";
+import DateEntity, {DateEntityTool} from "../../../../../model/DateEntity";
+import {hasContent} from "../../../../../util/isEmpty";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<Person, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
-    validate(params: Person): ValidationErrors<PersonValidationObject> {
-        let bindingResult: ValidationErrors<Human> = super.validate(params);
+    validate(params: Person): PersonValidationObject {
+        let fullNameResult: ValidationErrors<Human> = super.validateFullName(params);
         const passportErrors = this.validatePassportData(params);
-        bindingResult = {...bindingResult, ...passportErrors};
+        const sexErr = this.validateSex(params);
+        const dateErr = this.validateDateOfBirth(params);
+        const bindingResult: PersonValidationObject = {...fullNameResult, ...passportErrors, ...sexErr, ...dateErr, relationships: []};
         return bindingResult;
     }
 
-    formValidationErrors(response: ValidationErrors<ServerPersonValidationObject>): ValidationErrors<PersonValidationObject> {
-        const personValidationObject: ValidationErrors<PersonValidationObject> = {...response};
+    validateDateOfBirth(model: Person): Partial<PersonValidationObject> {
+        const dateOfBirth = model.dateOfBirth;
+        const bindingResult: Partial<PersonValidationObject> = {}
+        if (dateOfBirth&&hasContent(dateOfBirth)) {
+            const date = DateEntityTool.isValid(dateOfBirth);
+            if (!date) bindingResult.dateOfBirth = "Введіть коректну дату"
+        }
+        return bindingResult;
+    }
+
+
+
+
+    validateSex(model: Person): Partial<PersonValidationObject> {
+        const personValidationObject: Partial<PersonValidationObject> = {};
+
+        const sex = model.sex;
+        if (!sex) {
+            personValidationObject.sex = "Оберіть стать особи"
+        }
+        return personValidationObject;
+    }
+
+
+
+    mapServerValidationErrors(response: ServerPersonValidationObject): PersonValidationObject {
+        const personValidationObject: PersonValidationObject = {...response, relationships: []};
         personValidationObject.passportSerial = response["passportData.passportSerial"];
         personValidationObject.passportNumber = response["passportData.passportNumber"];
         personValidationObject.rnokppCode = response["passportData.rnokppCode"];
         return personValidationObject;
     }
 
-
-
-    validatePassportData(model: Person): ValidationErrors<PersonValidationObject> {
-        const bindingResult: ValidationErrors<PersonValidationObject> = {};
+    validatePassportData(model: Person): Partial<PersonValidationObject> {
+        const bindingResult: Partial<PersonValidationObject> = {};
         const passportData = model.passportData;
 
         if (passportData) {

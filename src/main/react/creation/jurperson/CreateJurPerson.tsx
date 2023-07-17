@@ -7,7 +7,7 @@ import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../CreationScreen";
 import InputDate from "../../sharedComponents/InputDate";
 import Person from "../../../model/human/person/Person";
-import {DateBuilder} from "../../../model/DateEntity";
+import {DateEntityTool} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
 import {LitmusServiceContext} from "../../App";
@@ -85,7 +85,7 @@ const CreateJurPerson = () => {
                 <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Дата реєстрації юридичної особи</Form.Label>
 
-                    <InputDate inputPrefix={validationErrors?.dateOfRegistration?'is-invalid':''} date={new DateBuilder().setDay(day).setMonth(month).setYear(year).build()} setDate={date=>creationManager.updateEntityCreationParams({dateOfRegistration: date})} className={"date-of-registration"}/>
+                    <InputDate inputPrefix={validationErrors?.dateOfRegistration?'is-invalid':''} date={new DateEntityTool().setDay(day).setMonth(month).setYear(year).build()} setDate={date=>creationManager.updateEntityCreationParams({dateOfRegistration: date})} className={"date-of-registration"}/>
 
                     <InputError error={validationErrors?.dateOfRegistration}/>
                 </Form.Group>

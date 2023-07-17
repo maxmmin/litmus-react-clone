@@ -8,12 +8,12 @@ import {Entity} from "../../../model/Entity";
 import {selectEmergingEntityAction} from "../../../redux/reducers/creationStateReducer";
 import {ValidationErrors} from "../../ValidationErrors";
 
-class CreationStateManagerImpl<E> implements CreationStateManager<E> {
+class CreationStateManagerImpl<E,V=ValidationErrors<E>> implements CreationStateManager<E,V> {
     protected readonly dispatch: AppDispatch;
-    protected readonly getState: ()=>EntityCreationState<E>;
+    protected readonly getState: ()=>EntityCreationState<E,V>;
     protected readonly actions: CreationTypedAction;
 
-    constructor(dispatch: AppDispatch, getState: () => EntityCreationState<E>, actions: CreationTypedAction) {
+    constructor(dispatch: AppDispatch, getState: () => EntityCreationState<E,V>, actions: CreationTypedAction) {
         this.dispatch = dispatch;
         this.getState = getState;
         this.actions = actions;
@@ -23,18 +23,18 @@ class CreationStateManagerImpl<E> implements CreationStateManager<E> {
         return this.actions;
     }
 
-    getValidationErrors(): ValidationErrors<E> {
+    getValidationErrors(): V {
         return this.getState().validationErrors;
     }
 
-    setValidationErrors(errors: ValidationErrors<E>): void {
+    setValidationErrors(errors: V): void {
         this.dispatch({
             type: this.actions["SET_ENTITY_VALIDATION_ERRORS"],
             payload: errors
         })
     }
 
-    updateValidationErrors(errors: ValidationErrors<E>): void {
+    updateValidationErrors(errors: V): void {
         this.dispatch({
             type: this.actions["UPDATE_ENTITY_VALIDATION_ERRORS"],
             payload: errors
@@ -52,7 +52,7 @@ class CreationStateManagerImpl<E> implements CreationStateManager<E> {
         return this.getState().emergingEntity;
     }
 
-    getCreationState(): EntityCreationState<E> {
+    getCreationState(): EntityCreationState<E,V> {
         return this.getState();
     }
 

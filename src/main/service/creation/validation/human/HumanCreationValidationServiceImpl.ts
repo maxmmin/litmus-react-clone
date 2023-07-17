@@ -1,40 +1,24 @@
 import HumanCreationValidationService from "./HumanCreationValidationService";
 import Human from "../../../../model/human/Human";
-import {hasErrors} from "../../../exploration/validation/BasicExplorationValidationService";
 import {ValidationErrors} from "../../../ValidationErrors";
 
-abstract class HumanCreationValidationServiceImpl<E extends Human, R=E, S=R> implements HumanCreationValidationService<E,R,S> {
+abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationErrors<E>, S=R> implements HumanCreationValidationService<E,R,S> {
     private static readonly FIRST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
 
     private static readonly MIDDLE_NAME_REGEXP = new RegExp("^[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']{3,32}$");
 
     private static readonly LAST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
 
-    abstract formValidationErrors(response: ValidationErrors<S>): ValidationErrors<R>;
+    abstract mapServerValidationErrors(response: S): R;
 
-    validate(model: E): ValidationErrors<R> {
-        return {
-            firstName: this.isFirstNameValid(model.firstName),
-            middleName: this.isMiddleNameValid(model.middleName),
-            lastName: this.isLastNameValid(model.lastName)
-        } as ValidationErrors<R>;
-    }
+    abstract validate(model: E): R;
 
-    validateFullName(model: Human): ValidationErrors<Human>|null {
-        const bindingRes = {
+    validateFullName(model: Human): ValidationErrors<Human> {
+        return  {
             firstName: this.isFirstNameValid(model.firstName),
             middleName: this.isMiddleNameValid(model.middleName),
             lastName: this.isLastNameValid(model.lastName)
         };
-
-        if (hasErrors(bindingRes)) {
-            return {
-                firstName: this.isFirstNameValid(model.firstName),
-                middleName: this.isMiddleNameValid(model.middleName),
-                lastName: this.isLastNameValid(model.lastName)
-            }
-        }
-        else return null;
     }
 
 

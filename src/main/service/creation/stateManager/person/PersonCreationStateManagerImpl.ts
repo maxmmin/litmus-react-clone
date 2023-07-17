@@ -4,19 +4,43 @@ import CreationStateManagerImpl from "../CreationStateManagerImpl";
 import PersonCreationStateManager from "./PersonCreationStateManager";
 import {PayloadAction} from "@reduxjs/toolkit";
 import store, {AppDispatch} from "../../../../redux/store";
-import Person, {Relationship} from "../../../../model/human/person/Person";
+import Person, {Relationship, RelationshipsLinkObject} from "../../../../model/human/person/Person";
 import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import PassportData from "../../../../model/human/person/PassportData";
 
 import {GeoLocation} from "../../../../model/GeoLocation";
+import {
+    PersonValidationObject,
+    RelationShipValidationObject
+} from "../../validation/human/person/PersonCreationValidationService";
+import {ValidationErrors} from "../../../ValidationErrors";
 
-class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person> implements PersonCreationStateManager {
+class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person, PersonValidationObject> implements PersonCreationStateManager {
 
 
     constructor() {
         const dispatch: AppDispatch = store.dispatch;
         const getState = ()=>store.getState().creation.person!;
         super(dispatch, getState, CreationTypedAction.person);
+    }
+
+    getRelationshipsValidationErrors(): RelationShipValidationObject[] {
+        return this.getValidationErrors().relationships;
+    }
+
+    setRelationshipValidationErrors(relObject: RelationShipValidationObject): void {
+        const relationShipValidationErrors: RelationShipValidationObject[] = [...this.getValidationErrors().relationships];
+        const relObjectInd: number = relationShipValidationErrors.findIndex(obj=>RelationshipsLinkObject.checkIsEqual(obj.relationship,relObject.relationship));
+        if (relObjectInd===-1) throw new Error("no such validation object");
+        relationShipValidationErrors.splice(relObjectInd,1,relObject);
+        this.updateValidationErrors({relationships: relationShipValidationErrors});
+    }
+
+    getRelationshipValidationErrors(rel: Relationship): RelationShipValidationObject {
+        const relationShipValidationErrors: RelationShipValidationObject[] = this.getValidationErrors().relationships;
+        const validationObject: RelationShipValidationObject|undefined = relationShipValidationErrors.find(obj => RelationshipsLinkObject.checkIsEqual(obj.relationship, rel));
+        if (!validationObject) throw new Error("no such validation object");
+            else return validationObject;
     }
 
     clearLocation(): void {

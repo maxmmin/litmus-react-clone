@@ -11,7 +11,7 @@ export default class DateEntity {
     }
 }
 
-export class DateBuilder {
+export class DateEntityTool {
     private static readonly separator = "-";
 
     private day: string = '';
@@ -20,39 +20,51 @@ export class DateBuilder {
 
     private year: string = '';
 
-    setDay (day: string): DateBuilder {
+    setDay (day: string): DateEntityTool {
         this.day = day;
         return this;
     }
 
-    setMonth (month: string): DateBuilder {
+    setMonth (month: string): DateEntityTool {
         this.month = month;
         return this;
     }
 
-    setYear (year: string): DateBuilder {
+    setYear (year: string): DateEntityTool {
         this.year = year;
         return this;
-    }
-
-    static buildStringFrom (date: DateEntity): string {
-        return new DateBuilder().setYear(date.year).setMonth(date.month).setDay(date.day).buildStringDate();
     }
 
     buildStringDate (): string {
         return `${this.year}-${this.month}-${this.day}`
     }
 
-    static buildFromString (date: string): DateEntity {
-        const [year, month, day] = date.split(DateBuilder.separator)
-        return {year, month, day};
-    }
-
     build (): DateEntity {
         return new DateEntity(this.year, this.month, this.day)
     }
 
+    getDate (): Date {
+        return new Date(`${this.year}-${this.month}-${this.day}`);
+    }
+
     isValid (): boolean {
-        return !isNaN(new Date(`${this.year}-${this.month}-${this.day}`).getTime())
+        return !isNaN(this.getDate().getTime())
+    }
+
+    static buildFromString (date: string): DateEntity {
+        const [year, month, day] = date.split(DateEntityTool.separator)
+        return {year, month, day};
+    }
+
+    static getTool(date: DateEntity): DateEntityTool {
+        return new DateEntityTool().setYear(date.year).setMonth(date.month).setDay(date.day)
+    }
+
+    static getStringFrom (date: DateEntity): string {
+        return DateEntityTool.getTool(date).buildStringDate();
+    }
+
+    static isValid(dateEntity: DateEntity): boolean {
+        return !isNaN(this.getTool(dateEntity).getDate().getTime());
     }
 }

@@ -1,15 +1,15 @@
 import {ValidationErrors} from "../../../service/ValidationErrors";
 
-export default interface EntityCreationState<P,E=P> {
+export default interface EntityCreationState<P,E=ValidationErrors<P>> {
     emergingEntity: P;
-    validationErrors: ValidationErrors<E>;
+    validationErrors: E;
 }
 
-export class BasicEntityCreationState<P, E=P> implements EntityCreationState<P,E> {
+export class BasicEntityCreationState<P, E=ValidationErrors<P>> implements EntityCreationState<P,E> {
     emergingEntity: P;
-    validationErrors: ValidationErrors<E>
+    validationErrors: E
 
-    constructor(params: P, errors: ValidationErrors<E>) {
+    constructor(params: P, errors: E) {
         this.emergingEntity = params;
         this.validationErrors = errors;
     }

@@ -17,7 +17,7 @@ export const getFullName = (person: Person) => {
     return `${person.lastName} ${person.firstName} ${person.middleName}`
 }
 
-export type Relationship ={
+export type Relationship = {
     person: Person,
     relationType: RelationType | null,
     note: string
@@ -120,7 +120,23 @@ export class RelationshipsLinkObject {
         return false;
     }
 
+    indexOf (rel: Relationship): number {
+        const presentRelationships = this.relationships;
+
+        for (let counter = 0; counter<presentRelationships.length; counter++) {
+            const checked = presentRelationships[counter];
+
+            if (this.checkIsEqual(rel, checked)) return counter;
+        }
+
+        return -1;
+    }
+
     private checkIsEqual (rel: Relationship, compared: Relationship) {
+        return RelationshipsLinkObject.checkIsEqual(rel,compared);
+    }
+
+    static checkIsEqual (rel: Relationship, compared: Relationship) {
         return rel.person.id===compared.person.id;
     }
 }

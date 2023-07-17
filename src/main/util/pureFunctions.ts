@@ -11,7 +11,7 @@ import User from "../model/human/user/User";
 import Person from "../model/human/person/Person";
 import person from "../model/human/person/Person";
 import {JurPerson} from "../model/jurPerson/JurPerson";
-import {DateBuilder} from "../model/DateEntity";
+import {DateEntityTool} from "../model/DateEntity";
 import {Action} from "redux";
 
 

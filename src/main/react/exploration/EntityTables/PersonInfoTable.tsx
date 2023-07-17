@@ -1,6 +1,6 @@
 import {noInfoMessage} from "../../../error/BasicHttpError";
 import Person from "../../../model/human/person/Person";
-import {DateBuilder} from "../../../model/DateEntity";
+import {DateEntityTool} from "../../../model/DateEntity";
 
 type Props = {
     person: Person
@@ -25,7 +25,7 @@ const PersonInfoTable = ({person}: Props) => {
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.lastName?person.lastName:noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.firstName?person.firstName:noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.middleName?person.middleName:noInfoMessage}</p></div>
-        <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.dateOfBirth?DateBuilder.buildStringFrom(person.dateOfBirth):noInfoMessage}</p></div>
+        <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.dateOfBirth?DateEntityTool.getStringFrom(person.dateOfBirth):noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{passportData?.passportNumber?passportData.passportNumber:noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{passportData?.passportSerial?passportData.passportSerial:noInfoMessage}</p></div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{passportData?.rnokppCode?passportData.rnokppCode:noInfoMessage}</p></div>

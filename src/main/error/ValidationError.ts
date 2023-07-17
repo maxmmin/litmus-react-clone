@@ -4,20 +4,20 @@ import {ValidationErrors} from "../service/ValidationErrors";
 
 export type ValidationResponse<E> = {
     detail: {
-        validationErrors: ValidationErrors<E>
+        validationErrors: E
     }
 }
 
-export default class ValidationError<P> extends Error implements ErrorResponse<Partial<Record<keyof P, string>>>{
-    errors: Partial<Record<keyof P, string>>;
+export default class ValidationError<E> extends Error implements ErrorResponse<E> {
+    errors: E;
 
-    detail: Partial<Record<keyof P, string>> | null;
+    detail: E | null;
     status: number = HttpStatus.UNPROCESSABLE_ENTITY;
     title: string = "Деякі поля мають невалідні значення";
 
 
 
-    constructor(errors: Partial<Record<keyof P, string>>) {
+    constructor(errors: E) {
         super("validation err");
         this.errors = errors;
         this.detail = errors;

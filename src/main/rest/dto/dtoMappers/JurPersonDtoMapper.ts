@@ -1,4 +1,4 @@
-import {DateBuilder} from "../../../model/DateEntity";
+import {DateEntityTool} from "../../../model/DateEntity";
 import {hasContent} from "../../../util/isEmpty";
 import DtoMapper from "./DtoMapper";
 import JurPersonRequestDto from "../jurPerson/JurPersonRequestDto";
@@ -26,7 +26,7 @@ class JurPersonDtoMapper implements DtoMapper<JurPersonRequestDto, JurPerson, Ju
         }
 
         if (emergingEntity.dateOfRegistration&&hasContent(emergingEntity.dateOfRegistration)) {
-            dto.dateOfRegistration = DateBuilder.buildStringFrom(emergingEntity.dateOfRegistration!);
+            dto.dateOfRegistration = DateEntityTool.getStringFrom(emergingEntity.dateOfRegistration!);
         }
 
         if (hasContent(emergingEntity.name)) {
@@ -43,7 +43,7 @@ class JurPersonDtoMapper implements DtoMapper<JurPersonRequestDto, JurPerson, Ju
             owner: exploredEntityDto.owner?exploredEntityDto.owner:null,
             benOwner: exploredEntityDto.benOwner?exploredEntityDto.benOwner:null,
             location: exploredEntityDto.location?exploredEntityDto.location:null,
-            dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateBuilder.buildFromString(exploredEntityDto.dateOfRegistration!):null,
+            dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:null
         }
 

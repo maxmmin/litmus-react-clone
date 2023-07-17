@@ -1,5 +1,5 @@
 import {RoleName} from "../types/userIdentity/Role";
-import {DateBuilder} from "../../model/DateEntity";
+import {DateEntityTool} from "../../model/DateEntity";
 import Person from "../../model/human/person/Person";
 import User from "../../model/human/user/User";
 import {JurPerson} from "../../model/jurPerson/JurPerson";

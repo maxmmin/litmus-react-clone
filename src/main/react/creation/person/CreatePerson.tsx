@@ -8,7 +8,7 @@ import {useAppSelector} from "../../../redux/hooks";
 import InputDate from "../../sharedComponents/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
 import CreationGeoModal from "../geo/CreationGeoModal";
-import {DateBuilder} from "../../../model/DateEntity";
+import {DateEntityTool} from "../../../model/DateEntity";
 import Sex from "../../../model/human/person/Sex";
 import {CrossIcon} from "../../../util/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
@@ -19,6 +19,7 @@ import PersonCreationStateManager from "../../../service/creation/stateManager/p
 import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
 
+
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
 
@@ -26,7 +27,17 @@ const CreatePerson = () => {
 
     const creationPersonParams = useAppSelector(state => state.creation?.person?.emergingEntity)
 
-    const validationErrors = useAppSelector(state => state.creation.person?.validationErrors)
+    const validationErrors = useAppSelector(state => state.creation.person?.validationErrors)!
+
+    const validationService = useContext(LitmusServiceContext).creation.validation.person;
+
+    const person = useAppSelector(state => state.creation.person?.emergingEntity)!
+
+    const checkSexValidationError = () => {
+        if (validationErrors?.sex) {
+            creationStateManager.updateValidationErrors({sex: undefined})
+        }
+    }
 
     if (!creationPersonParams) {
         throw new Error("createPersonDto was null but it shouldn't be")
@@ -54,6 +65,9 @@ const CreatePerson = () => {
                            onKeyDown={keyPressHandler}
                            onChange={e => {
                                 creationStateManager.updateEntityCreationParams({lastName: e.currentTarget.value})
+                                if (validationErrors?.lastName&&!validationService.validateFullName(person)?.lastName) {
+                                    creationStateManager.updateValidationErrors({lastName: undefined})
+                                }
                             }
                         }
                     />
@@ -66,6 +80,9 @@ const CreatePerson = () => {
                     onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updateEntityCreationParams({firstName: e.currentTarget.value})
+                           if (validationErrors?.firstName&&!validationService.validateFullName(person)?.firstName) {
+                               creationStateManager.updateValidationErrors({firstName: undefined})
+                           }
                         }
                        }
                 />
@@ -77,7 +94,10 @@ const CreatePerson = () => {
                 <input value={middleName?middleName:""} autoComplete={"new-password"} className={`middleName form-control ${validationErrors?.middleName?'is-invalid':''}`} type="text" placeholder="Введіть ім'я по-батькові"
                     onKeyDown={keyPressHandler}
                        onChange={e => {
-                           creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value})
+                           creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value});
+                           if (validationErrors?.middleName&&!validationService.validateFullName(person)?.middleName) {
+                               creationStateManager.updateValidationErrors({middleName: undefined})
+                           }
                         }
                        }
                 />
@@ -90,6 +110,7 @@ const CreatePerson = () => {
                <div className="form-check">
                    <input className="form-check-input maleRadioBtn" type="radio" checked={creationPersonParams.sex===Sex.male} name="sex" onChange={()=>{
                        creationStateManager.updateEntityCreationParams({sex: Sex.male})
+                       checkSexValidationError();
                    }}/>
                    <label className="form-check-label" htmlFor="maleRadioBtn">
                        Чоловіча
@@ -97,7 +118,8 @@ const CreatePerson = () => {
                </div>
                <div className="form-check">
                    <input className="form-check-input femaleRadioBtn" type="radio" checked={creationPersonParams.sex===Sex.female} name="sex" onChange={()=>{
-                       creationStateManager.updateEntityCreationParams({sex: Sex.female})
+                       creationStateManager.updateEntityCreationParams({sex: Sex.female});
+                       checkSexValidationError();
                    }}/>
                    <label className="form-check-label" htmlFor="femaleRadioBtn">
                        Жіноча
@@ -111,7 +133,10 @@ const CreatePerson = () => {
                 <input value={passportData!.passportNumber!} autoComplete={"new-password"} className={`passport-number form-control ${validationErrors?.passportNumber?'is-invalid':''}`} type="text" placeholder="Введіть номер паспорта"
                        onKeyDown={keyPressHandler}
                        onChange={e => {
-                           creationStateManager.updatePassportData({passportNumber: e.currentTarget.value})
+                           creationStateManager.updatePassportData({passportNumber: e.currentTarget.value});
+                           if (validationErrors?.passportNumber&&!validationService.validatePassportData(person).passportNumber) {
+                               creationStateManager.updateValidationErrors({passportNumber: undefined})
+                           }
                         }
                        }
                 />
@@ -123,7 +148,10 @@ const CreatePerson = () => {
                 <input  value={passportData!.passportSerial!} autoComplete={"new-password"} className={`passport-serial form-control ${validationErrors?.passportSerial?'is-invalid':''}`} type="text" placeholder="Введіть серію паспорта"
                        onKeyDown={keyPressHandler}
                         onChange={e => {
-                                creationStateManager.updatePassportData({passportSerial: e.currentTarget.value})
+                                creationStateManager.updatePassportData({passportSerial: e.currentTarget.value});
+                            if (validationErrors?.passportSerial&&!validationService.validatePassportData(person).passportSerial) {
+                                creationStateManager.updateValidationErrors({passportSerial: undefined})
+                            }
                             }
                         }
                 />
@@ -136,6 +164,9 @@ const CreatePerson = () => {
                        onKeyDown={inputBeforeDateContainerHandler}
                        onChange={e => {
                            creationStateManager.updatePassportData({rnokppCode: e.currentTarget.value})
+                           if (validationErrors?.rnokppCode&&!validationService.validatePassportData(person).rnokppCode) {
+                               creationStateManager.updateValidationErrors({rnokppCode: undefined})
+                           }
                         }
                        }
                 />
@@ -145,7 +176,7 @@ const CreatePerson = () => {
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Дата народження</Form.Label>
 
-                <InputDate inputPrefix={validationErrors?.dateOfBirth?"is-invalid":undefined} date={new DateBuilder().setYear(year).setMonth(month).setDay(day).build()} setDate={date => creationStateManager.updateEntityCreationParams({dateOfBirth: date})} className={"date-of-birth"}/>
+                <InputDate inputPrefix={validationErrors?.dateOfBirth?"is-invalid":undefined} date={new DateEntityTool().setYear(year).setMonth(month).setDay(day).build()} setDate={date => creationStateManager.updateEntityCreationParams({dateOfBirth: date})} className={"date-of-birth"}/>
                 <InputError error={validationErrors?.dateOfBirth}/>
             </Form.Group>
 
@@ -174,7 +205,7 @@ const CreatePerson = () => {
                 <div className={`create-relationships-section__relations ${relationships!.length>0?'':'empty'}`}>
                     {
                         relationships!.length>0?
-                            <PersonRelationships relationships={creationPersonParams.relationships}/>
+                            <PersonRelationships validationErrors={validationErrors?.relationships?validationErrors.relationships:[]} relationships={creationPersonParams.relationships}/>
                             :
                             <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
                     }

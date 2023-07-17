@@ -8,7 +8,7 @@ export default class BasicExplorationValidationService implements ExplorationVal
         return  {id: this.testId(explorationParams.id)};
     }
 
-    formValidationErrors(response: ValidationErrors<EntityExplorationParams>): ValidationErrors<EntityExplorationParams> {
+    mapServerValidationErrors(response: ValidationErrors<EntityExplorationParams>): ValidationErrors<EntityExplorationParams> {
         return {...response};
     }
 
