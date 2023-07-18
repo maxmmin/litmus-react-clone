@@ -51,7 +51,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationE
         LitmusAsyncThunkConfig>(prefix,async ({emergingEntity}, {rejectWithValue, fulfillWithValue}) => {
         try {
             const errors = this.validationService.validate(emergingEntity);
-            if (hasErrors(errors)) {
+            if (this.validationService.hasErrors(errors)) {
                 throw new ValidationError(errors);
             }
             const requestDto: RequestDto = this.mapper.mapToRequestDto(emergingEntity);

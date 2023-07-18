@@ -9,4 +9,5 @@ import {ValidationErrors} from "./ValidationErrors";
 export default interface ValidationService<E, R=ValidationErrors<E>, S=R> {
     validate(model: E): R;
     mapServerValidationErrors(response: S): R;
+    hasErrors(bindingResult: R): boolean;
 }

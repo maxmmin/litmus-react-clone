@@ -1,4 +1,4 @@
-import {Relationship, RelationshipsLinkObject} from "../../../model/human/person/Person";
+import {Relationship} from "../../../model/human/person/Person";
 import RelationshipCreationComponent from "./RelationshipCreationComponent";
 import {useContext} from "react";
 import {LitmusServiceContext} from "../../App";

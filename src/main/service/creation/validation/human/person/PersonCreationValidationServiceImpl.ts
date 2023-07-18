@@ -9,6 +9,7 @@ import Human from "../../../../../model/human/Human";
 import {DateEntityTool} from "../../../../../model/DateEntity";
 import {hasContent} from "../../../../../util/isEmpty";
 import {allowedSymbolsRegExp} from "../../../../../util/regExps";
+import {hasErrors} from "../../../../exploration/validation/BasicExplorationValidationService";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<Person, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
@@ -20,6 +21,13 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         const relationShipsErrors = this.validateRelationships(params)
         const bindingResult: PersonValidationObject = {...fullNameResult, ...passportErrors, ...sexErr, ...dateErr, relationships: relationShipsErrors};
         return bindingResult;
+    };
+
+    hasErrors(bindingResult: PersonValidationObject): boolean {
+        const main = {...bindingResult, relationships: undefined}
+        if (hasErrors(main)) return true;
+
+        return  bindingResult.relationships.some(relationshipValidationObject => hasErrors(({...relationshipValidationObject, relationship: undefined} as Partial<RelationShipValidationObject>)))
     }
 
     validateRelationships(model: Person): RelationShipValidationObject[] {
@@ -30,7 +38,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         const bindingResult: RelationShipValidationObject = {relationship: relationship};
         if (relationship) {
             if (relationship.note) {
-                const noteTest = allowedSymbolsRegExp.test(relationship.note);
+                const noteTest = relationship.note.split("\n").every(line=>allowedSymbolsRegExp.test(line));
                 if (!noteTest) {
                     bindingResult.note = "Поле містить службові символи";
                 }

@@ -14,6 +14,8 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
 
     abstract validate(model: E): R;
 
+    abstract hasErrors(bindingResult: R): boolean;
+
     validateFullName(model: Human): ValidationErrors<Human> {
         return  {
             firstName: this.isFirstNameValid(model.firstName),

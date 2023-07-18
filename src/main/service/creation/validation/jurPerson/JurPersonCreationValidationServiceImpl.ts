@@ -1,6 +1,7 @@
 import JurPersonCreationValidationService from "./JurPersonCreationValidationService";
 import {ValidationErrors} from "../../../ValidationErrors";
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
+import {hasErrors} from "../../../exploration/validation/BasicExplorationValidationService";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {
     validate(model: JurPerson): ValidationErrors<JurPerson> {
@@ -10,6 +11,10 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
 
     mapServerValidationErrors(response: ValidationErrors<JurPerson>): ValidationErrors<JurPerson> {
         return {...response};
+    }
+
+    hasErrors(bindingResult: ValidationErrors<JurPerson>): boolean {
+        return hasErrors(bindingResult);
     }
 
 }

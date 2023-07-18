@@ -3,6 +3,7 @@ import Human from "../../../../../model/human/Human";
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
 import {ValidationErrors} from "../../../../ValidationErrors";
 import User from "../../../../../model/human/user/User";
+import {hasErrors} from "../../../../exploration/validation/BasicExplorationValidationService";
 
 
 class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<User> implements UserCreationValidationService {
@@ -11,6 +12,10 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
         return {
             ...bindingResult
         };
+    }
+
+    hasErrors(bindingResult: ValidationErrors<User>): boolean {
+        return hasErrors(bindingResult);
     }
 
 
