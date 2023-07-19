@@ -78,7 +78,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
                             const relShip = {...relationship};
                             relShip.note = e.currentTarget.value;
                             personCreationStateManager.updateRelationship(relShip);
-                            if (validationObject.note&&!validationService.validateRelationship(relationship).note) {
+                            if (validationObject.note&&!validationService.validateRelationship(relShip).note) {
                                 stateManager.updateRelationshipValidationErrors({relationship: relationship, note: undefined})
                             }
                         }}

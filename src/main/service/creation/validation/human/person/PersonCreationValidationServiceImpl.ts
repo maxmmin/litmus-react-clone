@@ -8,8 +8,8 @@ import {ValidationErrors} from "../../../../ValidationErrors";
 import Human from "../../../../../model/human/Human";
 import {DateEntityTool} from "../../../../../model/DateEntity";
 import {hasContent} from "../../../../../util/isEmpty";
-import {allowedSymbolsRegExp} from "../../../../../util/regExps";
 import {hasErrors} from "../../../../exploration/validation/BasicExplorationValidationService";
+import hasHtml from "../../../../../util/hasHtml";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<Person, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
@@ -38,9 +38,9 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         const bindingResult: RelationShipValidationObject = {relationship: relationship};
         if (relationship) {
             if (relationship.note) {
-                const noteTest = relationship.note.split("\n").every(line=>allowedSymbolsRegExp.test(line));
-                if (!noteTest) {
-                    bindingResult.note = "Поле містить службові символи";
+                const noteTest = hasHtml(relationship.note);
+                if (noteTest) {
+                    bindingResult.note = "Поле містить заборонені символи";
                 }
 
                 if (!relationship.relationType) {
