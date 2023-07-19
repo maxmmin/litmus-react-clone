@@ -1,4 +1,7 @@
-import UserCreationValidationService from "./UserCreationValidationService";
+import UserCreationValidationService, {
+    ServerUserValidationObject,
+    UserValidationObject
+} from "./UserCreationValidationService";
 import Human from "../../../../../model/human/Human";
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
 import {ValidationErrors} from "../../../../ValidationErrors";
@@ -6,7 +9,7 @@ import User from "../../../../../model/human/user/User";
 import {hasErrors} from "../../../../exploration/validation/BasicExplorationValidationService";
 
 
-class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<User> implements UserCreationValidationService {
+class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<User, UserValidationObject, ServerUserValidationObject> implements UserCreationValidationService {
     validate(model: User): ValidationErrors<User> {
         const bindingResult: ValidationErrors<Human> = super.validateFullName(model);
         return {

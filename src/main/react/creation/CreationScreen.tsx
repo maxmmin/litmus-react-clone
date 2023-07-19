@@ -4,7 +4,7 @@ import {Entity} from "../../model/Entity";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import {Permissions} from "../../redux/types/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
-import React, {ChangeEvent, useEffect} from "react";
+import React, {ChangeEvent, useEffect, useMemo} from "react";
 import CreationInputSection from "./CreationInputSection";
 import {
     getEntityByDomain,
@@ -18,6 +18,14 @@ import {useAppSelector} from "../../redux/hooks";
 import CreationStateManagerImpl from "../../service/creation/stateManager/CreationStateManagerImpl";
 import CreationService from "../../service/creation/CreationService";
 import getEntityCreationService from "../../util/getEntityCreationService";
+import {useSelector} from "react-redux";
+import ServiceContext from "../serviceContext";
+import {PersonValidationObject} from "../../service/creation/validation/human/person/PersonCreationValidationService";
+import {JurPerson} from "../../model/jurPerson/JurPerson";
+import {
+    JurPersonValidationObject
+} from "../../service/creation/validation/jurPerson/JurPersonCreationValidationService";
+import {UserValidationObject} from "../../service/creation/validation/human/user/UserCreationValidationService";
 
 
 export type CreationModalSettings = {
@@ -53,6 +61,24 @@ const Creation = () => {
         }
     }, [location])
 
+    const hasScreenErrors = useAppSelector(state => {
+        if (!emergingEntity) return true;
+        switch (emergingEntity) {
+            case Entity.PERSON: {
+                const validationErrors: PersonValidationObject = state.creation.person?state.creation.person.validationErrors:{relationships: []};
+                return ServiceContext.creation.validation.person.hasErrors(validationErrors)
+            }
+            case Entity.JUR_PERSON: {
+                const validationErrors: JurPersonValidationObject = state.creation.person?state.creation.person.validationErrors:{};
+                return ServiceContext.creation.validation.jurPerson.hasErrors(validationErrors);
+            }
+            case Entity.USER: {
+                const validationErrors: UserValidationObject = state.creation.user?state.creation.user.validationErrors:{};
+                return ServiceContext.creation.validation.jurPerson.hasErrors(validationErrors);
+            }
+            default: throw new Error("unknown entity")
+        }
+    })
 
     if (!emergingEntity) return null;
 
@@ -81,7 +107,7 @@ const Creation = () => {
                    }} className={"creation-input-group"}>
                        <CreationInputSection entity={emergingEntity}/>
 
-                       <button type={"submit"} className="creation-input-group__btn btn btn-primary">Створити</button>
+                       <button disabled={hasScreenErrors} type={"submit"} className="creation-input-group__btn btn btn-primary">Створити</button>
                    </Form>
                </div>
             </main>

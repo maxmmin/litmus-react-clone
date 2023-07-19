@@ -8,11 +8,14 @@ import UserDtoMapper from "../../rest/dto/dtoMappers/UserDtoMapper";
 import UserCreationApiService from "./api/UserCreationApiService";
 import UserCreationStateManagerImpl from "./stateManager/user/UserCreationStateManagerImpl";
 import UserCreationStateManager from "./stateManager/user/UserCreationStateManager";
-import UserCreationValidationService from "./validation/human/user/UserCreationValidationService";
+import UserCreationValidationService, {
+    ServerUserValidationObject,
+    UserValidationObject
+} from "./validation/human/user/UserCreationValidationService";
 import UserCreationValidationServiceImpl from "./validation/human/user/UserCreationValidationServiceImpl";
 
 
-class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto> {
+class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto, UserValidationObject, ServerUserValidationObject> {
 
     constructor(
         apiService: CreationApiService<UserRequestDto, UserResponseDto>,

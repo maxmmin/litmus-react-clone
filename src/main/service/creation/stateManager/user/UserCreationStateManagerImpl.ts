@@ -3,9 +3,10 @@ import store, {AppDispatch} from "../../../../redux/store";
 import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import UserCreationStateManager from "./UserCreationStateManager";
 import User from "../../../../model/human/user/User";
+import {UserValidationObject} from "../../validation/human/user/UserCreationValidationService";
 
 
-class UserCreationStateManagerImpl extends CreationStateManagerImpl<User> implements UserCreationStateManager {
+class UserCreationStateManagerImpl extends CreationStateManagerImpl<User, UserValidationObject> implements UserCreationStateManager {
 
     constructor() {
         const dispatch: AppDispatch = store.dispatch;

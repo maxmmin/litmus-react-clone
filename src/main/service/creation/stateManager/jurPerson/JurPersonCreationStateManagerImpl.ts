@@ -4,8 +4,12 @@ import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import JurPersonCreationStateManager from "./JurPersonCreationStateManager";
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import {GeoLocation} from "../../../../model/GeoLocation";
+import {
+    JurPersonValidationObject,
+    ServerJurPersonValidationObject
+} from "../../validation/jurPerson/JurPersonCreationValidationService";
 
-class JurPersonCreationStateManagerImpl extends CreationStateManagerImpl<JurPerson> implements JurPersonCreationStateManager {
+class JurPersonCreationStateManagerImpl extends CreationStateManagerImpl<JurPerson, JurPersonValidationObject> implements JurPersonCreationStateManager {
     constructor() {
         const dispatch: AppDispatch = store.dispatch;
         const getState = () => store.getState().creation.jurPerson!;

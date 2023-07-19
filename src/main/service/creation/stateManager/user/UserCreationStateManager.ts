@@ -1,8 +1,8 @@
 import CreationStateManager from "../CreationStateManager";
-import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
 import User from "../../../../model/human/user/User";
+import {UserValidationObject} from "../../validation/human/user/UserCreationValidationService";
 
-interface UserCreationStateManager extends CreationStateManager<User> {
+interface UserCreationStateManager extends CreationStateManager<User, UserValidationObject> {
 }
 
 export default UserCreationStateManager;

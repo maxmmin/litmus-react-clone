@@ -17,9 +17,12 @@ import JurPersonCreationStateManager from "./stateManager/jurPerson/JurPersonCre
 import JurPersonCreationStateManagerImpl from "./stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 import ValidationService from "../ValidationService";
 import JurPersonCreationValidationServiceImpl from "./validation/jurPerson/JurPersonCreationValidationServiceImpl";
-import JurPersonCreationValidationService from "./validation/jurPerson/JurPersonCreationValidationService";
+import JurPersonCreationValidationService, {
+    JurPersonValidationObject, ServerJurPersonValidationObject
+} from "./validation/jurPerson/JurPersonCreationValidationService";
 
-class JurPersonCreationService extends CreationServiceImpl<JurPersonRequestDto, JurPerson, JurPersonResponseDto> {
+class JurPersonCreationService extends CreationServiceImpl<JurPersonRequestDto, JurPerson, JurPersonResponseDto,
+    JurPersonValidationObject, ServerJurPersonValidationObject> {
 
     constructor(apiService: CreationApiService<JurPersonRequestDto, JurPersonResponseDto>,
                 creationStateManager: JurPersonCreationStateManager,
