@@ -4,7 +4,7 @@ import {clearAuthentication} from "../redux/actions/AuthAction";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
 import {getGeocode} from "use-places-autocomplete";
-import Geo from "../model/Geo";
+import GeoCoordinates from "../model/GeoCoordinates";
 import appConfig, {gmapsRegionOptions} from "../config/appConfig";
 import {Entity} from "../model/Entity";
 import User from "../model/human/user/User";
@@ -167,7 +167,7 @@ export const onWakeUp = (callback: Function): NodeJS.Timer => {
     }, TIMEOUT);
 }
 
-export const geocode = async (geoData: Geo|string) => {
+export const geocode = async (geoData: GeoCoordinates|string) => {
     const requestArgs:  google.maps.GeocoderRequest = {}
 
     if (typeof geoData==="string") {

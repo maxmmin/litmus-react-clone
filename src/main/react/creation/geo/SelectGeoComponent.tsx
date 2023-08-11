@@ -1,13 +1,13 @@
 import React, {Dispatch, SetStateAction } from "react";
 import {GeoLocation} from "../../../model/GeoLocation";
 import { GoogleMap, Marker } from "@react-google-maps/api";
-import Geo from "../../../model/Geo";
+import GeoCoordinates from "../../../model/GeoCoordinates";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import {geocode} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
 
 
-const defaultMapPosition: Geo = {
+const defaultMapPosition: GeoCoordinates = {
     lat: 50.45466,
     lng: 30.5238
 }
