@@ -13,7 +13,6 @@ import {
     PersonValidationObject,
     RelationShipValidationObject
 } from "../../validation/human/person/PersonCreationValidationService";
-import {ValidationErrors} from "../../../ValidationErrors";
 
 class PersonCreationStateManagerImpl extends CreationStateManagerImpl<Person, PersonValidationObject> implements PersonCreationStateManager {
 
