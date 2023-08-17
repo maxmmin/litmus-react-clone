@@ -95,6 +95,7 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
         } else passportData = null;
 
         const person: Person = {
+            media: retrievedEntityDto.media,
             id: retrievedEntityDto.id,
             passportData: passportData,
             sex: retrievedEntityDto.sex,

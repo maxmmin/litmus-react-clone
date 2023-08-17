@@ -1,4 +1,4 @@
 export default interface Media {
-    mainImage: string;
+    mainImage: string|null;
     images: Array<string>;
 }

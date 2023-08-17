@@ -1,7 +1,7 @@
 import {RelationType} from "../../../model/human/person/Person";
 import Sex from "../../../model/human/person/Sex";
 import {GeoLocation} from "../../../model/GeoLocation";
-import Form from "react-bootstrap/Form";
+import MediaEntity from "../../../model/MediaEntity";
 
 export type RelationshipRequestDto = {
     personId?: string,
@@ -15,7 +15,7 @@ export type PassportDataRequestDto = {
     rnokppCode?: string;
 }
 
-export default interface PersonRequestDto {
+export default interface PersonRequestDto extends Partial<MediaEntity>{
     firstName?: string;
     middleName?: string;
     lastName?: string;

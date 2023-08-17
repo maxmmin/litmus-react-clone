@@ -12,7 +12,7 @@ class ImageServiceImpl implements ImageService {
 
     uploadImage(file: File): string {
         if (ImageServiceImpl.allowedImageTypes.includes(file.type)) {
-            return this.fileService.uploadFile(file);
+            return this.fileService.saveFile(file);
         }   else throw new Error("unexpected type")
     }
 
