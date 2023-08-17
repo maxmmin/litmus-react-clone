@@ -1,6 +1,7 @@
-import Media from "../../../model/Media";
+import Media from "../../../../model/Media";
+import MediaEntityFormDataBuilder from "./MediaEntityFormDataBuilder";
 
-class MediaEntityMultipartDataBuilder {
+export default class MediaEntityFormDataBuilderImpl implements MediaEntityFormDataBuilder{
     private readonly fileService: FileService;
 
 
@@ -17,12 +18,10 @@ class MediaEntityMultipartDataBuilder {
                 formData.set('mainImg', mainImage);
             }
 
-            if (media.images.length>0) {
-                for (let counter = 0; counter<media.images.length; counter++) {
-                    const imageKey = media.images[counter];
-                    const image: File = this.fileService.getFileOrThrow(imageKey);
-                    formData.set('img', image);
-                }
+            for (let counter = 0; counter<media.images.length; counter++) {
+                const imageKey = media.images[counter];
+                const image: File = this.fileService.getFileOrThrow(imageKey);
+                formData.set('img', image);
             }
         }
         return formData;
