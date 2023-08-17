@@ -13,7 +13,7 @@ export default class MediaEntityFormDataBuilderImpl implements MediaEntityFormDa
         const formData = new FormData();
         formData.set("entity", JSON.stringify(entityRequestDto));
         if (media) {
-            if (media.mainImage) {
+            if (media.mainImage!==null) {
                 const mainImage: File = this.fileService.getFileOrThrow(media.mainImage);
                 formData.set('mainImg', mainImage);
             }
