@@ -111,7 +111,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         if (isIdValid&&isValid(accessToken)) {
             // TODO: Maybe write additional checkup for core, add global error handler and Authentication error: 05/09
             setPending(true)
-            const timerID = setTimeout(()=>fetchPerson(accessToken!,stringId, new PersonDtoMapper()),250)
+            const timerID = setTimeout(()=>fetchPerson(stringId, new PersonDtoMapper()),250)
             setRequestTimerId(timerID)
         }
 
@@ -119,7 +119,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const personApiService = useContext(LitmusServiceContext).exploration.apiService.person
 
-    const fetchPerson = async (accessToken: string, id: string, mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>) => {
+    const fetchPerson = async (id: string, mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>) => {
         const personService: PersonExplorationApiService = personApiService;
 
         setPending(true)
