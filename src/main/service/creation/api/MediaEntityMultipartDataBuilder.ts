@@ -1,9 +1,5 @@
 import Media from "../../../model/Media";
-import {checkNotEmpty} from "../../../util/pureFunctions";
 
-/**
- *  R - requestDto
- */
 class MediaEntityMultipartDataBuilder {
     private readonly fileService: FileService;
 
