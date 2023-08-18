@@ -18,6 +18,8 @@ import {Entity} from "../../../model/Entity";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
+import FilesUploader from "../../sharedComponents/FilesUploader";
+import ImagesManager from "../../sharedComponents/ImagesManager";
 
 
 const CreatePerson = () => {
@@ -29,7 +31,11 @@ const CreatePerson = () => {
 
     const validationErrors = useAppSelector(state => state.creation.person?.validationErrors)!
 
-    const validationService = useContext(LitmusServiceContext).creation.validation.person;
+    const litmusContext = useContext(LitmusServiceContext);
+
+    const validationService = litmusContext.creation.validation.person;
+
+    const fileService = litmusContext.files.fileService;
 
     const person = useAppSelector(state => state.creation.person?.emergingEntity)!
 
@@ -211,6 +217,14 @@ const CreatePerson = () => {
                     }
                 </div>
             </div>
+
+            <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
+                <Form.Label>Зображення особи</Form.Label>
+                <ImagesManager mainImage={} images={} uploadImage={file=>{
+                    const fileKey = fileService.saveFile(file);
+
+                }} removeImage={()=>true}/>
+            </Form.Group>
 
     </>
     )

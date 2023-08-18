@@ -1,16 +1,15 @@
-import CreationStateManager from "../CreationStateManager";
-import EntityCreationState from "../../../../redux/types/creation/EntityCreationState";
 import Person, {Relationship} from "../../../../model/human/person/Person";
 import GeoStateManager from "../GeoStateManager";
 import {
     PersonValidationObject,
     RelationShipValidationObject
 } from "../../validation/human/person/PersonCreationValidationService";
+import MediaEntityCreationStateManager from "../MediaCreationStateManager";
 
 class CreationPassportData {
 }
 
-interface PersonCreationStateManager extends CreationStateManager<Person, PersonValidationObject>, GeoStateManager {
+interface PersonCreationStateManager extends MediaEntityCreationStateManager<Person,PersonValidationObject>, GeoStateManager {
     setRelationshipValidationErrors(relObject: RelationShipValidationObject): void;
 
     getRelationshipValidationErrors (rel: Relationship): RelationShipValidationObject;

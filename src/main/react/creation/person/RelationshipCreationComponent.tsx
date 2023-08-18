@@ -1,6 +1,6 @@
 import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../model/human/person/Person";
 import {FloatingLabel, Form} from "react-bootstrap";
-import React, {useMemo} from "react";
+import React from "react";
 import {CrossIcon} from "../../../util/icons";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import PersonCreationStateManagerImpl
