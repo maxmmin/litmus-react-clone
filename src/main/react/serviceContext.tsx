@@ -11,7 +11,6 @@ import UserExplorationStateManager from "../service/exploration/stateManager/use
 import PersonExplorationApiService from "../service/exploration/api/human/person/PersonExplorationApiService";
 import JurPersonExplorationApiService from "../service/exploration/api/jurPerson/JurPersonExplorationApiService";
 import UserExplorationApiService from "../service/exploration/api/human/user/UserExplorationApiService";
-import ExplorationService from "../service/exploration/ExplorationService";
 import PersonCreationStateManager from "../service/creation/stateManager/person/PersonCreationStateManager";
 import JurPersonCreationStateManager from "../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import UserCreationStateManager from "../service/creation/stateManager/user/UserCreationStateManager";
@@ -69,23 +68,33 @@ import UserExplorationValidationService
 import UserDtoMapper from "../rest/dto/dtoMappers/UserDtoMapper";
 import PersonDtoMapper from "../rest/dto/dtoMappers/PersonDtoMapper";
 import JurPersonDtoMapper from "../rest/dto/dtoMappers/JurPersonDtoMapper";
-import userDtoMapper from "../rest/dto/dtoMappers/UserDtoMapper";
 import PersonCreationValidationServiceImpl
     from "../service/creation/validation/human/person/PersonCreationValidationServiceImpl";
 import JurPersonCreationValidationServiceImpl
     from "../service/creation/validation/jurPerson/JurPersonCreationValidationServiceImpl";
 import UserCreationValidationServiceImpl
     from "../service/creation/validation/human/user/UserCreationValidationServiceImpl";
-import personDtoMapper from "../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonCreationValidationService
     from "../service/creation/validation/human/person/PersonCreationValidationService";
 import UserCreationValidationService from "../service/creation/validation/human/user/UserCreationValidationService";
 import JurPersonCreationValidationService
     from "../service/creation/validation/jurPerson/JurPersonCreationValidationService";
+import FileServiceFactory from "../service/media/FileServiceFactory";
+import MediaEntityFormDataBuilder from "../service/creation/api/multipartBuilder/MediaEntityFormDataBuilder";
+import MediaEntityFormDataBuilderImpl from "../service/creation/api/multipartBuilder/MediaEntityFormDataBuilderImpl";
 
-const dtoUserMapper = new UserDtoMapper();
-const dtoPersonMapper = new PersonDtoMapper();
-const dtoJurPersonMapper = new JurPersonDtoMapper();
+
+type Mappers = {
+    user: UserDtoMapper,
+    person: PersonDtoMapper,
+    jurPerson: JurPersonDtoMapper
+}
+
+const mappers: Mappers = {
+    person: new PersonDtoMapper(),
+    user: new UserDtoMapper(),
+    jurPerson: new JurPersonDtoMapper()
+}
 
 type AuthContext = {
     stateManager: AuthenticationStateManager
@@ -97,6 +106,14 @@ const authContext: AuthContext = {
     stateManager: new AuthenticationStateManagerImpl(),
     apiService: new BasicAuthApiService(),
     manager: BasicAuthenticationManager.getInstance()
+}
+
+type FileContext = {
+    fileService: FileService
+}
+
+const fileContext: FileContext = {
+    fileService: FileServiceFactory.getGlobalFileService()
 }
 
 type ExplorationContext = {
@@ -151,9 +168,9 @@ const explorationContext: ExplorationContext = {
       user: userExplorationValidationService
     },
     service: {
-        user: UserExplorationService.getInstance(userExplorationStateManager,userExplorationApiService, dtoUserMapper, userExplorationValidationService),
-        person: PersonExplorationService.getInstance(personExplorationStateManager, personExplorationApiService, dtoPersonMapper, personExplorationValidationService),
-        jurPerson: JurPersonExplorationService.getInstance(jurPersonExplorationStateManager, jurPersonExplorationApiService, dtoJurPersonMapper,jurPersonExplorationValidationService)
+        user: UserExplorationService.getInstance(userExplorationStateManager,userExplorationApiService, mappers.user, userExplorationValidationService),
+        person: PersonExplorationService.getInstance(personExplorationStateManager, personExplorationApiService, mappers.person, personExplorationValidationService),
+        jurPerson: JurPersonExplorationService.getInstance(jurPersonExplorationStateManager, jurPersonExplorationApiService, mappers.jurPerson,jurPersonExplorationValidationService)
     }
 }
 
@@ -177,7 +194,8 @@ type CreationContext = {
         person: PersonCreationValidationService,
         jurPerson: JurPersonCreationValidationService,
         user: UserCreationValidationService
-    }
+    },
+    formDataBuilder: MediaEntityFormDataBuilder
 }
 
 const personCreationApiService = PersonCreationApiService.getInstance(authContext.stateManager);
@@ -204,15 +222,16 @@ const creationContext: CreationContext = {
         user: userCreationStateManager
     },
     service: {
-        person: PersonCreationService.getInstance(personCreationApiService, personCreationStateManager, dtoPersonMapper, personCreationValidationService),
-        user: UserCreationService.getInstance(userCreationApiService,userCreationStateManager, dtoUserMapper, userCreationValidationService),
-        jurPerson: JurPersonCreationService.getInstance(jurPersonCreationApiService, jurPersonCreationStateManager, dtoJurPersonMapper, jurPersonCreationValidationService)
+        person: PersonCreationService.getInstance(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService),
+        user: UserCreationService.getInstance(userCreationApiService,userCreationStateManager, mappers.user, userCreationValidationService),
+        jurPerson: JurPersonCreationService.getInstance(jurPersonCreationApiService, jurPersonCreationStateManager, mappers.jurPerson, jurPersonCreationValidationService)
     },
     validation: {
         person: personCreationValidationService,
         jurPerson: jurPersonCreationValidationService,
         user: userCreationValidationService
-    }
+    },
+    formDataBuilder: MediaEntityFormDataBuilderImpl.getInstance(fileContext.fileService)
 }
 
 type TimersContext = {
@@ -258,7 +277,8 @@ type ServiceContext = {
     appState: AppStateContext,
     userIdentity: UserIdentityContext,
     timers: TimersContext,
-    notification: NotificationContext
+    notification: NotificationContext,
+    files: FileContext
 }
 
 const serviceContext: ServiceContext = {
@@ -268,7 +288,8 @@ const serviceContext: ServiceContext = {
     appState: appStateContext,
     userIdentity: userIdentityContext,
     timers: timersContext,
-    notification: notificationContext
+    notification: notificationContext,
+    files: fileContext
 }
 
 export default serviceContext;
