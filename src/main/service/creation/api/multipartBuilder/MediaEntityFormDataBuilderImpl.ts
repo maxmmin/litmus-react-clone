@@ -1,9 +1,13 @@
 import Media from "../../../../model/Media";
 import MediaEntityFormDataBuilder from "./MediaEntityFormDataBuilder";
+import FileServiceFactory from "../../../media/FileServiceFactory";
 
 export default class MediaEntityFormDataBuilderImpl implements MediaEntityFormDataBuilder{
     private readonly fileService: FileService;
 
+    public static getInstance (fileService: FileService = FileServiceFactory.getGlobalFileService()) {
+        return new MediaEntityFormDataBuilderImpl(fileService);
+    }
 
     constructor(fileService: FileService) {
         this.fileService = fileService;

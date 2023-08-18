@@ -10,21 +10,22 @@ import AuthenticationStateManager from "../../auth/stateManager/AuthenticationSt
 
 
 import AuthenticationStateManagerImpl from "../../auth/stateManager/AuthenticationStateManagerImpl";
+import MediaEntityFormDataBuilder from "./multipartBuilder/MediaEntityFormDataBuilder";
+import MediaEntityFormDataBuilderImpl from "./multipartBuilder/MediaEntityFormDataBuilderImpl";
 
 class PersonCreationApiService implements CreationApiService<PersonRequestDto, PersonResponseDto> {
-    private readonly getAccessToken: ()=>string = ()=>this.authStateManager.getAuth()!.accessToken;
-
-    constructor(private readonly authStateManager: AuthenticationStateManager) {
+    constructor(private readonly authStateManager: AuthenticationStateManager, formDataBuilder: MediaEntityFormDataBuilder) {
     }
 
-    public static getInstance (authManager: AuthenticationStateManager = new AuthenticationStateManagerImpl()): PersonCreationApiService {
-        return new PersonCreationApiService(authManager);
+    public static getInstance (authManager: AuthenticationStateManager = new AuthenticationStateManagerImpl(),
+                               formDataBuilder: MediaEntityFormDataBuilder = MediaEntityFormDataBuilderImpl.getInstance()): PersonCreationApiService {
+        return new PersonCreationApiService(authManager, formDataBuilder);
     }
 
     async create(dto: PersonRequestDto): Promise<PersonResponseDto> {
         const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
 
-        const accessToken = this.getAccessToken();
+        const accessToken = this.authStateManager.getAuth()!.accessToken;
 
         const response: Response = await apiRequestManager
             .url(appConfig.serverMappings.persons)

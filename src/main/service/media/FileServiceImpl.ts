@@ -1,6 +1,6 @@
 import * as crypto from "crypto";
 
-class FileServiceImpl implements FileService {
+export default class FileServiceImpl implements FileService {
     private readonly files: Map<string, File> = new Map<string, File>();
 
     private isPresent(fileKey: string): boolean {
@@ -42,6 +42,5 @@ class FileServiceImpl implements FileService {
         this.files.set(fileKey, file);
         return fileKey;
     }
-
 
 }
