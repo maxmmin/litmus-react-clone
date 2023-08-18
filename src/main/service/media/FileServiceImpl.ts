@@ -1,4 +1,4 @@
-import * as crypto from "crypto";
+import {generateRandomString} from "../../util/pureFunctions";
 
 export default class FileServiceImpl implements FileService {
     private readonly files: Map<string, File> = new Map<string, File>();
@@ -11,7 +11,7 @@ export default class FileServiceImpl implements FileService {
         let generatedName = baseFileName;
 
         while (this.isPresent(generatedName)) {
-            generatedName = baseFileName+"_"+crypto.randomUUID();
+            generatedName = baseFileName+"_"+generateRandomString(5);
         }
 
         return generatedName;

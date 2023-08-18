@@ -9,6 +9,7 @@ export default interface PersonCreationState extends EntityCreationState<Person,
 
 export const initialPersonCreationParams: Person = {
     id: '-1',
+    media: {images: [], mainImage: null},
     dateOfBirth: {...new DateEntityTool().build()},
     firstName: "",
     lastName: "",
