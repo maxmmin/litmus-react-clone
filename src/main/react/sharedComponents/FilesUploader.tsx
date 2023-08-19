@@ -1,13 +1,20 @@
 import React from "react";
 import "../../css/imageUploader.scss";
+import {BasicHttpError} from "../../error/BasicHttpError";
 
 type UploaderProps = {
     uploadFile: (file: File)=>string,
     cssAnchor?: string,
-    allowedTypes: string[]|null
+    allowedTypes: string[]|null,
+    handleUploadError?: (error: unknown)=>void
 }
 
-export default function FilesUploader ({uploadFile, allowedTypes, cssAnchor = ""}: UploaderProps) {
+const defaultErrHandler = (e: unknown) => {
+    const error = BasicHttpError.parseError(e);
+    console.error(error);
+}
+
+export default function FilesUploader ({uploadFile, handleUploadError=defaultErrHandler, allowedTypes, cssAnchor = ""}: UploaderProps) {
     function upload (file: File) {
         if (allowedTypes&&!allowedTypes.includes(file.type)) throw new Error("cannot upload file. invalid extension")
         uploadFile(file);
@@ -18,9 +25,15 @@ export default function FilesUploader ({uploadFile, allowedTypes, cssAnchor = ""
             <input type={"file"} className={"file form-control"}
                    multiple={true}
                onChange={e=>{
-                   const files = e.currentTarget.files;
-                   if (files) Array.from(files).forEach(upload);
-                   e.currentTarget.value="";
+                  try {
+                      const files = e.currentTarget.files;
+                      if (files) Array.from(files).forEach(upload);
+                  } catch (e: unknown) {
+                    handleUploadError(e);
+                  }
+                  finally {
+                      e.currentTarget.value="";
+                  }
                }}
             />
         </div>)

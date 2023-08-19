@@ -2,6 +2,7 @@ import React from "react";
 import FilesUploader from "./FilesUploader";
 import FileProps from "../../model/FileProps";
 import {PersonIcon, TrashIcon} from "../../util/icons";
+import ImageServiceImpl from "../../service/media/ImageServiceImpl";
 
 type ImageManagerProps = {
     mainImageKey: string|null,
@@ -46,7 +47,7 @@ export default function ImagesManager ({images, mainImageKey, clearMainImage, se
 
     return (
         <div className={`images-manager-wrapper ${cssAnchor}`}>
-            <FilesUploader uploadFile={uploadImage} allowedTypes={null}/>
+            <FilesUploader uploadFile={uploadImage} allowedTypes={ImageServiceImpl.allowedImageTypes}/>
 
             {hasImages &&
                     <div className={"uploaded-images-section"}>
