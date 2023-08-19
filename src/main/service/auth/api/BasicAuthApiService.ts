@@ -4,7 +4,7 @@ import AuthApiService, {Credentials} from "./AuthApiService";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import appConfig from "../../../config/appConfig";
 import Authentication from "../../../redux/types/auth/Authentication";
-import {BasicHttpError} from "../../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 
 class BasicAuthApiService implements AuthApiService {
@@ -19,7 +19,7 @@ class BasicAuthApiService implements AuthApiService {
         if (response.ok) {
             return await response.json() as Authentication;
         } else {
-            throw await BasicHttpError.parseResponse(response);
+            throw await HttpErrorParser.parseResponse(response);
         }
     }
 
@@ -35,7 +35,7 @@ class BasicAuthApiService implements AuthApiService {
         if (response.ok) {
             return await response.json() as Authentication;
         } else {
-            throw await BasicHttpError.parseResponse(response);
+            throw await HttpErrorParser.parseResponse(response);
         }
     }
 

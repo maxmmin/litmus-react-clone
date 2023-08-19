@@ -5,7 +5,7 @@
 import LookupService from "./ExplorationApiService";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
-import {BasicHttpError} from "../../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
 import {buildUrl} from "../../../util/pureFunctions";
 
 class BasicEntityLookupService<P> implements LookupService<P>{
@@ -26,7 +26,7 @@ class BasicEntityLookupService<P> implements LookupService<P>{
             .authentication(accessToken)
             .fetch();
         if (!response.ok) {
-            throw await BasicHttpError.parseResponse(response);
+            throw await HttpErrorParser.parseResponse(response);
         } else {
             return await response.json().catch(()=>null) as P;
         }

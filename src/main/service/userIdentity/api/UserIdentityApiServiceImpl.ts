@@ -3,7 +3,7 @@ import UserIdentityApiService from "./UserIdentityApiService";
 import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
-import {BasicHttpError} from "../../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
 import Role from "../../../redux/types/userIdentity/Role";
 import AuthenticationStateManager from "../../auth/stateManager/AuthenticationStateManager";
 import BasicAuthenticationManager from "../../auth/BasicAuthenticationManager";
@@ -39,7 +39,7 @@ class UserIdentityApiServiceImpl implements UserIdentityApiService {
             }
             return {...identity, role: role.role, permissions: role.permissions }
         } else {
-            throw await BasicHttpError.parseResponse(response);
+            throw await HttpErrorParser.parseResponse(response);
         }
     }
 }

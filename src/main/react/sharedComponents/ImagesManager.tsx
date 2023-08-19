@@ -12,6 +12,7 @@ type ImageManagerProps = {
     removeImage: (fileKey: string)=>boolean,
     cssAnchor?: string,
     selectAsMain: (fileKey: string)=>void;
+    uploadErrorHandler?: (e: unknown)=>void;
 }
 
 type ImageComponentProps = {
@@ -37,7 +38,7 @@ export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: I
     )
 }
 
-export default function ImagesManager ({images, mainImageKey, clearMainImage, selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
+export default function ImagesManager ({images, uploadErrorHandler, mainImageKey, clearMainImage, selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
 
     const hasImages = images.length>0;
 
@@ -47,7 +48,7 @@ export default function ImagesManager ({images, mainImageKey, clearMainImage, se
 
     return (
         <div className={`images-manager-wrapper ${cssAnchor}`}>
-            <FilesUploader uploadFile={uploadImage} allowedTypes={ImageServiceImpl.allowedImageTypes}/>
+            <FilesUploader uploadErrorHandler={uploadErrorHandler} uploadFile={uploadImage} allowedTypes={ImageServiceImpl.allowedImageTypes}/>
 
             {hasImages &&
                     <div className={"uploaded-images-section"}>

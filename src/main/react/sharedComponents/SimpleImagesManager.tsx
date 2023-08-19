@@ -3,6 +3,7 @@ import ImageStateManager from "../../service/media/ImageStateManager";
 import React, {useContext} from "react";
 import {LitmusServiceContext} from "../App";
 import ImagesManager from "./ImagesManager";
+import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 
 type Props = {
     mainImageKey: string|null,
@@ -18,6 +19,13 @@ export default function SimpleImagesManager ({mainImageKey, images, imageStateMa
     const fileService = litmusContext.files.fileService;
 
     const imageService = litmusContext.files.imageService;
+
+    const notificationManager = litmusContext.notification.manager;
+
+    function handleUploadError(e: unknown) {
+        const error = HttpErrorParser.parseError(e);
+        notificationManager.error(error.title);
+    }
 
     return (
         <ImagesManager
@@ -61,6 +69,8 @@ export default function SimpleImagesManager ({mainImageKey, images, imageStateMa
 
                 imageStateManager.setMainImage(fileKey);
             }}
+
+            uploadErrorHandler={handleUploadError}
 
         />
     )

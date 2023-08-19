@@ -1,7 +1,7 @@
 import AuthAction from "../actions/AuthAction";
 import Authentication, {AuthenticationReducible} from "../types/auth/Authentication";
 import {Reducer} from "react";
-import {BasicHttpError} from "../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import {isRejected, PayloadAction} from "@reduxjs/toolkit";
 import {HttpStatus} from "../../rest/HttpStatus";
 import ErrorResponse from "../../rest/ErrorResponse";
@@ -26,14 +26,14 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
         }
 
         case `${AuthAction.AUTHENTICATE}/rejected`: {
-            const err: ErrorResponse<unknown> = BasicHttpError.parseError(action.payload);
+            const err: ErrorResponse<unknown> = HttpErrorParser.parseError(action.payload);
             if (err.status===401) return null
                 else return prevState;
         }
 
         default: {
             if (isRejected(action)) {
-                const errorResponse: ErrorResponse<unknown> = BasicHttpError.parseError(action.payload)
+                const errorResponse: ErrorResponse<unknown> = HttpErrorParser.parseError(action.payload)
                 return errorHandle(prevState, errorResponse)
             }
             else return prevState;

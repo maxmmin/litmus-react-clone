@@ -2,7 +2,7 @@ import JurPersonExplorationApiService from "./JurPersonExplorationApiService";
 import appConfig from "../../../../config/appConfig";
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
-import {BasicHttpError} from "../../../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../../../error/BasicHttpError";
 import BasicEntityLookupService from "../BasicExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
@@ -31,7 +31,7 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPer
             .authentication(token)
             .fetch();
         if (!response.ok) {
-            throw await BasicHttpError.parseResponse(response);
+            throw await HttpErrorParser.parseResponse(response);
         } else {
             return await response.json() as PagedData<JurPersonResponseDto>;
         }

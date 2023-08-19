@@ -11,7 +11,7 @@ import Notification, {AppNotificationType, BasicNotification, notificationTypes}
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 import {FulfilledThunkAction, PendingThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
 import ErrorResponse from "../../rest/ErrorResponse";
-import {BasicHttpError} from "../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import GeneralAction from "../GeneralAction";
 
 const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
@@ -104,7 +104,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                         if (err && "status" in err && "detail" in err) {
                             errorResponse = err as ErrorResponse<any>;
                         } else {
-                            errorResponse = BasicHttpError.parseError(err);
+                            errorResponse = HttpErrorParser.parseError(err);
                         }
 
                         const basicHttpErr = new BasicHttpError(errorResponse)

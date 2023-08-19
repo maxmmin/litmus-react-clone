@@ -4,7 +4,7 @@ import BasicEntityLookupService from "../BasicExplorationApiService";
 import appConfig from "../../../../config/appConfig";
 import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
-import {BasicHttpError} from "../../../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../../../error/BasicHttpError";
 import {isEmpty} from "../../../../util/isEmpty";
 import FullName from "../../FullName";
 
@@ -40,7 +40,7 @@ export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookup
         if (response.ok) {
             return await response.json() as PagedData<P>
         } else {
-            throw await BasicHttpError.parseResponse(response);
+            throw await HttpErrorParser.parseResponse(response);
         }
     }
 }

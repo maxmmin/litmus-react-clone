@@ -14,7 +14,7 @@ import {CreationModalModes} from "../../redux/types/creation/CreationModalModes"
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
 import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
-import {BasicHttpError} from "../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
@@ -133,7 +133,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                 throw new Error(`Особу з ідентифікатором ${id} не знайдено`)
             }
         } catch (e: unknown) {
-            const err = BasicHttpError.parseError(e);
+            const err = HttpErrorParser.parseError(e);
             setSearchError(err);
         }
 

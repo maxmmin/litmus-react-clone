@@ -1,22 +1,22 @@
 import React from "react";
 import "../../css/imageUploader.scss";
-import {BasicHttpError} from "../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 
 type UploaderProps = {
     uploadFile: (file: File)=>string,
     cssAnchor?: string,
     allowedTypes: string[]|null,
-    handleUploadError?: (error: unknown)=>void
+    uploadErrorHandler?: (error: unknown)=>void
 }
 
 const defaultErrHandler = (e: unknown) => {
-    const error = BasicHttpError.parseError(e);
+    const error = HttpErrorParser.parseError(e);
     console.error(error);
 }
 
-export default function FilesUploader ({uploadFile, handleUploadError=defaultErrHandler, allowedTypes, cssAnchor = ""}: UploaderProps) {
+export default function FilesUploader ({uploadFile, uploadErrorHandler=defaultErrHandler, allowedTypes, cssAnchor = ""}: UploaderProps) {
     function upload (file: File) {
-        if (allowedTypes&&!allowedTypes.includes(file.type)) throw new Error("cannot upload file. invalid extension")
+        if (allowedTypes&&!allowedTypes.includes(file.type)) throw new Error("Cannot upload file: invalid extension")
         uploadFile(file);
     }
 
@@ -29,7 +29,7 @@ export default function FilesUploader ({uploadFile, handleUploadError=defaultErr
                       const files = e.currentTarget.files;
                       if (files) Array.from(files).forEach(upload);
                   } catch (e: unknown) {
-                    handleUploadError(e);
+                    uploadErrorHandler(e);
                   }
                   finally {
                       e.currentTarget.value="";

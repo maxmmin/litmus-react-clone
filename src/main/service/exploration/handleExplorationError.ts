@@ -1,8 +1,8 @@
-import {BasicHttpError} from "../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import deepCopy from "../../util/deepCopy";
 
 function handleExplorationError (e: unknown) {
     console.error(e);
-    const error = BasicHttpError.parseError(e);
+    const error = HttpErrorParser.parseError(e);
     return deepCopy(error);
 }

@@ -1,7 +1,7 @@
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
-import {BasicHttpError} from "../../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
 import CreationApiService from "./CreationApiService";
 import JurPersonRequestDto from "../../../rest/dto/jurPerson/JurPersonRequestDto";
 import JurPersonResponseDto from "../../../rest/dto/jurPerson/JurPersonResponseDto";
@@ -34,7 +34,7 @@ class JurPersonCreationApiService implements CreationApiService<JurPersonRequest
         if (response.ok) {
             return await response.json() as JurPersonResponseDto;
         } else {
-            throw await BasicHttpError.parseResponse(response);
+            throw await HttpErrorParser.parseResponse(response);
         }
     }
 }

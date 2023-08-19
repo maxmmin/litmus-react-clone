@@ -1,7 +1,7 @@
 import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
-import {BasicHttpError} from "../../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
 import CreationApiService from "./CreationApiService";
 import UserRequestDto from "../../../rest/dto/user/UserRequestDto";
 import UserResponseDto from "../../../rest/dto/user/UserResponseDto";
@@ -35,7 +35,7 @@ class UserCreationApiService implements CreationApiService<UserRequestDto, UserR
         if (response.ok) {
             return await response.json() as UserResponseDto;
         } else {
-            throw await BasicHttpError.parseResponse(response);
+            throw await HttpErrorParser.parseResponse(response);
         }
     }
 }
