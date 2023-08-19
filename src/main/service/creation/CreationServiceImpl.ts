@@ -24,10 +24,10 @@ import {ValidationErrors} from "../ValidationErrors";
  */
 class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationErrors<E>,S extends object=V> implements CreationService {
 
-    private readonly mapper: DtoMapper<RequestDto, E, ResponseDto>;
-    private readonly apiService: CreationApiService<RequestDto, ResponseDto>;
-    private readonly creationStateManager: CreationStateManager<E,V>;
-    private readonly validationService: ValidationService<E,V,S>
+    protected readonly mapper: DtoMapper<RequestDto, E, ResponseDto>;
+    protected readonly apiService: CreationApiService<RequestDto, ResponseDto>;
+    protected readonly creationStateManager: CreationStateManager<E,V>;
+    protected readonly validationService: ValidationService<E,V,S>
 
     constructor(apiService: CreationApiService<RequestDto, ResponseDto>,
                 creationStateManager: CreationStateManager<E,V>,
@@ -40,10 +40,14 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationE
     }
 
     createEntity(): void {
+        this.defaultCreate().catch(console.error);
+    }
+
+    protected defaultCreate () {
         const emergedEntity = this.creationStateManager.getCreationState().emergingEntity;
         const prefix = this.creationStateManager.getCreationActions()[CreationCoreAction.CREATE_ENTITY];
         const thunkAction = this.createEntityThunk(prefix)({emergingEntity: emergedEntity, globalPending: false});
-        this.creationStateManager.create(thunkAction).catch(console.error);
+        return this.creationStateManager.create(thunkAction);
     }
 
     private createEntityThunk = (prefix: string) => createAsyncThunk<E,

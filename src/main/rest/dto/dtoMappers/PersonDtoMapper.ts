@@ -5,7 +5,7 @@ import Person, {Relationship} from "../../../model/human/person/Person";
 import PassportData from "../../../model/human/person/PassportData";
 import {DateEntityTool} from "../../../model/DateEntity";
 import PersonResponseDto from "../person/PersonResponseDto";
-import hasMediaContent from "../../../util/hasMediaContent";
+import hasMediaContent from "../../../util/media/hasMediaContent";
 
 
 class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonResponseDto> {

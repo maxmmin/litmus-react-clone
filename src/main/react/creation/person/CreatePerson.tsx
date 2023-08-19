@@ -18,8 +18,6 @@ import {Entity} from "../../../model/Entity";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
-import FilesUploader from "../../sharedComponents/FilesUploader";
-import ImagesManager from "../../sharedComponents/ImagesManager";
 import FileProps from "../../../model/FileProps";
 import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
 

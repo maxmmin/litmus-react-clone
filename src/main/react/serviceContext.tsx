@@ -228,7 +228,7 @@ const creationContext: CreationContext = {
         user: userCreationStateManager
     },
     service: {
-        person: PersonCreationService.getInstance(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService),
+        person: PersonCreationService.getInstance(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService, fileContext.fileService),
         user: UserCreationService.getInstance(userCreationApiService,userCreationStateManager, mappers.user, userCreationValidationService),
         jurPerson: JurPersonCreationService.getInstance(jurPersonCreationApiService, jurPersonCreationStateManager, mappers.jurPerson, jurPersonCreationValidationService)
     },

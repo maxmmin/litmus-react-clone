@@ -12,21 +12,42 @@ import PersonCreationValidationService, {
     PersonValidationObject, ServerPersonValidationObject
 } from "./validation/human/person/PersonCreationValidationService";
 import PersonCreationValidationServiceImpl from "./validation/human/person/PersonCreationValidationServiceImpl";
+import creationStateManager from "./stateManager/CreationStateManager";
+import FileServiceImpl from "../media/FileServiceImpl";
+import FileServiceFactory from "../media/FileServiceFactory";
+import {isFulfilled} from "@reduxjs/toolkit";
+import getFilesFromMedia from "../../util/media/getFilesFromMedia";
 
 class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto, PersonValidationObject, ServerPersonValidationObject> {
 
     constructor(apiService: CreationApiService<PersonRequestDto, PersonResponseDto>,
                 creationStateManager: PersonCreationStateManager,
                 mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>,
-                validationService: PersonCreationValidationService) {
+                validationService: PersonCreationValidationService,
+                protected readonly fileService: FileService) {
         super(apiService, creationStateManager, mapper, validationService);
+    }
+
+
+    createEntity() {
+        const media = this.creationStateManager.getCreationParams().media;
+        super
+            .defaultCreate()
+            .then(resAction=>{
+                if (isFulfilled(resAction)) {
+                    const linkedFiles: string[] = getFilesFromMedia(media);
+                    linkedFiles.forEach(file=>this.fileService.removeFile(file))
+                    console.log("Local media buffer cleaned")
+                }
+            })
     }
 
     public static getInstance(apiService: CreationApiService<PersonRequestDto, PersonResponseDto> = PersonCreationApiService.getInstance(),
                               stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl(),
                               mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto> = new PersonDtoMapper(),
-                              validationService: PersonCreationValidationService = new PersonCreationValidationServiceImpl()): PersonCreationService {
-        return  new PersonCreationService(apiService, stateManager, mapper,validationService);
+                              validationService: PersonCreationValidationService = new PersonCreationValidationServiceImpl(),
+                              fileService: FileService = FileServiceFactory.getGlobalFileService()): PersonCreationService {
+        return  new PersonCreationService(apiService, stateManager, mapper,validationService,fileService);
     }
 }
 
