@@ -1,5 +1,5 @@
 import React from "react";
-import "../../css/filesUploader.scss";
+import "../../css/imageUploader.scss";
 
 type UploaderProps = {
     uploadFile: (file: File)=>string,

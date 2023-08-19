@@ -1,6 +1,7 @@
 import React from "react";
 import FilesUploader from "./FilesUploader";
 import FileProps from "../../model/FileProps";
+import {PersonIcon, TrashIcon} from "../../util/icons";
 
 type ImageManagerProps = {
     mainImage: FileProps|null,
@@ -11,16 +12,26 @@ type ImageManagerProps = {
     selectAsMain: (fileKey: string)=>void;
 }
 
-type ImageProps = {
+type ImageComponentProps = {
     image: FileProps,
     remove: (fileKey: string)=>boolean,
     selectAsMain: (fileKey: string)=>void,
     cssAnchor?: string
 }
 
-export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: ImageProps) {
+export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: ImageComponentProps) {
     return (
-        <div className={`file form-control ${cssAnchor}`}>{image.file.name}</div>
+        <div className={`uploaded-image form-control ${cssAnchor}`}>
+            <div className="uploaded-image__info">{image.file.name}</div>
+            <div className="uploaded-image__actions-block">
+                <div className="uploaded-image__action uploaded-image__action_set-main-wrapper"
+                    onClick={e=>selectAsMain(image.fileKey)}
+                ><PersonIcon className={"uploaded-image__action-icon"} color={"black"}/></div>
+                <div className="uploaded-image__action uploaded-image__action_remove-wrapper"
+                    onClick={e => remove(image.fileKey)}
+                ><TrashIcon className={"uploaded-image__action-icon"} color={"black"}/></div>
+            </div>
+        </div>
     )
 }
 
@@ -32,8 +43,8 @@ export default function ImagesManager ({images, mainImage, selectAsMain, uploadI
             {images.map(imageProps => <ImageComponent
                                                     key={imageProps.fileKey}
                                                     image={imageProps}
-                                                    remove={()=>removeImage(imageProps.fileKey)}
-                                                    selectAsMain={()=>selectAsMain(imageProps.fileKey)}
+                                                    remove={removeImage}
+                                                    selectAsMain={selectAsMain}
                                                 />
             )}
         </div>

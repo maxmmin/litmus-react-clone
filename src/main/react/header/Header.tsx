@@ -24,7 +24,7 @@ const Header = ({backButtonPath}: PropsType) => {
                         e.stopPropagation();
                         dispatch(switchAppState(AppStateAction.HEADER_MENU_TOGGLE))
                     }}>
-                        {userIdentity?<span className="header__avatar-letter">{userIdentity!.firstName[0]}</span>:<PersonIcon className="header__avatar-icon" />}
+                        {userIdentity?<span className="header__avatar-letter">{userIdentity!.firstName[0]}</span>:<PersonIcon color={"black"} className="header__avatar-icon" />}
 
                         <HeaderMenu/>
                     </div>

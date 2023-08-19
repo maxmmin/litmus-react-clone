@@ -1,0 +1,33 @@
+.uploaded-image {
+  display: flex;
+}
+
+.uploaded-image__info {
+  flex-grow: 1;
+}
+
+.uploaded-image__actions-block {
+  flex-grow: 0;
+  display: flex;
+  column-gap: 8px;
+}
+
+.uploaded-image__action {
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+}
+
+.uploaded-image__action-icon {
+  height: 100%;
+  width: 100%;
+}
+
+.uploaded-image__action:hover {
+  background: rgba(black, 0.1);
+}
