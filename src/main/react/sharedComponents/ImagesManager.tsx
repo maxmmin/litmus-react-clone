@@ -1,24 +1,25 @@
 import React from "react";
 import FilesUploader from "./FilesUploader";
+import FileProps from "../../model/FileProps";
 
 type ImageManagerProps = {
-    mainImage: File|null,
-    images: File[],
+    mainImage: FileProps|null,
+    images: FileProps[],
     uploadImage: (file: File)=>string,
-    removeImage: ()=>boolean,
-    cssAnchor: string
-}
-
-type FileProps = {
-    image: File,
-    remove: ()=>boolean,
-    selectAsMain: ()=>void,
+    removeImage: (fileKey: string)=>boolean,
     cssAnchor?: string
 }
 
-export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: FileProps) {
+type ImageProps = {
+    image: FileProps,
+    remove: (fileKey: string)=>boolean,
+    selectAsMain: (fileKey: string)=>void,
+    cssAnchor?: string
+}
+
+export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: ImageProps) {
     return (
-        <div className={`file form-control ${cssAnchor}`}>{image.name}</div>
+        <div className={`file form-control ${cssAnchor}`}>{image.file.name}</div>
     )
 }
 

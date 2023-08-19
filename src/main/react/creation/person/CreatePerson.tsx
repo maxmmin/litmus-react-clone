@@ -3,7 +3,7 @@ import {
     inputBeforeDateContainerHandler,
     inputGroupsKeyPressHandler as keyPressHandler
 } from "../../../util/pureFunctions";
-import React, {useContext, useState} from "react";
+import React, {useContext, useMemo, useState} from "react";
 import {useAppSelector} from "../../../redux/hooks";
 import InputDate from "../../sharedComponents/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
@@ -20,7 +20,12 @@ import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
 import FilesUploader from "../../sharedComponents/FilesUploader";
 import ImagesManager from "../../sharedComponents/ImagesManager";
+import FileProps from "../../../model/FileProps";
 
+type PersonImages = {
+    mainImage: FileProps|null,
+    images: FileProps[]
+}
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -56,6 +61,14 @@ const CreatePerson = () => {
     const passportData = creationPersonParams?.passportData;
 
     const relationships = creationPersonParams?.relationships;
+
+    const {mainImage, images} = useMemo<PersonImages>(()=>{
+        const media = creationPersonParams.media;
+        return {
+            mainImage: media.mainImage?{file: fileService.getFileOrThrow(media.mainImage), fileKey: media.mainImage}:null,
+            images: media.images.map(fileKey=>({file: fileService.getFileOrThrow(fileKey), fileKey: fileKey}))
+        }
+    }, [creationPersonParams.media])
 
     const closeModal = () => setModalSettings(null)
 
@@ -220,10 +233,27 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Зображення особи</Form.Label>
-                <ImagesManager mainImage={} images={} uploadImage={file=>{
+                <ImagesManager mainImage={mainImage} images={images} uploadImage={file=>{
                     const fileKey = fileService.saveFile(file);
+                    creationStateManager.appendImage(fileKey);
+                    return fileKey;
+                }} removeImage={(fileKey: string): boolean => {
+                    const wasFileDeleted = fileService.removeFile(fileKey);
 
-                }} removeImage={()=>true}/>
+                    const media = creationStateManager.getMedia();
+
+                    const updatedImages = [...media.images];
+                    const fileKeyIndex = updatedImages.indexOf(fileKey);
+
+                    if (fileKeyIndex>-1) {
+                        updatedImages.splice(fileKeyIndex, 1);
+                    } else throw new Error("no image key found in redux state");
+
+                    creationStateManager.setImages(updatedImages);
+
+                    return wasFileDeleted;
+                }}
+                />
             </Form.Group>
 
     </>

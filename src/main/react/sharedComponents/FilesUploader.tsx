@@ -20,6 +20,7 @@ export default function FilesUploader ({uploadFile, allowedTypes, cssAnchor = ""
                onChange={e=>{
                    const files = e.currentTarget.files;
                    if (files) Array.from(files).forEach(upload);
+                   e.currentTarget.value="";
                }}
             />
         </div>)

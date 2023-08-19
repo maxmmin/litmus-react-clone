@@ -8,18 +8,25 @@ export default class MediaEntityCreationStateManagerImpl<E extends MediaEntity,V
         return this.getCreationParams().media;
     }
 
+    appendImage(imageKey: string): void {
+        const currentImages = this.getMedia().images;
+        this.setImages([...currentImages,imageKey])
+    }
+
+    setImages(imageKeys: string[]): void {
+        const currentMedia = this.getMedia();
+
+        const newMedia: Media = {...currentMedia, images: imageKeys}
+
+        this.setMedia(newMedia);
+    }
+
     setMainImage(imageKey: string | null): void {
         const currentMedia = this.getMedia();
-        const newMedia: Media = {mainImage: currentMedia.mainImage, images: [...currentMedia.images]}
 
-        if (imageKey!==null) {
-            const imageIndex = newMedia.images.indexOf(imageKey);
-            if (imageIndex>-1) newMedia.images.splice(imageIndex,1);
-        }
-        if (newMedia.mainImage) newMedia.images.push(newMedia.mainImage);
+        const newMedia: Media = {...currentMedia, mainImage: imageKey};
 
-        currentMedia.mainImage = imageKey;
-
+        this.setMedia(newMedia);
     }
 
     setMedia(media: Media): void {
