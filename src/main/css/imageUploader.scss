@@ -26,8 +26,26 @@
   border-radius: 50%;
 }
 
-.uploaded-image.main uploaded-image__action_set-main-wrapper {
-  background: rgba($md-sys-color-surface-tint-light, 0.3);
+.uploaded-image.main {
+  & .uploaded-image__action_set-main-wrapper {
+    background: rgba($md-sys-color-surface-tint-light, 0.3);
+  }
+}
+
+.uploaded-image-wrapper + .uploaded-image-wrapper {
+  margin-top: 15px;
+}
+
+.uploaded-image-wrapper.main {
+  margin-top: 3px;
+}
+
+.uploaded-image-wrapper__main-photo-label {
+  font-size: 10px;
+  padding: 5px 10px;
+  margin-bottom: 3px;
+  background: darken($primary-light-container, 2%);
+  border-radius: 15px;
 }
 
 .uploaded-images-section {

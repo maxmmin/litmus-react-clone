@@ -38,13 +38,11 @@ export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: I
 
 export default function ImagesManager ({images, mainImageKey, selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
 
-    const litmusContext = useContext(LitmusServiceContext);
-
-    const fileService = litmusContext.files.fileService;
-
-    const imageService = litmusContext.files.imageService;
-
     const hasImages = images.length>0;
+
+    function isMain (imageKey: string) {
+        return imageKey===mainImageKey;
+    }
 
     return (
         <div className={`images-manager-wrapper ${cssAnchor}`}>
@@ -52,13 +50,18 @@ export default function ImagesManager ({images, mainImageKey, selectAsMain, uplo
 
             {hasImages &&
                     <div className={"uploaded-images-section"}>
-                        {images.map(imageProps => <ImageComponent
-                                key={imageProps.fileKey}
-                                image={imageProps}
-                                remove={removeImage}
-                                selectAsMain={selectAsMain}
-                                cssAnchor={imageProps.fileKey===mainImageKey?"main":undefined}
-                            />
+                        {images.map(imageProps => <div className={`uploaded-image-wrapper ${isMain(imageProps.fileKey)?"main":""}`}>
+                                <>
+                                    {isMain(imageProps.fileKey) && <label className={"uploaded-image-wrapper__main-photo-label"}>Головне фото:</label>}
+                                    <ImageComponent
+                                        key={imageProps.fileKey}
+                                        image={imageProps}
+                                        remove={removeImage}
+                                        selectAsMain={selectAsMain}
+                                        cssAnchor={isMain(imageProps.fileKey)?"main":undefined}
+                                    />
+                                </>
+                            </div>
                         )}
                     </div>
             }

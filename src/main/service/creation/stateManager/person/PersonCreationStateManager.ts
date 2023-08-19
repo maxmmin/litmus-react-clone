@@ -5,7 +5,7 @@ import {
     RelationShipValidationObject
 } from "../../validation/human/person/PersonCreationValidationService";
 import MediaEntityCreationStateManager from "../MediaCreationStateManager";
-import ImageStateManager from "../../../media/ImageStateService";
+import ImageStateManager from "../../../media/ImageStateManager";
 
 class CreationPassportData {
 }

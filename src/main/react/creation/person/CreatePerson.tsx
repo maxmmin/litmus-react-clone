@@ -21,6 +21,7 @@ import {LitmusServiceContext} from "../../App";
 import FilesUploader from "../../sharedComponents/FilesUploader";
 import ImagesManager from "../../sharedComponents/ImagesManager";
 import FileProps from "../../../model/FileProps";
+import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
 
 type PersonImages = {
     mainImage: FileProps|null,
@@ -235,45 +236,10 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Зображення особи</Form.Label>
-                <ImagesManager
+                <SimpleImagesManager
                     mainImageKey={mainImage?mainImage.fileKey:null}
                     images={images}
-
-                    uploadImage={file=>{
-                        const fileKey = imageService.saveImage(file);
-                        creationStateManager.appendImage(fileKey);
-                        return fileKey;
-                    }}
-
-                    removeImage={(fileKey: string): boolean => {
-                        const wasFileDeleted = fileService.removeFile(fileKey);
-
-                        const media = creationStateManager.getMedia();
-
-                        const updatedImages = [...media.images];
-                        const fileKeyIndex = updatedImages.indexOf(fileKey);
-
-                        if (fileKeyIndex>-1) {
-                            updatedImages.splice(fileKeyIndex, 1);
-                        } else throw new Error("no image key found in redux state");
-
-                        creationStateManager.setImages(updatedImages);
-
-                        return wasFileDeleted;
-                    }}
-
-                    selectAsMain={(fileKey: string): void => {
-                        const currentImages = creationStateManager.getMedia().images;
-
-                        const fileKeyIndex = currentImages.indexOf(fileKey);
-
-                        if (fileKeyIndex===-1) {
-                            throw new Error("no image key found in redux state");
-                        }
-
-                        creationStateManager.setMainImage(fileKey);
-                    }}
-
+                    imageStateManager={creationStateManager}
                 />
             </Form.Group>
 
