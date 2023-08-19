@@ -1,3 +1,3 @@
 export default interface ImageService {
-    uploadImage(image: File): string;
+    saveImage(image: File): string;
 }

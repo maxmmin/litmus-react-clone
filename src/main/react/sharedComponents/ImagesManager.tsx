@@ -7,7 +7,8 @@ type ImageManagerProps = {
     images: FileProps[],
     uploadImage: (file: File)=>string,
     removeImage: (fileKey: string)=>boolean,
-    cssAnchor?: string
+    cssAnchor?: string,
+    selectAsMain: (fileKey: string)=>void;
 }
 
 type ImageProps = {
@@ -23,12 +24,18 @@ export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: I
     )
 }
 
-export default function ImagesManager ({images, mainImage, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
+export default function ImagesManager ({images, mainImage, selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
     return (
         <div className={`images-manager-wrapper ${cssAnchor}`}>
             <FilesUploader uploadFile={uploadImage} allowedTypes={null}/>
 
-            {images.map(image => <ImageComponent image={image} remove={()=>true} selectAsMain={()=>{}}/>)}
+            {images.map(imageProps => <ImageComponent
+                                                    key={imageProps.fileKey}
+                                                    image={imageProps}
+                                                    remove={()=>removeImage(imageProps.fileKey)}
+                                                    selectAsMain={()=>selectAsMain(imageProps.fileKey)}
+                                                />
+            )}
         </div>
     )
 }

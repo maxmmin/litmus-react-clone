@@ -15,7 +15,7 @@ export default class ImageServiceImpl implements ImageService {
         return new ImageServiceImpl(fileService);
     }
 
-    uploadImage(file: File): string {
+    saveImage(file: File): string {
         if (ImageServiceImpl.allowedImageTypes.includes(file.type)) {
             return this.fileService.saveFile(file);
         }   else throw new Error("unexpected type")

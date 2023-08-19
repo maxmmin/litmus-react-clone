@@ -42,6 +42,8 @@ const CreatePerson = () => {
 
     const fileService = litmusContext.files.fileService;
 
+    const imageService = litmusContext.files.imageService;
+
     const person = useAppSelector(state => state.creation.person?.emergingEntity)!
 
     const checkSexValidationError = () => {
@@ -233,26 +235,46 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Зображення особи</Form.Label>
-                <ImagesManager mainImage={mainImage} images={images} uploadImage={file=>{
-                    const fileKey = fileService.saveFile(file);
-                    creationStateManager.appendImage(fileKey);
-                    return fileKey;
-                }} removeImage={(fileKey: string): boolean => {
-                    const wasFileDeleted = fileService.removeFile(fileKey);
+                <ImagesManager
+                    mainImage={mainImage}
+                    images={images}
 
-                    const media = creationStateManager.getMedia();
+                    uploadImage={file=>{
+                        const fileKey = imageService.saveImage(file);
+                        creationStateManager.appendImage(fileKey);
+                        return fileKey;
+                    }}
 
-                    const updatedImages = [...media.images];
-                    const fileKeyIndex = updatedImages.indexOf(fileKey);
+                    removeImage={(fileKey: string): boolean => {
+                        const wasFileDeleted = fileService.removeFile(fileKey);
 
-                    if (fileKeyIndex>-1) {
-                        updatedImages.splice(fileKeyIndex, 1);
-                    } else throw new Error("no image key found in redux state");
+                        const media = creationStateManager.getMedia();
 
-                    creationStateManager.setImages(updatedImages);
+                        const updatedImages = [...media.images];
+                        const fileKeyIndex = updatedImages.indexOf(fileKey);
 
-                    return wasFileDeleted;
-                }}
+                        if (fileKeyIndex>-1) {
+                            updatedImages.splice(fileKeyIndex, 1);
+                        } else throw new Error("no image key found in redux state");
+
+                        creationStateManager.setImages(updatedImages);
+
+                        return wasFileDeleted;
+                    }}
+
+                    selectAsMain={(fileKey: string): void => {
+                        const currentMedia = creationStateManager.getMedia();
+
+                        const updatedImages = [...currentMedia.images];
+                        const fileKeyIndex = updatedImages.indexOf(fileKey);
+
+                        if (fileKeyIndex>-1) {
+                            const spliced = updatedImages.splice(fileKeyIndex, 1)[0];
+                            const newMedia = {images: updatedImages, mainImage: spliced};
+                        } else throw new Error("no image key found in redux state");
+
+                    }}
+
                 />
             </Form.Group>
 
