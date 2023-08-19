@@ -43,8 +43,7 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
         if (emergingPerson.dateOfBirth&&hasContent(emergingPerson.dateOfBirth)) {
             dto.dateOfBirth = DateEntityTool.getStringFrom(emergingPerson.dateOfBirth)
         }
-
-        if (emergingPerson.media&&hasMediaContent(emergingPerson.media)) {
+        if (hasMediaContent(emergingPerson.media)) {
             dto.media = emergingPerson.media;
         }
 

@@ -50,11 +50,10 @@ export default function ImagesManager ({images, mainImageKey, clearMainImage, se
 
             {hasImages &&
                     <div className={"uploaded-images-section"}>
-                        {images.map(imageProps => <div className={`uploaded-image-wrapper ${isMain(imageProps.fileKey)?"main":""}`}>
+                        {images.map(imageProps => <div key={imageProps.fileKey} className={`uploaded-image-wrapper ${isMain(imageProps.fileKey)?"main":""}`}>
                                 <>
                                     {isMain(imageProps.fileKey) && <label className={"uploaded-image-wrapper__main-photo-label"}>Головне фото:</label>}
                                     <ImageComponent
-                                        key={imageProps.fileKey}
                                         image={imageProps}
                                         remove={removeImage}
                                         selectAsMain={isMain(imageProps.fileKey)?clearMainImage:selectAsMain}
