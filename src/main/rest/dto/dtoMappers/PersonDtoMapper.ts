@@ -5,6 +5,7 @@ import Person, {Relationship} from "../../../model/human/person/Person";
 import PassportData from "../../../model/human/person/PassportData";
 import {DateEntityTool} from "../../../model/DateEntity";
 import PersonResponseDto from "../person/PersonResponseDto";
+import hasMediaContent from "../../../util/hasMediaContent";
 
 
 class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonResponseDto> {
@@ -41,6 +42,10 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
 
         if (emergingPerson.dateOfBirth&&hasContent(emergingPerson.dateOfBirth)) {
             dto.dateOfBirth = DateEntityTool.getStringFrom(emergingPerson.dateOfBirth)
+        }
+
+        if (emergingPerson.media&&hasMediaContent(emergingPerson.media)) {
+            dto.media = emergingPerson.media;
         }
 
         return dto;

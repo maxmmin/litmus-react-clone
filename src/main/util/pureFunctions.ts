@@ -7,11 +7,6 @@ import {getGeocode} from "use-places-autocomplete";
 import GeoCoordinates from "../model/GeoCoordinates";
 import appConfig, {gmapsRegionOptions} from "../config/appConfig";
 import {Entity} from "../model/Entity";
-import User from "../model/human/user/User";
-import Person from "../model/human/person/Person";
-import person from "../model/human/person/Person";
-import {JurPerson} from "../model/jurPerson/JurPerson";
-import {DateEntityTool} from "../model/DateEntity";
 import {Action} from "redux";
 
 
