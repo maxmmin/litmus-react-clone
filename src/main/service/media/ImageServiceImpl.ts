@@ -1,6 +1,7 @@
 import ImageService from "./ImageService";
+import FileServiceFactory from "./FileServiceFactory";
 
-class ImageServiceImpl implements ImageService {
+export default class ImageServiceImpl implements ImageService {
     public static allowedImageTypes: string[] = ["image/jpeg", "image/png"]
 
     readonly fileService: FileService;
@@ -8,6 +9,10 @@ class ImageServiceImpl implements ImageService {
 
     constructor(fileService: FileService) {
         this.fileService = fileService;
+    }
+
+    static getInstance(fileService: FileService = FileServiceFactory.getGlobalFileService()) {
+        return new ImageServiceImpl(fileService);
     }
 
     uploadImage(file: File): string {
