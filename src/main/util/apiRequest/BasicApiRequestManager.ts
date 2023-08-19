@@ -1,4 +1,4 @@
-import ApiRequestManager, {HttpMethod} from "./ApiRequestManager";
+import ApiRequestManager, {ContentType, HttpMethod} from "./ApiRequestManager";
 import appConfig from "../../config/appConfig";
 
 
@@ -8,7 +8,17 @@ class BasicApiRequestManager implements ApiRequestManager {
     private init: RequestInit = this.getDefaultRequestInit();
 
     private getDefaultRequestInit (): RequestInit {
-        return {headers: {'Content-Type': 'application/json'}}
+        return {headers: {'Content-Type': ContentType.JSON}}
+    }
+
+    contentType(contentType: ContentType): ApiRequestManager {
+        if (contentType===ContentType.UNSET) {
+            // @ts-ignore
+            delete this.init.headers["Content-Type"]
+        } else {
+            (this.init.headers as Record<string, string>)['Content-Type'] = contentType;
+        }
+        return this;
     }
 
     body(body: BodyInit): ApiRequestManager {
@@ -16,7 +26,13 @@ class BasicApiRequestManager implements ApiRequestManager {
         return this;
     }
 
-    setQueryParam(key: string, value: string): ApiRequestManager {
+    header(key: string, value?: string): ApiRequestManager {
+        if (value===undefined) delete (this.init.headers as Record<string, string>)[key];
+        else (this.init.headers as Record<string, string>)[key] = value;
+        return this;
+    }
+
+    queryParam(key: string, value: string): ApiRequestManager {
         let keyValue = `${key}=${value}`
         if (this.fetchUrl!==null) {
             if (this.fetchUrl.includes("?")) {

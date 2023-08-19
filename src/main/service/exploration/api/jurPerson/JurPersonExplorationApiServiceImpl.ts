@@ -26,7 +26,7 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPer
 
         const response = await requestManager
             .url(this.apiUrl)
-            .setQueryParam("name", name)
+            .queryParam("name", name)
             .method(HttpMethod.GET)
             .authentication(token)
             .fetch();

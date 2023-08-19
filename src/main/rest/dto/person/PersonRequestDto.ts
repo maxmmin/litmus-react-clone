@@ -2,6 +2,7 @@ import {RelationType} from "../../../model/human/person/Person";
 import Sex from "../../../model/human/person/Sex";
 import {GeoLocation} from "../../../model/GeoLocation";
 import MediaEntity from "../../../model/MediaEntity";
+import Media from "../../../model/Media";
 
 export type RelationshipRequestDto = {
     personId?: string,

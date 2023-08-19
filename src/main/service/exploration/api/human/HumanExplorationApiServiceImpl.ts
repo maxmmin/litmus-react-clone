@@ -25,15 +25,15 @@ export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookup
             .authentication(accessToken);
 
         if (fullName.firstName&&!isEmpty(fullName.firstName)) {
-            requestManager.setQueryParam("firstName", fullName.firstName);
+            requestManager.queryParam("firstName", fullName.firstName);
         }
 
         if (fullName.middleName&&!isEmpty(fullName.middleName)) {
-            requestManager.setQueryParam("middleName", fullName.middleName);
+            requestManager.queryParam("middleName", fullName.middleName);
         }
 
         if (fullName.lastName&&!isEmpty(fullName.lastName)) {
-            requestManager.setQueryParam("lastName", fullName.lastName);
+            requestManager.queryParam("lastName", fullName.lastName);
         }
 
         const response = await requestManager.fetch();

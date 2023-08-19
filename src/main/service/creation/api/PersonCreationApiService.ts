@@ -1,5 +1,4 @@
-import Person from "../../../model/human/person/Person";
-import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
+import ApiRequestManager, {ContentType, HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
 import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
 import {BasicHttpError} from "../../../error/BasicHttpError";
@@ -14,7 +13,7 @@ import MediaEntityFormDataBuilder from "./multipartBuilder/MediaEntityFormDataBu
 import MediaEntityFormDataBuilderImpl from "./multipartBuilder/MediaEntityFormDataBuilderImpl";
 
 class PersonCreationApiService implements CreationApiService<PersonRequestDto, PersonResponseDto> {
-    constructor(private readonly authStateManager: AuthenticationStateManager, formDataBuilder: MediaEntityFormDataBuilder) {
+    constructor(private readonly authStateManager: AuthenticationStateManager, private readonly formDataBuilder: MediaEntityFormDataBuilder) {
     }
 
     public static getInstance (authManager: AuthenticationStateManager = new AuthenticationStateManagerImpl(),
@@ -27,10 +26,17 @@ class PersonCreationApiService implements CreationApiService<PersonRequestDto, P
 
         const accessToken = this.authStateManager.getAuth()!.accessToken;
 
+        const media = dto.media;
+
+        delete dto.media;
+
+        const formData = this.formDataBuilder.buildFormData(dto, media?media:null);
+
         const response: Response = await apiRequestManager
+            .contentType(ContentType.UNSET)
             .url(appConfig.serverMappings.persons)
             .method(HttpMethod.POST)
-            .body(JSON.stringify(dto))
+            .body(formData)
             .authentication(accessToken)
             .fetch();
 
