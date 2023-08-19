@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useContext} from "react";
 import FilesUploader from "./FilesUploader";
 import FileProps from "../../model/FileProps";
 import {PersonIcon, TrashIcon} from "../../util/icons";
+import {LitmusServiceContext} from "../App";
 
 type ImageManagerProps = {
-    mainImage: FileProps|null,
+    mainImageKey: string|null,
     images: FileProps[],
     uploadImage: (file: File)=>string,
     removeImage: (fileKey: string)=>boolean,
@@ -35,18 +36,32 @@ export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: I
     )
 }
 
-export default function ImagesManager ({images, mainImage, selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
+export default function ImagesManager ({images, mainImageKey, selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
+
+    const litmusContext = useContext(LitmusServiceContext);
+
+    const fileService = litmusContext.files.fileService;
+
+    const imageService = litmusContext.files.imageService;
+
+    const hasImages = images.length>0;
+
     return (
         <div className={`images-manager-wrapper ${cssAnchor}`}>
             <FilesUploader uploadFile={uploadImage} allowedTypes={null}/>
 
-            {images.map(imageProps => <ImageComponent
-                                                    key={imageProps.fileKey}
-                                                    image={imageProps}
-                                                    remove={removeImage}
-                                                    selectAsMain={selectAsMain}
-                                                />
-            )}
+            {hasImages &&
+                    <div className={"uploaded-images-section"}>
+                        {images.map(imageProps => <ImageComponent
+                                key={imageProps.fileKey}
+                                image={imageProps}
+                                remove={removeImage}
+                                selectAsMain={selectAsMain}
+                                cssAnchor={imageProps.fileKey===mainImageKey?"main":undefined}
+                            />
+                        )}
+                    </div>
+            }
         </div>
     )
 }

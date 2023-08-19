@@ -24,6 +24,7 @@ class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl
         super(dispatch, getState, CreationTypedAction.person);
     }
 
+
     updateRelationshipValidationErrors(relObject: RelationShipValidationObject): void {
         const relationShipValidationErrors: RelationShipValidationObject[] = [...this.getValidationErrors().relationships];
         const relObjectInd: number = relationShipValidationErrors.findIndex(obj=>RelationshipsLinkObject.checkIsEqual(obj.relationship,relObject.relationship));

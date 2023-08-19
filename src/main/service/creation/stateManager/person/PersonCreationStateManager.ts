@@ -5,11 +5,12 @@ import {
     RelationShipValidationObject
 } from "../../validation/human/person/PersonCreationValidationService";
 import MediaEntityCreationStateManager from "../MediaCreationStateManager";
+import ImageStateManager from "../../../media/ImageStateService";
 
 class CreationPassportData {
 }
 
-interface PersonCreationStateManager extends MediaEntityCreationStateManager<Person,PersonValidationObject>, GeoStateManager {
+interface PersonCreationStateManager extends MediaEntityCreationStateManager<Person,PersonValidationObject>, ImageStateManager, GeoStateManager {
     setRelationshipValidationErrors(relObject: RelationShipValidationObject): void;
 
     getRelationshipValidationErrors (rel: Relationship): RelationShipValidationObject;

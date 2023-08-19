@@ -236,7 +236,7 @@ const CreatePerson = () => {
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Зображення особи</Form.Label>
                 <ImagesManager
-                    mainImage={mainImage}
+                    mainImageKey={mainImage?mainImage.fileKey:null}
                     images={images}
 
                     uploadImage={file=>{
@@ -263,16 +263,15 @@ const CreatePerson = () => {
                     }}
 
                     selectAsMain={(fileKey: string): void => {
-                        const currentMedia = creationStateManager.getMedia();
+                        const currentImages = creationStateManager.getMedia().images;
 
-                        const updatedImages = [...currentMedia.images];
-                        const fileKeyIndex = updatedImages.indexOf(fileKey);
+                        const fileKeyIndex = currentImages.indexOf(fileKey);
 
-                        if (fileKeyIndex>-1) {
-                            const spliced = updatedImages.splice(fileKeyIndex, 1)[0];
-                            const newMedia = {images: updatedImages, mainImage: spliced};
-                        } else throw new Error("no image key found in redux state");
+                        if (fileKeyIndex===-1) {
+                            throw new Error("no image key found in redux state");
+                        }
 
+                        creationStateManager.setMainImage(fileKey);
                     }}
 
                 />

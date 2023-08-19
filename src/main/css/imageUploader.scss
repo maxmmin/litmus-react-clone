@@ -1,5 +1,8 @@
+@import "colors";
+
 .uploaded-image {
   display: flex;
+  min-height: 44px;
 }
 
 .uploaded-image__info {
@@ -21,6 +24,14 @@
   justify-content: center;
   align-items: center;
   border-radius: 50%;
+}
+
+.uploaded-image.main uploaded-image__action_set-main-wrapper {
+  background: rgba($md-sys-color-surface-tint-light, 0.3);
+}
+
+.uploaded-images-section {
+  margin-top: 30px;
 }
 
 .uploaded-image__action-icon {
