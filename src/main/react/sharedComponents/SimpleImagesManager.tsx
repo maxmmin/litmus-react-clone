@@ -23,6 +23,7 @@ export default function SimpleImagesManager ({mainImageKey, images, imageStateMa
         <ImagesManager
             mainImageKey={mainImageKey}
             images={images}
+            cssAnchor={cssAnchor}
 
             uploadImage={file=>{
                 const fileKey = imageService.saveImage(file);
@@ -46,6 +47,8 @@ export default function SimpleImagesManager ({mainImageKey, images, imageStateMa
 
                 return wasFileDeleted;
             }}
+
+            clearMainImage={()=>imageStateManager.setMainImage(null)}
 
             selectAsMain={(fileKey: string): void => {
                 const currentImages = images.map(imageProps=>imageProps.fileKey);

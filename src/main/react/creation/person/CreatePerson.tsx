@@ -211,7 +211,7 @@ const CreatePerson = () => {
                 />
             </Form.Group>
 
-            <div className="create-relationships-section">
+            <div className="mb-3 create-relationships-section">
                 <div className="create-relationships-section__heading-block">
                     <p className={"create-relationships-section__heading"}>Пов'язані особи</p>
                     <button className="create-relationships-section__add-person-btn"
@@ -240,6 +240,7 @@ const CreatePerson = () => {
                     mainImageKey={mainImage?mainImage.fileKey:null}
                     images={images}
                     imageStateManager={creationStateManager}
+                    cssAnchor={"creation"}
                 />
             </Form.Group>
 

@@ -1,12 +1,12 @@
-import React, {useContext} from "react";
+import React from "react";
 import FilesUploader from "./FilesUploader";
 import FileProps from "../../model/FileProps";
 import {PersonIcon, TrashIcon} from "../../util/icons";
-import {LitmusServiceContext} from "../App";
 
 type ImageManagerProps = {
     mainImageKey: string|null,
     images: FileProps[],
+    clearMainImage: ()=>void,
     uploadImage: (file: File)=>string,
     removeImage: (fileKey: string)=>boolean,
     cssAnchor?: string,
@@ -36,7 +36,7 @@ export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: I
     )
 }
 
-export default function ImagesManager ({images, mainImageKey, selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
+export default function ImagesManager ({images, mainImageKey, clearMainImage, selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
 
     const hasImages = images.length>0;
 
@@ -57,7 +57,7 @@ export default function ImagesManager ({images, mainImageKey, selectAsMain, uplo
                                         key={imageProps.fileKey}
                                         image={imageProps}
                                         remove={removeImage}
-                                        selectAsMain={selectAsMain}
+                                        selectAsMain={isMain(imageProps.fileKey)?clearMainImage:selectAsMain}
                                         cssAnchor={isMain(imageProps.fileKey)?"main":undefined}
                                     />
                                 </>
