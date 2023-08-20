@@ -20,12 +20,19 @@ import CreationService from "../../service/creation/CreationService";
 import getEntityCreationService from "../../util/getEntityCreationService";
 import {useSelector} from "react-redux";
 import ServiceContext from "../serviceContext";
-import {PersonValidationObject} from "../../service/creation/validation/human/person/PersonCreationValidationService";
+import {
+    personDefaultValidationObject,
+    PersonValidationObject
+} from "../../service/creation/validation/human/person/PersonCreationValidationService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {
+    jurPersonDefaultValidationObject,
     JurPersonValidationObject
 } from "../../service/creation/validation/jurPerson/JurPersonCreationValidationService";
-import {UserValidationObject} from "../../service/creation/validation/human/user/UserCreationValidationService";
+import {
+    userDefaultValidationObject,
+    UserValidationObject
+} from "../../service/creation/validation/human/user/UserCreationValidationService";
 
 
 export type CreationModalSettings = {
@@ -65,16 +72,16 @@ const Creation = () => {
         if (!emergingEntity) return true;
         switch (emergingEntity) {
             case Entity.PERSON: {
-                const validationErrors: PersonValidationObject = state.creation.person?state.creation.person.validationErrors:{relationships: []};
+                const validationErrors: PersonValidationObject = state.creation.person?state.creation.person.validationErrors:personDefaultValidationObject;
                 return ServiceContext.creation.validation.person.hasErrors(validationErrors)
             }
             case Entity.JUR_PERSON: {
-                const validationErrors: JurPersonValidationObject = state.creation.person?state.creation.person.validationErrors:{};
+                const validationErrors: JurPersonValidationObject = state.creation.jurPerson?state.creation.jurPerson.validationErrors:jurPersonDefaultValidationObject;
                 return ServiceContext.creation.validation.jurPerson.hasErrors(validationErrors);
             }
             case Entity.USER: {
-                const validationErrors: UserValidationObject = state.creation.user?state.creation.user.validationErrors:{};
-                return ServiceContext.creation.validation.jurPerson.hasErrors(validationErrors);
+                const validationErrors: UserValidationObject = state.creation.user?state.creation.user.validationErrors:userDefaultValidationObject;
+                return ServiceContext.creation.validation.user.hasErrors(validationErrors);
             }
             default: throw new Error("unknown entity")
         }

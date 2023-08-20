@@ -9,6 +9,18 @@ export type RelationShipValidationObject = ValidationErrors<{relationType: strin
 export type PersonValidationObject = ValidationErrors<Pick<Person, keyof FullName | 'sex' | 'dateOfBirth'>>
     &ValidationErrors<{passportSerial: string, passportNumber: string, rnokppCode: string}>&{relationships: RelationShipValidationObject[]}
 
+export const personDefaultValidationObject: PersonValidationObject = Object.freeze({
+    firstName: null,
+    middleName: null,
+    lastName: null,
+    rnokppCode: null,
+    dateOfBirth: null,
+    sex: null,
+    passportSerial: null,
+    passportNumber: null,
+    relationships: []
+})
+
 export type ServerPersonValidationObject = Omit<ValidationErrors<Person>, 'passportData'>&{
     'passportData.passportSerial'?: string,
     'passportData.passportNumber'?: string,
