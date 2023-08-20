@@ -80,7 +80,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         return personValidationObject;
     }
 
-    validatePassportData(passportData: Person['passportData']): ValidationErrors<Person["passportData"]> {
+    validatePassportData(passportData: Person['passportData']): Pick<PersonValidationObject, keyof PassportData> {
         const bindingResult: Partial<PersonValidationObject> = {};
 
         if (passportData) {
