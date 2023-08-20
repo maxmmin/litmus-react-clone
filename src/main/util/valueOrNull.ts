@@ -1,0 +1,1 @@
+export default <T> (value: T|undefined): T|null => value?value:null

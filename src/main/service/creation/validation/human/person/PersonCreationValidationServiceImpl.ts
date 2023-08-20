@@ -11,6 +11,7 @@ import {DateEntityTool} from "../../../../../model/DateEntity";
 import {hasContent} from "../../../../../util/isEmpty";
 import hasHtml from "../../../../../util/hasHtml";
 import PassportData from "../../../../../model/human/person/PassportData";
+import valueOrNull from "../../../../../util/valueOrNull";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<Person, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
@@ -80,9 +81,14 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
 
     mapServerValidationErrors(response: ServerPersonValidationObject): PersonValidationObject {
         const personValidationObject: PersonValidationObject = {...personDefaultValidationObject};
-        personValidationObject.passportSerial = response["passportData.passportSerial"]?response["passportData.passportSerial"]:null;
-        personValidationObject.passportNumber = response["passportData.passportNumber"]?response["passportData.passportNumber"]:null;
-        personValidationObject.rnokppCode = response["passportData.rnokppCode"]?response["passportData.rnokppCode"]:null;
+        personValidationObject.firstName = valueOrNull(response.firstName);
+        personValidationObject.middleName = valueOrNull(response.middleName);
+        personValidationObject.lastName = valueOrNull(response.lastName);
+        personValidationObject.dateOfBirth = valueOrNull(response.dateOfBirth);
+        personValidationObject.sex = valueOrNull(response.sex);
+        personValidationObject.passportSerial = valueOrNull(response["passportData.passportSerial"]);
+        personValidationObject.passportNumber = valueOrNull(response["passportData.passportNumber"]);
+        personValidationObject.rnokppCode = valueOrNull(response["passportData.rnokppCode"]);
         return personValidationObject;
     }
 

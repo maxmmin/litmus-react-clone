@@ -21,7 +21,6 @@ import PersonExplorationStateManager from "./stateManager/person/PersonExplorati
 import PersonExplorationStateManagerImpl from "./stateManager/person/PersonExplorationStateManagerImpl";
 import PersonExplorationApiServiceImpl from "./api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
-import ValidationError from "../../error/ValidationError";
 
 type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: DtoMapper<unknown, Person, PersonResponseDto>) => Promise<PagedData<Person>>;
 
