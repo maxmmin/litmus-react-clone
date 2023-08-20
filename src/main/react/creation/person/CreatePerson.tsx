@@ -71,15 +71,15 @@ const CreatePerson = () => {
 
 
         if (validationErrors?.passportNumber&&!updatedPassportDataValidation.passportNumber) {
-            creationStateManager.updateValidationErrors({passportNumber: undefined})
+            creationStateManager.updateValidationErrors({passportNumber: null})
         }
 
         if (validationErrors?.passportSerial&&!updatedPassportDataValidation.passportSerial) {
-            creationStateManager.updateValidationErrors({passportSerial: undefined})
+            creationStateManager.updateValidationErrors({passportSerial: null})
         }
 
         if (validationErrors?.rnokppCode&&!updatedPassportDataValidation.rnokppCode) {
-            creationStateManager.updateValidationErrors({rnokppCode: undefined})
+            creationStateManager.updateValidationErrors({rnokppCode: null})
         }
     }, [passportData])
 
@@ -87,21 +87,21 @@ const CreatePerson = () => {
         const updatedFullNameErrors = validationService.validateFullName(person);
 
         if (validationErrors?.lastName&&!updatedFullNameErrors.lastName) {
-            creationStateManager.updateValidationErrors({lastName: undefined})
+            creationStateManager.updateValidationErrors({lastName: null})
         }
 
         if (validationErrors?.middleName&&!updatedFullNameErrors?.middleName) {
-            creationStateManager.updateValidationErrors({middleName: undefined})
+            creationStateManager.updateValidationErrors({middleName: null})
         }
 
         if (validationErrors?.firstName&&!updatedFullNameErrors.firstName) {
-            creationStateManager.updateValidationErrors({firstName: undefined})
+            creationStateManager.updateValidationErrors({firstName: null})
         }
     }, [person.firstName, person.middleName, person.lastName])
 
     useEffect(()=>{
         if (validationErrors?.sex&&!validationService.validateSex(person.sex)) {
-            creationStateManager.updateValidationErrors({sex: undefined})
+            creationStateManager.updateValidationErrors({sex: null})
         }
     }, [person.sex])
 

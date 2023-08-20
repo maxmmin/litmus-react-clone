@@ -2,7 +2,7 @@ import React, {ReactNode} from "react";
 
 type Props = {
     cssAnchor?: string,
-    error?: string
+    error: string|null
 }
 
 export default function InputError ({cssAnchor,error}: Props) {

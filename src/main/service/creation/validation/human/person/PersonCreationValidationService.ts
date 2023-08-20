@@ -6,7 +6,8 @@ import FullName from "../../../../exploration/FullName";
 
 export type RelationShipValidationObject = ValidationErrors<{relationType: string, note: string}>&{relationship: Relationship}
 
-export type PersonValidationObject = ValidationErrors<Pick<Person, keyof FullName | 'sex' | 'dateOfBirth'>>&{passportSerial?: string, passportNumber?: string, rnokppCode?: string, relationships: RelationShipValidationObject[]}
+export type PersonValidationObject = ValidationErrors<Pick<Person, keyof FullName | 'sex' | 'dateOfBirth'>>
+    &ValidationErrors<{passportSerial: string, passportNumber: string, rnokppCode: string}>&{relationships: RelationShipValidationObject[]}
 
 export type ServerPersonValidationObject = Omit<ValidationErrors<Person>, 'passportData'>&{
     'passportData.passportSerial'?: string,
