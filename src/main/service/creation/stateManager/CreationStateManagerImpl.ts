@@ -34,7 +34,7 @@ class CreationStateManagerImpl<E,V=ValidationErrors<E>> implements CreationState
         })
     }
 
-    updateValidationErrors(errors: V): void {
+    updateValidationErrors(errors: Partial<V>): void {
         this.dispatch({
             type: this.actions["UPDATE_ENTITY_VALIDATION_ERRORS"],
             payload: errors
