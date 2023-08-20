@@ -16,7 +16,6 @@ export type ExplorationFormProps = {
 function ExplorationInputForm ({exploredEntity, isPending, onSubmit}: ExplorationFormProps): JSX.Element|null {
     const explorationStateManager = useAppSelector(()=>exploredEntity?getEntityExplorationStateManager(exploredEntity):undefined);
     const modeId = useAppSelector(()=>explorationStateManager?.getExplorationParams().modeId);
-    const validationErrors = useAppSelector(()=>explorationStateManager?.getValidationErrors());
 
     if (!exploredEntity||!explorationStateManager) {
         return null;
@@ -24,14 +23,13 @@ function ExplorationInputForm ({exploredEntity, isPending, onSubmit}: Exploratio
 
     const explorationMode = ExplorationMode.getModeById(modeId!);
 
-    const hasErrors = explorationMode.hasErrors(validationErrors!);
 
     return (
         <div className="explore-page__input-group-container">
             <Form className={"explore-input-group"}>
                 <ExplorationInputGroupByMode mode={explorationMode}/>
 
-                <Button disabled={isPending||hasErrors} onClick={onSubmit} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
+                <Button disabled={isPending} onClick={onSubmit} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
                     {isPending?"Завантаження...":"Пошук"}
                 </Button>
             </Form>

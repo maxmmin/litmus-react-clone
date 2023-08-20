@@ -10,6 +10,4 @@ export class BasicUserExplorationState implements EntityExplorationState<User, U
     readonly data: EntityExplorationData<User, UserExplorationParams>|null = null;
     isPending: boolean = false;
     readonly params: UserExplorationParams = new BasicUserExplorationParams();
-    validationErrors: ValidationErrors<UserExplorationParams> = {};
-
 }

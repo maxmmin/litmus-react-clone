@@ -1,8 +1,11 @@
 import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import {DateEntityTool} from "../../../model/DateEntity";
+import {
+    jurPersonDefaultValidationObject, JurPersonValidationObject
+} from "../../../service/creation/validation/jurPerson/JurPersonCreationValidationService";
 
-export default interface JurPersonCreationState extends EntityCreationState<JurPerson> {
+export default interface JurPersonCreationState extends EntityCreationState<JurPerson, JurPersonValidationObject> {
 
 }
 
@@ -17,8 +20,8 @@ export const initialJurPersonCreationParams: JurPerson = {
 }
 
 
-export class BasicJurPersonCreationState extends BasicEntityCreationState<JurPerson> implements JurPersonCreationState {
+export class BasicJurPersonCreationState extends BasicEntityCreationState<JurPerson, JurPersonValidationObject> implements JurPersonCreationState {
     constructor() {
-        super(initialJurPersonCreationParams, {});
+        super(initialJurPersonCreationParams, jurPersonDefaultValidationObject);
     }
 }

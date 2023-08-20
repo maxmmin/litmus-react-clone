@@ -6,8 +6,7 @@ import Human from "../../../../../model/human/Human";
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
 import {ValidationErrors} from "../../../../ValidationErrors";
 import User from "../../../../../model/human/user/User";
-import {hasErrors} from "../../../../exploration/validation/BasicExplorationValidationService";
-
+import {hasContent} from "../../../../../util/isEmpty";
 
 class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<User, UserValidationObject, ServerUserValidationObject> implements UserCreationValidationService {
     validate(model: User): UserValidationObject {
@@ -21,11 +20,11 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
     }
 
     hasErrors(bindingResult: ValidationErrors<User>): boolean {
-        return hasErrors(bindingResult);
+        return hasContent(bindingResult);
     }
 
 
-    isMiddleNameValid(middleName: Human["middleName"]): string | undefined {
+    isMiddleNameValid(middleName: Human["middleName"]): string | null {
         if (middleName) {
             return super.isMiddleNameValid(middleName);
         } else return "Поле обов'язкове до заповнення";

@@ -25,7 +25,7 @@ class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl
     }
 
 
-    updateRelationshipValidationErrors(relObject: RelationShipValidationObject): void {
+    updateRelationshipValidationErrors(relObject: Partial<RelationShipValidationObject>&Pick<RelationShipValidationObject,'relationship'>): void {
         const relationShipValidationErrors: RelationShipValidationObject[] = [...this.getValidationErrors().relationships];
         const relObjectInd: number = relationShipValidationErrors.findIndex(obj=>RelationshipsLinkObject.checkIsEqual(obj.relationship,relObject.relationship));
         if (relObjectInd===-1) throw new Error("no such validation object");

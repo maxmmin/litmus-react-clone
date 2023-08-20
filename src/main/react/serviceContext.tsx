@@ -53,18 +53,6 @@ import JurPersonCreationService from "../service/creation/JurPersonCreationServi
 import ApplicationStateManager from "../service/appState/ApplicationStateManager";
 import {NotificationManager} from "../redux/types/applicationState/Notification";
 import {BasicNotificationManager} from "../redux/types/applicationState/BasicNotificationManager";
-import PersonExplorationValidationServiceImpl
-    from "../service/exploration/validation/human/person/PersonExplorationValidationServiceImpl";
-import UserExplorationValidationServiceImpl
-    from "../service/exploration/validation/human/user/UserExplorationValidationServiceImpl";
-import JurPersonExplorationValidationServiceImpl
-    from "../service/exploration/validation/jurPerson/JurPersonExplorationValidationServiceImpl";
-import PersonExplorationValidationService
-    from "../service/exploration/validation/human/person/PersonExplorationValidationService";
-import JurPersonExplorationValidationService
-    from "../service/exploration/validation/jurPerson/JurPersonExplorationValidationService";
-import UserExplorationValidationService
-    from "../service/exploration/validation/human/user/UserExplorationValidationService";
 import UserDtoMapper from "../rest/dto/dtoMappers/UserDtoMapper";
 import PersonDtoMapper from "../rest/dto/dtoMappers/PersonDtoMapper";
 import JurPersonDtoMapper from "../rest/dto/dtoMappers/JurPersonDtoMapper";
@@ -133,11 +121,6 @@ type ExplorationContext = {
         jurPerson: JurPersonExplorationApiService,
         user: UserExplorationApiService
     },
-    validation: {
-        person: PersonExplorationValidationService,
-        jurPerson: JurPersonExplorationValidationService,
-        user: UserExplorationValidationService
-    }
     service: {
         jurPerson: JurPersonExplorationService,
         person: PersonExplorationService,
@@ -153,10 +136,6 @@ const personExplorationApiService = PersonExplorationApiServiceImpl.getInstance(
 const jurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance(authContext.stateManager);
 const userExplorationApiService = UserExplorationApiServiceImpl.getInstance(authContext.stateManager);
 
-const personExplorationValidationService = new PersonExplorationValidationServiceImpl();
-const userExplorationValidationService = new UserExplorationValidationServiceImpl();
-const jurPersonExplorationValidationService = new JurPersonExplorationValidationServiceImpl();
-
 const explorationContext: ExplorationContext = {
     stateManagers: {
         person: personExplorationStateManager,
@@ -168,15 +147,10 @@ const explorationContext: ExplorationContext = {
         user: userExplorationApiService,
         jurPerson: jurPersonExplorationApiService
     },
-    validation: {
-      person: personExplorationValidationService,
-      jurPerson: jurPersonExplorationValidationService,
-      user: userExplorationValidationService
-    },
     service: {
-        user: UserExplorationService.getInstance(userExplorationStateManager,userExplorationApiService, mappers.user, userExplorationValidationService),
-        person: PersonExplorationService.getInstance(personExplorationStateManager, personExplorationApiService, mappers.person, personExplorationValidationService),
-        jurPerson: JurPersonExplorationService.getInstance(jurPersonExplorationStateManager, jurPersonExplorationApiService, mappers.jurPerson,jurPersonExplorationValidationService)
+        user: UserExplorationService.getInstance(userExplorationStateManager,userExplorationApiService, mappers.user),
+        person: PersonExplorationService.getInstance(personExplorationStateManager, personExplorationApiService, mappers.person),
+        jurPerson: JurPersonExplorationService.getInstance(jurPersonExplorationStateManager, jurPersonExplorationApiService, mappers.jurPerson)
     }
 }
 

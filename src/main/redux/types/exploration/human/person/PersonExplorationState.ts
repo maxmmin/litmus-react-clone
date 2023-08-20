@@ -10,7 +10,5 @@ export class BasicPersonExplorationState implements EntityExplorationState<Perso
     data: EntityExplorationData<Person, PersonExplorationParams>|null = null;
     isPending: boolean = false;
     params: PersonExplorationParams = new BasicPersonExplorationParams();
-    validationErrors: ValidationErrors<PersonExplorationParams> = {};
-
 }
 

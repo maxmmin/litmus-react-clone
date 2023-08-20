@@ -11,8 +11,6 @@ export default interface ExplorationStateManager <E, P extends EntityExploration
 
     getExplorationParams(): P;
 
-    getValidationErrors (): EntityExplorationState<E, P>["validationErrors"]
-
     setState (state: EntityExplorationState<E, P>): void;
 
     updateParams (params: Partial<EntityExplorationState<E, P>['params']>): void;
@@ -26,10 +24,6 @@ export default interface ExplorationStateManager <E, P extends EntityExploration
     enableSectionPending (): void;
 
     disableSectionPending (): void;
-
-    updateValidationErrors(errors: Partial<Record<keyof P, string>>): void;
-
-    setValidationErrors(errors: Partial<Record<keyof P, string>>): void;
 
     switchExplorationMode(mode: ExplorationMode): void;
 }

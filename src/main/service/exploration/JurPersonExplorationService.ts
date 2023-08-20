@@ -2,10 +2,8 @@ import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import PagedData, {UnPagedData} from "../../rest/PagedData";
 import ExplorationService from "./ExplorationService";
 import ExplorationStateManager from "./stateManager/ExplorationStateManager";
-import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
-import PersonExplorationParams from "../../redux/types/exploration/human/person/PersonExplorationParams";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import EntityExplorationData from "../../redux/types/exploration/EntityExplorationData";
 import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
@@ -18,18 +16,12 @@ import jurPersonExplorationApiService from "./api/jurPerson/JurPersonExploration
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import JurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
-
 import UnsupportedModeError from "./UnsupportedModeError";
-
 import JurPersonExplorationParams from "../../redux/types/exploration/jurPerson/JurPersonExplorationParams";
 import JurPersonExplorationStateManager from "./stateManager/jurPerson/JurPersonExplorationStateManager";
 import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
-import JurPersonExplorationValidationService from "./validation/jurPerson/JurPersonExplorationValidationService";
-import JurPersonExplorationValidationServiceImpl
-    from "./validation/jurPerson/JurPersonExplorationValidationServiceImpl";
-import ValidationError from "../../error/ValidationError";
 
 type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) => Promise<PagedData<JurPerson>>;
 
@@ -37,23 +29,17 @@ class JurPersonExplorationService implements ExplorationService {
 
     constructor(private readonly stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>,
                 private readonly service: JurPersonExplorationApiService,
-                private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>,
-                private readonly validationService: JurPersonExplorationValidationService) {
+                private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
     }
 
     public static getInstance(stateManager: JurPersonExplorationStateManager = new JurPersonExplorationStateManagerImpl(),
                        service: JurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance(),
                        mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto> = new JurPersonDtoMapper(),
-                       validationService: JurPersonExplorationValidationService = new JurPersonExplorationValidationServiceImpl()
                     ) {
-        return new JurPersonExplorationService(stateManager,service,mapper, validationService)
+        return new JurPersonExplorationService(stateManager,service,mapper)
     }
 
     private exploreByIdCallback: JurPersonExplorationCallbackType = async (params, service, mapper) => {
-        const errors = this.validationService.validateId(params);
-        if (errors) {
-            throw new ValidationError(errors);
-        }
         //@todo write the way to get all entities
         const id = checkNotEmpty(params.id);
         const content: JurPerson[] = []
@@ -96,9 +82,6 @@ class JurPersonExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            if (e instanceof ValidationError) {
-                this.stateManager.setValidationErrors(e.errors)
-            }
             return rejectWithValue(handleCreationError(e), {notify: true});
         }
     }))

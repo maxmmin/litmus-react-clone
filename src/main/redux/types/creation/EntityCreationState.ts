@@ -7,7 +7,7 @@ export default interface EntityCreationState<P,E=ValidationErrors<P>> {
 
 export class BasicEntityCreationState<P, E=ValidationErrors<P>> implements EntityCreationState<P,E> {
     emergingEntity: P;
-    validationErrors: E
+    validationErrors: E;
 
     constructor(params: P, errors: E) {
         this.emergingEntity = params;

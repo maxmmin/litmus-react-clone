@@ -7,7 +7,6 @@ import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
 import ValidationService from "../ValidationService";
-import {hasErrors} from "../exploration/validation/BasicExplorationValidationService";
 import ValidationError, {ValidationResponse} from "../../error/ValidationError";
 import CreationCoreAction from "../../redux/actions/CreationCoreAction";
 import {HttpStatus} from "../../rest/HttpStatus";

@@ -25,7 +25,7 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
         };
     }
 
-    isFirstNameValid(firstName: Human["firstName"]): string|undefined {
+    isFirstNameValid(firstName: Human["firstName"]): string|null {
         if (firstName) {
             if (firstName.length<3||firstName?.length>32) {
                 return "Довжина імені повина бути між 3 та 32 символами"
@@ -34,10 +34,12 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
             if (!HumanCreationValidationServiceImpl.FIRST_NAME_REGEXP.test(firstName)) {
                 return "Некоректний формат імені"
             }
+
+            return null;
         } else return "Поле обов'язкове до заповнення"
     }
 
-    isMiddleNameValid(middleName: Human["middleName"]): string|undefined {
+    isMiddleNameValid(middleName: Human["middleName"]): string|null {
         if (middleName) {
             if (middleName.length<3||middleName.length>32) {
                 return "Довжина імені повина бути між 3 та 32 символами"
@@ -47,9 +49,11 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
                 return "Некоректний формат ім'я по-батькові"
             }
         }
+
+        return null;
     }
 
-    isLastNameValid(lastName: Human["lastName"]): string|undefined {
+    isLastNameValid(lastName: Human["lastName"]): string|null {
         if (lastName) {
             if (lastName?.length<3||lastName?.length>32) {
                 return "Довжина прізвища повина бути між 3 та 32"
@@ -58,6 +62,8 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
             if (!HumanCreationValidationServiceImpl.LAST_NAME_REGEXP.test(lastName)) {
                 return "Некоректний формат прізвища"
             }
+
+            return null;
         } else return "Поле обов'язкове до заповнення"
     }
 }

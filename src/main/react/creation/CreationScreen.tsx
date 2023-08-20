@@ -18,13 +18,11 @@ import {useAppSelector} from "../../redux/hooks";
 import CreationStateManagerImpl from "../../service/creation/stateManager/CreationStateManagerImpl";
 import CreationService from "../../service/creation/CreationService";
 import getEntityCreationService from "../../util/getEntityCreationService";
-import {useSelector} from "react-redux";
 import ServiceContext from "../serviceContext";
 import {
     personDefaultValidationObject,
     PersonValidationObject
 } from "../../service/creation/validation/human/person/PersonCreationValidationService";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {
     jurPersonDefaultValidationObject,
     JurPersonValidationObject

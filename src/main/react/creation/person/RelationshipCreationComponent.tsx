@@ -6,6 +6,7 @@ import PersonCreationStateManager from "../../../service/creation/stateManager/p
 import PersonCreationStateManagerImpl
     from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
 import PersonCreationValidationService, {
+    getRelationshipDefaultValidationObject,
     RelationShipValidationObject
 } from "../../../service/creation/validation/human/person/PersonCreationValidationService";
 import InputError from "../../sharedComponents/InputError";
@@ -28,7 +29,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
             return stateManager.getRelationshipValidationErrors(relationship);
         } catch (e) {
             // relationship validation object can not exist if there was no validation checks before
-           return {relationship: relationship};
+           return getRelationshipDefaultValidationObject(relationship);
         }
     })
 
@@ -46,11 +47,11 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
         const updatedValidationObject = validationService.validateRelationship(relationship);
         console.log(updatedValidationObject);
         if (validationObject.relationType&&!updatedValidationObject.relationType) {
-            stateManager.updateRelationshipValidationErrors({relationship: relationship, relationType: undefined});
+            stateManager.updateRelationshipValidationErrors({relationship: relationship, relationType: null});
         }
 
         if (validationObject.note&&!updatedValidationObject.note) {
-            stateManager.updateRelationshipValidationErrors({relationship: relationship, note: undefined})
+            stateManager.updateRelationshipValidationErrors({relationship: relationship, note: null})
         }
     }, [relationship])
 

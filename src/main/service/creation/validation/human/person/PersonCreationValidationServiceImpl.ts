@@ -1,5 +1,6 @@
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
 import PersonCreationValidationService, {
+    personDefaultValidationObject,
     PersonValidationObject, RelationShipValidationObject,
     ServerPersonValidationObject
 } from "./PersonCreationValidationService";
@@ -8,7 +9,6 @@ import {ValidationErrors} from "../../../../ValidationErrors";
 import Human from "../../../../../model/human/Human";
 import {DateEntityTool} from "../../../../../model/DateEntity";
 import {hasContent} from "../../../../../util/isEmpty";
-import {hasErrors} from "../../../../exploration/validation/BasicExplorationValidationService";
 import hasHtml from "../../../../../util/hasHtml";
 import PassportData from "../../../../../model/human/person/PassportData";
 
@@ -32,9 +32,9 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
 
     hasErrors(bindingResult: PersonValidationObject): boolean {
         const main = {...bindingResult, relationships: undefined}
-        if (hasErrors(main)) return true;
+        if (hasContent(main)) return true;
 
-        return  bindingResult.relationships.some(relationshipValidationObject => hasErrors(({...relationshipValidationObject, relationship: undefined} as Partial<RelationShipValidationObject>)))
+        return  bindingResult.relationships.some(relationshipValidationObject => hasContent(({...relationshipValidationObject, relationship: undefined} as Partial<RelationShipValidationObject>)))
     }
 
     validateRelationships(relationships: Relationship[]): RelationShipValidationObject[] {
@@ -79,15 +79,19 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
     }
 
     mapServerValidationErrors(response: ServerPersonValidationObject): PersonValidationObject {
-        const personValidationObject: PersonValidationObject = {...response, relationships: []};
-        personValidationObject.passportSerial = response["passportData.passportSerial"];
-        personValidationObject.passportNumber = response["passportData.passportNumber"];
-        personValidationObject.rnokppCode = response["passportData.rnokppCode"];
+        const personValidationObject: PersonValidationObject = {...personDefaultValidationObject};
+        personValidationObject.passportSerial = response["passportData.passportSerial"]?response["passportData.passportSerial"]:null;
+        personValidationObject.passportNumber = response["passportData.passportNumber"]?response["passportData.passportNumber"]:null;
+        personValidationObject.rnokppCode = response["passportData.rnokppCode"]?response["passportData.rnokppCode"]:null;
         return personValidationObject;
     }
 
     validatePassportData(passportData: Person['passportData']): Pick<PersonValidationObject, keyof PassportData> {
-        const bindingResult: Partial<PersonValidationObject> = {};
+        const bindingResult: Pick<PersonValidationObject, keyof PassportData> = {
+            passportNumber: null,
+            passportSerial: null,
+            rnokppCode: null
+        };
 
         if (passportData) {
             const passportSerial = passportData.passportSerial;

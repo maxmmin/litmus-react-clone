@@ -106,7 +106,7 @@ const personCreationStateReducer: Reducer<EntityCreationState<
 }
 const initialJurPersonState: JurPersonCreationState = deepCopy(new BasicJurPersonCreationState())
 
-const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPerson>|undefined, PayloadAction<JurPerson>> = (prevState=initialJurPersonState, action) => {
+const jurPersonCreationStateReducer: Reducer<JurPersonCreationState|undefined, PayloadAction<JurPerson>> = (prevState=initialJurPersonState, action) => {
     const actions = CreationTypedAction.person;
     switch (action.type) {
         // code-place for jur person specific actions
@@ -129,7 +129,7 @@ const jurPersonCreationStateReducer: Reducer<EntityCreationState<JurPerson>|unde
 
 const initialUserCreationState: UserCreationState = deepCopy(new BasicUserCreationState());
 
-const userCreationStateReducer: Reducer<EntityCreationState<User>|undefined, PayloadAction<User>> = (prevState=initialUserCreationState, action) => {
+const userCreationStateReducer: Reducer<UserCreationState|undefined, PayloadAction<User>> = (prevState=initialUserCreationState, action) => {
     const actions = CreationTypedAction.person;
     switch (action.type) {
 

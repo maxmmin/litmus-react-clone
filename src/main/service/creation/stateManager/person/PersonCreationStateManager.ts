@@ -21,7 +21,7 @@ interface PersonCreationStateManager extends MediaEntityCreationStateManager<Per
 
     getRelationshipValidationErrors(rel: Relationship): RelationShipValidationObject;
 
-    updateRelationshipValidationErrors(relationship: RelationShipValidationObject): void;
+    updateRelationshipValidationErrors(relationship: Partial<RelationShipValidationObject>&Pick<RelationShipValidationObject,'relationship'>): void;
 
     updatePassportData: (data: Partial<CreationPassportData>) => void;
 

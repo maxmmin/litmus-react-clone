@@ -13,5 +13,4 @@ export class BasicJurPersonExplorationState implements JurPersonExplorationState
     readonly data: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams>|null = null;
     readonly isPending: boolean = false;
     readonly params: JurPersonExplorationParams = new BasicJurPersonExplorationParams();
-    readonly validationErrors: ValidationErrors<JurPersonExplorationParams> = {};
 }

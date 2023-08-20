@@ -8,7 +8,6 @@ import {ValidationErrors} from "../../../service/ValidationErrors";
  */
 export default interface EntityExplorationState <E,P extends EntityExplorationParams> {
     params: P,
-    validationErrors: ValidationErrors<P>
     isPending: boolean,
     data: EntityExplorationData<E, P>|null
 }

@@ -19,8 +19,6 @@ import UserExplorationStateManager from "./stateManager/user/UserExplorationStat
 import UserExplorationStateManagerImpl from "./stateManager/user/UserExplorationStateManagerImpl";
 import UserExplorationApiServiceImpl from "./api/human/user/UserExplorationApiServiceImpl";
 import UserDtoMapper from "../../rest/dto/dtoMappers/UserDtoMapper";
-import UserExplorationValidationService from "./validation/human/user/UserExplorationValidationService";
-import UserExplorationValidationServiceImpl from "./validation/human/user/UserExplorationValidationServiceImpl";
 import ValidationError from "../../error/ValidationError";
 
 type UserExplorationCallbackType = (params: UserExplorationParams, service: UserExplorationApiService, mapper: DtoMapper<unknown, User, UserResponseDto>) => Promise<PagedData<User>>;
@@ -30,23 +28,17 @@ class UserExplorationService implements ExplorationService {
 
     constructor(private readonly stateManager: UserExplorationStateManager,
                 private readonly service: UserExplorationApiService,
-                private readonly mapper: DtoMapper<unknown, User, UserResponseDto>,
-                private readonly validationService: UserExplorationValidationService) {
+                private readonly mapper: DtoMapper<unknown, User, UserResponseDto>) {
     }
 
     public static getInstance (stateManager: UserExplorationStateManager = new UserExplorationStateManagerImpl(),
                                service: UserExplorationApiService = UserExplorationApiServiceImpl.getInstance(),
                                mapper: DtoMapper<unknown, User, UserResponseDto> = new UserDtoMapper(),
-                               validationService: UserExplorationValidationService = new UserExplorationValidationServiceImpl()
                                 ): UserExplorationService {
-        return new UserExplorationService(stateManager,service,mapper, validationService)
+        return new UserExplorationService(stateManager,service,mapper)
     }
 
     private exploreByIdCallback: UserExplorationCallbackType = async (params, service, mapper) => {
-        const errors = this.validationService.validateId(params);
-        if (errors) {
-            throw new ValidationError(errors);
-        }
         const id = checkNotEmpty(params.id);
         const content: User[] = []
         const userResponseDto: UserResponseDto|null = await service.findById(id);
@@ -58,10 +50,6 @@ class UserExplorationService implements ExplorationService {
     }
 
     private exploreByFullNameCallback: UserExplorationCallbackType = async (params, service, mapper) => {
-        const errors = this.validationService.validateFullName(params);
-        if (errors) {
-            throw new ValidationError(errors);
-        }
         const lastName = checkNotEmpty(params.lastName);
         const middleName = params.middleName;
         const firstName = params.firstName;
@@ -102,9 +90,6 @@ class UserExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<User, UserExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            if (e instanceof ValidationError) {
-                this.stateManager.setValidationErrors(e.errors);
-            }
             return rejectWithValue(handleCreationError(e), {notify: true});
         }
     }))

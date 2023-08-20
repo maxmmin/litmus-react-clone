@@ -4,7 +4,7 @@ import JurPersonCreationValidationService, {
 } from "./JurPersonCreationValidationService";
 import {ValidationErrors} from "../../../ValidationErrors";
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
-import {hasErrors} from "../../../exploration/validation/BasicExplorationValidationService";
+import {hasContent} from "../../../../util/isEmpty";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {
     validate(model: JurPerson): JurPersonValidationObject {
@@ -16,8 +16,8 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
         return {...response};
     }
 
-    hasErrors(bindingResult: ValidationErrors<JurPersonValidationObject>): boolean {
-        return hasErrors(bindingResult);
+    hasErrors(bindingResult: JurPersonValidationObject): boolean {
+        return bindingResult.name!==null||bindingResult.edrpou!==null||bindingResult.dateOfRegistration!==null;
     }
 
 }

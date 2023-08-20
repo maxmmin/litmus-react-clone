@@ -36,10 +36,6 @@ class ExplorationStateManagerImpl<E,P extends EntityExplorationParams> implement
         return this.getExplorationState().params;
     }
 
-    public getValidationErrors(): EntityExplorationState<E, P>["validationErrors"] {
-        return this.getExplorationState().validationErrors;
-    }
-
     public constructor(dispatch: AppDispatch, getState: ()=>EntityExplorationState<E, P>, actions: ExplorationTypedAction) {
         this.dispatch = dispatch;
         this.getExplorationState = getState;
@@ -52,23 +48,6 @@ class ExplorationStateManagerImpl<E,P extends EntityExplorationParams> implement
             payload: deepCopy(state)
         })
     }
-
-    setValidationErrors(errors: Partial<Record<keyof P, string>>): void {
-        this.dispatch({
-            type: this.actions[ExplorationCoreAction.SET_EXPLORATION_VALIDATION_ERRORS],
-            payload: errors
-        })
-    }
-
-    updateValidationErrors(errors: Partial<Record<keyof P, string>>): void {
-        this.dispatch({
-            type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_VALIDATION_ERRORS],
-            payload: errors
-        })
-    }
-
-
-
 
     setParams (params: EntityExplorationState<E, P>['params']): void {
         this.dispatch({

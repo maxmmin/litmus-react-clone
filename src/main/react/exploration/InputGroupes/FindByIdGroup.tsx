@@ -10,7 +10,6 @@ const FindByIdGroup = () => {
 
     const stateManager = entity?getEntityExplorationStateManager(entity):null;
 
-    const validationErrors = useAppSelector(state => stateManager?.getValidationErrors()!);
 
     const {id} = useAppSelector(() => stateManager?.getExplorationParams())||{}
 
@@ -23,14 +22,10 @@ const FindByIdGroup = () => {
             <Form.Group className="mb-3">
                 <Form.Label>ID</Form.Label>
                 <input autoComplete={"new-password"} onChange={e=>{
-                    if (validationErrors.id) {
-                        stateManager.updateValidationErrors({id: undefined})
-                    }
                     stateManager.updateParams({id: e.currentTarget.value});
-                }} className={`id form-control ${validationErrors.id?"is-invalid":""}`} value={id?id:''} type="text" placeholder="Введіть id"
+                }} className={`id form-control`} value={id?id:''} type="text" placeholder="Введіть id"
                 onKeyDown={keyPressHandler}
                 />
-                <InputError error={validationErrors.id}/>
             </Form.Group>
         </>
     )
