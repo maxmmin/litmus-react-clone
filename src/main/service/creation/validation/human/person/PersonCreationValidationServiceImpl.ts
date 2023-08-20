@@ -20,7 +20,13 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         const sexErr = this.validateSex(params.sex);
         const dateErr = this.validateDateOfBirth(params.dateOfBirth);
         const relationShipsErrors = this.validateRelationships(params.relationships)
-        const bindingResult: PersonValidationObject = {...fullNameResult, ...passportErrors, sex: sexErr, dateOfBirth: dateErr, relationships: relationShipsErrors};
+        const bindingResult: PersonValidationObject = {
+            ...fullNameResult,
+            ...passportErrors,
+            sex: sexErr,
+            dateOfBirth: dateErr,
+            relationships: relationShipsErrors
+        };
         return bindingResult;
     };
 
@@ -36,7 +42,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
     }
 
     validateRelationship(relationship: Relationship): RelationShipValidationObject {
-        const bindingResult: RelationShipValidationObject = {relationship: relationship};
+        const bindingResult: RelationShipValidationObject = {relationship: relationship, relationType: null, note: null};
         if (relationship) {
             if (relationship.note) {
                 const noteTest = hasHtml(relationship.note);
@@ -53,7 +59,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
     }
 
     validateDateOfBirth(dateOfBirth: Person["dateOfBirth"]): PersonValidationObject["dateOfBirth"] {
-        let dateErr: string|undefined = undefined;
+        let dateErr: string|null = null;
         if (dateOfBirth&&hasContent(dateOfBirth)) {
             const date = DateEntityTool.isValid(dateOfBirth);
             if (!date) dateErr = "Введіть коректну дату"
@@ -62,8 +68,8 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
     }
 
 
-    validateSex(sex: Person["sex"]): string|undefined {
-        let sexErr = undefined;
+    validateSex(sex: Person["sex"]): string|null {
+        let sexErr = null;
 
         if (!sex) {
             sexErr = "Оберіть стать особи"
