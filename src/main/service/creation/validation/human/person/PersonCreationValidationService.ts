@@ -1,6 +1,7 @@
 import HumanCreationValidationService from "../HumanCreationValidationService";
 import Person, {Relationship} from "../../../../../model/human/person/Person";
-import {ValidationErrors} from "../../../../ValidationErrors";
+import {FieldValidationErrors, ValidationErrors} from "../../../../ValidationErrors";
+import PassportData from "../../../../../model/human/person/PassportData";
 
 export type RelationShipValidationObject = ValidationErrors<{relationType: string, note: string}>&{relationship: Relationship}
 
@@ -14,8 +15,8 @@ export type ServerPersonValidationObject = Omit<ValidationErrors<Person>, 'passp
 
 export default interface PersonCreationValidationService extends HumanCreationValidationService<Person, PersonValidationObject, ServerPersonValidationObject> {
     validateRelationship(relationship: Relationship): RelationShipValidationObject;
-    validateRelationships(model: Person): RelationShipValidationObject[];
-    validatePassportData(model: Person): Partial<PersonValidationObject>;
-    validateSex(model: Person): Partial<PersonValidationObject>;
-    validateDateOfBirth(model: Person): Partial<PersonValidationObject>
+    validateRelationships(relationShips: Relationship[]): RelationShipValidationObject[];
+    validatePassportData(passportData: Person["passportData"]): Pick<PersonValidationObject, keyof PassportData>;
+    validateSex(sex: Person["sex"]): PersonValidationObject["sex"];
+    validateDateOfBirth(dateOfBirth: Person["dateOfBirth"]): PersonValidationObject["dateOfBirth"];
 }

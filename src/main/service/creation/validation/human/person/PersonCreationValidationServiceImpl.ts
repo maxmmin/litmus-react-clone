@@ -10,16 +10,17 @@ import {DateEntityTool} from "../../../../../model/DateEntity";
 import {hasContent} from "../../../../../util/isEmpty";
 import {hasErrors} from "../../../../exploration/validation/BasicExplorationValidationService";
 import hasHtml from "../../../../../util/hasHtml";
+import PassportData from "../../../../../model/human/person/PassportData";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<Person, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
     validate(params: Person): PersonValidationObject {
         let fullNameResult: ValidationErrors<Human> = super.validateFullName(params);
-        const passportErrors = this.validatePassportData(params);
-        const sexErr = this.validateSex(params);
-        const dateErr = this.validateDateOfBirth(params);
-        const relationShipsErrors = this.validateRelationships(params)
-        const bindingResult: PersonValidationObject = {...fullNameResult, ...passportErrors, ...sexErr, ...dateErr, relationships: relationShipsErrors};
+        const passportErrors = this.validatePassportData(params.passportData);
+        const sexErr = this.validateSex(params.sex);
+        const dateErr = this.validateDateOfBirth(params.dateOfBirth);
+        const relationShipsErrors = this.validateRelationships(params.relationships)
+        const bindingResult: PersonValidationObject = {...fullNameResult, ...passportErrors, sex: sexErr, dateOfBirth: dateErr, relationships: relationShipsErrors};
         return bindingResult;
     };
 
@@ -30,8 +31,8 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         return  bindingResult.relationships.some(relationshipValidationObject => hasErrors(({...relationshipValidationObject, relationship: undefined} as Partial<RelationShipValidationObject>)))
     }
 
-    validateRelationships(model: Person): RelationShipValidationObject[] {
-        return model.relationships.map(this.validateRelationship);
+    validateRelationships(relationships: Relationship[]): RelationShipValidationObject[] {
+        return relationships.map(this.validateRelationship);
     }
 
     validateRelationship(relationship: Relationship): RelationShipValidationObject {
@@ -51,25 +52,24 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         return bindingResult;
     }
 
-    validateDateOfBirth(model: Person): Partial<PersonValidationObject> {
-        const dateOfBirth = model.dateOfBirth;
-        const bindingResult: Partial<PersonValidationObject> = {}
+    validateDateOfBirth(dateOfBirth: Person["dateOfBirth"]): PersonValidationObject["dateOfBirth"] {
+        let dateErr: string|undefined = undefined;
         if (dateOfBirth&&hasContent(dateOfBirth)) {
             const date = DateEntityTool.isValid(dateOfBirth);
-            if (!date) bindingResult.dateOfBirth = "Введіть коректну дату"
+            if (!date) dateErr = "Введіть коректну дату"
         }
-        return bindingResult;
+        return dateErr;
     }
 
 
-    validateSex(model: Person): Partial<PersonValidationObject> {
-        const personValidationObject: Partial<PersonValidationObject> = {};
+    validateSex(sex: Person["sex"]): string|undefined {
+        let sexErr = undefined;
 
-        const sex = model.sex;
         if (!sex) {
-            personValidationObject.sex = "Оберіть стать особи"
+            sexErr = "Оберіть стать особи"
         }
-        return personValidationObject;
+
+        return sexErr;
     }
 
     mapServerValidationErrors(response: ServerPersonValidationObject): PersonValidationObject {
@@ -80,9 +80,8 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         return personValidationObject;
     }
 
-    validatePassportData(model: Person): Partial<PersonValidationObject> {
+    validatePassportData(passportData: Person['passportData']): ValidationErrors<Person["passportData"]> {
         const bindingResult: Partial<PersonValidationObject> = {};
-        const passportData = model.passportData;
 
         if (passportData) {
             const passportSerial = passportData.passportSerial;

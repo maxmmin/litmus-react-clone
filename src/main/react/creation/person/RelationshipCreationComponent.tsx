@@ -1,6 +1,6 @@
 import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../model/human/person/Person";
 import {FloatingLabel, Form} from "react-bootstrap";
-import React from "react";
+import React, {useEffect} from "react";
 import {CrossIcon} from "../../../util/icons";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import PersonCreationStateManagerImpl
@@ -23,11 +23,12 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
 
     const personTo = relationship.person;
 
-    const validationObject = useSelector(()=>{
+    const validationObject: RelationShipValidationObject = useSelector(()=>{
         try {
             return stateManager.getRelationshipValidationErrors(relationship);
         } catch (e) {
-            return {relationship: relationship} as RelationShipValidationObject
+            // relationship validation object can not exist if there was no validation checks before
+           return {relationship: relationship};
         }
     })
 
@@ -40,6 +41,18 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
         }
        personCreationStateManager.updateRelationship(relShip)
     }
+
+    useEffect(()=>{
+        const updatedValidationObject = validationService.validateRelationship(relationship);
+        console.log(updatedValidationObject);
+        if (validationObject.relationType&&!updatedValidationObject.relationType) {
+            stateManager.updateRelationshipValidationErrors({relationship: relationship, relationType: undefined});
+        }
+
+        if (validationObject.note&&!updatedValidationObject.note) {
+            stateManager.updateRelationshipValidationErrors({relationship: relationship, note: undefined})
+        }
+    }, [relationship])
 
     const relType = relationship.relationType?relationship.relationType:undefined;
 
@@ -78,9 +91,6 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
                             const relShip = {...relationship};
                             relShip.note = e.currentTarget.value;
                             personCreationStateManager.updateRelationship(relShip);
-                            if (validationObject.note&&!validationService.validateRelationship(relShip).note) {
-                                stateManager.updateRelationshipValidationErrors({relationship: relationship, note: undefined})
-                            }
                         }}
                     />
                 </FloatingLabel>

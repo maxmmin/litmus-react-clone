@@ -3,7 +3,7 @@ import {
     inputBeforeDateContainerHandler,
     inputGroupsKeyPressHandler as keyPressHandler
 } from "../../../util/pureFunctions";
-import React, {useContext, useMemo, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import {useAppSelector} from "../../../redux/hooks";
 import InputDate from "../../sharedComponents/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
@@ -41,15 +41,8 @@ const CreatePerson = () => {
 
     const fileService = litmusContext.files.fileService;
 
-    const imageService = litmusContext.files.imageService;
-
     const person = useAppSelector(state => state.creation.person?.emergingEntity)!
 
-    const checkSexValidationError = () => {
-        if (validationErrors?.sex) {
-            creationStateManager.updateValidationErrors({sex: undefined})
-        }
-    }
 
     if (!creationPersonParams) {
         throw new Error("createPersonDto was null but it shouldn't be")
@@ -73,6 +66,45 @@ const CreatePerson = () => {
 
     const closeModal = () => setModalSettings(null)
 
+    useEffect(()=>{
+        const updatedPassportDataValidation = validationService.validatePassportData(person.passportData);
+
+
+        if (validationErrors?.passportNumber&&!updatedPassportDataValidation.passportNumber) {
+            creationStateManager.updateValidationErrors({passportNumber: undefined})
+        }
+
+        if (validationErrors?.passportSerial&&!updatedPassportDataValidation.passportSerial) {
+            creationStateManager.updateValidationErrors({passportSerial: undefined})
+        }
+
+        if (validationErrors?.rnokppCode&&!updatedPassportDataValidation.rnokppCode) {
+            creationStateManager.updateValidationErrors({rnokppCode: undefined})
+        }
+    }, [passportData])
+
+    useEffect(()=>{
+        const updatedFullNameErrors = validationService.validateFullName(person);
+
+        if (validationErrors?.lastName&&!updatedFullNameErrors.lastName) {
+            creationStateManager.updateValidationErrors({lastName: undefined})
+        }
+
+        if (validationErrors?.middleName&&!updatedFullNameErrors?.middleName) {
+            creationStateManager.updateValidationErrors({middleName: undefined})
+        }
+
+        if (validationErrors?.firstName&&!updatedFullNameErrors.firstName) {
+            creationStateManager.updateValidationErrors({firstName: undefined})
+        }
+    }, [person.firstName, person.middleName, person.lastName])
+
+    useEffect(()=>{
+        if (validationErrors?.sex&&!validationService.validateSex(person.sex)) {
+            creationStateManager.updateValidationErrors({sex: undefined})
+        }
+    }, [person.sex])
+
     return (
         <>
             <CreationGeoModal entity={Entity.PERSON} show={modalSettings?.mode===CreationModalModes.SET_GEOLOCATION} close={closeModal}/>
@@ -85,9 +117,6 @@ const CreatePerson = () => {
                            onKeyDown={keyPressHandler}
                            onChange={e => {
                                 creationStateManager.updateEntityCreationParams({lastName: e.currentTarget.value})
-                                if (validationErrors?.lastName&&!validationService.validateFullName(person)?.lastName) {
-                                    creationStateManager.updateValidationErrors({lastName: undefined})
-                                }
                             }
                         }
                     />
@@ -100,9 +129,6 @@ const CreatePerson = () => {
                     onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updateEntityCreationParams({firstName: e.currentTarget.value})
-                           if (validationErrors?.firstName&&!validationService.validateFullName(person)?.firstName) {
-                               creationStateManager.updateValidationErrors({firstName: undefined})
-                           }
                         }
                        }
                 />
@@ -115,9 +141,6 @@ const CreatePerson = () => {
                     onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value});
-                           if (validationErrors?.middleName&&!validationService.validateFullName(person)?.middleName) {
-                               creationStateManager.updateValidationErrors({middleName: undefined})
-                           }
                         }
                        }
                 />
@@ -130,7 +153,6 @@ const CreatePerson = () => {
                <div className="form-check">
                    <input className="form-check-input maleRadioBtn" type="radio" checked={creationPersonParams.sex===Sex.male} name="sex" onChange={()=>{
                        creationStateManager.updateEntityCreationParams({sex: Sex.male})
-                       checkSexValidationError();
                    }}/>
                    <label className="form-check-label" htmlFor="maleRadioBtn">
                        Чоловіча
@@ -139,7 +161,6 @@ const CreatePerson = () => {
                <div className="form-check">
                    <input className="form-check-input femaleRadioBtn" type="radio" checked={creationPersonParams.sex===Sex.female} name="sex" onChange={()=>{
                        creationStateManager.updateEntityCreationParams({sex: Sex.female});
-                       checkSexValidationError();
                    }}/>
                    <label className="form-check-label" htmlFor="femaleRadioBtn">
                        Жіноча
@@ -154,9 +175,6 @@ const CreatePerson = () => {
                        onKeyDown={keyPressHandler}
                        onChange={e => {
                            creationStateManager.updatePassportData({passportNumber: e.currentTarget.value});
-                           if (validationErrors?.passportNumber&&!validationService.validatePassportData(person).passportNumber) {
-                               creationStateManager.updateValidationErrors({passportNumber: undefined})
-                           }
                         }
                        }
                 />
@@ -169,9 +187,6 @@ const CreatePerson = () => {
                        onKeyDown={keyPressHandler}
                         onChange={e => {
                                 creationStateManager.updatePassportData({passportSerial: e.currentTarget.value});
-                            if (validationErrors?.passportSerial&&!validationService.validatePassportData(person).passportSerial) {
-                                creationStateManager.updateValidationErrors({passportSerial: undefined})
-                            }
                             }
                         }
                 />
@@ -184,9 +199,6 @@ const CreatePerson = () => {
                        onKeyDown={inputBeforeDateContainerHandler}
                        onChange={e => {
                            creationStateManager.updatePassportData({rnokppCode: e.currentTarget.value})
-                           if (validationErrors?.rnokppCode&&!validationService.validatePassportData(person).rnokppCode) {
-                               creationStateManager.updateValidationErrors({rnokppCode: undefined})
-                           }
                         }
                        }
                 />
