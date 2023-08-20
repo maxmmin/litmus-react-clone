@@ -33,7 +33,7 @@ const CreatePerson = () => {
 
     const creationPersonParams = useAppSelector(state => state.creation?.person?.emergingEntity)
 
-    const validationErrors = useAppSelector(state => state.creation.person?.validationErrors)!
+    const validationErrors = useAppSelector(state => state.creation.person?.validationErrors)
 
     const litmusContext = useContext(LitmusServiceContext);
 

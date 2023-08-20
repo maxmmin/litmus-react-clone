@@ -7,8 +7,8 @@ import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import {hasErrors} from "../../../exploration/validation/BasicExplorationValidationService";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {
-    validate(model: JurPerson): ValidationErrors<JurPersonValidationObject> {
-        const bindingResult: ValidationErrors<JurPerson> = {};
+    validate(model: JurPerson): JurPersonValidationObject {
+        const bindingResult: JurPersonValidationObject = {dateOfRegistration: null, edrpou: null, name: null};
         return bindingResult;
     }
 

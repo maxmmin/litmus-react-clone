@@ -10,11 +10,14 @@ import {hasErrors} from "../../../../exploration/validation/BasicExplorationVali
 
 
 class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<User, UserValidationObject, ServerUserValidationObject> implements UserCreationValidationService {
-    validate(model: User): ValidationErrors<User> {
-        const bindingResult: ValidationErrors<Human> = super.validateFullName(model);
-        return {
-            ...bindingResult
+    validate(model: User): UserValidationObject {
+        const bindingResult: UserValidationObject = {
+            ...super.validateFullName(model),
+            email: null,
+            password: null,
+            role: null
         };
+        return bindingResult;
     }
 
     hasErrors(bindingResult: ValidationErrors<User>): boolean {
