@@ -2,9 +2,8 @@ import JurPersonCreationValidationService, {
     JurPersonValidationObject,
     ServerJurPersonValidationObject
 } from "./JurPersonCreationValidationService";
-import {ValidationErrors} from "../../../ValidationErrors";
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
-import {hasContent} from "../../../../util/isEmpty";
+import valueOrNull from "../../../../util/valueOrNull";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {
     validate(model: JurPerson): JurPersonValidationObject {
@@ -12,8 +11,12 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
         return bindingResult;
     }
 
-    mapServerValidationErrors(response: ValidationErrors<ServerJurPersonValidationObject>): ValidationErrors<JurPerson> {
-        return {...response};
+    mapServerValidationErrors(response: ServerJurPersonValidationObject): JurPersonValidationObject {
+        return {
+            name: valueOrNull(response.name),
+            edrpou: valueOrNull(response.edrpou),
+            dateOfRegistration: valueOrNull(response.dateOfRegistration)
+        };
     }
 
     hasErrors(bindingResult: JurPersonValidationObject): boolean {

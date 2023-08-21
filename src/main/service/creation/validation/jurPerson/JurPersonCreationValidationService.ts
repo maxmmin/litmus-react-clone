@@ -10,7 +10,7 @@ export const jurPersonDefaultValidationObject: JurPersonValidationObject = Objec
     edrpou: null
 })
 
-export type ServerJurPersonValidationObject = ValidationErrors<JurPerson>
+export type ServerJurPersonValidationObject = Partial<ValidationErrors<JurPerson>>
 
 export default interface JurPersonCreationValidationService extends ValidationService<JurPerson, JurPersonValidationObject, ServerJurPersonValidationObject> {
 

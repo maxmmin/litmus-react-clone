@@ -7,6 +7,7 @@ import HumanCreationValidationServiceImpl from "../HumanCreationValidationServic
 import {ValidationErrors} from "../../../../ValidationErrors";
 import User from "../../../../../model/human/user/User";
 import {hasContent} from "../../../../../util/isEmpty";
+import valueOrNull from "../../../../../util/valueOrNull";
 
 class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<User, UserValidationObject, ServerUserValidationObject> implements UserCreationValidationService {
     validate(model: User): UserValidationObject {
@@ -30,8 +31,15 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
         } else return "Поле обов'язкове до заповнення";
     }
 
-    mapServerValidationErrors(response: ValidationErrors<User>): ValidationErrors<User> {
-        return {...response};
+    mapServerValidationErrors(response: ServerUserValidationObject): UserValidationObject {
+        return {
+            lastName: valueOrNull(response.lastName),
+            middleName: valueOrNull(response.middleName),
+            firstName: valueOrNull(response.firstName),
+            email: valueOrNull(response.email),
+            role: valueOrNull(response.role),
+            password: valueOrNull(response.password)
+        };
     }
 
 

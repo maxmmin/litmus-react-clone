@@ -14,7 +14,7 @@ export const userDefaultValidationObject: UserValidationObject = {
     role: null
 }
 
-export type ServerUserValidationObject = Partial<UserValidationObject>;
+export type ServerUserValidationObject = Partial<ValidationErrors<User>>;
 
 export default interface UserCreationValidationService extends HumanCreationValidationService<User, UserValidationObject, ServerUserValidationObject> {
 }
