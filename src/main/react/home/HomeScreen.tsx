@@ -11,8 +11,6 @@ import Role, {RoleName} from "../../redux/types/userIdentity/Role";
 
 function HomeScreen () {
 
-    const [isOpened, setIsOpened] = useState(false);
-
     const navigate = useNavigate()
 
     const exploredEntity = useAppSelector(state => state.exploration.exploredEntity)
@@ -27,13 +25,7 @@ function HomeScreen () {
     }
 
     return (
-        <div className="homepage" onClick={(e)=>{
-            if (isOpened) {
-                setIsOpened(false)
-            }
-        }}>
-            <Header/>
-
+        <div className="homepage">
             <main className="homepage-actions">
                     <div itemProp={appConfig.applicationMappings.exploration[exploredEntity!]} className="homepage-actions__action" onClick={actionOnClick}>
                         <div className="homepage-actions__icon-container">

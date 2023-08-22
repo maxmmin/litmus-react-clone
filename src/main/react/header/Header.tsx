@@ -1,18 +1,18 @@
 import {PersonIcon} from "../../util/icons";
 import HeaderMenu from "./HeaderMenu";
-import React from "react";
+import React, {useContext} from "react";
 import {UserIdentityReducible} from "../../redux/types/userIdentity/UserIdentity";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import AppStateAction, {switchAppState} from "../../redux/actions/AppStateAction";
+import {useAppSelector} from "../../redux/hooks";
 import BackButton from "../sharedComponents/BackButton";
+import {LitmusServiceContext} from "../App";
 
 type PropsType = {
-    backButtonPath?: string
+    backButtonPath: string|null
 }
 
 const Header = ({backButtonPath}: PropsType) => {
-    const dispatch = useAppDispatch();
     const userIdentity = useAppSelector<UserIdentityReducible>(state => state.userIdentity);
+    const appStateManager = useContext(LitmusServiceContext).appState.manager;
     return (
         <header className="header">
             <h2 style={{
@@ -22,7 +22,7 @@ const Header = ({backButtonPath}: PropsType) => {
                     {backButtonPath?<BackButton path={backButtonPath}/>:null}
                     <div className="header__avatar-container" onClick={e=>{
                         e.stopPropagation();
-                        dispatch(switchAppState(AppStateAction.HEADER_MENU_TOGGLE))
+                        appStateManager.headerMenuToggle();
                     }}>
                         {userIdentity?<span className="header__avatar-letter">{userIdentity!.firstName[0]}</span>:<PersonIcon color={"black"} className="header__avatar-icon" />}
 

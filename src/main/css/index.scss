@@ -1,13 +1,21 @@
 @import 'colors.scss';
 
-html, body, #root, .wrapper {
+html, body, #root, .wrapper, .root-screen {
   height: 100%;
+}
+
+.root-screen {
+  display: flex;
+  flex-direction: column;
+}
+
+.root-screen__content-wrapper {
+  flex-grow: 1;
 }
 
 .wrapper {
   padding: 0px 20px;
 }
-
 
 body {
   margin: 0;

@@ -91,8 +91,6 @@ const Creation = () => {
 
     return (
         <div className="creation-page">
-            <Header backButtonPath={"/"}/>
-
             <main className={"creation-page__main-container"}>
                <div className="creation-page__create">
                        <div className="creation-page__create-select-wrapper">

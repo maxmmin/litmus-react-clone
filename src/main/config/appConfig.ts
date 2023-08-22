@@ -43,6 +43,7 @@ const creationRoot = "/create";
 const personCreationMapping = buildUrl(creationRoot, entityDomains.PERSON)
 
 const applicationMappings = Object.freeze({
+    home: "/",
     exploration: {
         default: personExplorationMapping,
         root: explorationRoot,
@@ -75,19 +76,6 @@ export default appConfig;
 export const gmapsRegionOptions: {region: string, language: string} = {
     region: "UA",
     language: "ua"
-}
-
-export const routingLinks = {
-    explore: {
-        [Entity.PERSON]: `/explore/${Entity.PERSON.toLowerCase()}`,
-        [Entity.JUR_PERSON]: `/explore/${Entity.JUR_PERSON.toLowerCase()}`,
-        [Entity.USER]: `/explore/${Entity.USER.toLowerCase()}`
-    },
-    creation: {
-        [Entity.PERSON]: `/create/${Entity.PERSON.toLowerCase()}`,
-        [Entity.JUR_PERSON]: `/create/${Entity.JUR_PERSON.toLowerCase()}`,
-        [Entity.USER]: `/create/${Entity.USER.toLowerCase()}`
-    }
 }
 
 export const createAuthHeader = (accessToken: string) => ({

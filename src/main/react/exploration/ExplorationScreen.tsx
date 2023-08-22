@@ -71,7 +71,6 @@ const ExplorationScreen = () => {
     return (
        <PrivateComponentWrapper requiredPermissions={requiredPermissions} mode={"ERROR_PAGE"}>
            <div className={"explore-page"}>
-               <Header backButtonPath={"/"}/>
                <main className={"explore-page__main"}>
                    <div className="explore-page__search">
                        <p style={{marginBottom: '10px'}}>Знайти</p>

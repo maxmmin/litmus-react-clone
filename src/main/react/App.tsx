@@ -11,7 +11,6 @@ import Explore from "./exploration/ExplorationScreen";
 import AppStateAction, {switchAppState} from "../redux/actions/AppStateAction";
 import LitmusCore from "./LitmusCore";
 import Creation from "./creation/CreationScreen";
-import appConfig, {routingLinks} from "../config/appConfig";
 import Role, {Permissions} from "../redux/types/userIdentity/Role";
 import {buildUrl} from "../util/pureFunctions";
 import {Entity} from "../model/Entity";
@@ -19,6 +18,9 @@ import LoginPage from "./login/LoginPage";
 import NotificationCenter from "./notifications/NotificationCenter";
 import {ErrorBoundary} from "react-error-boundary";
 import serviceContext from "./serviceContext";
+import appConfig from "../config/appConfig";
+import RootScreen from "./RootScreen";
+import HomeScreen from "./home/HomeScreen";
 
 export const LitmusServiceContext = createContext(serviceContext);
 
@@ -30,43 +32,20 @@ function App() {
             <NotificationCenter/>
             <BrowserRouter basename={"/"}>
                 <LitmusCore>
-                    <div className={"wrapper"} onClick={e=>{
-                        const appStore = store.getState();
-                        const isMenuOpened = appStore.appState?.isHeaderMenuOpened;
-
-                        if (isMenuOpened) {
-                            dispatch(switchAppState(AppStateAction.HEADER_MENU_CLOSE))
-                        }
-                        // @todo think about replace this
-                    }}>
+                    <div className={"wrapper"}>
                         <Routes>
                             <Route path={"/"} element={
-                                <PrivateComponent mode={"ERROR_PAGE"} component={<Home/>} requiredPermissions={[Permissions.DATA_READ]}/>
-                            }/>
+                                <PrivateComponent mode={"ERROR_PAGE"} component={<RootScreen/>} requiredPermissions={[Permissions.DATA_READ]}/>
+                            }>
+                                <Route path={appConfig.applicationMappings.home} element={<HomeScreen/>}/>
+                                <Route path={buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={
+                                    <Explore/>
+                                }/>
 
-                            <Route path={""} element={
-                                <PrivateComponent mode={ERROR_PAGE} component={<Explore/>} requiredPermissions={[Permissions.DATA_READ]}/>
-                            }/>
-
-                            <Route path={buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={
-                                <Explore/>
-                            }/>
-
-                            <Route path={buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')} element={
-                                <Creation/>
-                            }/>
-
-                            <Route path={routingLinks.creation[Entity.PERSON]} element={
-                                <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={Role.MODERATOR.permissions}/>
-                            }/>
-
-                            <Route path={routingLinks.creation[Entity.JUR_PERSON]} element={
-                                <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={Role.MODERATOR.permissions}/>
-                            }/>
-
-                            <Route path={routingLinks.creation[Entity.USER]} element={
-                                <PrivateComponent mode={ERROR_PAGE} component={<Creation/>} requiredPermissions={Role.ADMIN.permissions}/>
-                            }/>
+                                <Route path={buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')} element={
+                                    <Creation/>
+                                }/>
+                            </Route>
 
                             <Route path="/sign-in" element={<LoginPage/>}/>
                         </Routes>
