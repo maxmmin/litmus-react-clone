@@ -27,6 +27,28 @@
   padding: 15px 0px;
 }
 
+.results-container__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.exploration-pagination {
+  & .page-item.active>.page-link {
+    background: $primary-light;
+    color: white;
+  }
+
+  & .page-link {
+    color: $primary-light;
+  }
+
+  & .page-link:focus {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba($primary-light, 0.25);
+  }
+}
+
 .entity-container {
   display: grid;
   column-gap: 40px;

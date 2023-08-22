@@ -3,7 +3,6 @@ import Pagination from 'react-bootstrap/Pagination';
 import PersonInfoTable from "./EntityTables/PersonInfoTable";
 import JurPersonInfoTable from "./EntityTables/JurPersonInfoTable";
 import UserInfoTable from "./EntityTables/UserInfoTable";
-import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
 import PagedData, {isUnPaged} from "../../rest/PagedData";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import Loader from "../loader/Loader";
@@ -40,6 +39,43 @@ type Props = {
     state: EntityExplorationState<any, any>
 }
 
+type PaginationProps = {
+    pagedData: PagedData<unknown>
+}
+
+const getVisibleIndexes = (pagedData: PagedData<unknown>) => {
+    const desirableLength = 5;
+
+    const sideLength = Math.trunc(desirableLength/2);
+
+    const indexes: number[] = [pagedData.index]
+
+    for (let cursor = pagedData.index-1; cursor>0&&cursor>pagedData.index-1-sideLength; cursor--) {
+        indexes.unshift(cursor);
+    }
+
+    for (let cursor = pagedData.index+1; cursor<pagedData.totalPages-1&&cursor<pagedData.index+1+sideLength; cursor++) {
+        indexes.push(cursor);
+    }
+
+    return indexes;
+}
+
+const ExplorationPagination = ({pagedData}: PaginationProps) => {
+
+    const indexes = getVisibleIndexes(pagedData);
+
+    return (
+        <Pagination className={"exploration-pagination"}>
+            <Pagination.First />
+            <Pagination.Prev />
+            {indexes.map(index => <Pagination.Item key={index} active={pagedData.index===index}>{index+1}</Pagination.Item>)}
+            <Pagination.Next />
+            <Pagination.Last />
+        </Pagination>
+    )
+}
+
 const ExplorationData = ({exploredEntity, state}: Props) => {
     if (state.isPending) {
         return <div style={{margin: '50px auto 0px', maxWidth: '100px'}}>
@@ -58,8 +94,10 @@ const ExplorationData = ({exploredEntity, state}: Props) => {
 
     return (
         <div className={"results-container"}>
-            {unPaged?null:<Pagination results={pagedResponse.numberOfElements}/>}
-            <h4>Результатів: {totalElements}</h4>
+            <div className="results-container__header">
+                <h4>Результатів: {totalElements}</h4>
+                {unPaged?null:<ExplorationPagination pagedData={{...pagedResponse, index: 25, totalElements: 10000, totalPages: 40}}/>}
+            </div>
             {getProcessedResults(exploredEntity, content)}
         </div>
     )

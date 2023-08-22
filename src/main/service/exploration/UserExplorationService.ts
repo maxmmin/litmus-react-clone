@@ -50,7 +50,7 @@ class UserExplorationService implements ExplorationService {
     }
 
     private exploreByFullNameCallback: UserExplorationCallbackType = async (params, service, mapper) => {
-        const lastName = checkNotEmpty(params.lastName);
+        const lastName = params.lastName;
         const middleName = params.middleName;
         const firstName = params.firstName;
         const pagedResponse: PagedData<UserResponseDto> = await service.findByFullName({lastName, middleName, firstName});

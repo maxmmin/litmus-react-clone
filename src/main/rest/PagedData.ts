@@ -43,6 +43,6 @@ export class UnPagedData<E> implements PagedData<E>{
 
 export function isUnPaged(response: PagedData<any>) {
     const unPaged = response as UnPagedData<unknown>;
-    return unPaged.unPaged;
+    return Boolean(unPaged.unPaged);
 }
 
