@@ -14,7 +14,7 @@ import PersonCreationValidationService, {
 import PersonCreationValidationServiceImpl from "./validation/human/person/PersonCreationValidationServiceImpl";
 import creationStateManager from "./stateManager/CreationStateManager";
 import FileRepoImpl from "../media/FileRepoImpl";
-import FileServiceFactory from "../media/FileServiceFactory";
+import FileRepoFactory from "../media/FileRepoFactory";
 import {isFulfilled} from "@reduxjs/toolkit";
 import getFilesFromMedia from "../../util/media/getFilesFromMedia";
 import FileRepo from "../media/FileRepo";
@@ -47,7 +47,7 @@ class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person
                               stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl(),
                               mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto> = new PersonDtoMapper(),
                               validationService: PersonCreationValidationService = new PersonCreationValidationServiceImpl(),
-                              fileService: FileRepo = FileServiceFactory.getGlobalFileService()): PersonCreationService {
+                              fileService: FileRepo = FileRepoFactory.getGlobalFileService()): PersonCreationService {
         return  new PersonCreationService(apiService, stateManager, mapper,validationService,fileService);
     }
 }

@@ -1,5 +1,5 @@
 import ImageRepo from "./ImageRepo";
-import FileServiceFactory from "./FileServiceFactory";
+import FileRepoFactory from "./FileRepoFactory";
 import FileRepo from "./FileRepo";
 
 export default class ImageRepoImpl implements ImageRepo {
@@ -12,7 +12,7 @@ export default class ImageRepoImpl implements ImageRepo {
         this.fileService = fileService;
     }
 
-    static getInstance(fileService: FileRepo = FileServiceFactory.getGlobalFileService()) {
+    static getInstance(fileService: FileRepo = FileRepoFactory.getGlobalFileService()) {
         return new ImageRepoImpl(fileService);
     }
 

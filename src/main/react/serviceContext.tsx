@@ -67,7 +67,7 @@ import PersonCreationValidationService
 import UserCreationValidationService from "../service/creation/validation/human/user/UserCreationValidationService";
 import JurPersonCreationValidationService
     from "../service/creation/validation/jurPerson/JurPersonCreationValidationService";
-import FileServiceFactory from "../service/media/FileServiceFactory";
+import FileRepoFactory from "../service/media/FileRepoFactory";
 import MediaEntityFormDataBuilder from "../service/creation/api/multipartBuilder/MediaEntityFormDataBuilder";
 import MediaEntityFormDataBuilderImpl from "../service/creation/api/multipartBuilder/MediaEntityFormDataBuilderImpl";
 import ImageRepoImpl from "../service/media/ImageRepoImpl";
@@ -104,7 +104,7 @@ type FileContext = {
     imageService: ImageRepo
 }
 
-const fileService = FileServiceFactory.getGlobalFileService();
+const fileService = FileRepoFactory.getGlobalFileService();
 
 const fileContext: FileContext = {
     fileService: fileService,
