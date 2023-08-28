@@ -2,7 +2,6 @@ import {buildUrl} from "../util/pureFunctions";
 import {Entity} from "../model/Entity";
 
 type AppConfig = {
-    apiHost: string,
     entitiesPerPage: number,
     geoApiKey: string,
     entityDomains: Readonly<Record<Entity, string>>,
@@ -14,7 +13,7 @@ type AppConfig = {
 const host = "http://localhost:8081";
 
 const apiRoot = `${host}/api`
-const authRoot = `${host}/auth`
+const authApiRoot = `${host}/auth`
 const entitiesPerPage = 50;
 const geoApiKEy = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA";
 const apiAuthHeader = "Authorization"
@@ -26,12 +25,15 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
 })
 
 const serverMappings = Object.freeze({
+    apiHost: host,
+    apiRoot: apiRoot,
+    "mediaRoot": buildUrl(apiRoot, "/media"),
     "users": buildUrl(apiRoot, entityDomains.USER),
     "persons": buildUrl(apiRoot, entityDomains.PERSON),
     "jurPersons": buildUrl(apiRoot, entityDomains.JUR_PERSON),
-    "getCurrentUser": buildUrl(authRoot),
-    "refreshTokens": buildUrl(authRoot, "/refresh"),
-    "signIn": buildUrl(authRoot, "/sign-in")
+    "getCurrentUser": buildUrl(authApiRoot),
+    "refreshTokens": buildUrl(authApiRoot, "/refresh"),
+    "signIn": buildUrl(authApiRoot, "/sign-in")
 })
 
 const explorationRoot = "/explore";
@@ -42,8 +44,15 @@ const creationRoot = "/create";
 
 const personCreationMapping = buildUrl(creationRoot, entityDomains.PERSON)
 
+const applicationRoot = "/"
+
 const applicationMappings = Object.freeze({
-    home: "/",
+    home: applicationRoot,
+    getEntity: {
+        [Entity.USER]: buildUrl(applicationRoot,entityDomains.USER,':id'),
+        [Entity.PERSON]: buildUrl(applicationRoot,entityDomains.PERSON,':id'),
+        [Entity.JUR_PERSON]: buildUrl(applicationRoot,entityDomains.JUR_PERSON,':id')
+    },
     exploration: {
         default: personExplorationMapping,
         root: explorationRoot,
@@ -61,7 +70,6 @@ const applicationMappings = Object.freeze({
 })
 
 const appConfig: AppConfig = {
-    apiHost: host,
     entitiesPerPage: entitiesPerPage,
     geoApiKey: geoApiKEy,
     entityDomains: entityDomains,

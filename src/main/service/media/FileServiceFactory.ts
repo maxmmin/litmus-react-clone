@@ -1,8 +1,9 @@
-import FileServiceImpl from "./FileServiceImpl";
+import FileRepoImpl from "./FileRepoImpl";
+import FileRepo from "./FileRepo";
 
 export default class FileServiceFactory {
-    private static readonly fileService: FileService = new FileServiceImpl();
+    private static readonly fileRepo: FileRepo = new FileRepoImpl();
     static getGlobalFileService () {
-        return FileServiceFactory.fileService;
+        return FileServiceFactory.fileRepo;
     }
 }

@@ -1,4 +1,4 @@
-interface FileService {
+export default interface FileRepo {
     getFile(name: string): File|null;
     getFileOrThrow(name: string): File;
     getFiles(): Array<File>;

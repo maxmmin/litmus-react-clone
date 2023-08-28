@@ -70,8 +70,9 @@ import JurPersonCreationValidationService
 import FileServiceFactory from "../service/media/FileServiceFactory";
 import MediaEntityFormDataBuilder from "../service/creation/api/multipartBuilder/MediaEntityFormDataBuilder";
 import MediaEntityFormDataBuilderImpl from "../service/creation/api/multipartBuilder/MediaEntityFormDataBuilderImpl";
-import ImageServiceImpl from "../service/media/ImageServiceImpl";
-import ImageService from "../service/media/ImageService";
+import ImageRepoImpl from "../service/media/ImageRepoImpl";
+import ImageRepo from "../service/media/ImageRepo";
+import FileRepo from "../service/media/FileRepo";
 
 
 type Mappers = {
@@ -99,15 +100,15 @@ const authContext: AuthContext = {
 }
 
 type FileContext = {
-    fileService: FileService,
-    imageService: ImageService
+    fileService: FileRepo,
+    imageService: ImageRepo
 }
 
 const fileService = FileServiceFactory.getGlobalFileService();
 
 const fileContext: FileContext = {
     fileService: fileService,
-    imageService: ImageServiceImpl.getInstance(fileService)
+    imageService: ImageRepoImpl.getInstance(fileService)
 }
 
 type ExplorationContext = {
@@ -258,7 +259,8 @@ type ServiceContext = {
     userIdentity: UserIdentityContext,
     timers: TimersContext,
     notification: NotificationContext,
-    files: FileContext
+    files: FileContext,
+    mappers: Mappers
 }
 
 const serviceContext: ServiceContext = {
@@ -269,7 +271,8 @@ const serviceContext: ServiceContext = {
     userIdentity: userIdentityContext,
     timers: timersContext,
     notification: notificationContext,
-    files: fileContext
+    files: fileContext,
+    mappers: mappers
 }
 
 export default serviceContext;

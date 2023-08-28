@@ -1,6 +1,7 @@
 import {generateRandomString} from "../../util/pureFunctions";
+import FileRepo from "./FileRepo";
 
-export default class FileServiceImpl implements FileService {
+export default class FileRepoImpl implements FileRepo {
     private readonly files: Map<string, File> = new Map<string, File>();
 
     private isPresent(fileKey: string): boolean {

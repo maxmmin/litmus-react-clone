@@ -3,11 +3,12 @@ import DateEntity from "../../DateEntity";
 import Sex from "./Sex";
 import PassportData from "./PassportData";
 import Human from "../Human";
-import Media from "../../Media";
 import MediaEntity from "../../MediaEntity";
 
 interface Person extends Human, MediaEntity {
     id: string;
+    lastName: string;
+    firstName: string;
     relationships: Relationship[],
     sex: Sex | null;
     passportData: PassportData | null;
