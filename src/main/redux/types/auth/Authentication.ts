@@ -1,7 +1,5 @@
 export type Authentication = {
-    accessToken: string
-    refreshToken: string,
-    expired?: boolean
+    isAuthenticated: boolean
 }
 
 export type AuthenticationReducible = Authentication | null | undefined

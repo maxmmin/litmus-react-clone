@@ -1,4 +1,5 @@
-import ErrorResponse from "../rest/ErrorResponse";
+import ErrorResponse, {ApplicationError} from "../rest/ErrorResponse";
+import {AxiosError} from "axios/index";
 export const noInfoMessage = "Інформація відсутня"
 
 class BasicHttpError<D> extends Error implements ErrorResponse<D> {
@@ -30,7 +31,7 @@ class BasicHttpError<D> extends Error implements ErrorResponse<D> {
 }
 
 class HttpErrorParser {
-    static parseError(err: unknown): ErrorResponse<unknown> {
+    private static getErrorResponse(err: unknown): ErrorResponse<unknown> {
         let status: number = -1;
         let title: string = 'Unknown error';
         let detail: unknown = null;
@@ -60,16 +61,32 @@ class HttpErrorParser {
         return `Error ${error.status}: ${error.title}`
     }
 
-    static async parseResponse(response: Response): Promise<ErrorResponse<unknown>> {
-        try {
-            const body = await response.json();
+    static parseError(error: unknown): ApplicationError<unknown> {
+        const errResponse: ErrorResponse<unknown> = this.getErrorResponse(error);
+        let code: string|null = null;
 
-            return HttpErrorParser.parseError(body);
-        }
-        catch (e) {
-            return HttpErrorParser.parseError(null);
+        if (error&&typeof error === "object") {
+            if ("code" in error) {
+                code = ''+error;
+            }
         }
 
+        return {
+            ...errResponse,
+            code: code
+        }
+    }
+
+    static parseAxiosError(error: AxiosError<ErrorResponse<unknown>>): ApplicationError<unknown> {
+        let errCode: string|null = error.code?error.code:null;
+        let errStatus: number = error.status?error.status:-1;
+        let errorResponse: ErrorResponse<unknown>|undefined = this.getErrorResponse(error.response);
+
+        return {
+            ...errorResponse,
+            code: errCode,
+            status: errStatus
+        }
     }
 }
 

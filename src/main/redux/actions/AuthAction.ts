@@ -9,9 +9,7 @@ import {ThunkArg} from "../store";
 
 enum AuthAction {
     AUTHENTICATE="AUTHENTICATE",
-    CLEAR_AUTH="CLEAR_AUTH",
-    CHECK_AUTH="CHECK_AUTH",
-    SET_EXPIRED="SET_EXPIRED"
+    LOGOUT="LOGOUT"
 }
 
 export default AuthAction;
@@ -49,7 +47,7 @@ export const setAuthentication = (auth: Authentication) : PayloadAction<Authenti
 
 export function clearAuthentication (): Action<AuthAction> {
     return {
-        type: AuthAction.CLEAR_AUTH
+        type: AuthAction.LOGOUT
     }
 }
 

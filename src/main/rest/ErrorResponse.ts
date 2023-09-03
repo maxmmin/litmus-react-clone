@@ -4,4 +4,8 @@ interface ErrorResponse<T> {
     detail: T|null;
 };
 
+export interface ApplicationError<T> extends ErrorResponse<T>{
+    code: string|null
+}
+
 export default ErrorResponse;

@@ -3,11 +3,10 @@ import Authentication, {AuthenticationReducible} from "../../../redux/types/auth
 import ErrorResponse from "../../../rest/ErrorResponse";
 
 interface AuthenticationStateManager {
-    retrieveAuthentication (authThunk:  AsyncThunkAction<Authentication, any, any>):  Promise<PayloadAction<Authentication, string, {arg: any, requestId: string, requestStatus: "fulfilled"}, never> | PayloadAction<unknown, string, unknown, unknown>>;
-    setExpired (): void;
-    getAuth(): AuthenticationReducible;
-    setLoginError (error: ErrorResponse<any>): void;
-    clearAuth (): void;
+    isAuthenticated(): boolean;
+    setLoginError(error: ErrorResponse<unknown>): void;
+    authenticate(authThunk:  AsyncThunkAction<void, any, any>): Promise<PayloadAction<void, string, {arg: any, requestId: string, requestStatus: "fulfilled"}, never> | PayloadAction<unknown, string, unknown, unknown>>;
+    logout(): void;
 }
 
 export default AuthenticationStateManager;

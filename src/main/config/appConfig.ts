@@ -7,13 +7,15 @@ type AppConfig = {
     entityDomains: Readonly<Record<Entity, string>>,
     serverMappings: Readonly<typeof serverMappings>,
     applicationMappings: Readonly<typeof applicationMappings>
-    authHeader: string
+    authHeader: string,
+    xsrfCookieName: string,
+    xsrfHeaderName: string
 }
 
 const host = "http://localhost:8081";
 
-const apiRoot = `${host}/api`
-const authApiRoot = `${host}/auth`
+const apiRoot = `/api`
+const authApiRoot = `/auth`
 const entitiesPerPage = 50;
 const geoApiKEy = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA";
 const apiAuthHeader = "Authorization"
@@ -33,6 +35,7 @@ const serverMappings = Object.freeze({
     "jurPersons": buildUrl(apiRoot, entityDomains.JUR_PERSON),
     "getCurrentUser": buildUrl(authApiRoot),
     "refreshTokens": buildUrl(authApiRoot, "/refresh"),
+    "logout": buildUrl(authApiRoot,"/logout"),
     "signIn": buildUrl(authApiRoot, "/sign-in")
 })
 
@@ -75,7 +78,9 @@ const appConfig: AppConfig = {
     entityDomains: entityDomains,
     serverMappings: serverMappings,
     applicationMappings: applicationMappings,
-    authHeader: apiAuthHeader
+    authHeader: apiAuthHeader,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN'
 }
 
 export default appConfig;

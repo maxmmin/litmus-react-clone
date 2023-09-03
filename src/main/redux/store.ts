@@ -1,4 +1,4 @@
-import {AsyncThunkAction, configureStore, createAsyncThunk, PayloadAction} from '@reduxjs/toolkit'
+import {configureStore, PayloadAction} from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
 import authReducer from "./reducers/authReducer";
 import appStateReducer from "./reducers/appStateReducer";
@@ -15,7 +15,6 @@ import {
 import {PersistConfig} from "reduxjs-toolkit-persist/es/types";
 import storage from 'reduxjs-toolkit-persist/lib/storage'
 import userIdentityReducer from "./reducers/userIdentityReducer";
-import authenticationCheckMiddleware from "./middlewares/authenticationCheckMiddleware";
 import loginPageDataReducer from "./reducers/LoginPageDataReducer";
 import creationReducer from "./reducers/creationStateReducer";
 import timersReducer from "./reducers/timersReducer";
@@ -51,7 +50,7 @@ const store = configureStore({
             serializableCheck: {
                 ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER]
             },
-        }).concat(authenticationCheckMiddleware,errLoggingMiddleware, thunk),
+        }).concat(errLoggingMiddleware, thunk),
     enhancers: defaultEnhancers => [...defaultEnhancers],
     devTools: true
 })
@@ -97,7 +96,7 @@ export type FulfilledThunkAction = Action&MetaAction<FulfillMeta>
 
 export type RejectedThunkAction = PayloadAction<ErrorResponse<any>>&MetaAction<RejectedMeta>
 
-export type ThunkArg<T> = T & ThunkMetaData
+export type ThunkArg<T={}> = T & ThunkMetaData
 
 export type LitmusAsyncThunkConfig = {
     state: RootState

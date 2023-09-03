@@ -1,4 +1,4 @@
-import Authentication from "../../../redux/types/auth/Authentication";
+import {AxiosResponse} from "axios/index";
 
 export type Credentials = {
     email: string,
@@ -6,8 +6,8 @@ export type Credentials = {
 }
 
 interface AuthApiService {
-    refreshAuth(refreshToken: string): Promise<Authentication>;
-    getAuth(credentials: Credentials): Promise<Authentication>;
+    refreshAuth(): Promise<void>;
+    getAuth(credentials: Credentials): Promise<void>;
 }
 
 export default AuthApiService;

@@ -14,12 +14,16 @@ class AuthenticationStateManagerImpl implements AuthenticationStateManager{
     private readonly dispatch: AppDispatch = store.dispatch;
     private readonly getState:()=>AuthenticationReducible = ()=>store.getState().authentication;
 
-    public retrieveAuthentication (authThunk:  AsyncThunkAction<Authentication, any, any>):  Promise<PayloadAction<Authentication, string, {arg: any, requestId: string, requestStatus: "fulfilled"}, never> | PayloadAction<unknown, string, unknown, unknown>> {
-       return this.dispatch(authThunk);
+    isAuthenticated(): boolean {
+        return this.getState()!.isAuthenticated;
     }
 
-    public setExpired () {
-        const action: Action<AuthAction> = {type: AuthAction.SET_EXPIRED}
+    authenticate(authThunk:  AsyncThunkAction<void, any, any>): Promise<PayloadAction<void, string, {arg: any, requestId: string, requestStatus: "fulfilled"}, never> | PayloadAction<unknown, string, unknown, unknown>> {
+        return this.dispatch(authThunk);
+    }
+
+    logout(): void {
+        const action: Action = {type: AuthAction.LOGOUT};
         this.dispatch(action);
     }
 
@@ -27,13 +31,9 @@ class AuthenticationStateManagerImpl implements AuthenticationStateManager{
         return this.getState();
     }
 
-    public setLoginError (error: ErrorResponse<any>) {
+    public setLoginError (error: ErrorResponse<unknown>) {
         const action: PayloadAction<Partial<LoginPageState>> = {type: LoginPageDataActions.UPDATE_STATE, payload: {error: deepCopy(error)}}
         this.dispatch(action)
-    }
-
-    public clearAuth (): void {
-        this.dispatch(clearAuthentication());
     }
 }
 

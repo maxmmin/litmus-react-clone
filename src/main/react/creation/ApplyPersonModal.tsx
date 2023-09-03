@@ -39,8 +39,6 @@ const whitelist: Array<CreationModalModes> = [CreationModalModes.SET_BEN_OWNER, 
 
 function ApplyPersonModal ({modalSettings, close}: Props) {
 
-    const accessToken = useAppSelector(state => state.authentication?.accessToken)
-
     const [searchError, setSearchError] = useState<ErrorResponse<unknown>|null>(null);
 
     const [person, setPerson] = useState<Person|null>(null);
@@ -108,7 +106,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             isIdValid = true;
         }
 
-        if (isIdValid&&isValid(accessToken)) {
+        if (isIdValid) {
             // TODO: Maybe write additional checkup for core, add global error handler and Authentication error: 05/09
             setPending(true)
             const timerID = setTimeout(()=>fetchPerson(stringId, new PersonDtoMapper()),250)

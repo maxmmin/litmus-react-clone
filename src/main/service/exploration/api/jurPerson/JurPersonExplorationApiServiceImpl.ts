@@ -1,40 +1,36 @@
 import JurPersonExplorationApiService from "./JurPersonExplorationApiService";
 import appConfig from "../../../../config/appConfig";
 import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
-import BasicApiRequestManager from "../../../../util/apiRequest/BasicApiRequestManager";
-import {BasicHttpError, HttpErrorParser} from "../../../../error/BasicHttpError";
+import {HttpErrorParser} from "../../../../error/BasicHttpError";
 import BasicEntityLookupService from "../BasicExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
 import jurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
 import AuthenticationStateManager from "../../../auth/stateManager/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "../../../auth/stateManager/AuthenticationStateManagerImpl";
+import axiosApiInstance from "../../../../config/axiosApiInstance";
+
 class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPersonResponseDto> implements JurPersonExplorationApiService {
 
-    constructor(authStateManager: AuthenticationStateManager) {
-        super(()=>authStateManager.getAuth()!.accessToken, appConfig.serverMappings.jurPersons);
+
+    constructor() {
+        super(appConfig.serverMappings.jurPersons);
     }
 
-    public static getInstance (authStateManager: AuthenticationStateManager = new AuthenticationStateManagerImpl()): JurPersonExplorationApiServiceImpl {
-        return new JurPersonExplorationApiServiceImpl(authStateManager);
+    public static getInstance (): JurPersonExplorationApiServiceImpl {
+        return new JurPersonExplorationApiServiceImpl();
     }
 
     async findByName(name: string): Promise<PagedData<JurPersonResponseDto>> {
-        const requestManager: ApiRequestManager = new BasicApiRequestManager();
 
-        const token = this.getAccessToken();
+        const params: {name?: string} = {}
+        if (name) params.name = name;
 
-        const response = await requestManager
-            .url(this.apiUrl)
-            .queryParam("name", name)
-            .method(HttpMethod.GET)
-            .authentication(token)
-            .fetch();
-        if (!response.ok) {
-            throw await HttpErrorParser.parseResponse(response);
-        } else {
-            return await response.json() as PagedData<JurPersonResponseDto>;
-        }
+        const response = await axiosApiInstance.get<PagedData<JurPersonResponseDto>>(this.apiUrl, {
+            params: params
+        });
+
+        return response.data;
     }
 
 
