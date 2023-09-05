@@ -17,10 +17,6 @@ class BasicAuthApiService implements AuthApiService {
     }
 
     async getAuth(credentials: Credentials): Promise<void> {
-        console.log(AxiosApiManager.globalApiInstance.defaults)
-        AxiosApiManager.globalApiInstance.defaults.headers['post']['bye'] = "world";
-        console.log(AxiosApiManager.globalApiInstance.defaults.headers['post'])
-
         await this.axiosInstance
             .post<Authentication, AxiosResponse<void>, Credentials>(appConfig.serverMappings.signIn, credentials)
             .catch((err: AxiosError)=>{
