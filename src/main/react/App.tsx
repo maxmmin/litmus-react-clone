@@ -3,7 +3,6 @@ import {BrowserRouter, Route, Routes} from 'react-router-dom';
 import React, {createContext} from 'react';
 import HomeScreen from "./home/HomeScreen";
 import PrivateComponent from "./authorization/PrivateComponent";
-import {useAppDispatch} from "../redux/hooks";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../css/index.scss';
 import Explore from "./exploration/ExplorationScreen";

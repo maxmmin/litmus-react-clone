@@ -4,8 +4,11 @@ import {HttpStatus} from "../../rest/HttpStatus";
 import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
 import ErrorResponse from "../../rest/ErrorResponse";
 import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
+import {HttpMethod} from "../../util/apiRequest/ApiRequestManager";
 
 class AxiosApiManager {
+    public static csrfProtectedMethods: HttpMethod[] = [HttpMethod.PATCH, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT]
+
     private static csrfHeader: string = "X-XSRF-TOKEN";
 
     private static readonly authStateManager: AuthenticationStateManager = new AuthenticationStateManagerImpl();
@@ -16,12 +19,17 @@ class AxiosApiManager {
 
     public static setCsrfToken (csrfToken: string) {
         this.csrfToken = csrfToken;
-        this._globalApiInstance.defaults.headers[this.csrfHeader] = csrfToken;
+        this
+            .csrfProtectedMethods
+            .forEach(method => {
+                (this._globalApiInstance.defaults.headers[method.toLowerCase()] as Record<string, string>)[this.csrfHeader] = csrfToken
+            })
+        console.log(this._globalApiInstance.defaults.headers)
     }
 
     public static setCsrfHeader (csrfHeader: string) {
-        this.csrfHeader = csrfHeader;
-        if (this.csrfToken) this._globalApiInstance.defaults.headers[this.csrfHeader] = this.csrfToken;
+        // this.csrfHeader = csrfHeader;
+        // if (this.csrfToken) this.setCsrfToken(this.csrfToken);
     }
 
     static get globalApiInstance(): AxiosInstance {
@@ -63,6 +71,8 @@ class AxiosApiManager {
     private static createRawApiInstance () {
         return axios.create({
             baseURL: appConfig.serverMappings.apiHost,
+            xsrfCookieName: "",
+            xsrfHeaderName: "",
             withCredentials: true
         });
     }

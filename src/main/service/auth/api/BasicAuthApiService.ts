@@ -17,10 +17,14 @@ class BasicAuthApiService implements AuthApiService {
     }
 
     async getAuth(credentials: Credentials): Promise<void> {
+        console.log(AxiosApiManager.globalApiInstance.defaults)
+        AxiosApiManager.globalApiInstance.defaults.headers['post']['bye'] = "world";
+        console.log(AxiosApiManager.globalApiInstance.defaults.headers['post'])
+
         await this.axiosInstance
             .post<Authentication, AxiosResponse<void>, Credentials>(appConfig.serverMappings.signIn, credentials)
             .catch((err: AxiosError)=>{
-                throw HttpErrorParser.parseError(err);
+                throw HttpErrorParser.parseAxiosError(err);
             });
     }
 
@@ -29,7 +33,7 @@ class BasicAuthApiService implements AuthApiService {
         await this.axiosInstance
             .post<undefined,AxiosResponse<void>>(appConfig.serverMappings.refreshTokens)
             .catch((err: AxiosError)=>{
-                throw HttpErrorParser.parseError(err);
+                throw HttpErrorParser.parseAxiosError(err);
             });
     }
 

@@ -29,7 +29,7 @@ function LoginPage() {
         authManager.login({email: em, password: mail});
     }
 
-    if (authentication) {
+    if (authentication?.isAuthenticated) {
         return <Navigate to="/"/>
     }
 
