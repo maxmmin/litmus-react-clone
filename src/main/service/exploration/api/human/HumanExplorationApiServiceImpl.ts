@@ -27,8 +27,10 @@ export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookup
             params.lastName = fullName.lastName;
         }
 
-        return  this.apiInstance.get(this.apiUrl, {
+        const response = await this.apiInstance.get<PagedData<P>>(this.apiUrl, {
             params: params
         })
+
+        return response.data;
     }
 }
