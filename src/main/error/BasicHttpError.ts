@@ -1,11 +1,13 @@
 import ErrorResponse, {ApplicationError} from "../rest/ErrorResponse";
-import {AxiosError} from "axios/index";
+import {AxiosError} from "axios";
+
 export const noInfoMessage = "Інформація відсутня"
 
-class BasicHttpError<D> extends Error implements ErrorResponse<D> {
+class BasicHttpError<D> extends Error implements ApplicationError<D> {
     public readonly detail: D | null;
     public readonly status: number;
     public readonly title: string;
+    code: string | null;
 
     public getDescription () {
         let detail: string|null = null;
@@ -22,11 +24,12 @@ class BasicHttpError<D> extends Error implements ErrorResponse<D> {
     };
 
 
-    constructor(errorResponse: ErrorResponse<D>) {
-        super("Error "+errorResponse.status+" "+errorResponse.title)
-        this.detail = errorResponse.detail;
-        this.status = errorResponse.status;
-        this.title = errorResponse.title;
+    constructor(error: ApplicationError<D>) {
+        super("Error "+error.status+" "+error.title)
+        this.detail = error.detail;
+        this.status = error.status;
+        this.title = error.title;
+        this.code = error.code;
     }
 }
 
@@ -77,10 +80,11 @@ class HttpErrorParser {
         }
     }
 
-    static parseAxiosError(error: AxiosError<ErrorResponse<unknown>>): ApplicationError<unknown> {
+    static parseAxiosError(error: AxiosError): ApplicationError<unknown> {
         let errCode: string|null = error.code?error.code:null;
-        let errStatus: number = error.status?error.status:-1;
-        let errorResponse: ErrorResponse<unknown>|undefined = this.getErrorResponse(error.response);
+        let errStatus: number = -1;
+        if (error.response?.status) errStatus = error.response.status;
+        let errorResponse: ErrorResponse<unknown>|undefined = this.getErrorResponse(error.response?.data);
 
         return {
             ...errorResponse,

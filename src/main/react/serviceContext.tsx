@@ -73,7 +73,8 @@ import MediaEntityFormDataBuilderImpl from "../service/creation/api/multipartBui
 import ImageRepoImpl from "../service/media/ImageRepoImpl";
 import ImageRepo from "../service/media/ImageRepo";
 import FileRepo from "../service/media/FileRepo";
-
+import CsrfTokenLoader from "../service/rest/CsrfTokenLoader";
+import BasicCsrfTokenLoader from "../service/rest/BasicCsrfTokenLoader";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -93,8 +94,10 @@ type AuthContext = {
     manager: AuthenticationManager
 }
 
+const authStateManager = new AuthenticationStateManagerImpl();
+
 const authContext: AuthContext = {
-    stateManager: new AuthenticationStateManagerImpl(),
+    stateManager: authStateManager,
     apiService: new BasicAuthApiService(),
     manager: BasicAuthenticationManager.getInstance()
 }
@@ -133,9 +136,9 @@ const personExplorationStateManager = new PersonExplorationStateManagerImpl();
 const jurPersonExplorationStateManager = new JurPersonExplorationStateManagerImpl();
 const userExplorationStateManager = new UserExplorationStateManagerImpl();
 
-const personExplorationApiService = PersonExplorationApiServiceImpl.getInstance(authContext.stateManager);
-const jurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance(authContext.stateManager);
-const userExplorationApiService = UserExplorationApiServiceImpl.getInstance(authContext.stateManager);
+const personExplorationApiService = PersonExplorationApiServiceImpl.getInstance();
+const jurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance();
+const userExplorationApiService = UserExplorationApiServiceImpl.getInstance();
 
 const explorationContext: ExplorationContext = {
     stateManagers: {
@@ -179,9 +182,11 @@ type CreationContext = {
     formDataBuilder: MediaEntityFormDataBuilder
 }
 
-const personCreationApiService = PersonCreationApiService.getInstance(authContext.stateManager);
-const jurPersonCreationApiService = JurPersonCreationApiService.getInstance(authContext.stateManager);
-const userCreationApiService = UserCreationApiService.getInstance(authContext.stateManager);
+const formDataBuilder = MediaEntityFormDataBuilderImpl.getInstance(fileContext.fileService);
+
+const personCreationApiService = PersonCreationApiService.getInstance(formDataBuilder);
+const jurPersonCreationApiService = JurPersonCreationApiService.getInstance();
+const userCreationApiService = UserCreationApiService.getInstance();
 
 const personCreationStateManager = new PersonCreationStateManagerImpl();
 const jurPersonCreationStateManager = new JurPersonCreationStateManagerImpl();
@@ -193,9 +198,9 @@ const userCreationValidationService = new UserCreationValidationServiceImpl();
 
 const creationContext: CreationContext = {
     apiService: {
-      person: personCreationApiService,
-      jurPerson: jurPersonCreationApiService,
-      user: userCreationApiService
+        person: personCreationApiService,
+        jurPerson: jurPersonCreationApiService,
+        user: userCreationApiService
     },
     stateManagers: {
         person: personCreationStateManager,
@@ -212,7 +217,7 @@ const creationContext: CreationContext = {
         jurPerson: jurPersonCreationValidationService,
         user: userCreationValidationService
     },
-    formDataBuilder: MediaEntityFormDataBuilderImpl.getInstance(fileContext.fileService)
+    formDataBuilder: formDataBuilder
 }
 
 type TimersContext = {
@@ -228,7 +233,7 @@ type UserIdentityContext = {
     manager: UserIdentityManager
 }
 
-const userIdentityApiService = UserIdentityApiServiceImpl.getInstance(authContext.stateManager);
+const userIdentityApiService = UserIdentityApiServiceImpl.getInstance();
 
 const userIdentityContext: UserIdentityContext = {
     apiService: userIdentityApiService,
@@ -260,7 +265,8 @@ type ServiceContext = {
     timers: TimersContext,
     notification: NotificationContext,
     files: FileContext,
-    mappers: Mappers
+    mappers: Mappers,
+    csrfTokenLoader: CsrfTokenLoader
 }
 
 const serviceContext: ServiceContext = {
@@ -272,7 +278,8 @@ const serviceContext: ServiceContext = {
     timers: timersContext,
     notification: notificationContext,
     files: fileContext,
-    mappers: mappers
+    mappers: mappers,
+    csrfTokenLoader: new BasicCsrfTokenLoader()
 }
 
 export default serviceContext;

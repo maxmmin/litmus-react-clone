@@ -2,7 +2,7 @@ import {configureStore, PayloadAction} from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
 import authReducer from "./reducers/authReducer";
 import appStateReducer from "./reducers/appStateReducer";
-import {Action, combineReducers, Dispatch} from "redux"
+import {Action, combineReducers} from "redux"
 import {
     persistReducer,
     persistStore,

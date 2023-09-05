@@ -52,8 +52,6 @@ person.relationships.push(rel1, rel2, rel3)
 export const LitmusServiceContext = createContext(serviceContext);
 
 function App() {
-    const dispatch = useAppDispatch();
-
     return (
         <ErrorBoundary fallback={<h1>Something went wrong...</h1>}>
             <NotificationCenter/>

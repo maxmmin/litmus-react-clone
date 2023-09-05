@@ -1,4 +1,3 @@
-import {AxiosResponse} from "axios/index";
 
 export type Credentials = {
     email: string,

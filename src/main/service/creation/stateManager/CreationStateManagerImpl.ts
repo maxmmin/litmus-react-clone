@@ -56,8 +56,8 @@ class CreationStateManagerImpl<E,V=ValidationErrors<E>> implements CreationState
         return this.getState();
     }
 
-    create(thunk: AsyncThunkAction<unknown, unknown, LitmusAsyncThunkConfig>): Promise<PayloadAction<unknown, string, unknown>> {
-        return this.dispatch(thunk);
+    async create(thunk: AsyncThunkAction<E, unknown, LitmusAsyncThunkConfig>): Promise<E> {
+        return this.dispatch(thunk).unwrap();
     }
 
     public setEntityCreationParams(entityCreationParams: EntityCreationState<E>["emergingEntity"]) {

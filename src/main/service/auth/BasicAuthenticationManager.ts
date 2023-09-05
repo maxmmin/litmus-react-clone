@@ -27,10 +27,12 @@ class BasicAuthenticationManager implements AuthenticationManager {
         return new BasicAuthenticationManager(authStateManager, authApiService)
     }
 
-    login({email, password}: Credentials): void {
+    async login({email, password}: Credentials): Promise<void> {
         const arg: ThunkArg<Credentials> = {email, password, globalPending: true}
 
-        this.authenticationStateManager.authenticate(this._loginThunk(arg));
+        await this.authenticationStateManager.authenticate(this._loginThunk(arg));
+
+        return Promise.resolve();
     }
 
     _login({email, password}: Credentials): Promise<void> {
@@ -45,7 +47,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         }
         catch (thrownErr: any) {
             if ("status" in thrownErr&&"detail" in thrownErr&&thrownErr.status===HttpStatus.UNAUTHENTICATED) {
-                thrownErr = new BasicHttpError({status: HttpStatus.UNAUTHENTICATED, title: "Невірні облікові дані", detail: null})
+                thrownErr = new BasicHttpError({status: HttpStatus.UNAUTHENTICATED, title: "Невірні облікові дані", detail: null, code: null})
             }
             return rejectWithValue(deepCopy(thrownErr), {notify: true});
         }}
@@ -54,13 +56,14 @@ class BasicAuthenticationManager implements AuthenticationManager {
     // @todo 12.10
     // now if method checkAndRefreshAuth wont be invoked no more u will stay in ui even there is 401 error. Need to write global custom error handler
 
-    refreshAuth(): void {
+    async refreshAuth(): Promise<void> {
         const meta: ThunkArg = {globalPending: false};
 
         const authThunk = this._refreshAuthThunk(meta);
 
-        this.authenticationStateManager
-            .authenticate(authThunk);
+        await this.authenticationStateManager.authenticate(authThunk);
+
+        return Promise.resolve();
     }
     
     private async _refreshAuth(): Promise<void> {
@@ -78,8 +81,9 @@ class BasicAuthenticationManager implements AuthenticationManager {
         }
     );
 
-    public logout(): void {
+    public logout(): Promise<void> {
         // this.authenticationStateManager.clearAuth();
+        return Promise.resolve();
     }
 
 

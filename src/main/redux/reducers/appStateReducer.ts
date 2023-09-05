@@ -10,7 +10,7 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import Notification, {AppNotificationType, BasicNotification, notificationTypes} from "../types/applicationState/Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 import {FulfilledThunkAction, PendingThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
-import ErrorResponse from "../../rest/ErrorResponse";
+import ErrorResponse, {ApplicationError} from "../../rest/ErrorResponse";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import GeneralAction from "../GeneralAction";
 
@@ -99,13 +99,9 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                     if (errorAction.meta.notify) {
                         const err: object = errorAction.payload;
 
-                        let errorResponse: ErrorResponse<any>;
+                        let errorResponse: ApplicationError<any>;
 
-                        if (err && "status" in err && "detail" in err) {
-                            errorResponse = err as ErrorResponse<any>;
-                        } else {
-                            errorResponse = HttpErrorParser.parseError(err);
-                        }
+                        errorResponse = HttpErrorParser.parseError(err);
 
                         const basicHttpErr = new BasicHttpError(errorResponse)
 

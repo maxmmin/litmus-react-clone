@@ -1,29 +1,31 @@
 import AuthAction from "../actions/AuthAction";
 import Authentication, {AuthenticationReducible} from "../types/auth/Authentication";
 import {Reducer} from "react";
-import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
+import {HttpErrorParser} from "../../error/BasicHttpError";
 import {isRejected, PayloadAction} from "@reduxjs/toolkit";
 import {HttpStatus} from "../../rest/HttpStatus";
-import ErrorResponse, {ApplicationError} from "../../rest/ErrorResponse";
+import {ApplicationError} from "../../rest/ErrorResponse";
 
-const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=null, action): AuthenticationReducible => {
+const defaultState: Authentication = {
+    isAuthenticated: false
+}
+
+const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=defaultState, action): AuthenticationReducible => {
 
     switch (action.type) {
         case AuthAction.LOGOUT: {
-            return null;
-        }
-
-        case AuthAction.AUTHENTICATE: {
-            return action.payload;
+            return defaultState;
         }
 
         case `${AuthAction.AUTHENTICATE}/fulfilled`: {
-            return {...action.payload};
+            return {
+                isAuthenticated: true
+            };
         }
 
         case `${AuthAction.AUTHENTICATE}/rejected`: {
             const err: ApplicationError<unknown> = HttpErrorParser.parseError(action.payload);
-            if (err.status===401) return null
+            if (err.status===401) return defaultState
                 else return prevState;
         }
 

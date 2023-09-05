@@ -3,8 +3,8 @@
  * E - entity
  */
 
-interface CreationService {
-    createEntity(): void;
+interface CreationService<E> {
+    createEntity(): Promise<E>;
 }
 
 export default CreationService;

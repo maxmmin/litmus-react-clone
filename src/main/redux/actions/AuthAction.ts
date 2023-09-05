@@ -1,10 +1,7 @@
 import {AuthenticationReducible} from "../types/auth/Authentication";
-import {createAsyncThunk, PayloadAction} from "@reduxjs/toolkit";
-import JwtInfo from "../types/auth/JwtInfo";
-import { BasicHttpError} from "../../error/BasicHttpError";
+import {PayloadAction} from "@reduxjs/toolkit";
 import {Action} from "redux";
 import Authentication from "../types/auth/Authentication";
-import appConfig from "../../config/appConfig";
 import {ThunkArg} from "../store";
 
 enum AuthAction {

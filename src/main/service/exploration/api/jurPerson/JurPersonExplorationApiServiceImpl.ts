@@ -1,14 +1,10 @@
 import JurPersonExplorationApiService from "./JurPersonExplorationApiService";
 import appConfig from "../../../../config/appConfig";
-import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
-import {HttpErrorParser} from "../../../../error/BasicHttpError";
 import BasicEntityLookupService from "../BasicExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
 import jurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
-import AuthenticationStateManager from "../../../auth/stateManager/AuthenticationStateManager";
-import AuthenticationStateManagerImpl from "../../../auth/stateManager/AuthenticationStateManagerImpl";
-import axiosApiInstance from "../../../../config/axiosApiInstance";
+import axiosApiInstance from "../../../rest/AxiosApiManager";
 
 class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPersonResponseDto> implements JurPersonExplorationApiService {
 
@@ -26,7 +22,7 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPer
         const params: {name?: string} = {}
         if (name) params.name = name;
 
-        const response = await axiosApiInstance.get<PagedData<JurPersonResponseDto>>(this.apiUrl, {
+        const response = await this.apiInstance.get<PagedData<JurPersonResponseDto>>(this.apiUrl, {
             params: params
         });
 

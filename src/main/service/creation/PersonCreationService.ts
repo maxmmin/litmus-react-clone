@@ -30,17 +30,15 @@ class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person
     }
 
 
-    createEntity() {
+    async createEntity(): Promise<Person> {
         const media = this.creationStateManager.getCreationParams().media;
-        super
-            .defaultCreate()
-            .then(resAction=>{
-                if (isFulfilled(resAction)) {
-                    const linkedFiles: string[] = getFilesFromMedia(media);
-                    linkedFiles.forEach(file=>this.fileService.removeFile(file))
-                    console.log("Local media buffer cleaned")
-                }
-            })
+        const createdPerson: Person = await super.defaultCreate();
+
+        const linkedFiles: string[] = getFilesFromMedia(media);
+        linkedFiles.forEach(file=>this.fileService.removeFile(file))
+        console.log("Local media buffer cleaned");
+
+        return createdPerson;
     }
 
     public static getInstance(apiService: CreationApiService<PersonRequestDto, PersonResponseDto> = PersonCreationApiService.getInstance(),

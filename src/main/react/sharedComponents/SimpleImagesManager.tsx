@@ -23,7 +23,7 @@ export default function SimpleImagesManager ({mainImageKey, images, imageStateMa
     const notificationManager = litmusContext.notification.manager;
 
     function handleUploadError(e: unknown) {
-        const error = HttpErrorParser.getErrorResponse(e);
+        const error = HttpErrorParser.parseError(e);
         notificationManager.error(error.title);
     }
 

@@ -1,17 +1,14 @@
 import HumanExplorationApiService from "./HumanExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import BasicEntityLookupService from "../BasicExplorationApiService";
-import ApiRequestManager, {HttpMethod} from "../../../../util/apiRequest/ApiRequestManager";
-import {BasicHttpError, HttpErrorParser} from "../../../../error/BasicHttpError";
 import {isEmpty} from "../../../../util/isEmpty";
 import FullName from "../../FullName";
-import axiosApiInstance from "../../../../config/axiosApiInstance";
-import appConfig from "../../../../config/appConfig";
+import axiosApiInstance from "../../../rest/AxiosApiManager";
 
 export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookupService<P> implements HumanExplorationApiService<P> {
 
-    constructor(getToken: () => string, apiMapping: string) {
-        super(getToken, apiMapping);
+    constructor(apiMapping: string) {
+        super(apiMapping);
     }
 
     async findByFullName(fullName: FullName): Promise<PagedData<P>> {
@@ -30,7 +27,7 @@ export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookup
             params.lastName = fullName.lastName;
         }
 
-        return  axiosApiInstance.get(this.apiUrl, {
+        return  this.apiInstance.get(this.apiUrl, {
             params: params
         })
     }

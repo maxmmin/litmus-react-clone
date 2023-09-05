@@ -2,7 +2,7 @@ import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import CreationService from "./CreationService";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import deepCopy from "../../util/deepCopy";
-import handleCreationError from "./handleCreationError";
+import handleRequestError from "./handleRequestError";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
@@ -12,6 +12,7 @@ import CreationCoreAction from "../../redux/actions/CreationCoreAction";
 import {HttpStatus} from "../../rest/HttpStatus";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {ValidationErrors} from "../ValidationErrors";
+import {AxiosError} from "axios";
 
 
 /**
@@ -21,7 +22,7 @@ import {ValidationErrors} from "../ValidationErrors";
  * V - validation object
  * S - server validation type
  */
-class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationErrors<E>,S extends object=V> implements CreationService {
+class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationErrors<E>,S extends object=V> implements CreationService<E> {
 
     protected readonly mapper: DtoMapper<RequestDto, E, ResponseDto>;
     protected readonly apiService: CreationApiService<RequestDto, ResponseDto>;
@@ -38,8 +39,8 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationE
         this.validationService = validationService;
     }
 
-    createEntity(): void {
-        this.defaultCreate().catch(console.error);
+    createEntity(): Promise<E> {
+        return this.defaultCreate();
     }
 
     protected defaultCreate () {
@@ -70,7 +71,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationE
                 this.creationStateManager.setValidationErrors(validationErrors);
             }
 
-            return rejectWithValue(handleCreationError(e), {notify: true});
+            return rejectWithValue(handleRequestError(e as AxiosError), {notify: true});
         }
     })
 

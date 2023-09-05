@@ -33,6 +33,7 @@ const serverMappings = Object.freeze({
     "users": buildUrl(apiRoot, entityDomains.USER),
     "persons": buildUrl(apiRoot, entityDomains.PERSON),
     "jurPersons": buildUrl(apiRoot, entityDomains.JUR_PERSON),
+    "csrfToken": '/csrf-token',
     "getCurrentUser": buildUrl(authApiRoot),
     "refreshTokens": buildUrl(authApiRoot, "/refresh"),
     "logout": buildUrl(authApiRoot,"/logout"),

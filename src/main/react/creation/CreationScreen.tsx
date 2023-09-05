@@ -87,7 +87,7 @@ const Creation = () => {
 
     if (!emergingEntity) return null;
 
-    const creationService: CreationService = getEntityCreationService(emergingEntity);
+    const creationService: CreationService<unknown> = getEntityCreationService(emergingEntity);
 
     return (
         <div className="creation-page">

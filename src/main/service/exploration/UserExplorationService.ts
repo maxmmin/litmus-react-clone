@@ -10,7 +10,7 @@ import UserExplorationParams from "../../redux/types/exploration/human/user/User
 import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
 import deepCopy from "../../util/deepCopy";
-import handleCreationError from "../creation/handleCreationError";
+import handleRequestError from "../creation/handleRequestError";
 import UserExplorationApiService from "./api/human/user/UserExplorationApiService";
 import User from "../../model/human/user/User";
 import UserResponseDto from "../../rest/dto/user/UserResponseDto";
@@ -90,7 +90,7 @@ class UserExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<User, UserExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            return rejectWithValue(handleCreationError(e), {notify: true});
+            return rejectWithValue(handleRequestError(e), {notify: true});
         }
     }))
 

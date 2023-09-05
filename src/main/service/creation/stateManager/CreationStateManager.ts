@@ -15,7 +15,7 @@ interface CreationStateManager<E, V=ValidationErrors<E>> {
     getValidationErrors(): V;
     setValidationErrors(errors: V): void;
     updateValidationErrors(errors: Partial<V>): void;
-    create(thunk: AsyncThunkAction<unknown, unknown, LitmusAsyncThunkConfig>): Promise<PayloadAction<unknown, string, unknown>>;
+    create(thunk:  AsyncThunkAction<E, unknown, LitmusAsyncThunkConfig>): Promise<E>;
     getCreationParams(): EntityCreationState<E,V>['emergingEntity'];
     setEntityCreationParams(params: EntityCreationState<E,V>["emergingEntity"]): void;
     updateEntityCreationParams(params: Partial<EntityCreationState<E,V>["emergingEntity"]>): void;

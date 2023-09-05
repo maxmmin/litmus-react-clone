@@ -4,17 +4,20 @@
  */
 import LookupService from "./ExplorationApiService";
 import {buildUrl} from "../../../util/pureFunctions";
-import axiosApiInstance from "../../../config/axiosApiInstance";
+import axiosApiInstance from "../../rest/AxiosApiManager";
+import AxiosApiManager from "../../rest/AxiosApiManager";
 
 class BasicEntityLookupService<P> implements LookupService<P>{
     protected readonly apiUrl: string;
+
+    protected readonly apiInstance = AxiosApiManager.globalApiInstance;
 
     constructor(apiUrl: string) {
         this.apiUrl = apiUrl;
     }
 
     async findById(id: string): Promise<P> {
-        const response = await axiosApiInstance.get<P>(buildUrl(this.apiUrl,id));
+        const response = await this.apiInstance<P>(buildUrl(this.apiUrl,id));
         return response.data;
     }
 }

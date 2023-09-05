@@ -10,7 +10,7 @@ import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
 import deepCopy from "../../util/deepCopy";
-import handleCreationError from "../creation/handleCreationError";
+import handleRequestError from "../creation/handleRequestError";
 import BasicJurPersonExplorationParams from "../../redux/types/exploration/jurPerson/BasicJurPersonExplorationParams";
 import jurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
@@ -82,7 +82,7 @@ class JurPersonExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            return rejectWithValue(handleCreationError(e), {notify: true});
+            return rejectWithValue(handleRequestError(e), {notify: true});
         }
     }))
 

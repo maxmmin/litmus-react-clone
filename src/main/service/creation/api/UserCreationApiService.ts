@@ -1,42 +1,26 @@
-import ApiRequestManager, {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
-import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
-import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
 import CreationApiService from "./CreationApiService";
 import UserRequestDto from "../../../rest/dto/user/UserRequestDto";
 import UserResponseDto from "../../../rest/dto/user/UserResponseDto";
-
-
-import AuthenticationStateManager from "../../auth/stateManager/AuthenticationStateManager";
-import AuthenticationStateManagerImpl from "../../auth/stateManager/AuthenticationStateManagerImpl";
+import {AxiosResponse} from "axios";
+import AxiosApiManager from "../../rest/AxiosApiManager";
 
 class UserCreationApiService implements CreationApiService<UserRequestDto, UserResponseDto> {
-    private readonly getAccessToken: ()=>string = ()=>this.authStateManager.getAuth()!.accessToken;
+    protected readonly apiInstance = AxiosApiManager.globalApiInstance;
 
-    constructor(private readonly authStateManager: AuthenticationStateManager) {
+    constructor() {
     }
 
-    public static getInstance (authManager: AuthenticationStateManager = new AuthenticationStateManagerImpl()): UserCreationApiService {
-        return new UserCreationApiService(authManager);
+    public static getInstance (): UserCreationApiService {
+        return new UserCreationApiService();
     }
 
     async create(dto: UserRequestDto): Promise<UserResponseDto> {
-        const apiRequestManager: ApiRequestManager = new BasicApiRequestManager();
+        const response = await this.apiInstance
+            .post<UserRequestDto, AxiosResponse<UserResponseDto>>(appConfig.serverMappings.users,
+                dto);
 
-        const accessToken = this.getAccessToken();
-
-        const response: Response = await apiRequestManager
-            .url(appConfig.serverMappings.users)
-            .method(HttpMethod.POST)
-            .body(JSON.stringify(dto))
-            .authentication(accessToken)
-            .fetch();
-
-        if (response.ok) {
-            return await response.json() as UserResponseDto;
-        } else {
-            throw await HttpErrorParser.parseResponse(response);
-        }
+        return response.data;
     }
 }
 

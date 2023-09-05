@@ -6,9 +6,8 @@ import UserIdentity, {UserIdentityReducible} from "../../redux/types/userIdentit
 import UserIdentityApiService from "./api/UserIdentityApiService";
 import UserIdentityManager from "./UserIdentityManager";
 import UserIdentityApiServiceImpl from "./api/UserIdentityApiServiceImpl";
-import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
 import deepCopy from "../../util/deepCopy";
-import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
+import handleRequestError from "../creation/handleRequestError";
 
 
 type RetrieveIdentityThunkArg = ThunkArg<{
@@ -31,9 +30,9 @@ class UserIdentityManagerImpl implements UserIdentityManager{
         return new UserIdentityManagerImpl(store.dispatch, ()=>store.getState().userIdentity, service)
     }
 
-    retrieveIdentity (globalPending: boolean = false): void  {
+    async retrieveIdentity (globalPending: boolean = false): Promise<UserIdentity>  {
         const action: AsyncThunkAction<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig> = this._retrieveIdentityThunk({identityService: this.identityService, globalPending: globalPending})
-        this.dispatch(action);
+        return await this.dispatch(action).unwrap();
     };
 
     public _retrieveIdentityThunk = createAsyncThunk<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig>(UserIdentityActions.RETRIEVE_IDENTITY, async ({identityService}, {fulfillWithValue, rejectWithValue})=>{
@@ -42,13 +41,14 @@ class UserIdentityManagerImpl implements UserIdentityManager{
             return fulfillWithValue(userIdentity, {notify: false});
         }
         catch (e: any) {
-            return rejectWithValue(deepCopy(e), {notify: true});
+            return rejectWithValue(handleRequestError(e), {notify: true});
         }
     })
 
-    public clearIdentity () {
+    async clearIdentity (): Promise<void> {
         const action: Action<UserIdentityActions> = {type: UserIdentityActions.CLEAR_IDENTITY}
-        this.dispatch(action);
+        await this.dispatch(action);
+        return Promise.resolve();
     }
 }
 

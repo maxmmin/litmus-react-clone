@@ -1,46 +1,33 @@
 import UserIdentity from "../../../redux/types/userIdentity/UserIdentity";
 import UserIdentityApiService from "./UserIdentityApiService";
-import {HttpMethod} from "../../../util/apiRequest/ApiRequestManager";
-import BasicApiRequestManager from "../../../util/apiRequest/BasicApiRequestManager";
 import appConfig from "../../../config/appConfig";
-import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
 import Role from "../../../redux/types/userIdentity/Role";
-import AuthenticationStateManager from "../../auth/stateManager/AuthenticationStateManager";
-import BasicAuthenticationManager from "../../auth/BasicAuthenticationManager";
-import AuthenticationStateManagerImpl from "../../auth/stateManager/AuthenticationStateManagerImpl";
+import {AxiosInstance} from "axios";
+import AxiosApiManager from "../../rest/AxiosApiManager";
+
 
 class UserIdentityApiServiceImpl implements UserIdentityApiService {
 
-    getToken: ()=>string;
+    protected readonly apiInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
 
-    constructor(getToken: ()=>string) {
-        this.getToken = getToken;
+    constructor() {
     }
 
-    public static getInstance(authManager: AuthenticationStateManager = new AuthenticationStateManagerImpl): UserIdentityApiServiceImpl {
-        const getToken = () => authManager.getAuth()!.accessToken;
-        return new UserIdentityApiServiceImpl(getToken);
+    public static getInstance(): UserIdentityApiServiceImpl {
+        return new UserIdentityApiServiceImpl();
     }
 
     async retrieveIdentity (): Promise<UserIdentity> {
-        const accessToken = this.getToken();
+        const response = await this.apiInstance
+            .get<UserIdentity>(appConfig.serverMappings.getCurrentUser);
 
-        const response: Response = await new BasicApiRequestManager()
-            .url(appConfig.serverMappings.getCurrentUser)
-            .method(HttpMethod.GET)
-            .authentication(accessToken)
-            .fetch();
+        const identity: UserIdentity = response.data;
 
-        if (response.ok) {
-            const identity: UserIdentity = await response.json();
-            const role = Role[identity.role];
-            if (!role) {
-                throw new Error("Invalid role. Contact developers to solve this issue");
-            }
-            return {...identity, role: role.role, permissions: role.permissions }
-        } else {
-            throw await HttpErrorParser.parseResponse(response);
+        const role = Role[identity.role];
+        if (!role) {
+            throw new Error("Invalid role. Contact developers to solve this issue");
         }
+        return {...identity, role: role.role, permissions: role.permissions }
     }
 }
 

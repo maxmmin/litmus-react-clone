@@ -8,12 +8,12 @@ import AuthenticationStateManagerImpl from "../../../../auth/stateManager/Authen
 
 class UserExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<UserResponseDto> implements UserExplorationApiService {
 
-    constructor(authStateManager: AuthenticationStateManager) {
-        super(()=>authStateManager.getAuth()!.accessToken, appConfig.serverMappings.users);
+    constructor() {
+        super(appConfig.serverMappings.users);
     }
 
-    public static getInstance (authStateManager: AuthenticationStateManager = new AuthenticationStateManagerImpl()): UserExplorationApiServiceImpl {
-        return new UserExplorationApiServiceImpl(authStateManager);
+    public static getInstance (): UserExplorationApiServiceImpl {
+        return new UserExplorationApiServiceImpl();
     }
 
 }
