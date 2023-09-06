@@ -78,7 +78,7 @@ function App() {
                                 } />
                             </Route>
 
-                            <Route path="/sign-in" element={<LoginPage/>}/>
+                            <Route path={appConfig.applicationMappings.signIn} element={<LoginPage/>}/>
                         </Routes>
                     </div>
                 </LitmusCore>

@@ -81,8 +81,9 @@ class BasicAuthenticationManager implements AuthenticationManager {
         }
     );
 
-    public logout(): Promise<void> {
-        // this.authenticationStateManager.clearAuth();
+    async logout(): Promise<void> {
+        await this.authService.logOut();
+        this.authenticationStateManager.logout();
         return Promise.resolve();
     }
 

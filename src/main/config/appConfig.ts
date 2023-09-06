@@ -51,6 +51,7 @@ const personCreationMapping = buildUrl(creationRoot, entityDomains.PERSON)
 const applicationRoot = "/"
 
 const applicationMappings = Object.freeze({
+    signIn: "/sign-in",
     home: applicationRoot,
     getEntity: {
         [Entity.USER]: buildUrl(applicationRoot,entityDomains.USER,':id'),
