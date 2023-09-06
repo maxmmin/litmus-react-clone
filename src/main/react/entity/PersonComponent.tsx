@@ -52,7 +52,7 @@ export default function PersonComponent ({person}: PersonProps) {
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_person">
                 <div className="main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person">
-                    {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.apiRoot, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
+                    {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.apiHost,appConfig.serverMappings.mediaRoot, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
 
                 <div className="main-entity-section__main-entity-info-container">
