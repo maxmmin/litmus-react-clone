@@ -25,15 +25,16 @@ export default class MediaEntityFormDataBuilderImpl implements MediaEntityFormDa
                 formData.set('mainImg', mainImage);
             }
 
+
             for (let counter = 0; counter<media.images.length; counter++) {
                 const imageKey = media.images[counter];
 
                 if (imageKey===media.mainImage) continue;
-
                 const image: File = this.fileService.getFileOrThrow(imageKey);
-                formData.set('img', image);
+                formData.append('img', image);
             }
         }
+
         return formData;
     }
 }

@@ -5,6 +5,7 @@ import valueOrNull, {valueOrMessage} from "../../util/valueOrNull";
 import {DateEntityTool} from "../../model/DateEntity";
 import "../../css/entityPage.scss";
 import {DashedUserIcon} from "../../util/icons";
+import ImageSlider from "./ImageSlider";
 
 type PersonProps = {
     person: Person
@@ -18,7 +19,7 @@ function RelationshipComponent ({relationship}: RelationShipProps) {
     const person = relationship.person
 
     const mainImg: string|null = person.media.mainImage;
-    console.log(relationship)
+
     return (
         <div className="person-page__relationship-container">
             <div className="relationship-container__main">
@@ -71,7 +72,7 @@ export default function PersonComponent ({person}: PersonProps) {
             <section className="entity-images-slider-section">
                 <h4>Фотографії</h4>
                 <div className="entity-images-slider-container">
-                    <div className="entity-images-slider"></div>
+                    <ImageSlider imageLinks={person.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.apiHost,appConfig.serverMappings.mediaRoot,imagePath))}/>
                 </div>
             </section>
 
@@ -79,7 +80,7 @@ export default function PersonComponent ({person}: PersonProps) {
                 <h4 className={'relationships-section__title'}>Пов'язані особи</h4>
                 {person.relationships.length > 0 ?
                     <div className={'person-page__relationships-container'}>
-                        {person.relationships.map(relationship=><RelationshipComponent relationship={relationship}/>)}
+                        {person.relationships.map(relationship=><RelationshipComponent key={relationship.person.id} relationship={relationship}/>)}
                     </div>
                     :
                     <p>Пов'язані особи відсутні</p>
