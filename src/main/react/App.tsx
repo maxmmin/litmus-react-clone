@@ -29,20 +29,20 @@ const person: Person=  {id: '21', firstName: 'Олена', middleName: 'Вікт
 
 const rel1: Relationship = {
     person: person,
-    relationType: RelationType.SIBLING,
+    type: RelationType.SIBLING,
     note: "Сестра рідна"
 }
 
 
 const rel2: Relationship = {
     person: person,
-    relationType: RelationType.RELATIVE,
+    type: RelationType.RELATIVE,
     note: "Сестра двоюрідна"
 }
 
 const rel3: Relationship = {
     person: person,
-    relationType: RelationType.FRIEND,
+    type: RelationType.FRIEND,
     note: "Подруга дитинства"
 }
 

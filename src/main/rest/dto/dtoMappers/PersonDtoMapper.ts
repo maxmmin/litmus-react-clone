@@ -57,8 +57,8 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
             dto.personId = relationship.person.id;
         }
 
-        if (hasContent(relationship.relationType)) {
-            dto.type = relationship.relationType!;
+        if (hasContent(relationship.type)) {
+            dto.type = relationship.type!;
         }
 
         if (hasContent(relationship.note)) {

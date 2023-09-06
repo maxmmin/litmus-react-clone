@@ -22,7 +22,7 @@ export const getFullName = (person: Person) => {
 
 export type Relationship = {
     person: Person,
-    relationType: RelationType | null,
+    type: RelationType | null,
     note: string
 }
 

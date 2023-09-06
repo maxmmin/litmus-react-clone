@@ -18,7 +18,7 @@ function RelationshipComponent ({relationship}: RelationShipProps) {
     const person = relationship.person
 
     const mainImg: string|null = person.media.mainImage;
-
+    console.log(relationship)
     return (
         <div className="person-page__relationship-container">
             <div className="relationship-container__main">
@@ -32,13 +32,13 @@ function RelationshipComponent ({relationship}: RelationShipProps) {
                     </div>
 
                     <div className="main-relationship-info__relation-type-container">
-                        <p className={"main-relationship-info__relation-type"}>{relationship.relationType}</p>
+                        <p className={"main-relationship-info__relation-type"}>{relationship.type}</p>
                     </div>
                 </div>
             </div>
 
             <div className="relation-ship-container__note-container">
-                <p className={"relation-ship-container__note"}>{valueOrMessage(relationship.note)}</p>
+                <p className={"relation-ship-container__note"}>{relationship.note?relationship.note:"Додаткова інформація відсутня"}</p>
             </div>
         </div>
     )

@@ -38,9 +38,9 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
     const handleSelectChange = (e: React.SyntheticEvent<HTMLSelectElement>) => {
         const relShip: Relationship = {...relationship};
         try {
-            relShip.relationType = getRelationTypeFrom(e.currentTarget.value)
+            relShip.type = getRelationTypeFrom(e.currentTarget.value)
         } catch (e) {
-            relShip.relationType = null;
+            relShip.type = null;
         }
        personCreationStateManager.updateRelationship(relShip)
     }
@@ -56,7 +56,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
         }
     }, [relationship])
 
-    const relType = relationship.relationType?relationship.relationType:undefined;
+    const relType = relationship.type?relationship.type:undefined;
 
     const image: string|undefined = relationship.person.media.mainImage||relationship.person.media.images[0];
 

@@ -51,7 +51,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
                     bindingResult.note = "Поле містить заборонені символи";
                 }
 
-                if (!relationship.relationType) {
+                if (!relationship.type) {
                     bindingResult.relationType = "Вкажіть тип відносин";
                 }
             }

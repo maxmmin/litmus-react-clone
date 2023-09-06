@@ -171,7 +171,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                 const stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl();
                 
                 const relationship: Relationship = {
-                    note: "", person: person, relationType: null
+                    note: "", person: person, type: null
                 }
 
                 const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.emergingEntity.relationships);
