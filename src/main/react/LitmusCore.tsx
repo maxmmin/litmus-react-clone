@@ -20,7 +20,7 @@ type Props = {
 const libraries: Libraries = ["places"];
 
 const LitmusCore = ({children}: Props) => {
-    const [csrfLoaded, setCsrfLoaded] = useState(false);
+    const [isCsrfLoading, setCsrfLoading] = useState(false);
 
     const serviceContext = useContext(LitmusServiceContext);
 
@@ -28,20 +28,19 @@ const LitmusCore = ({children}: Props) => {
 
     const authentication = useAppSelector(state => state.authentication)
 
-    const userIdentity = useAppSelector(state => state.userIdentity)
-
     const csrfLoader: CsrfTokenLoader = serviceContext.csrfTokenLoader;
 
     useEffect(()=>{
+        setCsrfLoading(true)
         csrfLoader.loadCsrfToken()
             .then(response => {
                 AxiosApiManager.setCsrfHeader(response.headerName);
                 AxiosApiManager.setCsrfToken(response.token);
-                setCsrfLoaded(true);
             })
+            .finally(()=>setCsrfLoading(false))
     }, [authentication])
 
-    const isRefreshing = useAppSelector(state => state.appState?.isRefreshing)&&csrfLoaded;
+    const isRefreshing = useAppSelector(state => state.appState?.isRefreshing)||isCsrfLoading;
 
     const {isLoaded, loadError} = useLoadScript({
         googleMapsApiKey: appConfig.geoApiKey,
@@ -56,11 +55,10 @@ const LitmusCore = ({children}: Props) => {
     // fix err if no internet
 
     useEffect(()=>{
-        if (csrfLoaded&&authentication?.isAuthenticated) {
-            const globalPending = !userIdentity;
-            userIdentityManager.retrieveIdentity(globalPending);
+        if (authentication?.isAuthenticated) {
+            userIdentityManager.retrieveIdentity(true);
         }
-    },[authentication, csrfLoaded])
+    },[authentication])
 
     return (
         <>

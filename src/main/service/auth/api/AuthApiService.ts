@@ -7,6 +7,7 @@ export type Credentials = {
 interface AuthApiService {
     refreshAuth(): Promise<void>;
     getAuth(credentials: Credentials): Promise<void>;
+    logOut(): Promise<void>
 }
 
 export default AuthApiService;

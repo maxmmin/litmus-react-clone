@@ -3,18 +3,13 @@
 import AuthApiService, {Credentials} from "./AuthApiService";
 import appConfig from "../../../config/appConfig";
 import {HttpErrorParser} from "../../../error/BasicHttpError";
-import {AxiosError, AxiosResponse} from "axios";
-import {AxiosInstance} from "axios";
-import Authentication from "../../../redux/types/auth/Authentication";
+import {AxiosError, AxiosInstance, AxiosResponse} from "axios";
 import AxiosApiManager from "../../rest/AxiosApiManager";
+import Authentication from "../../../redux/types/auth/Authentication";
 
 class BasicAuthApiService implements AuthApiService {
 
     private readonly axiosInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
-
-    constructor() {
-
-    }
 
     async getAuth(credentials: Credentials): Promise<void> {
         await this.axiosInstance
@@ -27,11 +22,22 @@ class BasicAuthApiService implements AuthApiService {
 
     async refreshAuth(): Promise<void> {
         await this.axiosInstance
-            .post<undefined,AxiosResponse<void>>(appConfig.serverMappings.refreshTokens)
+            .post<any,AxiosResponse<void>>(appConfig.serverMappings.refreshTokens, {})
             .catch((err: AxiosError)=>{
                 throw HttpErrorParser.parseAxiosError(err);
             });
     }
+
+    async logOut(): Promise<void> {
+        await this.axiosInstance
+            .post<any,AxiosResponse<void>>(appConfig.serverMappings.logout, {})
+            .catch((err: AxiosError)=>{
+                throw HttpErrorParser.parseAxiosError(err);
+            });
+        return Promise.resolve();
+    }
+
+
 
 }
 

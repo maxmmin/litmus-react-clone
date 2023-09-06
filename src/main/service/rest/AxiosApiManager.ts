@@ -4,7 +4,7 @@ import {HttpStatus} from "../../rest/HttpStatus";
 import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
 import ErrorResponse from "../../rest/ErrorResponse";
 import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
-import {HttpMethod} from "../../util/apiRequest/ApiRequestManager";
+import {ContentType, HttpMethod} from "../../util/apiRequest/ApiRequestManager";
 
 class AxiosApiManager {
     public static csrfProtectedMethods: HttpMethod[] = [HttpMethod.PATCH, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT]
@@ -17,19 +17,22 @@ class AxiosApiManager {
 
     private static readonly _globalApiInstance: AxiosInstance = this.createApiInstance();
 
-    public static setCsrfToken (csrfToken: string) {
-        this.csrfToken = csrfToken;
+    private static setCsrfTokenToInstance (axiosInstance: AxiosInstance, csrfToken: string): void {
         this
             .csrfProtectedMethods
             .forEach(method => {
-                (this._globalApiInstance.defaults.headers[method.toLowerCase()] as Record<string, string>)[this.csrfHeader] = csrfToken
+                (axiosInstance.defaults.headers[method.toLowerCase()] as Record<string, string>)[this.csrfHeader] = csrfToken;
             })
-        console.log(this._globalApiInstance.defaults.headers)
+    }
+
+    public static setCsrfToken (csrfToken: string) {
+        this.csrfToken = csrfToken;
+        this.setCsrfTokenToInstance(this._globalApiInstance, csrfToken)
     }
 
     public static setCsrfHeader (csrfHeader: string) {
-        // this.csrfHeader = csrfHeader;
-        // if (this.csrfToken) this.setCsrfToken(this.csrfToken);
+        this.csrfHeader = csrfHeader;
+        if (this.csrfToken) this.setCsrfTokenToInstance(this.globalApiInstance,this.csrfToken);
     }
 
     static get globalApiInstance(): AxiosInstance {
@@ -39,11 +42,6 @@ class AxiosApiManager {
     private static createApiInstance (): AxiosInstance {
         const globalInstance = this.createRawApiInstance();
 
-        const noHandlerApiInstance = this.createRawApiInstance();
-        if (this.csrfToken) noHandlerApiInstance.defaults.headers[this.csrfHeader] = this.csrfToken;
-
-        if (this.csrfToken!==undefined) globalInstance.defaults.headers[this.csrfHeader] = this.csrfToken;
-
         const manager = this.authStateManager;
 
         globalInstance.interceptors.response.use(
@@ -51,14 +49,20 @@ class AxiosApiManager {
             async (err: AxiosError<ErrorResponse<unknown>>) => {
                 const {config} = err;
 
+                const noHandlerApiInstance = AxiosApiManager.createRawApiInstance();
+                if (AxiosApiManager.csrfToken!==undefined) AxiosApiManager.setCsrfTokenToInstance(noHandlerApiInstance,AxiosApiManager.csrfToken);
+
                 if (manager.isAuthenticated() && config && err.response?.status === HttpStatus.UNAUTHENTICATED) {
+
                     try {
-                        await noHandlerApiInstance.post(appConfig.serverMappings.refreshTokens);
-                        return await globalInstance(config);
+                        await noHandlerApiInstance.post(appConfig.serverMappings.refreshTokens, {});
                     } catch {
-                        await noHandlerApiInstance.post(appConfig.serverMappings.logout).catch();
+                        await noHandlerApiInstance.post(appConfig.serverMappings.logout, {}).catch(console.error);
                         this.authStateManager.logout();
+                        return Promise.reject(err);
                     }
+
+                    return await globalInstance(config);
                 }
 
                 return Promise.reject(err);
@@ -69,7 +73,7 @@ class AxiosApiManager {
     }
 
     private static createRawApiInstance () {
-        return axios.create({
+        return  axios.create({
             baseURL: appConfig.serverMappings.apiHost,
             xsrfCookieName: "",
             xsrfHeaderName: "",
