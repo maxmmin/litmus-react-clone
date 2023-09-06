@@ -23,7 +23,7 @@ function RelationshipComponent ({relationship}: RelationShipProps) {
         <div className="person-page__relationship-container">
             <div className="relationship-container__main">
                 <div className="main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person person-page__relationship-container_person-image-wrapper">
-                    { mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRoot, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
+                    { mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.apiHost,appConfig.serverMappings.mediaRoot, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
 
                 <div className="relationship-container__main-relationship-info">

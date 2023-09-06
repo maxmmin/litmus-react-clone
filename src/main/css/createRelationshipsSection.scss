@@ -83,11 +83,19 @@
 }
 
 .create-relation__person-avatar-wrapper {
-  background: blueviolet;
+  //border: 2px dashed $md-sys-color-inverse-primary-light;
   border-radius: 50%;
   width: 100px;
-  min-height: 100px;
+  height: 100px;
   overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.create-relation__person-avatar {
+  width: 100%;
+  height: 100%;
 }
 
 .create-relation__person-info {

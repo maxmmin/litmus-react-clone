@@ -1,7 +1,7 @@
 import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../model/human/person/Person";
 import {FloatingLabel, Form} from "react-bootstrap";
 import React, {useEffect} from "react";
-import {CrossIcon} from "../../../util/icons";
+import {CrossIcon, DashedUserIcon} from "../../../util/icons";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import PersonCreationStateManagerImpl
     from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
@@ -11,6 +11,8 @@ import PersonCreationValidationService, {
 } from "../../../service/creation/validation/human/person/PersonCreationValidationService";
 import InputError from "../../sharedComponents/InputError";
 import {useSelector} from "react-redux";
+import {buildUrl} from "../../../util/pureFunctions";
+import appConfig from "../../../config/appConfig";
 
 
 type Props = {
@@ -56,11 +58,19 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
 
     const relType = relationship.relationType?relationship.relationType:undefined;
 
+    const image: string|undefined = relationship.person.media.mainImage||relationship.person.media.images[0];
+
     return (
         <div className={"create-relationships-section__create-relation"}>
             <div className="create-relation__related-person">
                 <div className="create-relation__person-avatar-wrapper">
-                    {/*<img src="" alt="avatar" className="create-relation__relation-avatar"/>*/}
+                    {
+                        image?
+                            <img src={buildUrl(appConfig.serverMappings.apiHost, appConfig.serverMappings.mediaRoot, image)} alt="avatar" className="create-relation__person-avatar"/>
+                            :
+                            <DashedUserIcon className={"create-relation__person-avatar"}/>
+                    }
+
                 </div>
 
                 <ul className="create-relation__person-info">
