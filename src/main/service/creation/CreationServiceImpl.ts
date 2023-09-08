@@ -63,12 +63,15 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationE
             const entity: E = this.mapper.mapToEntity(responseDto);
             return fulfillWithValue(deepCopy(entity), {notify: true});
         } catch (e: unknown) {
+            console.log(e)
             if (e instanceof ValidationError<unknown>) {
                 this.creationStateManager.setValidationErrors(e.errors);
-            } else if (Object.hasOwn(e as object, "status")&&(e as ErrorResponse<unknown>).status===HttpStatus.UNPROCESSABLE_ENTITY) {
-                const validationResponse = e as ValidationResponse<S>
-                const validationErrors = this.validationService.mapServerValidationErrors(validationResponse.detail.validationErrors);
-                this.creationStateManager.setValidationErrors(validationErrors);
+            } else if (e instanceof AxiosError && e.response?.status===HttpStatus.UNPROCESSABLE_ENTITY) {
+                const validationResponse = (e as AxiosError<ValidationResponse<S>>).response?.data;
+                if (validationResponse) {
+                    const validationErrors = this.validationService.mapServerValidationErrors(validationResponse.detail.validationErrors);
+                    this.creationStateManager.setValidationErrors(validationErrors);
+                }
             }
 
             return rejectWithValue(handleRequestError(e as AxiosError), {notify: true});

@@ -12,10 +12,7 @@ import PersonCreationValidationService, {
     PersonValidationObject, ServerPersonValidationObject
 } from "./validation/human/person/PersonCreationValidationService";
 import PersonCreationValidationServiceImpl from "./validation/human/person/PersonCreationValidationServiceImpl";
-import creationStateManager from "./stateManager/CreationStateManager";
-import FileRepoImpl from "../media/FileRepoImpl";
 import FileRepoFactory from "../media/FileRepoFactory";
-import {isFulfilled} from "@reduxjs/toolkit";
 import getFilesFromMedia from "../../util/media/getFilesFromMedia";
 import FileRepo from "../media/FileRepo";
 
