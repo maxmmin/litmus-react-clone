@@ -31,8 +31,6 @@ const CreatePerson = () => {
 
     const creationStateManager: PersonCreationStateManager = useContext(LitmusServiceContext).creation.stateManagers.person;
 
-    const creationPersonParams = useAppSelector(state => state.creation?.person?.emergingEntity)
-
     const validationErrors = useAppSelector(state => state.creation.person?.validationErrors)
 
     const litmusContext = useContext(LitmusServiceContext);
@@ -44,25 +42,27 @@ const CreatePerson = () => {
     const person = useAppSelector(state => state.creation.person?.emergingEntity)!
 
 
-    if (!creationPersonParams) {
+    if (!person) {
         throw new Error("createPersonDto was null but it shouldn't be")
     }
 
-    const {firstName, middleName, lastName} = creationPersonParams;
+    const {firstName, middleName, lastName} = person;
 
-    const {year, month, day} = creationPersonParams!.dateOfBirth||{day: "", month: "", year: ""};
+    const dateOfBirth = person.dateOfBirth;
 
-    const passportData = creationPersonParams?.passportData;
+    const {year, month, day} = person!.dateOfBirth||{day: "", month: "", year: ""};
 
-    const relationships = creationPersonParams?.relationships;
+    const passportData = person?.passportData;
+
+    const relationships = person?.relationships;
 
     const {mainImage, images} = useMemo<PersonImages>(()=>{
-        const media = creationPersonParams.media;
+        const media = person.media;
         return {
             mainImage: media.mainImage?{file: fileService.getFileOrThrow(media.mainImage), fileKey: media.mainImage}:null,
             images: media.images.map(fileKey=>({file: fileService.getFileOrThrow(fileKey), fileKey: fileKey}))
         }
-    }, [creationPersonParams.media])
+    }, [person.media])
 
     const closeModal = () => setModalSettings(null)
 
@@ -82,6 +82,10 @@ const CreatePerson = () => {
             creationStateManager.updateValidationErrors({rnokppCode: null})
         }
     }, [passportData])
+
+    useEffect(()=>{
+        // @todo write dateEntity validation recheck
+    }, [person.dateOfBirth])
 
     useEffect(()=>{
         const updatedFullNameErrors = validationService.validateFullName(person);
@@ -151,7 +155,7 @@ const CreatePerson = () => {
                <p className="m-0">Стать</p>
 
                <div className="form-check">
-                   <input className="form-check-input maleRadioBtn" type="radio" checked={creationPersonParams.sex===Sex.male} name="sex" onChange={()=>{
+                   <input className="form-check-input maleRadioBtn" type="radio" checked={person.sex===Sex.male} name="sex" onChange={()=>{
                        creationStateManager.updateEntityCreationParams({sex: Sex.male})
                    }}/>
                    <label className="form-check-label" htmlFor="maleRadioBtn">
@@ -159,7 +163,7 @@ const CreatePerson = () => {
                    </label>
                </div>
                <div className="form-check">
-                   <input className="form-check-input femaleRadioBtn" type="radio" checked={creationPersonParams.sex===Sex.female} name="sex" onChange={()=>{
+                   <input className="form-check-input femaleRadioBtn" type="radio" checked={person.sex===Sex.female} name="sex" onChange={()=>{
                        creationStateManager.updateEntityCreationParams({sex: Sex.female});
                    }}/>
                    <label className="form-check-label" htmlFor="femaleRadioBtn">
@@ -181,7 +185,7 @@ const CreatePerson = () => {
                 <InputError error={validationErrors?.passportNumber}/>
             </Form.Group>
 
-            <Form.Group className="mb-3 creation-input-group__item">
+            <Form.Group className="mb-3 creation-input-group__iteFm">
                 <Form.Label>Серія паспорта</Form.Label>
                 <input  value={passportData!.passportSerial!} autoComplete={"new-password"} className={`passport-serial form-control ${validationErrors?.passportSerial?'is-invalid':''}`} type="text" placeholder="Введіть серію паспорта"
                        onKeyDown={keyPressHandler}
@@ -214,7 +218,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Адреса</Form.Label>
-                <input type={"button"} className={"jur-person-creation__input address form-control"} value={creationPersonParams.location?creationPersonParams.location.address:"Додати адресу"}
+                <input type={"button"} className={"jur-person-creation__input address form-control"} value={person.location?person.location.address:"Додати адресу"}
                        onClick={()=>{
                            setModalSettings({mode: CreationModalModes.SET_GEOLOCATION})
                        }}
@@ -237,7 +241,7 @@ const CreatePerson = () => {
                 <div className={`create-relationships-section__relations ${relationships!.length>0?'':'empty'}`}>
                     {
                         relationships!.length>0?
-                            <PersonRelationships relationships={creationPersonParams.relationships}/>
+                            <PersonRelationships relationships={person.relationships}/>
                             :
                             <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
                     }
