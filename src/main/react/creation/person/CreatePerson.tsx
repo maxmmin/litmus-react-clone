@@ -84,7 +84,10 @@ const CreatePerson = () => {
     }, [passportData])
 
     useEffect(()=>{
-        // @todo write dateEntity validation recheck
+        if (validationErrors?.dateOfBirth) {
+            const updatedDateValidationConstraint = validationService.validateDateOfBirth(person.dateOfBirth);
+            if (!updatedDateValidationConstraint) creationStateManager.updateValidationErrors({dateOfBirth: null});
+        }
     }, [person.dateOfBirth])
 
     useEffect(()=>{

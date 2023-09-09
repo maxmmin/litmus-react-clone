@@ -65,6 +65,10 @@ export class DateEntityTool {
     }
 
     static isValid(dateEntity: DateEntity): boolean {
+        if ((!dateEntity.day || dateEntity.day.length!==2 || isNaN(+dateEntity.day))  ||
+            (!dateEntity.month || dateEntity.month.length!==2 || isNaN(+dateEntity.month)) ||
+            (!dateEntity.year || dateEntity.year.length!==4 || isNaN(+dateEntity.year))) return false;
+
         return !isNaN(this.getTool(dateEntity).getDate().getTime());
     }
 }

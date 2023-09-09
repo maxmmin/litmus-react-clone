@@ -61,6 +61,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
 
     validateDateOfBirth(dateOfBirth: Person["dateOfBirth"]): PersonValidationObject["dateOfBirth"] {
         let dateErr: string|null = null;
+
         if (dateOfBirth&&hasContent(dateOfBirth)) {
             const date = DateEntityTool.isValid(dateOfBirth);
             if (!date) dateErr = "Введіть коректну дату"
