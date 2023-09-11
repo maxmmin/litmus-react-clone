@@ -4,11 +4,38 @@ import JurPersonCreationValidationService, {
 } from "./JurPersonCreationValidationService";
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import valueOrNull from "../../../../util/valueOrNull";
+import {hasContent} from "../../../../util/isEmpty";
+import {DateEntityTool} from "../../../../model/DateEntity";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {
     validate(model: JurPerson): JurPersonValidationObject {
-        const bindingResult: JurPersonValidationObject = {dateOfRegistration: null, edrpou: null, name: null};
+        const bindingResult: JurPersonValidationObject = {
+            dateOfRegistration: this.validateDateOfRegistration(model.dateOfRegistration),
+            edrpou: this.validateEdrpou(model.edrpou),
+            name: this.validateName(model.name)};
         return bindingResult;
+    }
+
+    validateName(name: string): string | null {
+        return hasContent(name)?null:"Ім'я не повинно бути пустим";
+    }
+
+    validateEdrpou(edrpou: string): string | null {
+        if (!edrpou) return null;
+        //@todo validation
+        return null;
+    }
+
+
+
+    validateDateOfRegistration(dateOfRegistration: JurPerson["dateOfRegistration"]): string|null {
+        let dateErr: string|null = null;
+
+        if (dateOfRegistration&&hasContent(dateOfRegistration)) {
+            const date = DateEntityTool.isValid(dateOfRegistration);
+            if (!date) dateErr = "Введіть коректну дату"
+        }
+        return dateErr;
     }
 
     mapServerValidationErrors(response: ServerJurPersonValidationObject): JurPersonValidationObject {

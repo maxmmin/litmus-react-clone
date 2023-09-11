@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import React, {useContext, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppSelector} from "../../../redux/hooks";
 import CreationGeoModal from "../geo/CreationGeoModal";
@@ -12,6 +12,7 @@ import {CreationModalModes} from "../../../redux/types/creation/CreationModalMod
 import {Entity} from "../../../model/Entity";
 import {LitmusServiceContext} from "../../App";
 import InputError from "../../sharedComponents/InputError";
+import ServiceContext from "../../serviceContext";
 
 
 const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
@@ -19,7 +20,9 @@ const getShortInfo = (person: Person): string => `${person.id}: ${person.lastNam
 const CreateJurPerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
 
-    const creationManager = useContext(LitmusServiceContext).creation.stateManagers.jurPerson;
+    const context = useContext(LitmusServiceContext);
+
+    const creationStateManager = context.creation.stateManagers.jurPerson;
 
     const closeModal = () => setModalSettings(null)
 
@@ -27,11 +30,41 @@ const CreateJurPerson = () => {
 
     const validationErrors = useAppSelector(state => state.creation.jurPerson?.validationErrors);
 
+    const validationService = context.creation.validation.jurPerson;
+
     if (!jurPersonCreationParams) {
         throw new Error("createPersonDto was null but it shouldn't")
     }
 
     const {year, month, day} = jurPersonCreationParams.dateOfRegistration||{year: '', month: '', day: ''};
+
+    useEffect(()=>{
+        if (validationErrors?.dateOfRegistration) {
+            const updatedDateOfRegistrationErr = validationService.validateDateOfRegistration(jurPersonCreationParams.dateOfRegistration);
+            if (!updatedDateOfRegistrationErr) {
+                creationStateManager.updateValidationErrors({dateOfRegistration: null})
+            }
+        }
+    }, [jurPersonCreationParams.dateOfRegistration])
+
+    useEffect(()=>{
+        if (validationErrors?.name) {
+            const updatedNameErr = validationService.validateName(jurPersonCreationParams.name);
+            if (!updatedNameErr) {
+                creationStateManager.updateValidationErrors({name: null})
+            }
+        }
+    }, [jurPersonCreationParams.name])
+
+    useEffect(()=>{
+        if (validationErrors?.edrpou) {
+            const updatedEdrpouErr = validationService.validateName(jurPersonCreationParams.edrpou);
+            if (!updatedEdrpouErr) {
+                creationStateManager.updateValidationErrors({edrpou: null})
+            }
+        }
+    }, [jurPersonCreationParams.edrpou])
+
 
     return (
         <>
@@ -45,7 +78,7 @@ const CreateJurPerson = () => {
                     <input value={jurPersonCreationParams.name} autoComplete={"new-password"} className={`name form-control ${validationErrors?.name?'is-invalid':''}`} type="text" placeholder="Введіть назву юридичної особи"
                            onKeyDown={keyPressHandler}
                            onChange={e=>{
-                               creationManager.updateEntityCreationParams({name: e.currentTarget.value});
+                               creationStateManager.updateEntityCreationParams({name: e.currentTarget.value});
                            }}
                     />
                     <InputError error={validationErrors?.name}/>
@@ -56,7 +89,7 @@ const CreateJurPerson = () => {
                     <input value={jurPersonCreationParams.edrpou?jurPersonCreationParams.edrpou:''} autoComplete={"new-password"} className={`${validationErrors?.edrpou?'is-invalid':''} edrpou form-control`} type="text" placeholder="Введіть ЄДРПОУ"
                            onKeyDown={keyPressHandler}
                            onChange={e=>{
-                               creationManager.updateEntityCreationParams({edrpou: e.currentTarget.value});
+                               creationStateManager.updateEntityCreationParams({edrpou: e.currentTarget.value});
                            }}
                     />
                     <InputError error={validationErrors?.edrpou}/>
@@ -85,7 +118,7 @@ const CreateJurPerson = () => {
                 <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Дата реєстрації юридичної особи</Form.Label>
 
-                    <InputDate inputPrefix={validationErrors?.dateOfRegistration?'is-invalid':''} date={new DateEntityTool().setDay(day).setMonth(month).setYear(year).build()} setDate={date=>creationManager.updateEntityCreationParams({dateOfRegistration: date})} className={"date-of-registration"}/>
+                    <InputDate inputPrefix={validationErrors?.dateOfRegistration?'is-invalid':''} date={new DateEntityTool().setDay(day).setMonth(month).setYear(year).build()} setDate={date=>creationStateManager.updateEntityCreationParams({dateOfRegistration: date})} className={"date-of-registration"}/>
 
                     <InputError error={validationErrors?.dateOfRegistration}/>
                 </Form.Group>

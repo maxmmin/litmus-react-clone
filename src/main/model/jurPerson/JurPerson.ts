@@ -5,7 +5,7 @@ import DateEntity from "../DateEntity";
 export type JurPerson = {
     id: string;
     name: string;
-    edrpou: string|null;
+    edrpou: string;
     dateOfRegistration: DateEntity|null;
     owner: Person | null;
     benOwner: Person | null;

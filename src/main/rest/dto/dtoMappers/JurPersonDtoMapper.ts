@@ -44,7 +44,7 @@ class JurPersonDtoMapper implements DtoMapper<JurPersonRequestDto, JurPerson, Ju
             benOwner: exploredEntityDto.benOwner?exploredEntityDto.benOwner:null,
             location: exploredEntityDto.location?exploredEntityDto.location:null,
             dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
-            edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:null
+            edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:""
         }
 
         return jurPerson
