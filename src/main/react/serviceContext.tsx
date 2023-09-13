@@ -8,7 +8,7 @@ import PersonExplorationStateManager from "../service/exploration/stateManager/p
 import JurPersonExplorationStateManager
     from "../service/exploration/stateManager/jurPerson/JurPersonExplorationStateManager";
 import UserExplorationStateManager from "../service/exploration/stateManager/user/UserExplorationStateManager";
-import PersonExplorationApiService from "../service/exploration/api/human/person/PersonExplorationApiService";
+import piService from "../service/exploration/api/human/person/PersonExplorationApiService";
 import JurPersonExplorationApiService from "../service/exploration/api/jurPerson/JurPersonExplorationApiService";
 import UserExplorationApiService from "../service/exploration/api/human/user/UserExplorationApiService";
 import PersonCreationStateManager from "../service/creation/stateManager/person/PersonCreationStateManager";
@@ -75,6 +75,7 @@ import ImageRepo from "../service/media/ImageRepo";
 import FileRepo from "../service/media/FileRepo";
 import CsrfTokenLoader from "../service/rest/CsrfTokenLoader";
 import BasicCsrfTokenLoader from "../service/rest/BasicCsrfTokenLoader";
+import PersonExplorationApiService from "../service/exploration/api/human/person/PersonExplorationApiService";
 
 type Mappers = {
     user: UserDtoMapper,

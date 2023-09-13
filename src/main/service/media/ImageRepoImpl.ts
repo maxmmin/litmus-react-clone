@@ -1,7 +1,7 @@
 import ImageRepo from "./ImageRepo";
 import FileRepoFactory from "./FileRepoFactory";
 import FileRepo from "./FileRepo";
-import MimeMatcher, {matcher} from "mime-matcher";
+import MimeMatcher from "mime-matcher";
 
 export default class ImageRepoImpl implements ImageRepo {
     public static allowedImageTypes: string[] = ["image/*"]

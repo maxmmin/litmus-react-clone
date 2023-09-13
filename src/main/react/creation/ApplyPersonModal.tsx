@@ -13,7 +13,7 @@ import {isValid} from "../../util/pureFunctions";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
-import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
+import ApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
@@ -25,6 +25,7 @@ import JurPersonCreationStateManagerImpl
     from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 import PersonCreationStateManagerImpl from "../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
 import {LitmusServiceContext} from "../App";
+import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
 
 type Props = {
     modalSettings: CreationModalSettings,

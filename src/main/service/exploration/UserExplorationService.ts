@@ -19,7 +19,6 @@ import UserExplorationStateManager from "./stateManager/user/UserExplorationStat
 import UserExplorationStateManagerImpl from "./stateManager/user/UserExplorationStateManagerImpl";
 import UserExplorationApiServiceImpl from "./api/human/user/UserExplorationApiServiceImpl";
 import UserDtoMapper from "../../rest/dto/dtoMappers/UserDtoMapper";
-import ValidationError from "../../error/ValidationError";
 
 type UserExplorationCallbackType = (params: UserExplorationParams, service: UserExplorationApiService, mapper: DtoMapper<unknown, User, UserResponseDto>) => Promise<PagedData<User>>;
 
@@ -44,8 +43,8 @@ class UserExplorationService implements ExplorationService {
         const userResponseDto: UserResponseDto|null = await service.findById(id);
         if (userResponseDto) {
             const user: User = mapper.mapToEntity(userResponseDto);
-            content.push(user)
-        };
+            content.push(user);
+        }
         return new UnPagedData(content);
     }
 
@@ -53,7 +52,8 @@ class UserExplorationService implements ExplorationService {
         const lastName = params.lastName;
         const middleName = params.middleName;
         const firstName = params.firstName;
-        const pagedResponse: PagedData<UserResponseDto> = await service.findByFullName({lastName, middleName, firstName});
+        const i = params.i;
+        const pagedResponse: PagedData<UserResponseDto> = await service.findByFullName({lastName, middleName, firstName}, i);
         const userArray: User[] = pagedResponse.content.map(mapper.mapToEntity);
         return {...pagedResponse, content: userArray};
     }

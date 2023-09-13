@@ -11,9 +11,8 @@ export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookup
         super(apiMapping);
     }
 
-    async findByFullName(fullName: FullName): Promise<PagedData<P>> {
-        const params: Partial<{firstName: string, middleName: string, lastName: string}> = {}
-
+    async findByFullName(fullName: FullName, i: number): Promise<PagedData<P>> {
+        const params: Partial<{firstName: string, middleName: string, lastName: string}>&{i: number} = {i};
 
         if (fullName.firstName&&!isEmpty(fullName.firstName)) {
             params.firstName = fullName.firstName;

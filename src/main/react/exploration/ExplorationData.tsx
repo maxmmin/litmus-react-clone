@@ -9,6 +9,11 @@ import Loader from "../loader/Loader";
 import Person from "../../model/human/person/Person";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import User from "../../model/human/user/User";
+import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
+import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
+import getEntityExplorationService, {getEntityExplorationStateManager} from "../../util/getEntityExplorationService";
+import {useAppSelector} from "../../redux/hooks";
+import {useEffect} from "react";
 
 const getProcessedResults = (entity: Entity, data: unknown[]) => {
     switch (entity) {
@@ -40,7 +45,8 @@ type Props = {
 }
 
 type PaginationProps = {
-    pagedData: PagedData<unknown>
+    pagedData: PagedData<unknown>,
+    explorationStateManager: ExplorationStateManager<unknown, EntityExplorationParams>
 }
 
 const getVisibleIndexes = (pagedData: PagedData<unknown>) => {
@@ -50,7 +56,7 @@ const getVisibleIndexes = (pagedData: PagedData<unknown>) => {
 
     const indexes: number[] = [pagedData.index]
 
-    for (let cursor = pagedData.index-1; cursor>0&&cursor>pagedData.index-1-sideLength; cursor--) {
+    for (let cursor = pagedData.index-1; cursor>-1&&cursor>pagedData.index-1-sideLength; cursor--) {
         indexes.unshift(cursor);
     }
 
@@ -61,42 +67,73 @@ const getVisibleIndexes = (pagedData: PagedData<unknown>) => {
     return indexes;
 }
 
-const ExplorationPagination = ({pagedData}: PaginationProps) => {
+const ExplorationPagination = ({pagedData, explorationStateManager}: PaginationProps) => {
 
     const indexes = getVisibleIndexes(pagedData);
 
+    const currentParams = useAppSelector(()=>explorationStateManager.getExplorationParams());
+
+    function setI (i: number) {
+        explorationStateManager.setParams({...currentParams, i: i})
+    }
+
     return (
         <Pagination className={"exploration-pagination"}>
-            <Pagination.First />
-            <Pagination.Prev />
-            {indexes.map(index => <Pagination.Item key={index} active={pagedData.index===index}>{index+1}</Pagination.Item>)}
-            <Pagination.Next />
-            <Pagination.Last />
+            <Pagination.First disabled={pagedData.first} onClick={()=>{
+                setI(0);
+            }} />
+            <Pagination.Prev disabled={pagedData.first} onClick={()=>{
+                setI(currentParams.i-1)
+            }} />
+            {indexes.map(index => <Pagination.Item onClick={()=>{
+                setI(index);
+            }} key={index} active={pagedData.index===index}>{index+1}</Pagination.Item>)}
+            <Pagination.Next disabled={pagedData.last} onClick={() =>{
+                setI(currentParams.i+1)
+            }} />
+            <Pagination.Last disabled={pagedData.last} onClick={()=>{
+                setI(pagedData.totalPages+1)
+            }} />
         </Pagination>
     )
 }
 
 const ExplorationData = ({exploredEntity, state}: Props) => {
+
+    const explorationService = getEntityExplorationService(exploredEntity);
+    const explorationStateManager = getEntityExplorationStateManager(exploredEntity);
+
+    const data = state.data;
+
+    const pagedResponse: PagedData<unknown>|undefined = data?.response;
+
+
+    const unPaged: boolean = pagedResponse?isUnPaged(pagedResponse):true;
+
+    const i = useAppSelector(()=>explorationStateManager.getExplorationParams().i);
+
+    useEffect(()=>{
+        const paged = !unPaged;
+        if (paged&&i!==pagedResponse!.index) {
+            explorationService.explore();
+        }
+    },[i])
+
     if (state.isPending) {
         return <div style={{margin: '50px auto 0px', maxWidth: '100px'}}>
             <Loader/>
         </div>
     }
 
-    const data = state.data;
-    if (!data) return null;
-
-    const pagedResponse: PagedData<unknown> = data.response;
+    if (!data||!pagedResponse) return null;
 
     const {content, totalElements} = pagedResponse;
-
-    const unPaged: boolean = isUnPaged(pagedResponse)
 
     return (
         <div className={"results-container"}>
             <div className="results-container__header">
                 <h4>Результатів: {totalElements}</h4>
-                {unPaged?null:<ExplorationPagination pagedData={{...pagedResponse, index: 25, totalElements: 10000, totalPages: 40}}/>}
+                {unPaged?null:<ExplorationPagination explorationStateManager={explorationStateManager} pagedData={pagedResponse}/>}
             </div>
             {getProcessedResults(exploredEntity, content)}
         </div>
