@@ -10,13 +10,12 @@ import {Entity} from "../model/Entity";
 
 const backButtonsPathMap: Record<string, string|null> = {
     "/": null,
-    [buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')]: appConfig.applicationMappings.home,
-    [buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')]: appConfig.applicationMappings.home,
-    [appConfig.applicationMappings.getEntity[Entity.PERSON]]: appConfig.applicationMappings.home,
-    [appConfig.applicationMappings.getEntity[Entity.JUR_PERSON]]: appConfig.applicationMappings.home,
-    [appConfig.applicationMappings.getEntity[Entity.USER]]: appConfig.applicationMappings.home,
+    [buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')]: appConfig.applicationMappings.root,
+    [buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')]: appConfig.applicationMappings.root,
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: appConfig.applicationMappings.root,
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: appConfig.applicationMappings.root,
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: appConfig.applicationMappings.root,
 }
-
 export default function RootScreen () {
     const isHeaderOpened = useAppSelector(state => state.appState?.isHeaderMenuOpened);
     const appStateManager = useContext(LitmusServiceContext).appState.manager;

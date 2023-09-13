@@ -66,7 +66,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
                 <div className="create-relation__person-avatar-wrapper">
                     {
                         image?
-                            <img src={buildUrl(appConfig.serverMappings.apiHost, appConfig.serverMappings.mediaRoot, image)} alt="avatar" className="create-relation__person-avatar"/>
+                            <img src={buildUrl(appConfig.serverMappings.mediaRootUrl, image)} alt="avatar" className="create-relation__person-avatar"/>
                             :
                             <DashedUserIcon className={"create-relation__person-avatar"}/>
                     }

@@ -61,11 +61,11 @@ function App() {
                             <Route path={"/"} element={
                                 <PrivateComponent mode={"ERROR_PAGE"} component={<RootScreen/>} requiredPermissions={[Permissions.DATA_READ]}/>
                             }>
-                                <Route path={appConfig.applicationMappings.home} element={<HomeScreen/>}/>
+                                <Route path={appConfig.applicationMappings.root} element={<HomeScreen/>}/>
                                 <Route path={buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={
                                     <Explore/>
                                 }/>
-                                <Route path={appConfig.applicationMappings.getEntity[Entity.PERSON]} element={
+                                <Route path={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],':id')} element={
                                     <PersonScreen/>
                                 }/>
 

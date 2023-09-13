@@ -29,15 +29,15 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
 const serverMappings = Object.freeze({
     apiHost: host,
     apiRoot: apiRoot,
-    "mediaRoot": buildUrl(apiRoot, "/media"),
-    "users": buildUrl(apiRoot, entityDomains.USER),
-    "persons": buildUrl(apiRoot, entityDomains.PERSON),
-    "jurPersons": buildUrl(apiRoot, entityDomains.JUR_PERSON),
-    "csrfToken": '/csrf-token',
-    "getCurrentUser": buildUrl(authApiRoot),
-    "refreshTokens": buildUrl(authApiRoot, "/refresh"),
-    "logout": buildUrl(authApiRoot,"/logout"),
-    "signIn": buildUrl(authApiRoot, "/sign-in")
+    mediaRootUrl: buildUrl(host,apiRoot, "/media/"),
+    users: buildUrl(apiRoot, entityDomains.USER),
+    persons: buildUrl(apiRoot, entityDomains.PERSON),
+    jurPersons: buildUrl(apiRoot, entityDomains.JUR_PERSON),
+    csrfToken: '/csrf-token',
+    getCurrentUser: buildUrl(authApiRoot),
+    refreshTokens: buildUrl(authApiRoot, "/refresh"),
+    logout: buildUrl(authApiRoot,"/logout"),
+    signIn: buildUrl(authApiRoot, "/sign-in")
 })
 
 const explorationRoot = "/explore";
@@ -52,11 +52,11 @@ const applicationRoot = "/"
 
 const applicationMappings = Object.freeze({
     signIn: "/sign-in",
-    home: applicationRoot,
-    getEntity: {
-        [Entity.USER]: buildUrl(applicationRoot,entityDomains.USER,':id'),
-        [Entity.PERSON]: buildUrl(applicationRoot,entityDomains.PERSON,':id'),
-        [Entity.JUR_PERSON]: buildUrl(applicationRoot,entityDomains.JUR_PERSON,':id')
+    root: applicationRoot,
+    entityRoot: {
+        [Entity.USER]: buildUrl(applicationRoot,"/users"),
+        [Entity.PERSON]: buildUrl(applicationRoot,"/persons"),
+        [Entity.JUR_PERSON]: buildUrl(applicationRoot,"/jur-persons")
     },
     exploration: {
         default: personExplorationMapping,

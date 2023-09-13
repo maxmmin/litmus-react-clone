@@ -1,6 +1,7 @@
 import React from "react";
 import "../../css/imageUploader.scss";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
+import MimeMatcher, {matcher} from "mime-matcher";
 
 type UploaderProps = {
     uploadFile: (file: File)=>string,
@@ -16,7 +17,7 @@ const defaultErrHandler = (e: unknown) => {
 
 export default function FilesUploader ({uploadFile, uploadErrorHandler=defaultErrHandler, allowedTypes, cssAnchor = ""}: UploaderProps) {
     function upload (file: File) {
-        if (allowedTypes&&!allowedTypes.includes(file.type)) throw new Error("Cannot upload file: invalid extension")
+        if (allowedTypes&&!new MimeMatcher(...allowedTypes).match(file.type)) throw new Error("Cannot upload file: invalid extension "+file.type)
         uploadFile(file);
     }
 

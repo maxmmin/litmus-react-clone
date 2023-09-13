@@ -1,11 +1,13 @@
-import Person, {Relationship} from "../../model/human/person/Person";
+import Person, {getFullName, Relationship} from "../../model/human/person/Person";
 import {buildUrl} from "../../util/pureFunctions";
 import appConfig from "../../config/appConfig";
-import valueOrNull, {valueOrMessage} from "../../util/valueOrNull";
+import {valueOrMessage} from "../../util/valueOrNull";
 import {DateEntityTool} from "../../model/DateEntity";
 import "../../css/entityPage.scss";
 import {DashedUserIcon} from "../../util/icons";
 import ImageSlider from "./ImageSlider";
+import {NavLink} from "react-router-dom";
+import {Entity} from "../../model/Entity";
 
 type PersonProps = {
     person: Person
@@ -24,12 +26,12 @@ function RelationshipComponent ({relationship}: RelationShipProps) {
         <div className="person-page__relationship-container">
             <div className="relationship-container__main">
                 <div className="main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person person-page__relationship-container_person-image-wrapper">
-                    { mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.apiHost,appConfig.serverMappings.mediaRoot, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
+                    { mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
 
                 <div className="relationship-container__main-relationship-info">
                     <div className="main-relationship-info__fullname-container">
-                        <p className={"main-relationship-info__fullname"}>{person.lastName} {person.firstName} {valueOrNull(person.middleName)}</p>
+                        <p className={"main-relationship-info__fullname"}><NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id.toString())}>{getFullName(person)}</NavLink></p>
                     </div>
 
                     <div className="main-relationship-info__relation-type-container">
@@ -53,7 +55,7 @@ export default function PersonComponent ({person}: PersonProps) {
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_person">
                 <div className="main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person">
-                    {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.apiHost,appConfig.serverMappings.mediaRoot, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
+                    {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
 
                 <div className="main-entity-section__main-entity-info-container">
@@ -72,7 +74,7 @@ export default function PersonComponent ({person}: PersonProps) {
             <section className="entity-images-slider-section">
                 <h4>Фотографії</h4>
                 <div className="entity-images-slider-container">
-                    <ImageSlider imageLinks={person.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.apiHost,appConfig.serverMappings.mediaRoot,imagePath))}/>
+                    <ImageSlider imageLinks={person.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.mediaRootUrl,imagePath))}/>
                 </div>
             </section>
 

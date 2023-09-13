@@ -15,7 +15,7 @@ export default function ImageSlider ({imageLinks, cssAnchor=""}: SliderProps) {
                 pagination: true
             }} className={"image-slider"}>
                 {imageLinks.map(link => {
-                    return <SplideSlide className={"image-slider__slide"}>
+                    return <SplideSlide key={link} className={"image-slider__slide"}>
                         <div className="image-slider__image-wrapper">
                             <img className={"image-slider__image"} src={link} alt={"person image"}/>
                         </div>

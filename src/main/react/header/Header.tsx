@@ -7,7 +7,7 @@ import BackButton from "../sharedComponents/BackButton";
 import {LitmusServiceContext} from "../App";
 
 type PropsType = {
-    backButtonPath: string|null
+    backButtonPath: string|null|-1
 }
 
 const Header = ({backButtonPath}: PropsType) => {

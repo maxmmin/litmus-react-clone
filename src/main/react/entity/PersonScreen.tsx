@@ -38,7 +38,7 @@ export default function PersonScreen () {
         }
     }, [id])
 
-    if (!id) return <h1>Error. Invalid ID.</h1>
+    if (id===undefined) return <h1>Error. Invalid ID.</h1>
 
     return (
         <div className="entity-root-screen">

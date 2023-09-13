@@ -1,9 +1,15 @@
 import ImageRepo from "./ImageRepo";
 import FileRepoFactory from "./FileRepoFactory";
 import FileRepo from "./FileRepo";
+import MimeMatcher, {matcher} from "mime-matcher";
 
 export default class ImageRepoImpl implements ImageRepo {
-    public static allowedImageTypes: string[] = ["image/jpeg", "image/png"]
+    public static allowedImageTypes: string[] = ["image/*"]
+
+    public static isAllowed(mime: string): boolean {
+        const m = new MimeMatcher(...this.allowedImageTypes);
+        return m.match(mime);
+    }
 
     readonly fileService: FileRepo;
 
@@ -17,9 +23,9 @@ export default class ImageRepoImpl implements ImageRepo {
     }
 
     saveImage(file: File): string {
-        if (ImageRepoImpl.allowedImageTypes.includes(file.type)) {
+        if (ImageRepoImpl.isAllowed(file.type)) {
             return this.fileService.saveFile(file);
-        }   else throw new Error("unexpected type")
+        }   else throw new Error("unexpected type: "+file.type)
     }
 
 }
