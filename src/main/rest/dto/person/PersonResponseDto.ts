@@ -5,7 +5,7 @@ import {Relationship} from "../../../model/human/person/Person";
 import Media from "../../../model/Media";
 
 interface PersonResponseDto {
-    id: string;
+    id: number;
     media: Media | null;
     firstName: string;
     middleName?: string|null;

@@ -100,7 +100,7 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
 
         const person: Person = {
             media: retrievedEntityDto.media?retrievedEntityDto.media:{images: [], mainImage: null},
-            id: retrievedEntityDto.id,
+            id: retrievedEntityDto.id.toString(),
             passportData: passportData,
             sex: retrievedEntityDto.sex,
             location: retrievedEntityDto.location?retrievedEntityDto.location:null,

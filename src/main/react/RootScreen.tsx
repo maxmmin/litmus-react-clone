@@ -8,19 +8,19 @@ import {matchPath, useLocation} from "react-router";
 import {buildUrl} from "../util/pureFunctions";
 import {Entity} from "../model/Entity";
 
-const backButtonsPathMap: Record<string, string|null> = {
+const backButtonsPathMap: Record<string, string|number|null> = {
     "/": null,
     [buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')]: appConfig.applicationMappings.root,
     [buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')]: appConfig.applicationMappings.root,
-    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: appConfig.applicationMappings.root,
-    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: appConfig.applicationMappings.root,
-    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: appConfig.applicationMappings.root,
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: -1,
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: -1,
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: -1,
 }
 export default function RootScreen () {
     const isHeaderOpened = useAppSelector(state => state.appState?.isHeaderMenuOpened);
     const appStateManager = useContext(LitmusServiceContext).appState.manager;
     const path = useLocation().pathname;
-    const currentBackBtnUrl = useMemo<string|null>(()=>{
+    const currentBackBtnUrl = useMemo<string|number|null>(()=>{
         const matchedPath = Object.keys(backButtonsPathMap).find(checkedPath=>matchPath(checkedPath, path));
         if (matchedPath) return backButtonsPathMap[matchedPath];
         else return null;

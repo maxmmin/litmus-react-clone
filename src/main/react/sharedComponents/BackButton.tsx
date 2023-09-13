@@ -3,7 +3,7 @@ import {BackButtonIcon} from "../../util/icons";
 
 type PropsType = {
     className?: string,
-    path: string|-1
+    path: string|number
 }
 
 const BackButton = ({className = "", path}: PropsType) => {

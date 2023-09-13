@@ -92,7 +92,7 @@ const ExplorationPagination = ({pagedData, explorationStateManager}: PaginationP
                 setI(currentParams.i+1)
             }} />
             <Pagination.Last disabled={pagedData.last} onClick={()=>{
-                setI(pagedData.totalPages+1)
+                setI(pagedData.totalPages-1)
             }} />
         </Pagination>
     )
