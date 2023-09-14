@@ -39,7 +39,7 @@ class UserDtoMapper implements DtoMapper<UserRequestDto, User, UserResponseDto> 
     mapToEntity(exploredEntityDto: UserResponseDto): User {
         return {
             email: exploredEntityDto.email,
-            id: exploredEntityDto.id,
+            id: exploredEntityDto.id.toString(),
             firstName: exploredEntityDto.firstName,
             middleName: exploredEntityDto.middleName,
             lastName: exploredEntityDto.lastName,

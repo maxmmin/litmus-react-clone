@@ -38,7 +38,7 @@ class JurPersonDtoMapper implements DtoMapper<JurPersonRequestDto, JurPerson, Ju
 
     mapToEntity(exploredEntityDto: JurPersonResponseDto): JurPerson {
         const jurPerson: JurPerson = {
-            id: exploredEntityDto.id,
+            id: exploredEntityDto.id.toString(),
             name: exploredEntityDto.name,
             owner: exploredEntityDto.owner?exploredEntityDto.owner:null,
             benOwner: exploredEntityDto.benOwner?exploredEntityDto.benOwner:null,

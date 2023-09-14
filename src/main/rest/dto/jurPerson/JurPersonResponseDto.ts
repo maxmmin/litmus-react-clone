@@ -2,7 +2,7 @@ import Person from "../../../model/human/person/Person";
 import {GeoLocation} from "../../../model/GeoLocation";
 
 interface JurPersonResponseDto {
-    id: string;
+    id: number;
     name: string;
     edrpou?: string;
     dateOfRegistration?: string;
