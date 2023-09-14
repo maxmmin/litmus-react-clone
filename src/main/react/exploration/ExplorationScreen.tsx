@@ -85,6 +85,7 @@ const ExplorationScreen = () => {
                        <ExplorationModeSelectContainer explorationStateManager={stateManager}/>
 
                        <ExplorationInputForm onSubmit={(e: React.MouseEvent<HTMLButtonElement>) => {
+                           stateManager?.setParams({...stateManager?.getExplorationParams(), i: 0});
                            explorationService.explore();
                        }} isPending={Boolean(explorationState?.isPending)} exploredEntity={exploredEntity}/>
 
