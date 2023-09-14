@@ -60,7 +60,7 @@ const getVisibleIndexes = (pagedData: PagedData<unknown>) => {
         indexes.unshift(cursor);
     }
 
-    for (let cursor = pagedData.index+1; cursor<pagedData.totalPages-1&&cursor<pagedData.index+1+sideLength; cursor++) {
+    for (let cursor = pagedData.index+1; cursor<pagedData.totalPages&&cursor<pagedData.index+1+sideLength; cursor++) {
         indexes.push(cursor);
     }
 
