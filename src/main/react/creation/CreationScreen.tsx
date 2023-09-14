@@ -7,6 +7,7 @@ import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import React, {ChangeEvent, useEffect, useMemo} from "react";
 import CreationInputSection from "./CreationInputSection";
 import {
+    buildUrl,
     getEntityByDomain,
 } from "../../util/pureFunctions";
 import {useLocation, useParams} from "react-router";
@@ -106,7 +107,13 @@ const Creation = () => {
 
                    <Form onSubmit={e=>{
                        e.preventDefault();
-                       creationService.createEntity();
+                       creationService
+                           .createEntity()
+                           .then(createdEntity=>{
+                               const {id} = (createdEntity as {id: string});
+                               navigate(buildUrl(appConfig.applicationMappings.entityRoot[emergingEntity!], id))
+                           });
+
                    }} className={"creation-input-group"}>
                        <CreationInputSection entity={emergingEntity}/>
 
