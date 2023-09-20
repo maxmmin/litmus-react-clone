@@ -14,26 +14,25 @@ import {
     REGISTER    }   from "reduxjs-toolkit-persist";
 import {PersistConfig} from "reduxjs-toolkit-persist/es/types";
 import storage from 'reduxjs-toolkit-persist/lib/storage'
-import userIdentityReducer, {initialUserIdentityState} from "./reducers/userIdentityReducer";
+import userIdentityReducer, {initialUserIdentityState, UserIdentityState} from "./reducers/userIdentityReducer";
 import loginPageDataReducer, {initialLoginState} from "./reducers/loginPageDataReducer";
-import creationReducer, {CreationStateReducible, defaultCreationState} from "./reducers/creationStateReducer";
+import creationReducer, {
+    CreationState,
+    CreationStateReducible,
+    defaultCreationState
+} from "./reducers/creationStateReducer";
 import explorationStateReducer, {
-    defaultExplorationState,
+    defaultExplorationState, ExplorationState,
     ExplorationStateReducible
 } from "./reducers/explorationStateReducer";
 import ErrorResponse from "../rest/ErrorResponse";
 import errLoggingMiddleware from "./middlewares/errLoggingMiddleware";
 import {AppNotificationType} from "./types/applicationState/Notification";
 import AuthAction from "./actions/AuthAction";
-import Authentication, {AuthenticationReducible} from "./types/auth/Authentication";
+import {Authentication, AuthenticationReducible} from "./types/auth/Authentication";
 import AppState, {AppStateReducible} from "./types/applicationState/AppState";
-import UserIdentity, {UserIdentityReducible} from "./types/userIdentity/UserIdentity";
-import UserExplorationState from "./types/exploration/human/user/UserExplorationState";
-import PersonExplorationState from "./types/exploration/human/person/PersonExplorationState";
-import JurPersonExplorationState from "./types/exploration/jurPerson/JurPersonExplorationState";
-import {LoginPageStateReducible} from "./actions/LoginPageDataActions";
-import {TimersReducible} from "./actions/TimersAction";
-
+import UserIdentity, {UserIdentityStateReducible} from "./types/userIdentity/UserIdentity";
+import {LoginPageState, LoginPageStateReducible} from "./actions/LoginPageDataActions";
 
 const persistConfig: PersistConfig<any> = {
     storage,
@@ -43,12 +42,12 @@ const persistConfig: PersistConfig<any> = {
 }
 
 type StoreState = {
-    authentication: AuthenticationReducible,
-    appState: AppStateReducible,
-    userIdentity: UserIdentityReducible,
-    exploration: ExplorationStateReducible,
-    loginPageState: LoginPageStateReducible,
-    creation: CreationStateReducible
+    authentication: Authentication,
+    appState: AppState,
+    userIdentity: UserIdentityState,
+    exploration: ExplorationState,
+    loginPageState: LoginPageState,
+    creation: CreationState
 }
 
 const defaultStoreState: StoreState = {
@@ -71,7 +70,15 @@ const _rootReducer = combineReducers({
 
 const rootReducer: typeof _rootReducer = (state, action) => {
     if (action.type===AuthAction.LOGOUT) {
-        return defaultStoreState;
+        const resetState = {...defaultStoreState};
+        resetState.appState = {...defaultStoreState.appState};
+        return {
+            ...defaultStoreState,
+            appState: {
+                ...defaultStoreState.appState,
+                gmapsApiState: state!.appState!.gmapsApiState
+            }
+        }
     } else {
         return _rootReducer(state,action);
     }

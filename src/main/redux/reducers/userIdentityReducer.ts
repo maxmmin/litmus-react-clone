@@ -1,13 +1,14 @@
-import {UserIdentityReducible} from "../types/userIdentity/UserIdentity";
+import UserIdentity, {UserIdentityStateReducible} from "../types/userIdentity/UserIdentity";
 import {Reducer} from "react";
 import UserIdentityActions from "../actions/UserIdentityActions";
 import AuthAction from "../actions/AuthAction";
 import {PayloadAction} from "@reduxjs/toolkit";
 import GeneralAction from "../GeneralAction";
 
-export const initialUserIdentityState = null;
+export type UserIdentityState = UserIdentity|null
+export const initialUserIdentityState: UserIdentity|null = null;
 
-const userIdentityReducer: Reducer<UserIdentityReducible, PayloadAction<UserIdentityReducible>> = (prevState=null, identityAction): UserIdentityReducible => {
+const userIdentityReducer: Reducer<UserIdentityStateReducible, PayloadAction<UserIdentityStateReducible>> = (prevState=null, identityAction): UserIdentityStateReducible => {
 
     switch (identityAction.type) {
         case `${UserIdentityActions.RETRIEVE_IDENTITY}/fulfilled`: {

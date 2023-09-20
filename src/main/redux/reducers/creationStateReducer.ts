@@ -164,14 +164,21 @@ const emergingEntitySelectReducer:  Reducer<Entity|undefined, PayloadAction<Enti
     }
 }
 
-export type CreationStateReducible  = {
+export type CreationState  = {
     user: UserCreationStateReducible,
     person: PersonCreationStateReducible,
     jurPerson: JurPersonCreationStateReducible,
     selectedEntity: Entity
 }
 
-export const defaultCreationState: CreationStateReducible = {
+export type CreationStateReducible  = {
+    user: UserCreationStateReducible,
+    person: PersonCreationStateReducible,
+    jurPerson: JurPersonCreationStateReducible,
+    selectedEntity: Entity
+} | undefined
+
+export const defaultCreationState: CreationState = {
     jurPerson: initialJurPersonState, person: initialPersonCreationState, selectedEntity: initialEntity, user: initialUserCreationState
 }
 

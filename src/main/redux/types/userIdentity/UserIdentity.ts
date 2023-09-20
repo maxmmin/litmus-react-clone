@@ -1,4 +1,5 @@
 import {Permissions, RoleName} from "./Role";
+import {UserIdentityState} from "../../reducers/userIdentityReducer";
 
 type UserIdentity = {
     email: string;
@@ -12,6 +13,6 @@ type UserIdentity = {
     status: string;
 }
 
-export type UserIdentityReducible = UserIdentity | null | undefined
+export type UserIdentityStateReducible = UserIdentityState | undefined
 
 export default UserIdentity;

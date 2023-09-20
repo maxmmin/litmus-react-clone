@@ -2,7 +2,7 @@ import store, {AppDispatch, LitmusAsyncThunkConfig, ThunkArg} from "../../redux/
 import {Action} from "redux";
 import UserIdentityActions from "../../redux/actions/UserIdentityActions";
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
-import UserIdentity, {UserIdentityReducible} from "../../redux/types/userIdentity/UserIdentity";
+import UserIdentity, {UserIdentityStateReducible} from "../../redux/types/userIdentity/UserIdentity";
 import UserIdentityApiService from "./api/UserIdentityApiService";
 import UserIdentityManager from "./UserIdentityManager";
 import UserIdentityApiServiceImpl from "./api/UserIdentityApiServiceImpl";
@@ -16,11 +16,11 @@ type RetrieveIdentityThunkArg = ThunkArg<{
 
 class UserIdentityManagerImpl implements UserIdentityManager{
     private readonly dispatch: AppDispatch;
-    private readonly getState: () => UserIdentityReducible;
+    private readonly getState: () => UserIdentityStateReducible;
 
     private readonly identityService: UserIdentityApiService;
 
-    constructor(dispatch: AppDispatch, getState: ()=>UserIdentityReducible, identityService: UserIdentityApiService) {
+    constructor(dispatch: AppDispatch, getState: ()=>UserIdentityStateReducible, identityService: UserIdentityApiService) {
         this.dispatch = dispatch;
         this.getState = getState;
         this.identityService = identityService;
