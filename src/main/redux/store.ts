@@ -1,7 +1,7 @@
 import {configureStore, PayloadAction} from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
-import authReducer from "./reducers/authReducer";
-import appStateReducer from "./reducers/appStateReducer";
+import authReducer, {defaultAuthState} from "./reducers/authReducer";
+import appStateReducer, {initialAppState} from "./reducers/appStateReducer";
 import {Action, combineReducers} from "redux"
 import {
     persistReducer,
@@ -14,14 +14,25 @@ import {
     REGISTER    }   from "reduxjs-toolkit-persist";
 import {PersistConfig} from "reduxjs-toolkit-persist/es/types";
 import storage from 'reduxjs-toolkit-persist/lib/storage'
-import userIdentityReducer from "./reducers/userIdentityReducer";
-import loginPageDataReducer from "./reducers/LoginPageDataReducer";
-import creationReducer from "./reducers/creationStateReducer";
-import timersReducer from "./reducers/timersReducer";
-import explorationStateReducer from "./reducers/explorationStateReducer";
+import userIdentityReducer, {initialUserIdentityState} from "./reducers/userIdentityReducer";
+import loginPageDataReducer, {initialLoginState} from "./reducers/loginPageDataReducer";
+import creationReducer, {CreationStateReducible, defaultCreationState} from "./reducers/creationStateReducer";
+import explorationStateReducer, {
+    defaultExplorationState,
+    ExplorationStateReducible
+} from "./reducers/explorationStateReducer";
 import ErrorResponse from "../rest/ErrorResponse";
 import errLoggingMiddleware from "./middlewares/errLoggingMiddleware";
 import {AppNotificationType} from "./types/applicationState/Notification";
+import AuthAction from "./actions/AuthAction";
+import Authentication, {AuthenticationReducible} from "./types/auth/Authentication";
+import AppState, {AppStateReducible} from "./types/applicationState/AppState";
+import UserIdentity, {UserIdentityReducible} from "./types/userIdentity/UserIdentity";
+import UserExplorationState from "./types/exploration/human/user/UserExplorationState";
+import PersonExplorationState from "./types/exploration/human/person/PersonExplorationState";
+import JurPersonExplorationState from "./types/exploration/jurPerson/JurPersonExplorationState";
+import {LoginPageStateReducible} from "./actions/LoginPageDataActions";
+import {TimersReducible} from "./actions/TimersAction";
 
 
 const persistConfig: PersistConfig<any> = {
@@ -31,15 +42,40 @@ const persistConfig: PersistConfig<any> = {
     timeout: 1000
 }
 
-const rootReducer = combineReducers({
+type StoreState = {
+    authentication: AuthenticationReducible,
+    appState: AppStateReducible,
+    userIdentity: UserIdentityReducible,
+    exploration: ExplorationStateReducible,
+    loginPageState: LoginPageStateReducible,
+    creation: CreationStateReducible
+}
+
+const defaultStoreState: StoreState = {
+    appState: initialAppState,
+    authentication: defaultAuthState,
+    creation: defaultCreationState,
+    exploration: defaultExplorationState,
+    loginPageState: initialLoginState,
+    userIdentity: initialUserIdentityState
+}
+
+const _rootReducer = combineReducers({
     authentication: authReducer,
     appState: appStateReducer,
     userIdentity: userIdentityReducer,
     exploration: explorationStateReducer,
     loginPageState: loginPageDataReducer,
-    creation: creationReducer,
-    timers: timersReducer
-} )
+    creation: creationReducer
+})
+
+const rootReducer: typeof _rootReducer = (state, action) => {
+    if (action.type===AuthAction.LOGOUT) {
+        return defaultStoreState;
+    } else {
+        return _rootReducer(state,action);
+    }
+}
 
 const persistedReducer = persistReducer(persistConfig, rootReducer) as typeof rootReducer;
 

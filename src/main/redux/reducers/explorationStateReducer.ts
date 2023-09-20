@@ -14,6 +14,7 @@ import deepCopy from "../../util/deepCopy";
 import GeneralAction from "../GeneralAction";
 import {ExplorationTypedAction} from "../actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../actions/ExplorationActions";
+import {CombinedState} from "@reduxjs/toolkit/dist/query/core/apiState";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<unknown, string>): S => {
     switch (action.type) {
@@ -154,6 +155,13 @@ const exploredEntityReducer:  Reducer<Entity|undefined, PayloadAction<Entity>> =
     } else {
         return prevState;
     }
+}
+
+export type ExplorationStateReducible = {person: PersonExplorationStateReducible, jurPerson: JurPersonExplorationStateReducible, user: UserExplorationStateReducible, exploredEntity: Entity | undefined}
+
+export const defaultExplorationState: ExplorationStateReducible = {
+    exploredEntity: initialEntity, jurPerson: initialJurPersonExplorationState, person: initialPersonExplorationState, user: initialUserExplorationState
+
 }
 
 const explorationStateReducer = combineReducers({

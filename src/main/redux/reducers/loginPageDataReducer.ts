@@ -4,13 +4,13 @@ import {PayloadAction} from "@reduxjs/toolkit";
 import AuthAction from "../actions/AuthAction";
 import {BasicHttpError} from "../../error/BasicHttpError";
 
-const initialState: LoginPageState = {
+export const initialLoginState: LoginPageState = {
     email: "",
     password: "",
     error: null
 }
 
-const loginPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<LoginPageState>> = (prevState=initialState, action) => {
+const loginPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<LoginPageState>> = (prevState=initialLoginState, action) => {
     switch (action.type) {
         case LoginPageDataActions.SET_STATE: {
             return action.payload;
@@ -21,13 +21,13 @@ const loginPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<Login
         }
 
         case `${AuthAction.AUTHENTICATE}/fulfilled`: {
-            return initialState;
+            return initialLoginState;
         }
 
         default: {
 
             if (action.type.endsWith("/rejected")) {
-                const prev = prevState?prevState:initialState;
+                const prev = prevState?prevState:initialLoginState;
 
                 const actionType = action.type.slice(0,-9)
 

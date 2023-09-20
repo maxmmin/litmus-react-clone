@@ -5,7 +5,7 @@ import AuthAction from "../actions/AuthAction";
 import {PayloadAction} from "@reduxjs/toolkit";
 import GeneralAction from "../GeneralAction";
 
-const initialState = null;
+export const initialUserIdentityState = null;
 
 const userIdentityReducer: Reducer<UserIdentityReducible, PayloadAction<UserIdentityReducible>> = (prevState=null, identityAction): UserIdentityReducible => {
 
@@ -17,7 +17,7 @@ const userIdentityReducer: Reducer<UserIdentityReducible, PayloadAction<UserIden
         case `${AuthAction.AUTHENTICATE}/rejected`:
         case UserIdentityActions.CLEAR_IDENTITY:
         case GeneralAction.RESET_DATA: {
-            return initialState;
+            return initialUserIdentityState;
         }
 
         default: return prevState

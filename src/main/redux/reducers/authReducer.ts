@@ -6,15 +6,15 @@ import {isRejected, PayloadAction} from "@reduxjs/toolkit";
 import {HttpStatus} from "../../rest/HttpStatus";
 import {ApplicationError} from "../../rest/ErrorResponse";
 
-const defaultState: Authentication = {
+export const defaultAuthState: Authentication = {
     isAuthenticated: false
 }
 
-const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=defaultState, action): AuthenticationReducible => {
+const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication>> = (prevState=defaultAuthState, action): AuthenticationReducible => {
 
     switch (action.type) {
         case AuthAction.LOGOUT: {
-            return defaultState;
+            return defaultAuthState;
         }
 
         case `${AuthAction.AUTHENTICATE}/fulfilled`: {
@@ -25,7 +25,7 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
 
         case `${AuthAction.AUTHENTICATE}/rejected`: {
             const err: ApplicationError<unknown> = HttpErrorParser.parseError(action.payload);
-            if (err.status===401) return defaultState
+            if (err.status===401) return defaultAuthState
                 else return prevState;
         }
 

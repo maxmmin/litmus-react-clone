@@ -14,11 +14,11 @@ import ErrorResponse, {ApplicationError} from "../../rest/ErrorResponse";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import GeneralAction from "../GeneralAction";
 
-const initialState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
+export const initialAppState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
 
 
 
-const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState = initialState, action) => {
+const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState = initialAppState, action) => {
 
     switch (action.type) {
         case AppStateAction.REFRESH_ON: {
@@ -39,7 +39,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
 
 
         case GeneralAction.RESET_DATA: {
-            return {...initialState, notifications: prevState.notifications, gmapsApiState: prevState.gmapsApiState}
+            return {...initialAppState, notifications: prevState.notifications, gmapsApiState: prevState.gmapsApiState}
         }
 
         case AppStateAction.SET_MAPS_API_RESPONSE: {

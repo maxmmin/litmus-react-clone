@@ -55,8 +55,9 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
 
 const initialPersonCreationState: PersonCreationState = deepCopy(new BasicPersonCreationState());
 
-const personCreationStateReducer: Reducer<EntityCreationState<
-    Person, PersonValidationObject>|undefined, PayloadAction<Person>> = (prevState=initialPersonCreationState, action) => {
+export type PersonCreationStateReducible = PersonCreationState|undefined;
+
+const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadAction<Person>> = (prevState=initialPersonCreationState, action) => {
     switch (action.type) {
         case PersonCreationAction.ADD_PERSON_RELATION: {
             const relToAdd = (action.payload as unknown as Relationship);
@@ -106,7 +107,8 @@ const personCreationStateReducer: Reducer<EntityCreationState<
 }
 const initialJurPersonState: JurPersonCreationState = deepCopy(new BasicJurPersonCreationState())
 
-const jurPersonCreationStateReducer: Reducer<JurPersonCreationState|undefined, PayloadAction<JurPerson>> = (prevState=initialJurPersonState, action) => {
+export type JurPersonCreationStateReducible = JurPersonCreationState|undefined;
+const jurPersonCreationStateReducer: Reducer<JurPersonCreationStateReducible, PayloadAction<JurPerson>> = (prevState=initialJurPersonState, action) => {
     const actions = CreationTypedAction.person;
     switch (action.type) {
         // code-place for jur person specific actions
@@ -129,7 +131,9 @@ const jurPersonCreationStateReducer: Reducer<JurPersonCreationState|undefined, P
 
 const initialUserCreationState: UserCreationState = deepCopy(new BasicUserCreationState());
 
-const userCreationStateReducer: Reducer<UserCreationState|undefined, PayloadAction<User>> = (prevState=initialUserCreationState, action) => {
+type UserCreationStateReducible = UserCreationState|undefined;
+
+const userCreationStateReducer: Reducer<UserCreationStateReducible, PayloadAction<User>> = (prevState=initialUserCreationState, action) => {
     const actions = CreationTypedAction.person;
     switch (action.type) {
 
@@ -160,11 +164,22 @@ const emergingEntitySelectReducer:  Reducer<Entity|undefined, PayloadAction<Enti
     }
 }
 
-const CreationStateReducer = combineReducers({
+export type CreationStateReducible  = {
+    user: UserCreationStateReducible,
+    person: PersonCreationStateReducible,
+    jurPerson: JurPersonCreationStateReducible,
+    selectedEntity: Entity
+}
+
+export const defaultCreationState: CreationStateReducible = {
+    jurPerson: initialJurPersonState, person: initialPersonCreationState, selectedEntity: initialEntity, user: initialUserCreationState
+}
+
+const creationStateReducer = combineReducers({
     user: userCreationStateReducer,
     person: personCreationStateReducer,
     jurPerson: jurPersonCreationStateReducer,
     selectedEntity: emergingEntitySelectReducer
 })
 
-export default CreationStateReducer;
+export default creationStateReducer;

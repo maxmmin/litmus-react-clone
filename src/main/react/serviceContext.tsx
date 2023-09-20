@@ -17,7 +17,6 @@ import UserCreationStateManager from "../service/creation/stateManager/user/User
 import PersonCreationApiService from "../service/creation/api/PersonCreationApiService";
 import JurPersonCreationApiService from "../service/creation/api/JurPersonCreationApiService";
 import UserCreationApiService from "../service/creation/api/UserCreationApiService";
-import TimersStateManager from "../service/timers/TimersStateManager";
 import PersonCreationStateManagerImpl from "../service/creation/stateManager/person/PersonCreationStateManagerImpl";
 import JurPersonCreationStateManagerImpl
     from "../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
@@ -221,14 +220,6 @@ const creationContext: CreationContext = {
     formDataBuilder: formDataBuilder
 }
 
-type TimersContext = {
-    manager: TimersStateManager
-}
-
-const timersContext: TimersContext = {
-    manager: new TimersStateManager()
-}
-
 type UserIdentityContext = {
     apiService: UserIdentityApiService,
     manager: UserIdentityManager
@@ -263,7 +254,6 @@ type ServiceContext = {
     creation: CreationContext,
     appState: AppStateContext,
     userIdentity: UserIdentityContext,
-    timers: TimersContext,
     notification: NotificationContext,
     files: FileContext,
     mappers: Mappers,
@@ -276,7 +266,6 @@ const serviceContext: ServiceContext = {
     creation: creationContext,
     appState: appStateContext,
     userIdentity: userIdentityContext,
-    timers: timersContext,
     notification: notificationContext,
     files: fileContext,
     mappers: mappers,
