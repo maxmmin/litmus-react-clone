@@ -10,7 +10,6 @@ import ValidationService from "../ValidationService";
 import ValidationError, {ValidationResponse} from "../../error/ValidationError";
 import CreationCoreAction from "../../redux/actions/CreationCoreAction";
 import {HttpStatus} from "../../rest/HttpStatus";
-import ErrorResponse from "../../rest/ErrorResponse";
 import {ValidationErrors} from "../ValidationErrors";
 import {AxiosError} from "axios";
 
@@ -46,7 +45,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationE
     protected defaultCreate () {
         const emergedEntity = this.creationStateManager.getCreationState().emergingEntity;
         const prefix = this.creationStateManager.getCreationActions()[CreationCoreAction.CREATE_ENTITY];
-        const thunkAction = this.createEntityThunk(prefix)({emergingEntity: emergedEntity, globalPending: false});
+        const thunkAction = this.createEntityThunk(prefix)({emergingEntity: emergedEntity, globalPending: true});
         return this.creationStateManager.create(thunkAction);
     }
 

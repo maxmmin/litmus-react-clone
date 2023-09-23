@@ -4,7 +4,7 @@ import FileRepo from "./FileRepo";
 import MimeMatcher from "mime-matcher";
 
 export default class ImageRepoImpl implements ImageRepo {
-    public static allowedImageTypes: string[] = ["image/*"]
+    public static allowedImageTypes: string[] = ["image/tiff",  "image/png", "image/jpeg", "image/tiff", "image/webp"]
 
     public static isAllowed(mime: string): boolean {
         const m = new MimeMatcher(...this.allowedImageTypes);
