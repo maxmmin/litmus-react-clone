@@ -7,7 +7,7 @@ import 'ol/ol.css';
 import 'ol-popup/src/ol-popup.css';
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
-import {Overlay, View} from "ol";
+import {View} from "ol";
 import Map from 'ol/Map';
 import {FullScreen, Zoom} from "ol/control";
 import "../../../css/map.scss";
@@ -53,10 +53,11 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
                         source: new OSM()
                     })
                 ],
+                pixelRatio: 1,
                 view: new View({
                     center: center,
                     zoom: 15,
-                    projection: 'EPSG:4326'
+                    projection: 'EPSG:4326',
                 }),
                 controls: [
                     new FullScreen({
@@ -78,6 +79,8 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
                 });
             })
 
+            olMap.addOverlay(locationPopup);
+
             setMap(olMap);
 
             console.log("map has been initialized")
@@ -90,6 +93,12 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
             locationPopup.show([coordinates.lng, coordinates.lat], "position");
         }
     }, [coordinates])
+
+    useEffect(()=>{
+        if (map&&coordinates) {
+            locationPopup.show([coordinates.lng, coordinates.lat], '<div><h2>Hello world</h2></div>');
+        }
+    }, [coordinates, map])
 
     return (
         <div className="map" ref={mapTargetElement}>

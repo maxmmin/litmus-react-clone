@@ -72,8 +72,8 @@ export default class BingGeocodingService implements GeocodingService {
             .flat()
             .map(place =>({
             address: place.address.formattedAddress,
-            longitude: place.point.coordinates[0],
-            latitude: place.point.coordinates[1]
+            latitude: place.point.coordinates[0],
+            longitude: place.point.coordinates[1]
         }));
         return locations[0];
     }
