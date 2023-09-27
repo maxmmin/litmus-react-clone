@@ -1,15 +1,18 @@
-import React, {Dispatch, SetStateAction, useEffect, useRef, useState} from "react";
+import React, {Dispatch, SetStateAction, useContext, useEffect, useRef, useState} from "react";
 import {GeoLocation} from "../../../model/GeoLocation";
 import GeoCoordinates from "../../../model/GeoCoordinates";
 import PlacesAutocomplete from "./PlacesAutocomplete";
 import {useAppSelector} from "../../../redux/hooks";
 import 'ol/ol.css';
+import 'ol-popup/src/ol-popup.css';
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
-import {View} from "ol";
+import {Overlay, View} from "ol";
 import Map from 'ol/Map';
 import {FullScreen, Zoom} from "ol/control";
 import "../../../css/map.scss";
+import Popup from "ol-popup";
+import {LitmusServiceContext} from "../../App";
 
 
 const defaultMapPosition: GeoCoordinates = {
@@ -29,15 +32,19 @@ const SelectGeoComponent = ({location, setLocation}: LocationProps) => {
 }
 
 type MapLocationProps = {
-    coordinates: GeoCoordinates,
-    setCoordinates: (coordinates: GeoCoordinates)=>void
+    coordinates: GeoCoordinates|null,
+    setLocation: (coordinates: GeoCoordinates)=>void
 }
 
-const MapComponent = ({coordinates, setCoordinates}: MapLocationProps) => {
+const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null)
     const [map, setMap] = useState<Map | undefined>();
-    console.log(coordinates)
+    const [locationPopup, setLocationPopup] = useState(new Popup());
+
     useEffect(()=>{
+        const mapCoordinates = coordinates||defaultMapPosition;
+        const center = [mapCoordinates.lng,mapCoordinates.lat]
+
         if (mapTargetElement.current) {
             const olMap = new Map({
                 target: 'map',
@@ -47,7 +54,7 @@ const MapComponent = ({coordinates, setCoordinates}: MapLocationProps) => {
                     })
                 ],
                 view: new View({
-                    center: [coordinates.lng, coordinates.lat],
+                    center: center,
                     zoom: 15,
                     projection: 'EPSG:4326'
                 }),
@@ -64,11 +71,25 @@ const MapComponent = ({coordinates, setCoordinates}: MapLocationProps) => {
             });
 
             olMap.setTarget(mapTargetElement.current);
+            olMap.on("click", (event) => {
+                setLocation({
+                    lng: event.coordinate[0],
+                    lat: event.coordinate[1]
+                });
+            })
+
             setMap(olMap);
 
             console.log("map has been initialized")
+
         }
     }, [mapTargetElement])
+
+    useEffect(()=>{
+        if (coordinates) {
+            locationPopup.show([coordinates.lng, coordinates.lat], "position");
+        }
+    }, [coordinates])
 
     return (
         <div className="map" ref={mapTargetElement}>
@@ -77,7 +98,8 @@ const MapComponent = ({coordinates, setCoordinates}: MapLocationProps) => {
 }
 
 const GeoComponent = ({location, setLocation}: LocationProps) => {
-
+    const geocodingService = useContext(LitmusServiceContext).geocodingService;
+    console.log(location)
     return (
     <>
         <div className="places-container">
@@ -85,7 +107,10 @@ const GeoComponent = ({location, setLocation}: LocationProps) => {
         </div>
 
         <div className="modal__map-wrapper">
-            <MapComponent coordinates={location?{lat: location.latitude, lng: location.longitude}:defaultMapPosition} setCoordinates={()=>{}}/>
+            <MapComponent coordinates={location?{lat: location.latitude, lng: location.longitude}:null} setLocation={async (coordinates)=>{
+                const location = await geocodingService.reverseGeocodeToGeo(coordinates);
+                setLocation(location);
+            }}/>
         </div>
     </>
     )

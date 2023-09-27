@@ -7,7 +7,6 @@ type AppConfig = {
     entityDomains: Readonly<Record<Entity, string>>,
     serverMappings: Readonly<typeof serverMappings>,
     applicationMappings: Readonly<typeof applicationMappings>
-    authHeader: string,
     xsrfCookieName: string,
     xsrfHeaderName: string
 }
@@ -17,8 +16,7 @@ const host = "http://localhost:8081";
 const apiRoot = `/api`
 const authApiRoot = `/auth`
 const entitiesPerPage = 50;
-const geoApiKEy = "AIzaSyANxtNc5B2xbpNjhs84bIR_YWRd5RMoymA";
-const apiAuthHeader = "Authorization"
+const geoApiKEy = "AplsM3q0nzBnkkYGFC3NOXLr_XIeqbG2NQRxONopsPIeneujRujL86u_PWQC5hfh";
 
 const entityDomains: AppConfig['entityDomains'] = Object.freeze({
     [Entity.USER]: "users",
@@ -80,7 +78,6 @@ const appConfig: AppConfig = {
     entityDomains: entityDomains,
     serverMappings: serverMappings,
     applicationMappings: applicationMappings,
-    authHeader: apiAuthHeader,
     xsrfCookieName: 'XSRF-TOKEN',
     xsrfHeaderName: 'X-XSRF-TOKEN'
 }
@@ -92,8 +89,3 @@ export const gmapsRegionOptions: {region: string, language: string} = {
     region: "UA",
     language: "ua"
 }
-
-export const createAuthHeader = (accessToken: string) => ({
-    [appConfig.authHeader]: `Bearer ${accessToken}`
-})
-

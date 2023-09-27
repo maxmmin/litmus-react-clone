@@ -75,6 +75,9 @@ import FileRepo from "../service/media/FileRepo";
 import CsrfTokenLoader from "../service/rest/CsrfTokenLoader";
 import BasicCsrfTokenLoader from "../service/rest/BasicCsrfTokenLoader";
 import PersonExplorationApiService from "../service/exploration/api/human/person/PersonExplorationApiService";
+import GeocodingService from "../service/geocoding/GeocodingService";
+import BingGeocodingService from "../service/geocoding/BingGeocodingService";
+import appConfig from "../config/appConfig";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -196,6 +199,8 @@ const personCreationValidationService = new PersonCreationValidationServiceImpl(
 const jurPersonCreationValidationService = new JurPersonCreationValidationServiceImpl();
 const userCreationValidationService = new UserCreationValidationServiceImpl();
 
+const geocodingService = new BingGeocodingService(appConfig.geoApiKey);
+
 const creationContext: CreationContext = {
     apiService: {
         person: personCreationApiService,
@@ -257,7 +262,8 @@ type ServiceContext = {
     notification: NotificationContext,
     files: FileContext,
     mappers: Mappers,
-    csrfTokenLoader: CsrfTokenLoader
+    csrfTokenLoader: CsrfTokenLoader,
+    geocodingService: GeocodingService
 }
 
 const serviceContext: ServiceContext = {
@@ -269,7 +275,8 @@ const serviceContext: ServiceContext = {
     notification: notificationContext,
     files: fileContext,
     mappers: mappers,
-    csrfTokenLoader: new BasicCsrfTokenLoader()
+    csrfTokenLoader: new BasicCsrfTokenLoader(),
+    geocodingService: geocodingService
 }
 
 export default serviceContext;
