@@ -1,9 +1,10 @@
-import React, {Dispatch, SetStateAction, useEffect, useState} from "react";
+import React, {Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
 import {GeoLocation} from "../../../model/GeoLocation";
 import usePlacesAutocomplete from "use-places-autocomplete";
 import {Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover} from "@reach/combobox";
 import {geocode} from "../../../util/pureFunctions";
 import {gmapsRegionOptions} from "../../../config/appConfig";
+import {LitmusServiceContext} from "../../App";
 
 
 type AutocompleteProps = {
@@ -11,33 +12,54 @@ type AutocompleteProps = {
     setLocation: Dispatch<SetStateAction<GeoLocation | null>>;
 }
 
+type AutoSuggestRequest = {
+    value: string
+}
+
 const PlacesAutocomplete = ({address,setLocation}: AutocompleteProps) => {
-    const {
-        ready,
-        setValue,
-        suggestions: { status, data },
-        clearSuggestions,
-    } = usePlacesAutocomplete({
-        requestOptions: {
-            ...gmapsRegionOptions
-        }
-    });
+    const geocodingService = useContext(LitmusServiceContext).geocodingService;
+
+    const [places, setPlaces] = useState<string[]>([])
 
     const [inputValue, setInputValue] = useState<string>("")
 
     const handleSelect = async (address: string) => {
-        setValue(address, false);
-        clearSuggestions();
+        setPlaces([])
 
-        const results = await geocode(address)
-        const result = results[0]
+        const location = await geocodingService.geocode(address);
 
-        setLocation({ latitude: result.geometry.location.lat()!, longitude: result.geometry.location.lng()!, address: result.formatted_address});
+        setLocation({...location, address: address});
     };
-    // I split value for input and value of autocomplete to prevent firing Google Maps Autocomplete invoking when you select position on map.
+
     useEffect(()=>{
         setInputValue(address)
     }, [address])
+
+    useEffect(() => {
+        let timerId: null|number = null;
+
+        let aborted: {value: boolean} = {value: false};
+
+        if (inputValue.length>0&&inputValue!==address) {
+            timerId = window.setTimeout(()=>{
+                geocodingService
+                    .autocomplete(inputValue)
+                    .then(data=> {
+                        if (!aborted.value) {
+                            setPlaces(data);
+                        }
+                    });
+            }, 100)
+
+        } else {
+            if (places.length>0) setPlaces([]);
+        }
+
+        return ()=>{
+            if (timerId!==null) window.clearTimeout(timerId);
+            aborted.value = true;
+        }
+    }, [inputValue]);
 
     return (
         <Combobox className={"geo-autocomplete-container"} onSelect={handleSelect}>
@@ -45,18 +67,16 @@ const PlacesAutocomplete = ({address,setLocation}: AutocompleteProps) => {
                 value={inputValue}
                 onChange={(e) => {
                     setInputValue(e.target.value)
-                    setValue(e.target.value)
                 }}
-                disabled={!ready}
+                disabled={false} // change @TODO
                 className="combobox-input form-control"
                 placeholder="Search an address"
             />
             <ComboboxPopover portal={false} className={"autocomplete-items-popover"}>
                 <ComboboxList className={"autocomplete-items-list"}>
                     {
-                        status === "OK" &&
-                        data.map(({ place_id, description }: {place_id: string, description: string}) => {
-                            return <ComboboxOption className={"autocomplete-items__item"} key={place_id} value={description} />
+                        places.map( (place, index) => {
+                            return <ComboboxOption className={"autocomplete-items__item"} key={index} value={place} />
                         })
                     }
                 </ComboboxList>

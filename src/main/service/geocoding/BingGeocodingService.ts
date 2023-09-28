@@ -21,22 +21,47 @@ type BingReverseGeocodeResponse = {
     }>;
 }
 
-
-type BingGeocodeResponse = {
-    resourceSets: Array<{
-        resources: Array<{
+type BingGeocodingResponse = {
+    resourceSets: {
+        resources: {
+            __type: string;
+            bbox: [number, number, number, number];
             name: string;
             point: {
                 type: string;
                 coordinates: [number, number];
             };
             address: {
+                addressLine: string;
+                adminDistrict: string;
+                adminDistrict2: string;
+                countryRegion: string;
                 formattedAddress: string;
                 locality: string;
-                adminDistrict: string;
                 postalCode: string;
-                countryRegion: string;
             };
+        }[];
+    }[];
+    statusCode: number;
+    statusDescription: string;
+    traceId: string;
+}
+
+
+
+type BingAutocompleteResponse = {
+    resourceSets: Array<{
+        resources: Array<{
+            value: Array<{
+                name: string,
+                address: {
+                    formattedAddress: string;
+                    locality: string;
+                    adminDistrict: string;
+                    postalCode: string;
+                    countryRegion: string;
+                };
+            }>
         }>;
     }>;
 }
@@ -50,22 +75,47 @@ export default class BingGeocodingService implements GeocodingService {
     constructor(private readonly bingKey: string) {
     }
 
-    private formApiReverseUrl = (coordinates: GeoCoordinates): string => {
-        return `http://dev.virtualearth.net/REST/v1/Locations/${coordinates.lat},${coordinates.lng}?&key=${this.bingKey}&c=${this.lang}`;
+    private formApiReverseGeocodingUrl = (coordinates: GeoCoordinates): string => {
+        return `https://dev.virtualearth.net/REST/v1/Locations/${coordinates.lat},${coordinates.lng}?&key=${this.bingKey}&c=${this.lang}`;
+    }
+
+    private formApiGeocodingUrl = (address: string): string => {
+        return `https://dev.virtualearth.net/REST/v1/Locations?q=${address}userRegion=${this.region}&maxResults=1&c=${this.lang}&key=${this.bingKey}`
     }
 
     private formApiAutocompleteUrl = (address: string) => {
-        return `http://dev.virtualearth.net/REST/v1/Autosuggest?query=${address}&c=${this.lang}&maxResults=20&userRegion=${this.region}&key=${this.bingKey}`
+        return `https://dev.virtualearth.net/REST/v1/Autosuggest?query=${address}&c=${this.lang}&maxResults=10&userRegion=${this.region}&key=${this.bingKey}`
     }
 
     async reverseGeocode(coordinates: GeoCoordinates): Promise<string> {
         return (await this.reverseGeocodeToGeo(coordinates)).address;
     }
 
+    async geocode(address: string): Promise<GeoLocation> {
+        const fetchUrl = this.formApiGeocodingUrl(address);
+        const response = await this.axiosInstance.get<BingGeocodingResponse>(fetchUrl);
+        console.log(response.data)
+        return response.data
+            .resourceSets
+            .map(resourceSet => {
+                return resourceSet.resources;
+            })
+            .flat()
+            .map(resource => {
+                console.log(resource)
+                const location: GeoLocation = {
+                    longitude: resource.point.coordinates[1],
+                    latitude: resource.point.coordinates[0],
+                    address: resource.address.formattedAddress
+                }
+                return location;
+            })[0]
+    }
+
+
     async reverseGeocodeToGeo(coordinates: GeoCoordinates): Promise<GeoLocation> {
-        const fetchUrl = this.formApiReverseUrl(coordinates);
+        const fetchUrl = this.formApiReverseGeocodingUrl(coordinates);
         const response = await this.axiosInstance.get<BingReverseGeocodeResponse>(fetchUrl);
-        console.log(response.data.resourceSets)
         const locations: GeoLocation[] = response.data.resourceSets
             .flat()
             .map(data=>data.resources)
@@ -81,12 +131,14 @@ export default class BingGeocodingService implements GeocodingService {
 
     async autocomplete(address: string): Promise<string[]> {
         const fetchUrl = this.formApiAutocompleteUrl(address);
-        const response = await this.axiosInstance.get<BingGeocodeResponse>(fetchUrl);
+        const response = await this.axiosInstance.get<BingAutocompleteResponse>(fetchUrl);
         const resourceSets = response.data.resourceSets;
 
         return resourceSets
             .flat()
             .map(resourceSets=>resourceSets.resources)
+            .flat()
+            .map(res=>res.value)
             .flat()
             .map(place=>place.address.formattedAddress);
     }

@@ -2,8 +2,8 @@ import GeoCoordinates from "../../model/GeoCoordinates";
 import {GeoLocation} from "../../model/GeoLocation";
 
 export default interface GeocodingService {
-    reverseGeocode(coordinates: GeoCoordinates): Promise<string>
-
+    geocode(address: string): Promise<GeoLocation>
+    reverseGeocode(coordinates: GeoCoordinates): Promise<string>;
     /**
      *
      * @param coordinates
