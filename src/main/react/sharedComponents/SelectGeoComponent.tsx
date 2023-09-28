@@ -1,19 +1,19 @@
 import React, {Dispatch, SetStateAction, useContext, useEffect, useRef, useState} from "react";
-import {GeoLocation} from "../../../model/GeoLocation";
-import GeoCoordinates from "../../../model/GeoCoordinates";
-import PlacesAutocomplete from "./PlacesAutocomplete";
-import {useAppSelector} from "../../../redux/hooks";
+import {GeoLocation} from "../../model/GeoLocation";
+import GeoCoordinates from "../../model/GeoCoordinates";
+import PlacesAutocomplete from "../creation/geo/PlacesAutocomplete";
+import {useAppSelector} from "../../redux/hooks";
 import 'ol/ol.css';
-import 'ol-popup/src/ol-popup.css';
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
 import {View} from "ol";
 import Map from 'ol/Map';
 import {FullScreen, Zoom} from "ol/control";
-import "../../../css/map.scss";
-import Popup from "ol-popup";
-import {LitmusServiceContext} from "../../App";
+import "../../css/map.scss";
+import {LitmusServiceContext} from "../App";
 import {transform} from "ol/proj";
+import Popup from "ol-ext/overlay/Popup";
+import "../../css/ol-ext-min.css";
 
 
 const defaultMapPosition: GeoCoordinates = {
@@ -67,7 +67,12 @@ type MapLocationProps = {
 const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null)
     const [map, setMap] = useState<Map | undefined>();
-    const [locationPopup, setLocationPopup] = useState(new Popup());
+
+    const [locationPopup, _] = useState(new Popup({
+        popupClass: "user-select-location-popup",
+        closeBox: false,
+        positioning: 'bottom-center'
+    }));
 
     useEffect(()=>{
         const sourceCoordinates = coordinates||defaultMapPosition;
@@ -75,7 +80,6 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
         const targetCoordinates = transformToTarget(sourceCoordinates);
 
         const center = [targetCoordinates.lng, targetCoordinates.lat];
-
 
         if (mapTargetElement.current) {
             const olMap = new Map({
@@ -121,12 +125,11 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
             console.log("map has been initialized")
 
         }
-    }, [mapTargetElement])
+    }, [mapTargetElement, locationPopup])
 
     useEffect(()=>{
         if (map&&coordinates) {
             const targetCoordinates = transformToTarget(coordinates);
-
             locationPopup.show([targetCoordinates.lng, targetCoordinates.lat], '<div><h2>Hello world</h2></div>');
         }
     }, [coordinates, map])

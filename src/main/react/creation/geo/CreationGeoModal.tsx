@@ -1,4 +1,4 @@
-import SelectGeoComponent from "./SelectGeoComponent";
+import SelectGeoComponent from "../../sharedComponents/SelectGeoComponent";
 import {Modal} from "react-bootstrap";
 import React, {useEffect, useMemo, useState} from "react";
 import Button from "react-bootstrap/Button";
