@@ -14,6 +14,8 @@ import {LitmusServiceContext} from "../App";
 import {transform} from "ol/proj";
 import Popup from "ol-ext/overlay/Popup";
 import "../../css/ol-ext-min.css";
+import {GeoLocationIcon} from "../../util/icons";
+import appConfig from "../../config/appConfig";
 
 
 const defaultMapPosition: GeoCoordinates = {
@@ -130,7 +132,10 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
     useEffect(()=>{
         if (map&&coordinates) {
             const targetCoordinates = transformToTarget(coordinates);
-            locationPopup.show([targetCoordinates.lng, targetCoordinates.lat], '<div><h2>Hello world</h2></div>');
+            locationPopup.show([targetCoordinates.lng, targetCoordinates.lat],
+                `<div class="user-location-icon-wrapper">
+                            <svg class="user-location-icon" height="48" viewBox="0 0 48 48" width="48" xmlns="http://www.w3.org/2000/svg"><path d="M24 4c-7.73 0-14 6.27-14 14 0 10.5 14 26 14 26s14-15.5 14-26c0-7.73-6.27-14-14-14zm0 19c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/><path d="M0 0h48v48h-48z" fill="none"/></svg>  
+                      </div>`);
         }
     }, [coordinates, map])
 
@@ -151,8 +156,12 @@ const GeoComponent = ({location, setLocation}: LocationProps) => {
 
         <div className="modal__map-wrapper">
             <MapComponent coordinates={location?{lat: location.latitude, lng: location.longitude}:null} setLocation={async (coordinates)=>{
-                const location = await geocodingService.reverseGeocodeToGeo(coordinates);
-                setLocation(location);
+                const address = await geocodingService.reverseGeocode(coordinates);
+                setLocation({
+                    latitude: coordinates.lat,
+                    longitude: coordinates.lng,
+                    address: address
+                });
             }}/>
         </div>
     </>
