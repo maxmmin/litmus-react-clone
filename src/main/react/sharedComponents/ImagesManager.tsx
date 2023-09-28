@@ -48,7 +48,7 @@ export default function ImagesManager ({images, uploadErrorHandler, mainImageKey
 
     return (
         <div className={`images-manager-wrapper ${cssAnchor}`}>
-            <FilesUploader uploadErrorHandler={uploadErrorHandler} uploadFile={uploadImage} allowedTypes={ImageRepoImpl.allowedImageTypes}/>
+            <FilesUploader uploadErrorHandler={uploadErrorHandler} uploadFile={uploadImage} accept={"image/*"} allowedTypes={ImageRepoImpl.allowedImageTypes}/>
 
             {hasImages &&
                     <div className={"uploaded-images-section"}>

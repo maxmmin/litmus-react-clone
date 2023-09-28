@@ -8,6 +8,7 @@ type UploaderProps = {
     cssAnchor?: string,
     allowedTypes: string[]|null,
     uploadErrorHandler?: (error: unknown)=>void
+    accept?: string
 }
 
 const defaultErrHandler = (e: unknown) => {
@@ -15,7 +16,7 @@ const defaultErrHandler = (e: unknown) => {
     console.error(error);
 }
 
-export default function FilesUploader ({uploadFile, uploadErrorHandler=defaultErrHandler, allowedTypes, cssAnchor = ""}: UploaderProps) {
+export default function FilesUploader ({uploadFile, uploadErrorHandler=defaultErrHandler, allowedTypes, cssAnchor = "", accept}: UploaderProps) {
     function upload (file: File) {
         if (allowedTypes&&!new MimeMatcher(...allowedTypes).match(file.type)) throw new Error("Cannot upload file: invalid extension "+file.type)
         uploadFile(file);
@@ -23,8 +24,7 @@ export default function FilesUploader ({uploadFile, uploadErrorHandler=defaultEr
 
     return (
         <div className={`files-uploader-wrapper ${cssAnchor}`}>
-            <input type={"file"} className={"file form-control"}
-                   multiple={true}
+            <input type={"file"} accept={accept} className={"file form-control"} multiple={true}
                onChange={e=>{
                   try {
                       const files = e.currentTarget.files;
