@@ -13,6 +13,7 @@ import {FullScreen, Zoom} from "ol/control";
 import "../../../css/map.scss";
 import Popup from "ol-popup";
 import {LitmusServiceContext} from "../../App";
+import {transform} from "ol/proj";
 
 
 const defaultMapPosition: GeoCoordinates = {
@@ -23,6 +24,33 @@ const defaultMapPosition: GeoCoordinates = {
 type LocationProps = {
     location: GeoLocation|null,
     setLocation: Dispatch<SetStateAction<GeoLocation|null>>
+}
+
+const projections = {
+    source: 'EPSG:4326',
+    target: 'EPSG:3857'
+}
+
+function transformToTarget(coordinates: GeoCoordinates): GeoCoordinates {
+    const sourceCoordinates = [coordinates.lng,coordinates.lat]
+
+    const targetCoordinates = transform(sourceCoordinates, projections.source, projections.target);
+
+    return {
+        lng: targetCoordinates[0],
+        lat: targetCoordinates[1]
+    }
+}
+
+function transformToSource(coordinates: GeoCoordinates): GeoCoordinates {
+    const targetCoordinates = [coordinates.lng,coordinates.lat]
+
+    const sourceCoordinates = transform(targetCoordinates, projections.target, projections.source);
+
+    return {
+        lng: sourceCoordinates[0],
+        lat: sourceCoordinates[1]
+    }
 }
 
 const SelectGeoComponent = ({location, setLocation}: LocationProps) => {
@@ -42,8 +70,12 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
     const [locationPopup, setLocationPopup] = useState(new Popup());
 
     useEffect(()=>{
-        const mapCoordinates = coordinates||defaultMapPosition;
-        const center = [mapCoordinates.lng,mapCoordinates.lat]
+        const sourceCoordinates = coordinates||defaultMapPosition;
+
+        const targetCoordinates = transformToTarget(sourceCoordinates);
+
+        const center = [targetCoordinates.lng, targetCoordinates.lat];
+
 
         if (mapTargetElement.current) {
             const olMap = new Map({
@@ -53,11 +85,9 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
                         source: new OSM()
                     })
                 ],
-                pixelRatio: 1,
                 view: new View({
                     center: center,
-                    zoom: 15,
-                    projection: 'EPSG:4326',
+                    zoom: 17
                 }),
                 controls: [
                     new FullScreen({
@@ -73,10 +103,15 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
 
             olMap.setTarget(mapTargetElement.current);
             olMap.on("click", (event) => {
-                setLocation({
+                const coordinates = {
                     lng: event.coordinate[0],
                     lat: event.coordinate[1]
-                });
+                };
+
+                const sourceCoordinates = transformToSource(coordinates);
+
+                setLocation(sourceCoordinates);
+                console.log(sourceCoordinates)
             })
 
             olMap.addOverlay(locationPopup);
@@ -89,14 +124,10 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
     }, [mapTargetElement])
 
     useEffect(()=>{
-        if (coordinates) {
-            locationPopup.show([coordinates.lng, coordinates.lat], "position");
-        }
-    }, [coordinates])
-
-    useEffect(()=>{
         if (map&&coordinates) {
-            locationPopup.show([coordinates.lng, coordinates.lat], '<div><h2>Hello world</h2></div>');
+            const targetCoordinates = transformToTarget(coordinates);
+
+            locationPopup.show([targetCoordinates.lng, targetCoordinates.lat], '<div><h2>Hello world</h2></div>');
         }
     }, [coordinates, map])
 
