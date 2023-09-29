@@ -1,4 +1,4 @@
-@import "colors";
+@import "../colors";
 
 .entity-page-wrapper {
   max-width: 1440px;
@@ -16,6 +16,7 @@
 
 .main-entity-section__main-photo-wrapper {
   width: 300px;
+  flex-shrink: 0;
   overflow: hidden;
   background: black;
   display: flex;
@@ -24,7 +25,7 @@
 }
 
 .main-entity-section__main-photo {
-  width: 100%;
+  max-width: 100%;
 }
 
 .main-entity-section__main-photo_placeholder {
@@ -54,38 +55,3 @@
   height: 400px;
 }
 
-.person-page__relationships-section {
-  max-width: 800px;
-  margin: 60px auto 0;
-}
-
-.person-page__relationships-container {
-  margin-top: 40px;
-}
-
-.relationship-container__main {
-  display: flex;
-  column-gap: 15px;
-}
-
-.main-relationship-info__fullname {
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.main-relationship-info__relation-type-container {
-  margin-top: 5px;
-}
-
-.relationship-container__main-relationship-info {
-
-  & p {
-    margin: 0;
-  }
-}
-
-.person-page__relationship-container_person-image-wrapper {
-  width: 60px;
-  height: 60px;
-  border: 1px dashed $md-sys-color-inverse-primary-light;
-}

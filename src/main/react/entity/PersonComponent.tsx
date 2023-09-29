@@ -3,27 +3,32 @@ import {buildUrl} from "../../util/pureFunctions";
 import appConfig from "../../config/appConfig";
 import {valueOrMessage} from "../../util/valueOrNull";
 import {DateEntityTool} from "../../model/DateEntity";
-import "../../css/entityPage.scss";
+import "../../css/entityPage/entityPage.scss";
+import "../../css/entityPage/personPage.scss";
 import {DashedUserIcon} from "../../util/icons";
 import ImageSlider from "./ImageSlider";
 import {NavLink} from "react-router-dom";
 import {Entity} from "../../model/Entity";
+import PersonMap from "./PersonMap";
+import React from "react";
 
 type PersonProps = {
     person: Person
 }
 
 type RelationShipProps = {
-    relationship: Relationship
+    relationship: Relationship,
+    cssAnchor?: string,
+    onClick?: (relationship: Relationship, e: React.MouseEvent<HTMLDivElement>)=>void
 }
 
-function RelationshipComponent ({relationship}: RelationShipProps) {
+export function RelationshipComponent ({relationship, cssAnchor="", onClick}: RelationShipProps) {
     const person = relationship.person
 
     const mainImg: string|null = person.media.mainImage;
 
     return (
-        <div className="person-page__relationship-container">
+        <div className={`person-page__relationship-container ${cssAnchor}`} onClick={onClick && (e=>onClick(relationship, e))}>
             <div className="relationship-container__main">
                 <div className="main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person person-page__relationship-container_person-image-wrapper">
                     { mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
@@ -75,6 +80,12 @@ export default function PersonComponent ({person}: PersonProps) {
                 <h4>Фотографії</h4>
                 <div className="entity-images-slider-container">
                     <ImageSlider imageLinks={person.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.mediaRootUrl,imagePath))}/>
+                </div>
+            </section>'
+
+            <section className={"person-page__map-section"}>
+                <div className="person-page__map-wrapper">
+                    <PersonMap person={person}/>
                 </div>
             </section>
 

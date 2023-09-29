@@ -20,7 +20,7 @@ type Props = {
 const libraries: Libraries = ["places"];
 
 const LitmusCore = ({children}: Props) => {
-    const [isCsrfLoading, setCsrfLoading] = useState(false);
+    const [isCsrfLoading, setCsrfLoading] = useState(true);
 
     const serviceContext = useContext(LitmusServiceContext);
 
