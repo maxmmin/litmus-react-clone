@@ -1,8 +1,14 @@
 import Sex from "../../../model/human/person/Sex";
 import PassportData from "../../../model/human/person/PassportData";
 import {GeoLocation} from "../../../model/GeoLocation";
-import {Relationship} from "../../../model/human/person/Person";
+import Person, {Relationship, RelationType} from "../../../model/human/person/Person";
 import Media from "../../../model/Media";
+
+export interface RelationshipResponseDto {
+    person: PersonResponseDto,
+    type: RelationType | null,
+    note: string
+}
 
 interface PersonResponseDto {
     id: number;
@@ -10,7 +16,7 @@ interface PersonResponseDto {
     firstName: string;
     middleName?: string|null;
     lastName: string;
-    relationships?: Relationship[]|null,
+    relationships?: RelationshipResponseDto[]|null,
     sex: Sex;
     passportData?: Partial<PassportData> | null;
     dateOfBirth?: string | null;

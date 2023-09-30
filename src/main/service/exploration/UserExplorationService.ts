@@ -54,7 +54,7 @@ class UserExplorationService implements ExplorationService {
         const firstName = params.firstName;
         const i = params.i;
         const pagedResponse: PagedData<UserResponseDto> = await service.findByFullName({lastName, middleName, firstName}, i);
-        const userArray: User[] = pagedResponse.content.map(mapper.mapToEntity);
+        const userArray: User[] = pagedResponse.content.map(user=>mapper.mapToEntity(user));
         return {...pagedResponse, content: userArray};
     }
 

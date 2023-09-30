@@ -5,12 +5,13 @@ import {valueOrMessage} from "../../util/valueOrNull";
 import {DateEntityTool} from "../../model/DateEntity";
 import "../../css/entityPage/entityPage.scss";
 import "../../css/entityPage/personPage.scss";
-import {DashedUserIcon} from "../../util/icons";
+import {DashedUserIcon, GeoLocationPinDropIcon} from "../../util/icons";
 import ImageSlider from "./ImageSlider";
+import PersonMap from "./PersonMap";
+import React, {useEffect, useState} from "react";
 import {NavLink} from "react-router-dom";
 import {Entity} from "../../model/Entity";
-import PersonMap from "./PersonMap";
-import React from "react";
+import {GeoLocation} from "../../model/GeoLocation";
 
 type PersonProps = {
     person: Person
@@ -19,34 +20,30 @@ type PersonProps = {
 type RelationShipProps = {
     relationship: Relationship,
     cssAnchor?: string,
-    onClick?: (relationship: Relationship, e: React.MouseEvent<HTMLDivElement>)=>void
+    containerOnClick?: (relationship: Relationship, e: React.MouseEvent<HTMLDivElement>)=>void,
+    geoBtnOnClick?: (relationship: Relationship, e: React.MouseEvent<HTMLDivElement>)=>void
 }
 
-export function RelationshipComponent ({relationship, cssAnchor="", onClick}: RelationShipProps) {
+export function RelationshipComponent ({relationship, cssAnchor="", containerOnClick, geoBtnOnClick}: RelationShipProps) {
     const person = relationship.person
 
     const mainImg: string|null = person.media.mainImage;
 
     return (
-        <div className={`person-page__relationship-container ${cssAnchor}`} onClick={onClick && (e=>onClick(relationship, e))}>
-            <div className="relationship-container__main">
-                <div className="main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person person-page__relationship-container_person-image-wrapper">
-                    { mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
+        <div className="person-page__relationship-container ${cssAnchor}" onClick={
+            containerOnClick&&((e)=>containerOnClick(relationship, e))}>
+            <div className="relationship-container__main-block">
+                <div className="relationship-container_person-img-wrapper">
+                    { mainImg ? <img className={"relationship-container__person-img"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
-
-                <div className="relationship-container__main-relationship-info">
-                    <div className="main-relationship-info__fullname-container">
-                        <p className={"main-relationship-info__fullname"}><NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id.toString())}>{getFullName(person)}</NavLink></p>
-                    </div>
-
-                    <div className="main-relationship-info__relation-type-container">
-                        <p className={"main-relationship-info__relation-type"}>{relationship.type}</p>
-                    </div>
-                </div>
+                <p className="relationship-container__person-name"><NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id)}>{getFullName(person)}</NavLink></p>
             </div>
-
-            <div className="relation-ship-container__note-container">
-                <p className={"relation-ship-container__note"}>{relationship.note?relationship.note:"Додаткова інформація відсутня"}</p>
+            <p className="relationship-container__relation-type">{relationship.type}</p>
+            <p className="relationship-container__relation-note">{relationship.note}</p>
+            <div className="relationship-container__location-btn-wrapper" onClick={
+                geoBtnOnClick&&(e=>geoBtnOnClick(relationship, e))
+            }>
+                <GeoLocationPinDropIcon className={"relationship-container__location-btn"}/>
             </div>
         </div>
     )
@@ -55,6 +52,8 @@ export function RelationshipComponent ({relationship, cssAnchor="", onClick}: Re
 export default function PersonComponent ({person}: PersonProps) {
 
     const mainImg: string|undefined = person.media.mainImage?person.media.mainImage:person.media.images[0];
+
+    const [location, setLocation] = useState<GeoLocation|null>(person.location)
 
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
@@ -81,11 +80,11 @@ export default function PersonComponent ({person}: PersonProps) {
                 <div className="entity-images-slider-container">
                     <ImageSlider imageLinks={person.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.mediaRootUrl,imagePath))}/>
                 </div>
-            </section>'
+            </section>
 
             <section className={"person-page__map-section"}>
                 <div className="person-page__map-wrapper">
-                    <PersonMap person={person}/>
+                    <PersonMap person={person} currentLocation={location}/>
                 </div>
             </section>
 

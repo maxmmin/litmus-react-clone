@@ -2,28 +2,13 @@
 
 .person-page__relationships-section {
   max-width: 800px;
-  margin: 60px auto 0;
+  margin: 30px auto 0;
 }
 
 .person-page__relationships-container {
-  margin-top: 40px;
+  margin-top: 15px;
 }
-
-.relationship-container__main {
-  display: flex;
-  column-gap: 15px;
-}
-
-.main-relationship-info__fullname {
-  font-size: 18px;
-  font-weight: 500;
-}
-
-.main-relationship-info__relation-type-container {
-  margin-top: 5px;
-}
-
-.relationship-container__main-relationship-info {
+.person-page__relationships-container {
 
   & p {
     margin: 0;
@@ -36,12 +21,97 @@
   border: 1px dashed $md-sys-color-inverse-primary-light;
 }
 
+.person-page__map-section {
+  max-width: 800px;
+  margin: 20px auto 0;
+}
+
 .person-page__map-wrapper {
   height: 600px;
-  max-width: 800px;
-  margin: 0 auto;
 }
 
 .person-map {
   height: 100%;
+  position: relative;
 }
+
+.person-page__relationship-container {
+  display: flex;
+  column-gap: 20px;
+  align-items: center;
+  background: rgba($md-sys-color-inverse-primary-light, 0.3);
+  padding: 2% 5%;
+  //border-radius: 23px;
+  overflow: hidden;
+  justify-content: space-between;
+}
+
+.relationship-container__main-block {
+  display: flex;
+  column-gap: 15px;
+  align-items: center;
+}
+
+.relationship-container_person-img-wrapper {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+.relationship-container__person-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.relationship-container__person-name {
+  font-weight: 600;
+  &>a {
+    color: $md-sys-color-on-primary-container-light;
+    text-decoration: none;
+  }
+}
+
+.relationship-container__relationship-type {
+}
+
+.relationship-container__location-btn-wrapper {
+  width: 30px;
+  height: 30px;
+}
+
+.relationship-container__location-btn {
+  height: 100%;
+  width: 100%;
+  fill: $md-sys-color-primary-light;
+}
+
+.person-map-label {
+  width: 75px;
+  height: 75px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 5px solid rgba($md-sys-color-primary-light, 0.8);
+  outline: 10px solid rgba($md-sys-color-inverse-primary-light, 0.8);
+  box-shadow: 0 0 15px 5px black;
+}
+
+.person-map {
+  cursor: pointer;
+}
+
+.person-map-label__img-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.person-map-label__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+

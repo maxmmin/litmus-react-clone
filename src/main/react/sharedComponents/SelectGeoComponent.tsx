@@ -14,46 +14,15 @@ import {LitmusServiceContext} from "../App";
 import {transform} from "ol/proj";
 import Popup from "ol-ext/overlay/Popup";
 import "../../css/ol-ext-min.css";
-import {GeoLocationIcon} from "../../util/icons";
-import appConfig from "../../config/appConfig";
+import {defaultMapPosition, transformToSource, transformToTarget} from "../../util/mapUtil";
 
-
-const defaultMapPosition: GeoCoordinates = {
-    lat: 50.45466,
-    lng: 30.5238
-}
 
 type LocationProps = {
     location: GeoLocation|null,
     setLocation: Dispatch<SetStateAction<GeoLocation|null>>
 }
 
-const projections = {
-    source: 'EPSG:4326',
-    target: 'EPSG:3857'
-}
 
-function transformToTarget(coordinates: GeoCoordinates): GeoCoordinates {
-    const sourceCoordinates = [coordinates.lng,coordinates.lat]
-
-    const targetCoordinates = transform(sourceCoordinates, projections.source, projections.target);
-
-    return {
-        lng: targetCoordinates[0],
-        lat: targetCoordinates[1]
-    }
-}
-
-function transformToSource(coordinates: GeoCoordinates): GeoCoordinates {
-    const targetCoordinates = [coordinates.lng,coordinates.lat]
-
-    const sourceCoordinates = transform(targetCoordinates, projections.target, projections.source);
-
-    return {
-        lng: sourceCoordinates[0],
-        lat: sourceCoordinates[1]
-    }
-}
 
 const SelectGeoComponent = ({location, setLocation}: LocationProps) => {
     const isLoaded = useAppSelector(state => state.appState?.gmapsApiState?.isLoaded)

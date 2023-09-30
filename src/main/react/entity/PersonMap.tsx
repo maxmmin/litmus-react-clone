@@ -1,34 +1,99 @@
-import Person, {getFullName, Relationship} from "../../model/human/person/Person";
-import {useEffect, useRef, useState} from "react";
+import Person from "../../model/human/person/Person";
+import React, {useEffect, useRef, useState} from "react";
 import Map from "ol/Map";
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
-import {View} from "ol";
+import {Overlay, View} from "ol";
 import {FullScreen, Zoom} from "ol/control";
-import {RelationshipComponent} from "./PersonComponent";
+import {GeoLocation} from "../../model/GeoLocation";
+import {defaultMapPosition, transformToTarget} from "../../util/mapUtil";
+import {buildUrl} from "../../util/pureFunctions";
+import appConfig from "../../config/appConfig";
 
 type PersonMapProps = {
-    person: Person
+    person: Person,
+    currentLocation: GeoLocation|null
 }
 
-type PersonMapRelationshipItemProps = {
-    relationship: Relationship
+function transformLocationToCoordinates (location: GeoLocation) {
+    const sourceCoordinates = {lng: location.longitude, lat: location.latitude};
+    const targetCoordinates = transformToTarget(sourceCoordinates);
+    return [targetCoordinates.lng, targetCoordinates.lat];
 }
 
-const PersonMapRelationshipItem = ({relationship}: PersonMapRelationshipItemProps) => {
-    return (
-        <div className="person-map__person-relationship-wrapper">
-            <RelationshipComponent relationship={relationship}/>
-        </div>
-    )
+type PersonLabelData = Pick<Person, "firstName"|"middleName"|"lastName"|"location"|"media">;
+
+function getPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelData, cssAnchor?: string}): HTMLDivElement {
+    const personContainer = document.createElement("div");
+    personContainer.className = "person-map-label "+cssAnchor;
+
+    const imgContainer = document.createElement("div")
+    imgContainer.className = 'person-map-label__img-wrapper'
+
+    personContainer.append(imgContainer);
+
+    const mainImg = person.media.mainImage;
+
+    if (mainImg) {
+        const personImg = document.createElement("img");
+        personImg.src = buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg);
+        personImg.className = "person-map-label__img"
+        imgContainer.append(personImg);
+    }
+
+    return personContainer;
 }
 
-const PersonMap = ({person}: PersonMapProps) => {
+function onResize () {
+    // var mapScale = map.getView().getResolution(); // Получаем текущий масштаб карты
+    // var containerScale = 1 / mapScale;
+}
+
+function addPersonGeoToMap({person, map}: {
+        person: PersonLabelData,
+        map: Map
+    }): HTMLDivElement {
+    if (!person.location) throw new Error("person has no location")
+
+    const coordinates = transformLocationToCoordinates(person.location);
+
+    const personContainer = getPersonLabelElement({person: person});
+
+    const label = new Overlay({
+        element: personContainer,
+        positioning: "center-center"
+    });
+
+    label.setMap(map);
+    label.setPosition(coordinates);
+
+    return personContainer;
+}
+
+const resizeMapCallback = ({map, labels}: {map: Map, labels: HTMLDivElement[]}) => {
+    let scale = 100/(map.getView().getResolution()!);
+
+    const minScale = 0.01;
+    const maxScale = 1;
+
+    labels.forEach(label=>{
+        if (scale>maxScale) {
+            scale = maxScale;
+        } else if (scale<minScale) scale=minScale;
+        label.style.transform = `scale(${Math.pow(scale, 1/3)})`
+    })
+}
+
+const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<Map | undefined>();
+    const [personsLabels, setPersonsLabels] = useState<HTMLDivElement[]>([])
 
     useEffect(()=>{
         if (mapTargetElement.current) {
+            const center = transformLocationToCoordinates(currentLocation?currentLocation:
+                {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
+
             const olMap = new Map({
                 target: 'map',
                 layers: [
@@ -37,7 +102,7 @@ const PersonMap = ({person}: PersonMapProps) => {
                     })
                 ],
                 view: new View({
-                    center: [0,0],
+                    center: center,
                     zoom: 17
                 }),
                 controls: [
@@ -54,18 +119,44 @@ const PersonMap = ({person}: PersonMapProps) => {
 
             olMap.setTarget(mapTargetElement.current);
 
-            setMap(olMap);
+            setMap(olMap)
 
             console.log("map has been initialized")
 
         }
     }, [mapTargetElement])
 
+    useEffect(()=>{
+        if (map) {
+            const label = addPersonGeoToMap({person, map});
+            setPersonsLabels(prev=>[...prev, label]);
+        }
+    }, [map])
+
+    useEffect(()=>{
+        if (map) {
+            const coordinates = transformLocationToCoordinates(currentLocation?currentLocation:
+                {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
+            map.getView().setCenter(coordinates);
+        }
+    }, [currentLocation])
+
+    useEffect(()=>{
+        if (map) {
+            const resizeCallback = ()=>{
+                resizeMapCallback({map: map, labels: personsLabels})
+            }
+
+            map.getView().on("change:resolution", resizeCallback);
+
+            resizeCallback();
+
+            return ()=>map.getView().un("change:resolution", resizeCallback);
+        }
+    }, [map, personsLabels])
+
     return (
         <div ref={mapTargetElement} className="person-map">
-            <div className="person-map__person-relationships">
-                {person.}
-            </div>
         </div>
     )
 }

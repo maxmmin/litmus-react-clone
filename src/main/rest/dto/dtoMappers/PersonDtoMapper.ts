@@ -4,7 +4,7 @@ import {hasContent} from "../../../util/isEmpty";
 import Person, {Relationship} from "../../../model/human/person/Person";
 import PassportData from "../../../model/human/person/PassportData";
 import {DateEntityTool} from "../../../model/DateEntity";
-import PersonResponseDto from "../person/PersonResponseDto";
+import PersonResponseDto, {RelationshipResponseDto} from "../person/PersonResponseDto";
 import hasMediaContent from "../../../util/media/hasMediaContent";
 
 
@@ -86,6 +86,14 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
         return dto;
     }
 
+    private mapRelationshipResponseDto (relationshipResponseDto: RelationshipResponseDto): Relationship {
+        return {
+            note: relationshipResponseDto.note,
+            type: relationshipResponseDto.type,
+            person: this.mapToEntity(relationshipResponseDto.person)
+        }
+    }
+
 
     mapToEntity(retrievedEntityDto: PersonResponseDto): Person {
         let passportData: PassportData|null;
@@ -107,7 +115,7 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
             firstName: retrievedEntityDto.firstName,
             middleName: retrievedEntityDto.middleName?retrievedEntityDto.middleName:null,
             lastName: retrievedEntityDto.lastName,
-            relationships: retrievedEntityDto.relationships?retrievedEntityDto.relationships:[],
+            relationships: retrievedEntityDto.relationships?retrievedEntityDto.relationships.map(dto=>this.mapRelationshipResponseDto(dto)):[],
             dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null
         };
 
