@@ -1,4 +1,4 @@
-import Person from "../../model/human/person/Person";
+import Person, {Relationship} from "../../model/human/person/Person";
 import React, {useEffect, useRef, useState} from "react";
 import Map from "ol/Map";
 import TileLayer from "ol/layer/Tile";
@@ -26,9 +26,9 @@ function transformLocationToCoordinates (location: GeoLocation) {
     return [targetCoordinates.lng, targetCoordinates.lat];
 }
 
-type PersonLabelData = Pick<Person, "firstName"|"middleName"|"lastName"|"location"|"media">;
+type PersonLabelRequiredFields = Pick<Person, "id"|"firstName"|"middleName"|"lastName"|"location"|"media">;
 
-function getPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelData, cssAnchor?: string}): HTMLDivElement {
+function getPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelRequiredFields, cssAnchor?: string}): HTMLDivElement {
     const personContainer = document.createElement("div");
     personContainer.className = "person-map-label "+cssAnchor;
 
@@ -49,11 +49,12 @@ function getPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelData,
     return personContainer;
 }
 
+type PersonLabelInfo = {person: PersonLabelRequiredFields, label: HTMLDivElement}
 function addPersonGeoToMap({person, map, cssAnchor}: {
-        person: PersonLabelData,
+        person: PersonLabelRequiredFields,
         map: Map,
         cssAnchor?: string
-    }): HTMLDivElement {
+    }): PersonLabelInfo {
     if (!person.location) throw new Error("person has no location")
 
     const coordinates = transformLocationToCoordinates(person.location);
@@ -68,7 +69,10 @@ function addPersonGeoToMap({person, map, cssAnchor}: {
     label.setMap(map);
     label.setPosition(coordinates);
 
-    return personContainer;
+    return {
+        label: personContainer,
+        person: person
+    };
 }
 
 const resizeMapCallback = ({map, labels}: {map: Map, labels: HTMLDivElement[]}) => {
@@ -85,51 +89,82 @@ const resizeMapCallback = ({map, labels}: {map: Map, labels: HTMLDivElement[]}) 
     })
 }
 
-function drawRelationshipsLines ({person, map}: {person: Person, map: Map}) {
-    if (person.location) {
-        const personCoordinates = transformLocationToCoordinates(person.location);
+const isSameRelationship = (srcRelationship: Relationship, targetRelationShip: Relationship) => {
+    return srcRelationship.person.id===targetRelationShip.person.id;
+}
 
-        const source = new Vector<LineString>({
-        });
+const lineStyle = new Style({
+    fill: new Fill({ color: '#6750A4' }),
+    stroke: new Stroke({
+        color: '#6750A4',
+        width: 3,
+    })
+});
 
-        const vectorLayer = new VectorLayer({
-            source: source,
-            renderBuffer: 1e6
-        });
+function buildRelationshipLine({basePerson, relationship}: {relationship: Relationship, basePerson: Person}): {relationship: Relationship, basePerson: Person, line: Feature<LineString>} {
+    if (basePerson.location) {
+        const personCoordinates = transformLocationToCoordinates(basePerson.location!);
 
-        const lineStyle = new Style({
-            fill: new Fill({ color: '#6750A4' }),
-            stroke: new Stroke({
-                color: '#6750A4',
-                width: 3,
+        const relatedPerson = relationship.person;
+        if (relatedPerson.location) {
+            const relatedPersonCoordinates = transformLocationToCoordinates(relatedPerson.location);
+
+            const line = new Feature({
+                geometry: new LineString([personCoordinates, relatedPersonCoordinates])
             })
-        });
+            line.setStyle(lineStyle);
 
-        person.relationships.forEach(relationShip=>{
-            const relatedPerson = relationShip.person;
-            if (relatedPerson.location) {
-                const relatedPersonCoordinates = transformLocationToCoordinates(relatedPerson.location);
-
-                const line = new Feature({
-                    geometry: new LineString([personCoordinates, relatedPersonCoordinates])
-                })
-                line.setStyle(lineStyle);
-
-                source.addFeature(line);
-
-                console.log(source.getFeatures())
+            return {
+                relationship: relationship,
+                basePerson: basePerson,
+                line: line
             }
-        })
+        } else throw new Error("related person has no location")
+    } else throw new Error("base person has no location")
+}
 
-        map.addLayer(vectorLayer);
-        console.log(map.getLayers())
-    }
+function drawRelationshipsLines ({person, map}: {person: Person, map: Map}) {
+    const source = new Vector<LineString>({
+    });
+
+    const vectorLayer = new VectorLayer({
+        source: source,
+        renderBuffer: 1e6
+    });
+
+    const processedRelationships: Relationship[] = [];
+
+    person.relationships.forEach(relationShip=>{
+        if (person.location) {
+            const lineData = buildRelationshipLine({basePerson: person, relationship: relationShip});
+            processedRelationships.push(relationShip);
+            source.addFeature(lineData.line);
+            console.log(lineData)
+        }
+        const relatedPerson = relationShip.person;
+        if (relatedPerson.location&&relatedPerson.relationships) {
+            relatedPerson.relationships.forEach(internalRelationship => {
+                if (internalRelationship.person.location) {
+                    if (!processedRelationships.some(r=>isSameRelationship(r, internalRelationship))) {
+                        if (person.relationships.some(r=>r.person.id===internalRelationship.person.id)) {
+                            const lineData = buildRelationshipLine({basePerson: relatedPerson, relationship: internalRelationship});
+                            processedRelationships.push(internalRelationship);
+                            source.addFeature(lineData.line)
+                        }
+                    }
+                }
+            })
+        }
+    })
+
+    map.addLayer(vectorLayer);
+    console.log(source.getFeatures())
 }
 
 const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<Map | undefined>();
-    const [personsLabels, setPersonsLabels] = useState<HTMLDivElement[]>([])
+    const [personsLabels, setPersonsLabels] = useState<PersonLabelInfo[]>([])
 
     useEffect(()=>{
         if (mapTargetElement.current) {
@@ -170,12 +205,13 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
 
     useEffect(()=>{
         if (map) {
-            const labels = [...personsLabels];
+            const processedLabels: PersonLabelInfo[] = [];
 
             if (person.location) {
-                const label = addPersonGeoToMap({person, map, cssAnchor: "main"})
-
+                const labelData = addPersonGeoToMap({person, map, cssAnchor: "main"})
+                processedLabels.push(labelData)
             }
+
             const relLabels = person.relationships
                 .filter(rel=>rel.person.location)
                 .map(rel=>addPersonGeoToMap({
@@ -183,9 +219,9 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
                     map: map
                 }));
 
-            labels.push(...relLabels);
+            processedLabels.push(...relLabels);
 
-            setPersonsLabels(labels);
+            setPersonsLabels(processedLabels);
             drawRelationshipsLines({person: person, map: map});
         }
     }, [map])
@@ -201,7 +237,7 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     useEffect(()=>{
         if (map) {
             const resizeCallback = ()=>{
-                resizeMapCallback({map: map, labels: personsLabels})
+                resizeMapCallback({map: map, labels: personsLabels.map(l=>l.label)})
             }
 
             map.getView().on("change:resolution", resizeCallback);
