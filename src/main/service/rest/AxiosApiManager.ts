@@ -4,7 +4,13 @@ import {HttpStatus} from "../../rest/HttpStatus";
 import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
 import ErrorResponse from "../../rest/ErrorResponse";
 import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
-import {ContentType, HttpMethod} from "../../util/apiRequest/ApiRequestManager";
+import {HttpMethod} from "../../util/apiRequest/ApiRequestManager";
+
+type CsrfResponse = {
+    "token": string,
+    "headerName": string,
+    "parameterName": string
+}
 
 class AxiosApiManager {
     public static csrfProtectedMethods: HttpMethod[] = [HttpMethod.PATCH, HttpMethod.POST, HttpMethod.DELETE, HttpMethod.PUT]
@@ -63,6 +69,25 @@ class AxiosApiManager {
                     }
 
                     return await globalInstance(config);
+                }
+
+                if (config?.url
+                    &&
+                    config.url.includes(appConfig.serverMappings.refreshTokens)
+                    &&
+                    err.response?.status===HttpStatus.FORBIDDEN) {
+                    try {
+                        const csrfResponse = await noHandlerApiInstance.get<CsrfResponse>(appConfig.serverMappings.csrfToken, {});
+
+                        const token = csrfResponse.data.token;
+
+                        this.setCsrfToken(csrfResponse.data.token);
+                        AxiosApiManager.setCsrfTokenToInstance(noHandlerApiInstance, token);
+
+                        return await noHandlerApiInstance.request(config)
+                    } catch (e) {
+                        return Promise.reject(e);
+                    }
                 }
 
                 return Promise.reject(err);

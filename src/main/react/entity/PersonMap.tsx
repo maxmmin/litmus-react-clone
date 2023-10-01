@@ -49,9 +49,10 @@ function onResize () {
     // var containerScale = 1 / mapScale;
 }
 
-function addPersonGeoToMap({person, map}: {
+function addPersonGeoToMap({person, map, cssAnchor}: {
         person: PersonLabelData,
-        map: Map
+        map: Map,
+        cssAnchor?: string
     }): HTMLDivElement {
     if (!person.location) throw new Error("person has no location")
 
@@ -128,8 +129,14 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
 
     useEffect(()=>{
         if (map) {
-            const label = addPersonGeoToMap({person, map});
-            setPersonsLabels(prev=>[...prev, label]);
+            const label = addPersonGeoToMap({person, map, cssAnchor: "main"});
+            const relLabels = person.relationships
+                .filter(rel=>rel.person.location)
+                .map(rel=>addPersonGeoToMap({
+                    person: rel.person,
+                    map: map
+                }));
+            setPersonsLabels(prev=>[...prev, label, ...relLabels]);
         }
     }, [map])
 
