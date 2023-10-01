@@ -3,12 +3,17 @@ import React, {useEffect, useRef, useState} from "react";
 import Map from "ol/Map";
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
-import {Overlay, View} from "ol";
+import {Feature, Overlay, View} from "ol";
 import {FullScreen, Zoom} from "ol/control";
 import {GeoLocation} from "../../model/GeoLocation";
 import {defaultMapPosition, transformToTarget} from "../../util/mapUtil";
 import {buildUrl} from "../../util/pureFunctions";
 import appConfig from "../../config/appConfig";
+import {Geometry, LineString, Point} from "ol/geom";
+import {fromLonLat} from "ol/proj";
+import {Vector as VectorLayer} from "ol/layer";
+import Vector from "ol/source/Vector";
+import {Fill, Stroke, Style} from "ol/style";
 
 type PersonMapProps = {
     person: Person,
@@ -44,11 +49,6 @@ function getPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelData,
     return personContainer;
 }
 
-function onResize () {
-    // var mapScale = map.getView().getResolution(); // Получаем текущий масштаб карты
-    // var containerScale = 1 / mapScale;
-}
-
 function addPersonGeoToMap({person, map, cssAnchor}: {
         person: PersonLabelData,
         map: Map,
@@ -58,7 +58,7 @@ function addPersonGeoToMap({person, map, cssAnchor}: {
 
     const coordinates = transformLocationToCoordinates(person.location);
 
-    const personContainer = getPersonLabelElement({person: person});
+    const personContainer = getPersonLabelElement({person: person, cssAnchor: cssAnchor});
 
     const label = new Overlay({
         element: personContainer,
@@ -83,6 +83,47 @@ const resizeMapCallback = ({map, labels}: {map: Map, labels: HTMLDivElement[]}) 
         } else if (scale<minScale) scale=minScale;
         label.style.transform = `scale(${Math.pow(scale, 1/3)})`
     })
+}
+
+function drawRelationshipsLines ({person, map}: {person: Person, map: Map}) {
+    if (person.location) {
+        const personCoordinates = transformLocationToCoordinates(person.location);
+
+        const source = new Vector<LineString>({
+        });
+
+        const vectorLayer = new VectorLayer({
+            source: source,
+            renderBuffer: 1e6
+        });
+
+        const lineStyle = new Style({
+            fill: new Fill({ color: '#6750A4' }),
+            stroke: new Stroke({
+                color: '#6750A4',
+                width: 3,
+            })
+        });
+
+        person.relationships.forEach(relationShip=>{
+            const relatedPerson = relationShip.person;
+            if (relatedPerson.location) {
+                const relatedPersonCoordinates = transformLocationToCoordinates(relatedPerson.location);
+
+                const line = new Feature({
+                    geometry: new LineString([personCoordinates, relatedPersonCoordinates])
+                })
+                line.setStyle(lineStyle);
+
+                source.addFeature(line);
+
+                console.log(source.getFeatures())
+            }
+        })
+
+        map.addLayer(vectorLayer);
+        console.log(map.getLayers())
+    }
 }
 
 const PersonMap = ({person, currentLocation}: PersonMapProps) => {
@@ -137,6 +178,7 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
                     map: map
                 }));
             setPersonsLabels(prev=>[...prev, label, ...relLabels]);
+            drawRelationshipsLines({person: person, map: map});
         }
     }, [map])
 
