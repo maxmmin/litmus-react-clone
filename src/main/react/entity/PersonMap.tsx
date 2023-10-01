@@ -170,14 +170,22 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
 
     useEffect(()=>{
         if (map) {
-            const label = addPersonGeoToMap({person, map, cssAnchor: "main"});
+            const labels = [...personsLabels];
+
+            if (person.location) {
+                const label = addPersonGeoToMap({person, map, cssAnchor: "main"})
+
+            }
             const relLabels = person.relationships
                 .filter(rel=>rel.person.location)
                 .map(rel=>addPersonGeoToMap({
                     person: rel.person,
                     map: map
                 }));
-            setPersonsLabels(prev=>[...prev, label, ...relLabels]);
+
+            labels.push(...relLabels);
+
+            setPersonsLabels(labels);
             drawRelationshipsLines({person: person, map: map});
         }
     }, [map])
