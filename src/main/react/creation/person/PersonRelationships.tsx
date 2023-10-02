@@ -15,7 +15,7 @@ const PersonRelationships = ({relationships}: props) => {
                         return (
                             <RelationshipCreationComponent
                                 validationService={validationService}
-                                key={relation.person.id}
+                                key={relation.to.id}
                                 relationship={relation}
                                 stateManager={stateManager}
                             />

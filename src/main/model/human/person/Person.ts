@@ -21,7 +21,8 @@ export const getFullName = (person: Person) => {
 }
 
 export type Relationship = {
-    person: Person,
+    to: Person,
+    from: Person,
     type: RelationType | null,
     note: string
 }
@@ -47,7 +48,7 @@ export class RelationshipsLinkObject {
     constructor(relations?: Array<Relationship>|undefined) {
         if (relations) {
             this._relationships = [...relations]
-        };
+        }
     }
 
     /**
@@ -62,7 +63,7 @@ export class RelationshipsLinkObject {
     }
 
     checkConstraints(rel: Relationship) {
-        if (!rel.person||!rel.person.id||isNaN(+rel.person.id)) {
+        if (!rel.to||!rel.to.id||isNaN(+rel.to.id)) {
             throw new Error("attempt to add relationship with non-valid person")
         }
     }
@@ -140,7 +141,7 @@ export class RelationshipsLinkObject {
     }
 
     static checkIsEqual (rel: Relationship, compared: Relationship) {
-        return rel.person.id===compared.person.id;
+        return rel.to.id===compared.to.id;
     }
 }
 

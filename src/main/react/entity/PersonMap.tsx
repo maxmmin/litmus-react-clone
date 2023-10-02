@@ -90,7 +90,7 @@ const resizeMapCallback = ({map, labels}: {map: Map, labels: HTMLDivElement[]}) 
 }
 
 const isSameRelationship = (srcRelationship: Relationship, targetRelationShip: Relationship) => {
-    return srcRelationship.person.id===targetRelationShip.person.id;
+    return srcRelationship.to.id===targetRelationShip.to.id;
 }
 
 const lineStyle = new Style({
@@ -105,7 +105,7 @@ function buildRelationshipLine({basePerson, relationship}: {relationship: Relati
     if (basePerson.location) {
         const personCoordinates = transformLocationToCoordinates(basePerson.location!);
 
-        const relatedPerson = relationship.person;
+        const relatedPerson = relationship.to;
         if (relatedPerson.location) {
             const relatedPersonCoordinates = transformLocationToCoordinates(relatedPerson.location);
 
@@ -141,12 +141,12 @@ function drawRelationshipsLines ({person, map}: {person: Person, map: Map}) {
             source.addFeature(lineData.line);
             console.log(lineData)
         }
-        const relatedPerson = relationShip.person;
+        const relatedPerson = relationShip.to;
         if (relatedPerson.location&&relatedPerson.relationships) {
             relatedPerson.relationships.forEach(internalRelationship => {
-                if (internalRelationship.person.location) {
+                if (internalRelationship.to.location) {
                     if (!processedRelationships.some(r=>isSameRelationship(r, internalRelationship))) {
-                        if (person.relationships.some(r=>r.person.id===internalRelationship.person.id)) {
+                        if (person.relationships.some(r=>r.to.id===internalRelationship.to.id)) {
                             const lineData = buildRelationshipLine({basePerson: relatedPerson, relationship: internalRelationship});
                             processedRelationships.push(internalRelationship);
                             source.addFeature(lineData.line)
@@ -213,9 +213,9 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
             }
 
             const relLabels = person.relationships
-                .filter(rel=>rel.person.location)
+                .filter(rel=>rel.to.location)
                 .map(rel=>addPersonGeoToMap({
-                    person: rel.person,
+                    person: rel.to,
                     map: map
                 }));
 

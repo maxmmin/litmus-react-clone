@@ -24,7 +24,7 @@ type Props = {
 const RelationshipCreationComponent = ({relationship, validationService, stateManager}: Props) => {
     const personCreationStateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl();
 
-    const personTo = relationship.person;
+    const personTo = relationship.to;
 
     const validationObject: RelationShipValidationObject = useSelector(()=>{
         try {
@@ -58,7 +58,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
 
     const relType = relationship.type?relationship.type:undefined;
 
-    const image: string|undefined = relationship.person.media.mainImage||relationship.person.media.images[0];
+    const image: string|undefined = relationship.to.media.mainImage||relationship.to.media.images[0];
 
     return (
         <div className={"create-relationships-section__create-relation"}>

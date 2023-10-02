@@ -53,8 +53,8 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
     private getRelationshipRequestDto (relationship: Relationship): RelationshipRequestDto {
         const dto: RelationshipRequestDto = {}
 
-        if (hasContent(relationship.person)) {
-            dto.personId = relationship.person.id;
+        if (hasContent(relationship.to)) {
+            dto.personId = relationship.to.id;
         }
 
         if (hasContent(relationship.type)) {
@@ -86,11 +86,12 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
         return dto;
     }
 
-    private mapRelationshipResponseDto (relationshipResponseDto: RelationshipResponseDto): Relationship {
+    private mapRelationshipResponseDto (basePerson: Person,relationshipResponseDto: RelationshipResponseDto): Relationship {
         return {
             note: relationshipResponseDto.note,
             type: relationshipResponseDto.type,
-            person: this.mapToEntity(relationshipResponseDto.person)
+            to: this.mapToEntity(relationshipResponseDto.person),
+            from: basePerson
         }
     }
 
@@ -115,9 +116,13 @@ class PersonDtoMapper implements DtoMapper<PersonRequestDto, Person, PersonRespo
             firstName: retrievedEntityDto.firstName,
             middleName: retrievedEntityDto.middleName?retrievedEntityDto.middleName:null,
             lastName: retrievedEntityDto.lastName,
-            relationships: retrievedEntityDto.relationships?retrievedEntityDto.relationships.map(dto=>this.mapRelationshipResponseDto(dto)):[],
+            relationships: [],
             dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null
         };
+
+        if (retrievedEntityDto.relationships&&retrievedEntityDto.relationships.length>0) {
+            person.relationships = retrievedEntityDto.relationships.map(dto=>this.mapRelationshipResponseDto(person,dto))
+        }
 
         return person;
     }

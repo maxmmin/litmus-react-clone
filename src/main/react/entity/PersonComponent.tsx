@@ -25,7 +25,7 @@ type RelationShipProps = {
 }
 
 export function RelationshipComponent ({relationship, cssAnchor="", containerOnClick, geoBtnOnClick}: RelationShipProps) {
-    const person = relationship.person
+    const person = relationship.to
 
     const mainImg: string|null = person.media.mainImage;
 
@@ -92,7 +92,7 @@ export default function PersonComponent ({person}: PersonProps) {
                 <h4 className={'relationships-section__title'}>Пов'язані особи</h4>
                 {person.relationships.length > 0 ?
                     <div className={'person-page__relationships-container'}>
-                        {person.relationships.map(relationship=><RelationshipComponent key={relationship.person.id} relationship={relationship}/>)}
+                        {person.relationships.map(relationship=><RelationshipComponent key={relationship.to.id} relationship={relationship}/>)}
                     </div>
                     :
                     <p>Пов'язані особи відсутні</p>

@@ -17,36 +17,8 @@ import serviceContext from "./serviceContext";
 import appConfig from "../config/appConfig";
 import RootScreen from "./RootScreen";
 import PersonComponent from "./entity/PersonComponent";
-import Sex from "../model/human/person/Sex";
-import {DateEntityTool} from "../model/DateEntity";
-import Person, {Relationship, RelationType} from "../model/human/person/Person";
 import {Entity} from "../model/Entity";
 import PersonScreen from "./entity/PersonScreen";
-
-const person: Person=  {id: '21', firstName: 'Олена', middleName: 'Вікторівна', lastName: 'Ліщук', location: null, sex: Sex.male, passportData: null, relationships: [], media: {
-        mainImage: null, images: []
-    }, dateOfBirth: DateEntityTool.buildFromString("2003-05-08")}
-
-const rel1: Relationship = {
-    person: person,
-    type: RelationType.SIBLING,
-    note: "Сестра рідна"
-}
-
-
-const rel2: Relationship = {
-    person: person,
-    type: RelationType.RELATIVE,
-    note: "Сестра двоюрідна"
-}
-
-const rel3: Relationship = {
-    person: person,
-    type: RelationType.FRIEND,
-    note: "Подруга дитинства"
-}
-
-person.relationships.push(rel1, rel2, rel3)
 
 export const LitmusServiceContext = createContext(serviceContext);
 
@@ -73,9 +45,6 @@ function App() {
                                     <Creation/>
                                 }/>
 
-                                <Route path={buildUrl(appConfig.applicationMappings.exploration.root, '/test')} element={
-                                    <PersonComponent person={person} />
-                                } />
                             </Route>
 
                             <Route path={appConfig.applicationMappings.signIn} element={<LoginPage/>}/>
