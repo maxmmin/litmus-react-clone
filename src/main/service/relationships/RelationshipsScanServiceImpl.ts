@@ -14,11 +14,11 @@ export type ClientRelationshipsScanMetaData = {
     depth: number
 }
 
-export type RecursiveScanData = {scanned: PersonScanIdMap, shared: PersonsIdMap};
+export type RecursiveScanSource = {scanned: PersonScanIdMap, shared: PersonsIdMap};
 
 type RelationshipMapKey = [string, string]
 
-type PairedRelationships = [Relationship,Relationship]
+export type PairedRelationships = [Relationship,Relationship]
 
 export type PairedRelationshipsMap = Map<RelationshipMapKey, PairedRelationships>
 
@@ -129,13 +129,21 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
         return pairedMap;
     }
 
+    public recursiveScan(person: Person, counter: number, limit: number): PersonsIdMap {
+        const shared: PersonsIdMap = new Map();
+        this._recursiveScan(person, {
+            scanned: new Map<string, {person: Person; clientScanMetaData: ClientRelationshipsScanMetaData}>(),
+            shared: shared
+        }, counter, limit);
+        return shared;
+    }
 
-    recursiveScan(person: Person, scanData: RecursiveScanData, counter: number, limit: number): RecursiveScanData {
+    private _recursiveScan(person: Person, scanData: RecursiveScanSource, counter: number, limit: number): RecursiveScanSource["scanned"] {
         const shared: PersonsIdMap = scanData.shared;
 
-         const scanned = person
+        return  person
             .relationshipsInfo
-             .relationships
+            .relationships
             .reduce((accum,relationShip) => {
                     const iterationScanned = new Map(scanData.scanned);
 
@@ -150,32 +158,29 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
                             });
                         }
                     } else {
-                            iterationScanned.set(person.id, {
-                                person: person,
-                                clientScanMetaData: {
-                                    depth: counter
-                                }
-                            });
+                        iterationScanned.set(person.id, {
+                            person: person,
+                            clientScanMetaData: {
+                                depth: counter
+                            }
+                        });
                     }
 
                     if (accum.has(person.id)) {
-                        const prevScanned = accum.get(person.id)!;
+                        // const prevScanned = accum.get(person.id)!;
 
-                        if (Math.abs(prevScanned.clientScanMetaData.depth-counter!)!==1) {
-                            scanData.shared.set(person.id, person);
-                        }
+                        // if (Math.abs(prevScanned.clientScanMetaData.depth-counter!)!==1) {
+                        //     scanData.shared.set(person.id, person);
+                        // }
+                        scanData.shared.set(person.id, person);
                         // @todo find way to find different branches(idea: dif more that one + person isnt prev
                     }
 
-                    const iterationScanData = this.recursiveScan(relationShip.to, {scanned: iterationScanned, shared: shared}, counter+1, limit);
+                    const scanned = this._recursiveScan(relationShip.to, {scanned: iterationScanned, shared: shared}, counter+1, limit);
 
-                    return  new Map([...Array.from(accum.entries()), ...Array.from(iterationScanData.scanned.entries())]);
-                    },
+                    return  new Map([...Array.from(accum.entries()), ...Array.from(scanned.entries())]);
+                },
                 scanData.scanned
             )
-
-        return {
-             scanned, shared
-        };
     }
 }

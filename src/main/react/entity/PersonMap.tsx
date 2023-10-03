@@ -14,14 +14,18 @@ import {Vector as VectorLayer} from "ol/layer";
 import Vector from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
 import {LitmusServiceContext} from "../App";
-import {PersonsIdMap} from "../../service/relationships/RelationshipsScanServiceImpl";
+import {
+    PairedRelationships,
+    PairedRelationshipsMap,
+    PersonsIdMap
+} from "../../service/relationships/RelationshipsScanServiceImpl";
 
 type PersonMapProps = {
     person: Person,
     currentLocation: GeoLocation|null
 }
 
-function transformLocationToCoordinates (location: GeoLocation) {
+function transformLocationToCoordinates (location: GeoLocation): [number, number] {
     const sourceCoordinates = {lng: location.longitude, lat: location.latitude};
     const targetCoordinates = transformToTarget(sourceCoordinates);
     return [targetCoordinates.lng, targetCoordinates.lat];
@@ -102,29 +106,26 @@ const lineStyle = new Style({
     })
 });
 
-function buildRelationshipLine({basePerson, relationship}: {relationship: Relationship, basePerson: Person}): {relationship: Relationship, basePerson: Person, line: Feature<LineString>} {
-    if (basePerson.location) {
-        const personCoordinates = transformLocationToCoordinates(basePerson.location!);
+function buildRelationshipLine({pair}: {pair: PairedRelationships}): {pair: PairedRelationships, line: Feature<LineString>} {
+    const personPair = pair.map(r=>r.to);
+    const [personOne, personTwo] = personPair;
+    if (personOne.location&&personTwo.location) {
+        const pairCoordinates: [number, number][] = personPair.map(p=>transformLocationToCoordinates(p.location!))
 
-        const relatedPerson = relationship.to;
-        if (relatedPerson.location) {
-            const relatedPersonCoordinates = transformLocationToCoordinates(relatedPerson.location);
 
-            const line = new Feature({
-                geometry: new LineString([personCoordinates, relatedPersonCoordinates])
-            })
-            line.setStyle(lineStyle);
+        const line = new Feature({
+            geometry: new LineString(pairCoordinates)
+        })
+        line.setStyle(lineStyle);
 
             return {
-                relationship: relationship,
-                basePerson: basePerson,
+                pair: pair,
                 line: line
             }
-        } else throw new Error("related person has no location")
-    } else throw new Error("base person has no location")
+    } else throw new Error("one of persons has no location: "+JSON.stringify(personPair))
 }
 
-function drawRelationshipsLines ({person, map}: {person: Person, map: OlMap}) {
+function drawRelationshipsLines ({pairedRelationshipsMap, map}: {pairedRelationshipsMap: PairedRelationshipsMap, map: OlMap}) {
     const source = new Vector<LineString>({
     });
 
@@ -133,34 +134,16 @@ function drawRelationshipsLines ({person, map}: {person: Person, map: OlMap}) {
         renderBuffer: 1e6
     });
 
-    const processedRelationships: Relationship[] = [];
-
-    person
-        .relationshipsInfo
-        .relationships
-        .forEach(relationShip=>{
-            if (person.location) {
-                const lineData = buildRelationshipLine({basePerson: person, relationship: relationShip});
-                processedRelationships.push(relationShip);
-                source.addFeature(lineData.line);
-                console.log(lineData)
-            }
-            const relatedPerson = relationShip.to;
-            if (relatedPerson.location&&relatedPerson.relationshipsInfo.relationships) {
-                relatedPerson.relationshipsInfo.relationships.forEach(internalRelationship => {
-                    if (internalRelationship.to.location) {
-                        if (!processedRelationships.some(r=>isSameRelationship(r, internalRelationship))) {
-                            if (person.relationshipsInfo.relationships.some(r=>r.to.id===internalRelationship.to.id)) {
-                                const lineData = buildRelationshipLine({basePerson: relatedPerson, relationship: internalRelationship});
-                                processedRelationships.push(internalRelationship);
-                                source.addFeature(lineData.line)
-                            }
-                        }
-                    }
-                })
-            }
+    const pairData = Array
+        .from(pairedRelationshipsMap.entries())
+        .filter(([_, [r1,r2]])=>r1.to.location&&r2.to.location)
+        .map(([_, pair])=>{
+            return buildRelationshipLine({pair})
         })
 
+    const lines = pairData.map(data=>data.line)
+
+    source.addFeatures(lines)
     map.addLayer(vectorLayer);
     console.log(source.getFeatures())
 }
@@ -168,19 +151,16 @@ function drawRelationshipsLines ({person, map}: {person: Person, map: OlMap}) {
 const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<OlMap | undefined>();
+
     const [personsLabels, setPersonsLabels] = useState<PersonLabelInfo[]>([])
+
+    const [sharedPersons, setSharedPersons] = useState<PersonsIdMap>(new Map())
 
     const relationshipsScanService = useContext(LitmusServiceContext).relationshipsScanService;
 
     useEffect(()=>{
-        const shared: PersonsIdMap = new Map<string, Person>();
-        const map = relationshipsScanService.recursiveScan(person, {
-            scanned: new Map(),
-            shared
-        },0
-        ,6);
-        console.log(map)
-        relationshipsScanService.buildPairedRelationshipsMap(map.shared).then(console.log)
+        const shared = relationshipsScanService.recursiveScan(person,0,6);
+        setSharedPersons(shared);
     }, [person])
 
     useEffect(()=>{
@@ -221,29 +201,35 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     }, [mapTargetElement])
 
     useEffect(()=>{
-        if (map) {
+        if (map&&sharedPersons) {
             const processedLabels: PersonLabelInfo[] = [];
 
-            if (person.location) {
-                const labelData = addPersonGeoToMap({person, map, cssAnchor: "main"})
-                processedLabels.push(labelData)
-            }
+            const sharedPersonsArray: Person[] = Array.from(sharedPersons.entries()).map(entry=>entry[1]);
 
-            const relLabels = person
-                .relationshipsInfo
-                .relationships
-                .filter(rel=>rel.to.location)
-                .map(rel=>addPersonGeoToMap({
-                    person: rel.to,
+            // if (person.location) {
+            //     const labelData = addPersonGeoToMap({person, map, cssAnchor: "main"})
+            //     processedLabels.push(labelData)
+            // }
+
+            const relLabels = sharedPersonsArray
+                .filter(person=>person.location)
+                .map(p=>addPersonGeoToMap({
+                    person: p,
+                    cssAnchor: p.id===person.id?"main":undefined,
                     map: map
                 }));
 
             processedLabels.push(...relLabels);
 
             setPersonsLabels(processedLabels);
-            drawRelationshipsLines({person: person, map: map});
+
+            const relationshipsPairs = relationshipsScanService
+                .buildPairedRelationshipsMap(sharedPersons)
+                .then(pairs => {
+                    drawRelationshipsLines({pairedRelationshipsMap: pairs, map: map});
+                })
         }
-    }, [map])
+    }, [map, sharedPersons])
 
     useEffect(()=>{
         if (map) {
