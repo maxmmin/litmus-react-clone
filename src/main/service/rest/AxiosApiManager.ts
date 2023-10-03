@@ -61,9 +61,9 @@ class AxiosApiManager {
                 if (manager.isAuthenticated() && config && err.response?.status === HttpStatus.UNAUTHENTICATED) {
 
                     try {
-                        await noHandlerApiInstance.post(appConfig.serverMappings.refreshTokens, {});
+                        await noHandlerApiInstance.post(appConfig.serverMappings.auth.refreshTokens, {});
                     } catch {
-                        await noHandlerApiInstance.post(appConfig.serverMappings.logout, {}).catch(console.error);
+                        await noHandlerApiInstance.post(appConfig.serverMappings.auth.logout, {}).catch(console.error);
                         this.authStateManager.logout();
                         return Promise.reject(err);
                     }
@@ -73,7 +73,7 @@ class AxiosApiManager {
 
                 if (config?.url
                     &&
-                    config.url.includes(appConfig.serverMappings.refreshTokens)
+                    config.url.includes(appConfig.serverMappings.auth.refreshTokens)
                     &&
                     err.response?.status===HttpStatus.FORBIDDEN) {
                     try {

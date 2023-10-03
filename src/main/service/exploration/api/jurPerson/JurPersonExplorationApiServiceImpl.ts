@@ -10,7 +10,7 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPer
 
 
     constructor() {
-        super(appConfig.serverMappings.jurPersons);
+        super(appConfig.serverMappings.jurPersons.root);
     }
 
     public static getInstance (): JurPersonExplorationApiServiceImpl {

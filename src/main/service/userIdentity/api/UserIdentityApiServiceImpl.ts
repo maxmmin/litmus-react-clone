@@ -19,7 +19,7 @@ class UserIdentityApiServiceImpl implements UserIdentityApiService {
 
     async retrieveIdentity (): Promise<UserIdentity> {
         const response = await this.apiInstance
-            .get<UserIdentity>(appConfig.serverMappings.getCurrentUser);
+            .get<UserIdentity>(appConfig.serverMappings.auth.getCurrentUser);
 
         const identity: UserIdentity = response.data;
 

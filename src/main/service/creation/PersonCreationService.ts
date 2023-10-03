@@ -15,6 +15,7 @@ import PersonCreationValidationServiceImpl from "./validation/human/person/Perso
 import FileRepoFactory from "../media/FileRepoFactory";
 import getFilesFromMedia from "../../util/media/getFilesFromMedia";
 import FileRepo from "../media/FileRepo";
+import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
 class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto, PersonValidationObject, ServerPersonValidationObject> {
 
@@ -40,7 +41,7 @@ class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person
 
     public static getInstance(apiService: CreationApiService<PersonRequestDto, PersonResponseDto> = PersonCreationApiService.getInstance(),
                               stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl(),
-                              mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto> = new PersonDtoMapper(),
+                              mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto> = new PersonDtoMapperImpl(),
                               validationService: PersonCreationValidationService = new PersonCreationValidationServiceImpl(),
                               fileService: FileRepo = FileRepoFactory.getGlobalFileService()): PersonCreationService {
         return  new PersonCreationService(apiService, stateManager, mapper,validationService,fileService);

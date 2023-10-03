@@ -20,7 +20,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         const passportErrors = this.validatePassportData(params.passportData);
         const sexErr = this.validateSex(params.sex);
         const dateErr = this.validateDateOfBirth(params.dateOfBirth);
-        const relationShipsErrors = this.validateRelationships(params.relationships)
+        const relationShipsErrors = this.validateRelationships(params.relationshipsInfo.relationships)
         const bindingResult: PersonValidationObject = {
             ...fullNameResult,
             ...passportErrors,

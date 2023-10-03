@@ -10,13 +10,22 @@ export interface RelationshipResponseDto {
     note: string
 }
 
+type RelationshipsScanOptionsResponseDto = {
+    depth: number
+}
+
+export type RelationshipsInfoResponseDto = {
+    scanOptions: RelationshipsScanOptionsResponseDto,
+    relationships: RelationshipResponseDto[]|null
+}
+
 interface PersonResponseDto {
     id: number;
     media: Media | null;
     firstName: string;
     middleName?: string|null;
     lastName: string;
-    relationships?: RelationshipResponseDto[]|null,
+    relationshipsInfo: RelationshipsInfoResponseDto,
     sex: Sex;
     passportData?: Partial<PassportData> | null;
     dateOfBirth?: string | null;

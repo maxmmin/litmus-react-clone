@@ -20,7 +20,7 @@ import UnsupportedModeError from "./UnsupportedModeError";
 import PersonExplorationStateManager from "./stateManager/person/PersonExplorationStateManager";
 import PersonExplorationStateManagerImpl from "./stateManager/person/PersonExplorationStateManagerImpl";
 import PersonExplorationApiServiceImpl from "./api/human/person/PersonExplorationApiServiceImpl";
-import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
+import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
 type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: DtoMapper<unknown, Person, PersonResponseDto>) => Promise<PagedData<Person>>;
 
@@ -33,7 +33,7 @@ class PersonExplorationService implements ExplorationService {
 
     public static getInstance (stateManager: PersonExplorationStateManager = new PersonExplorationStateManagerImpl(),
                                service: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance(),
-                               mapper: DtoMapper<unknown, Person, PersonResponseDto> = new PersonDtoMapper()): PersonExplorationService {
+                               mapper: DtoMapper<unknown, Person, PersonResponseDto> = new PersonDtoMapperImpl()): PersonExplorationService {
        return new PersonExplorationService(stateManager, service, mapper);
     }
 

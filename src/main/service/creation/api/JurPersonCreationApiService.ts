@@ -18,7 +18,7 @@ class JurPersonCreationApiService implements CreationApiService<JurPersonRequest
 
     async create(creationDto: JurPersonRequestDto): Promise<JurPersonResponseDto> {
 
-        const response = await this.apiInstance.post<JurPersonRequestDto, AxiosResponse<JurPersonResponseDto>>(appConfig.serverMappings.jurPersons, creationDto);
+        const response = await this.apiInstance.post<JurPersonRequestDto, AxiosResponse<JurPersonResponseDto>>(appConfig.serverMappings.jurPersons.root, creationDto);
 
         return response.data;
     }

@@ -15,7 +15,10 @@ export const initialPersonCreationParams: Person = {
     firstName: "",
     lastName: "",
     middleName: "",
-    relationships: [],
+    relationshipsInfo: {
+        scanOptions: undefined,
+        relationships: []
+    },
     sex: null,
     passportData: {passportSerial: "", passportNumber: "", rnokppCode: ""},
     location: null

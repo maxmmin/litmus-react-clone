@@ -5,11 +5,20 @@ import PassportData from "./PassportData";
 import Human from "../Human";
 import MediaEntity from "../../MediaEntity";
 
+export type RelationshipsScanOptions = {
+    depth: number
+}
+
+export type RelationshipsInfo = {
+    scanOptions?: RelationshipsScanOptions,
+    relationships: Relationship[]
+}
+
 interface Person extends Human, MediaEntity {
     id: string;
     lastName: string;
     firstName: string;
-    relationships: Relationship[],
+    relationshipsInfo: RelationshipsInfo,
     sex: Sex | null;
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
@@ -22,7 +31,6 @@ export const getFullName = (person: Person) => {
 
 export type Relationship = {
     to: Person,
-    from: Person,
     type: RelationType | null,
     note: string
 }

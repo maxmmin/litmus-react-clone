@@ -62,28 +62,36 @@ const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadA
         case PersonCreationAction.ADD_PERSON_RELATION: {
             const relToAdd = (action.payload as unknown as Relationship);
 
-            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationshipsInfo.relationships);
             relationshipsLinkObject.addRelationship(relToAdd);
 
-            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationships: relationshipsLinkObject.relationships}}
+            const newPersonState: PersonCreationState =  {...prevState, emergingEntity: {...prevState.emergingEntity, relationshipsInfo: {
+                        relationships: relationshipsLinkObject.relationships
+                    }}}
+
+            return newPersonState;
         }
 
         case PersonCreationAction.REMOVE_PERSON_RELATION: {
             const relToAdd = (action.payload as unknown as Relationship);
 
-            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationshipsInfo.relationships);
             relationshipsLinkObject.removeRelationship(relToAdd);
 
-            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationships: relationshipsLinkObject.relationships}}
+            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationshipsInfo: {
+                        relationships: relationshipsLinkObject.relationships
+                    }}}
         }
 
         case PersonCreationAction.UPDATE_PERSON_RELATION: {
             const relToUpdate = (action.payload as unknown as Relationship);
 
-            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationshipsInfo.relationships);
             relationshipsLinkObject.updateRelationship(relToUpdate);
 
-            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationships: relationshipsLinkObject.relationships}}
+            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationshipsInfo: {
+                        relationships: relationshipsLinkObject.relationships
+                    }}}
         }
 
         case PersonCreationAction.UPDATE_PASSPORT_DATA: {

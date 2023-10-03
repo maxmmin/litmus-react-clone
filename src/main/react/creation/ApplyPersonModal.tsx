@@ -26,6 +26,8 @@ import JurPersonCreationStateManagerImpl
 import PersonCreationStateManagerImpl from "../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
 import {LitmusServiceContext} from "../App";
 import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
+import deepCopy from "../../util/deepCopy";
+import {initialPersonCreationParams} from "../../redux/types/creation/PersonCreationState";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -75,6 +77,10 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         }
     }, [modalSettings])
 
+    const serviceContext = useContext(LitmusServiceContext);
+    const personApiService = serviceContext.exploration.apiService.person;
+    const personDtoMapper = serviceContext.mappers.person;
+
     const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (person) {
             setPerson(null)
@@ -110,13 +116,12 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         if (isIdValid) {
             // TODO: Maybe write additional checkup for core, add global error handler and Authentication error: 05/09
             setPending(true)
-            const timerID = setTimeout(()=>fetchPerson(stringId, new PersonDtoMapper()),250)
+            const timerID = setTimeout(()=>fetchPerson(stringId, personDtoMapper),250)
             setRequestTimerId(timerID)
         }
 
     }
 
-    const personApiService = useContext(LitmusServiceContext).exploration.apiService.person
 
     const fetchPerson = async (id: string, mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>) => {
         const personService: PersonExplorationApiService = personApiService;
@@ -124,7 +129,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         setPending(true)
 
         try {
-            const personResponseDto: PersonResponseDto|null = await personService.findById(id);
+            const personResponseDto: PersonResponseDto|null = await personService.findPersonByIdWithDepthOption(id, 0);
             const person: Person|null = personResponseDto?mapper.mapToEntity(personResponseDto):null;
             //@todo я выбрасываю ошибку внутри или оно нормально обрабатывает? заменить search error моей нормальной ошибкой
             setPerson(person)
@@ -169,13 +174,13 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             }
 
             case CreationModalModes.SET_RELATIONSHIP: {
-                const stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl();
-                
+                const stateManager: PersonCreationStateManager = serviceContext.creation.stateManagers.person;
+
                 const relationship: Relationship = {
-                    note: "", to: person, type: null, from: stateManager.getCreationParams()
+                    note: "", to: person, type: null
                 }
 
-                const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.emergingEntity.relationships);
+                const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.emergingEntity.relationshipsInfo.relationships);
 
                 if (sourceRelObject?.isPresent(relationship)) {
                     const err: ErrorResponse<null> = {

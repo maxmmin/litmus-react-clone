@@ -27,7 +27,7 @@ class PersonCreationApiService implements CreationApiService<PersonRequestDto, P
         const formData = this.formDataBuilder.buildFormData(dto, media?media:null);
 
         const response = await this.apiInstance.post<FormData, AxiosResponse<PersonResponseDto>>(
-            appConfig.serverMappings.persons,
+            appConfig.serverMappings.persons.root,
             formData
         );
 

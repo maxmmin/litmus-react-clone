@@ -17,7 +17,7 @@ class UserCreationApiService implements CreationApiService<UserRequestDto, UserR
 
     async create(dto: UserRequestDto): Promise<UserResponseDto> {
         const response = await this.apiInstance
-            .post<UserRequestDto, AxiosResponse<UserResponseDto>>(appConfig.serverMappings.users,
+            .post<UserRequestDto, AxiosResponse<UserResponseDto>>(appConfig.serverMappings.users.root,
                 dto);
 
         return response.data;

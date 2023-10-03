@@ -54,7 +54,7 @@ const CreatePerson = () => {
 
     const passportData = person?.passportData;
 
-    const relationships = person?.relationships;
+    const relationships = person?.relationshipsInfo?.relationships;
 
     const {mainImage, images} = useMemo<PersonImages>(()=>{
         const media = person.media;
@@ -244,7 +244,7 @@ const CreatePerson = () => {
                 <div className={`create-relationships-section__relations ${relationships!.length>0?'':'empty'}`}>
                     {
                         relationships!.length>0?
-                            <PersonRelationships relationships={person.relationships}/>
+                            <PersonRelationships relationships={person.relationshipsInfo.relationships}/>
                             :
                             <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
                     }

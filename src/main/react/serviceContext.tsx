@@ -78,6 +78,9 @@ import PersonExplorationApiService from "../service/exploration/api/human/person
 import GeocodingService from "../service/geocoding/GeocodingService";
 import BingGeocodingService from "../service/geocoding/BingGeocodingService";
 import appConfig from "../config/appConfig";
+import RelationshipsScanServiceImpl from "../service/relationships/RelationshipsScanServiceImpl";
+import RelationshipsScanService from "../service/relationships/RelationshipsScanService";
+import PersonDtoMapperImpl from "../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -86,7 +89,7 @@ type Mappers = {
 }
 
 const mappers: Mappers = {
-    person: new PersonDtoMapper(),
+    person: new PersonDtoMapperImpl(),
     user: new UserDtoMapper(),
     jurPerson: new JurPersonDtoMapper()
 }
@@ -263,7 +266,8 @@ type ServiceContext = {
     files: FileContext,
     mappers: Mappers,
     csrfTokenLoader: CsrfTokenLoader,
-    geocodingService: GeocodingService
+    geocodingService: GeocodingService,
+    relationshipsScanService: RelationshipsScanService
 }
 
 const serviceContext: ServiceContext = {
@@ -276,7 +280,8 @@ const serviceContext: ServiceContext = {
     files: fileContext,
     mappers: mappers,
     csrfTokenLoader: new BasicCsrfTokenLoader(),
-    geocodingService: geocodingService
+    geocodingService: geocodingService,
+    relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person)
 }
 
 export default serviceContext;

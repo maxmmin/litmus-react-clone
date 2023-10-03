@@ -30,7 +30,7 @@ export function RelationshipComponent ({relationship, cssAnchor="", containerOnC
     const mainImg: string|null = person.media.mainImage;
 
     return (
-        <div className="person-page__relationship-container ${cssAnchor}" onClick={
+        <div className={`person-page__relationship-container ${cssAnchor}`} onClick={
             containerOnClick&&((e)=>containerOnClick(relationship, e))}>
             <div className="relationship-container__main-block">
                 <div className="relationship-container_person-img-wrapper">
@@ -90,9 +90,9 @@ export default function PersonComponent ({person}: PersonProps) {
 
             <section className={"person-page__relationships-section"}>
                 <h4 className={'relationships-section__title'}>Пов'язані особи</h4>
-                {person.relationships.length > 0 ?
+                {person.relationshipsInfo.relationships.length > 0 ?
                     <div className={'person-page__relationships-container'}>
-                        {person.relationships.map(relationship=><RelationshipComponent key={relationship.to.id} relationship={relationship}/>)}
+                        {person.relationshipsInfo.relationships.map(relationship=><RelationshipComponent key={relationship.to.id} relationship={relationship}/>)}
                     </div>
                     :
                     <p>Пов'язані особи відсутні</p>

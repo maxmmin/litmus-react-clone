@@ -9,7 +9,7 @@ import AuthenticationStateManagerImpl from "../../../../auth/stateManager/Authen
 class UserExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<UserResponseDto> implements UserExplorationApiService {
 
     constructor() {
-        super(appConfig.serverMappings.users);
+        super(appConfig.serverMappings.users.root);
     }
 
     public static getInstance (): UserExplorationApiServiceImpl {

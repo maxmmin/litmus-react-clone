@@ -24,18 +24,29 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
     [Entity.JUR_PERSON]: "jur-persons"
 })
 
+const personsRoot = buildUrl(apiRoot, entityDomains.PERSON);
+
 const serverMappings = Object.freeze({
     apiHost: host,
     apiRoot: apiRoot,
     mediaRootUrl: buildUrl(host,apiRoot, "/media/"),
-    users: buildUrl(apiRoot, entityDomains.USER),
-    persons: buildUrl(apiRoot, entityDomains.PERSON),
-    jurPersons: buildUrl(apiRoot, entityDomains.JUR_PERSON),
-    csrfToken: '/csrf-token',
-    getCurrentUser: buildUrl(authApiRoot),
-    refreshTokens: buildUrl(authApiRoot, "/refresh"),
-    logout: buildUrl(authApiRoot,"/logout"),
-    signIn: buildUrl(authApiRoot, "/sign-in")
+    users: {
+        root: buildUrl(apiRoot, entityDomains.USER)
+    },
+    persons: {
+        root: personsRoot,
+        relationships: (id: string)=>buildUrl(personsRoot, id, "/relationships")
+    },
+    jurPersons: {
+        root: buildUrl(apiRoot, entityDomains.JUR_PERSON)
+    },
+    auth: {
+        refreshTokens: buildUrl(authApiRoot, "/refresh"),
+        logout: buildUrl(authApiRoot,"/logout"),
+        signIn: buildUrl(authApiRoot, "/sign-in"),
+        getCurrentUser: buildUrl(authApiRoot)
+    },
+    csrfToken: '/csrf-token'
 })
 
 const explorationRoot = "/explore";
