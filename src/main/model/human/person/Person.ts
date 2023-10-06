@@ -4,6 +4,7 @@ import Sex from "./Sex";
 import PassportData from "./PassportData";
 import Human from "../Human";
 import MediaEntity from "../../MediaEntity";
+import {NestedRelationshipResponseDto} from "../../../rest/dto/person/PersonResponseDto";
 
 export type RelationshipsScanOptions = {
     depth: number
@@ -12,6 +13,19 @@ export type RelationshipsScanOptions = {
 export type RelationshipsInfo = {
     scanOptions?: RelationshipsScanOptions,
     relationships: Relationship[]
+}
+
+export type NestedPerson = Pick<Person, 'id'> & {
+    relationshipsInfo: NestedRelationshipsInfo
+}
+
+export type NestedRelationship = Pick<Relationship, 'type'|'note'> &  {
+    to: NestedPerson
+}
+
+export type NestedRelationshipsInfo = {
+    scanOptions: RelationshipsScanOptions,
+    relationships: NestedRelationship[]
 }
 
 interface Person extends Human, MediaEntity {
@@ -23,6 +37,7 @@ interface Person extends Human, MediaEntity {
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
     location: GeoLocation | null
+    minifiedRelationshipsInfo?: NestedRelationshipsInfo
 }
 
 export const getFullName = (person: Person) => {

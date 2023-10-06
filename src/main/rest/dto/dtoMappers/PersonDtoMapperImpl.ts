@@ -1,10 +1,22 @@
-import Person, {Relationship, RelationshipsInfo, RelationshipsScanOptions} from "../../../model/human/person/Person";
+import Person, {
+    NestedPerson,
+    NestedRelationship, NestedRelationshipsInfo,
+    Relationship,
+    RelationshipsInfo,
+    RelationshipsScanOptions
+} from "../../../model/human/person/Person";
 import PersonRequestDto, {PassportDataRequestDto, RelationshipRequestDto} from "../person/PersonRequestDto";
 import {hasContent} from "../../../util/isEmpty";
 import {DateEntityTool} from "../../../model/DateEntity";
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import PassportData from "../../../model/human/person/PassportData";
-import PersonResponseDto, {RelationshipResponseDto, RelationshipsInfoResponseDto} from "../person/PersonResponseDto";
+import PersonResponseDto, {
+    NestedPersonResponseDto,
+    NestedRelationshipResponseDto, NestedRelationshipsInfoResponseDto,
+    RelatedPersonResponseDto,
+    RelationshipResponseDto,
+    RelationshipsInfoResponseDto
+} from "../person/PersonResponseDto";
 import PersonDtoMapper from "./PersonDtoMapper";
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
@@ -88,8 +100,18 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         return dto;
     }
 
+    private relatedToPersonResponseDto (dto: RelatedPersonResponseDto): PersonResponseDto {
+        return {...dto, relationshipsInfo: {
+                scanOptions: {
+                    depth: 0
+                },
+                relationships: null
+            }}
+    }
+
     public mapRelationshipResponseDto (relationshipResponseDto: RelationshipResponseDto): Relationship {
-        const linkedPerson = this.mapToEntity(relationshipResponseDto.person);
+        const linkedPersonDto = this.relatedToPersonResponseDto(relationshipResponseDto.person);
+        const linkedPerson = this.mapToEntity(linkedPersonDto);
 
         return {
             note: relationshipResponseDto.note,
@@ -103,19 +125,98 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             depth: relationshipsInfoResponseDto.scanOptions.depth
         };
 
-        const relationships = relationshipsInfoResponseDto.relationships?
-            relationshipsInfoResponseDto.relationships.map(r=>this.mapRelationshipResponseDto(r))
-            :
-            [];
+        let relationships: Relationship[] = []
 
-        const relationshipsInfo: RelationshipsInfo = {
+        if (relationshipsInfoResponseDto.relationships) {
+            relationships = relationshipsInfoResponseDto.relationships.map(r=>this.mapRelationshipResponseDto(r))
+        }
+
+        return  {
             scanOptions: options,
             relationships: relationships
         }
-
-        return relationshipsInfo;
     }
 
+    private mapNestedPersonResponseDto(dto: NestedPersonResponseDto): NestedPerson {
+        return {
+            id: dto.id.toString(),
+            relationshipsInfo: this.mapNestedRelationshipsInfoResponseDto(dto.relationshipsInfo)
+        }
+    }
+
+    private mapNestedRelationshipResponseDto(relationshipDto: NestedRelationshipResponseDto): NestedRelationship {
+        const nestedPerson: NestedPerson = this.mapNestedPersonResponseDto(relationshipDto.person);
+        return {
+            note: relationshipDto.note,
+            type: relationshipDto.type,
+            to: nestedPerson
+        }
+    }
+
+    private mapNestedRelationshipsInfoResponseDto(relationshipsInfoResponseDto: NestedRelationshipsInfoResponseDto): NestedRelationshipsInfo {
+        let nestedRelationships: NestedRelationship[] = []
+        if (relationshipsInfoResponseDto.scanOptions.depth>0
+            &&
+            relationshipsInfoResponseDto.relationships
+            &&
+            relationshipsInfoResponseDto.relationships.length>0) {
+                nestedRelationships = relationshipsInfoResponseDto.relationships.map(r=>this.mapNestedRelationshipResponseDto(r))
+        }
+
+        return {
+            scanOptions: {
+                depth: relationshipsInfoResponseDto.scanOptions.depth
+            },
+            relationships: nestedRelationships
+        }
+    }
+
+    private personResponseDtoToNestedPersonResponseDto(dto: PersonResponseDto|RelatedPersonResponseDto): NestedPersonResponseDto {
+        let nestedRelationships: NestedRelationshipsInfoResponseDto['relationships'] = null;
+
+        if (dto.relationshipsInfo.relationships) {
+            nestedRelationships = dto.relationshipsInfo.relationships.map(r => {
+                const nested: NestedRelationshipResponseDto = {
+                    ...r,
+                    person: {
+                        id: r.person.id, relationshipsInfo: {
+                            scanOptions: r.person.relationshipsInfo.scanOptions,
+                            relationships: r.person.relationshipsInfo.relationships
+                        }
+                    }
+                }
+                return nested;
+            })
+        }
+        return {
+            id: dto.id,
+            relationshipsInfo: {
+                scanOptions: dto.relationshipsInfo.scanOptions,
+                relationships: nestedRelationships
+            }
+        }
+    }
+
+
+    private mapRelationshipsInfoResponseDtoToNestedInfo(relationshipsInfoResponseDto: RelationshipsInfoResponseDto): NestedRelationshipsInfo {
+        const options: RelationshipsScanOptions = {
+            depth: relationshipsInfoResponseDto.scanOptions.depth
+        };
+
+        let relationships: NestedRelationship[] = []
+
+        if (relationshipsInfoResponseDto.relationships) {
+            relationships = relationshipsInfoResponseDto.relationships.map(r=>this.mapNestedRelationshipResponseDto({
+                ...r,
+                person: this.personResponseDtoToNestedPersonResponseDto(r.person)
+            }))
+        }
+
+        return  {
+            scanOptions: options,
+            relationships: relationships
+        }
+    }
 
     mapToEntity(retrievedEntityDto: PersonResponseDto): Person {
         let passportData: PassportData|null;
@@ -137,20 +238,11 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             firstName: retrievedEntityDto.firstName,
             middleName: retrievedEntityDto.middleName?retrievedEntityDto.middleName:null,
             lastName: retrievedEntityDto.lastName,
-            relationshipsInfo: {
-                scanOptions: {
-                    depth: retrievedEntityDto.relationshipsInfo.scanOptions.depth
-                },
-                relationships: []
-            },
+            relationshipsInfo: this.mapRelationshipsInfoResponseDto(retrievedEntityDto.relationshipsInfo),
             dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null
         };
 
-        const relationships = retrievedEntityDto.relationshipsInfo.relationships;
-
-        if (relationships&&relationships.length>0) {
-            person.relationshipsInfo.relationships = relationships.map(dto=>this.mapRelationshipResponseDto(dto))
-        }
+        person.minifiedRelationshipsInfo = this.mapRelationshipsInfoResponseDtoToNestedInfo(retrievedEntityDto.relationshipsInfo);
 
         return person;
     }

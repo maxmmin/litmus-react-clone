@@ -15,7 +15,7 @@ import Vector from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
 import {LitmusServiceContext} from "../App";
 import {
-    PairedRelationships,
+    PairedRelationshipsFullInfo,
     PairedRelationshipsMap,
     PersonsIdMap
 } from "../../service/relationships/RelationshipsScanServiceImpl";
@@ -106,7 +106,7 @@ const lineStyle = new Style({
     })
 });
 
-function buildRelationshipLine({pair}: {pair: PairedRelationships}): {pair: PairedRelationships, line: Feature<LineString>} {
+function buildRelationshipLine({pair}: {pair: PairedRelationshipsFullInfo}): {pair: PairedRelationshipsFullInfo, line: Feature<LineString>} {
     const personPair = pair.map(r=>r.to);
     const [personOne, personTwo] = personPair;
     if (personOne.location&&personTwo.location) {
@@ -145,7 +145,6 @@ function drawRelationshipsLines ({pairedRelationshipsMap, map}: {pairedRelations
 
     source.addFeatures(lines)
     map.addLayer(vectorLayer);
-    console.log(source.getFeatures())
 }
 
 const PersonMap = ({person, currentLocation}: PersonMapProps) => {
@@ -156,12 +155,7 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
 
     const [sharedPersons, setSharedPersons] = useState<PersonsIdMap>(new Map())
 
-    const relationshipsScanService = useContext(LitmusServiceContext).relationshipsScanService;
 
-    useEffect(()=>{
-        const shared = relationshipsScanService.recursiveScan(person,0,6);
-        setSharedPersons(shared);
-    }, [person])
 
     useEffect(()=>{
         if (mapTargetElement.current) {
@@ -200,36 +194,37 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
         }
     }, [mapTargetElement])
 
-    useEffect(()=>{
-        if (map&&sharedPersons) {
-            const processedLabels: PersonLabelInfo[] = [];
-
-            const sharedPersonsArray: Person[] = Array.from(sharedPersons.entries()).map(entry=>entry[1]);
-
-            // if (person.location) {
-            //     const labelData = addPersonGeoToMap({person, map, cssAnchor: "main"})
-            //     processedLabels.push(labelData)
-            // }
-
-            const relLabels = sharedPersonsArray
-                .filter(person=>person.location)
-                .map(p=>addPersonGeoToMap({
-                    person: p,
-                    cssAnchor: p.id===person.id?"main":undefined,
-                    map: map
-                }));
-
-            processedLabels.push(...relLabels);
-
-            setPersonsLabels(processedLabels);
-
-            const relationshipsPairs = relationshipsScanService
-                .buildPairedRelationshipsMap(sharedPersons)
-                .then(pairs => {
-                    drawRelationshipsLines({pairedRelationshipsMap: pairs, map: map});
-                })
-        }
-    }, [map, sharedPersons])
+    // useEffect(()=>{
+    //     if (map&&sharedPersons) {
+    //         const processedLabels: PersonLabelInfo[] = [];
+    //
+    //         const sharedPersonsArray: Person[] = Array.from(sharedPersons.entries()).map(entry=>entry[1]);
+    //
+    //         // if (person.location) {
+    //         //     const labelData = addPersonGeoToMap({person, map, cssAnchor: "main"})
+    //         //     processedLabels.push(labelData)
+    //         // }
+    //
+    //         const relLabels = sharedPersonsArray
+    //             .filter(person=>person.location)
+    //             .map(p=>addPersonGeoToMap({
+    //                 person: p,
+    //                 cssAnchor: p.id===person.id?"main":undefined,
+    //                 map: map
+    //             }));
+    //
+    //         processedLabels.push(...relLabels);
+    //
+    //         setPersonsLabels(processedLabels);
+    //
+    //         relationshipsScanService
+    //             .buildPairedRelationshipsMap(sharedPersons)
+    //             .then(pairs => {
+    //                 console.log(pairs)
+    //                 drawRelationshipsLines({pairedRelationshipsMap: pairs, map: map});
+    //             })
+    //     }
+    // }, [map, sharedPersons])
 
     useEffect(()=>{
         if (map) {

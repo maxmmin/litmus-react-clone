@@ -8,7 +8,6 @@ import PersonExplorationStateManager from "../service/exploration/stateManager/p
 import JurPersonExplorationStateManager
     from "../service/exploration/stateManager/jurPerson/JurPersonExplorationStateManager";
 import UserExplorationStateManager from "../service/exploration/stateManager/user/UserExplorationStateManager";
-import piService from "../service/exploration/api/human/person/PersonExplorationApiService";
 import JurPersonExplorationApiService from "../service/exploration/api/jurPerson/JurPersonExplorationApiService";
 import UserExplorationApiService from "../service/exploration/api/human/user/UserExplorationApiService";
 import PersonCreationStateManager from "../service/creation/stateManager/person/PersonCreationStateManager";
@@ -78,8 +77,6 @@ import PersonExplorationApiService from "../service/exploration/api/human/person
 import GeocodingService from "../service/geocoding/GeocodingService";
 import BingGeocodingService from "../service/geocoding/BingGeocodingService";
 import appConfig from "../config/appConfig";
-import RelationshipsScanServiceImpl from "../service/relationships/RelationshipsScanServiceImpl";
-import RelationshipsScanService from "../service/relationships/RelationshipsScanService";
 import PersonDtoMapperImpl from "../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
 type Mappers = {
@@ -267,7 +264,7 @@ type ServiceContext = {
     mappers: Mappers,
     csrfTokenLoader: CsrfTokenLoader,
     geocodingService: GeocodingService,
-    relationshipsScanService: RelationshipsScanService
+    // relationshipsScanService: RelationshipsScanService
 }
 
 const serviceContext: ServiceContext = {
@@ -280,8 +277,8 @@ const serviceContext: ServiceContext = {
     files: fileContext,
     mappers: mappers,
     csrfTokenLoader: new BasicCsrfTokenLoader(),
-    geocodingService: geocodingService,
-    relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person)
+    geocodingService: geocodingService
+    // relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person)
 }
 
 export default serviceContext;
