@@ -13,6 +13,17 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
         super(appConfig.serverMappings.persons.root);
     }
 
+    async findPersons(idArray: Array<string>, d: number): Promise<RelationshipsInfoResponseDto> {
+        const response = await this.apiInstance<PersonResponseDto>(buildUrl(this.apiUrl,id), {
+            params: {
+                d: d
+            }
+        });
+        return response.data;
+    }
+
+
+
     async findPersonByIdWithDepthOption(id: string, d: number): Promise<PersonResponseDto> {
         const response = await this.apiInstance<PersonResponseDto>(buildUrl(this.apiUrl,id), {
             params: {

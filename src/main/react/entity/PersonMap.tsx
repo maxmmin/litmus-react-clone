@@ -155,7 +155,7 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
 
     const [sharedPersons, setSharedPersons] = useState<PersonsIdMap>(new Map())
 
-
+    const relationShipScanService = useContext(LitmusServiceContext).relationshipsScanService;
 
     useEffect(()=>{
         if (mapTargetElement.current) {
@@ -225,6 +225,10 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     //             })
     //     }
     // }, [map, sharedPersons])
+
+    useEffect(()=>{
+        console.log(relationShipScanService.getSharedPersons(person, 10))
+    }, [person])
 
     useEffect(()=>{
         if (map) {

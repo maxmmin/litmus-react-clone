@@ -37,7 +37,7 @@ interface Person extends Human, MediaEntity {
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
     location: GeoLocation | null
-    minifiedRelationshipsInfo?: NestedRelationshipsInfo
+    nestedRelationshipsInfo?: NestedRelationshipsInfo
 }
 
 export const getFullName = (person: Person) => {

@@ -78,6 +78,8 @@ import GeocodingService from "../service/geocoding/GeocodingService";
 import BingGeocodingService from "../service/geocoding/BingGeocodingService";
 import appConfig from "../config/appConfig";
 import PersonDtoMapperImpl from "../rest/dto/dtoMappers/PersonDtoMapperImpl";
+import RelationshipsScanServiceImpl from "../service/relationships/RelationshipsScanServiceImpl";
+import RelationshipsScanService from "../service/relationships/RelationshipsScanService";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -182,7 +184,7 @@ type CreationContext = {
         jurPerson: JurPersonCreationValidationService,
         user: UserCreationValidationService
     },
-    formDataBuilder: MediaEntityFormDataBuilder
+    formDataBuilder: MediaEntityFormDataBuilder,
 }
 
 const formDataBuilder = MediaEntityFormDataBuilderImpl.getInstance(fileContext.fileService);
@@ -264,7 +266,7 @@ type ServiceContext = {
     mappers: Mappers,
     csrfTokenLoader: CsrfTokenLoader,
     geocodingService: GeocodingService,
-    // relationshipsScanService: RelationshipsScanService
+    relationshipsScanService: RelationshipsScanService
 }
 
 const serviceContext: ServiceContext = {
@@ -277,8 +279,8 @@ const serviceContext: ServiceContext = {
     files: fileContext,
     mappers: mappers,
     csrfTokenLoader: new BasicCsrfTokenLoader(),
-    geocodingService: geocodingService
-    // relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person)
+    geocodingService: geocodingService,
+    relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person)
 }
 
 export default serviceContext;

@@ -23,6 +23,21 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
     static getInstance(): PersonDtoMapperImpl {
         return new PersonDtoMapperImpl();
     }
+
+    mapPersonToNestedPerson(person: Person): NestedPerson {
+        let relationshipsInfo: NestedRelationshipsInfo|undefined = person.nestedRelationshipsInfo;
+        if (!relationshipsInfo) {
+           throw new Error("person has no nested relationships info")
+        }
+
+        const nested: NestedPerson = {
+            id: person.id,
+            relationshipsInfo: relationshipsInfo
+        }
+
+        return nested;
+    }
+
     mapToRequestDto(emergingPerson: Person): PersonRequestDto {
         const dto: PersonRequestDto = {}
 
@@ -242,7 +257,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null
         };
 
-        person.minifiedRelationshipsInfo = this.mapRelationshipsInfoResponseDtoToNestedInfo(retrievedEntityDto.relationshipsInfo);
+        person.nestedRelationshipsInfo = this.mapRelationshipsInfoResponseDtoToNestedInfo(retrievedEntityDto.relationshipsInfo);
 
         return person;
     }
