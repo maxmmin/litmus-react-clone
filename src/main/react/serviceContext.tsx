@@ -80,6 +80,9 @@ import appConfig from "../config/appConfig";
 import PersonDtoMapperImpl from "../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import RelationshipsScanServiceImpl from "../service/relationships/RelationshipsScanServiceImpl";
 import RelationshipsScanService from "../service/relationships/RelationshipsScanService";
+import PersonRelationshipsAnalyzer from "../service/relationships/PersonRelationshipsAnalyzer";
+import BasicPersonRelationshipsAnalyzer from "../service/relationships/BasicPersonRelationshipsAnalyzer";
+import Person from "../model/human/person/Person";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -266,8 +269,11 @@ type ServiceContext = {
     mappers: Mappers,
     csrfTokenLoader: CsrfTokenLoader,
     geocodingService: GeocodingService,
-    relationshipsScanService: RelationshipsScanService
+    relationshipsScanService: RelationshipsScanService,
+    personRelationshipsAnalyzer: (person: Person)=>PersonRelationshipsAnalyzer
 }
+
+const relationshipsScanService = RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person);
 
 const serviceContext: ServiceContext = {
     auth: authContext,
@@ -280,7 +286,13 @@ const serviceContext: ServiceContext = {
     mappers: mappers,
     csrfTokenLoader: new BasicCsrfTokenLoader(),
     geocodingService: geocodingService,
-    relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person)
+    relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person),
+    personRelationshipsAnalyzer: (person: Person)=>BasicPersonRelationshipsAnalyzer.getInstance(
+            person,
+            relationshipsScanService,
+            personExplorationApiService,
+            mappers.person
+        )
 }
 
 export default serviceContext;

@@ -17,7 +17,7 @@ import {LitmusServiceContext} from "../App";
 import {
     PairedRelationshipsFullInfo,
     PairedRelationshipsMap,
-    PersonsIdMap
+    NestedPersonsIdMap
 } from "../../service/relationships/RelationshipsScanServiceImpl";
 
 type PersonMapProps = {
@@ -153,9 +153,9 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
 
     const [personsLabels, setPersonsLabels] = useState<PersonLabelInfo[]>([])
 
-    const [sharedPersons, setSharedPersons] = useState<PersonsIdMap>(new Map())
+    const [sharedPersons, setSharedPersons] = useState<NestedPersonsIdMap>(new Map())
 
-    const relationShipScanService = useContext(LitmusServiceContext).relationshipsScanService;
+    const relationshipsAnalyzer = useContext(LitmusServiceContext).personRelationshipsAnalyzer(person);
 
     useEffect(()=>{
         if (mapTargetElement.current) {
@@ -227,7 +227,7 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     // }, [map, sharedPersons])
 
     useEffect(()=>{
-        console.log(relationShipScanService.getSharedPersons(person, 10))
+        relationshipsAnalyzer.analyze().then(console.log)
     }, [person])
 
     useEffect(()=>{

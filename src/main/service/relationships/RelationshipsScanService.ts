@@ -1,6 +1,7 @@
-import Person, {Relationship} from "../../model/human/person/Person";
-import {PairedRelationshipsMap, PersonsIdMap, RecursiveScanSource} from "./RelationshipsScanServiceImpl";
+import Person from "../../model/human/person/Person";
+import {NestedPersonsIdMap} from "./RelationshipsScanServiceImpl";
 
 export default interface RelationshipsScanService {
-    getSharedPersons(person: Person, limit: number): PersonsIdMap;
+    // pass -1 to disable limit
+    getSharedPersons(person: Person, limit: number): NestedPersonsIdMap;
 }

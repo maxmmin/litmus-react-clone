@@ -8,7 +8,7 @@ import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
-export type PersonsIdMap = Map<string, NestedPerson>
+export type NestedPersonsIdMap = Map<string, NestedPerson>
 
 type PersonScanIdMap = Map<string, {person: NestedPerson, clientScanMetaData: ClientRelationshipsScanMetaData}>
 
@@ -16,7 +16,7 @@ export type ClientRelationshipsScanMetaData = {
     depth: number
 }
 
-export type RecursiveScanSource = {scanned: PersonScanIdMap, shared: PersonsIdMap, depth: number, limit: number};
+export type RecursiveScanSource = {scanned: PersonScanIdMap, shared: NestedPersonsIdMap, depth: number, limit: number};
 
 type RelationshipMapKey = [string, string]
 
@@ -139,7 +139,9 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
     //     return pairedMap;
     // }
 
-    public getSharedPersons(person: Person, limit: number): PersonsIdMap {
+    public getSharedPersons(person: Person, limit: number): NestedPersonsIdMap {
+        if (limit===0) return new Map<string, NestedPerson>();
+
         if (!person.nestedRelationshipsInfo) throw new Error("nested relationships info is undefined")
 
         const nestedPerson = this.dtoMapper.mapPersonToNestedPerson(person);
@@ -178,6 +180,8 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
     }
 
     private _recursiveScan(person: NestedPerson, scanData: RecursiveScanSource): void {
+        if (scanData.limit!==-1&&!(scanData.depth<scanData.limit)) return;
+
         const shared = scanData.shared;
         const scanned = scanData.scanned;
 

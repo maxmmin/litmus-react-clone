@@ -7,7 +7,6 @@ import {useLoadScript} from "@react-google-maps/api";
 import appConfig, {gmapsRegionOptions} from "../config/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
 import {setMapsApiResponse} from "../redux/actions/AppStateAction";
-import AuthenticationManager from "../service/auth/AuthenticationManager";
 import UserIdentityManager from "../service/userIdentity/UserIdentityManager";
 import {LitmusServiceContext} from "./App";
 import CsrfTokenLoader from "../service/rest/CsrfTokenLoader";

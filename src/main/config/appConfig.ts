@@ -35,6 +35,7 @@ const serverMappings = Object.freeze({
     },
     persons: {
         root: personsRoot,
+        getByIdList: buildUrl(personsRoot, "/id-list"),
         relationships: (id: string)=>buildUrl(personsRoot, id, "/relationships")
     },
     jurPersons: {

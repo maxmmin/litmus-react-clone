@@ -7,16 +7,22 @@ import PersonResponseDto, {
 } from "../../../../../rest/dto/person/PersonResponseDto";
 import {buildUrl} from "../../../../../util/pureFunctions";
 import {RelationshipsInfo} from "../../../../../model/human/person/Person";
+
+export type PersonResponseIdMapDto = Record<number, PersonResponseDto|null>
 class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<PersonResponseDto> implements PersonExplorationApiService {
 
     constructor() {
         super(appConfig.serverMappings.persons.root);
     }
 
-    async findPersons(idArray: Array<string>, d: number): Promise<RelationshipsInfoResponseDto> {
-        const response = await this.apiInstance<PersonResponseDto>(buildUrl(this.apiUrl,id), {
+    async findPersons(idSet: Set<string>, d: number): Promise<PersonResponseIdMapDto> {
+        const response = await this.apiInstance<PersonResponseIdMapDto>(buildUrl(appConfig.serverMappings.persons.getByIdList), {
             params: {
-                d: d
+                d: d,
+                id: [...idSet]
+            },
+            paramsSerializer: {
+                indexes: null
             }
         });
         return response.data;
@@ -25,7 +31,7 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
 
 
     async findPersonByIdWithDepthOption(id: string, d: number): Promise<PersonResponseDto> {
-        const response = await this.apiInstance<PersonResponseDto>(buildUrl(this.apiUrl,id), {
+        const response = await this.apiInstance<PersonResponseDto>(buildUrl(appConfig.serverMappings.persons.root,id), {
             params: {
                 d: d
             }
@@ -39,7 +45,7 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
                 d: d
             }
         });
-        return Promise.resolve(response.data);
+        return response.data;
     }
 
     public static getInstance (): PersonExplorationApiServiceImpl {

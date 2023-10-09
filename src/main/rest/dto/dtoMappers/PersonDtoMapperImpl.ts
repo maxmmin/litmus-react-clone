@@ -18,6 +18,8 @@ import PersonResponseDto, {
     RelationshipsInfoResponseDto
 } from "../person/PersonResponseDto";
 import PersonDtoMapper from "./PersonDtoMapper";
+import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
+import {PersonIdMap, OptionalPersonIdMap} from "../../../service/relationships/BasicPersonRelationshipsAnalyzer";
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
     static getInstance(): PersonDtoMapperImpl {
@@ -36,6 +38,24 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         }
 
         return nested;
+    }
+
+    mapPersonResponseIdMapDto(dto: PersonResponseIdMapDto): OptionalPersonIdMap {
+        const personMap: OptionalPersonIdMap = new Map<string, Person | null>();
+
+        for (const id in dto) {
+            const personDto = dto[id];
+
+            let person: Person|null;
+
+            if (personDto) {
+                person = this.mapToEntity(personDto);
+            } else person = null;
+
+            personMap.set(id, person);
+        }
+
+        return personMap;
     }
 
     mapToRequestDto(emergingPerson: Person): PersonRequestDto {

@@ -8,7 +8,6 @@ import axiosApiInstance from "../../../rest/AxiosApiManager";
 
 class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPersonResponseDto> implements JurPersonExplorationApiService {
 
-
     constructor() {
         super(appConfig.serverMappings.jurPersons.root);
     }
