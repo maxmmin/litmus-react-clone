@@ -155,8 +155,6 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
 
     const [personsLabels, setPersonsLabels] = useState<PersonLabelInfo[]>([])
 
-    const [sharedPersons, setSharedPersons] = useState<NestedPersonsIdMap>(new Map())
-
     const relationshipsAnalyzer = useContext(LitmusServiceContext).personRelationshipsAnalyzer(person);
 
     useEffect(()=>{

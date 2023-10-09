@@ -1,6 +1,6 @@
 import Person, {
     NestedPerson,
-    Relationship
+    Relationship, RelationshipsInfo
 } from "../../model/human/person/Person";
 import RelationshipsScanService from "./RelationshipsScanService";
 import PersonExplorationApiService from "../exploration/api/human/person/PersonExplorationApiService";
@@ -30,112 +30,23 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
         return new RelationshipsScanServiceImpl(apiService, dtoMapper);
     }
 
-    // private buildKey = (personId: string, secondPersonId: string): RelationshipMapKey => {
-    //     const mapKey: RelationshipMapKey = [personId, secondPersonId];
-    //     return mapKey
-    //         .sort((a,b)=>(+a)-(+b));
-    // }
+    public getRelatedPersons(person: Person, limit: number): Set<Person> {
+        const personSet: Set<Person> = new Set<Person>();
+        this._getRelatedPersons(person.relationshipsInfo, personSet, limit);
+        return personSet;
+    }
 
-    // async buildPairedRelationshipsMap(sharedPersons: PersonsIdMap): Promise<PairedRelationshipsMap> {
-    //     const optionalPairedRelationshipsMap: Map<RelationshipMapKey, [RelationshipFullInfo, RelationshipFullInfo|null]> = new Map();
-    //
-    //     const entries = Array.from(sharedPersons.entries());
-    //
-    //     const reverseRelationshipsPromises: {
-    //         key: RelationshipMapKey,
-    //         linkedPersonId: string,
-    //         relationshipsInfoPromise: Promise<RelationshipsInfo>
-    //     }[] = [];
-    //
-    //     for (let i = 0; i<entries.length; i++) {
-    //         const [id, person] = entries[i];
-    //
-    //         person
-    //             .relationshipsInfo
-    //             .relationships
-    //             .forEach(relationShip => {
-    //                 if (sharedPersons.has(relationShip.to.id)) {
-    //                     const relatedPerson = sharedPersons.get(relationShip.to.id)!;
-    //
-    //                     const rKey = this.buildKey(person.id, relatedPerson.id);
-    //
-    //                     if (!optionalPairedRelationshipsMap.has(rKey)) {
-    //                         if (relatedPerson.relationshipsInfo.scanOptions?.depth===0) {
-    //                             const promise = this.apiService
-    //                                 .findPersonRelationships(relatedPerson.id, 1)
-    //                                 .then(dto=>this.dtoMapper.mapRelationshipsInfoResponseDto(dto));
-    //
-    //                             reverseRelationshipsPromises.push({
-    //                                 key: rKey,
-    //                                 linkedPersonId: id,
-    //                                 relationshipsInfoPromise: promise
-    //                             })
-    //                         }
-    //
-    //                         let reverseRelationshipFullInfo: RelationshipFullInfo|null = null;
-    //
-    //                         const depth = relatedPerson.relationshipsInfo.scanOptions?.depth;
-    //
-    //                         if (depth) {
-    //                             const reverseRelationship = relatedPerson
-    //                                 .relationshipsInfo
-    //                                 .relationships
-    //                                 .find(r=>r.to.id===id)!;
-    //                             reverseRelationshipFullInfo = {...reverseRelationship, from: relatedPerson}
-    //                         }
-    //
-    //
-    //                         const paired: [RelationshipFullInfo, RelationshipFullInfo|null] = [
-    //                             {...relationShip,from: person},
-    //                             reverseRelationshipFullInfo
-    //                         ];
-    //
-    //                         optionalPairedRelationshipsMap.set(rKey, paired);
-    //                     }
-    //                 }
-    //             })
-    //     }
-    //
-    //     if (reverseRelationshipsPromises.length>0) {
-    //         for (let counter = 0; counter<reverseRelationshipsPromises.length; counter++) {
-    //             const {key,relationshipsInfoPromise} = reverseRelationshipsPromises[counter];
-    //
-    //             if (!optionalPairedRelationshipsMap.get(key)) {
-    //                 throw new Error("key was registered but was not found in relationship map: " + key)
-    //             }
-    //
-    //             const relationshipsInfo: RelationshipsInfo = await relationshipsInfoPromise;
-    //
-    //             const reverseRelationship = relationshipsInfo
-    //                 .relationships
-    //                 .find(r=>r.to.id===linkedPersonId);
-    //
-    //             if (!reverseRelationship) throw new Error("nested relationships where loaded but reverse relationships was not found");
-    //
-    //             const processedPerson = optionalPairedRelationshipsMap.get(key)![0].to;
-    //
-    //             processedPerson.relationshipsInfo = relationshipsInfo;
-    //
-    //             optionalPairedRelationshipsMap.get(key)![1] = {...reverseRelationship, from: processedPerson};
-    //         }
-    //     }
-    //
-    //     const pairedMap: PairedRelationshipsMap = new Map();
-    //
-    //     Array
-    //         .from(optionalPairedRelationshipsMap.entries())
-    //         .forEach(entry => {
-    //             const [key, [relationship, reversedRelationship]] = entry;
-    //             if (!reversedRelationship) throw new Error("reversed relationship was null: " + JSON.stringify(entry));
-    //             pairedMap.set(key, [relationship, reversedRelationship]);
-    //         })
-    //
-    //     return pairedMap;
-    // }
+    private _getRelatedPersons(relationshipInfo: RelationshipsInfo,personSet: Set<Person>, limit: number, counter: number = 0) {
+        if (limit!==-1&&!(counter<limit)) return;
+        relationshipInfo.relationships.forEach(r=>{
+            if (!personSet.has(r.to)) {
+                personSet.add(r.to);
+            }
+            this._getRelatedPersons(r.to.relationshipsInfo, personSet, limit, counter+1);
+        })
+    }
 
     public getSharedPersons(person: Person, limit: number): NestedPersonsIdMap {
-        if (limit===0) return new Map<number, NestedPerson>();
-
         if (!person.nestedRelationshipsInfo) throw new Error("nested relationships info is undefined")
 
         const nestedPerson = this.dtoMapper.mapPersonToNestedPerson(person);
@@ -152,10 +63,6 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
         data.depth+=1;
 
         this._recursiveScan(nestedPerson, data);
-
-        console.log(JSON.stringify(nestedPerson))
-
-        console.log(data.scanned)
 
         return data.shared;
     }

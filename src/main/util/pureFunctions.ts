@@ -200,10 +200,12 @@ export const isActionPending = (action: Action<String>) => {
 
 export {checkAuthorization, logOut}
 
-export function checkNotEmpty <T> (arg: T) {
+type NotNullOrUndefined<T> = T extends null | undefined ? never : T;
+
+export function checkNotEmpty <T> (arg: T): NotNullOrUndefined<T> {
     if (arg===null||arg===undefined) {
         throw new Error("unset arg exception")
-    } else return arg;
+    } else return arg as NotNullOrUndefined<T>;
 }
 
 export function generateRandomString(length: number) {
