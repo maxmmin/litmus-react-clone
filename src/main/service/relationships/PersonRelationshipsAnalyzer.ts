@@ -9,7 +9,5 @@ export type AnalyzeResult = {
 }
 export default interface PersonRelationshipsAnalyzer {
     getPerson(): Person,
-    getFilteredRelationshipsInfo(): NestedRelationshipsInfo,
-    getRelatedPersonsStore(): PersonStore,
-    analyze (): Promise<AnalyzeResult>,
+    analyze (): Promise<AnalyzeResult>
 }

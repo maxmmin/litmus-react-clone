@@ -1,6 +1,6 @@
 import RelationshipsScanService from "./RelationshipsScanService";
 import PersonExplorationApiService from "../exploration/api/human/person/PersonExplorationApiService";
-import Person, {NestedRelationshipsInfo, Relationship} from "../../model/human/person/Person";
+import Person, {NestedPerson, NestedRelationshipsInfo, Relationship} from "../../model/human/person/Person";
 import PersonExplorationApiServiceImpl, {PersonResponseIdMapDto} from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import deepCopy from "../../util/deepCopy";
@@ -11,6 +11,14 @@ import PersonRelationshipsAnalyzer, {AnalyzeResult} from "./PersonRelationshipsA
 export type PersonStore = Map<string,{person: Person}>
 export type PersonIdMap = Map<string, Person>
 export type OptionalPersonIdMap = Map<string, Person|null>
+
+type RelationshipMapKey = [string, string]
+
+export type RelationshipFullInfo = Relationship&{from: Person}
+
+export type PairedRelationshipsFullInfo = [RelationshipFullInfo,RelationshipFullInfo]
+
+export type PairedRelationshipMap = Map<RelationshipMapKey, PairedRelationshipsFullInfo>
 
 export default class BasicPersonRelationshipsAnalyzer implements PersonRelationshipsAnalyzer{
 
@@ -24,14 +32,31 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
             dtoMapper)
     }
 
-    protected filteredRelationshipsInfo: NestedRelationshipsInfo;
-
     constructor(protected readonly person: Person,
                 protected readonly relationShipsScanService: RelationshipsScanService,
                 protected readonly personExplorationApiService: PersonExplorationApiService,
                 protected readonly dtoMapper: PersonDtoMapper) {
-        this.filteredRelationshipsInfo = this.formFilteredRelationshipsInfo(person);
     }
+
+    private getPairedRelationshipMap (filteredRelationshipsInfo: NestedRelationshipsInfo) {
+
+    }
+
+    private buildPairedMapKey = (personId: string, secondPersonId: string): RelationshipMapKey => {
+        const mapKey: RelationshipMapKey = [personId, secondPersonId];
+        return mapKey
+            .sort((a,b)=>(+a)-(+b));
+    }
+
+    // private recursiveBuildPairedRelationshipMap (basePersonId: string, filteredRelationshipsInfo: NestedRelationshipsInfo, pairedMap: PairedRelationshipMap) {
+    //     filteredRelationshipsInfo.relationships.forEach(r=>{
+    //         const key = this.buildPairedMapKey(r.to.id, basePersonId);
+    //         if (!pairedMap.has(key)) {
+    //             const reversedRelationship =
+    //             const pair: PairedRelationshipsFullInfo = []
+    //         }
+    //     })
+    // }
 
     public getPerson(): Person {
         return this.person;
@@ -43,18 +68,11 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
 
     async analyze(): Promise<AnalyzeResult> {
         const person = this.getPerson();
-        await this.refreshData(person);
-        return {
-            analyzedPerson: person,
-            filteredRelationshipsInfo: this.filteredRelationshipsInfo,
-            relatedPersonsStore: this.getRelatedPersonsStore()
-        }
+        return await this.analyzePerson(person);
     }
 
-    private async refreshData (person: Person) {
-        const filtered = this.formFilteredRelationshipsInfo(person);
-
-        this.filteredRelationshipsInfo = filtered;
+    private async analyzePerson (person: Person): Promise<AnalyzeResult> {
+        const filtered = this.getPersonFilteredRelationshipsInfo(person);
 
         const storeEntries = [...this.personStore].filter(([id, person])=>this.isPresent(id, filtered));
 
@@ -70,6 +88,12 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
         })
 
         await this.bindRelated();
+
+        return {
+            relatedPersonsStore: this.getRelatedPersonsStore(),
+            analyzedPerson: this.getPerson(),
+            filteredRelationshipsInfo: filtered
+        }
     }
 
     private readonly personStore: PersonStore = new Map();
@@ -94,7 +118,7 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
     }
 
     private async loadRelated (): Promise<PersonIdMap> {
-        const idList = this.getUnloadedPersonsIdList(this.filteredRelationshipsInfo);
+        const idList = this.getUnloadedPersonsIdList(this.getPersonFilteredRelationshipsInfo(this.person));
         const loadedPersonResponseDtoMap: PersonResponseIdMapDto = await this.personExplorationApiService.findPersons(idList, 1);
 
         const personsIdMap: PersonIdMap = new Map();
@@ -124,11 +148,8 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
             })
     }
 
-    public getFilteredRelationshipsInfo(): NestedRelationshipsInfo {
-        return this.filteredRelationshipsInfo;
-    }
 
-    private formFilteredRelationshipsInfo(person: Person): NestedRelationshipsInfo {
+    private getPersonFilteredRelationshipsInfo(person: Person): NestedRelationshipsInfo {
         if (!person.nestedRelationshipsInfo) throw new Error("no nested relationships info present");
         const matchList = this.relationShipsScanService.getSharedPersons(person, -1);
 

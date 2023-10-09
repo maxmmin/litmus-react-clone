@@ -18,13 +18,7 @@ export type ClientRelationshipsScanMetaData = {
 
 export type RecursiveScanSource = {scanned: PersonScanIdMap, shared: NestedPersonsIdMap, depth: number, limit: number};
 
-type RelationshipMapKey = [string, string]
 
-export type RelationshipFullInfo = Relationship&{from: Person}
-
-export type PairedRelationshipsFullInfo = [RelationshipFullInfo,RelationshipFullInfo]
-
-export type PairedRelationshipsMap = Map<RelationshipMapKey, PairedRelationshipsFullInfo>
 
 export default class RelationshipsScanServiceImpl implements RelationshipsScanService {
     constructor(protected readonly apiService: PersonExplorationApiService,
@@ -36,11 +30,11 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
         return new RelationshipsScanServiceImpl(apiService, dtoMapper);
     }
 
-    private buildKey = (personId: string, secondPersonId: string): RelationshipMapKey => {
-        const mapKey: RelationshipMapKey = [personId, secondPersonId];
-        return mapKey
-            .sort((a,b)=>(+a)-(+b));
-    }
+    // private buildKey = (personId: string, secondPersonId: string): RelationshipMapKey => {
+    //     const mapKey: RelationshipMapKey = [personId, secondPersonId];
+    //     return mapKey
+    //         .sort((a,b)=>(+a)-(+b));
+    // }
 
     // async buildPairedRelationshipsMap(sharedPersons: PersonsIdMap): Promise<PairedRelationshipsMap> {
     //     const optionalPairedRelationshipsMap: Map<RelationshipMapKey, [RelationshipFullInfo, RelationshipFullInfo|null]> = new Map();

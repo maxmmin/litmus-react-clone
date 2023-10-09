@@ -15,10 +15,12 @@ import Vector from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
 import {LitmusServiceContext} from "../App";
 import {
-    PairedRelationshipsFullInfo,
-    PairedRelationshipsMap,
     NestedPersonsIdMap
 } from "../../service/relationships/RelationshipsScanServiceImpl";
+import {
+    PairedRelationshipMap,
+    PairedRelationshipsFullInfo
+} from "../../service/relationships/BasicPersonRelationshipsAnalyzer";
 
 type PersonMapProps = {
     person: Person,
@@ -125,7 +127,7 @@ function buildRelationshipLine({pair}: {pair: PairedRelationshipsFullInfo}): {pa
     } else throw new Error("one of persons has no location: "+JSON.stringify(personPair))
 }
 
-function drawRelationshipsLines ({pairedRelationshipsMap, map}: {pairedRelationshipsMap: PairedRelationshipsMap, map: OlMap}) {
+function drawRelationshipsLines ({pairedRelationshipsMap, map}: {pairedRelationshipsMap: PairedRelationshipMap, map: OlMap}) {
     const source = new Vector<LineString>({
     });
 
