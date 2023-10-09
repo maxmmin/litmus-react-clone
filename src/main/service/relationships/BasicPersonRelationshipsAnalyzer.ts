@@ -8,9 +8,9 @@ import RelationshipsScanServiceImpl, {NestedPersonsIdMap} from "./RelationshipsS
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import PersonRelationshipsAnalyzer, {AnalyzeResult} from "./PersonRelationshipsAnalyzer";
 
-export type PersonStore = Map<string,{person: Person}>
-export type PersonIdMap = Map<string, Person>
-export type OptionalPersonIdMap = Map<string, Person|null>
+export type PersonStore = Map<number,{person: Person}>
+export type PersonIdMap = Map<number, Person>
+export type OptionalPersonIdMap = Map<number, Person|null>
 
 type RelationshipMapKey = [string, string]
 
@@ -125,18 +125,18 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
 
         [...this.dtoMapper.mapPersonResponseIdMapDto(loadedPersonResponseDtoMap)].map(([id, person])=>{
             if (!person) throw new Error(`person was not found: ${id}`)
-            personsIdMap.set(id.toString(), person);
+            personsIdMap.set(id, person);
         })
         return personsIdMap;
     }
 
-    private getUnloadedPersonsIdList(relationshipsInfo: NestedRelationshipsInfo): Set<string> {
+    private getUnloadedPersonsIdList(relationshipsInfo: NestedRelationshipsInfo): Set<number> {
         return relationshipsInfo.relationships.reduce((iterationSet,r)=>{
             if (!this.personStore.has(r.to.id)) {
                 iterationSet.add(r.to.id);
             }
             return new Set([...iterationSet,...this.getUnloadedPersonsIdList(r.to.relationshipsInfo)]);
-        }, new Set<string>())
+        }, new Set<number>())
     }
 
     private filterRelationships(relationshipsInfo: NestedRelationshipsInfo, matchList: NestedPersonsIdMap) {
@@ -163,7 +163,7 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
         return nestedRelationshipsInfo;
     }
 
-    private isPresent(id: string, relationshipsInfo: NestedRelationshipsInfo): boolean {
+    private isPresent(id: number, relationshipsInfo: NestedRelationshipsInfo): boolean {
         return relationshipsInfo.relationships.findIndex(r=>{
             if (r.to.id===id) return true;
             else return this.isPresent(id, r.to.relationshipsInfo)

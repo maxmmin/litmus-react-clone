@@ -22,6 +22,7 @@ import JurPersonExplorationStateManager from "./stateManager/jurPerson/JurPerson
 import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
+import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 
 type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) => Promise<PagedData<JurPerson>>;
 
@@ -34,7 +35,7 @@ class JurPersonExplorationService implements ExplorationService {
 
     public static getInstance(stateManager: JurPersonExplorationStateManager = new JurPersonExplorationStateManagerImpl(),
                        service: JurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance(),
-                       mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto> = new JurPersonDtoMapper(),
+                       mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto> = new JurPersonDtoMapperImpl(),
                     ) {
         return new JurPersonExplorationService(stateManager,service,mapper)
     }

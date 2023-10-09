@@ -18,20 +18,21 @@ import {AxiosError} from "axios";
  * Q - requestDto
  * E - entity
  * P - response dto
+ * C - creation params type
  * V - validation object
  * S - server validation type
  */
-class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationErrors<E>,S extends object=V> implements CreationService<E> {
+class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=ValidationErrors<C>,S extends object=V> implements CreationService<E> {
 
-    protected readonly mapper: DtoMapper<RequestDto, E, ResponseDto>;
+    protected readonly mapper: DtoMapper<RequestDto, E, ResponseDto, C>;
     protected readonly apiService: CreationApiService<RequestDto, ResponseDto>;
-    protected readonly creationStateManager: CreationStateManager<E,V>;
-    protected readonly validationService: ValidationService<E,V,S>
+    protected readonly creationStateManager: CreationStateManager<E,C,V>;
+    protected readonly validationService: ValidationService<C,V,S>
 
     constructor(apiService: CreationApiService<RequestDto, ResponseDto>,
-                creationStateManager: CreationStateManager<E,V>,
-                mapper: DtoMapper<RequestDto, E, ResponseDto>,
-                validationService: ValidationService<E, V, S>) {
+                creationStateManager: CreationStateManager<E,C,V>,
+                mapper: DtoMapper<RequestDto, E, ResponseDto, C>,
+                validationService: ValidationService<C, V, S>) {
         this.mapper = mapper;
         this.apiService = apiService;
         this.creationStateManager = creationStateManager;
@@ -50,7 +51,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, V extends object=ValidationE
     }
 
     private createEntityThunk = (prefix: string) => createAsyncThunk<E,
-        ThunkArg<{emergingEntity: E}>,
+        ThunkArg<{emergingEntity: C}>,
         LitmusAsyncThunkConfig>(prefix,async ({emergingEntity}, {rejectWithValue, fulfillWithValue}) => {
         try {
             const errors = this.validationService.validate(emergingEntity);

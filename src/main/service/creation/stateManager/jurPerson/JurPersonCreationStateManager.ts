@@ -4,8 +4,9 @@ import GeoStateManager from "../GeoStateManager";
 import {
     JurPersonValidationObject
 } from "../../validation/jurPerson/JurPersonCreationValidationService";
+import {JurPersonCreationParams} from "../../../../redux/types/creation/JurPersonCreationState";
 
-interface JurPersonCreationStateManager extends CreationStateManager<JurPerson, JurPersonValidationObject>, GeoStateManager {
+interface JurPersonCreationStateManager extends CreationStateManager<JurPerson, JurPersonCreationParams, JurPersonValidationObject>, GeoStateManager {
 }
 
 export default JurPersonCreationStateManager;

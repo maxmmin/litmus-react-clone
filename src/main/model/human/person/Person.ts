@@ -5,6 +5,7 @@ import PassportData from "./PassportData";
 import Human from "../Human";
 import MediaEntity from "../../MediaEntity";
 import {NestedRelationshipResponseDto} from "../../../rest/dto/person/PersonResponseDto";
+import CoreEntity from "../../CoreEntity";
 
 export type RelationshipsScanOptions = {
     depth: number
@@ -28,8 +29,7 @@ export type NestedRelationshipsInfo = {
     relationships: NestedRelationship[]
 }
 
-interface Person extends Human, MediaEntity {
-    id: string;
+interface Person extends Human, MediaEntity, CoreEntity {
     lastName: string;
     firstName: string;
     relationshipsInfo: RelationshipsInfo,

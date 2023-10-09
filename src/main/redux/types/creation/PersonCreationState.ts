@@ -5,11 +5,11 @@ import {
     personDefaultValidationObject,
     PersonValidationObject
 } from "../../../service/creation/validation/human/person/PersonCreationValidationService";
+import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
 
-export default interface PersonCreationState extends EntityCreationState<Person, PersonValidationObject>{}
+export default interface PersonCreationState extends EntityCreationState<PersonCreationParams, PersonValidationObject>{}
 
-export const initialPersonCreationParams: Person = {
-    id: '-1',
+export const initialPersonCreationParams: PersonCreationParams = {
     media: {images: [], mainImage: null},
     dateOfBirth: {...new DateEntityTool().build()},
     firstName: "",
@@ -24,7 +24,7 @@ export const initialPersonCreationParams: Person = {
     location: null
 }
 
-export class BasicPersonCreationState extends BasicEntityCreationState<Person, PersonValidationObject> implements PersonCreationState {
+export class BasicPersonCreationState extends BasicEntityCreationState<PersonCreationParams, PersonValidationObject> implements PersonCreationState {
 
     constructor() {
         super(initialPersonCreationParams, personDefaultValidationObject);

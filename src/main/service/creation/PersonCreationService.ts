@@ -15,12 +15,16 @@ import FileRepoFactory from "../media/FileRepoFactory";
 import getFilesFromMedia from "../../util/media/getFilesFromMedia";
 import FileRepo from "../media/FileRepo";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
+import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
+import PersonCreationApiServiceImpl from "./api/PersonCreationApiServiceImpl";
 
-class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto, PersonValidationObject, ServerPersonValidationObject> {
+export type PersonCreationParams = Omit<Person, 'id'>
+
+class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto, PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> {
 
     constructor(apiService: CreationApiService<PersonRequestDto, PersonResponseDto>,
                 creationStateManager: PersonCreationStateManager,
-                mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>,
+                mapper: PersonDtoMapper,
                 validationService: PersonCreationValidationService,
                 protected readonly fileService: FileRepo) {
         super(apiService, creationStateManager, mapper, validationService);
@@ -38,9 +42,9 @@ class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person
         return createdPerson;
     }
 
-    public static getInstance(apiService: CreationApiService<PersonRequestDto, PersonResponseDto> = PersonCreationApiService.getInstance(),
+    public static getInstance(apiService: CreationApiService<PersonRequestDto, PersonResponseDto> = PersonCreationApiServiceImpl.getInstance(),
                               stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl(),
-                              mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto> = new PersonDtoMapperImpl(),
+                              mapper: PersonDtoMapper = new PersonDtoMapperImpl(),
                               validationService: PersonCreationValidationService = new PersonCreationValidationServiceImpl(),
                               fileService: FileRepo = FileRepoFactory.getGlobalFileService()): PersonCreationService {
         return  new PersonCreationService(apiService, stateManager, mapper,validationService,fileService);

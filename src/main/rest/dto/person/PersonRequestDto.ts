@@ -5,7 +5,7 @@ import MediaEntity from "../../../model/MediaEntity";
 import Media from "../../../model/Media";
 
 export type RelationshipRequestDto = {
-    personId?: string,
+    personId: number,
     type?: RelationType,
     note?: string
 }

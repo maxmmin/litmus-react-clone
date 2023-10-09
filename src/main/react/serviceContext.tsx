@@ -83,6 +83,11 @@ import RelationshipsScanService from "../service/relationships/RelationshipsScan
 import PersonRelationshipsAnalyzer from "../service/relationships/PersonRelationshipsAnalyzer";
 import BasicPersonRelationshipsAnalyzer from "../service/relationships/BasicPersonRelationshipsAnalyzer";
 import Person from "../model/human/person/Person";
+import PersonCreationApiServiceImpl from "../service/creation/api/PersonCreationApiServiceImpl";
+import JurPersonCreationApiServiceImpl from "../service/creation/api/JurPersonCreationApiServiceImpl";
+import UserCreationApiServiceImpl from "../service/creation/api/UserCreationApiServiceImpl";
+import JurPersonDtoMapperImpl from "../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
+import UserDtoMapperImpl from "../rest/dto/dtoMappers/UserDtoMapperImpl";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -92,8 +97,8 @@ type Mappers = {
 
 const mappers: Mappers = {
     person: new PersonDtoMapperImpl(),
-    user: new UserDtoMapper(),
-    jurPerson: new JurPersonDtoMapper()
+    user: new UserDtoMapperImpl(),
+    jurPerson: new JurPersonDtoMapperImpl()
 }
 
 type AuthContext = {
@@ -173,9 +178,9 @@ type CreationContext = {
         user: UserCreationStateManager
     },
     apiService: {
-        person: CreationApiService<PersonRequestDto, PersonResponseDto>,
-        jurPerson: CreationApiService<JurPersonRequestDto, JurPersonResponseDto>,
-        user: CreationApiService<UserRequestDto, UserResponseDto>
+        person: PersonCreationApiService,
+        jurPerson: JurPersonCreationApiService,
+        user: UserCreationApiService
     },
     service: {
         person: PersonCreationService,
@@ -192,9 +197,9 @@ type CreationContext = {
 
 const formDataBuilder = MediaEntityFormDataBuilderImpl.getInstance(fileContext.fileService);
 
-const personCreationApiService = PersonCreationApiService.getInstance(formDataBuilder);
-const jurPersonCreationApiService = JurPersonCreationApiService.getInstance();
-const userCreationApiService = UserCreationApiService.getInstance();
+const personCreationApiService: PersonCreationApiService = PersonCreationApiServiceImpl.getInstance(formDataBuilder);
+const jurPersonCreationApiService: JurPersonCreationApiService = JurPersonCreationApiServiceImpl.getInstance();
+const userCreationApiService: UserCreationApiService = UserCreationApiServiceImpl.getInstance();
 
 const personCreationStateManager = new PersonCreationStateManagerImpl();
 const jurPersonCreationStateManager = new JurPersonCreationStateManagerImpl();

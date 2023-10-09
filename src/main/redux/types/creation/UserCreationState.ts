@@ -4,13 +4,13 @@ import {RoleName} from "../userIdentity/Role";
 import {
     userDefaultValidationObject, UserValidationObject
 } from "../../../service/creation/validation/human/user/UserCreationValidationService";
+import {UserCreationParams} from "../../../service/creation/UserCreationService";
 
-export default interface UserCreationState extends EntityCreationState<User, UserValidationObject> {
+export default interface UserCreationState extends EntityCreationState<UserCreationParams, UserValidationObject> {
 
 }
 
-export const initialUserCreationParams: User = {
-    id: '-1',
+export const initialUserCreationParams: UserCreationParams = {
     email: "",
     firstName:  "",
     lastName: "",
@@ -20,7 +20,7 @@ export const initialUserCreationParams: User = {
 }
 
 
-export class BasicUserCreationState extends BasicEntityCreationState<User, UserValidationObject> implements UserCreationState {
+export class BasicUserCreationState extends BasicEntityCreationState<UserCreationParams, UserValidationObject> implements UserCreationState {
 
     constructor() {
         super(initialUserCreationParams, userDefaultValidationObject);

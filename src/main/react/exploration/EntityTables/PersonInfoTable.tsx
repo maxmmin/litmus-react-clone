@@ -27,7 +27,7 @@ const PersonInfoTable = ({person}: Props) => {
 
         <div className="entity-container__value entity-container__value-block_person">
             <p className="entity-container__value entity-container__value_person">
-                <NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], person.id)}>{person.id}</NavLink>
+                <NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], person.id.toString())}>{person.id}</NavLink>
             </p>
         </div>
         <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.lastName}</p></div>

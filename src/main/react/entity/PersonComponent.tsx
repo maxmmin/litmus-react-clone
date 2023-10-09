@@ -36,7 +36,7 @@ export function RelationshipComponent ({relationship, cssAnchor="", containerOnC
                 <div className="relationship-container_person-img-wrapper">
                     { mainImg ? <img className={"relationship-container__person-img"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
-                <p className="relationship-container__person-name"><NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id)}>{getFullName(person)}</NavLink></p>
+                <p className="relationship-container__person-name"><NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id.toString())}>{getFullName(person)}</NavLink></p>
             </div>
             <p className="relationship-container__relation-type">{relationship.type}</p>
             <p className="relationship-container__relation-note">{relationship.note}</p>

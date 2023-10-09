@@ -20,6 +20,7 @@ import PersonResponseDto, {
 import PersonDtoMapper from "./PersonDtoMapper";
 import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import {PersonIdMap, OptionalPersonIdMap} from "../../../service/relationships/BasicPersonRelationshipsAnalyzer";
+import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
     static getInstance(): PersonDtoMapperImpl {
@@ -41,10 +42,15 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
     }
 
     mapPersonResponseIdMapDto(dto: PersonResponseIdMapDto): OptionalPersonIdMap {
-        const personMap: OptionalPersonIdMap = new Map<string, Person | null>();
+        const personMap: OptionalPersonIdMap = new Map<number, Person | null>();
 
         for (const id in dto) {
-            const personDto = dto[id];
+
+            if (isNaN(+id)) throw new Error("invalid id");
+
+            const numId: number = +id;
+
+            const personDto = dto[numId];
 
             let person: Person|null;
 
@@ -52,13 +58,13 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
                 person = this.mapToEntity(personDto);
             } else person = null;
 
-            personMap.set(id, person);
+            personMap.set(numId, person);
         }
 
         return personMap;
     }
 
-    mapToRequestDto(emergingPerson: Person): PersonRequestDto {
+    mapToRequestDto(emergingPerson: PersonCreationParams): PersonRequestDto {
         const dto: PersonRequestDto = {}
 
         if (emergingPerson.firstName&&hasContent(emergingPerson.firstName)) {
@@ -100,10 +106,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
     }
 
     private getRelationshipRequestDto (relationship: Relationship): RelationshipRequestDto {
-        const dto: RelationshipRequestDto = {}
-
-        if (hasContent(relationship.to)) {
-            dto.personId = relationship.to.id;
+        const dto: RelationshipRequestDto = {
+            personId: relationship.to.id
         }
 
         if (hasContent(relationship.type)) {
@@ -174,7 +178,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
 
     private mapNestedPersonResponseDto(dto: NestedPersonResponseDto): NestedPerson {
         return {
-            id: dto.id.toString(),
+            id: dto.id,
             relationshipsInfo: this.mapNestedRelationshipsInfoResponseDto(dto.relationshipsInfo)
         }
     }
@@ -266,7 +270,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
 
         const person: Person = {
             media: retrievedEntityDto.media?retrievedEntityDto.media:{images: [], mainImage: null},
-            id: retrievedEntityDto.id.toString(),
+            id: retrievedEntityDto.id,
             passportData: passportData,
             sex: retrievedEntityDto.sex,
             location: retrievedEntityDto.location?retrievedEntityDto.location:null,

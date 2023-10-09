@@ -2,10 +2,11 @@
  * Q - request dto
  * E - entity
  * P - response dto
+ * C - creation params
  */
 
-interface DtoMapper<Q, E, P> {
-    mapToRequestDto: (emergingEntity: E) => Q;
+interface DtoMapper<Q, E, P, C=E> {
+    mapToRequestDto: (emergingEntity: C) => Q;
     mapToEntity: (exploredEntityDto: P) => E;
 }
 

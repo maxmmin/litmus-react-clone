@@ -19,6 +19,7 @@ import UserExplorationStateManager from "./stateManager/user/UserExplorationStat
 import UserExplorationStateManagerImpl from "./stateManager/user/UserExplorationStateManagerImpl";
 import UserExplorationApiServiceImpl from "./api/human/user/UserExplorationApiServiceImpl";
 import UserDtoMapper from "../../rest/dto/dtoMappers/UserDtoMapper";
+import UserDtoMapperImpl from "../../rest/dto/dtoMappers/UserDtoMapperImpl";
 
 type UserExplorationCallbackType = (params: UserExplorationParams, service: UserExplorationApiService, mapper: DtoMapper<unknown, User, UserResponseDto>) => Promise<PagedData<User>>;
 
@@ -32,7 +33,7 @@ class UserExplorationService implements ExplorationService {
 
     public static getInstance (stateManager: UserExplorationStateManager = new UserExplorationStateManagerImpl(),
                                service: UserExplorationApiService = UserExplorationApiServiceImpl.getInstance(),
-                               mapper: DtoMapper<unknown, User, UserResponseDto> = new UserDtoMapper(),
+                               mapper: DtoMapper<unknown, User, UserResponseDto> = new UserDtoMapperImpl(),
                                 ): UserExplorationService {
         return new UserExplorationService(stateManager,service,mapper)
     }

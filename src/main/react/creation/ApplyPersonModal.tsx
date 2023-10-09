@@ -28,6 +28,7 @@ import {LitmusServiceContext} from "../App";
 import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
 import deepCopy from "../../util/deepCopy";
 import {initialPersonCreationParams} from "../../redux/types/creation/PersonCreationState";
+import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -161,7 +162,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             case CreationModalModes.SET_BEN_OWNER: {
                 const stateManager: JurPersonCreationStateManager = new JurPersonCreationStateManagerImpl();
 
-                const payload: Partial<JurPerson> = {}
+                const payload: Partial<JurPersonCreationParams> = {}
 
                 if (modalSettings.mode===CreationModalModes.SET_OWNER) {
                     payload.owner = person;
@@ -204,7 +205,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             case CreationModalModes.SET_OWNER:
             case CreationModalModes.SET_BEN_OWNER: {
                 const stateManager: JurPersonCreationStateManager = new JurPersonCreationStateManagerImpl();
-                const payload: Partial<JurPerson> = {}
+                const payload: Partial<JurPersonCreationParams> = {}
                 if (modalSettings.mode===CreationModalModes.SET_OWNER) {
                     payload.owner = null;
                 } else {

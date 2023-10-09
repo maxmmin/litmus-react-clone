@@ -7,7 +7,7 @@ import {PersonResponseIdMapDto} from "./PersonExplorationApiServiceImpl";
 interface PersonExplorationApiService extends HumanExplorationApiService<PersonResponseDto>{
     findPersonByIdWithDepthOption(id: string, d: number): Promise<PersonResponseDto>;
     findPersonRelationships(id: string, d: number): Promise<RelationshipsInfoResponseDto>;
-    findPersons(idList: Set<string>, d: number): Promise<PersonResponseIdMapDto>;
+    findPersons(idList: Set<number>, d: number): Promise<PersonResponseIdMapDto>;
 }
 
 export default PersonExplorationApiService;

@@ -14,8 +14,9 @@ import {
     RelationShipValidationObject
 } from "../../validation/human/person/PersonCreationValidationService";
 import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateManagerImpl";
+import {PersonCreationParams} from "../../PersonCreationService";
 
-class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<Person, PersonValidationObject> implements PersonCreationStateManager {
+class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<Person,PersonCreationParams, PersonValidationObject> implements PersonCreationStateManager {
 
 
     constructor() {

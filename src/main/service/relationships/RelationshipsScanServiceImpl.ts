@@ -8,9 +8,9 @@ import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
-export type NestedPersonsIdMap = Map<string, NestedPerson>
+export type NestedPersonsIdMap = Map<number, NestedPerson>
 
-type PersonScanIdMap = Map<string, {person: NestedPerson, clientScanMetaData: ClientRelationshipsScanMetaData}>
+type PersonScanIdMap = Map<number, {person: NestedPerson, clientScanMetaData: ClientRelationshipsScanMetaData}>
 
 export type ClientRelationshipsScanMetaData = {
     depth: number
@@ -134,7 +134,7 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
     // }
 
     public getSharedPersons(person: Person, limit: number): NestedPersonsIdMap {
-        if (limit===0) return new Map<string, NestedPerson>();
+        if (limit===0) return new Map<number, NestedPerson>();
 
         if (!person.nestedRelationshipsInfo) throw new Error("nested relationships info is undefined")
 

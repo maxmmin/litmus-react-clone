@@ -3,7 +3,7 @@ import MediaEntity from "../../../model/MediaEntity";
 import CreationStateManagerImpl from "./CreationStateManagerImpl";
 import Media from "../../../model/Media";
 
-export default class MediaEntityCreationStateManagerImpl<E extends MediaEntity,V=E> extends CreationStateManagerImpl<E, V> implements MediaEntityCreationStateManager<E,V> {
+export default class MediaEntityCreationStateManagerImpl<E,C extends MediaEntity,V=E> extends CreationStateManagerImpl<E, C, V> implements MediaEntityCreationStateManager<E,C,V> {
     getMedia(): Media {
         return this.getCreationParams().media;
     }
@@ -30,12 +30,12 @@ export default class MediaEntityCreationStateManagerImpl<E extends MediaEntity,V
     }
 
     setMedia(media: Media): void {
-        this.updateEntityCreationParams({media: media} as Partial<E>)
+        this.updateEntityCreationParams({media: media} as Partial<C>)
     }
 
     clearMedia(): void {
         const defaultMedia: Media = {mainImage: null, images: []};
-        this.updateEntityCreationParams({media: defaultMedia} as Partial<E>)
+        this.updateEntityCreationParams({media: defaultMedia} as Partial<C>)
     }
 
 }

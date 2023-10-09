@@ -5,12 +5,13 @@ import {
     jurPersonDefaultValidationObject, JurPersonValidationObject
 } from "../../../service/creation/validation/jurPerson/JurPersonCreationValidationService";
 
-export default interface JurPersonCreationState extends EntityCreationState<JurPerson, JurPersonValidationObject> {
+export default interface JurPersonCreationState extends EntityCreationState<JurPersonCreationParams, JurPersonValidationObject> {
 
 }
 
-export const initialJurPersonCreationParams: JurPerson = {
-    id: '-1',
+export type JurPersonCreationParams = Omit<JurPerson, 'id'>
+
+export const initialJurPersonCreationParams: JurPersonCreationParams = {
     benOwner: null,
     dateOfRegistration:  {...new DateEntityTool().build()},
     edrpou:  "",
@@ -20,7 +21,7 @@ export const initialJurPersonCreationParams: JurPerson = {
 }
 
 
-export class BasicJurPersonCreationState extends BasicEntityCreationState<JurPerson, JurPersonValidationObject> implements JurPersonCreationState {
+export class BasicJurPersonCreationState extends BasicEntityCreationState<JurPersonCreationParams, JurPersonValidationObject> implements JurPersonCreationState {
     constructor() {
         super(initialJurPersonCreationParams, jurPersonDefaultValidationObject);
     }

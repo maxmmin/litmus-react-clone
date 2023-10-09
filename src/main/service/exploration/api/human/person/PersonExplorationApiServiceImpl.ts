@@ -15,7 +15,7 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
         super(appConfig.serverMappings.persons.root);
     }
 
-    async findPersons(idSet: Set<string>, d: number): Promise<PersonResponseIdMapDto> {
+    async findPersons(idSet: Set<number>, d: number): Promise<PersonResponseIdMapDto> {
         const response = await this.apiInstance<PersonResponseIdMapDto>(buildUrl(appConfig.serverMappings.persons.getByIdList), {
             params: {
                 d: d,
