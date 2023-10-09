@@ -25,7 +25,7 @@ class JurPersonCreationService extends CreationServiceImpl<JurPersonRequestDto, 
         super(apiService, creationStateManager, mapper, validationService);
     }
 
-    public static getInstance(apiService: CreationApiService<JurPersonRequestDto, JurPersonResponseDto> = JurPersonCreationApiServiceImpl.getInstance(),
+    public static getInstance(apiService: JurPersonCreationApiService = JurPersonCreationApiServiceImpl.getInstance(),
                               stateManager: JurPersonCreationStateManager = new JurPersonCreationStateManagerImpl(),
                               mapper: JurPersonDtoMapper = new JurPersonDtoMapperImpl(),
                               validationService: JurPersonCreationValidationService = new JurPersonCreationValidationServiceImpl()): JurPersonCreationService {

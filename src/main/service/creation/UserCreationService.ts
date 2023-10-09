@@ -14,20 +14,21 @@ import UserCreationValidationService, {
 import UserCreationValidationServiceImpl from "./validation/human/user/UserCreationValidationServiceImpl";
 import UserDtoMapperImpl from "../../rest/dto/dtoMappers/UserDtoMapperImpl";
 import UserCreationApiServiceImpl from "./api/UserCreationApiServiceImpl";
+import UserCreationApiService from "./api/UserCreationApiService";
 
 export type UserCreationParams = Omit<User, "id">
 
 class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto, UserCreationParams, UserValidationObject, ServerUserValidationObject> {
 
     constructor(
-        apiService: CreationApiService<UserRequestDto, UserResponseDto>,
+        apiService: UserCreationApiService,
         creationStateManager: UserCreationStateManager,
-        mapper: DtoMapper<UserRequestDto, User, UserResponseDto, UserCreationParams>,
+        mapper: UserDtoMapper,
         validationService: UserCreationValidationService) {
         super(apiService, creationStateManager, mapper, validationService);
     }
 
-    public static getInstance(apiService: CreationApiService<UserRequestDto, UserResponseDto> = UserCreationApiServiceImpl.getInstance(),
+    public static getInstance(apiService: UserCreationApiService = UserCreationApiServiceImpl.getInstance(),
                               stateManager: UserCreationStateManager = new UserCreationStateManagerImpl(),
                               mapper: UserDtoMapper = new UserDtoMapperImpl(),
                               validationService: UserCreationValidationService = new UserCreationValidationServiceImpl()): UserCreationService {

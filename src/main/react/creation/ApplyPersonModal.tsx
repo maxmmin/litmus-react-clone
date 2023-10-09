@@ -124,7 +124,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
     }
 
 
-    const fetchPerson = async (id: string, mapper: DtoMapper<PersonRequestDto, Person, PersonResponseDto>) => {
+    const fetchPerson = async (id: string, mapper: PersonDtoMapper) => {
         const personService: PersonExplorationApiService = personApiService;
 
         setPending(true)

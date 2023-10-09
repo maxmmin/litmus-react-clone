@@ -22,7 +22,7 @@ export type PersonCreationParams = Omit<Person, 'id'>
 
 class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto, PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> {
 
-    constructor(apiService: CreationApiService<PersonRequestDto, PersonResponseDto>,
+    constructor(apiService: PersonCreationApiService,
                 creationStateManager: PersonCreationStateManager,
                 mapper: PersonDtoMapper,
                 validationService: PersonCreationValidationService,
@@ -42,7 +42,7 @@ class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person
         return createdPerson;
     }
 
-    public static getInstance(apiService: CreationApiService<PersonRequestDto, PersonResponseDto> = PersonCreationApiServiceImpl.getInstance(),
+    public static getInstance(apiService: PersonCreationApiService = PersonCreationApiServiceImpl.getInstance(),
                               stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl(),
                               mapper: PersonDtoMapper = new PersonDtoMapperImpl(),
                               validationService: PersonCreationValidationService = new PersonCreationValidationServiceImpl(),
