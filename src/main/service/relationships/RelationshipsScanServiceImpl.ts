@@ -36,13 +36,15 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
         return personSet;
     }
 
-    private _getRelatedPersons(relationshipInfo: RelationshipsInfo,personSet: Set<Person>, limit: number, counter: number = 0) {
+    private _getRelatedPersons(relationshipInfo: RelationshipsInfo,personSet: Set<Person>, limit: number, counter: number = 0, scannedRelationshipsInfoSet: Set<RelationshipsInfo> = new Set()) {
         if (limit!==-1&&!(counter<limit)) return;
         relationshipInfo.relationships.forEach(r=>{
             if (!personSet.has(r.to)) {
                 personSet.add(r.to);
             }
-            this._getRelatedPersons(r.to.relationshipsInfo, personSet, limit, counter+1);
+            if (scannedRelationshipsInfoSet.has(r.to.relationshipsInfo)) return;
+            scannedRelationshipsInfoSet.add(r.to.relationshipsInfo);
+            this._getRelatedPersons(r.to.relationshipsInfo, personSet, limit, counter+1, scannedRelationshipsInfoSet);
         })
     }
 

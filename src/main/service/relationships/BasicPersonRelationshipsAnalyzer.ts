@@ -14,7 +14,7 @@ export type PersonStore = Map<number,{person: Person}>
 export type PersonIdMap = Map<number, Person>
 export type OptionalPersonIdMap = Map<number, Person|null>
 
-type RelationshipMapKey = [number, number]
+type RelationshipMapKey = string
 
 export type RelationshipFullInfo = Relationship&{from: Person}
 
@@ -44,9 +44,10 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
     }
     
     private buildPairedMapKey = (personId: number, secondPersonId: number): RelationshipMapKey => {
-        const mapKey: RelationshipMapKey = [personId, secondPersonId];
-        return mapKey
-            .sort((a,b)=>(+a)-(+b));
+        const preProcessedKey: [number, number] = [personId, secondPersonId];
+        return preProcessedKey
+            .sort((a,b)=>(+a)-(+b))
+            .join("->");
     }
 
     private mapRelationsToPairedRelationshipMap (sharedPersons: Set<Person>): PairedRelationshipMap {
@@ -77,7 +78,7 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
 
     private async analyzePerson (person: Person): Promise<AnalyzeResult> {
         person = deepCopy(person);
-        
+
         this.personStore.set(person.id, {person: person});
 
         person.relationshipsInfo.relationships.forEach(r=>{
@@ -108,16 +109,9 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
 
         person.relationshipsInfo.relationships.forEach(r=> {
             if (r.to.relationshipsInfo.relationships.length === 0) {
-                r.to.relationshipsInfo.relationships = person.nestedRelationshipsInfo!.relationships.map((rel) => {
-                    const relationship: Relationship = {...rel, to: checkNotEmpty(this.personStore.get(rel.to.id)).person};
-                    return relationship;
-                });
-                console.log(r.to.relationshipsInfo.relationships)
-                console.log(r.to)
+                r.to.nestedRelationshipsInfo = person.nestedRelationshipsInfo!.relationships.find(nested=>nested.to.id===r.to.id)!.to.relationshipsInfo;
             }
         });
-
-        console.log(person);
 
         [...this.personStore].forEach(([id, personObject])=>{
             personObject.person.relationshipsInfo.relationships = personObject
