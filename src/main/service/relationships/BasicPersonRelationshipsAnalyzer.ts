@@ -8,7 +8,6 @@ import RelationshipsScanServiceImpl, {NestedPersonsIdMap} from "./RelationshipsS
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import PersonRelationshipsAnalyzer, {AnalyzeResult} from "./PersonRelationshipsAnalyzer";
 import {checkNotEmpty} from "../../util/pureFunctions";
-import {map} from "react-bootstrap/ElementChildren";
 
 export type PersonStore = Map<number,{person: Person}>
 export type PersonIdMap = Map<number, Person>
@@ -52,7 +51,7 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
 
     private mapRelationsToPairedRelationshipMap (sharedPersons: Set<Person>): PairedRelationshipMap {
         const pairedMap: PairedRelationshipMap = new Map<RelationshipMapKey, PairedRelationshipsFullInfo>();
-        console.log(sharedPersons)
+
         sharedPersons.forEach(person=>{
             person.relationshipsInfo.relationships.forEach(r=>{
                 const key = this.buildPairedMapKey(r.to.id, person.id);
@@ -109,7 +108,9 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
 
         person.relationshipsInfo.relationships.forEach(r=> {
             if (r.to.relationshipsInfo.relationships.length === 0) {
-                r.to.nestedRelationshipsInfo = person.nestedRelationshipsInfo!.relationships.find(nested=>nested.to.id===r.to.id)!.to.relationshipsInfo;
+                const matchedNestedRelationshipsInfo = checkNotEmpty(person.nestedRelationshipsInfo!.relationships.find(nested=>nested.to.id===r.to.id)).to.relationshipsInfo
+                r.to.nestedRelationshipsInfo = matchedNestedRelationshipsInfo;
+                r.to.relationshipsInfo.scanOptions = matchedNestedRelationshipsInfo.scanOptions;
             }
         });
 
@@ -159,15 +160,16 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
             })
     }
 
-
+    /**
+     *
+     * @param person
+     * @private method do not mutates original person nested relationships dto
+     */
     private getPersonFilteredRelationshipsInfo(person: Person): NestedRelationshipsInfo {
         if (!person.nestedRelationshipsInfo) throw new Error("no nested relationships info present");
         const matchList = this.relationShipsScanService.getSharedPersons(person, -1);
 
-        const nestedRelationshipsInfo: NestedRelationshipsInfo = {
-            scanOptions: {depth: -1},
-            relationships: deepCopy(person.nestedRelationshipsInfo.relationships)
-        }
+        const nestedRelationshipsInfo: NestedRelationshipsInfo = deepCopy(person.nestedRelationshipsInfo)
 
         this.filterRelationships(nestedRelationshipsInfo, matchList);
 
