@@ -46,7 +46,7 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
     private buildPairedMapKey = (personId: number, secondPersonId: number): RelationshipMapKey => {
         const preProcessedKey: [number, number] = [personId, secondPersonId];
         return preProcessedKey
-            .sort((a,b)=>(+a)-(+b))
+            .sort((a,b)=>a-b)
             .join("->");
     }
 
