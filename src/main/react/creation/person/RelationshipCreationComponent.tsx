@@ -13,10 +13,11 @@ import InputError from "../../sharedComponents/InputError";
 import {useSelector} from "react-redux";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
+import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 
 
 type Props = {
-    relationship: Relationship,
+    relationship: RelationshipCreationParams,
     validationService: PersonCreationValidationService,
     stateManager: PersonCreationStateManager
 }
@@ -36,7 +37,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
     })
 
     const handleSelectChange = (e: React.SyntheticEvent<HTMLSelectElement>) => {
-        const relShip: Relationship = {...relationship};
+        const relShip: RelationshipCreationParams = {...relationship};
         try {
             relShip.type = getRelationTypeFrom(e.currentTarget.value)
         } catch (e) {

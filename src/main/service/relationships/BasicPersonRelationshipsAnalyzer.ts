@@ -21,6 +21,15 @@ export type PairedRelationshipsFullInfo = [RelationshipFullInfo,RelationshipFull
 
 export type PairedRelationshipMap = Map<RelationshipMapKey, PairedRelationshipsFullInfo>
 
+export interface AnalyzerOptions {
+    depth: number,
+    limitDepth: number
+}
+
+export function isFinished(options: AnalyzerOptions): boolean {
+    return options.limitDepth!==-1&&options.depth>=options.limitDepth
+}
+
 export default class BasicPersonRelationshipsAnalyzer implements PersonRelationshipsAnalyzer{
 
     public static getInstance (person: Person,
@@ -70,24 +79,27 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
         return this.person;
     }
 
-    async analyze(): Promise<AnalyzeResult> {
+    //pass -1 to load full
+    async analyze(limit: number = 2): Promise<AnalyzeResult> {
         const person = this.getPerson();
-        return await this.analyzePerson(person);
+        return await this.analyzePerson(person, limit);
     }
 
-    private async analyzePerson (person: Person): Promise<AnalyzeResult> {
+    private async analyzePerson (person: Person, limit: number): Promise<AnalyzeResult> {
         person = deepCopy(person);
 
         this.personStore.set(person.id, {person: person});
 
-        person.relationshipsInfo.relationships.forEach(r=>{
-            const relatedPerson = r.to;
-            this.personStore.set(relatedPerson.id, {person: relatedPerson});
-        })
+        if (limit>0) {
+            person.relationshipsInfo.relationships.forEach(r=>{
+                const relatedPerson = r.to;
+                this.personStore.set(relatedPerson.id, {person: relatedPerson});
+            })
+        }
 
-        await this.bindRelated(person);
+        await this.bindRelated(person, limit);
 
-        const relatedPersons = this.relationShipsScanService.getRelatedPersons(person, -1);
+        const relatedPersons = this.relationShipsScanService.getRelatedPersons(person, limit);
 
         const pairedMap: PairedRelationshipMap = this.mapRelationsToPairedRelationshipMap(relatedPersons);
 
@@ -101,16 +113,14 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
 
     private readonly personStore: PersonStore = new Map();
 
-    private async bindRelated (person: Person) {
-        const loadedPersons = await this.loadRelated(person);
+    private async bindRelated (person: Person, limit: number) {
+        const loadedPersons = await this.loadRelated(person, limit);
 
         [...loadedPersons].forEach(([id,person])=>this.personStore.set(id,{person: person}));
 
         person.relationshipsInfo.relationships.forEach(r=> {
             if (r.to.relationshipsInfo.relationships.length === 0) {
-                const matchedNestedRelationshipsInfo = checkNotEmpty(person.nestedRelationshipsInfo!.relationships.find(nested=>nested.to.id===r.to.id)).to.relationshipsInfo
-                r.to.nestedRelationshipsInfo = matchedNestedRelationshipsInfo;
-                r.to.relationshipsInfo.scanOptions = matchedNestedRelationshipsInfo.scanOptions;
+                r.to.nestedRelationshipsInfo = checkNotEmpty(person.nestedRelationshipsInfo!.relationships.find(nested=>nested.to.id===r.to.id)).to.relationshipsInfo;
             }
         });
 
@@ -125,61 +135,64 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
                         return relationship;
                     } else return null;
                 })
-                .filter((r): r is Relationship=>r!==null);
+                .filter((r): r is Relationship=>r!==null)
+
+            personObject.person.relationshipsInfo.relationships.forEach(r=>r.to.relationshipsInfo.scanOptions)
         })
     }
 
-    private async loadRelated (person: Person): Promise<PersonIdMap> {
-        const idList = this.getUnloadedPersonsIdList(this.getPersonFilteredRelationshipsInfo(person));
-        const loadedPersonResponseDtoMap: PersonResponseIdMapDto = await this.personExplorationApiService.findPersons(idList, 1);
+    private async loadRelated (person: Person, limit: number): Promise<PersonIdMap> {
+        const idList = this.getUnloadedPersonsIdList(this.getPersonFilteredRelationshipsInfo(person, limit), {depth: 0, limitDepth: limit});
 
         const personsIdMap: PersonIdMap = new Map();
 
-        [...this.dtoMapper.mapPersonResponseIdMapDto(loadedPersonResponseDtoMap)].map(([id, person])=>{
-            if (!person) throw new Error(`person was not found: ${id}`)
-            personsIdMap.set(id, person);
-        })
+        if (idList.size>0) {
+            const loadedPersonResponseDtoMap: PersonResponseIdMapDto = await this.personExplorationApiService.findPersons(idList, 1);
+
+            [...this.dtoMapper.mapPersonResponseIdMapDto(loadedPersonResponseDtoMap)].map(([id, person])=>{
+                if (!person) throw new Error(`person was not found: ${id}`)
+                personsIdMap.set(id, person);
+            })
+        }
+
         return personsIdMap;
     }
 
-    private getUnloadedPersonsIdList(relationshipsInfo: NestedRelationshipsInfo): Set<number> {
+    private getUnloadedPersonsIdList(relationshipsInfo: NestedRelationshipsInfo, options: AnalyzerOptions): Set<number> {
+        if (isFinished(options)) return new Set();
         return relationshipsInfo.relationships.reduce((iterationSet,r)=>{
             if (!this.personStore.has(r.to.id)) {
                 iterationSet.add(r.to.id);
             }
-            return new Set([...iterationSet,...this.getUnloadedPersonsIdList(r.to.relationshipsInfo)]);
+            return new Set([...iterationSet,...this.getUnloadedPersonsIdList(r.to.relationshipsInfo, {...options, depth: options.depth+1})]);
         }, new Set<number>())
     }
 
     private filterRelationships(relationshipsInfo: NestedRelationshipsInfo, matchList: NestedPersonsIdMap) {
-        relationshipsInfo
-            .relationships
-            .filter(r=>matchList.has(r.to.id))
-            .forEach(r=>{
-                this.filterRelationships(r.to.relationshipsInfo, matchList)
-            })
+        relationshipsInfo.relationships = relationshipsInfo.relationships
+            .filter(r=>{
+                matchList.has(r.to.id);
+            });
+
+        relationshipsInfo.relationships.forEach(r=>{
+            this.filterRelationships(r.to.relationshipsInfo, matchList)
+        })
     }
 
     /**
      *
-     * @param person
-     * @private method do not mutates original person nested relationships dto
+     * @param person - persons to scan
+     * @param limit - depth of scan
+     * @private method do not mutates original person nestedRelationshipsInfo, just filter it from not shared relationships and returns clone
      */
-    private getPersonFilteredRelationshipsInfo(person: Person): NestedRelationshipsInfo {
+    private getPersonFilteredRelationshipsInfo(person: Person, limit: number): NestedRelationshipsInfo {
         if (!person.nestedRelationshipsInfo) throw new Error("no nested relationships info present");
-        const matchList = this.relationShipsScanService.getSharedPersons(person, -1);
+        const matchList = this.relationShipsScanService.getSharedPersons(person, limit);
 
         const nestedRelationshipsInfo: NestedRelationshipsInfo = deepCopy(person.nestedRelationshipsInfo)
 
         this.filterRelationships(nestedRelationshipsInfo, matchList);
 
         return nestedRelationshipsInfo;
-    }
-
-    private isPresent(relationshipsInfo: NestedRelationshipsInfo, id: number): boolean {
-        return relationshipsInfo.relationships.findIndex(r=>{
-            if (r.to.id===id) return true;
-            else return this.isPresent(r.to.relationshipsInfo, id)
-        })>-1;
     }
 }

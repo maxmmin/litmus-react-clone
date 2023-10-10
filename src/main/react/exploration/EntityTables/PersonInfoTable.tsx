@@ -5,9 +5,10 @@ import {NavLink} from "react-router-dom";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {Entity} from "../../../model/Entity";
+import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
 
 type Props = {
-    person: Person
+    person: NoRelationshipsPerson
 }
 
 const PersonInfoTable = ({person}: Props) => {

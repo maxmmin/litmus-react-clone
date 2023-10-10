@@ -8,8 +8,9 @@ import {ValidationErrors} from "../../../../ValidationErrors";
 import User from "../../../../../model/human/user/User";
 import {hasContent} from "../../../../../util/isEmpty";
 import valueOrNull from "../../../../../util/valueOrNull";
+import {UserCreationParams} from "../../../UserCreationService";
 
-class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<User, UserValidationObject, ServerUserValidationObject> implements UserCreationValidationService {
+class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<UserCreationParams, UserValidationObject, ServerUserValidationObject> implements UserCreationValidationService {
     validate(model: User): UserValidationObject {
         const bindingResult: UserValidationObject = {
             ...super.validateFullName(model),
@@ -20,7 +21,7 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
         return bindingResult;
     }
 
-    hasErrors(bindingResult: ValidationErrors<User>): boolean {
+    hasErrors(bindingResult: UserValidationObject): boolean {
         return hasContent(bindingResult);
     }
 

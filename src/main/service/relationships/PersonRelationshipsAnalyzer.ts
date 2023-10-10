@@ -11,5 +11,5 @@ export type AnalyzeResult = {
 export default interface PersonRelationshipsAnalyzer {
     getPerson(): Person,
 
-    analyze (): Promise<AnalyzeResult>
+    analyze (limit?: number): Promise<AnalyzeResult>
 }

@@ -27,8 +27,9 @@ import PersonCreationStateManagerImpl from "../../service/creation/stateManager/
 import {LitmusServiceContext} from "../App";
 import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
 import deepCopy from "../../util/deepCopy";
-import {initialPersonCreationParams} from "../../redux/types/creation/PersonCreationState";
+import {initialPersonCreationParams, NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
+import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -45,7 +46,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const [searchError, setSearchError] = useState<ErrorResponse<unknown>|null>(null);
 
-    const [person, setPerson] = useState<Person|null>(null);
+    const [person, setPerson] = useState<NoRelationshipsPerson|null>(null);
     /**
      * state of modal input pending
      */
@@ -177,11 +178,11 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             case CreationModalModes.SET_RELATIONSHIP: {
                 const stateManager: PersonCreationStateManager = serviceContext.creation.stateManagers.person;
 
-                const relationship: Relationship = {
+                const relationship: RelationshipCreationParams = {
                     note: "", to: person, type: null
                 }
 
-                const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.emergingEntity.relationshipsInfo.relationships);
+                const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.emergingEntity.relationships);
 
                 if (sourceRelObject?.isPresent(relationship)) {
                     const err: ErrorResponse<null> = {

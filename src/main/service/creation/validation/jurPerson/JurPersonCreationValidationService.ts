@@ -1,8 +1,9 @@
 import ValidationService from "../../../ValidationService";
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import {ValidationErrors} from "../../../ValidationErrors";
+import {JurPersonCreationParams} from "../../../../redux/types/creation/JurPersonCreationState";
 
-export type JurPersonValidationObject = ValidationErrors<Pick<JurPerson, 'name'|'dateOfRegistration'|'edrpou'>>
+export type JurPersonValidationObject = ValidationErrors<Pick<JurPersonCreationParams, 'name'|'dateOfRegistration'|'edrpou'>>
 
 export const jurPersonDefaultValidationObject: JurPersonValidationObject = Object.freeze({
     name: null,
@@ -12,8 +13,8 @@ export const jurPersonDefaultValidationObject: JurPersonValidationObject = Objec
 
 export type ServerJurPersonValidationObject = Partial<ValidationErrors<JurPerson>>
 
-export default interface JurPersonCreationValidationService extends ValidationService<JurPerson, JurPersonValidationObject, ServerJurPersonValidationObject> {
-    validateDateOfRegistration(dateOfRegistration: JurPerson["dateOfRegistration"]): string|null;
-    validateName(name: string): string|null;
-    validateEdrpou(edrpou: string): string|null
+export default interface JurPersonCreationValidationService extends ValidationService<JurPersonCreationParams, JurPersonValidationObject, ServerJurPersonValidationObject> {
+    validateDateOfRegistration(dateOfRegistration: JurPersonCreationParams["dateOfRegistration"]): string|null;
+    validateName(name: JurPersonCreationParams["name"]): string|null;
+    validateEdrpou(edrpou: JurPersonCreationParams["edrpou"]): string|null
 }

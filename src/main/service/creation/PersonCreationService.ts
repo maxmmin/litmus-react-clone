@@ -1,9 +1,7 @@
 import CreationServiceImpl from "./CreationServiceImpl";
 import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
-import Person from "../../model/human/person/Person";
+import Person, {Relationship} from "../../model/human/person/Person";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
-import CreationApiService from "./api/CreationApiService";
-import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import PersonCreationApiService from "./api/PersonCreationApiService";
 import PersonCreationStateManager from "./stateManager/person/PersonCreationStateManager";
 import PersonCreationStateManagerImpl from "./stateManager/person/PersonCreationStateManagerImpl";
@@ -17,8 +15,15 @@ import FileRepo from "../media/FileRepo";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonCreationApiServiceImpl from "./api/PersonCreationApiServiceImpl";
+import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 
-export type PersonCreationParams = Omit<Person, 'id'>
+export type RelationshipCreationParams = Omit<Relationship, 'to'> & {
+    to: NoRelationshipsPerson
+}
+
+export type PersonCreationParams = Omit<Person, 'id'|'relationshipsInfo'|'nestedRelationshipsInfo'> & {
+    relationships: RelationshipCreationParams[]
+}
 
 class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto, PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> {
 

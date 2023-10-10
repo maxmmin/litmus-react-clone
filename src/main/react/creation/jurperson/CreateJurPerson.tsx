@@ -12,10 +12,10 @@ import {CreationModalModes} from "../../../redux/types/creation/CreationModalMod
 import {Entity} from "../../../model/Entity";
 import {LitmusServiceContext} from "../../App";
 import InputError from "../../sharedComponents/InputError";
-import ServiceContext from "../../serviceContext";
+import Human from "../../../model/human/Human";
 
 
-const getShortInfo = (person: Person): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
+const getShortInfo = (person: Human&{id: number}): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
 
 const CreateJurPerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);

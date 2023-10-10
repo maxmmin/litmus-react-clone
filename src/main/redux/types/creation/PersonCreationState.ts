@@ -1,5 +1,5 @@
 import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
-import Person from "../../../model/human/person/Person";
+import Person, {RelationshipsScanOptions} from "../../../model/human/person/Person";
 import {DateEntityTool} from "../../../model/DateEntity";
 import {
     personDefaultValidationObject,
@@ -7,7 +7,11 @@ import {
 } from "../../../service/creation/validation/human/person/PersonCreationValidationService";
 import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
 
+export type NoRelationshipsPerson = Omit<Person, 'relationshipsInfo'|'nestedRelationshipsInfo'>
+
 export default interface PersonCreationState extends EntityCreationState<PersonCreationParams, PersonValidationObject>{}
+
+export const defaultScanOptions: RelationshipsScanOptions = {depth: 0}
 
 export const initialPersonCreationParams: PersonCreationParams = {
     media: {images: [], mainImage: null},
@@ -15,10 +19,7 @@ export const initialPersonCreationParams: PersonCreationParams = {
     firstName: "",
     lastName: "",
     middleName: "",
-    relationshipsInfo: {
-        scanOptions: undefined,
-        relationships: []
-    },
+    relationships: [],
     sex: null,
     passportData: {passportSerial: "", passportNumber: "", rnokppCode: ""},
     location: null

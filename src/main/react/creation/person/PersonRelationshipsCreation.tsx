@@ -2,10 +2,11 @@ import {Relationship} from "../../../model/human/person/Person";
 import RelationshipCreationComponent from "./RelationshipCreationComponent";
 import {useContext} from "react";
 import {LitmusServiceContext} from "../../App";
+import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 
-type props = {relationships: Relationship[]}
+type props = {relationships: RelationshipCreationParams[]}
 
-const PersonRelationships = ({relationships}: props) => {
+const PersonRelationshipsCreation = ({relationships}: props) => {
     const validationService = useContext(LitmusServiceContext).creation.validation.person;
     const stateManager = useContext(LitmusServiceContext).creation.stateManagers.person;
     return (
@@ -26,4 +27,4 @@ const PersonRelationships = ({relationships}: props) => {
     )
 }
 
-export default PersonRelationships;
+export default PersonRelationshipsCreation;

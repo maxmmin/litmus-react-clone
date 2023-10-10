@@ -14,7 +14,7 @@ import {
     RelationShipValidationObject
 } from "../../validation/human/person/PersonCreationValidationService";
 import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateManagerImpl";
-import {PersonCreationParams} from "../../PersonCreationService";
+import {PersonCreationParams, RelationshipCreationParams} from "../../PersonCreationService";
 
 class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<Person,PersonCreationParams, PersonValidationObject> implements PersonCreationStateManager {
 
@@ -47,7 +47,7 @@ class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl
         this.updateValidationErrors({relationships: relationShipValidationErrors});
     }
 
-    getRelationshipValidationErrors(rel: Relationship): RelationShipValidationObject {
+    getRelationshipValidationErrors(rel: RelationshipCreationParams): RelationShipValidationObject {
         const relationShipValidationErrors: RelationShipValidationObject[] = this.getValidationErrors().relationships;
         const validationObject: RelationShipValidationObject|undefined = relationShipValidationErrors.find(obj => RelationshipsLinkObject.checkIsEqual(obj.relationship, rel));
         if (!validationObject) throw new Error("no such validation object");
@@ -74,24 +74,24 @@ class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl
         this.dispatch(action)
     };
 
-    addRelationship(relationship: Relationship): void {
-        const action: PayloadAction<Relationship, PersonCreationAction> = {
+    addRelationship(relationship: RelationshipCreationParams): void {
+        const action: PayloadAction<RelationshipCreationParams, PersonCreationAction> = {
             type: PersonCreationAction.ADD_PERSON_RELATION,
             payload: relationship
         }
         this.dispatch(action)
     }
 
-    removeRelationship(relationship: Relationship): void {
-        const action: PayloadAction<Relationship, PersonCreationAction> = {
+    removeRelationship(relationship: RelationshipCreationParams): void {
+        const action: PayloadAction<RelationshipCreationParams, PersonCreationAction> = {
             type: PersonCreationAction.REMOVE_PERSON_RELATION,
             payload: relationship
         }
         this.dispatch(action)
     }
 
-    updateRelationship(relationship: Relationship): void {
-        const action: PayloadAction<Relationship, PersonCreationAction> = {
+    updateRelationship(relationship: RelationshipCreationParams): void {
+        const action: PayloadAction<RelationshipCreationParams, PersonCreationAction> = {
             type: PersonCreationAction.UPDATE_PERSON_RELATION,
             payload: relationship
         }

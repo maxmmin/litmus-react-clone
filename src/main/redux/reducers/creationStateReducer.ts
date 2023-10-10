@@ -8,7 +8,7 @@ import deepCopy from "../../util/deepCopy";
 import CreationCoreAction, {
     PersonCreationAction
 } from "../actions/CreationCoreAction";
-import Person, {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
+import Person, {Relationship, RelationshipsLinkObject, RelationshipsScanOptions} from "../../model/human/person/Person";
 import GeneralAction from "../GeneralAction";
 import {Entity} from "../../model/Entity";
 import PassportData from "../../model/human/person/PassportData";
@@ -16,7 +16,7 @@ import {JurPerson} from "../../model/jurPerson/JurPerson";
 import User from "../../model/human/user/User";
 import UserCreationState, {BasicUserCreationState} from "../types/creation/UserCreationState";
 import JurPersonCreationState, {BasicJurPersonCreationState} from "../types/creation/JurPersonCreationState";
-import PersonCreationState, {BasicPersonCreationState} from "../types/creation/PersonCreationState";
+import PersonCreationState, {BasicPersonCreationState, defaultScanOptions} from "../types/creation/PersonCreationState";
 import {ValidationErrors} from "../../service/ValidationErrors";
 import {PersonValidationObject} from "../../service/creation/validation/human/person/PersonCreationValidationService";
 
@@ -57,17 +57,16 @@ const initialPersonCreationState: PersonCreationState = deepCopy(new BasicPerson
 
 export type PersonCreationStateReducible = PersonCreationState|undefined;
 
+
 const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadAction<Person>> = (prevState=initialPersonCreationState, action) => {
     switch (action.type) {
         case PersonCreationAction.ADD_PERSON_RELATION: {
             const relToAdd = (action.payload as unknown as Relationship);
 
-            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationshipsInfo.relationships);
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.addRelationship(relToAdd);
 
-            const newPersonState: PersonCreationState =  {...prevState, emergingEntity: {...prevState.emergingEntity, relationshipsInfo: {
-                        relationships: relationshipsLinkObject.relationships
-                    }}}
+            const newPersonState: PersonCreationState =  {...prevState, emergingEntity: {...prevState.emergingEntity, relationships: relationshipsLinkObject.relationships,}}
 
             return newPersonState;
         }
@@ -75,22 +74,24 @@ const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadA
         case PersonCreationAction.REMOVE_PERSON_RELATION: {
             const relToAdd = (action.payload as unknown as Relationship);
 
-            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationshipsInfo.relationships);
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.removeRelationship(relToAdd);
 
             return {...prevState, emergingEntity: {...prevState.emergingEntity, relationshipsInfo: {
-                        relationships: relationshipsLinkObject.relationships
+                        relationships: relationshipsLinkObject.relationships,
+                        scanOptions: defaultScanOptions
                     }}}
         }
 
         case PersonCreationAction.UPDATE_PERSON_RELATION: {
             const relToUpdate = (action.payload as unknown as Relationship);
 
-            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationshipsInfo.relationships);
+            const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.updateRelationship(relToUpdate);
 
             return {...prevState, emergingEntity: {...prevState.emergingEntity, relationshipsInfo: {
-                        relationships: relationshipsLinkObject.relationships
+                        relationships: relationshipsLinkObject.relationships,
+                        scanOptions: defaultScanOptions
                     }}}
         }
 

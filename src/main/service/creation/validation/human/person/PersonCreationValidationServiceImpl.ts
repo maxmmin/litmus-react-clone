@@ -12,15 +12,16 @@ import {hasContent} from "../../../../../util/isEmpty";
 import hasHtml from "../../../../../util/hasHtml";
 import PassportData from "../../../../../model/human/person/PassportData";
 import valueOrNull from "../../../../../util/valueOrNull";
+import {PersonCreationParams, RelationshipCreationParams} from "../../../PersonCreationService";
 
-class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<Person, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
+class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
-    validate(params: Person): PersonValidationObject {
+        validate(params: PersonCreationParams): PersonValidationObject {
         let fullNameResult: ValidationErrors<Human> = super.validateFullName(params);
         const passportErrors = this.validatePassportData(params.passportData);
         const sexErr = this.validateSex(params.sex);
         const dateErr = this.validateDateOfBirth(params.dateOfBirth);
-        const relationShipsErrors = this.validateRelationships(params.relationshipsInfo.relationships)
+        const relationShipsErrors = this.validateRelationships(params.relationships)
         const bindingResult: PersonValidationObject = {
             ...fullNameResult,
             ...passportErrors,
@@ -38,11 +39,11 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         return  bindingResult.relationships.some(relationshipValidationObject => hasContent(({...relationshipValidationObject, relationship: undefined} as Partial<RelationShipValidationObject>)))
     }
 
-    validateRelationships(relationships: Relationship[]): RelationShipValidationObject[] {
+    validateRelationships(relationships: RelationshipCreationParams[]): RelationShipValidationObject[] {
         return relationships.map(this.validateRelationship);
     }
 
-    validateRelationship(relationship: Relationship): RelationShipValidationObject {
+    validateRelationship(relationship: RelationshipCreationParams): RelationShipValidationObject {
         const bindingResult: RelationShipValidationObject = {relationship: relationship, relationType: null, note: null};
         if (relationship) {
             if (relationship.note) {
@@ -93,7 +94,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         return personValidationObject;
     }
 
-    validatePassportData(passportData: Person['passportData']): Pick<PersonValidationObject, keyof PassportData> {
+    validatePassportData(passportData: PersonCreationParams['passportData']): Pick<PersonValidationObject, keyof PassportData> {
         const bindingResult: Pick<PersonValidationObject, keyof PassportData> = {
             passportNumber: null,
             passportSerial: null,

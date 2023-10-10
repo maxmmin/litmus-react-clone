@@ -21,19 +21,20 @@ import PersonExplorationStateManager from "./stateManager/person/PersonExplorati
 import PersonExplorationStateManagerImpl from "./stateManager/person/PersonExplorationStateManagerImpl";
 import PersonExplorationApiServiceImpl from "./api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
+import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 
-type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: DtoMapper<unknown, Person, PersonResponseDto>) => Promise<PagedData<Person>>;
+type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: PersonDtoMapper) => Promise<PagedData<Person>>;
 
 class PersonExplorationService implements ExplorationService {
 
     constructor(private readonly stateManager: PersonExplorationStateManager,
                 private readonly service: PersonExplorationApiService,
-                private readonly mapper: DtoMapper<unknown, Person, PersonResponseDto>) {
+                private readonly mapper: PersonDtoMapper) {
     }
 
     public static getInstance (stateManager: PersonExplorationStateManager = new PersonExplorationStateManagerImpl(),
                                service: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance(),
-                               mapper: DtoMapper<unknown, Person, PersonResponseDto> = new PersonDtoMapperImpl()): PersonExplorationService {
+                               mapper: PersonDtoMapper = new PersonDtoMapperImpl()): PersonExplorationService {
        return new PersonExplorationService(stateManager, service, mapper);
     }
 

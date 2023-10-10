@@ -2,7 +2,6 @@ import CreationServiceImpl from "./CreationServiceImpl";
 import JurPersonRequestDto from "../../rest/dto/jurPerson/JurPersonRequestDto";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
-import CreationApiService from "./api/CreationApiService";
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import JurPersonCreationApiService from "./api/JurPersonCreationApiService";
 import JurPersonCreationStateManager from "./stateManager/jurPerson/JurPersonCreationStateManager";

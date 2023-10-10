@@ -7,6 +7,7 @@ import PersonExplorationApiService from "../exploration/api/human/person/PersonE
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
+import {AnalyzerOptions, isFinished} from "./BasicPersonRelationshipsAnalyzer";
 
 export type NestedPersonsIdMap = Map<number, NestedPerson>
 
@@ -16,7 +17,9 @@ export type ClientRelationshipsScanMetaData = {
     depth: number
 }
 
-export type RecursiveScanSource = {scanned: PersonScanIdMap, shared: NestedPersonsIdMap, depth: number, limit: number};
+export interface RecursiveScanSource extends AnalyzerOptions {
+    scanned: PersonScanIdMap, shared: NestedPersonsIdMap
+}
 
 
 
@@ -32,19 +35,19 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
 
     public getRelatedPersons(person: Person, limit: number): Set<Person> {
         const personSet: Set<Person> = new Set<Person>();
-        this._getRelatedPersons(person.relationshipsInfo, personSet, limit);
+        this._getRelatedPersons(person.relationshipsInfo, personSet, {depth: 0, limitDepth: limit});
         return personSet;
     }
 
-    private _getRelatedPersons(relationshipInfo: RelationshipsInfo,personSet: Set<Person>, limit: number, counter: number = 0, scannedRelationshipsInfoSet: Set<RelationshipsInfo> = new Set()) {
-        if (limit!==-1&&!(counter<limit)) return;
+    private _getRelatedPersons(relationshipInfo: RelationshipsInfo,personSet: Set<Person>, options: AnalyzerOptions, scannedRelationshipsInfoSet: Set<RelationshipsInfo> = new Set()) {
+        if (isFinished(options)) return;
         relationshipInfo.relationships.forEach(r=>{
             if (!personSet.has(r.to)) {
                 personSet.add(r.to);
             }
             if (scannedRelationshipsInfoSet.has(r.to.relationshipsInfo)) return;
             scannedRelationshipsInfoSet.add(r.to.relationshipsInfo);
-            this._getRelatedPersons(r.to.relationshipsInfo, personSet, limit, counter+1, scannedRelationshipsInfoSet);
+            this._getRelatedPersons(r.to.relationshipsInfo, personSet, {...options, depth: options.depth+1}, scannedRelationshipsInfoSet);
         })
     }
 
@@ -54,7 +57,7 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
         const nestedPerson = this.dtoMapper.mapPersonToNestedPerson(person);
 
         const data: RecursiveScanSource = {
-            limit: limit,
+            limitDepth: limit,
             shared: new Map(),
             scanned: new Map(),
             depth: 0
@@ -83,7 +86,7 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
     }
 
     private _recursiveScan(person: NestedPerson, scanData: RecursiveScanSource): void {
-        if (scanData.limit!==-1&&!(scanData.depth<scanData.limit)) return;
+        if (isFinished(scanData)) return;
 
         const shared = scanData.shared;
         const scanned = scanData.scanned;

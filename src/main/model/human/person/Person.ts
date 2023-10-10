@@ -4,15 +4,16 @@ import Sex from "./Sex";
 import PassportData from "./PassportData";
 import Human from "../Human";
 import MediaEntity from "../../MediaEntity";
-import {NestedRelationshipResponseDto} from "../../../rest/dto/person/PersonResponseDto";
 import CoreEntity from "../../CoreEntity";
+import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
+import FullName from "../../../service/exploration/FullName";
 
 export type RelationshipsScanOptions = {
     depth: number
 }
 
 export type RelationshipsInfo = {
-    scanOptions?: RelationshipsScanOptions,
+    scanOptions: RelationshipsScanOptions,
     relationships: Relationship[]
 }
 
@@ -37,10 +38,10 @@ interface Person extends Human, MediaEntity, CoreEntity {
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
     location: GeoLocation | null
-    nestedRelationshipsInfo?: NestedRelationshipsInfo
+    nestedRelationshipsInfo: NestedRelationshipsInfo
 }
 
-export const getFullName = (person: Person) => {
+export const getFullName = (person: FullName) => {
     return `${person.lastName} ${person.firstName} ${person.middleName}`
 }
 
@@ -66,9 +67,9 @@ class RelationshipAlreadyExists extends Error {
 }
 
 export class RelationshipsLinkObject {
-    private readonly _relationships: Array<Relationship> = new Array<Relationship>();
+    private readonly _relationships: Array<RelationshipCreationParams> = new Array<RelationshipCreationParams>();
 
-    constructor(relations?: Array<Relationship>|undefined) {
+    constructor(relations?: Array<RelationshipCreationParams>|undefined) {
         if (relations) {
             this._relationships = [...relations]
         }
@@ -77,15 +78,15 @@ export class RelationshipsLinkObject {
     /**
      * returns copy of relationShip array. If you want to mutate original array, use addRelation or removeRelation methods.
      */
-    get relationships(): Array<Relationship> {
+    get relationships(): Array<RelationshipCreationParams> {
         return [...this._relationships];
     }
 
-    private getOriginalRelationships (): Array<Relationship> {
+    private getOriginalRelationships (): Array<RelationshipCreationParams> {
         return this._relationships;
     }
 
-    checkConstraints(rel: Relationship) {
+    checkConstraints(rel: RelationshipCreationParams) {
         if (!rel.to||!rel.to.id||isNaN(+rel.to.id)) {
             throw new Error("attempt to add relationship with non-valid person")
         }
@@ -103,7 +104,7 @@ export class RelationshipsLinkObject {
         return true;
     }
 
-    updateRelationship(rel: Relationship): boolean {
+    updateRelationship(rel: RelationshipCreationParams): boolean {
         this.checkConstraints(rel);
 
         const relationships = this.getOriginalRelationships();
@@ -120,7 +121,7 @@ export class RelationshipsLinkObject {
         return false;
     }
 
-    removeRelationship(rel: Relationship): boolean {
+    removeRelationship(rel: RelationshipCreationParams): boolean {
         const relationships = this.getOriginalRelationships();
 
         for (let counter = 0; counter<relationships.length; counter++) {
@@ -135,7 +136,7 @@ export class RelationshipsLinkObject {
         return false;
     }
 
-    isPresent (rel: Relationship): boolean {
+    isPresent (rel: RelationshipCreationParams): boolean {
         const presentRelationships = this.relationships;
 
         for (let counter = 0; counter<presentRelationships.length; counter++) {
@@ -147,7 +148,7 @@ export class RelationshipsLinkObject {
         return false;
     }
 
-    indexOf (rel: Relationship): number {
+    indexOf (rel: RelationshipCreationParams): number {
         const presentRelationships = this.relationships;
 
         for (let counter = 0; counter<presentRelationships.length; counter++) {
@@ -159,11 +160,11 @@ export class RelationshipsLinkObject {
         return -1;
     }
 
-    private checkIsEqual (rel: Relationship, compared: Relationship) {
+    private checkIsEqual (rel: RelationshipCreationParams, compared: RelationshipCreationParams) {
         return RelationshipsLinkObject.checkIsEqual(rel,compared);
     }
 
-    static checkIsEqual (rel: Relationship, compared: Relationship) {
+    static checkIsEqual (rel: RelationshipCreationParams, compared: RelationshipCreationParams) {
         return rel.to.id===compared.to.id;
     }
 }

@@ -9,6 +9,7 @@ import {buildUrl} from "../../../../../util/pureFunctions";
 import {RelationshipsInfo} from "../../../../../model/human/person/Person";
 
 export type PersonResponseIdMapDto = Record<number, PersonResponseDto|null>
+
 class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<PersonResponseDto> implements PersonExplorationApiService {
 
     constructor() {

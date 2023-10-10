@@ -13,7 +13,7 @@ import Sex from "../../../model/human/person/Sex";
 import {CrossIcon} from "../../../util/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
-import PersonRelationships from "./PersonRelationships";
+import PersonRelationshipsCreation from "./PersonRelationshipsCreation";
 import {Entity} from "../../../model/Entity";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import InputError from "../../sharedComponents/InputError";
@@ -54,7 +54,7 @@ const CreatePerson = () => {
 
     const passportData = person?.passportData;
 
-    const relationships = person?.relationshipsInfo?.relationships;
+    const relationships = person?.relationships;
 
     const {mainImage, images} = useMemo<PersonImages>(()=>{
         const media = person.media;
@@ -244,7 +244,7 @@ const CreatePerson = () => {
                 <div className={`create-relationships-section__relations ${relationships!.length>0?'':'empty'}`}>
                     {
                         relationships!.length>0?
-                            <PersonRelationships relationships={person.relationshipsInfo.relationships}/>
+                            <PersonRelationshipsCreation relationships={person.relationships}/>
                             :
                             <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
                     }
