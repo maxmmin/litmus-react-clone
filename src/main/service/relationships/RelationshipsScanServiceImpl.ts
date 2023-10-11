@@ -35,7 +35,7 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
 
     public getRelatedPersons(person: Person, limit: number): Set<Person> {
         const personSet: Set<Person> = new Set<Person>();
-        this._getRelatedPersons(person.relationshipsInfo, personSet, {depth: 0, limitDepth: limit});
+        this._getRelatedPersons(person.relationshipsInfo, personSet, {currentDepth: 0, limitDepth: limit});
         return personSet;
     }
 
@@ -47,7 +47,7 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
             }
             if (scannedRelationshipsInfoSet.has(r.to.relationshipsInfo)) return;
             scannedRelationshipsInfoSet.add(r.to.relationshipsInfo);
-            this._getRelatedPersons(r.to.relationshipsInfo, personSet, {...options, depth: options.depth+1}, scannedRelationshipsInfoSet);
+            this._getRelatedPersons(r.to.relationshipsInfo, personSet, {...options, currentDepth: options.currentDepth+1}, scannedRelationshipsInfoSet);
         })
     }
 
@@ -60,12 +60,12 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
             limitDepth: limit,
             shared: new Map(),
             scanned: new Map(),
-            depth: 0
+            currentDepth: 0
         }
 
         this.markAsScanned(nestedPerson, data);
 
-        data.depth+=1;
+        data.currentDepth+=1;
 
         this._recursiveScan(nestedPerson, data);
 
@@ -76,7 +76,7 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
         scanData.scanned.set(person.id, {
             person: person,
             clientScanMetaData: {
-                depth: scanData.depth
+                depth: scanData.currentDepth
             }
         });
     }
@@ -106,7 +106,7 @@ export default class RelationshipsScanServiceImpl implements RelationshipsScanSe
                                 this.markAsShared(person, shared)
                             }
                         } else {
-                            if (Math.abs(prevScanned.clientScanMetaData.depth-scanData.depth!)!==1) {
+                            if (Math.abs(prevScanned.clientScanMetaData.depth-scanData.currentDepth!)!==1) {
                                 this.markAsShared(person, shared)
                             }
                         }

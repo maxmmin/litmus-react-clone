@@ -18,16 +18,12 @@ import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
-import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
-import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import JurPersonCreationStateManagerImpl
     from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
-import PersonCreationStateManagerImpl from "../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
 import {LitmusServiceContext} from "../App";
 import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
-import deepCopy from "../../util/deepCopy";
-import {initialPersonCreationParams, NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
+import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
 

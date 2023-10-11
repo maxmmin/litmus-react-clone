@@ -21,6 +21,9 @@ import {
     PairedRelationshipMap,
     PairedRelationshipsFullInfo
 } from "../../service/relationships/BasicPersonRelationshipsAnalyzer";
+import PersonExplorationApiServiceImpl
+    from "../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
+import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
 type PersonMapProps = {
     person: Person,
@@ -227,8 +230,11 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     // }, [map, sharedPersons])
 
     useEffect(()=>{
-        relationshipsAnalyzer.analyze().then(console.log)
-    }, [person])
+        relationshipsAnalyzer.analyze(12).then(r=>{
+            console.log(r)
+        })
+            .then(()=>relationshipsAnalyzer.analyze(0)).then(console.log)
+    }, [])
 
     useEffect(()=>{
         if (map) {

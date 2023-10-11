@@ -22,12 +22,12 @@ export type PairedRelationshipsFullInfo = [RelationshipFullInfo,RelationshipFull
 export type PairedRelationshipMap = Map<RelationshipMapKey, PairedRelationshipsFullInfo>
 
 export interface AnalyzerOptions {
-    depth: number,
+    currentDepth: number,
     limitDepth: number
 }
 
 export function isFinished(options: AnalyzerOptions): boolean {
-    return options.limitDepth!==-1&&options.depth>=options.limitDepth
+    return options.limitDepth!==-1&&options.currentDepth>=options.limitDepth
 }
 
 export default class BasicPersonRelationshipsAnalyzer implements PersonRelationshipsAnalyzer{
@@ -80,17 +80,24 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
     }
 
     //pass -1 to load full
-    async analyze(limit: number = 2): Promise<AnalyzeResult> {
+    async analyze(limit: number = -1): Promise<AnalyzeResult> {
         const person = this.getPerson();
+        if (limit>person.nestedRelationshipsInfo.scanOptions.depth) {
+            throw new Error("limit is higher that base person scan depth")
+        }
         return await this.analyzePerson(person, limit);
     }
 
     private async analyzePerson (person: Person, limit: number): Promise<AnalyzeResult> {
-        person = deepCopy(person);
+        if (this.personStore.has(person.id)) {
+            person = this.personStore.get(person.id)!.person;
+        } else {
+            person = deepCopy(person);
 
-        this.personStore.set(person.id, {person: person});
+            this.personStore.set(person.id, {person: person});
+        }
 
-        if (limit>0) {
+        if (!isFinished({limitDepth: limit, currentDepth: 0})) {
             person.relationshipsInfo.relationships.forEach(r=>{
                 const relatedPerson = r.to;
                 this.personStore.set(relatedPerson.id, {person: relatedPerson});
@@ -106,8 +113,9 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
         return {
             personsStore: this.personStore,
             processedPerson: person,
-            originalPerson: this.getPerson(),
-            pairedRelationshipMap: pairedMap
+            unprocessedPerson: this.getPerson(),
+            pairedRelationshipMap: pairedMap,
+            analyzeDepth: limit
         }
     }
 
@@ -127,7 +135,7 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
         [...this.personStore].forEach(([id, personObject])=>{
             personObject.person.relationshipsInfo.relationships = personObject
                 .person
-                .nestedRelationshipsInfo!
+                .nestedRelationshipsInfo
                 .relationships
                 .map((r)=>{
                     if (this.personStore.has(r.to.id)) {
@@ -136,13 +144,14 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
                     } else return null;
                 })
                 .filter((r): r is Relationship=>r!==null)
-
-            personObject.person.relationshipsInfo.relationships.forEach(r=>r.to.relationshipsInfo.scanOptions)
+            personObject.person.relationshipsInfo.scanOptions = personObject.person.nestedRelationshipsInfo.scanOptions;
         })
     }
 
     private async loadRelated (person: Person, limit: number): Promise<PersonIdMap> {
-        const idList = this.getUnloadedPersonsIdList(this.getPersonFilteredRelationshipsInfo(person, limit), {depth: 0, limitDepth: limit});
+        const nestedFiltered = this.getPersonFilteredRelationshipsInfo(person, limit);
+        
+        const idList = this.getUnloadedPersonsIdList(nestedFiltered, {currentDepth: 0, limitDepth: limit});
 
         const personsIdMap: PersonIdMap = new Map();
 
@@ -164,15 +173,15 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
             if (!this.personStore.has(r.to.id)) {
                 iterationSet.add(r.to.id);
             }
-            return new Set([...iterationSet,...this.getUnloadedPersonsIdList(r.to.relationshipsInfo, {...options, depth: options.depth+1})]);
+            return new Set([...iterationSet,...this.getUnloadedPersonsIdList(r.to.relationshipsInfo, {...options, currentDepth: options.currentDepth+1})]);
         }, new Set<number>())
     }
 
     private filterRelationships(relationshipsInfo: NestedRelationshipsInfo, matchList: NestedPersonsIdMap) {
         relationshipsInfo.relationships = relationshipsInfo.relationships
-            .filter(r=>{
-                matchList.has(r.to.id);
-            });
+            .filter(r=>
+                matchList.has(r.to.id)
+            );
 
         relationshipsInfo.relationships.forEach(r=>{
             this.filterRelationships(r.to.relationshipsInfo, matchList)
@@ -187,6 +196,7 @@ export default class BasicPersonRelationshipsAnalyzer implements PersonRelations
      */
     private getPersonFilteredRelationshipsInfo(person: Person, limit: number): NestedRelationshipsInfo {
         if (!person.nestedRelationshipsInfo) throw new Error("no nested relationships info present");
+
         const matchList = this.relationShipsScanService.getSharedPersons(person, limit);
 
         const nestedRelationshipsInfo: NestedRelationshipsInfo = deepCopy(person.nestedRelationshipsInfo)

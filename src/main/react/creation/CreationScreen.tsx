@@ -32,6 +32,7 @@ import {
     userDefaultValidationObject,
     UserValidationObject
 } from "../../service/creation/validation/human/user/UserCreationValidationService";
+import CoreEntity from "../../model/CoreEntity";
 
 
 export type CreationModalSettings = {
@@ -110,8 +111,8 @@ const Creation = () => {
                        creationService
                            .createEntity()
                            .then(createdEntity=>{
-                               const {id} = (createdEntity as {id: string});
-                               navigate(buildUrl(appConfig.applicationMappings.entityRoot[emergingEntity!], id))
+                               const {id} = (createdEntity as CoreEntity);
+                               navigate(buildUrl(appConfig.applicationMappings.entityRoot[emergingEntity!], id.toString()))
                            });
 
                    }} className={"creation-input-group"}>

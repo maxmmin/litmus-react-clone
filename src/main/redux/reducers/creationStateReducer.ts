@@ -19,6 +19,7 @@ import JurPersonCreationState, {BasicJurPersonCreationState} from "../types/crea
 import PersonCreationState, {BasicPersonCreationState, defaultScanOptions} from "../types/creation/PersonCreationState";
 import {ValidationErrors} from "../../service/ValidationErrors";
 import {PersonValidationObject} from "../../service/creation/validation/human/person/PersonCreationValidationService";
+import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>, initialState: S): S => {
@@ -77,22 +78,16 @@ const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadA
             const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.removeRelationship(relToAdd);
 
-            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationshipsInfo: {
-                        relationships: relationshipsLinkObject.relationships,
-                        scanOptions: defaultScanOptions
-                    }}}
+            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationships: relationshipsLinkObject.relationships}}
         }
 
         case PersonCreationAction.UPDATE_PERSON_RELATION: {
-            const relToUpdate = (action.payload as unknown as Relationship);
+            const relToUpdate = (action.payload as unknown as RelationshipCreationParams);
 
             const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.updateRelationship(relToUpdate);
 
-            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationshipsInfo: {
-                        relationships: relationshipsLinkObject.relationships,
-                        scanOptions: defaultScanOptions
-                    }}}
+            return {...prevState, emergingEntity: {...prevState.emergingEntity, relationships: relationshipsLinkObject.relationships}}
         }
 
         case PersonCreationAction.UPDATE_PASSPORT_DATA: {
