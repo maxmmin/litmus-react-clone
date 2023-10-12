@@ -65,34 +65,29 @@ export default class BasicPersonRelationshipsBinder {
         createdPersons.set(person.id, person);
 
         if (rawPerson.relationshipsInfo.relationships) {
-            rawPerson.relationshipsInfo.relationships.forEach(r=>{
-                const relatedDto = r.person;
+            const stack: NestedRelationshipResponseDto[] = []
+            const initialRelationships: NestedRelationshipResponseDto[] = rawPerson.relationshipsInfo.relationships.filter(r=>personsToInclude.has(r.person.id))
+            stack.push(...initialRelationships)
 
-                if (personsToInclude.has(relatedDto.id)) {
-                    const stack: NestedRelationshipResponseDto[] = [];
+            while (stack.length>0) {
+                const currentRelationship = stack.pop()!;
 
-                    const initialRelationships = r.person.relationshipsInfo.relationships||[];
+                if (currentRelationship.person.relationshipsInfo.relationships) {
+                    currentRelationship.person.relationshipsInfo.relationships.forEach(r=>{
+                        if (personsToInclude.has(r.person.id)) {
+                            const fromPerson = this.getCreatedPerson(currentRelationship.person.id, createdPersons);
+                            const toPerson = this.getCreatedPerson(r.person.id, createdPersons);
 
-                    stack.push(...initialRelationships);
+                            if (fromPerson.relationships.findIndex(rel=>rel.to.id===r.person.id)===-1) {
+                                const relationship = this.dtoMapper.mapRelationshipResponseDto(r, toPerson);
+                                fromPerson.relationships.push(relationship);
+                            }
 
-                    while (stack.length>0) {
-                        const processedRelationship = stack.pop()!;
-
-                        if (personsToInclude.has(processedRelationship.person.id)) {
-                            const processedPerson = this.getCreatedPerson(processedRelationship.person.id, createdPersons);
-                            processedRelationship.person.relationshipsInfo.relationships?.forEach(rel=>{
-                                if (personsToInclude.has(rel.person.id)) {
-                                    const nestedPerson = this.getCreatedPerson(rel.person.id, createdPersons);
-                                    if (!processedPerson.relationships.map(r=>r.to).includes(nestedPerson)) {
-                                        processedPerson.relationships.push(this.dtoMapper.mapRelationshipResponseDto(rel, nestedPerson));
-                                    }
-                                    stack.push(rel);
-                                }
-                            })
+                            stack.push(r);
                         }
-                    }
+                    })
                 }
-            })
+            }
         }
 
         return person;
