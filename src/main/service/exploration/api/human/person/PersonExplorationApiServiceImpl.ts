@@ -2,12 +2,9 @@ import PersonExplorationApiService from "./PersonExplorationApiService";
 import appConfig from "../../../../../config/appConfig";
 import HumanExplorationApiServiceImpl from "../HumanExplorationApiServiceImpl";
 import PersonResponseDto, {
-    RelationshipResponseDto,
     RelationshipsInfoResponseDto
 } from "../../../../../rest/dto/person/PersonResponseDto";
 import {buildUrl} from "../../../../../util/pureFunctions";
-import {RelationshipsInfo} from "../../../../../model/human/person/Person";
-
 export type PersonResponseIdMapDto = Record<number, PersonResponseDto|null>
 
 class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<PersonResponseDto> implements PersonExplorationApiService {

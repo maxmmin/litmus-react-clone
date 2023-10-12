@@ -7,38 +7,25 @@ import MediaEntity from "../../MediaEntity";
 import CoreEntity from "../../CoreEntity";
 import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 import FullName from "../../../service/exploration/FullName";
+import {RelationshipsInfoResponseDto} from "../../../rest/dto/person/PersonResponseDto";
+import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
 
 export type RelationshipsScanOptions = {
     depth: number
 }
 
-export type RelationshipsInfo = {
-    scanOptions: RelationshipsScanOptions,
-    relationships: Relationship[]
-}
-
-export type NestedPerson = Pick<Person, 'id'> & {
-    relationshipsInfo: NestedRelationshipsInfo
-}
-
-export type NestedRelationship = Pick<Relationship, 'type'|'note'> &  {
-    to: NestedPerson
-}
-
-export type NestedRelationshipsInfo = {
-    scanOptions: RelationshipsScanOptions,
-    relationships: NestedRelationship[]
-}
-
 interface Person extends Human, MediaEntity, CoreEntity {
     lastName: string;
     firstName: string;
-    relationshipsInfo: RelationshipsInfo,
+    relationships: Relationship[],
     sex: Sex | null;
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
     location: GeoLocation | null
-    nestedRelationshipsInfo: NestedRelationshipsInfo
+}
+
+export type RawRelationshipsPerson = NoRelationshipsPerson&{
+    relationshipsInfo: RelationshipsInfoResponseDto
 }
 
 export const getFullName = (person: FullName) => {

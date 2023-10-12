@@ -1,12 +1,12 @@
 import ExplorationStateManagerImpl from "../ExplorationStateManagerImpl";
-import Person from "../../../../model/human/person/Person";
+import Person, {RawRelationshipsPerson} from "../../../../model/human/person/Person";
 import store from "../../../../redux/store";
 import {ExplorationTypedAction} from "../../../../redux/actions/ExplorationTypedAction";
 import PersonExplorationStateManager from "./PersonExplorationStateManager";
 import UserExplorationParams from "../../../../redux/types/exploration/human/user/UserExplorationParams";
 import PersonExplorationParams from "../../../../redux/types/exploration/human/person/PersonExplorationParams";
 
-class PersonExplorationStateManagerImpl extends ExplorationStateManagerImpl<Person, PersonExplorationParams> implements PersonExplorationStateManager {
+class PersonExplorationStateManagerImpl extends ExplorationStateManagerImpl<RawRelationshipsPerson, PersonExplorationParams> implements PersonExplorationStateManager {
     constructor() {
         super(store.dispatch, ()=>store.getState().exploration.person!,ExplorationTypedAction.person);
     }

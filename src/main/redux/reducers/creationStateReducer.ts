@@ -19,7 +19,7 @@ import JurPersonCreationState, {BasicJurPersonCreationState} from "../types/crea
 import PersonCreationState, {BasicPersonCreationState, defaultScanOptions} from "../types/creation/PersonCreationState";
 import {ValidationErrors} from "../../service/ValidationErrors";
 import {PersonValidationObject} from "../../service/creation/validation/human/person/PersonCreationValidationService";
-import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
+import {PersonCreationParams, RelationshipCreationParams} from "../../service/creation/PersonCreationService";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>, initialState: S): S => {
@@ -59,7 +59,7 @@ const initialPersonCreationState: PersonCreationState = deepCopy(new BasicPerson
 export type PersonCreationStateReducible = PersonCreationState|undefined;
 
 
-const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadAction<Person>> = (prevState=initialPersonCreationState, action) => {
+const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadAction<PersonCreationParams>> = (prevState=initialPersonCreationState, action) => {
     switch (action.type) {
         case PersonCreationAction.ADD_PERSON_RELATION: {
             const relToAdd = (action.payload as unknown as Relationship);

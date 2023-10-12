@@ -8,7 +8,7 @@ import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./CreationScreen";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import Person, {Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
+import Person, {RawRelationshipsPerson, Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
 import {isValid} from "../../util/pureFunctions";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
@@ -128,7 +128,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
         try {
             const personResponseDto: PersonResponseDto|null = await personService.findPersonByIdWithDepthOption(id, 0);
-            const person: Person|null = personResponseDto?mapper.mapToEntity(personResponseDto):null;
+            const person: RawRelationshipsPerson|null = personResponseDto?mapper.mapToEntity(personResponseDto):null;
             //@todo я выбрасываю ошибку внутри или оно нормально обрабатывает? заменить search error моей нормальной ошибкой
             setPerson(person)
             if (!person) {

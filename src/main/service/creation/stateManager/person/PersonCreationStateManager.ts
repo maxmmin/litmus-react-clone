@@ -1,4 +1,4 @@
-import Person, {Relationship} from "../../../../model/human/person/Person";
+import Person, {RawRelationshipsPerson, Relationship} from "../../../../model/human/person/Person";
 import GeoStateManager from "../GeoStateManager";
 import {
     PersonValidationObject,
@@ -11,7 +11,7 @@ import {PersonCreationParams, RelationshipCreationParams} from "../../PersonCrea
 class CreationPassportData {
 }
 
-interface PersonCreationStateManager extends MediaEntityCreationStateManager<Person,PersonCreationParams,PersonValidationObject>, ImageStateManager, GeoStateManager {
+interface PersonCreationStateManager extends MediaEntityCreationStateManager<RawRelationshipsPerson,PersonCreationParams,PersonValidationObject>, ImageStateManager, GeoStateManager {
     setRelationshipValidationErrors(relObject: RelationShipValidationObject): void;
 
     getRelationshipValidationErrors (rel: RelationshipCreationParams): RelationShipValidationObject;

@@ -1,4 +1,4 @@
-import Person, {getFullName, Relationship} from "../../model/human/person/Person";
+import Person, {getFullName, RawRelationshipsPerson, Relationship} from "../../model/human/person/Person";
 import {buildUrl} from "../../util/pureFunctions";
 import appConfig from "../../config/appConfig";
 import {valueOrMessage} from "../../util/valueOrNull";
@@ -14,7 +14,7 @@ import {Entity} from "../../model/Entity";
 import {GeoLocation} from "../../model/GeoLocation";
 
 type PersonProps = {
-    person: Person
+    person: RawRelationshipsPerson
 }
 
 type RelationShipProps = {
@@ -90,12 +90,13 @@ export default function PersonComponent ({person}: PersonProps) {
 
             <section className={"person-page__relationships-section"}>
                 <h4 className={'relationships-section__title'}>Пов'язані особи</h4>
-                {person.relationshipsInfo.relationships.length > 0 ?
-                    <div className={'person-page__relationships-container'}>
-                        {person.relationshipsInfo.relationships.map(relationship=><RelationshipComponent key={relationship.to.id} relationship={relationship}/>)}
-                    </div>
-                    :
-                    <p>Пов'язані особи відсутні</p>
+                {
+                    // person.relationshipsInfo.relationships.length > 0 ?
+                    // <div className={'person-page__relationships-container'}>
+                    //     {person.relationshipsInfo.relationships.map(relationship=><RelationshipComponent key={relationship.to.id} relationship={relationship}/>)}
+                    // </div>
+                    // :
+                    // <p>Пов'язані особи відсутні</p>
                 }
             </section>
         </div>

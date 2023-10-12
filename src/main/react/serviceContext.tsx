@@ -71,11 +71,6 @@ import GeocodingService from "../service/geocoding/GeocodingService";
 import BingGeocodingService from "../service/geocoding/BingGeocodingService";
 import appConfig from "../config/appConfig";
 import PersonDtoMapperImpl from "../rest/dto/dtoMappers/PersonDtoMapperImpl";
-import RelationshipsScanServiceImpl from "../service/relationships/RelationshipsScanServiceImpl";
-import RelationshipsScanService from "../service/relationships/RelationshipsScanService";
-import PersonRelationshipsAnalyzer from "../service/relationships/PersonRelationshipsAnalyzer";
-import BasicPersonRelationshipsAnalyzer from "../service/relationships/BasicPersonRelationshipsAnalyzer";
-import Person from "../model/human/person/Person";
 import PersonCreationApiServiceImpl from "../service/creation/api/PersonCreationApiServiceImpl";
 import JurPersonCreationApiServiceImpl from "../service/creation/api/JurPersonCreationApiServiceImpl";
 import UserCreationApiServiceImpl from "../service/creation/api/UserCreationApiServiceImpl";
@@ -267,11 +262,11 @@ type ServiceContext = {
     mappers: Mappers,
     csrfTokenLoader: CsrfTokenLoader,
     geocodingService: GeocodingService,
-    relationshipsScanService: RelationshipsScanService,
-    personRelationshipsAnalyzer: (person: Person)=>PersonRelationshipsAnalyzer
+    // relationshipsScanService: RelationshipsScanService,
+    // personRelationshipsAnalyzer: (person: Person)=>PersonRelationshipsAnalyzer
 }
 
-const relationshipsScanService = RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person);
+// const relationshipsScanService = RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person);
 
 const serviceContext: ServiceContext = {
     auth: authContext,
@@ -284,13 +279,13 @@ const serviceContext: ServiceContext = {
     mappers: mappers,
     csrfTokenLoader: new BasicCsrfTokenLoader(),
     geocodingService: geocodingService,
-    relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person),
-    personRelationshipsAnalyzer: (person: Person)=>BasicPersonRelationshipsAnalyzer.getInstance(
-            person,
-            relationshipsScanService,
-            personExplorationApiService,
-            mappers.person
-        )
+    // relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person),
+    // personRelationshipsAnalyzer: (person: Person)=>BasicPersonRelationshipsAnalyzer.getInstance(
+    //         person,
+    //         relationshipsScanService,
+    //         personExplorationApiService,
+    //         mappers.person
+    //     )
 }
 
 export default serviceContext;

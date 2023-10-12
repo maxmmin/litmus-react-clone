@@ -1,6 +1,6 @@
 import CreationServiceImpl from "./CreationServiceImpl";
 import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
-import Person, {Relationship} from "../../model/human/person/Person";
+import Person, {RawRelationshipsPerson, Relationship} from "../../model/human/person/Person";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import PersonCreationApiService from "./api/PersonCreationApiService";
 import PersonCreationStateManager from "./stateManager/person/PersonCreationStateManager";
@@ -21,11 +21,11 @@ export type RelationshipCreationParams = Omit<Relationship, 'to'> & {
     to: NoRelationshipsPerson
 }
 
-export type PersonCreationParams = Omit<Person, 'id'|'relationshipsInfo'|'nestedRelationshipsInfo'> & {
+export type PersonCreationParams = Omit<Person, 'id'|'relationships'> & {
     relationships: RelationshipCreationParams[]
 }
 
-class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person, PersonResponseDto, PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> {
+class PersonCreationService extends CreationServiceImpl<PersonRequestDto, RawRelationshipsPerson, PersonResponseDto, PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> {
 
     constructor(apiService: PersonCreationApiService,
                 creationStateManager: PersonCreationStateManager,
@@ -36,9 +36,9 @@ class PersonCreationService extends CreationServiceImpl<PersonRequestDto, Person
     }
 
 
-    async createEntity(): Promise<Person> {
+    async createEntity(): Promise<RawRelationshipsPerson> {
         const media = this.creationStateManager.getCreationParams().media;
-        const createdPerson: Person = await super.defaultCreate();
+        const createdPerson: RawRelationshipsPerson = await super.defaultCreate();
 
         const linkedFiles: string[] = getFilesFromMedia(media);
         linkedFiles.forEach(file=>this.fileService.removeFile(file))

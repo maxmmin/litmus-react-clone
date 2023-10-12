@@ -7,7 +7,7 @@ import {
 } from "../../../service/creation/validation/human/person/PersonCreationValidationService";
 import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
 
-export type NoRelationshipsPerson = Omit<Person, 'relationshipsInfo'|'nestedRelationshipsInfo'>
+export type NoRelationshipsPerson = Omit<Person, 'relationships'>
 
 export default interface PersonCreationState extends EntityCreationState<PersonCreationParams, PersonValidationObject>{}
 
