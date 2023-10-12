@@ -19,6 +19,11 @@ export default class BasicPersonRelationshipsBinder {
         // @ts-ignore
         delete clonedPerson['relationshipsInfo'];
         this.personsStore.set(clonedPerson.id, clonedPerson)
+
+        rawPerson.relationshipsInfo.relationships?.forEach(r=>{
+            const noRelationsPerson = this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(r.person);
+            this.personsStore.set(noRelationsPerson.id, noRelationsPerson);
+        })
     }
 
     async bindShared (rawPerson: RawRelationshipsPerson, scanDepth: number) {
@@ -28,8 +33,6 @@ export default class BasicPersonRelationshipsBinder {
 
         this.loadRawPersonToStore(rawPerson);
         const {shared} = this.relationshipScanService.scan(rawPerson, scanDepth);
-
-        console.log(shared)
 
         const loadedIdList = [...shared].filter(id=>this.personsStore.has(id));
 
@@ -41,7 +44,6 @@ export default class BasicPersonRelationshipsBinder {
             if (!person) throw new Error("person was not found "+id)
             this.personsStore.set(id, person);
         })
-
         return this.buildRipePerson(rawPerson, shared);
     }
 

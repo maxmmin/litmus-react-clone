@@ -158,7 +158,7 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
         const scanner = new BasicRelationshipsResponseDtoScanner();
         const loader = new BasicPersonRelationshipsLoader(scanner, PersonExplorationApiServiceImpl.getInstance(),PersonDtoMapperImpl.getInstance())
         const binder = new BasicPersonRelationshipsBinder(loader, scanner, PersonDtoMapperImpl.getInstance());
-        console.log(scanner.scan(person, -1));
+        binder.bindShared(person, -1).then(console.log)
         // binder.bindShared(person, -1).then(console.log);
     }, [])
 

@@ -21,7 +21,7 @@ export default class BasicPersonRelationshipsLoader {
         if (!dto.relationships) throw new Error("dto relationships are null");
         dto.relationships.forEach(r=>excludedIdSet.add(r.person.id))
         const {shared} = this.relationshipsResponseDtoScanner.scan(person, limit);
-        const idList = [...shared].filter(n=>excludedIdSet.has(n))
+        const idList = [...shared].filter(n=>!excludedIdSet.has(n))
         return this.load(new Set(idList));
     }
 
@@ -30,7 +30,7 @@ export default class BasicPersonRelationshipsLoader {
         if (!dto.relationships) throw new Error("dto relationships are null");
         dto.relationships.forEach(r=>excludedIdSet.add(r.person.id))
         const {all} = this.relationshipsResponseDtoScanner.scan(person, limit);
-        const idList = [...all].filter(n=>excludedIdSet.has(n))
+        const idList = [...all].filter(n=>!excludedIdSet.has(n))
         return this.load(new Set(idList));
     }
 

@@ -1,7 +1,6 @@
 import {
     NestedPersonResponseDto,
-    NestedRelationshipsInfoResponseDto,
-    RelationshipsInfoResponseDto
+    NestedRelationshipsInfoResponseDto
 } from "../../../rest/dto/person/PersonResponseDto";
 import {RawRelationshipsPerson} from "../../../model/human/person/Person";
 
