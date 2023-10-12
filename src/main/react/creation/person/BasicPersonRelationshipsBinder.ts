@@ -66,8 +66,15 @@ export default class BasicPersonRelationshipsBinder {
 
         if (rawPerson.relationshipsInfo.relationships) {
             const stack: NestedRelationshipResponseDto[] = []
-            const initialRelationships: NestedRelationshipResponseDto[] = rawPerson.relationshipsInfo.relationships.filter(r=>personsToInclude.has(r.person.id))
-            stack.push(...initialRelationships)
+
+            rawPerson.relationshipsInfo.relationships.forEach(r=>{
+                if (personsToInclude.has(r.person.id)) {
+                    const toPerson = this.getCreatedPerson(r.person.id, createdPersons);
+                    const rootRelation = this.dtoMapper.mapRelationshipResponseDto(r, toPerson);
+                    person.relationships.push(rootRelation);
+                    stack.push(r);
+                }
+            })
 
             while (stack.length>0) {
                 const currentRelationship = stack.pop()!;
