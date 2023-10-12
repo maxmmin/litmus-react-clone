@@ -77,8 +77,8 @@ export default class BasicRelationshipsResponseDtoScanner {
         this.scanForSharedRelationships(sh,person.relationshipsInfo, [...duplicatedSet], -1);
 
         [...sh].forEach(id=>sharedSet.add(id));
-
-        return {all: new Set<number>(relatedSet.keys()), shared: sharedSet};
+        console.log(duplicatedSet)
+        return {all: relatedSet, shared: sharedSet};
     }
 
     private scanForSharedRelationships(targetSet: Set<number>, relationshipsInfo: NestedRelationshipsInfoResponseDto, duplicateIdList: number[], limit: number, counter: number = 0, scannedPersons: Set<number> = new Set()) {

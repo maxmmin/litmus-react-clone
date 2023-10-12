@@ -165,8 +165,6 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null
         };
 
-        console.log(retrievedEntityDto)
-
         return person;
     }
 
