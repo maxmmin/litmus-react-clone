@@ -50,6 +50,7 @@ export default class BasicRelationshipsResponseDtoScanner {
 
                     if (relatedSet.has(nestedPersonDto.id)&&!branchSet.has(nestedPersonDto.id)) {
                         duplicatedSet.add(nestedPersonDto.id);
+                        continue;
                     }
 
                     branchSet.add(nestedPersonDto.id);
