@@ -285,10 +285,13 @@ const personRelationshipsLoader: PersonRelationshipsLoader = BasicPersonRelation
     personExplorationApiService,
     mappers.person);
 
+const ripePersonRelationshipsUtil = BasicRipePersonRelationshipsUtil.getInstance();
+
 const personRelationshipsBinder: PersonRelationshipsBinder = BasicPersonRelationshipsBinder.getInstance(
     personRelationshipsLoader,
     relationshipsResponseDtoScanner,
-    mappers.person)
+    mappers.person,
+    ripePersonRelationshipsUtil)
 
 const serviceContext: ServiceContext = {
     auth: authContext,
@@ -305,7 +308,7 @@ const serviceContext: ServiceContext = {
         personRelationshipsBinder: personRelationshipsBinder,
         personRelationshipsLoader: personRelationshipsLoader,
         personRelationshipsResponseDtoScanner: relationshipsResponseDtoScanner,
-        ripePersonRelationshipsUtil: BasicRipePersonRelationshipsUtil.getInstance()
+        ripePersonRelationshipsUtil: ripePersonRelationshipsUtil
     }
 }
 

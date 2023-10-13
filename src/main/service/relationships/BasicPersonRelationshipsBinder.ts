@@ -1,5 +1,5 @@
 import BasicPersonRelationshipsLoader from "./BasicPersonRelationshipsLoader";
-import Person, {RawRelationshipsPerson} from "../../model/human/person/Person";
+import Person, {RawRelationshipsPerson, Relationship} from "../../model/human/person/Person";
 import BasicPersonRelationshipsResponseDtoScanner from "./BasicPersonRelationshipsResponseDtoScanner";
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import {
@@ -10,18 +10,22 @@ import PersonRelationshipsBinder from "./PersonRelationshipsBinder";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
 import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponseDtoScanner";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
+import RipePersonRelationshipsUtil from "./RipePersonRelationshipsUtil";
+import BasicRipePersonRelationshipsUtil from "./BasicRipePersonRelationshipsUtil";
 
 export default class BasicPersonRelationshipsBinder implements PersonRelationshipsBinder{
     private readonly personsStore = new Map<number, NoRelationshipsPerson>();
     constructor(protected readonly relationshipsLoader: PersonRelationshipsLoader,
                 protected readonly relationshipScanService: PersonRelationshipsResponseDtoScanner,
-                protected readonly dtoMapper: PersonDtoMapper) {
+                protected readonly dtoMapper: PersonDtoMapper,
+                protected readonly ripePersonRelationshipsUtil: RipePersonRelationshipsUtil) {
     }
 
     public static getInstance(relationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(),
                               relationshipsDtoScanner: PersonRelationshipsResponseDtoScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
-                              dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance()): BasicPersonRelationshipsBinder {
-        return new BasicPersonRelationshipsBinder(relationshipsLoader, relationshipsDtoScanner, dtoMapper);
+                              dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
+                              relationshipsUtil: RipePersonRelationshipsUtil = BasicRipePersonRelationshipsUtil.getInstance()): BasicPersonRelationshipsBinder {
+        return new BasicPersonRelationshipsBinder(relationshipsLoader, relationshipsDtoScanner, dtoMapper, relationshipsUtil);
     }
 
     clearPersonsStorage(): void {
@@ -32,7 +36,20 @@ export default class BasicPersonRelationshipsBinder implements PersonRelationshi
         return new Map(this.personsStore);
     }
 
+    destroy(person: Person): void {
+        const allPersons = this.ripePersonRelationshipsUtil.extractRelatedPersons(person);
+        allPersons.add(person);
+        allPersons.forEach(p=>{
+            this._destroySinglePerson(p);
+        })
+    }
 
+    private _destroySinglePerson(person: Person) {
+        person.relationships.forEach(r=>{
+            delete (r as Partial<Relationship>)["to"]
+        })
+        delete (person as Partial<Person>)["relationships"]
+    }
 
     private loadRawPersonToStore(rawPerson: RawRelationshipsPerson) {
         const clonedPerson: NoRelationshipsPerson = {...rawPerson};

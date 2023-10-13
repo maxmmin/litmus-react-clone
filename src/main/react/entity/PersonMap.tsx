@@ -156,19 +156,6 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     const [personsLabels, setPersonsLabels] = useState<PersonLabelInfo[]>([])
 
     useEffect(()=>{
-        const scanner = new BasicPersonRelationshipsResponseDtoScanner();
-        const loader = new BasicPersonRelationshipsLoader(scanner, PersonExplorationApiServiceImpl.getInstance(),PersonDtoMapperImpl.getInstance())
-        const binder = new BasicPersonRelationshipsBinder(loader, scanner, PersonDtoMapperImpl.getInstance());
-        const analyzer = new BasicRipePersonRelationshipsUtil();
-        binder.bindShared(person, 1).then(person=>{
-            console.log(person);
-            console.log(analyzer.extractRelatedPersons(person));
-        })
-
-        // binder.bindShared(person, -1).then(console.log);
-    }, [])
-
-    useEffect(()=>{
         if (mapTargetElement.current) {
             const center = transformLocationToCoordinates(currentLocation?currentLocation:
                 {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});

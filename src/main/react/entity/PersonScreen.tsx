@@ -44,7 +44,7 @@ export default function PersonScreen () {
         <div className="entity-root-screen">
             {isFetching && <Loader/>}
 
-            {(!isFetching&&person) && <PersonComponent person={person}/>}
+            {(!isFetching&&person) && <PersonComponent rawPerson={person}/>}
         </div>
     )
 }

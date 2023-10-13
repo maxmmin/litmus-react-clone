@@ -6,4 +6,6 @@ export default interface PersonRelationshipsBinder {
     bindShared(person: RawRelationshipsPerson, limitDepth: number): Promise<Person>;
     getPersonsStorage(): Map<number, NoRelationshipsPerson>;
     clearPersonsStorage(): void;
+    // need to be called to remove circular dependencies
+    destroy(person: Person): void;
 }

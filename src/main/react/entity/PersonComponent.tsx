@@ -8,13 +8,14 @@ import "../../css/entityPage/personPage.scss";
 import {DashedUserIcon, GeoLocationPinDropIcon} from "../../util/icons";
 import ImageSlider from "./ImageSlider";
 import PersonMap from "./PersonMap";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {NavLink} from "react-router-dom";
 import {Entity} from "../../model/Entity";
 import {GeoLocation} from "../../model/GeoLocation";
+import {LitmusServiceContext} from "../App";
 
 type PersonProps = {
-    person: RawRelationshipsPerson
+    rawPerson: RawRelationshipsPerson
 }
 
 type RelationShipProps = {
@@ -49,11 +50,23 @@ export function RelationshipComponent ({relationship, cssAnchor="", containerOnC
     )
 }
 
-export default function PersonComponent ({person}: PersonProps) {
+export default function PersonComponent ({rawPerson}: PersonProps) {
+    const [isPending, setPending] = useState<boolean>(false);
+    
+    const [person, setPerson] = useState<Person|null>(null);
 
-    const mainImg: string|undefined = person.media.mainImage?person.media.mainImage:person.media.images[0];
+    const bindService = useContext(LitmusServiceContext).personServices.personRelationshipsBinder;
 
-    const [location, setLocation] = useState<GeoLocation|null>(person.location)
+    useEffect(()=>{
+        bindService.bindShared(rawPerson, -1).then(person=>{
+            console.log(person)
+            bindService.destroy(person);
+        })
+    }, [rawPerson])
+
+    const mainImg: string|undefined = rawPerson.media.mainImage?rawPerson.media.mainImage:rawPerson.media.images[0];
+
+    const [location, setLocation] = useState<GeoLocation|null>(rawPerson.location)
 
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
@@ -63,28 +76,28 @@ export default function PersonComponent ({person}: PersonProps) {
                 </div>
 
                 <div className="main-entity-section__main-entity-info-container">
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Прізвище:</span> {person.lastName}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Ім'я:</span> {person.firstName}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>По-батькові:</span> {person.middleName}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Стать:</span> {person.sex}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Дата народження:</span> {person.dateOfBirth?DateEntityTool.getTool(person.dateOfBirth).buildStringDate():valueOrMessage(null)}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Серія паспорту:</span> {valueOrMessage(person.passportData?.passportSerial)}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Номер паспорту:</span> {valueOrMessage(person.passportData?.passportNumber)}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>РНОКПП:</span> {valueOrMessage(person.passportData?.rnokppCode)}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Адреса:</span> {valueOrMessage(person.location?.address)}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Прізвище:</span> {rawPerson.lastName}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Ім'я:</span> {rawPerson.firstName}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>По-батькові:</span> {rawPerson.middleName}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Стать:</span> {rawPerson.sex}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Дата народження:</span> {rawPerson.dateOfBirth?DateEntityTool.getTool(rawPerson.dateOfBirth).buildStringDate():valueOrMessage(null)}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Серія паспорту:</span> {valueOrMessage(rawPerson.passportData?.passportSerial)}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Номер паспорту:</span> {valueOrMessage(rawPerson.passportData?.passportNumber)}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>РНОКПП:</span> {valueOrMessage(rawPerson.passportData?.rnokppCode)}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Адреса:</span> {valueOrMessage(rawPerson.location?.address)}</p>
                 </div>
             </section>
 
             <section className="entity-images-slider-section">
                 <h4>Фотографії</h4>
                 <div className="entity-images-slider-container">
-                    <ImageSlider imageLinks={person.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.mediaRootUrl,imagePath))}/>
+                    <ImageSlider imageLinks={rawPerson.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.mediaRootUrl,imagePath))}/>
                 </div>
             </section>
 
             <section className={"person-page__map-section"}>
                 <div className="person-page__map-wrapper">
-                    <PersonMap person={person} currentLocation={location}/>
+                    <PersonMap person={rawPerson} currentLocation={location}/>
                 </div>
             </section>
 
