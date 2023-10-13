@@ -6,82 +6,51 @@ import {RawRelationshipsPerson} from "../../../model/human/person/Person";
 
 export default class BasicRelationshipsResponseDtoScanner {
     scan(person: RawRelationshipsPerson, limit: number): {shared: Set<number>, all: Set<number>} {
-        const dto = person.relationshipsInfo;
+        const tree = person.relationshipsInfo.relationships;
 
-        const sharedSet: Set<number> = new Set();
+        const scannedPersons: Set<number> = new Set();
 
-        const duplicatedSet: Set<number> = new Set();
+        const duplicatedPersons: Set<number> = new Set();
 
-        const relatedSet: Set<number> = new Set();
+        const generalRelations: Set<string> = new Set();
 
-        const rootRelationships = dto.relationships;
+        if (tree) {
+            for (const rootRelationship of tree) {
+                const branchRelations: Set<string> = new Set();
+                const personDto = rootRelationship.person;
+                this.recursiveScanBranchRelations({scannedPersons: scannedPersons, relations: branchRelations}, personDto, -1);
+                branchRelations.forEach(stringRel=>{
+                    const [fromIdStr,toIdStr] = stringRel.split("/")!;
 
-        if (rootRelationships) {
-            const rootRelationshipsIdList = rootRelationships.map(r=>r.person.id).concat(person.id);
-            rootRelationshipsIdList.forEach(id=>{
-                sharedSet.add(id);
-                relatedSet.add(id)
-            })
-
-            const stack: {dto: NestedPersonResponseDto, depth: number}[] = []
-
-
-            rootRelationships.forEach((rootRelationship)=>{
-                const branchSet: Set<number> = new Set([person.id, rootRelationship.person.id]);
-
-                if (rootRelationship.person.relationshipsInfo.relationships) {
-                    rootRelationship.person.relationshipsInfo.relationships.forEach(r=>{
-                        if (!branchSet.has(r.person.id)) {
-                            stack.push({dto: r.person, depth: 2});
+                    generalRelations.forEach(rStr=>{
+                        if (!rStr.startsWith(fromIdStr)&&rStr.endsWith(toIdStr)) {
+                            duplicatedPersons.add(+toIdStr);
                         }
                     })
-                }
-
-                while (stack.length > 0) {
-                    const stackObject = stack.pop()!;
-
-                    const depth = stackObject.depth;
-
-                    if (limit!==-1&&depth>=limit) {
-                        continue;
-                    }
-
-                    const nestedPersonDto = stackObject.dto;
-
-                    if (relatedSet.has(nestedPersonDto.id)&&!branchSet.has(nestedPersonDto.id)) {
-                        duplicatedSet.add(nestedPersonDto.id);
-                        continue;
-                    }
-
-                    branchSet.add(nestedPersonDto.id);
-
-                    if (nestedPersonDto.relationshipsInfo.relationships) {
-                        const currentDepth = depth+1;
-
-                        nestedPersonDto.relationshipsInfo.relationships.forEach(r => {
-                            const related = r.person;
-
-                            if (!branchSet.has(related.id)) {
-                                stack.push({dto: related, depth: currentDepth});
-                            }
-                        })
-                    }
-                }
-
-                [...branchSet].forEach(id=>relatedSet.add(id));
-            })
+                })
+                branchRelations.forEach(r=>generalRelations.add(r));
+            }
         }
 
-        const sh: Set<number> = new Set();
+        const sharedPersons: Set<number> = new Set();
 
-        this.scanForSharedRelationships(sh,person.relationshipsInfo, [...duplicatedSet], -1);
+        this.scanForSharedRelationships(sharedPersons,person.relationshipsInfo, [...duplicatedPersons], limit)
 
-        [...sh].forEach(id=>sharedSet.add(id));
-        console.log(duplicatedSet)
-        return {all: relatedSet, shared: sharedSet};
+        return {all: scannedPersons, shared: sharedPersons};
     }
 
-    private scanForSharedRelationships(targetSet: Set<number>, relationshipsInfo: NestedRelationshipsInfoResponseDto, duplicateIdList: number[], limit: number, counter: number = 0, scannedPersons: Set<number> = new Set()) {
+    private recursiveScanBranchRelations(target: {scannedPersons: Set<number>,relations: Set<string>}, person: NestedPersonResponseDto, limitDepth: number, depth: number=1): void {
+        if (limitDepth!==-1&&depth>=limitDepth) return;
+        target.scannedPersons.add(person.id);
+        if (person.relationshipsInfo.relationships) {
+            for (const relationship of person.relationshipsInfo.relationships) {
+                target.relations.add(`${person.id}/${relationship.person.id}`)
+                this.recursiveScanBranchRelations(target, relationship.person, limitDepth, depth+1)
+            }
+        }
+    }
+
+    private scanForSharedRelationships(targetSet: Set<number>, relationshipsInfo: NestedRelationshipsInfoResponseDto, duplicateIdList: number[], limit: number, counter: number = 1, scannedPersons: Set<number> = new Set()) {
         if (limit!==-1&&counter>=limit) return;
 
         if (relationshipsInfo.relationships) {
