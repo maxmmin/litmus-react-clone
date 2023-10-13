@@ -1,11 +1,16 @@
 import {
     NestedPersonResponseDto,
     NestedRelationshipsInfoResponseDto
-} from "../../../rest/dto/person/PersonResponseDto";
-import {RawRelationshipsPerson} from "../../../model/human/person/Person";
+} from "../../rest/dto/person/PersonResponseDto";
+import {RawRelationshipsPerson} from "../../model/human/person/Person";
+import RelationshipsResponseDtoScanner, {ScanResult} from "./RelationshipsResponseDtoScanner";
 
-export default class BasicRelationshipsResponseDtoScanner {
-    scan(person: RawRelationshipsPerson, limit: number): {shared: Set<number>, all: Set<number>} {
+export default class BasicRelationshipsResponseDtoScanner implements RelationshipsResponseDtoScanner{
+    public static getInstance(): BasicRelationshipsResponseDtoScanner {
+        return new BasicRelationshipsResponseDtoScanner();
+    }
+
+    scan(person: RawRelationshipsPerson, limit: number): ScanResult {
         const tree = person.relationshipsInfo.relationships;
 
         const scannedPersons: Set<number> = new Set();
@@ -14,11 +19,15 @@ export default class BasicRelationshipsResponseDtoScanner {
 
         const generalRelations: Set<string> = new Set();
 
+        const sharedPersons: Set<number> = new Set();
+
         if (tree) {
+            if (limit>0) tree.forEach(r=>sharedPersons.add(r.person.id));
+
             for (const rootRelationship of tree) {
                 const branchRelations: Set<string> = new Set();
                 const personDto = rootRelationship.person;
-                this.recursiveScanBranchRelations({scannedPersons: scannedPersons, relations: branchRelations}, personDto, -1);
+                this.recursiveScanBranchRelations({scannedPersons: scannedPersons, relations: branchRelations}, personDto, limit);
                 branchRelations.forEach(stringRel=>{
                     const [fromIdStr,toIdStr] = stringRel.split("/")!;
 
@@ -32,14 +41,12 @@ export default class BasicRelationshipsResponseDtoScanner {
             }
         }
 
-        const sharedPersons: Set<number> = new Set();
-
         this.scanForSharedRelationships(sharedPersons,person.relationshipsInfo, [...duplicatedPersons], limit)
 
         return {all: scannedPersons, shared: sharedPersons};
     }
 
-    private recursiveScanBranchRelations(target: {scannedPersons: Set<number>,relations: Set<string>}, person: NestedPersonResponseDto, limitDepth: number, depth: number=1): void {
+    private recursiveScanBranchRelations(target: {scannedPersons: Set<number>,relations: Set<string>}, person: NestedPersonResponseDto, limitDepth: number, depth: number=0): void {
         if (limitDepth!==-1&&depth>=limitDepth) return;
         target.scannedPersons.add(person.id);
         if (person.relationshipsInfo.relationships) {
@@ -50,7 +57,7 @@ export default class BasicRelationshipsResponseDtoScanner {
         }
     }
 
-    private scanForSharedRelationships(targetSet: Set<number>, relationshipsInfo: NestedRelationshipsInfoResponseDto, duplicateIdList: number[], limit: number, counter: number = 1, scannedPersons: Set<number> = new Set()) {
+    private scanForSharedRelationships(targetSet: Set<number>, relationshipsInfo: NestedRelationshipsInfoResponseDto, duplicateIdList: number[], limit: number, counter: number = 0, scannedPersons: Set<number> = new Set()) {
         if (limit!==-1&&counter>=limit) return;
 
         if (relationshipsInfo.relationships) {

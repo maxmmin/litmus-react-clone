@@ -13,13 +13,13 @@ import {LineString} from "ol/geom";
 import {Vector as VectorLayer} from "ol/layer";
 import Vector from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
-import BasicPersonRelationshipsBinder from "../creation/person/BasicPersonRelationshipsBinder";
-import BasicPersonRelationshipsLoader from "../creation/person/BasicPersonRelationshipsLoader";
-import BasicRelationshipsResponseDtoScanner from "../creation/person/BasicRelationshipsResponseDtoScanner";
+import BasicPersonRelationshipsBinder from "../../service/relationships/BasicPersonRelationshipsBinder";
+import BasicPersonRelationshipsLoader from "../../service/relationships/BasicPersonRelationshipsLoader";
+import BasicRelationshipsResponseDtoScanner from "../../service/relationships/BasicRelationshipsResponseDtoScanner";
 import PersonExplorationApiServiceImpl
     from "../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
-import BasicRipePersonRelationshipTool from "../creation/person/BasicRipePersonRelationshipTool";
+import BasicRipePersonRelationshipUtil from "../../service/relationships/BasicRipePersonRelationshipUtil";
 
 
 type PersonMapProps = {
@@ -159,9 +159,8 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
         const scanner = new BasicRelationshipsResponseDtoScanner();
         const loader = new BasicPersonRelationshipsLoader(scanner, PersonExplorationApiServiceImpl.getInstance(),PersonDtoMapperImpl.getInstance())
         const binder = new BasicPersonRelationshipsBinder(loader, scanner, PersonDtoMapperImpl.getInstance());
-        const analyzer = new BasicRipePersonRelationshipTool();
-        console.log(scanner.scan(person, -1));
-        binder.bindShared(person, -1).then(person=>{
+        const analyzer = new BasicRipePersonRelationshipUtil();
+        binder.bindShared(person, 1).then(person=>{
             console.log(person);
             console.log(analyzer.extractRelatedPersons(person));
         })

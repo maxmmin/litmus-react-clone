@@ -1,6 +1,10 @@
-import Person from "../../../model/human/person/Person";
+import Person from "../../model/human/person/Person";
+import RipePersonRelationshipUtil from "./RipePersonRelationshipUtil";
 
-export default class BasicRipePersonRelationshipTool {
+export default class BasicRipePersonRelationshipUtil implements RipePersonRelationshipUtil{
+    public static getInstance () {
+        return new BasicRipePersonRelationshipUtil();
+    }
     extractRelatedPersons (person: Person, subBranchScanned: Set<Person> = new Set): Set<Person> {
         return person.relationships.reduce((accum, relationship)=>{
             const iteratedPerson = relationship.to;
@@ -12,7 +16,7 @@ export default class BasicRipePersonRelationshipTool {
                 iterationSet = this.extractRelatedPersons(iteratedPerson,subBranchScanned);
             }
 
-            iterationSet.add(person);
+            iterationSet.add(iteratedPerson);
 
             return new Set([...accum, ...iterationSet]);
         }, new Set<Person>())

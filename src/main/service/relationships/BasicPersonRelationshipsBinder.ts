@@ -1,18 +1,38 @@
 import BasicPersonRelationshipsLoader from "./BasicPersonRelationshipsLoader";
-import Person, {RawRelationshipsPerson} from "../../../model/human/person/Person";
+import Person, {RawRelationshipsPerson} from "../../model/human/person/Person";
 import BasicRelationshipsResponseDtoScanner from "./BasicRelationshipsResponseDtoScanner";
-import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
+import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import {
     NestedRelationshipResponseDto
-} from "../../../rest/dto/person/PersonResponseDto";
-import PersonDtoMapper from "../../../rest/dto/dtoMappers/PersonDtoMapper";
+} from "../../rest/dto/person/PersonResponseDto";
+import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
+import PersonRelationshipsBinder from "./PersonRelationshipsBinder";
+import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
+import RelationshipsResponseDtoScanner from "./RelationshipsResponseDtoScanner";
+import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
-export default class BasicPersonRelationshipsBinder {
+export default class BasicPersonRelationshipsBinder implements PersonRelationshipsBinder{
     private readonly personsStore = new Map<number, NoRelationshipsPerson>();
-    constructor(protected readonly relationshipsLoader: BasicPersonRelationshipsLoader,
-                protected readonly relationshipScanService: BasicRelationshipsResponseDtoScanner,
+    constructor(protected readonly relationshipsLoader: PersonRelationshipsLoader,
+                protected readonly relationshipScanService: RelationshipsResponseDtoScanner,
                 protected readonly dtoMapper: PersonDtoMapper) {
     }
+
+    public static getInstance(relationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(),
+                              scanService: RelationshipsResponseDtoScanner = BasicRelationshipsResponseDtoScanner.getInstance(),
+                              dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance()): BasicPersonRelationshipsBinder {
+        return new BasicPersonRelationshipsBinder(relationshipsLoader, scanService, dtoMapper);
+    }
+
+    clearPersonsStorage(): void {
+        this.personsStore.clear();
+    }
+
+    getPersonsStorage(): Map<number, NoRelationshipsPerson> {
+        return new Map(this.personsStore);
+    }
+
+
 
     private loadRawPersonToStore(rawPerson: RawRelationshipsPerson) {
         const clonedPerson: NoRelationshipsPerson = {...rawPerson};
@@ -26,7 +46,7 @@ export default class BasicPersonRelationshipsBinder {
         })
     }
 
-    async bindShared (rawPerson: RawRelationshipsPerson, scanDepth: number) {
+    async bindShared (rawPerson: RawRelationshipsPerson, scanDepth: number): Promise<Person> {
         if (scanDepth>rawPerson.relationshipsInfo.scanOptions.depth) {
             throw new Error("scan depth is higher that person scan depth");
         }
@@ -47,13 +67,25 @@ export default class BasicPersonRelationshipsBinder {
         return this.buildRipePerson(rawPerson, shared);
     }
 
-    bindAll (rawPerson: RawRelationshipsPerson, scanDepth: number) {
-        if (rawPerson.relationshipsInfo.scanOptions.depth) {
+    async bindAll (rawPerson: RawRelationshipsPerson, scanDepth: number): Promise<Person> {
+        if (scanDepth>rawPerson.relationshipsInfo.scanOptions.depth) {
             throw new Error("scan depth is higher that person scan depth");
         }
 
         this.loadRawPersonToStore(rawPerson);
+        const {all} = this.relationshipScanService.scan(rawPerson, scanDepth);
 
+        const loadedIdList = [...all].filter(id=>this.personsStore.has(id));
+
+        loadedIdList.push(rawPerson.id);
+
+        const loadedPersonsMap = await this.relationshipsLoader.loadAllNestedPersons(rawPerson,scanDepth,new Set(loadedIdList));
+
+        [...loadedPersonsMap].forEach(([id, person])=>{
+            if (!person) throw new Error("person was not found "+id)
+            this.personsStore.set(id, person);
+        })
+        return this.buildRipePerson(rawPerson, all);
     }
 
     private buildRipePerson (rawPerson: RawRelationshipsPerson, personsToInclude: Set<number>) {
@@ -109,14 +141,4 @@ export default class BasicPersonRelationshipsBinder {
         return person;
     }
 
-    // private buildRipeRelationship(nestedRelationship: NestedRelationshipResponseDto, personsToInclude: Set<number>, createdPersons: Map<number,Person>): Relationship {
-    //     if (!this.personsStore.has(nestedRelationship.person.id)) {
-    //         throw new Error("such person is not present in store "+nestedRelationship.person.id)
-    //     }
-    //     const storedPerson: NoRelationshipsPerson = this.personsStore.get(nestedRelationship.person.id)!;
-    //
-    //     const person: Person = {...storedPerson}
-    //
-    //     personnestedRelationship.person.relationshipsInfo.
-    // }
 }
