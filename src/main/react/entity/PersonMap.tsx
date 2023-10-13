@@ -10,7 +10,17 @@ import {defaultMapPosition, transformToTarget} from "../../util/mapUtil";
 import {buildUrl} from "../../util/pureFunctions";
 import appConfig from "../../config/appConfig";
 import {Fill, Stroke, Style} from "ol/style";
+import {LineString} from "ol/geom";
+import {Vector} from "ol/layer";
+import VectorLayer from "ol/layer/Vector";
 
+type PairedRelationships = [Relationship, Relationship]
+
+type PairedRelationshipMap = Map<string, PairedRelationships>
+
+function buildPairedMapKey(pairedId: [number, number]): string {
+    return pairedId.sort((a,b)=>a-b).join("/");
+}
 
 type PersonMapProps = {
     person: Person,
@@ -47,11 +57,7 @@ function getPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelRequi
 }
 
 type PersonLabelInfo = {person: PersonLabelRequiredFields, label: HTMLDivElement}
-function addPersonGeoToMap({person, map, cssAnchor}: {
-        person: PersonLabelRequiredFields,
-        map: OlMap,
-        cssAnchor?: string
-    }): PersonLabelInfo {
+function addPersonGeoToMap({person, map, cssAnchor}: { person: PersonLabelRequiredFields, map: OlMap, cssAnchor?: string }): PersonLabelInfo {
     if (!person.location) throw new Error("person has no location")
 
     const coordinates = transformLocationToCoordinates(person.location);
@@ -86,10 +92,6 @@ const resizeMapCallback = ({map, labels}: {map: OlMap, labels: HTMLDivElement[]}
     })
 }
 
-const isSameRelationship = (srcRelationship: Relationship, targetRelationShip: Relationship) => {
-    return srcRelationship.to.id===targetRelationShip.to.id;
-}
-
 const lineStyle = new Style({
     fill: new Fill({ color: '#6750A4' }),
     stroke: new Stroke({
@@ -98,46 +100,45 @@ const lineStyle = new Style({
     })
 });
 
-// function buildRelationshipLine({pair}: {pair: PairedRelationshipsFullInfo}): {pair: PairedRelationshipsFullInfo, line: Feature<LineString>} {
-//     const personPair = pair.map(r=>r.to);
-//     const [personOne, personTwo] = personPair;
-//     if (personOne.location&&personTwo.location) {
-//         const pairCoordinates: [number, number][] = personPair.map(p=>transformLocationToCoordinates(p.location!))
-//
-//
-//         const line = new Feature({
-//             geometry: new LineString(pairCoordinates)
-//         })
-//         line.setStyle(lineStyle);
-//
-//             return {
-//                 pair: pair,
-//                 line: line
-//             }
-//     } else throw new Error("one of persons has no location: "+JSON.stringify(personPair))
-// }
-//
-// function drawRelationshipsLines ({pairedRelationshipsMap, map}: {pairedRelationshipsMap: PairedRelationshipMap, map: OlMap}) {
-//     const source = new Vector<LineString>({
-//     });
-//
-//     const vectorLayer = new VectorLayer({
-//         source: source,
-//         renderBuffer: 1e6
-//     });
-//
-//     const pairData = Array
-//         .from(pairedRelationshipsMap.entries())
-//         .filter(([_, [r1,r2]])=>r1.to.location&&r2.to.location)
-//         .map(([_, pair])=>{
-//             return buildRelationshipLine({pair})
-//         })
-//
-//     const lines = pairData.map(data=>data.line)
-//
-//     source.addFeatures(lines)
-//     map.addLayer(vectorLayer);
-// }
+function buildRelationshipLine({pair}: {pair: [Relationship, Relationship]}): {pair: [Relationship, Relationship], line: Feature<LineString>} {
+    const personPair = pair.map(r=>r.to);
+    const [personOne, personTwo] = personPair;
+    if (personOne.location&&personTwo.location) {
+        const pairCoordinates: [number, number][] = personPair.map(p=>transformLocationToCoordinates(p.location!))
+
+        const line = new Feature({
+            geometry: new LineString(pairCoordinates)
+        })
+        line.setStyle(lineStyle);
+
+            return {
+                pair: pair,
+                line: line
+            }
+    } else throw new Error(`one of persons has no location: ${pair[0].to.id}->${pair[1].to.id}`)
+}
+
+function drawRelationshipsLines ({pairedRelationshipsMap, map}: {pairedRelationshipsMap: PairedRelationshipMap, map: OlMap}) {
+    const source = new Vector<LineString>({
+    });
+
+    const vectorLayer = new VectorLayer({
+        source: source,
+        renderBuffer: 1e6
+    });
+
+    const pairData = Array
+        .from(pairedRelationshipsMap.entries())
+        .filter(([_, [r1,r2]])=>r1.to.location&&r2.to.location)
+        .map(([_, pair])=>{
+            return buildRelationshipLine({pair})
+        })
+
+    const lines = pairData.map(data=>data.line)
+
+    source.addFeatures(lines)
+    map.addLayer(vectorLayer);
+}
 
 const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null);
