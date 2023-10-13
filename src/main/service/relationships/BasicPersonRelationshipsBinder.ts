@@ -28,11 +28,11 @@ export default class BasicPersonRelationshipsBinder implements PersonRelationshi
         return new BasicPersonRelationshipsBinder(relationshipsLoader, relationshipsDtoScanner, dtoMapper, relationshipsUtil);
     }
 
-    clearPersonsStorage(): void {
+    clearRawPersonsStorage(): void {
         this.personsStore.clear();
     }
 
-    getPersonsStorage(): Map<number, NoRelationshipsPerson> {
+    getRawPersonsStorage(): Map<number, NoRelationshipsPerson> {
         return new Map(this.personsStore);
     }
 

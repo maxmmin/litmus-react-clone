@@ -9,22 +9,12 @@ import {GeoLocation} from "../../model/GeoLocation";
 import {defaultMapPosition, transformToTarget} from "../../util/mapUtil";
 import {buildUrl} from "../../util/pureFunctions";
 import appConfig from "../../config/appConfig";
-import {LineString} from "ol/geom";
-import {Vector as VectorLayer} from "ol/layer";
-import Vector from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
-import BasicPersonRelationshipsBinder from "../../service/relationships/BasicPersonRelationshipsBinder";
-import BasicPersonRelationshipsLoader from "../../service/relationships/BasicPersonRelationshipsLoader";
-import BasicPersonRelationshipsResponseDtoScanner from "../../service/relationships/BasicPersonRelationshipsResponseDtoScanner";
-import PersonExplorationApiServiceImpl
-    from "../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
-import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
-import BasicRipePersonRelationshipsUtil from "../../service/relationships/BasicRipePersonRelationshipsUtil";
 
 
 type PersonMapProps = {
-    person: RawRelationshipsPerson,
-    currentLocation: GeoLocation|null
+    person: Person,
+    currentLocation: GeoLocation
 }
 
 function transformLocationToCoordinates (location: GeoLocation): [number, number] {

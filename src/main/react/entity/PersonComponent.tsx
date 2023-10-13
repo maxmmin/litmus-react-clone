@@ -13,6 +13,7 @@ import {NavLink} from "react-router-dom";
 import {Entity} from "../../model/Entity";
 import {GeoLocation} from "../../model/GeoLocation";
 import {LitmusServiceContext} from "../App";
+import Loader from "../loader/Loader";
 
 type PersonProps = {
     rawPerson: RawRelationshipsPerson
@@ -51,22 +52,25 @@ export function RelationshipComponent ({relationship, cssAnchor="", containerOnC
 }
 
 export default function PersonComponent ({rawPerson}: PersonProps) {
-    const [isPending, setPending] = useState<boolean>(false);
+    const [isPending, setPending] = useState<boolean>(true);
     
     const [person, setPerson] = useState<Person|null>(null);
 
     const bindService = useContext(LitmusServiceContext).personServices.personRelationshipsBinder;
 
     useEffect(()=>{
-        bindService.bindShared(rawPerson, -1).then(person=>{
-            console.log(person)
-            bindService.destroy(person);
-        })
+        setPending(true);
+        bindService
+            .bindShared(rawPerson, -1)
+            .then(person=>setPerson(person))
+            .finally(()=>setPending(false));
     }, [rawPerson])
 
     const mainImg: string|undefined = rawPerson.media.mainImage?rawPerson.media.mainImage:rawPerson.media.images[0];
 
-    const [location, setLocation] = useState<GeoLocation|null>(rawPerson.location)
+    if (isPending) return <Loader/>
+
+    if (!person) throw new Error("no person was loaded");
 
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
@@ -95,21 +99,23 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                 </div>
             </section>
 
-            <section className={"person-page__map-section"}>
-                <div className="person-page__map-wrapper">
-                    <PersonMap person={rawPerson} currentLocation={location}/>
-                </div>
-            </section>
+            {person.location &&
+                <section className={"person-page__map-section"}>
+                    <div className="person-page__map-wrapper">
+                        <PersonMap person={person} currentLocation={person.location}/>
+                    </div>
+                </section>
+            }
 
             <section className={"person-page__relationships-section"}>
                 <h4 className={'relationships-section__title'}>Пов'язані особи</h4>
                 {
-                    // person.relationshipsInfo.relationships.length > 0 ?
-                    // <div className={'person-page__relationships-container'}>
-                    //     {person.relationshipsInfo.relationships.map(relationship=><RelationshipComponent key={relationship.to.id} relationship={relationship}/>)}
-                    // </div>
-                    // :
-                    // <p>Пов'язані особи відсутні</p>
+                    person.relationships.length > 0 ?
+                    <div className={'person-page__relationships-container'}>
+                        {person.relationships.map(relationship=><RelationshipComponent key={relationship.to.id} relationship={relationship}/>)}
+                    </div>
+                    :
+                    <p>Пов'язані особи відсутні</p>
                 }
             </section>
         </div>

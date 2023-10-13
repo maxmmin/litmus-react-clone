@@ -16,7 +16,6 @@ import {ErrorBoundary} from "react-error-boundary";
 import serviceContext from "./serviceContext";
 import appConfig from "../config/appConfig";
 import RootScreen from "./RootScreen";
-import PersonComponent from "./entity/PersonComponent";
 import {Entity} from "../model/Entity";
 import PersonScreen from "./entity/PersonScreen";
 
