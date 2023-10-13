@@ -1,5 +1,5 @@
-import Person, {RawRelationshipsPerson, Relationship} from "../../model/human/person/Person";
-import React, {useContext, useEffect, useRef, useState} from "react";
+import Person, {Relationship} from "../../model/human/person/Person";
+import React, {useEffect, useRef, useState} from "react";
 import OlMap from "ol/Map";
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
@@ -9,10 +9,10 @@ import {GeoLocation} from "../../model/GeoLocation";
 import {defaultMapPosition, transformToTarget} from "../../util/mapUtil";
 import {buildUrl} from "../../util/pureFunctions";
 import appConfig from "../../config/appConfig";
-import {Fill, Stroke, Style} from "ol/style";
 import {LineString} from "ol/geom";
-import {Vector} from "ol/layer";
-import VectorLayer from "ol/layer/Vector";
+import {Vector as VectorLayer} from "ol/layer";
+import Vector from "ol/source/Vector";
+import {Fill, Stroke, Style} from "ol/style";
 
 type PairedRelationships = [Relationship, Relationship]
 

@@ -8,7 +8,6 @@ interface User extends Human, CoreEntity {
     password: string
 
     role: RoleName;
-
 }
 
 export default User;
