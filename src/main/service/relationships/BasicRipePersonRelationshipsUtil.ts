@@ -1,9 +1,9 @@
 import Person from "../../model/human/person/Person";
-import RipePersonRelationshipUtil from "./RipePersonRelationshipUtil";
+import RipePersonRelationshipsUtil from "./RipePersonRelationshipsUtil";
 
-export default class BasicRipePersonRelationshipUtil implements RipePersonRelationshipUtil{
+export default class BasicRipePersonRelationshipsUtil implements RipePersonRelationshipsUtil{
     public static getInstance () {
-        return new BasicRipePersonRelationshipUtil();
+        return new BasicRipePersonRelationshipsUtil();
     }
     extractRelatedPersons (person: Person, subBranchScanned: Set<Person> = new Set): Set<Person> {
         return person.relationships.reduce((accum, relationship)=>{

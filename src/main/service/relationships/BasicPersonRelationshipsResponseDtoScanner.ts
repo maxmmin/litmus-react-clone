@@ -3,11 +3,11 @@ import {
     NestedRelationshipsInfoResponseDto
 } from "../../rest/dto/person/PersonResponseDto";
 import {RawRelationshipsPerson} from "../../model/human/person/Person";
-import RelationshipsResponseDtoScanner, {ScanResult} from "./RelationshipsResponseDtoScanner";
+import PersonRelationshipsResponseDtoScanner, {ScanResult} from "./PersonRelationshipsResponseDtoScanner";
 
-export default class BasicRelationshipsResponseDtoScanner implements RelationshipsResponseDtoScanner{
-    public static getInstance(): BasicRelationshipsResponseDtoScanner {
-        return new BasicRelationshipsResponseDtoScanner();
+export default class BasicPersonRelationshipsResponseDtoScanner implements PersonRelationshipsResponseDtoScanner{
+    public static getInstance(): BasicPersonRelationshipsResponseDtoScanner {
+        return new BasicPersonRelationshipsResponseDtoScanner();
     }
 
     scan(person: RawRelationshipsPerson, limit: number): ScanResult {

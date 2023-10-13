@@ -1,4 +1,4 @@
-import Person, {RawRelationshipsPerson} from "../../model/human/person/Person";
+import {RawRelationshipsPerson} from "../../model/human/person/Person";
 import {useContext, useEffect, useState} from "react";
 import {LitmusServiceContext} from "../App";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";

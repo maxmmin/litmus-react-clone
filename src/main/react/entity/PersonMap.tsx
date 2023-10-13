@@ -15,11 +15,11 @@ import Vector from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
 import BasicPersonRelationshipsBinder from "../../service/relationships/BasicPersonRelationshipsBinder";
 import BasicPersonRelationshipsLoader from "../../service/relationships/BasicPersonRelationshipsLoader";
-import BasicRelationshipsResponseDtoScanner from "../../service/relationships/BasicRelationshipsResponseDtoScanner";
+import BasicPersonRelationshipsResponseDtoScanner from "../../service/relationships/BasicPersonRelationshipsResponseDtoScanner";
 import PersonExplorationApiServiceImpl
     from "../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
-import BasicRipePersonRelationshipUtil from "../../service/relationships/BasicRipePersonRelationshipUtil";
+import BasicRipePersonRelationshipsUtil from "../../service/relationships/BasicRipePersonRelationshipsUtil";
 
 
 type PersonMapProps = {
@@ -156,10 +156,10 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
     const [personsLabels, setPersonsLabels] = useState<PersonLabelInfo[]>([])
 
     useEffect(()=>{
-        const scanner = new BasicRelationshipsResponseDtoScanner();
+        const scanner = new BasicPersonRelationshipsResponseDtoScanner();
         const loader = new BasicPersonRelationshipsLoader(scanner, PersonExplorationApiServiceImpl.getInstance(),PersonDtoMapperImpl.getInstance())
         const binder = new BasicPersonRelationshipsBinder(loader, scanner, PersonDtoMapperImpl.getInstance());
-        const analyzer = new BasicRipePersonRelationshipUtil();
+        const analyzer = new BasicRipePersonRelationshipsUtil();
         binder.bindShared(person, 1).then(person=>{
             console.log(person);
             console.log(analyzer.extractRelatedPersons(person));

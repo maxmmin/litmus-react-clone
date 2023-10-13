@@ -2,12 +2,12 @@ import {
     RelationshipsInfoResponseDto
 } from "../../rest/dto/person/PersonResponseDto";
 import PersonExplorationApiService from "../exploration/api/human/person/PersonExplorationApiService";
-import BasicRelationshipsResponseDtoScanner from "./BasicRelationshipsResponseDtoScanner";
+import BasicPersonRelationshipsResponseDtoScanner from "./BasicPersonRelationshipsResponseDtoScanner";
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import {RawRelationshipsPerson} from "../../model/human/person/Person";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
-import RelationshipsResponseDtoScanner from "./RelationshipsResponseDtoScanner";
+import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponseDtoScanner";
 import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
@@ -15,13 +15,13 @@ export type NoRelationshipsOptionalPersonMap = Map<number, NoRelationshipsPerson
 
 export default class BasicPersonRelationshipsLoader implements PersonRelationshipsLoader{
 
-    public static getInstance(relationshipsResponseDtoScanner: RelationshipsResponseDtoScanner = BasicRelationshipsResponseDtoScanner.getInstance(),
+    public static getInstance(relationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
                               personApiService: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance(),
                               personDtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance()): BasicPersonRelationshipsLoader {
         return new BasicPersonRelationshipsLoader(relationshipsResponseDtoScanner, personApiService, personDtoMapper);
     }
 
-    constructor(protected readonly relationshipsResponseDtoScanner: RelationshipsResponseDtoScanner,
+    constructor(protected readonly relationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner,
                 protected readonly personApiService: PersonExplorationApiService,
                 protected readonly dtoMapper: PersonDtoMapper) {
     }

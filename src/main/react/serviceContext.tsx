@@ -76,6 +76,14 @@ import JurPersonCreationApiServiceImpl from "../service/creation/api/JurPersonCr
 import UserCreationApiServiceImpl from "../service/creation/api/UserCreationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 import UserDtoMapperImpl from "../rest/dto/dtoMappers/UserDtoMapperImpl";
+import PersonRelationshipsBinder from "../service/relationships/PersonRelationshipsBinder";
+import PersonRelationshipsLoader from "../service/relationships/PersonRelationshipsLoader";
+import PersonRelationshipsResponseDtoScanner from "../service/relationships/PersonRelationshipsResponseDtoScanner";
+import RipePersonRelationshipsUtil from "../service/relationships/RipePersonRelationshipsUtil";
+import BasicPersonRelationshipsResponseDtoScanner from "../service/relationships/BasicPersonRelationshipsResponseDtoScanner";
+import BasicPersonRelationshipsLoader from "../service/relationships/BasicPersonRelationshipsLoader";
+import BasicPersonRelationshipsBinder from "../service/relationships/BasicPersonRelationshipsBinder";
+import BasicRipePersonRelationshipsUtil from "../service/relationships/BasicRipePersonRelationshipsUtil";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -262,11 +270,25 @@ type ServiceContext = {
     mappers: Mappers,
     csrfTokenLoader: CsrfTokenLoader,
     geocodingService: GeocodingService,
-    // relationshipsScanService: RelationshipsScanService,
-    // personRelationshipsAnalyzer: (person: Person)=>PersonRelationshipsAnalyzer
+    personServices: {
+        personRelationshipsBinder: PersonRelationshipsBinder,
+        personRelationshipsLoader: PersonRelationshipsLoader,
+        personRelationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner,
+        ripePersonRelationshipsUtil: RipePersonRelationshipsUtil
+    }
 }
 
-// const relationshipsScanService = RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person);
+const relationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance();
+
+const personRelationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(
+    relationshipsResponseDtoScanner,
+    personExplorationApiService,
+    mappers.person);
+
+const personRelationshipsBinder: PersonRelationshipsBinder = BasicPersonRelationshipsBinder.getInstance(
+    personRelationshipsLoader,
+    relationshipsResponseDtoScanner,
+    mappers.person)
 
 const serviceContext: ServiceContext = {
     auth: authContext,
@@ -279,13 +301,12 @@ const serviceContext: ServiceContext = {
     mappers: mappers,
     csrfTokenLoader: new BasicCsrfTokenLoader(),
     geocodingService: geocodingService,
-    // relationshipsScanService: RelationshipsScanServiceImpl.getInstance(personExplorationApiService, mappers.person),
-    // personRelationshipsAnalyzer: (person: Person)=>BasicPersonRelationshipsAnalyzer.getInstance(
-    //         person,
-    //         relationshipsScanService,
-    //         personExplorationApiService,
-    //         mappers.person
-    //     )
+    personServices: {
+        personRelationshipsBinder: personRelationshipsBinder,
+        personRelationshipsLoader: personRelationshipsLoader,
+        personRelationshipsResponseDtoScanner: relationshipsResponseDtoScanner,
+        ripePersonRelationshipsUtil: BasicRipePersonRelationshipsUtil.getInstance()
+    }
 }
 
 export default serviceContext;

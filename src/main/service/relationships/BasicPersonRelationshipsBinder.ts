@@ -1,6 +1,6 @@
 import BasicPersonRelationshipsLoader from "./BasicPersonRelationshipsLoader";
 import Person, {RawRelationshipsPerson} from "../../model/human/person/Person";
-import BasicRelationshipsResponseDtoScanner from "./BasicRelationshipsResponseDtoScanner";
+import BasicPersonRelationshipsResponseDtoScanner from "./BasicPersonRelationshipsResponseDtoScanner";
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import {
     NestedRelationshipResponseDto
@@ -8,20 +8,20 @@ import {
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonRelationshipsBinder from "./PersonRelationshipsBinder";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
-import RelationshipsResponseDtoScanner from "./RelationshipsResponseDtoScanner";
+import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponseDtoScanner";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
 export default class BasicPersonRelationshipsBinder implements PersonRelationshipsBinder{
     private readonly personsStore = new Map<number, NoRelationshipsPerson>();
     constructor(protected readonly relationshipsLoader: PersonRelationshipsLoader,
-                protected readonly relationshipScanService: RelationshipsResponseDtoScanner,
+                protected readonly relationshipScanService: PersonRelationshipsResponseDtoScanner,
                 protected readonly dtoMapper: PersonDtoMapper) {
     }
 
     public static getInstance(relationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(),
-                              scanService: RelationshipsResponseDtoScanner = BasicRelationshipsResponseDtoScanner.getInstance(),
+                              relationshipsDtoScanner: PersonRelationshipsResponseDtoScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
                               dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance()): BasicPersonRelationshipsBinder {
-        return new BasicPersonRelationshipsBinder(relationshipsLoader, scanService, dtoMapper);
+        return new BasicPersonRelationshipsBinder(relationshipsLoader, relationshipsDtoScanner, dtoMapper);
     }
 
     clearPersonsStorage(): void {
