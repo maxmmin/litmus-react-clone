@@ -14,6 +14,7 @@ import {Entity} from "../../model/Entity";
 import {GeoLocation} from "../../model/GeoLocation";
 import {LitmusServiceContext} from "../App";
 import Loader from "../loader/Loader";
+import GeoCoordinates from "../../model/GeoCoordinates";
 
 type PersonProps = {
     rawPerson: RawRelationshipsPerson
@@ -58,6 +59,8 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
 
     const bindService = useContext(LitmusServiceContext).personServices.personRelationshipsBinder;
 
+    const [location, setLocation] = useState<GeoLocation|null>(rawPerson.location)
+
     useEffect(()=>{
         setPending(true);
         bindService
@@ -99,10 +102,10 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                 </div>
             </section>
 
-            {person.location &&
+            {location &&
                 <section className={"person-page__map-section"}>
                     <div className="person-page__map-wrapper">
-                        <PersonMap person={person} currentLocation={person.location}/>
+                        <PersonMap person={person} externalLocation={location}/>
                     </div>
                 </section>
             }
@@ -112,7 +115,15 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                 {
                     person.relationships.length > 0 ?
                     <div className={'person-page__relationships-container'}>
-                        {person.relationships.map(relationship=><RelationshipComponent key={relationship.to.id} relationship={relationship}/>)}
+                        {person.relationships.map(relationship=><RelationshipComponent key={relationship.to.id}
+                                                                                       relationship={relationship}
+                                                                                       cssAnchor={relationship.to.location?"":"disabled-geo"}
+                                                                                       geoBtnOnClick={(r,_e)=>{
+                                                                                           if (r.to.location) {
+                                                                                               setLocation(r.to.location);
+                                                                                           }
+                                                                                       }}
+                        />)}
                     </div>
                     :
                     <p>Пов'язані особи відсутні</p>

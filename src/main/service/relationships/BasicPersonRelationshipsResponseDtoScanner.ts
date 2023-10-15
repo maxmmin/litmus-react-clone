@@ -22,7 +22,7 @@ export default class BasicPersonRelationshipsResponseDtoScanner implements Perso
         const sharedPersons: Set<number> = new Set();
 
         if (tree) {
-            if (limit>0) tree.forEach(r=>sharedPersons.add(r.person.id));
+            if (limit===-1||limit>0) tree.forEach(r=>sharedPersons.add(r.person.id));
 
             for (const rootRelationship of tree) {
                 const branchRelations: Set<string> = new Set();

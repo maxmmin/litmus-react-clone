@@ -26,7 +26,7 @@ function buildPairedMapKey(pairedId: [number, number]): string {
 
 type PersonMapProps = {
     person: Person,
-    currentLocation: GeoLocation
+    externalLocation: GeoLocation
 }
 
 function transformLocationToCoordinates (location: GeoLocation): [number, number] {
@@ -162,7 +162,7 @@ function drawRelationshipsLines ({personsToDraw, map}: {personsToDraw: Set<Perso
     map.addLayer(vectorLayer);
 }
 
-const PersonMap = ({person, currentLocation}: PersonMapProps) => {
+const PersonMap = ({person, externalLocation}: PersonMapProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<OlMap | undefined>();
 
@@ -174,7 +174,7 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
 
     useEffect(()=>{
         if (mapTargetElement.current) {
-            const center = transformLocationToCoordinates(currentLocation?currentLocation:
+            const center = transformLocationToCoordinates(externalLocation?externalLocation:
                 {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
 
             const olMap = new OlMap({
@@ -244,11 +244,11 @@ const PersonMap = ({person, currentLocation}: PersonMapProps) => {
 
     useEffect(()=>{
         if (map) {
-            const coordinates = transformLocationToCoordinates(currentLocation?currentLocation:
+            const coordinates = transformLocationToCoordinates(externalLocation?externalLocation:
                 {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
             map.getView().setCenter(coordinates);
         }
-    }, [currentLocation])
+    }, [externalLocation])
 
     useEffect(()=>{
         if (map) {
