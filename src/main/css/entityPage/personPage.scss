@@ -37,7 +37,7 @@
 
 .person-page__relationship-container {
   display: grid;
-  grid-template-columns: 1fr repeat(2,25%) 30px;
+  grid-template-columns: 1fr repeat(2,20%) 60px;
   column-gap: 20px;
   align-items: center;
   background: rgba($md-sys-color-inverse-primary-light, 0.3);
@@ -66,6 +66,10 @@
   column-gap: 15px;
   align-items: center;
   justify-self: start;
+}
+
+.relationship-container__location-btn-wrapper {
+  justify-self: end;
 }
 
 .relationship-container_person-img-wrapper {
