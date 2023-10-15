@@ -53,6 +53,11 @@ function getPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelRequi
         personImg.src = buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg);
         personImg.className = "person-map-label__img"
         imgContainer.append(personImg);
+    } else {
+        const personLetter = document.createElement("p")
+        personLetter.className = "person-map-label__surname-first-letter"
+        personLetter.innerText = person.lastName[0];
+        imgContainer.append(personLetter);
     }
 
     return personContainer;
