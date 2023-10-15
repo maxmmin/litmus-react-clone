@@ -49,15 +49,22 @@
   }
 }
 
-.entity-container {
-  display: grid;
-  column-gap: 40px;
-  row-gap: 20px;
-  padding: 30px;
-  border-radius: 15px;
+.entity-container-wrapper {
+  padding: 20px;
+  margin: 30px 0;
   background: $md-sys-color-on-primary-light;
   border: 2px solid $md-sys-color-primary-light;
-  margin: 30px 0px;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.entity-container {
+  padding: 10px;
+  display: grid;
+  column-gap: 40px;
+  height: 180px;
+  overflow: auto;
+  row-gap: 20px;
 }
 
 .explore-page__main {
@@ -65,15 +72,15 @@
 }
 
 .person-container {
-  grid-template-columns: repeat(9, auto);
+  grid-template-columns: repeat(9, 1fr);
 }
 
 .jur-person-container {
-  grid-template-columns: repeat(7, auto);
+  grid-template-columns: repeat(7, 1fr);
 }
 
 .user-container {
-  grid-template-columns: repeat(6, auto);
+  grid-template-columns: repeat(6, 1fr);
 }
 
 .entity-container__column-title  {
