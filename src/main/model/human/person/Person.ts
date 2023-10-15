@@ -29,7 +29,7 @@ export type RawRelationshipsPerson = NoRelationshipsPerson&{
 }
 
 export const getFullName = (person: FullName) => {
-    return `${person.lastName} ${person.firstName} ${person.middleName}`
+    return `${person.lastName} ${person.firstName} ${person.middleName||""}`.trim()
 }
 
 export type Relationship = {

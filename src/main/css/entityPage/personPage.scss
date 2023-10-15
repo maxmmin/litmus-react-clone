@@ -36,20 +36,36 @@
 }
 
 .person-page__relationship-container {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr repeat(2,25%) 30px;
   column-gap: 20px;
   align-items: center;
   background: rgba($md-sys-color-inverse-primary-light, 0.3);
   padding: 2% 5%;
   //border-radius: 23px;
   overflow: hidden;
-  justify-content: space-between;
+  justify-items: center;
+}
+
+.relationship-container__relation-note {
+  width: 100%;
+  overflow: auto;
+}
+
+.relationship-container__relation-note::-webkit-scrollbar {
+  height: 3px;
+}
+
+.relationship-container__relation-note::-webkit-scrollbar-thumb {
+  background-color: white;
+  border: 1px solid transparent;
 }
 
 .relationship-container__main-block {
   display: flex;
   column-gap: 15px;
   align-items: center;
+  justify-self: start;
 }
 
 .relationship-container_person-img-wrapper {
