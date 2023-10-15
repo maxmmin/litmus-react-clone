@@ -87,6 +87,7 @@ function addPersonGeoToMap({person, map, cssAnchor}: { person: PersonLabelRequir
 
 const resizeMapCallback = ({map, labels}: {map: OlMap, labels: HTMLDivElement[]}) => {
     let scale = 100/(map.getView().getResolution()!);
+    console.log("resize")
 
     const minScale = 0.01;
     const maxScale = 1;
@@ -162,6 +163,8 @@ function drawRelationshipsLines ({personsToDraw, map}: {personsToDraw: Set<Perso
     map.addLayer(vectorLayer);
 }
 
+const defaultZoom: number = 17;
+
 const PersonMap = ({person, externalLocation}: PersonMapProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<OlMap | undefined>();
@@ -186,7 +189,7 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
                 ],
                 view: new View({
                     center: center,
-                    zoom: 17
+                    zoom: defaultZoom
                 }),
                 controls: [
                     new FullScreen({
@@ -246,7 +249,10 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
         if (map) {
             const coordinates = transformLocationToCoordinates(externalLocation?externalLocation:
                 {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
-            map.getView().setCenter(coordinates);
+            const view = map.getView();
+
+            view.setCenter(coordinates);
+            view.setZoom(defaultZoom);
         }
     }, [externalLocation])
 

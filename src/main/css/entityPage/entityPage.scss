@@ -24,6 +24,10 @@
   align-items: center;
 }
 
+.main-entity-section__main-photo-wrapper.no-photo {
+  background: transparent;
+}
+
 .main-entity-section__main-photo {
   max-width: 100%;
 }

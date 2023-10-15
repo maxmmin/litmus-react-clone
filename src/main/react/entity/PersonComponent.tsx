@@ -15,6 +15,7 @@ import {GeoLocation} from "../../model/GeoLocation";
 import {LitmusServiceContext} from "../App";
 import Loader from "../loader/Loader";
 import GeoCoordinates from "../../model/GeoCoordinates";
+import {retry} from "@reduxjs/toolkit/query";
 
 type PersonProps = {
     rawPerson: RawRelationshipsPerson
@@ -78,14 +79,14 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_person">
-                <div className="main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person">
+                <div className={`main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person ${mainImg?"":"no-photo"}`}>
                     {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
 
                 <div className="main-entity-section__main-entity-info-container">
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Прізвище:</span> {rawPerson.lastName}</p>
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Ім'я:</span> {rawPerson.firstName}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>По-батькові:</span> {rawPerson.middleName}</p>
+                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>По-батькові:</span> {valueOrMessage(rawPerson.middleName)}</p>
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Стать:</span> {rawPerson.sex}</p>
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Дата народження:</span> {rawPerson.dateOfBirth?DateEntityTool.getTool(rawPerson.dateOfBirth).buildStringDate():valueOrMessage(null)}</p>
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Серія паспорту:</span> {valueOrMessage(rawPerson.passportData?.passportSerial)}</p>
@@ -97,9 +98,15 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
 
             <section className="entity-images-slider-section">
                 <h4>Фотографії</h4>
-                <div className="entity-images-slider-container">
-                    <ImageSlider imageLinks={rawPerson.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.mediaRootUrl,imagePath))}/>
-                </div>
+                {
+                    person.media.images.length>0
+                    ?
+                        <div className="entity-images-slider-container">
+                            <ImageSlider imageLinks={rawPerson.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.mediaRootUrl,imagePath))}/>
+                        </div>
+                    :
+                        <p>Фотографії особи відсутні</p>
+                }
             </section>
 
             {location &&
@@ -115,15 +122,25 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                 {
                     person.relationships.length > 0 ?
                     <div className={'person-page__relationships-container'}>
-                        {person.relationships.map(relationship=><RelationshipComponent key={relationship.to.id}
-                                                                                       relationship={relationship}
-                                                                                       cssAnchor={relationship.to.location?"":"disabled-geo"}
-                                                                                       geoBtnOnClick={(r,_e)=>{
-                                                                                           if (r.to.location) {
-                                                                                               setLocation(r.to.location);
-                                                                                           }
-                                                                                       }}
-                        />)}
+                        {person.relationships.map(relationship=>{
+
+                            let cssAnchor: string;
+                            if (person.location) {
+                                cssAnchor = relationship.to.location?"":"disabled-geo"
+                            } else {
+                                cssAnchor = "no-geo";
+                            }
+
+                            return (<RelationshipComponent key={relationship.to.id}
+                                                   relationship={relationship}
+                                                   cssAnchor={cssAnchor}
+                                                   geoBtnOnClick={(r,_e)=>{
+                                                       if (location&&r.to.location) {
+                                                           setLocation(r.to.location);
+                                                       }
+                                                   }}
+                            />)
+                        })}
                     </div>
                     :
                     <p>Пов'язані особи відсутні</p>

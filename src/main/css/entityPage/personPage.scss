@@ -151,6 +151,11 @@
   text-align: center;
 }
 
-.person-page__relationship-container.relationship-container__location-btn {
-  fill: rgba(gray,0.5);
+.relationship-container__location-btn {
+  cursor: pointer;
+}
+
+.person-page__relationship-container.disabled-geo .relationship-container__location-btn {
+  fill: rgba(gray,0.4);
+  cursor: auto;
 }

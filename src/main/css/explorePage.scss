@@ -65,6 +65,7 @@
   height: 180px;
   overflow: auto;
   row-gap: 20px;
+  justify-content: space-between;
 }
 
 .explore-page__main {
@@ -72,15 +73,15 @@
 }
 
 .person-container {
-  grid-template-columns: repeat(9, 1fr);
+  grid-template-columns: 30px repeat(8, 8.5%);
 }
 
 .jur-person-container {
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: 30px repeat(6, 11.3%);
 }
 
 .user-container {
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: 30px repeat(5, 13.6%);
 }
 
 .entity-container__column-title  {
