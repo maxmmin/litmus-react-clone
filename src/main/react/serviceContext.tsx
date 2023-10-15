@@ -259,7 +259,7 @@ const notificationContext: NotificationContext = {
     manager: new BasicNotificationManager()
 }
 
-type ServiceContext = {
+export type ServiceContext = {
     auth: AuthContext,
     exploration: ExplorationContext,
     creation: CreationContext,
