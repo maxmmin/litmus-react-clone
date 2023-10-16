@@ -6,7 +6,7 @@ import {useAppSelector} from "../../../redux/hooks";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../CreationScreen";
 import InputDate from "../../sharedComponents/InputDate";
-import Person from "../../../model/human/person/Person";
+import Person, {getFullName} from "../../../model/human/person/Person";
 import {DateEntityTool} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
@@ -15,7 +15,7 @@ import InputError from "../../sharedComponents/InputError";
 import Human from "../../../model/human/Human";
 
 
-const getShortInfo = (person: Human&{id: number}): string => `${person.id}: ${person.lastName} ${person.firstName} ${person.middleName}`
+const getShortInfo = (person: Human&{id: number}): string => `${person.id}: ${getFullName(person)}`
 
 const CreateJurPerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
