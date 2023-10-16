@@ -7,6 +7,7 @@ import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import {LitmusServiceContext} from "../App";
 import appConfig from "../../config/appConfig";
 import ApplicationStateManager from "../../service/appState/ApplicationStateManager";
+import ErrorResponse, {ApplicationError} from "../../rest/ErrorResponse";
 
 
 function HeaderMenu () {
@@ -18,10 +19,24 @@ function HeaderMenu () {
     const authManager: AuthenticationManager = serviceContext.auth.manager;
     const appStateManager: ApplicationStateManager = serviceContext.appState.manager;
 
+    const notificationManager = serviceContext.notification.manager;
+
     async function logout () {
-        await authManager.logout();
-        appStateManager.headerMenuClose();
-        navigate(appConfig.applicationMappings.signIn);
+        try {
+            appStateManager.enablePending()
+            await authManager.logout();
+            appStateManager.headerMenuClose();
+            navigate(appConfig.applicationMappings.signIn);
+        } catch (e) {
+            if (Object.hasOwn(e as object, 'title')) {
+                notificationManager.error((e as ApplicationError<unknown>).title);
+            }
+           
+            console.error(e);
+        } finally {
+            appStateManager.disablePending();
+        }
+
     }
 
     return (

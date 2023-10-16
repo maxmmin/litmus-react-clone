@@ -1,7 +1,7 @@
 import AuthenticationManager from "./AuthenticationManager";
 import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import AuthApiService, {Credentials} from "./api/AuthApiService";
-import {BasicHttpError} from "../../error/BasicHttpError";
+import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import {HttpStatus} from "../../rest/HttpStatus";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import AuthAction from "../../redux/actions/AuthAction";
@@ -71,13 +71,16 @@ class BasicAuthenticationManager implements AuthenticationManager {
             catch (e: any) {
                 return rejectWithValue(deepCopy(e), {notify: true})
             }
-
         }
     );
 
     async logout(): Promise<void> {
-        await this.authService.logOut();
-        this.authenticationStateManager.logout();
+        try {
+            await this.authService.logOut();
+            this.authenticationStateManager.logout();
+        } catch (e: any) {
+            throw HttpErrorParser.parseError(e)
+        }
         return Promise.resolve();
     }
 
