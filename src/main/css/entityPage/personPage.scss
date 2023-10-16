@@ -159,3 +159,17 @@
   fill: rgba(gray,0.4);
   cursor: auto;
 }
+
+.map-tooltip__person-link {
+  color: white;
+
+  &:hover {
+    color: $md-sys-color-inverse-primary-light;
+  }
+}
+
+.person-popup.ol-popup.black  {
+  & .closeBox {
+    color: $md-sys-color-inverse-primary-light;
+  }
+}

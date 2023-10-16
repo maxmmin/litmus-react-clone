@@ -1,4 +1,4 @@
-import Person, {Relationship} from "../../model/human/person/Person";
+import Person, {getFullName, Relationship} from "../../model/human/person/Person";
 import React, {useContext, useEffect, useRef, useState} from "react";
 import OlMap from "ol/Map";
 import TileLayer from "ol/layer/Tile";
@@ -7,14 +7,17 @@ import {Feature, Overlay, View} from "ol";
 import {FullScreen, Zoom} from "ol/control";
 import {GeoLocation} from "../../model/GeoLocation";
 import {defaultMapPosition, transformToTarget} from "../../util/mapUtil";
-import {buildUrl} from "../../util/pureFunctions";
+import {buildUrl, checkNotEmpty} from "../../util/pureFunctions";
 import appConfig from "../../config/appConfig";
-import {LineString} from "ol/geom";
+import {LineString, Point} from "ol/geom";
 import {Vector as VectorLayer} from "ol/layer";
 import Vector from "ol/source/Vector";
+import VectorSource from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
 import {ServiceContext} from "../serviceContext";
 import {LitmusServiceContext} from "../App";
+import Popup from "ol-ext/overlay/Popup";
+import {Entity} from "../../model/Entity";
 
 type PairedRelationships = [Relationship, Relationship]
 
@@ -63,7 +66,7 @@ function getPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelRequi
     return personContainer;
 }
 
-type PersonLabelInfo = {person: PersonLabelRequiredFields, label: HTMLDivElement}
+type PersonLabelInfo = {person: PersonLabelRequiredFields, label: HTMLDivElement, labelOverlay: Overlay}
 function addPersonGeoToMap({person, map, cssAnchor}: { person: PersonLabelRequiredFields, map: OlMap, cssAnchor?: string }): PersonLabelInfo {
     if (!person.location) throw new Error("person has no location")
 
@@ -76,11 +79,22 @@ function addPersonGeoToMap({person, map, cssAnchor}: { person: PersonLabelRequir
         positioning: "center-center"
     });
 
+    personContainer.onclick = (e=>{
+        if (popup.getVisible()) {
+            popup.hide();
+        }
+        popup.show(coordinates, `<a class="map-tooltip__person-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], person.id.toString())}>${getFullName(person)}</a>`)
+    })
+
     label.setMap(map);
     label.setPosition(coordinates);
 
+    label.set("personId", person.id);
+    label.set("fullName", getFullName(person));
+
     return {
         label: personContainer,
+        labelOverlay: label,
         person: person
     };
 }
@@ -165,6 +179,14 @@ function drawRelationshipsLines ({personsToDraw, map}: {personsToDraw: Set<Perso
 
 const defaultZoom: number = 17;
 
+const popup: Popup = new Popup({
+    popupClass: "black person-popup",
+    closeBox: true,
+    autoPan: true,
+    anim: true,
+    positioning: 'bottom-center'
+})
+
 const PersonMap = ({person, externalLocation}: PersonMapProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<OlMap | undefined>();
@@ -217,6 +239,8 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
             const processedLabels: PersonLabelInfo[] = [];
 
             if (person.location) {
+                map.addOverlay(popup);
+
                 const labelData = addPersonGeoToMap({person, map, cssAnchor: "main"})
                 processedLabels.push(labelData)
 
@@ -228,6 +252,14 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
                         cssAnchor: p===person?"main":undefined,
                         map: map
                     }));
+
+                const labelsSource = new VectorSource({});
+
+                [...relLabels, labelData].map(labelData=>{
+                    const overlay = labelData.labelOverlay;
+                    const labelFeature = new Feature({geometry: new Point(checkNotEmpty(overlay.getPosition()))})
+                    labelsSource.addFeature(labelFeature);
+                })
 
                 processedLabels.push(...relLabels);
 
@@ -269,6 +301,12 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
             return ()=>map.getView().un("change:resolution", resizeCallback);
         }
     }, [map, personsLabels])
+
+    useEffect(()=>{
+        return ()=>{
+            map?.dispose();
+        }
+    }, [map])
 
     return (
         <div ref={mapTargetElement} className="person-map">
