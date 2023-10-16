@@ -102,6 +102,7 @@ export default class BasicPersonRelationshipsBinder implements PersonRelationshi
             if (!person) throw new Error("person was not found "+id)
             this.personsStore.set(id, person);
         })
+
         return this.buildRipePerson(rawPerson, all);
     }
 
