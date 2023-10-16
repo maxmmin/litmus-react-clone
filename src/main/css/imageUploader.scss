@@ -7,6 +7,14 @@
 
 .uploaded-image__info {
   flex-grow: 1;
+  width: 0;
+  word-break: keep-all;
+  white-space: nowrap;
+  overflow: scroll;
+}
+
+.uploaded-image__info::-webkit-scrollbar {
+  display: none;
 }
 
 .uploaded-image__actions-block {
