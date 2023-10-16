@@ -35,6 +35,7 @@
 ![Screenshot from 2023-10-16 13-02-15](https://github.com/maxmmin/litmus-react/assets/96373600/2416099e-2010-4d19-9b8b-a7f44b9ad463)
 ![Screenshot from 2023-10-16 13-02-23](https://github.com/maxmmin/litmus-react/assets/96373600/46502ccb-46a3-4dd0-aa6d-2946e8aec81b)
 ![Screenshot from 2023-10-16 13-02-29](https://github.com/maxmmin/litmus-react/assets/96373600/d7c07711-5cac-4dfe-a8d3-0b232126e969)
+![Screenshot from 2023-10-16 13-16-19](https://github.com/maxmmin/litmus-react/assets/96373600/c987d829-5147-42eb-922c-85d73c9316ef)
 ![Screenshot from 2023-10-16 13-11-14](https://github.com/maxmmin/litmus-react/assets/96373600/85f5a67b-4980-43b7-9fc2-0a850fec2baf)
 ![Screenshot from 2023-10-16 13-02-45](https://github.com/maxmmin/litmus-react/assets/96373600/62b82509-803f-4e30-b37a-69b3143fc306)
 
