@@ -6,7 +6,7 @@ export const noInfoMessage = "Інформація відсутня"
 class BasicHttpError<D> extends Error implements ApplicationError<D> {
     public readonly detail: D | null;
     public readonly status: number;
-    public readonly title: string;
+    public readonly error: string;
     code: string | null;
 
     public getDescription () {
@@ -16,7 +16,7 @@ class BasicHttpError<D> extends Error implements ApplicationError<D> {
             detail = this.detail;
         }
 
-        let msg = `Error ${this.status}: ${this.title}`;
+        let msg = `Error ${this.status}: ${this.error}`;
 
         if (detail) msg+=` - ${detail.toLowerCase()}`;
 
@@ -25,10 +25,10 @@ class BasicHttpError<D> extends Error implements ApplicationError<D> {
 
 
     constructor(error: ApplicationError<D>) {
-        super("Error "+error.status+" "+error.title)
+        super("Error "+error.status+" "+error.error)
         this.detail = error.detail;
         this.status = error.status;
-        this.title = error.title;
+        this.error = error.error;
         this.code = error.code;
     }
 }
@@ -36,7 +36,7 @@ class BasicHttpError<D> extends Error implements ApplicationError<D> {
 class HttpErrorParser {
     private static getErrorResponse(err: unknown): ErrorResponse<unknown> {
         let status: number = -1;
-        let title: string = 'Unknown error';
+        let error: string = 'Unknown error';
         let detail: unknown = null;
 
         if (err&&typeof err === "object") {
@@ -44,12 +44,10 @@ class HttpErrorParser {
                 status = err["status"] as number;
             }
 
-            if ("title" in err) {
-                title = err["title"] as string;
-            } else if ("error" in err) {
-                title = err["error"] as string;
-            }   else if ("message" in err) {
-                title = err.message as string;
+            if ("error" in err) {
+                error = err["error"] as string;
+            } else if ("message" in err) {
+                error = err.message as string;
             }
 
             if ("detail" in err) {
@@ -57,11 +55,11 @@ class HttpErrorParser {
             }
         }
 
-        return {status, title, detail};
+        return {status, error: error, detail};
     }
 
     static formErrorDescription(error: ErrorResponse<unknown>): string {
-        return `Error ${error.status}: ${error.title}`
+        return `Error ${error.status}: ${error.error}`
     }
 
     static parseError(error: unknown): ApplicationError<unknown> {

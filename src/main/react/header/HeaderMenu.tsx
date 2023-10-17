@@ -29,7 +29,7 @@ function HeaderMenu () {
             navigate(appConfig.applicationMappings.signIn);
         } catch (e) {
             if (Object.hasOwn(e as object, 'title')) {
-                notificationManager.error((e as ApplicationError<unknown>).title);
+                notificationManager.error((e as ApplicationError<unknown>).error);
             }
            
             console.error(e);

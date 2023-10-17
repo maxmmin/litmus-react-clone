@@ -105,7 +105,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         let isIdValid = false;
 
         if (isNaN(id)) {
-            setSearchError({detail: null, status: HttpStatus.UNKNOWN_ERROR, title: "Невалідний ідентифікатор"});
+            setSearchError({detail: null, status: HttpStatus.UNKNOWN_ERROR, error: "Невалідний ідентифікатор"});
         } else {
             setSearchError(null);
             isIdValid = true;
@@ -182,7 +182,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
                 if (sourceRelObject?.isPresent(relationship)) {
                     const err: ErrorResponse<null> = {
-                        title: "Дана особа вже присутня в списку відносин",
+                        error: "Дана особа вже присутня в списку відносин",
                         status: HttpStatus.UNKNOWN_ERROR,
                         detail: null
                     }
@@ -262,7 +262,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                             </div>
 
                             {searchError?
-                                <p className="apply-person-modal__error-description">{searchError.title}</p>
+                                <p className="apply-person-modal__error-description">{searchError.error}</p>
                                 :
                                 null
                             }

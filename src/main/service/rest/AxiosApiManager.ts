@@ -55,39 +55,20 @@ class AxiosApiManager {
             async (err: AxiosError<ErrorResponse<unknown>>) => {
                 const {config} = err;
 
-                const noHandlerApiInstance = AxiosApiManager.createRawApiInstance();
-                if (AxiosApiManager.csrfToken!==undefined) AxiosApiManager.setCsrfTokenToInstance(noHandlerApiInstance,AxiosApiManager.csrfToken);
+                const noAuthHandlerApiInstance = AxiosApiManager.createRawApiInstance();
+                if (AxiosApiManager.csrfToken!==undefined) AxiosApiManager.setCsrfTokenToInstance(noAuthHandlerApiInstance,AxiosApiManager.csrfToken);
 
                 if (manager.isAuthenticated() && config && err.response?.status === HttpStatus.UNAUTHENTICATED) {
 
                     try {
-                        await noHandlerApiInstance.post(appConfig.serverMappings.auth.refreshTokens, {});
+                        await noAuthHandlerApiInstance.post(appConfig.serverMappings.auth.refreshTokens, {});
                     } catch {
-                        await noHandlerApiInstance.post(appConfig.serverMappings.auth.logout, {}).catch(console.error);
+                        await noAuthHandlerApiInstance.post(appConfig.serverMappings.auth.logout, {}).catch(console.error);
                         this.authStateManager.logout();
                         return Promise.reject(err);
                     }
 
                     return await globalInstance(config);
-                }
-
-                if (config?.url
-                    &&
-                    config.url.includes(appConfig.serverMappings.auth.refreshTokens)
-                    &&
-                    err.response?.status===HttpStatus.FORBIDDEN) {
-                    try {
-                        const csrfResponse = await noHandlerApiInstance.get<CsrfResponse>(appConfig.serverMappings.csrfToken, {});
-
-                        const token = csrfResponse.data.token;
-
-                        this.setCsrfToken(csrfResponse.data.token);
-                        AxiosApiManager.setCsrfTokenToInstance(noHandlerApiInstance, token);
-
-                        return await noHandlerApiInstance.request(config)
-                    } catch (e) {
-                        return Promise.reject(e);
-                    }
                 }
 
                 return Promise.reject(err);
@@ -97,13 +78,39 @@ class AxiosApiManager {
         return globalInstance;
     }
 
-    private static createRawApiInstance () {
-        return  axios.create({
+    private static createRawApiInstance (): AxiosInstance {
+        const axiosInstance =  axios.create({
             baseURL: appConfig.serverMappings.apiHost,
             xsrfCookieName: "",
             xsrfHeaderName: "",
             withCredentials: true
         });
+
+        axiosInstance.interceptors.response.use((response) => response,
+            async (err: AxiosError<ErrorResponse<unknown>>)=>{
+                const {config} = err;
+
+                try {
+                    if (config&&err.response?.status===HttpStatus.FORBIDDEN) {
+                        const errData = err.response?.data;
+                        if (errData&&errData.error===appConfig.csrfErrCode) {
+                            const csrfResponse = await axiosInstance.get<CsrfResponse>(appConfig.serverMappings.csrfToken, {});
+
+                            const token = csrfResponse.data.token;
+
+                            this.setCsrfToken(csrfResponse.data.token);
+                            AxiosApiManager.setCsrfTokenToInstance(axiosInstance, token);
+
+                            return await axiosInstance.request(config)
+                        }
+                    }
+                    return Promise.reject(err);
+                } catch {
+                    return Promise.reject(err);
+                }
+            })
+
+        return axiosInstance;
     }
 
 }

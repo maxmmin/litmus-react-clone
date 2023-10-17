@@ -8,7 +8,8 @@ type AppConfig = {
     serverMappings: Readonly<typeof serverMappings>,
     applicationMappings: Readonly<typeof applicationMappings>
     xsrfCookieName: string,
-    xsrfHeaderName: string
+    xsrfHeaderName: string,
+    csrfErrCode: string
 }
 
 const host = "http://localhost:8081";
@@ -91,7 +92,8 @@ const appConfig: AppConfig = {
     serverMappings: serverMappings,
     applicationMappings: applicationMappings,
     xsrfCookieName: 'XSRF-TOKEN',
-    xsrfHeaderName: 'X-XSRF-TOKEN'
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    csrfErrCode: 'csrf:error'
 }
 
 export default appConfig;

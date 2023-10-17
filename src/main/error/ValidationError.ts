@@ -13,7 +13,7 @@ export default class ValidationError<E> extends Error implements ErrorResponse<E
 
     detail: E | null;
     status: number = HttpStatus.UNPROCESSABLE_ENTITY;
-    title: string = "Деякі поля мають невалідні значення";
+    error: string = "Деякі поля мають невалідні значення";
 
 
 
