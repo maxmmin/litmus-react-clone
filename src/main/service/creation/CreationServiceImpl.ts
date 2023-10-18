@@ -67,10 +67,12 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
             if (e instanceof ValidationError<unknown>) {
                 this.creationStateManager.setValidationErrors(e.errors);
             } else if (e instanceof AxiosError && e.response?.status===HttpStatus.UNPROCESSABLE_ENTITY) {
-                const validationResponse = (e as AxiosError<ValidationResponse<S>>).response?.data;
+                const validationResponse = (e as AxiosError<Partial<ValidationResponse<S>>>).response?.data;
                 if (validationResponse) {
-                    const validationErrors = this.validationService.mapServerValidationErrors(validationResponse.detail.validationErrors);
-                    this.creationStateManager.setValidationErrors(validationErrors);
+                    if (typeof validationResponse.detail === 'object'&&validationResponse.detail.validationErrors) {
+                        const validationErrors = this.validationService.mapServerValidationErrors(validationResponse.detail.validationErrors);
+                        this.creationStateManager.setValidationErrors(validationErrors);
+                    }
                 }
             }
 

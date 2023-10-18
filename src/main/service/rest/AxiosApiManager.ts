@@ -59,7 +59,6 @@ class AxiosApiManager {
                 if (AxiosApiManager.csrfToken!==undefined) AxiosApiManager.setCsrfTokenToInstance(noAuthHandlerApiInstance,AxiosApiManager.csrfToken);
 
                 if (manager.isAuthenticated() && config && err.response?.status === HttpStatus.UNAUTHENTICATED) {
-
                     try {
                         await noAuthHandlerApiInstance.post(appConfig.serverMappings.auth.refreshTokens, {});
                     } catch {
