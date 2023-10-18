@@ -1,5 +1,4 @@
 import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
-import User from "../../../model/human/user/User";
 import {RoleName} from "../userIdentity/Role";
 import {
     userDefaultValidationObject, UserValidationObject
