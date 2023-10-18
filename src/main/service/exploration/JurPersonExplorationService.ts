@@ -20,22 +20,23 @@ import UnsupportedModeError from "./UnsupportedModeError";
 import JurPersonExplorationParams from "../../redux/types/exploration/jurPerson/JurPersonExplorationParams";
 import JurPersonExplorationStateManager from "./stateManager/jurPerson/JurPersonExplorationStateManager";
 import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
-import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 
-type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) => Promise<PagedData<JurPerson>>;
+type JurPersonExplorationMapper = DtoMapper<any, JurPerson, JurPersonResponseDto,any>
+
+type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: JurPersonExplorationMapper) => Promise<PagedData<JurPerson>>;
 
 class JurPersonExplorationService implements ExplorationService {
 
     constructor(private readonly stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>,
                 private readonly service: JurPersonExplorationApiService,
-                private readonly mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto>) {
+                private readonly mapper: JurPersonExplorationMapper) {
     }
 
     public static getInstance(stateManager: JurPersonExplorationStateManager = new JurPersonExplorationStateManagerImpl(),
                        service: JurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance(),
-                       mapper: DtoMapper<unknown, JurPerson, JurPersonResponseDto> = new JurPersonDtoMapperImpl(),
+                       mapper: JurPersonExplorationMapper = new JurPersonDtoMapperImpl(),
                     ) {
         return new JurPersonExplorationService(stateManager,service,mapper)
     }
