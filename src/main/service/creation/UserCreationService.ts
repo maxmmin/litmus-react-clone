@@ -15,7 +15,9 @@ import UserDtoMapperImpl from "../../rest/dto/dtoMappers/UserDtoMapperImpl";
 import UserCreationApiServiceImpl from "./api/UserCreationApiServiceImpl";
 import UserCreationApiService from "./api/UserCreationApiService";
 
-export type UserCreationParams = Omit<User, "id">
+export type UserCreationParams = Omit<User, "id">&{
+    repeatPassword: string
+}
 
 class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto, UserCreationParams, UserValidationObject, ServerUserValidationObject> {
 

@@ -11,7 +11,7 @@ import valueOrNull from "../../../../../util/valueOrNull";
 import {UserCreationParams} from "../../../UserCreationService";
 
 class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<UserCreationParams, UserValidationObject, ServerUserValidationObject> implements UserCreationValidationService {
-    validate(model: User): UserValidationObject {
+    validate(model: UserCreationParams): UserValidationObject {
         const bindingResult: UserValidationObject = {
             ...super.validateFullName(model),
             email: null,
