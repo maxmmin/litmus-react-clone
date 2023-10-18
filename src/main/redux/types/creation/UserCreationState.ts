@@ -15,7 +15,8 @@ export const initialUserCreationParams: UserCreationParams = {
     lastName: "",
     middleName: "",
     password: "",
-    role: RoleName.USER
+    role: RoleName.USER,
+    repeatPassword: ""
 }
 
 

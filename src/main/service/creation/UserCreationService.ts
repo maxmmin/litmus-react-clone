@@ -14,9 +14,11 @@ import UserCreationValidationServiceImpl from "./validation/human/user/UserCreat
 import UserDtoMapperImpl from "../../rest/dto/dtoMappers/UserDtoMapperImpl";
 import UserCreationApiServiceImpl from "./api/UserCreationApiServiceImpl";
 import UserCreationApiService from "./api/UserCreationApiService";
+import {RoleName} from "../../redux/types/userIdentity/Role";
 
-export type UserCreationParams = Omit<User, "id">&{
-    repeatPassword: string
+export type UserCreationParams = Omit<User, "id"|"role">&{
+    repeatPassword: string,
+    role: RoleName
 }
 
 class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto, UserCreationParams, UserValidationObject, ServerUserValidationObject> {

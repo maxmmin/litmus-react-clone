@@ -73,6 +73,9 @@ const CreateUser = () => {
                 <Form.Label>Повторіть пароль</Form.Label>
                 <input autoComplete={"new-password"} className={`passport-number form-control`} type="password" placeholder="Повторіть пароль"
                        onKeyDown={keyPressHandler}
+                       onChange={(e)=>creationStateManager.updateEntityCreationParams({
+                           repeatPassword: e.currentTarget.value
+                       })}
                 />
             </Form.Group>
         </>

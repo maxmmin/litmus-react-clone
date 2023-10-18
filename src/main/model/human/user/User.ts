@@ -1,4 +1,4 @@
-import {RoleName} from "../../../redux/types/userIdentity/Role";
+import Role, {RoleName} from "../../../redux/types/userIdentity/Role";
 import Human from "../Human";
 import CoreEntity from "../../CoreEntity";
 
@@ -7,7 +7,7 @@ interface User extends Human, CoreEntity {
 
     password: string
 
-    role: RoleName;
+    role: Role;
 }
 
 export default User;

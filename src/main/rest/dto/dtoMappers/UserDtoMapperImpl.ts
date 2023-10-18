@@ -5,6 +5,8 @@ import {hasContent} from "../../../util/isEmpty";
 import UserResponseDto from "../user/UserResponseDto";
 import {UserCreationParams} from "../../../service/creation/UserCreationService";
 import UserDtoMapper from "./UserDtoMapper";
+import {checkNotEmpty} from "../../../util/pureFunctions";
+import Role from "../../../redux/types/userIdentity/Role";
 
 
 class UserDtoMapperImpl implements UserDtoMapper {
@@ -46,7 +48,7 @@ class UserDtoMapperImpl implements UserDtoMapper {
             middleName: exploredEntityDto.middleName,
             lastName: exploredEntityDto.lastName,
             password: exploredEntityDto.password,
-            role: exploredEntityDto.role
+            role: checkNotEmpty(Role[exploredEntityDto.role])
         }
     }
 
