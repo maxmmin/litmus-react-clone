@@ -165,7 +165,7 @@ const CreateUser = () => {
 
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Роль</Form.Label>
-                <Form.Select className="explore__select" value={RoleName.USER} onChange={e=>{
+                <Form.Select className="explore__select" value={user.role} onChange={e=>{
                     const roleName = RoleName[e.currentTarget.value as RoleName];
                     if (!roleName) throw new Error("unknown role");
                     creationStateManager.updateEntityCreationParams({role: roleName})
