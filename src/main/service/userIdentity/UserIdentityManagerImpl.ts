@@ -34,7 +34,7 @@ class UserIdentityManagerImpl implements UserIdentityManager{
     public _retrieveIdentityThunk = createAsyncThunk<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig>(UserIdentityActions.RETRIEVE_IDENTITY, async ({identityService}, {fulfillWithValue, rejectWithValue})=>{
         try {
             const userIdentity: UserIdentity = await identityService.retrieveIdentity();
-            return fulfillWithValue(userIdentity, {notify: false});
+            return fulfillWithValue(deepCopy(userIdentity), {notify: false});
         }
         catch (e: any) {
             return rejectWithValue(handleRequestError(e), {notify: true});
@@ -43,7 +43,7 @@ class UserIdentityManagerImpl implements UserIdentityManager{
 
     async clearIdentity (): Promise<void> {
         const action: Action<UserIdentityActions> = {type: UserIdentityActions.CLEAR_IDENTITY}
-        await this.dispatch(action);
+        this.dispatch(action);
         return Promise.resolve();
     }
 }
