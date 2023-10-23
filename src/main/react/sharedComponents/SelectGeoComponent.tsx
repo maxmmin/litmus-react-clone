@@ -86,7 +86,6 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
                 const sourceCoordinates = transformToSource(coordinates);
 
                 setLocation(sourceCoordinates);
-                console.log(sourceCoordinates)
             })
 
             olMap.addOverlay(locationPopup);
@@ -119,7 +118,7 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
 
 const GeoComponent = ({location, setLocation}: LocationProps) => {
     const geocodingService = useContext(LitmusServiceContext).geocodingService;
-    console.log(location)
+
     return (
     <>
         <div className="places-container">
