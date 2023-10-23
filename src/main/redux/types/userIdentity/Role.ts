@@ -1,8 +1,8 @@
 enum RoleName {
-    ADMIN='ADMIN',
+    USER='USER',
     MODERATOR='MODERATOR',
     SUPER_MODERATOR='SUPER_MODERATOR',
-    USER='USER'
+    ADMIN='ADMIN',
 }
 
 enum Permissions {
@@ -23,17 +23,19 @@ const moderatorPermissions = Array.from([Permissions.DATA_READ, Permissions.DATA
 const userPermissions = Array.from([Permissions.DATA_READ]);
 
 class Role {
-    static [RoleName.ADMIN] = new Role(RoleName.ADMIN, adminPermissions)
-    static [RoleName.SUPER_MODERATOR] = new Role(RoleName.SUPER_MODERATOR, superModeratorPermissions);
-    static [RoleName.MODERATOR] = new Role(RoleName.MODERATOR, moderatorPermissions);
-    static [RoleName.USER] = new Role(RoleName.USER, userPermissions);
+    static [RoleName.ADMIN] = new Role(RoleName.ADMIN, adminPermissions, "Адміністратор")
+    static [RoleName.SUPER_MODERATOR] = new Role(RoleName.SUPER_MODERATOR, superModeratorPermissions, "Супермодератор");
+    static [RoleName.MODERATOR] = new Role(RoleName.MODERATOR, moderatorPermissions, "Модератор");
+    static [RoleName.USER] = new Role(RoleName.USER, userPermissions, "Користувач");
 
     readonly role: RoleName;
     readonly permissions: Permissions[];
+    readonly canonicalName: string;
 
-    private constructor(role: RoleName, permissions: Permissions[]) {
+    private constructor(role: RoleName, permissions: Permissions[], canonicalName: string) {
         this.role = role;
         this.permissions = permissions;
+        this.canonicalName = canonicalName;
     }
 }
 

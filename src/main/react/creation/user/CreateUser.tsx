@@ -1,13 +1,14 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import React, {useContext, useEffect} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import UserCreationStateManager from "../../../service/creation/stateManager/user/UserCreationStateManager";
 import {useAppSelector} from "../../../redux/hooks";
 import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
 import UserCreationValidationService
     from "../../../service/creation/validation/human/user/UserCreationValidationService";
-
+import Role, {RoleName} from "../../../redux/types/userIdentity/Role";
+import {VisibilityDisabledIcon, VisibilityEnabledIcon} from "../../../util/icons";
 
 const CreateUser = () => {
     const context = useContext(LitmusServiceContext);
@@ -60,6 +61,11 @@ const CreateUser = () => {
             creationStateManager.updateValidationErrors({firstName: null})
         }
     }, [user.firstName, user.middleName, user.lastName])
+
+    const [passwordsVisibility, setPasswordsVisibility] = useState<{password: boolean, repeatPassword: boolean}>({
+        password: false,
+        repeatPassword: false
+    })
 
     return (
         <>
@@ -114,8 +120,17 @@ const CreateUser = () => {
             </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item">
-                <Form.Label>Пароль</Form.Label>
-                <input autoComplete={"new-password"} className={`passport-number form-control ${validationErrors?.password?'is-invalid':''}`} type="password" placeholder="Введіть пароль"
+                <Form.Label>Пароль <span className={"password__visibility"} onClick={()=>{
+                    setPasswordsVisibility(prev=>({...prev, password: !prev.password}))
+                    }}>
+                        {passwordsVisibility.password?
+                            <VisibilityDisabledIcon className={"password__visibility-icon password__visibility-icon_disabled"} color={"darkgrey"}/>
+                            :
+                            <VisibilityEnabledIcon className={"password__visibility-icon password__visibility-icon_enabled"} color={"darkgrey"}/>}
+                    </span>
+                </Form.Label>
+                <input autoComplete={"new-password"} className={`passport-number form-control ${validationErrors?.password?'is-invalid':''}`}
+                       type={passwordsVisibility.password?"text":"password"} placeholder="Введіть пароль"
                        onKeyDown={keyPressHandler}
                        value={user.password}
                        onChange={e=>{
@@ -125,8 +140,20 @@ const CreateUser = () => {
                 <InputError error={validationErrors?.password}/>
             </Form.Group>
             <Form.Group className="mb-3 creation-input-group__item">
-                <Form.Label>Повторіть пароль</Form.Label>
-                <input autoComplete={"new-password"} className={`passport-number form-control ${validationErrors?.repeatPassword?'is-invalid':''}`} type="password" placeholder="Повторіть пароль"
+                <Form.Label>
+                    Повторіть пароль <span className={"password__visibility"} onClick={()=>{
+                        setPasswordsVisibility(prev=>({...prev, repeatPassword: !prev.repeatPassword}))
+                    }}>
+                        {passwordsVisibility.repeatPassword?
+                            <VisibilityDisabledIcon className={"password__visibility-icon password__visibility-icon_disabled"} color={"darkgrey"}/>
+                                :
+                            <VisibilityEnabledIcon className={"password__visibility-icon password__visibility-icon_enabled"} color={"darkgrey"}/>}
+                    </span>
+                </Form.Label>
+                <input autoComplete={"new-password"}
+                       className={`passport-number form-control ${validationErrors?.repeatPassword?'is-invalid':''}`}
+                       type={passwordsVisibility.repeatPassword?"text":"password"}
+                       placeholder="Повторіть пароль"
                        onKeyDown={keyPressHandler}
                        value={user.repeatPassword}
                        onChange={(e)=>creationStateManager.updateEntityCreationParams({
@@ -134,6 +161,19 @@ const CreateUser = () => {
                        })}
                 />
                 <InputError error={validationErrors?.repeatPassword}/>
+            </Form.Group>
+
+            <Form.Group className="mb-3 creation-input-group__item">
+                <Form.Label>Роль</Form.Label>
+                <Form.Select className="explore__select" value={RoleName.USER} onChange={e=>{
+                    const roleName = RoleName[e.currentTarget.value as RoleName];
+                    if (!roleName) throw new Error("unknown role");
+                    creationStateManager.updateEntityCreationParams({role: roleName})
+                }}>
+                    {Object.keys(RoleName).map((mode, index)=>
+                        <option key={index} value={mode}>{Role[mode as RoleName].canonicalName}</option>)
+                    }
+                </Form.Select>
             </Form.Group>
         </>
     )
