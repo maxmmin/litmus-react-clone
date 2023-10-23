@@ -1,5 +1,5 @@
 import HumanCreationValidationService from "./HumanCreationValidationService";
-import Human, {FullNameCreationParams} from "../../../../model/human/Human";
+import Human, {FullNameCreationParams, HumanCreationParams} from "../../../../model/human/Human";
 import {ValidationErrors} from "../../../ValidationErrors";
 
 
@@ -24,7 +24,7 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
         };
     }
 
-    isFirstNameValid(firstName: Human["firstName"]): string|null {
+    isFirstNameValid(firstName: HumanCreationParams["firstName"]): string|null {
         if (firstName) {
             if (firstName.length<3||firstName?.length>32) {
                 return "Довжина імені повина бути між 3 та 32 символами"
@@ -38,7 +38,7 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
         } else return "Поле обов'язкове до заповнення"
     }
 
-    isMiddleNameValid(middleName: Human["middleName"]): string|null {
+    isMiddleNameValid(middleName: HumanCreationParams["middleName"]): string|null {
         if (middleName) {
             if (middleName.length<3||middleName.length>32) {
                 return "Довжина імені повина бути між 3 та 32 символами"
@@ -52,7 +52,7 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
         return null;
     }
 
-    isLastNameValid(lastName: Human["lastName"]): string|null {
+    isLastNameValid(lastName: HumanCreationParams["lastName"]): string|null {
         if (lastName) {
             if (lastName?.length<3||lastName?.length>32) {
                 return "Довжина прізвища повина бути між 3 та 32"

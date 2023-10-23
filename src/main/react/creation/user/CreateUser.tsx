@@ -1,17 +1,39 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import React, {useContext} from "react";
+import React, {useContext, useEffect} from "react";
 import UserCreationStateManager from "../../../service/creation/stateManager/user/UserCreationStateManager";
 import {useAppSelector} from "../../../redux/hooks";
 import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
+import UserCreationValidationService
+    from "../../../service/creation/validation/human/user/UserCreationValidationService";
 
 
 const CreateUser = () => {
+    const context = useContext(LitmusServiceContext);
+    const user = useAppSelector(state => state.creation.user?.emergingEntity)!
 
-    const creationStateManager: UserCreationStateManager = useContext(LitmusServiceContext).creation.stateManagers.user;
-    // todo: this section
+    const creationStateManager: UserCreationStateManager = context.creation.stateManagers.user;
+    const validationService: UserCreationValidationService = context.creation.validation.user;
+
     const validationErrors = useAppSelector(state => state.creation.user?.validationErrors);
+
+    useEffect(()=>{
+        const updatedFullNameErrors = validationService.validateFullName(user);
+
+        if (validationErrors?.middleName&&!updatedFullNameErrors?.middleName) {
+            creationStateManager.updateValidationErrors({middleName: null})
+        }
+
+        if (validationErrors?.lastName&&!updatedFullNameErrors.lastName) {
+            creationStateManager.updateValidationErrors({lastName: null})
+        }
+
+        if (validationErrors?.firstName&&!updatedFullNameErrors.firstName) {
+            creationStateManager.updateValidationErrors({firstName: null})
+        }
+    }, [user.firstName, user.middleName, user.lastName])
+
     return (
         <>
             <Form.Group className="mb-3 creation-input-group__item">

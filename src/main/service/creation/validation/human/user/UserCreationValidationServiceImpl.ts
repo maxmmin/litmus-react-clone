@@ -2,10 +2,9 @@ import UserCreationValidationService, {
     ServerUserValidationObject,
     UserValidationObject
 } from "./UserCreationValidationService";
-import Human from "../../../../../model/human/Human";
+import Human, {FullNameCreationParams, HumanCreationParams} from "../../../../../model/human/Human";
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
 import {ValidationErrors} from "../../../../ValidationErrors";
-import User from "../../../../../model/human/user/User";
 import {hasContent} from "../../../../../util/isEmpty";
 import valueOrNull from "../../../../../util/valueOrNull";
 import {UserCreationParams} from "../../../UserCreationService";
@@ -47,21 +46,17 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
         } else return null;
     }
 
-
-
     validatePassword(password: UserCreationParams["password"]): string | null {
         const valid = UserCreationValidationServiceImpl.PASSWORD_REG_EXP.test(password);
         if (!valid) return "Некоректний пароль. Пароль повинен мати від 8 до 64 символів, може містити латиницю,цифри, та символи  '@', '*', '#', '_'";
         else return null;
     }
 
-
-
     hasErrors(bindingResult: UserValidationObject): boolean {
         return hasContent(bindingResult);
     }
 
-    isMiddleNameValid(middleName: Human["middleName"]): string | null {
+    isMiddleNameValid(middleName: HumanCreationParams["middleName"]): string | null {
         if (middleName) {
             return super.isMiddleNameValid(middleName);
         } else return "Поле обов'язкове до заповнення";

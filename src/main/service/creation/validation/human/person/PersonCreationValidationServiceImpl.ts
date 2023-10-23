@@ -4,7 +4,7 @@ import PersonCreationValidationService, {
     PersonValidationObject, RelationShipValidationObject,
     ServerPersonValidationObject
 } from "./PersonCreationValidationService";
-import Person, {Relationship} from "../../../../../model/human/person/Person";
+import Person from "../../../../../model/human/person/Person";
 import {ValidationErrors} from "../../../../ValidationErrors";
 import Human from "../../../../../model/human/Human";
 import {DateEntityTool} from "../../../../../model/DateEntity";

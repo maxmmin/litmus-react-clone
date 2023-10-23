@@ -48,8 +48,6 @@ const CreatePerson = () => {
 
     const {firstName, middleName, lastName} = person;
 
-    const dateOfBirth = person.dateOfBirth;
-
     const {year, month, day} = person!.dateOfBirth||{day: "", month: "", year: ""};
 
     const passportData = person?.passportData;
