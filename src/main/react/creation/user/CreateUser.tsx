@@ -37,6 +37,15 @@ const CreateUser = () => {
     }, [user.password])
 
     useEffect(()=>{
+        if (validationErrors?.repeatPassword) {
+            const updatedPwdErr = validationService.isPasswordConfirmed(user);
+            if (!updatedPwdErr) {
+                creationStateManager.updateValidationErrors({repeatPassword: null})
+            }
+        }
+    }, [user.password])
+
+    useEffect(()=>{
         const updatedFullNameErrors = validationService.validateFullName(user);
 
         if (validationErrors?.middleName&&!updatedFullNameErrors?.middleName) {

@@ -17,7 +17,7 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
     private static readonly EMAIL_REG_EXP = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     validate(model: UserCreationParams): UserValidationObject {
-        const isPwdConfirmed = this.checkIsPasswordConfirmed(model);
+        const isPwdConfirmed = this.isPasswordConfirmed(model);
         const bindingResult: UserValidationObject = {
             ...super.validateFullName(model),
             email: this.validateEmail(model.email),
@@ -40,7 +40,7 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
         else return null;
     }
 
-    checkIsPasswordConfirmed(model: UserCreationParams): string | null {
+    isPasswordConfirmed(model: Pick<UserCreationParams, "password"|"repeatPassword">): string | null {
         if (model.password!==model.repeatPassword) {
             return "Passwords do not match";
         } else return null;

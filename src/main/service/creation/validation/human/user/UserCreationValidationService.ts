@@ -20,7 +20,7 @@ export type ServerUserValidationObject = Partial<ValidationErrors<UserCreationPa
 
 export default interface UserCreationValidationService extends HumanCreationValidationService<UserCreationParams, UserValidationObject, ServerUserValidationObject> {
     validatePassword(password: UserCreationParams["password"]): string|null
-    checkIsPasswordConfirmed(model: Pick<UserCreationParams, "password"|"repeatPassword">): string|null
+    isPasswordConfirmed(model: Pick<UserCreationParams, "password"|"repeatPassword">): string|null
     validateEmail(email: UserCreationParams["email"]): string|null;
     validateRole(role: RoleName): string|null;
 }
