@@ -1,7 +1,6 @@
 import HumanCreationValidationService from "../HumanCreationValidationService";
 import User from "../../../../../model/human/user/User";
 import {ValidationErrors} from "../../../../ValidationErrors";
-import FullName from "../../../../exploration/FullName";
 import {UserCreationParams} from "../../../UserCreationService";
 import {RoleName} from "../../../../../redux/types/userIdentity/Role";
 
@@ -17,7 +16,7 @@ export const userDefaultValidationObject: UserValidationObject = {
     role: null
 }
 
-export type ServerUserValidationObject = Partial<ValidationErrors<User>>;
+export type ServerUserValidationObject = Partial<ValidationErrors<UserCreationParams>>;
 
 export default interface UserCreationValidationService extends HumanCreationValidationService<UserCreationParams, UserValidationObject, ServerUserValidationObject> {
     validatePassword(password: UserCreationParams["password"]): string|null

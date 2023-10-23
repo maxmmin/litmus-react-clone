@@ -31,7 +31,7 @@ const PrivateComponent = ({component, mode, requiredPermissions}: Props) => {
 
     const isAuthorized: boolean = useMemo(()=>{
             if (user) {
-                return checkAuthorization(requiredPermissions, user.permissions)
+                return checkAuthorization(requiredPermissions, user.role.permissions)
             }
             return false;
     },[user, requiredPermissions]);

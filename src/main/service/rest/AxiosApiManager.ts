@@ -4,7 +4,7 @@ import {HttpStatus} from "../../rest/HttpStatus";
 import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
 import ErrorResponse from "../../rest/ErrorResponse";
 import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
-import {HttpMethod} from "../../util/apiRequest/ApiRequestManager";
+import {HttpMethod} from "./Http";
 
 type CsrfResponse = {
     "token": string,

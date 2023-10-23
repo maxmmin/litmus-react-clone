@@ -1,4 +1,4 @@
-import {getFullName, getRelationTypeFrom, Relationship, RelationType} from "../../../model/human/person/Person";
+import {RelationType} from "../../../model/human/person/Person";
 import {FloatingLabel, Form} from "react-bootstrap";
 import React, {useEffect} from "react";
 import {CrossIcon, DashedUserIcon} from "../../../util/icons";
@@ -14,6 +14,8 @@ import {useSelector} from "react-redux";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
+import getFullName from "../../../util/getFullName";
+import {getRelationTypeFrom} from "../../../service/relationships/RelationshipsLinkObject";
 
 
 type Props = {

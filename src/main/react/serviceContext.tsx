@@ -84,17 +84,21 @@ import BasicPersonRelationshipsResponseDtoScanner from "../service/relationships
 import BasicPersonRelationshipsLoader from "../service/relationships/BasicPersonRelationshipsLoader";
 import BasicPersonRelationshipsBinder from "../service/relationships/BasicPersonRelationshipsBinder";
 import BasicRipePersonRelationshipsUtil from "../service/relationships/BasicRipePersonRelationshipsUtil";
+import UserIdentityDtoMapper from "../rest/dto/dtoMappers/UserIdentityDtoMapper";
+import UserIdentityDtoMapperImpl from "../rest/dto/dtoMappers/UserIdentityDtoMapperImpl";
 
 type Mappers = {
     user: UserDtoMapper,
     person: PersonDtoMapper,
-    jurPerson: JurPersonDtoMapper
+    jurPerson: JurPersonDtoMapper,
+    userIdentity: UserIdentityDtoMapper
 }
 
 const mappers: Mappers = {
     person: new PersonDtoMapperImpl(),
     user: new UserDtoMapperImpl(),
-    jurPerson: new JurPersonDtoMapperImpl()
+    jurPerson: new JurPersonDtoMapperImpl(),
+    userIdentity: new UserIdentityDtoMapperImpl()
 }
 
 type AuthContext = {
@@ -120,7 +124,7 @@ const fileService = FileRepoFactory.getGlobalFileService();
 
 const fileContext: FileContext = {
     fileService: fileService,
-    imageService: ImageRepoImpl.getInstance(fileService)
+    imageService: new ImageRepoImpl(fileService)
 }
 
 type ExplorationContext = {
@@ -141,13 +145,13 @@ type ExplorationContext = {
     }
 }
 
-const personExplorationStateManager = new PersonExplorationStateManagerImpl();
-const jurPersonExplorationStateManager = new JurPersonExplorationStateManagerImpl();
-const userExplorationStateManager = new UserExplorationStateManagerImpl();
+const personExplorationStateManager: PersonExplorationStateManager = new PersonExplorationStateManagerImpl();
+const jurPersonExplorationStateManager: JurPersonExplorationStateManager = new JurPersonExplorationStateManagerImpl();
+const userExplorationStateManager: UserExplorationStateManager = new UserExplorationStateManagerImpl();
 
-const personExplorationApiService = PersonExplorationApiServiceImpl.getInstance();
-const jurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance();
-const userExplorationApiService = UserExplorationApiServiceImpl.getInstance();
+const personExplorationApiService: PersonExplorationApiService = new PersonExplorationApiServiceImpl();
+const jurPersonExplorationApiService: JurPersonExplorationApiService = new JurPersonExplorationApiServiceImpl();
+const userExplorationApiService: UserExplorationApiService = UserExplorationApiServiceImpl.getInstance();
 
 const explorationContext: ExplorationContext = {
     stateManagers: {
@@ -161,9 +165,9 @@ const explorationContext: ExplorationContext = {
         jurPerson: jurPersonExplorationApiService
     },
     service: {
-        user: UserExplorationService.getInstance(userExplorationStateManager,userExplorationApiService, mappers.user),
-        person: PersonExplorationService.getInstance(personExplorationStateManager, personExplorationApiService, mappers.person),
-        jurPerson: JurPersonExplorationService.getInstance(jurPersonExplorationStateManager, jurPersonExplorationApiService, mappers.jurPerson)
+        user: new UserExplorationService(userExplorationStateManager,userExplorationApiService, mappers.user),
+        person: new PersonExplorationService(personExplorationStateManager, personExplorationApiService, mappers.person),
+        jurPerson: new JurPersonExplorationService(jurPersonExplorationStateManager, jurPersonExplorationApiService, mappers.jurPerson)
     }
 }
 
@@ -191,11 +195,11 @@ type CreationContext = {
     formDataBuilder: MediaEntityFormDataBuilder,
 }
 
-const formDataBuilder = MediaEntityFormDataBuilderImpl.getInstance(fileContext.fileService);
+const formDataBuilder: MediaEntityFormDataBuilder = new MediaEntityFormDataBuilderImpl(fileContext.fileService);
 
-const personCreationApiService: PersonCreationApiService = PersonCreationApiServiceImpl.getInstance(formDataBuilder);
-const jurPersonCreationApiService: JurPersonCreationApiService = JurPersonCreationApiServiceImpl.getInstance();
-const userCreationApiService: UserCreationApiService = UserCreationApiServiceImpl.getInstance();
+const personCreationApiService: PersonCreationApiService = new PersonCreationApiServiceImpl(formDataBuilder);
+const jurPersonCreationApiService: JurPersonCreationApiService = new JurPersonCreationApiServiceImpl();
+const userCreationApiService: UserCreationApiService = new UserCreationApiServiceImpl();
 
 const personCreationStateManager = new PersonCreationStateManagerImpl();
 const jurPersonCreationStateManager = new JurPersonCreationStateManagerImpl();
@@ -219,9 +223,9 @@ const creationContext: CreationContext = {
         user: userCreationStateManager
     },
     service: {
-        person: PersonCreationService.getInstance(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService, fileContext.fileService),
-        user: UserCreationService.getInstance(userCreationApiService,userCreationStateManager, mappers.user, userCreationValidationService),
-        jurPerson: JurPersonCreationService.getInstance(jurPersonCreationApiService, jurPersonCreationStateManager, mappers.jurPerson, jurPersonCreationValidationService)
+        person: new PersonCreationService(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService, fileContext.fileService),
+        user: new UserCreationService(userCreationApiService,userCreationStateManager, mappers.user, userCreationValidationService),
+        jurPerson: new JurPersonCreationService(jurPersonCreationApiService, jurPersonCreationStateManager, mappers.jurPerson, jurPersonCreationValidationService)
     },
     validation: {
         person: personCreationValidationService,
@@ -236,11 +240,11 @@ type UserIdentityContext = {
     manager: UserIdentityManager
 }
 
-const userIdentityApiService = UserIdentityApiServiceImpl.getInstance();
+const userIdentityApiService = new UserIdentityApiServiceImpl(mappers.userIdentity);
 
 const userIdentityContext: UserIdentityContext = {
     apiService: userIdentityApiService,
-    manager: UserIdentityManagerImpl.getInstance(userIdentityApiService)
+    manager: new UserIdentityManagerImpl(userIdentityApiService)
 }
 
 type AppStateContext = {

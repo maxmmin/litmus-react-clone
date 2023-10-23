@@ -25,6 +25,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         const bindingResult: PersonValidationObject = {
             ...fullNameResult,
             ...passportErrors,
+            location: null,
             sex: sexErr,
             dateOfBirth: dateErr,
             relationships: relationShipsErrors

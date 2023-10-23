@@ -2,18 +2,14 @@ import React, {useContext, useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import {useAppSelector} from "../../redux/hooks";
 import PersonInfoTable from "../exploration/EntityTables/PersonInfoTable";
 import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./CreationScreen";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
-import Person, {RawRelationshipsPerson, Relationship, RelationshipsLinkObject} from "../../model/human/person/Person";
-import {isValid} from "../../util/pureFunctions";
+import Person, {RawRelationshipsPerson} from "../../model/human/person/Person";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
-import ApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import ErrorResponse from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
@@ -26,6 +22,7 @@ import PersonExplorationApiService from "../../service/exploration/api/human/per
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
+import RelationshipsLinkObject from "../../service/relationships/RelationshipsLinkObject";
 
 type Props = {
     modalSettings: CreationModalSettings,

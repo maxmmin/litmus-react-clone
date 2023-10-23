@@ -1,15 +1,14 @@
 import HumanCreationValidationService from "../HumanCreationValidationService";
-import Person, {Relationship} from "../../../../../model/human/person/Person";
-import {FieldValidationErrors, ValidationErrors} from "../../../../ValidationErrors";
+import Person from "../../../../../model/human/person/Person";
+import {ValidationErrors} from "../../../../ValidationErrors";
 import PassportData from "../../../../../model/human/person/PassportData";
-import FullName from "../../../../exploration/FullName";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../PersonCreationService";
 
 export type RelationShipValidationObject = ValidationErrors<{relationType: string, note: string}>&{relationship: RelationshipCreationParams}
 
 export const getRelationshipDefaultValidationObject = (relShip: RelationshipCreationParams): RelationShipValidationObject => ({relationship: relShip, relationType: null, note: null})
 
-export type PersonValidationObject = ValidationErrors<Pick<Person, keyof FullName | 'sex' | 'dateOfBirth'>>
+export type PersonValidationObject = ValidationErrors<Omit<PersonCreationParams, 'relationships'|'passportData'|'media'>>
     &ValidationErrors<{passportSerial: string, passportNumber: string, rnokppCode: string}>&{relationships: RelationShipValidationObject[]}
 
 export const personDefaultValidationObject: PersonValidationObject = Object.freeze({
@@ -19,12 +18,13 @@ export const personDefaultValidationObject: PersonValidationObject = Object.free
     rnokppCode: null,
     dateOfBirth: null,
     sex: null,
+    location: null,
     passportSerial: null,
     passportNumber: null,
     relationships: []
 })
 
-export type ServerPersonValidationObject = Omit<ValidationErrors<Person>, 'passportData'>&{
+export type ServerPersonValidationObject = Omit<ValidationErrors<PersonCreationParams>, 'passportData'|'relationships'>&{
     'passportData.passportSerial'?: string,
     'passportData.passportNumber'?: string,
     'passportData.rnokppCode'?: string

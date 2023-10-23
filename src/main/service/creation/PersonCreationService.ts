@@ -16,14 +16,15 @@ import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonCreationApiServiceImpl from "./api/PersonCreationApiServiceImpl";
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
+import Human, {HumanCreationParams} from "../../model/human/Human";
 
 export type RelationshipCreationParams = Omit<Relationship, 'to'> & {
     to: NoRelationshipsPerson
 }
 
-export type PersonCreationParams = Omit<Person, 'id'|'relationships'> & {
+export type PersonCreationParams = Omit<Person, 'id'|'relationships'|keyof Human> & {
     relationships: RelationshipCreationParams[]
-}
+} & HumanCreationParams
 
 class PersonCreationService extends CreationServiceImpl<PersonRequestDto, RawRelationshipsPerson, PersonResponseDto, PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> {
 

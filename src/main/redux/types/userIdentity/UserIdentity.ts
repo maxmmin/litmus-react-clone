@@ -1,17 +1,8 @@
-import {Permissions, RoleName} from "./Role";
 import {UserIdentityState} from "../../reducers/userIdentityReducer";
+import User from "../../../model/human/user/User";
 
-type UserIdentity = {
-    email: string;
-    firstName: string;
-    id: number;
-    lastName: string;
-    middleName: string;
-    records: number;
-    role: RoleName;
-    permissions: Permissions[];
-    status: string;
-}
+type UserIdentity = User
+
 
 export type UserIdentityStateReducible = UserIdentityState | undefined
 

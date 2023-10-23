@@ -47,7 +47,6 @@ class UserDtoMapperImpl implements UserDtoMapper {
             firstName: exploredEntityDto.firstName,
             middleName: exploredEntityDto.middleName,
             lastName: exploredEntityDto.lastName,
-            password: exploredEntityDto.password,
             role: checkNotEmpty(Role[exploredEntityDto.role])
         }
     }

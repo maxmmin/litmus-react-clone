@@ -1,4 +1,4 @@
-import Person, {getFullName, RawRelationshipsPerson, Relationship} from "../../model/human/person/Person";
+import Person, {RawRelationshipsPerson, Relationship} from "../../model/human/person/Person";
 import {buildUrl} from "../../util/pureFunctions";
 import appConfig from "../../config/appConfig";
 import {valueOrMessage} from "../../util/valueOrNull";
@@ -16,6 +16,7 @@ import {LitmusServiceContext} from "../App";
 import Loader from "../loader/Loader";
 import GeoCoordinates from "../../model/GeoCoordinates";
 import {retry} from "@reduxjs/toolkit/query";
+import getFullName from "../../util/getFullName";
 
 type PersonProps = {
     rawPerson: RawRelationshipsPerson

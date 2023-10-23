@@ -6,13 +6,13 @@ import {useAppSelector} from "../../../redux/hooks";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {CreationModalSettings} from "../CreationScreen";
 import InputDate from "../../sharedComponents/InputDate";
-import Person, {getFullName} from "../../../model/human/person/Person";
 import {DateEntityTool} from "../../../model/DateEntity";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import {Entity} from "../../../model/Entity";
 import {LitmusServiceContext} from "../../App";
 import InputError from "../../sharedComponents/InputError";
 import Human from "../../../model/human/Human";
+import getFullName from "../../../util/getFullName";
 
 
 const getShortInfo = (person: Human&{id: number}): string => `${person.id}: ${getFullName(person)}`

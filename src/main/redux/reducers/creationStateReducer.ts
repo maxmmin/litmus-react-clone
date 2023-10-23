@@ -8,7 +8,7 @@ import deepCopy from "../../util/deepCopy";
 import CreationCoreAction, {
     PersonCreationAction
 } from "../actions/CreationCoreAction";
-import Person, {Relationship, RelationshipsLinkObject, RelationshipsScanOptions} from "../../model/human/person/Person";
+import {Relationship} from "../../model/human/person/Person";
 import GeneralAction from "../GeneralAction";
 import {Entity} from "../../model/Entity";
 import PassportData from "../../model/human/person/PassportData";
@@ -18,8 +18,8 @@ import UserCreationState, {BasicUserCreationState} from "../types/creation/UserC
 import JurPersonCreationState, {BasicJurPersonCreationState} from "../types/creation/JurPersonCreationState";
 import PersonCreationState, {BasicPersonCreationState, defaultScanOptions} from "../types/creation/PersonCreationState";
 import {ValidationErrors} from "../../service/ValidationErrors";
-import {PersonValidationObject} from "../../service/creation/validation/human/person/PersonCreationValidationService";
 import {PersonCreationParams, RelationshipCreationParams} from "../../service/creation/PersonCreationService";
+import RelationshipsLinkObject from "../../service/relationships/RelationshipsLinkObject";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>, initialState: S): S => {

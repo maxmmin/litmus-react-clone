@@ -15,19 +15,15 @@ type RetrieveIdentityThunkArg = ThunkArg<{
 }>
 
 class UserIdentityManagerImpl implements UserIdentityManager{
-    private readonly dispatch: AppDispatch;
-    private readonly getState: () => UserIdentityStateReducible;
+    protected readonly dispatch: AppDispatch = store.dispatch;
+    protected readonly identityService: UserIdentityApiService;
 
-    private readonly identityService: UserIdentityApiService;
-
-    constructor(dispatch: AppDispatch, getState: ()=>UserIdentityStateReducible, identityService: UserIdentityApiService) {
-        this.dispatch = dispatch;
-        this.getState = getState;
+    constructor(identityService: UserIdentityApiService) {
         this.identityService = identityService;
     }
 
     static getInstance (service: UserIdentityApiService = UserIdentityApiServiceImpl.getInstance()): UserIdentityManagerImpl {
-        return new UserIdentityManagerImpl(store.dispatch, ()=>store.getState().userIdentity, service)
+        return new UserIdentityManagerImpl(service)
     }
 
     async retrieveIdentity (globalPending: boolean = false): Promise<UserIdentity>  {

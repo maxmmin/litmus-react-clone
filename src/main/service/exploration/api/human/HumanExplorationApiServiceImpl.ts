@@ -2,8 +2,7 @@ import HumanExplorationApiService from "./HumanExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import BasicEntityLookupService from "../BasicExplorationApiService";
 import {isEmpty} from "../../../../util/isEmpty";
-import FullName from "../../FullName";
-import axiosApiInstance from "../../../rest/AxiosApiManager";
+import {FullName} from "../../../../model/human/Human";
 
 export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookupService<P> implements HumanExplorationApiService<P> {
 
@@ -11,7 +10,7 @@ export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookup
         super(apiMapping);
     }
 
-    async findByFullName(fullName: FullName, i: number): Promise<PagedData<P>> {
+    async findByFullName(fullName: Partial<FullName>, i: number): Promise<PagedData<P>> {
         const params: Partial<{firstName: string, middleName: string, lastName: string}>&{i: number} = {i};
 
         if (fullName.firstName&&!isEmpty(fullName.firstName)) {

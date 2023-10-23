@@ -1,7 +1,6 @@
 import HumanCreationValidationService from "./HumanCreationValidationService";
-import Human from "../../../../model/human/Human";
+import Human, {FullNameCreationParams} from "../../../../model/human/Human";
 import {ValidationErrors} from "../../../ValidationErrors";
-import FullName from "../../../exploration/FullName";
 
 
 abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationErrors<E>, S=R> implements HumanCreationValidationService<E,R,S> {
@@ -17,7 +16,7 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
 
     abstract hasErrors(bindingResult: R): boolean;
 
-    validateFullName(fullName: FullName): ValidationErrors<FullName> {
+    validateFullName(fullName: FullNameCreationParams): ValidationErrors<FullNameCreationParams> {
         return  {
             firstName: this.isFirstNameValid(fullName.firstName),
             middleName: this.isMiddleNameValid(fullName.middleName),

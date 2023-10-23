@@ -4,30 +4,29 @@ import appConfig from "../../../config/appConfig";
 import Role from "../../../redux/types/userIdentity/Role";
 import {AxiosInstance} from "axios";
 import AxiosApiManager from "../../rest/AxiosApiManager";
+import UserResponseDto from "../../../rest/dto/user/UserResponseDto";
+import UserIdentityDtoMapper from "../../../rest/dto/dtoMappers/UserIdentityDtoMapper";
+import UserDtoMapperImpl from "../../../rest/dto/dtoMappers/UserDtoMapperImpl";
+import UserIdentityDtoMapperImpl from "../../../rest/dto/dtoMappers/UserIdentityDtoMapperImpl";
+import UserIdentityResponseDto from "../../../rest/UserIdentityResponseDto";
 
 
 class UserIdentityApiServiceImpl implements UserIdentityApiService {
 
     protected readonly apiInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
 
-    constructor() {
+    constructor(protected readonly dtoMapper: UserIdentityDtoMapper) {
     }
 
-    public static getInstance(): UserIdentityApiServiceImpl {
-        return new UserIdentityApiServiceImpl();
+    public static getInstance(dtoMapper: UserIdentityDtoMapper = new UserIdentityDtoMapperImpl()): UserIdentityApiServiceImpl {
+        return new UserIdentityApiServiceImpl(dtoMapper);
     }
 
     async retrieveIdentity (): Promise<UserIdentity> {
         const response = await this.apiInstance
-            .get<UserIdentity>(appConfig.serverMappings.auth.getCurrentUser);
+            .get<UserIdentityResponseDto>(appConfig.serverMappings.auth.getCurrentUser);
 
-        const identity: UserIdentity = response.data;
-
-        const role = Role[identity.role];
-        if (!role) {
-            throw new Error("Invalid role. Contact developers to solve this issue");
-        }
-        return {...identity, role: role.role, permissions: role.permissions }
+        return this.dtoMapper.mapToIdentity(response.data);
     }
 }
 

@@ -1,4 +1,4 @@
-import Person, {getFullName, Relationship} from "../../model/human/person/Person";
+import Person, {Relationship} from "../../model/human/person/Person";
 import React, {useContext, useEffect, useRef, useState} from "react";
 import OlMap from "ol/Map";
 import TileLayer from "ol/layer/Tile";
@@ -18,6 +18,7 @@ import {ServiceContext} from "../serviceContext";
 import {LitmusServiceContext} from "../App";
 import Popup from "ol-ext/overlay/Popup";
 import {Entity} from "../../model/Entity";
+import getFullName from "../../util/getFullName";
 
 type PairedRelationships = [Relationship, Relationship]
 

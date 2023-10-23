@@ -4,9 +4,6 @@ import CoreEntity from "../../CoreEntity";
 
 interface User extends Human, CoreEntity {
     email: string;
-
-    password: string
-
     role: Role;
 }
 
