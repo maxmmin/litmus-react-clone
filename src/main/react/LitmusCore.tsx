@@ -1,5 +1,4 @@
 import Loader from "./loader/Loader";
-import {onWakeUp} from "../util/pureFunctions";
 import React, {ReactNode, useContext, useEffect, useMemo, useState} from "react";
 import {useAppSelector} from "../redux/hooks";
 import store from "../redux/store";

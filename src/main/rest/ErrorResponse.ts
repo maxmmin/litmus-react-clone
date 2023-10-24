@@ -1,10 +1,22 @@
-interface ErrorResponse<T> {
+export type Properties = Record<string, unknown>
+
+interface ErrorResponse {
     status: number;
-    error: string;
-    detail: T|null;
+    error: string|null;
+    type: string|null;
+    detail: string|null;
+    properties: Properties|null
 }
 
-export interface ApplicationError<T> extends ErrorResponse<T>{
+export type ValidationErrorResponseProperties<ServerValidationObject> = Properties&{
+    validationErrors: ServerValidationObject
+}
+
+export type ValidationErrorResponse<ServerValidationObject> = Omit<ErrorResponse, "properties"> & {
+    properties: ValidationErrorResponseProperties<ServerValidationObject>
+}
+
+export interface ApplicationError extends ErrorResponse {
     code: string|null
 }
 

@@ -6,12 +6,12 @@ import PersonInfoTable from "../exploration/EntityTables/PersonInfoTable";
 import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./CreationScreen";
-import Person, {RawRelationshipsPerson} from "../../model/human/person/Person";
+import {RawRelationshipsPerson} from "../../model/human/person/Person";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
-import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
-import ErrorResponse from "../../rest/ErrorResponse";
+import {HttpErrorParser} from "../../error/BasicHttpError";
+import ErrorResponse, {ApplicationError} from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
@@ -37,7 +37,7 @@ const whitelist: Array<CreationModalModes> = [CreationModalModes.SET_BEN_OWNER, 
 
 function ApplyPersonModal ({modalSettings, close}: Props) {
 
-    const [searchError, setSearchError] = useState<ErrorResponse<unknown>|null>(null);
+    const [searchError, setSearchError] = useState<ApplicationError|null>(null);
 
     const [person, setPerson] = useState<NoRelationshipsPerson|null>(null);
     /**
@@ -102,7 +102,13 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         let isIdValid = false;
 
         if (isNaN(id)) {
-            setSearchError({detail: null, status: HttpStatus.UNKNOWN_ERROR, error: "Невалідний ідентифікатор"});
+            setSearchError({detail: null,
+                status: HttpStatus.UNKNOWN_ERROR,
+                error: "Невалідний ідентифікатор",
+                code: null,
+                type: null,
+                properties: null
+            });
         } else {
             setSearchError(null);
             isIdValid = true;
@@ -178,10 +184,11 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                 const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.emergingEntity.relationships);
 
                 if (sourceRelObject?.isPresent(relationship)) {
-                    const err: ErrorResponse<null> = {
+                    const err: ApplicationError = {
                         error: "Дана особа вже присутня в списку відносин",
                         status: HttpStatus.UNKNOWN_ERROR,
-                        detail: null
+                        detail: null, properties: null, type: null,
+                        code: null
                     }
                     setSearchError(err);
                     return;

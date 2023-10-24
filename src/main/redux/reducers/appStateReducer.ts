@@ -99,9 +99,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
                     if (errorAction.meta.notify) {
                         const err: object = errorAction.payload;
 
-                        let errorResponse: ApplicationError<any>;
-
-                        errorResponse = HttpErrorParser.parseError(err);
+                        let errorResponse: ApplicationError = HttpErrorParser.parseError(err);
 
                         const basicHttpErr = new BasicHttpError(errorResponse)
 

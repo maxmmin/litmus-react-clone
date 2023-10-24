@@ -137,7 +137,7 @@ export type RejectedMeta = {
 
 export type FulfilledThunkAction = Action&MetaAction<FulfillMeta>
 
-export type RejectedThunkAction = PayloadAction<ErrorResponse<any>>&MetaAction<RejectedMeta>
+export type RejectedThunkAction = PayloadAction<ErrorResponse>&MetaAction<RejectedMeta>
 
 export type ThunkArg<T={}> = T & ThunkMetaData
 
@@ -145,7 +145,7 @@ export type LitmusAsyncThunkConfig = {
     state: RootState
     dispatch: AppDispatch
     extra?: unknown
-    rejectValue: ErrorResponse<any>
+    rejectValue: ErrorResponse
     serializedErrorType?: unknown
     pendingMeta?: unknown
     fulfilledMeta: FulfillMeta

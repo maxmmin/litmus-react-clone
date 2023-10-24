@@ -1,6 +1,5 @@
 import {Permissions} from "../redux/types/userIdentity/Role";
 import {AppDispatch} from "../redux/store";
-import {clearAuthentication} from "../redux/actions/AuthAction";
 import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
 import {getGeocode} from "use-places-autocomplete";
@@ -13,21 +12,6 @@ import {Action} from "redux";
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)
     return presentRights.length===neededRights.length;
-}
-
-
-// export const createEntity = (url: string, entityPageComponents: CreateUserDto | CreatePersonDto | CreateJurPersonDto, accessToken: string): Promise<Response> => {
-//     return fetch(url, {
-//         headers: {
-//             ...createAuthHeader(accessToken),
-//             "content-type": "application/json"
-//         },
-//         method: 'POST',
-//         body: JSON.stringify(entityPageComponents)
-//     })
-// }
-function logOut(dispatch: AppDispatch) {
-    dispatch(clearAuthentication())
 }
 
 export const inputGroupsKeyPressHandler = (e: React.KeyboardEvent) => {
@@ -81,104 +65,6 @@ export const switchNeighbourInput = (e: React.ChangeEvent<HTMLInputElement>) => 
     }
 }
 
-export const getTableNameFromLocation = (pathName: string): Entity | null => {
-    const path = pathName.endsWith("/")?pathName.slice(0,-1):pathName;
-    const pathsArray = path.split("/")
-    return pathsArray[pathsArray.length - 1].toUpperCase() as Entity | null;
-}
-
-// export const checkAndRefreshAuth = (core: AuthenticationReducible,timers: TimersReducible, dispatch: AppDispatch) => {
-//     if (core) {
-//         if (!isValid(core?.accessToken!)) {
-//             if (core?.refreshToken&&isValid(core.refreshToken)) {
-//                 return dispatch(
-//                     refreshAccessToken({refreshToken: core.refreshToken, globalPending: false, notifyOnEnd: false})
-//                 )
-//             } else {
-//                 return logOut(dispatch)
-//             }
-//         }
-//
-//         if (!timers?.authRefreshTimerId&&core?.accessToken&&core.refreshToken) {
-//             return dispatch(setTimers({authRefreshTimerId: setAuthRefreshingTimer(core, dispatch)}))
-//         }
-//     }
-//
-//     if (!core&&timers?.authRefreshTimerId) {
-//         window.clearTimeout(timers.authRefreshTimerId)
-//         dispatch(clearAuthRefreshTimer())
-//     }
-//
-//     return;
-// }
-
-export function isValid(token: string | null | undefined): boolean {
-        try {
-            if (token) {
-                return !(jwtDecode<JwtPayload>(token).exp!*1000<Date.now());
-            }
-        } catch (e) {
-            console.error(e)
-        }
-        return false;
-}
-
-// export const setAuthRefreshingTimer = (authentication: AuthenticationReducible, dispatch: AppDispatch): NodeJS.Timer | null => {
-//     const accessToken = authentication?.accessToken!;
-//     const refreshToken = authentication?.refreshToken!;
-//
-//     let expirationTimeInMs;
-//
-//     try {
-//         expirationTimeInMs = jwtDecode<JwtPayload>(accessToken).exp! * 1000;
-//     } catch (e) {
-//         console.log(e)
-//         return null;
-//     }
-//
-//     const refreshCallbackDelayInMs = expirationTimeInMs - Date.now() - 1000*60;
-//
-//     const expDate = new Date(expirationTimeInMs-1000*60);
-//
-//     console.log(`core update planned in ${expDate.getHours()}:${expDate.getMinutes()}:${expDate.getSeconds()}`)
-//
-//     // this callback will fire when it will 1 minute before jwt expiring
-//     return setTimeout(()=>{
-//         console.log("updating core")
-//         dispatch(refreshAccessToken({refreshToken: refreshToken, globalPending: false, notifyOnEnd: false}))
-//     }, refreshCallbackDelayInMs)
-// }
-
-export const onWakeUp = (callback: Function): NodeJS.Timer => {
-    const TIMEOUT = 20000;
-    let lastTime = (new Date()).getTime();
-
-    return setInterval(function() {
-        const currentTime = (new Date()).getTime();
-        if (currentTime > (lastTime + TIMEOUT + 2000)) {
-            callback()
-        }
-        lastTime = currentTime;
-    }, TIMEOUT);
-}
-
-export const geocode = async (geoData: GeoCoordinates|string) => {
-    const requestArgs:  google.maps.GeocoderRequest = {}
-
-    if (typeof geoData==="string") {
-        requestArgs.address = geoData;
-    }   else {
-        requestArgs.location = {
-            lat: geoData.lat,
-            lng: geoData.lng
-        }
-    }
-
-    return await getGeocode({
-        ...requestArgs,
-        ...gmapsRegionOptions
-    })
-}
 
 export const preventEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key==="Enter") {
@@ -198,7 +84,7 @@ export const isActionPending = (action: Action<String>) => {
     return action.type.endsWith("/pending")
 }
 
-export {checkAuthorization, logOut}
+export {checkAuthorization}
 
 type NotNullOrUndefined<T> = T extends null | undefined ? never : T;
 

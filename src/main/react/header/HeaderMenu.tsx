@@ -1,13 +1,12 @@
 import {Dropdown} from "react-bootstrap";
 import React, {useContext} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../redux/hooks";
-import {logOut} from "../../util/pureFunctions";
+import {useAppSelector} from "../../redux/hooks";
 import AuthenticationManager from "../../service/auth/AuthenticationManager";
 import {LitmusServiceContext} from "../App";
 import appConfig from "../../config/appConfig";
 import ApplicationStateManager from "../../service/appState/ApplicationStateManager";
-import ErrorResponse, {ApplicationError} from "../../rest/ErrorResponse";
+import {HttpErrorParser} from "../../error/BasicHttpError";
 
 
 function HeaderMenu () {
@@ -28,10 +27,10 @@ function HeaderMenu () {
             appStateManager.headerMenuClose();
             navigate(appConfig.applicationMappings.signIn);
         } catch (e) {
-            if (Object.hasOwn(e as object, 'title')) {
-                notificationManager.error((e as ApplicationError<unknown>).error);
-            }
-           
+            const err = HttpErrorParser.parseError(e);
+
+            notificationManager.error(HttpErrorParser.getErrorDescription(err))
+
             console.error(e);
         } finally {
             appStateManager.disablePending();

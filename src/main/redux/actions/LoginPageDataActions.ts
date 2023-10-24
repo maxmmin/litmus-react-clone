@@ -5,7 +5,7 @@ import ErrorResponse from "../../rest/ErrorResponse";
 export type LoginPageState = {
     email: string,
     password: string,
-    error: ErrorResponse<any> | null
+    error: ErrorResponse | null
 }
 
 export type LoginPageStateReducible = LoginPageState | null | undefined

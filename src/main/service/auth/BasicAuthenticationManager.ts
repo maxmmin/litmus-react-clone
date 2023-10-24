@@ -41,7 +41,13 @@ class BasicAuthenticationManager implements AuthenticationManager {
         }
         catch (thrownErr: any) {
             if ("status" in thrownErr&&"detail" in thrownErr&&thrownErr.status===HttpStatus.UNAUTHENTICATED) {
-                thrownErr = new BasicHttpError({status: HttpStatus.UNAUTHENTICATED, error: "Невірні облікові дані", detail: null, code: null})
+                thrownErr = new BasicHttpError({status: HttpStatus.UNAUTHENTICATED,
+                    error: "Невірні облікові дані",
+                    detail: null,
+                    code: null,
+                    properties: null,
+                    type: null
+                })
             }
             return rejectWithValue(deepCopy(thrownErr), {notify: true});
         }}

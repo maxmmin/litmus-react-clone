@@ -1,9 +1,6 @@
 import React, {Dispatch, SetStateAction, useContext, useEffect, useState} from "react";
 import {GeoLocation} from "../../../model/GeoLocation";
-import usePlacesAutocomplete from "use-places-autocomplete";
 import {Combobox, ComboboxInput, ComboboxList, ComboboxOption, ComboboxPopover} from "@reach/combobox";
-import {geocode} from "../../../util/pureFunctions";
-import {gmapsRegionOptions} from "../../../config/appConfig";
 import {LitmusServiceContext} from "../../App";
 
 

@@ -24,14 +24,14 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
         }
 
         case `${AuthAction.AUTHENTICATE}/rejected`: {
-            const err: ApplicationError<unknown> = HttpErrorParser.parseError(action.payload);
+            const err: ApplicationError = HttpErrorParser.parseError(action.payload);
             if (err.status===401) return defaultAuthState
                 else return prevState;
         }
 
         default: {
             if (isRejected(action)) {
-                const err: ApplicationError<unknown> = HttpErrorParser.parseError(action.payload)
+                const err: ApplicationError = HttpErrorParser.parseError(action.payload)
                 return errorHandle(prevState, err)
             }
             else return prevState;
@@ -39,7 +39,7 @@ const authReducer: Reducer<AuthenticationReducible, PayloadAction<Authentication
     }
 }
 
-const errorHandle = (prevState: AuthenticationReducible, error: ApplicationError<any>): AuthenticationReducible => {
+const errorHandle = (prevState: AuthenticationReducible, error: ApplicationError): AuthenticationReducible => {
     switch (error.status) {
         case HttpStatus.UNAUTHENTICATED: {
             if (prevState) {

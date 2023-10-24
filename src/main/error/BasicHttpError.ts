@@ -1,32 +1,33 @@
-import ErrorResponse, {ApplicationError} from "../rest/ErrorResponse";
+import ErrorResponse, {ApplicationError, Properties} from "../rest/ErrorResponse";
 import {AxiosError} from "axios";
 
 export const noInfoMessage = "Інформація відсутня"
 
-class BasicHttpError<D> extends Error implements ApplicationError<D> {
-    public readonly detail: D | null;
-    public readonly status: number;
-    public readonly error: string;
+class BasicHttpError extends Error implements ApplicationError {
     code: string | null;
+    detail: string | null;
+    error: string | null;
+    properties: Properties | null;
+    status: number;
+    type: string | null;
+
 
     public getDescription () {
-        let detail: string|null = null;
+        let msg = "Помилка "+this.status;
 
-        if (this.detail && typeof this.detail === 'string') {
-            detail = this.detail;
-        }
+        let desc = this.detail||this.error||'невідома помилка';
 
-        let msg = `Error ${this.status}: ${this.error}`;
-
-        if (detail) msg+=` - ${detail.toLowerCase()}`;
+        msg += `: ${desc}`
 
         return msg;
     };
 
 
-    constructor(error: ApplicationError<D>) {
-        super("Error "+error.status+" "+error.error)
+    constructor(error: ApplicationError) {
+        super(`Помилка ${error.status}: ${error.detail||error.error}`)
         this.detail = error.detail;
+        this.properties = error.properties;
+        this.type = error.type;
         this.status = error.status;
         this.error = error.error;
         this.code = error.code;
@@ -34,36 +35,51 @@ class BasicHttpError<D> extends Error implements ApplicationError<D> {
 }
 
 class HttpErrorParser {
-    private static getErrorResponse(err: unknown): ErrorResponse<unknown> {
+    private static getErrorResponse(err: unknown): ErrorResponse {
         let status: number = -1;
-        let error: string = 'Unknown error';
-        let detail: unknown = null;
+
+        let error: ErrorResponse["error"] = null;
+        let detail: ErrorResponse["detail"] = null;
+        let properties: ErrorResponse['properties'] = null;
+        let type: ErrorResponse['type'] = null;
 
         if (err&&typeof err === "object") {
             if ("status" in err) {
-                status = err["status"] as number;
+                status = err["status"] as ErrorResponse['status'];
             }
 
             if ("error" in err) {
-                error = err["error"] as string;
-            } else if ("message" in err) {
-                error = err.message as string;
+                error = err["error"] as ErrorResponse['error'];
             }
 
             if ("detail" in err) {
-                detail = err["detail"];
+                detail = err["detail"] as ErrorResponse['detail'];
+            }
+
+            if ("properties" in err) {
+                properties = err["properties"] as ErrorResponse['properties'];
+            }
+
+            if ("type" in err) {
+                type = err["type"] as ErrorResponse['type'];
             }
         }
 
-        return {status, error: error, detail};
+        return {status, error: error, detail: detail, properties: properties, type: type};
     }
 
-    static formErrorDescription(error: ErrorResponse<unknown>): string {
-        return `Error ${error.status}: ${error.error}`
+    static getErrorDescription(error: ErrorResponse): string {
+        let msg = "Помилка "+error.status;
+
+        let desc = error.detail||error.error||'невідома помилка';
+
+        msg += `: ${desc}`
+
+        return msg;
     }
 
-    static parseError(error: unknown): ApplicationError<unknown> {
-        const errResponse: ErrorResponse<unknown> = this.getErrorResponse(error);
+    static parseError(error: unknown): ApplicationError {
+        const errResponse: ErrorResponse = this.getErrorResponse(error);
         let code: string|null = null;
 
         if (error&&typeof error === "object") {
@@ -78,17 +94,18 @@ class HttpErrorParser {
         }
     }
 
-    static parseAxiosError(error: AxiosError): ApplicationError<unknown> {
+    static parseAxiosError(error: AxiosError): ApplicationError {
         let errCode: string|null = error.code?error.code:null;
         let errStatus: number = -1;
         if (error.response?.status) errStatus = error.response.status;
-        let errorResponse: ErrorResponse<unknown>|undefined = this.getErrorResponse(error.response?.data);
+        let errorResponse: ErrorResponse|undefined = this.getErrorResponse(error.response?.data);
 
         return {
             ...errorResponse,
             code: errCode,
             status: errStatus
         }
+
     }
 }
 

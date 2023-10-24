@@ -7,11 +7,12 @@ import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
 import ValidationService from "../ValidationService";
-import ValidationError, {ValidationResponse} from "../../error/ValidationError";
+import ValidationError from "../../error/ValidationError";
 import CreationCoreAction from "../../redux/actions/CreationCoreAction";
 import {HttpStatus} from "../../rest/HttpStatus";
 import {ValidationErrors} from "../ValidationErrors";
 import {AxiosError} from "axios";
+import {ValidationErrorResponse} from "../../rest/ErrorResponse";
 
 
 /**
@@ -65,12 +66,12 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
         } catch (e: unknown) {
             console.log(e)
             if (e instanceof ValidationError<unknown>) {
-                this.creationStateManager.setValidationErrors(e.errors);
+                this.creationStateManager.setValidationErrors(e.properties.validationErrors);
             } else if (e instanceof AxiosError && e.response?.status===HttpStatus.UNPROCESSABLE_ENTITY) {
-                const validationResponse = (e as AxiosError<Partial<ValidationResponse<S>>>).response?.data;
+                const validationResponse = (e as AxiosError<Partial<ValidationErrorResponse<S>>>).response?.data;
                 if (validationResponse) {
-                    if (typeof validationResponse.detail === 'object'&&validationResponse.detail.validationErrors) {
-                        const validationErrors = this.validationService.mapServerValidationErrors(validationResponse.detail.validationErrors);
+                    if (typeof validationResponse.detail === 'object'&&validationResponse.properties?.validationErrors) {
+                        const validationErrors = this.validationService.mapServerValidationErrors(validationResponse.properties?.validationErrors);
                         this.creationStateManager.setValidationErrors(validationErrors);
                     }
                 }

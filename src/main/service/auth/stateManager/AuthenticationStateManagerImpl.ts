@@ -1,8 +1,8 @@
 
 
-import Authentication, {AuthenticationReducible} from "../../../redux/types/auth/Authentication";
+import {AuthenticationReducible} from "../../../redux/types/auth/Authentication";
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
-import AuthAction, {clearAuthentication} from "../../../redux/actions/AuthAction";
+import AuthAction from "../../../redux/actions/AuthAction";
 import ErrorResponse from "../../../rest/ErrorResponse";
 import LoginPageDataActions, {LoginPageState} from "../../../redux/actions/LoginPageDataActions";
 import store, {AppDispatch} from "../../../redux/store";
@@ -31,7 +31,7 @@ class AuthenticationStateManagerImpl implements AuthenticationStateManager{
         return this.getState();
     }
 
-    public setLoginError (error: ErrorResponse<unknown>) {
+    public setLoginError (error: ErrorResponse) {
         const action: PayloadAction<Partial<LoginPageState>> = {type: LoginPageDataActions.UPDATE_STATE, payload: {error: deepCopy(error)}}
         this.dispatch(action)
     }

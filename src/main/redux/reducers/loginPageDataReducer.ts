@@ -31,7 +31,7 @@ const loginPageDataReducer: Reducer<LoginPageStateReducible, PayloadAction<Login
 
                 const actionType = action.type.slice(0,-9)
 
-                const error = action.payload as unknown as BasicHttpError<any>|undefined;
+                const error = action.payload as unknown as BasicHttpError|undefined;
 
                 if (error?.status) {
                     switch (actionType) {

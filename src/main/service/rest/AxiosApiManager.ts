@@ -52,7 +52,7 @@ class AxiosApiManager {
 
         globalInstance.interceptors.response.use(
             (response) => response,
-            async (err: AxiosError<ErrorResponse<unknown>>) => {
+            async (err: AxiosError<ErrorResponse>) => {
                 const {config} = err;
 
                 const noAuthHandlerApiInstance = AxiosApiManager.createRawApiInstance();
@@ -86,13 +86,13 @@ class AxiosApiManager {
         });
 
         axiosInstance.interceptors.response.use((response) => response,
-            async (err: AxiosError<ErrorResponse<unknown>>)=>{
+            async (err: AxiosError<ErrorResponse>)=>{
                 const {config} = err;
 
                 try {
                     if (config&&err.response?.status===HttpStatus.FORBIDDEN) {
                         const errData = err.response?.data;
-                        if (errData&&errData.error===appConfig.csrfErrCode) {
+                        if (errData&&errData.type===appConfig.csrfErrCode) {
                             const csrfResponse = await axiosInstance.get<CsrfResponse>(appConfig.serverMappings.csrfToken, {});
 
                             const token = csrfResponse.data.token;

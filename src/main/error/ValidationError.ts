@@ -1,25 +1,26 @@
-import ErrorResponse from "../rest/ErrorResponse";
+import {
+    ValidationErrorResponse,
+    ValidationErrorResponseProperties
+} from "../rest/ErrorResponse";
 import {HttpStatus} from "../rest/HttpStatus";
-import {ValidationErrors} from "../service/ValidationErrors";
 
-export type ValidationResponse<E> = {
-    detail: {
-        validationErrors: E
-    }
-}
 
-export default class ValidationError<E> extends Error implements ErrorResponse<E> {
-    errors: E;
-
-    detail: E | null;
+/**
+ * S - server validation object type
+ */
+export default class ValidationError<S> extends Error implements ValidationErrorResponse<S> {
+    detail: string = "Деякі поля мають невалідні значення";
     status: number = HttpStatus.UNPROCESSABLE_ENTITY;
-    error: string = "Деякі поля мають невалідні значення";
+    error: string = "Unprocessable Entity";
+    properties: ValidationErrorResponseProperties<S>;
+    type: string | null = null;
 
 
 
-    constructor(errors: E) {
-        super("validation err");
-        this.errors = errors;
-        this.detail = errors;
+    constructor(errors: S) {
+        super("Some validation errors were found.");
+        this.properties = {
+            validationErrors: errors
+        }
     }
 }
