@@ -26,7 +26,7 @@ const FindByFullNameGroup = () => {
                 case Entity.PERSON: {
                     return new PersonExplorationStateManagerImpl();
                 }
-                default: throw new Error("unsupported entity")
+                default: throw new Error("unsupported entityPageComponents")
             }
         }
     }, [exploredEntity])

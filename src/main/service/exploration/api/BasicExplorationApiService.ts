@@ -1,5 +1,5 @@
 /**
- * E - entity
+ * E - entityPageComponents
  * creation which provides shared methods
  */
 import LookupService from "./ExplorationApiService";

@@ -1,6 +1,6 @@
 /**
  * Q - request dto
- * E - entity
+ * E - entityPageComponents
  * P - response dto
  * C - creation params
  */

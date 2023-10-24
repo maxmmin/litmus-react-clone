@@ -1,24 +1,24 @@
-import Person, {Relationship} from "../../model/human/person/Person";
+import Person, {Relationship} from "../../../model/human/person/Person";
 import React, {useContext, useEffect, useRef, useState} from "react";
 import OlMap from "ol/Map";
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
 import {Feature, Overlay, View} from "ol";
 import {FullScreen, Zoom} from "ol/control";
-import {GeoLocation} from "../../model/GeoLocation";
-import {defaultMapPosition, transformToTarget} from "../../util/mapUtil";
-import {buildUrl, checkNotEmpty} from "../../util/pureFunctions";
-import appConfig from "../../config/appConfig";
+import {GeoLocation} from "../../../model/GeoLocation";
+import {defaultMapPosition, transformToTarget} from "../../../util/mapUtil";
+import {buildUrl, checkNotEmpty} from "../../../util/pureFunctions";
+import appConfig from "../../../config/appConfig";
 import {LineString, Point} from "ol/geom";
 import {Vector as VectorLayer} from "ol/layer";
 import Vector from "ol/source/Vector";
 import VectorSource from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
-import {ServiceContext} from "../serviceContext";
-import {LitmusServiceContext} from "../App";
+import {ServiceContext} from "../../serviceContext";
+import {LitmusServiceContext} from "../../App";
 import Popup from "ol-ext/overlay/Popup";
-import {Entity} from "../../model/Entity";
-import getFullName from "../../util/getFullName";
+import {Entity} from "../../../model/Entity";
+import getFullName from "../../../util/getFullName";
 
 type PairedRelationships = [Relationship, Relationship]
 

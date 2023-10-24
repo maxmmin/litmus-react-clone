@@ -1,6 +1,6 @@
 
 /**
- * E - entity
+ * E - entityPageComponents
  */
 
 interface CreationService<E> {

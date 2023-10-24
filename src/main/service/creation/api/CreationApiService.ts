@@ -1,6 +1,6 @@
 /**
- * Q - entity request DTO
- * R - entity response DTO
+ * Q - entityPageComponents request DTO
+ * R - entityPageComponents response DTO
  */
 interface CreationApiService<Q, R> {
     create (requestDto: Q): Promise<R>;

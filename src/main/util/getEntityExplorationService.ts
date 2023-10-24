@@ -13,7 +13,7 @@ entityExplorationServiceMap.set(Entity.JUR_PERSON, serviceContext.exploration.se
 export default function getEntityExplorationService(entity: Entity): ExplorationService {
     const explorationService = entityExplorationServiceMap.get(entity);
     if (!explorationService) {
-        throw new Error("unknown entity")
+        throw new Error("unknown entityPageComponents")
     } else return explorationService;
 }
 
@@ -27,7 +27,7 @@ entityExplorationStateManagerMap.set(Entity.USER, serviceContext.exploration.sta
 export function getEntityExplorationStateManager(entity: Entity): ExplorationStateManager<unknown,EntityExplorationParams> {
     const manager:  ExplorationStateManager<unknown,EntityExplorationParams>|undefined =  entityExplorationStateManagerMap.get(entity)
     if (!manager) {
-        throw new Error("unknown entity");
+        throw new Error("unknown entityPageComponents");
     } else {
         return manager;
     }

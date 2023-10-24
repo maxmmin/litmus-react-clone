@@ -16,14 +16,14 @@ function checkAuthorization (neededRights: Permissions[], userRights: Permission
 }
 
 
-// export const createEntity = (url: string, entity: CreateUserDto | CreatePersonDto | CreateJurPersonDto, accessToken: string): Promise<Response> => {
+// export const createEntity = (url: string, entityPageComponents: CreateUserDto | CreatePersonDto | CreateJurPersonDto, accessToken: string): Promise<Response> => {
 //     return fetch(url, {
 //         headers: {
 //             ...createAuthHeader(accessToken),
 //             "content-type": "application/json"
 //         },
 //         method: 'POST',
-//         body: JSON.stringify(entity)
+//         body: JSON.stringify(entityPageComponents)
 //     })
 // }
 function logOut(dispatch: AppDispatch) {

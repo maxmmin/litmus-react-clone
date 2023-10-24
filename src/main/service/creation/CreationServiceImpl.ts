@@ -16,7 +16,7 @@ import {AxiosError} from "axios";
 
 /**
  * Q - requestDto
- * E - entity
+ * E - entityPageComponents
  * P - response dto
  * C - creation params type
  * V - validation object

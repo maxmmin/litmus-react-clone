@@ -35,7 +35,7 @@ const getProcessedResults = (entity: Entity, data: unknown[]) => {
             })
         }
 
-        default: throw new Error("unknown entity")
+        default: throw new Error("unknown entityPageComponents")
     }
 }
 

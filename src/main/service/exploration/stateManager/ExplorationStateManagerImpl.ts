@@ -11,7 +11,7 @@ import {ExplorationTypedAction} from "../../../redux/actions/ExplorationTypedAct
 import {Entity} from "../../../model/Entity";
 
 /**
- * E - entity
+ * E - entityPageComponents
  * S - entityExplorationState
  * */
 class ExplorationStateManagerImpl<E,P extends EntityExplorationParams> implements ExplorationStateManager<E,P> {

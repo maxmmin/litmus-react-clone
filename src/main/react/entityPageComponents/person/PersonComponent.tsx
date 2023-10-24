@@ -1,22 +1,22 @@
-import Person, {RawRelationshipsPerson, Relationship} from "../../model/human/person/Person";
-import {buildUrl} from "../../util/pureFunctions";
-import appConfig from "../../config/appConfig";
-import {valueOrMessage} from "../../util/valueOrNull";
-import {DateEntityTool} from "../../model/DateEntity";
-import "../../css/entityPage/entityPage.scss";
-import "../../css/entityPage/personPage.scss";
-import {DashedUserIcon, GeoLocationPinDropIcon} from "../../util/icons";
-import ImageSlider from "./ImageSlider";
+import Person, {RawRelationshipsPerson, Relationship} from "../../../model/human/person/Person";
+import {buildUrl} from "../../../util/pureFunctions";
+import appConfig from "../../../config/appConfig";
+import {valueOrMessage} from "../../../util/valueOrNull";
+import {DateEntityTool} from "../../../model/DateEntity";
+import "../../../css/entityPage/entityPage.scss";
+import "../../../css/entityPage/personPage.scss";
+import {DashedUserIcon, GeoLocationPinDropIcon} from "../../../util/icons";
+import ImageSlider from "../ImageSlider";
 import PersonMap from "./PersonMap";
 import React, {useContext, useEffect, useState} from "react";
 import {NavLink} from "react-router-dom";
-import {Entity} from "../../model/Entity";
-import {GeoLocation} from "../../model/GeoLocation";
-import {LitmusServiceContext} from "../App";
-import Loader from "../loader/Loader";
-import GeoCoordinates from "../../model/GeoCoordinates";
+import {Entity} from "../../../model/Entity";
+import {GeoLocation} from "../../../model/GeoLocation";
+import {LitmusServiceContext} from "../../App";
+import Loader from "../../loader/Loader";
+import GeoCoordinates from "../../../model/GeoCoordinates";
 import {retry} from "@reduxjs/toolkit/query";
-import getFullName from "../../util/getFullName";
+import getFullName from "../../../util/getFullName";
 
 type PersonProps = {
     rawPerson: RawRelationshipsPerson
@@ -78,22 +78,22 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
     if (!person) throw new Error("no person was loaded");
 
     return (
-        <div className={"entity-page-wrapper entity-page-wrapper_person"}>
+        <div className={"entity-page-wrapper entityPageComponents-page-wrapper_person"}>
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_person">
                 <div className={`main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person ${mainImg?"":"no-photo"}`}>
                     {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
 
                 <div className="main-entity-section__main-entity-info-container">
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Прізвище:</span> {rawPerson.lastName}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Ім'я:</span> {rawPerson.firstName}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>По-батькові:</span> {valueOrMessage(rawPerson.middleName)}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Стать:</span> {rawPerson.sex}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Дата народження:</span> {rawPerson.dateOfBirth?DateEntityTool.getTool(rawPerson.dateOfBirth).buildStringDate():valueOrMessage(null)}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Серія паспорту:</span> {valueOrMessage(rawPerson.passportData?.passportSerial)}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Номер паспорту:</span> {valueOrMessage(rawPerson.passportData?.passportNumber)}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>РНОКПП:</span> {valueOrMessage(rawPerson.passportData?.rnokppCode)}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Адреса:</span> {valueOrMessage(rawPerson.location?.address)}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Прізвище:</span> {rawPerson.lastName}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Ім'я:</span> {rawPerson.firstName}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>По-батькові:</span> {valueOrMessage(rawPerson.middleName)}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Стать:</span> {rawPerson.sex}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Дата народження:</span> {rawPerson.dateOfBirth?DateEntityTool.getTool(rawPerson.dateOfBirth).buildStringDate():valueOrMessage(null)}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Серія паспорту:</span> {valueOrMessage(rawPerson.passportData?.passportSerial)}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Номер паспорту:</span> {valueOrMessage(rawPerson.passportData?.passportNumber)}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>РНОКПП:</span> {valueOrMessage(rawPerson.passportData?.rnokppCode)}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Адреса:</span> {valueOrMessage(rawPerson.location?.address)}</p>
                 </div>
             </section>
 
