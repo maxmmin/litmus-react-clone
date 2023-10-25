@@ -16,6 +16,7 @@ import UserCreationApiServiceImpl from "./api/UserCreationApiServiceImpl";
 import UserCreationApiService from "./api/UserCreationApiService";
 import {RoleName} from "../../redux/types/userIdentity/Role";
 import Human, {HumanCreationParams} from "../../model/human/Human";
+import CreationService from "./CreationService";
 
 export type UserCreationParams = Omit<User, "id"|"role"|keyof Human>&{
     password: string,
@@ -23,22 +24,9 @@ export type UserCreationParams = Omit<User, "id"|"role"|keyof Human>&{
     role: RoleName
 }&HumanCreationParams
 
-class UserCreationService extends CreationServiceImpl<UserRequestDto, User, UserResponseDto, UserCreationParams, UserValidationObject, ServerUserValidationObject> {
+interface UserCreationService extends CreationService<User> {
 
-    constructor(
-        apiService: UserCreationApiService,
-        creationStateManager: UserCreationStateManager,
-        mapper: UserDtoMapper,
-        validationService: UserCreationValidationService) {
-        super(apiService, creationStateManager, mapper, validationService);
-    }
 
-    public static getInstance(apiService: UserCreationApiService = UserCreationApiServiceImpl.getInstance(),
-                              stateManager: UserCreationStateManager = new UserCreationStateManagerImpl(),
-                              mapper: UserDtoMapper = new UserDtoMapperImpl(),
-                              validationService: UserCreationValidationService = new UserCreationValidationServiceImpl()): UserCreationService {
-        return  new UserCreationService(apiService, stateManager, mapper, validationService);
-    }
 }
 
 export default UserCreationService;
