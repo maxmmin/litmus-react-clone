@@ -5,6 +5,11 @@ export default interface Media {
     images: Array<string>;
 }
 
+export interface MediaResponseDto {
+    mainImage: string|null,
+    images: Array<string>|null
+}
+
 export type Images = {
     mainImage: FileProps|null,
     images: FileProps[]

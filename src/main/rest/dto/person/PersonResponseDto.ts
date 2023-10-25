@@ -5,7 +5,7 @@ import {
     Relationship,
     RelationType
 } from "../../../model/human/person/Person";
-import Media from "../../../model/Media";
+import Media, {MediaResponseDto} from "../../../model/Media";
 
 export interface RelationshipResponseDto {
     person: RelatedPersonResponseDto,
@@ -42,7 +42,7 @@ export type NestedRelationshipsInfoResponseDto = {
 
 interface PersonResponseDto {
     id: number;
-    media: Media;
+    media: MediaResponseDto;
     firstName: string;
     middleName: string|null;
     lastName: string;

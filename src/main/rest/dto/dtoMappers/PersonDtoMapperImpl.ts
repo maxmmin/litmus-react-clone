@@ -15,6 +15,7 @@ import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/per
 import {PersonCreationParams, RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
 import deepCopy from "../../../util/deepCopy";
+import Media from "../../../model/Media";
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
     static getInstance(): PersonDtoMapperImpl {
@@ -152,8 +153,13 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             }
         } else passportData = null;
 
+        const media: Media =  {
+            mainImage: retrievedEntityDto.media.mainImage,
+            images: retrievedEntityDto.media.images||[]
+        }
+
         const person: RawRelationshipsPerson = {
-            media: retrievedEntityDto.media,
+            media: media,
             id: retrievedEntityDto.id,
             passportData: passportData,
             sex: retrievedEntityDto.sex,
