@@ -76,13 +76,13 @@ import JurPersonCreationApiServiceImpl from "../service/creation/api/JurPersonCr
 import UserCreationApiServiceImpl from "../service/creation/api/UserCreationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 import UserDtoMapperImpl from "../rest/dto/dtoMappers/UserDtoMapperImpl";
-import PersonRelationshipsBinder from "../service/relationships/PersonRelationshipsBinder";
+import PersonProcessor from "../service/relationships/PersonProcessor";
 import PersonRelationshipsLoader from "../service/relationships/PersonRelationshipsLoader";
 import PersonRelationshipsResponseDtoScanner from "../service/relationships/PersonRelationshipsResponseDtoScanner";
 import RipePersonRelationshipsUtil from "../service/relationships/RipePersonRelationshipsUtil";
 import BasicPersonRelationshipsResponseDtoScanner from "../service/relationships/BasicPersonRelationshipsResponseDtoScanner";
 import BasicPersonRelationshipsLoader from "../service/relationships/BasicPersonRelationshipsLoader";
-import BasicPersonRelationshipsBinder from "../service/relationships/BasicPersonRelationshipsBinder";
+import BasicPersonProcessor from "../service/relationships/BasicPersonProcessor";
 import BasicRipePersonRelationshipsUtil from "../service/relationships/BasicRipePersonRelationshipsUtil";
 import UserIdentityDtoMapper from "../rest/dto/dtoMappers/UserIdentityDtoMapper";
 import UserIdentityDtoMapperImpl from "../rest/dto/dtoMappers/UserIdentityDtoMapperImpl";
@@ -278,7 +278,7 @@ export type ServiceContext = {
     csrfTokenLoader: CsrfTokenLoader,
     geocodingService: GeocodingService,
     personServices: {
-        personRelationshipsBinder: PersonRelationshipsBinder,
+        personRelationshipsBinder: PersonProcessor,
         personRelationshipsLoader: PersonRelationshipsLoader,
         personRelationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner,
         ripePersonRelationshipsUtil: RipePersonRelationshipsUtil
@@ -294,7 +294,7 @@ const personRelationshipsLoader: PersonRelationshipsLoader = BasicPersonRelation
 
 const ripePersonRelationshipsUtil = BasicRipePersonRelationshipsUtil.getInstance();
 
-const personRelationshipsBinder: PersonRelationshipsBinder = BasicPersonRelationshipsBinder.getInstance(
+const personRelationshipsBinder: PersonProcessor = BasicPersonProcessor.getInstance(
     personRelationshipsLoader,
     relationshipsResponseDtoScanner,
     mappers.person,

@@ -1,7 +1,7 @@
 import Person, {RawRelationshipsPerson} from "../../model/human/person/Person";
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 
-export default interface PersonRelationshipsBinder {
+export default interface PersonProcessor {
     bindAll(person: RawRelationshipsPerson, limitDepth: number): Promise<Person>;
     bindShared(person: RawRelationshipsPerson, limitDepth: number): Promise<Person>;
     getRawPersonsStorage(): Map<number, NoRelationshipsPerson>;

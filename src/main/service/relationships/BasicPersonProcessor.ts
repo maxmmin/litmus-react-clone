@@ -6,14 +6,14 @@ import {
     NestedRelationshipResponseDto
 } from "../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
-import PersonRelationshipsBinder from "./PersonRelationshipsBinder";
+import PersonProcessor from "./PersonProcessor";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
 import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponseDtoScanner";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import RipePersonRelationshipsUtil from "./RipePersonRelationshipsUtil";
 import BasicRipePersonRelationshipsUtil from "./BasicRipePersonRelationshipsUtil";
 
-export default class BasicPersonRelationshipsBinder implements PersonRelationshipsBinder{
+export default class BasicPersonProcessor implements PersonProcessor{
     private readonly personsStore = new Map<number, NoRelationshipsPerson>();
     constructor(protected readonly relationshipsLoader: PersonRelationshipsLoader,
                 protected readonly relationshipScanService: PersonRelationshipsResponseDtoScanner,
@@ -24,8 +24,8 @@ export default class BasicPersonRelationshipsBinder implements PersonRelationshi
     public static getInstance(relationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(),
                               relationshipsDtoScanner: PersonRelationshipsResponseDtoScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
                               dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
-                              relationshipsUtil: RipePersonRelationshipsUtil = BasicRipePersonRelationshipsUtil.getInstance()): BasicPersonRelationshipsBinder {
-        return new BasicPersonRelationshipsBinder(relationshipsLoader, relationshipsDtoScanner, dtoMapper, relationshipsUtil);
+                              relationshipsUtil: RipePersonRelationshipsUtil = BasicRipePersonRelationshipsUtil.getInstance()): BasicPersonProcessor {
+        return new BasicPersonProcessor(relationshipsLoader, relationshipsDtoScanner, dtoMapper, relationshipsUtil);
     }
 
     clearRawPersonsStorage(): void {
