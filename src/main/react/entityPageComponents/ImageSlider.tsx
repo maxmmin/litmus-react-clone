@@ -1,5 +1,5 @@
 import {Splide, SplideSlide} from "@splidejs/react-splide";
-import "../../css/imageSlider.scss";
+import "../assets/css/imageSlider.scss";
 import '@splidejs/react-splide/css';
 
 type SliderProps = {

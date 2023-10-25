@@ -1,6 +1,7 @@
 import Person from "../../../model/human/person/Person";
 import {GeoLocation} from "../../../model/GeoLocation";
 import Media, {MediaResponseDto} from "../../../model/Media";
+import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
 
 interface JurPersonResponseDto {
     id: number;
@@ -8,8 +9,8 @@ interface JurPersonResponseDto {
     name: string;
     edrpou: string|null;
     dateOfRegistration: string;
-    owner: Person | null;
-    benOwner: Person | null;
+    owner: NoRelationshipsPerson | null;
+    benOwner: NoRelationshipsPerson | null;
     location: GeoLocation | null;
 }
 

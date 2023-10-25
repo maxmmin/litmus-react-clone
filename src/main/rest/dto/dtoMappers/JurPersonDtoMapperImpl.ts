@@ -53,8 +53,8 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
         const jurPerson: JurPerson = {
             id: exploredEntityDto.id,
             name: exploredEntityDto.name,
-            owner: exploredEntityDto.owner?exploredEntityDto.owner:null,
-            benOwner: exploredEntityDto.benOwner?exploredEntityDto.benOwner:null,
+            owner: exploredEntityDto.owner?{...exploredEntityDto.owner, relationships: []}:null,
+            benOwner: exploredEntityDto.benOwner?{...exploredEntityDto.benOwner, relationships: []}:null,
             location: exploredEntityDto.location?exploredEntityDto.location:null,
             dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:"",

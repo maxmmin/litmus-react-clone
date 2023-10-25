@@ -8,7 +8,7 @@ import {LitmusServiceContext} from "../../App";
 import UserCreationValidationService
     from "../../../service/creation/validation/human/user/UserCreationValidationService";
 import Role, {RoleName} from "../../../redux/types/userIdentity/Role";
-import {VisibilityDisabledIcon, VisibilityEnabledIcon} from "../../../util/icons";
+import {VisibilityDisabledIcon, VisibilityEnabledIcon} from "../../assets/icons";
 
 const CreateUser = () => {
     const context = useContext(LitmusServiceContext);

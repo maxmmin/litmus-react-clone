@@ -10,7 +10,7 @@ import {CreationModalSettings} from "../CreationScreen";
 import CreationGeoModal from "../geo/CreationGeoModal";
 import {DateEntityTool} from "../../../model/DateEntity";
 import Sex from "../../../model/human/person/Sex";
-import {CrossIcon} from "../../../util/icons";
+import {CrossIcon} from "../../assets/icons";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import PersonRelationshipsCreation from "./PersonRelationshipsCreation";

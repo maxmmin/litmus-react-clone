@@ -1,4 +1,4 @@
-import {PersonIcon} from "../../util/icons";
+import {PersonIcon} from "../assets/icons";
 import HeaderMenu from "./HeaderMenu";
 import React, {useContext} from "react";
 import {UserIdentityStateReducible} from "../../redux/types/userIdentity/UserIdentity";

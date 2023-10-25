@@ -1,7 +1,7 @@
 import React from "react";
 import FilesUploader from "./FilesUploader";
 import FileProps from "../../model/FileProps";
-import {PersonIcon, TrashIcon} from "../../util/icons";
+import {PersonIcon, TrashIcon} from "../assets/icons";
 import ImageRepoImpl from "../../service/media/ImageRepoImpl";
 
 type ImageManagerProps = {

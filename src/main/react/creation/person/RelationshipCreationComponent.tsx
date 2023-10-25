@@ -1,7 +1,7 @@
 import {RelationType} from "../../../model/human/person/Person";
 import {FloatingLabel, Form} from "react-bootstrap";
 import React, {useEffect} from "react";
-import {CrossIcon, DashedUserIcon} from "../../../util/icons";
+import {CrossIcon, DashedUserIcon} from "../../assets/icons";
 import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
 import PersonCreationStateManagerImpl
     from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
