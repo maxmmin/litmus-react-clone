@@ -161,7 +161,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             firstName: retrievedEntityDto.firstName,
             middleName: retrievedEntityDto.middleName||null,
             lastName: retrievedEntityDto.lastName,
-            relationshipsInfo: retrievedEntityDto.relationshipsInfo,
+            relationshipsInfo: retrievedEntityDto.relationshipsInfo||{scanOptions: {depth: 0}, relationships: []},
             dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null
         };
 
