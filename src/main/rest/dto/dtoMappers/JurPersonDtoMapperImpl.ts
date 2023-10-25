@@ -6,6 +6,7 @@ import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../jurPerson/JurPersonResponseDto";
 import JurPersonDtoMapper from "./JurPersonDtoMapper";
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";
+import hasMediaContent from "../../../util/media/hasMediaContent";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
     public mapToRequestDto (emergingEntity: JurPersonCreationParams): JurPersonRequestDto {
@@ -33,6 +34,10 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
 
         if (hasContent(emergingEntity.name)) {
             dto.name = emergingEntity.name;
+        }
+
+        if (hasMediaContent(emergingEntity.media)) {
+            dto.media = emergingEntity.media;
         }
 
         return dto;

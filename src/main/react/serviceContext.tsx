@@ -201,7 +201,7 @@ type CreationContext = {
 const formDataBuilder: MediaEntityFormDataBuilder = new MediaEntityFormDataBuilderImpl(fileContext.fileRepo);
 
 const personCreationApiService: PersonCreationApiService = new PersonCreationApiServiceImpl(formDataBuilder);
-const jurPersonCreationApiService: JurPersonCreationApiService = new JurPersonCreationApiServiceImpl();
+const jurPersonCreationApiService: JurPersonCreationApiService = new JurPersonCreationApiServiceImpl(formDataBuilder);
 const userCreationApiService: UserCreationApiService = new UserCreationApiServiceImpl();
 
 const personCreationStateManager = new PersonCreationStateManagerImpl();

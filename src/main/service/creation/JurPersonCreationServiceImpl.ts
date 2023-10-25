@@ -15,7 +15,6 @@ import JurPersonRequestDto from "../../rest/dto/jurPerson/JurPersonRequestDto";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
-import {RawRelationshipsPerson} from "../../model/human/person/Person";
 import getFilesFromMedia from "../../util/media/getFilesFromMedia";
 import FileRepo from "../media/FileRepo";
 
