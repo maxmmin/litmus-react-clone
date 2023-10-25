@@ -70,7 +70,7 @@ const CreateJurPerson = () => {
 
     useEffect(()=>{
         if (validationErrors?.edrpou) {
-            const updatedEdrpouErr = validationService.validateName(jurPersonCreationParams.edrpou);
+            const updatedEdrpouErr = validationService.validateEdrpou(jurPersonCreationParams.edrpou);
             if (!updatedEdrpouErr) {
                 creationStateManager.updateValidationErrors({edrpou: null})
             }
