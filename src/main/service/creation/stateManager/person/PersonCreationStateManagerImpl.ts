@@ -2,7 +2,7 @@ import {PersonCreationAction} from "../../../../redux/actions/CreationCoreAction
 import PersonCreationStateManager from "./PersonCreationStateManager";
 import {PayloadAction} from "@reduxjs/toolkit";
 import store, {AppDispatch} from "../../../../redux/store";
-import {RawRelationshipsPerson} from "../../../../model/human/person/Person";
+import {PreProcessedPerson} from "../../../../model/human/person/Person";
 import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import PassportData from "../../../../model/human/person/PassportData";
 
@@ -15,7 +15,7 @@ import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateMana
 import {PersonCreationParams, RelationshipCreationParams} from "../../PersonCreationService";
 import RelationshipsLinkObject from "../../../relationships/RelationshipsLinkObject";
 
-class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<RawRelationshipsPerson,PersonCreationParams, PersonValidationObject> implements PersonCreationStateManager {
+class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<PreProcessedPerson,PersonCreationParams, PersonValidationObject> implements PersonCreationStateManager {
 
 
     constructor() {

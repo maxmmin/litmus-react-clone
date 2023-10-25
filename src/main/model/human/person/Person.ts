@@ -8,6 +8,7 @@ import CoreEntity from "../../CoreEntity";
 import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 import {RelationshipsInfoResponseDto} from "../../../rest/dto/person/PersonResponseDto";
 import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
+import {JurPerson} from "../../jurPerson/JurPerson";
 
 export type RelationshipsScanOptions = {
     depth: number
@@ -15,13 +16,15 @@ export type RelationshipsScanOptions = {
 
 interface Person extends Human, MediaEntity, CoreEntity {
     relationships: Relationship[],
+    ownedJurPersons: JurPerson[],
+    benOwnedJurPersons: JurPerson[],
     sex: Sex | null;
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
     location: GeoLocation | null
 }
 
-export type RawRelationshipsPerson = NoRelationshipsPerson&{
+export type PreProcessedPerson = NoRelationshipsPerson&{
     relationshipsInfo: RelationshipsInfoResponseDto
 }
 

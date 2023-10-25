@@ -6,7 +6,7 @@ import PersonInfoTable from "../exploration/EntityTables/PersonInfoTable";
 import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./CreationScreen";
-import {RawRelationshipsPerson} from "../../model/human/person/Person";
+import {PreProcessedPerson} from "../../model/human/person/Person";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
@@ -131,7 +131,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
         try {
             const personResponseDto: PersonResponseDto|null = await personService.findPersonByIdWithDepthOption(id, 0);
-            const person: RawRelationshipsPerson|null = personResponseDto?mapper.mapToEntity(personResponseDto):null;
+            const person: PreProcessedPerson|null = personResponseDto?mapper.mapToEntity(personResponseDto):null;
             //@todo я выбрасываю ошибку внутри или оно нормально обрабатывает? заменить search error моей нормальной ошибкой
             setPerson(person)
             if (!person) {

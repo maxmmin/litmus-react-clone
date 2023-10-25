@@ -5,7 +5,7 @@ import PersonExplorationApiService from "../exploration/api/human/person/PersonE
 import BasicPersonRelationshipsResponseDtoScanner from "./BasicPersonRelationshipsResponseDtoScanner";
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
-import {RawRelationshipsPerson} from "../../model/human/person/Person";
+import {PreProcessedPerson} from "../../model/human/person/Person";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
 import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponseDtoScanner";
 import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
@@ -26,7 +26,7 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationshi
                 protected readonly dtoMapper: PersonDtoMapper) {
     }
 
-    loadSharedNestedPersons(person: RawRelationshipsPerson, limit: number, excludedIdSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
+    loadSharedNestedPersons(person: PreProcessedPerson, limit: number, excludedIdSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
         const dto = person.relationshipsInfo;
         if (!dto.relationships) throw new Error("dto relationships are null");
         dto.relationships.forEach(r=>excludedIdSet.add(r.person.id))
@@ -35,7 +35,7 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationshi
         return this.load(new Set(idList));
     }
 
-    loadAllNestedPersons(person: RawRelationshipsPerson, limit: number, excludedIdSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
+    loadAllNestedPersons(person: PreProcessedPerson, limit: number, excludedIdSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
         const dto = person.relationshipsInfo;
         if (!dto.relationships) throw new Error("dto relationships are null");
         dto.relationships.forEach(r=>excludedIdSet.add(r.person.id))

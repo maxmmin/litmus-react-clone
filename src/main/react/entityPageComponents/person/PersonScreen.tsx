@@ -1,4 +1,4 @@
-import {RawRelationshipsPerson} from "../../../model/human/person/Person";
+import {PreProcessedPerson} from "../../../model/human/person/Person";
 import {useContext, useEffect, useState} from "react";
 import {LitmusServiceContext} from "../../App";
 import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
@@ -17,7 +17,7 @@ export default function PersonScreen () {
 
     const [isFetching, setFetching] = useState<boolean>(true)
 
-    const [person,setPerson] = useState<RawRelationshipsPerson|null>(null);
+    const [person,setPerson] = useState<PreProcessedPerson|null>(null);
 
     useEffect(()=>{
         if (!isFetching) setFetching(true);

@@ -1,5 +1,5 @@
 import BasicPersonRelationshipsLoader from "./BasicPersonRelationshipsLoader";
-import Person, {RawRelationshipsPerson, Relationship} from "../../model/human/person/Person";
+import Person, {PreProcessedPerson, Relationship} from "../../model/human/person/Person";
 import BasicPersonRelationshipsResponseDtoScanner from "./BasicPersonRelationshipsResponseDtoScanner";
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import {
@@ -51,7 +51,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
         delete (person as Partial<Person>)["relationships"]
     }
 
-    private loadRawPersonToStore(rawPerson: RawRelationshipsPerson) {
+    private loadRawPersonToStore(rawPerson: PreProcessedPerson) {
         const clonedPerson: NoRelationshipsPerson = {...rawPerson};
         // @ts-ignore
         delete clonedPerson['relationshipsInfo'];
@@ -63,7 +63,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
         })
     }
 
-    async bindShared (rawPerson: RawRelationshipsPerson, scanDepth: number): Promise<Person> {
+    async bindShared (rawPerson: PreProcessedPerson, scanDepth: number): Promise<Person> {
         if (scanDepth>rawPerson.relationshipsInfo.scanOptions.depth) {
             throw new Error("scan depth is higher that person scan depth");
         }
@@ -84,7 +84,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
         return this.buildRipePerson(rawPerson, shared);
     }
 
-    async bindAll (rawPerson: RawRelationshipsPerson, scanDepth: number): Promise<Person> {
+    async bindAll (rawPerson: PreProcessedPerson, scanDepth: number): Promise<Person> {
         if (scanDepth>rawPerson.relationshipsInfo.scanOptions.depth) {
             throw new Error("scan depth is higher that person scan depth");
         }
@@ -106,7 +106,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
         return this.buildRipePerson(rawPerson, all);
     }
 
-    private buildRipePerson (rawPerson: RawRelationshipsPerson, personsToInclude: Set<number>) {
+    private buildRipePerson (rawPerson: PreProcessedPerson, personsToInclude: Set<number>) {
         const createdPersons: Map<number,Person> = new Map<number,Person>();
 
         const person: Person = {...rawPerson, relationships: []}

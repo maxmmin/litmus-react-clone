@@ -2,7 +2,7 @@ import {
     NestedPersonResponseDto,
     NestedRelationshipsInfoResponseDto
 } from "../../rest/dto/person/PersonResponseDto";
-import {RawRelationshipsPerson} from "../../model/human/person/Person";
+import {PreProcessedPerson} from "../../model/human/person/Person";
 import PersonRelationshipsResponseDtoScanner, {ScanResult} from "./PersonRelationshipsResponseDtoScanner";
 
 export default class BasicPersonRelationshipsResponseDtoScanner implements PersonRelationshipsResponseDtoScanner{
@@ -10,7 +10,7 @@ export default class BasicPersonRelationshipsResponseDtoScanner implements Perso
         return new BasicPersonRelationshipsResponseDtoScanner();
     }
 
-    scan(person: RawRelationshipsPerson, limit: number): ScanResult {
+    scan(person: PreProcessedPerson, limit: number): ScanResult {
         const tree = person.relationshipsInfo.relationships;
 
         const scannedPersons: Set<number> = new Set();

@@ -1,4 +1,4 @@
-import Person, {RawRelationshipsPerson, Relationship} from "../../../model/human/person/Person";
+import Person, {PreProcessedPerson, Relationship} from "../../../model/human/person/Person";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {valueOrMessage} from "../../../util/valueOrNull";
@@ -17,7 +17,7 @@ import Loader from "../../loader/Loader";
 import getFullName from "../../../util/getFullName";
 
 type PersonProps = {
-    rawPerson: RawRelationshipsPerson
+    rawPerson: PreProcessedPerson
 }
 
 type RelationShipProps = {

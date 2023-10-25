@@ -1,5 +1,5 @@
 import Person, {
-    RawRelationshipsPerson,
+    PreProcessedPerson,
     Relationship
 } from "../../../model/human/person/Person";
 import PersonRequestDto, {PassportDataRequestDto, RelationshipRequestDto} from "../person/PersonRequestDto";
@@ -37,7 +37,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
 
 
     mapPersonResponseIdMapDto(dto: PersonResponseIdMapDto): OptionalRawPersonIdMap {
-        const personMap: OptionalRawPersonIdMap = new Map<number, RawRelationshipsPerson | null>();
+        const personMap: OptionalRawPersonIdMap = new Map<number, PreProcessedPerson | null>();
 
         for (const id in dto) {
 
@@ -47,7 +47,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
 
             const personDto = dto[numId];
 
-            let person: RawRelationshipsPerson|null;
+            let person: PreProcessedPerson|null;
 
             if (personDto) {
                 person = this.mapToEntity(personDto);
@@ -142,7 +142,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         }
     }
 
-    mapToEntity(retrievedEntityDto: PersonResponseDto): RawRelationshipsPerson {
+    mapToEntity(retrievedEntityDto: PersonResponseDto): PreProcessedPerson {
         let passportData: PassportData|null;
 
         if (retrievedEntityDto.passportData) {
@@ -158,7 +158,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             images: retrievedEntityDto.media.images||[]
         }
 
-        const person: RawRelationshipsPerson = {
+        const person: PreProcessedPerson = {
             media: media,
             id: retrievedEntityDto.id,
             passportData: passportData,

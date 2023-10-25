@@ -1,7 +1,7 @@
 import ExplorationService from "./ExplorationService";
 import PersonExplorationApiService from "./api/human/person/PersonExplorationApiService";
 import PagedData, {UnPagedData} from "../../rest/PagedData";
-import Person, {RawRelationshipsPerson} from "../../model/human/person/Person";
+import Person, {PreProcessedPerson} from "../../model/human/person/Person";
 import PersonExplorationParams from "../../redux/types/exploration/human/person/PersonExplorationParams";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import EntityExplorationData from "../../redux/types/exploration/EntityExplorationData";
@@ -23,9 +23,9 @@ import PersonExplorationApiServiceImpl from "./api/human/person/PersonExploratio
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 
-type PersonExplorationMapper = DtoMapper<any, RawRelationshipsPerson, PersonResponseDto, any>
+type PersonExplorationMapper = DtoMapper<any, PreProcessedPerson, PersonResponseDto, any>
 
-type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: PersonExplorationMapper) => Promise<PagedData<RawRelationshipsPerson>>;
+type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: PersonExplorationMapper) => Promise<PagedData<PreProcessedPerson>>;
 
 class PersonExplorationService implements ExplorationService {
 
@@ -42,10 +42,10 @@ class PersonExplorationService implements ExplorationService {
 
     private exploreByIdCallback: PersonExplorationCallbackType = async (params, service, mapper) => {
         const id = checkNotEmpty(params.id);
-        const content: RawRelationshipsPerson[] = []
+        const content: PreProcessedPerson[] = []
         const personResponseDto: PersonResponseDto|null = await service.findById(id);
         if (personResponseDto) {
-            const person: RawRelationshipsPerson = mapper.mapToEntity(personResponseDto);
+            const person: PreProcessedPerson = mapper.mapToEntity(personResponseDto);
             content.push(person)
         };
         return new UnPagedData(content);
@@ -57,7 +57,7 @@ class PersonExplorationService implements ExplorationService {
         const firstName = params.firstName;
         const i = params.i;
         const pagedResponse: PagedData<PersonResponseDto> = await service.findByFullName({lastName, middleName, firstName}, i);
-        const personArray: RawRelationshipsPerson[] = pagedResponse.content.map(person=>mapper.mapToEntity(person));
+        const personArray: PreProcessedPerson[] = pagedResponse.content.map(person=>mapper.mapToEntity(person));
         return {...pagedResponse, content: personArray};
     }
 
@@ -73,7 +73,7 @@ class PersonExplorationService implements ExplorationService {
         this.stateManager.retrieveData(this.explorePersonsThunk({params: this.stateManager.getExplorationParams(), globalPending: false})).catch(console.error)
     }
 
-    private async exploreUponMode (explorationParams: PersonExplorationParams): Promise<PagedData<RawRelationshipsPerson>> {
+    private async exploreUponMode (explorationParams: PersonExplorationParams): Promise<PagedData<PreProcessedPerson>> {
         const modeId = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         const callback = this.callbackMap.get(mode);
@@ -85,12 +85,12 @@ class PersonExplorationService implements ExplorationService {
             } else throw new UnsupportedModeError();}
         }
 
-    private explorePersonsThunk = createAsyncThunk<EntityExplorationData<RawRelationshipsPerson, PersonExplorationParams>,
+    private explorePersonsThunk = createAsyncThunk<EntityExplorationData<PreProcessedPerson, PersonExplorationParams>,
         ThunkArg<{params: PersonExplorationParams}>,
         LitmusAsyncThunkConfig>(ExplorationTypedAction.person[ExplorationCoreAction.RETRIEVE_DATA],(async ({params}, {rejectWithValue, fulfillWithValue}) => {
         try {
-            const response: PagedData<RawRelationshipsPerson> = await this.exploreUponMode(params);
-            const exploredData: EntityExplorationData<RawRelationshipsPerson, PersonExplorationParams> = {requestParams: params, response: response}
+            const response: PagedData<PreProcessedPerson> = await this.exploreUponMode(params);
+            const exploredData: EntityExplorationData<PreProcessedPerson, PersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
             return rejectWithValue(handleRequestError(e), {notify: true});
