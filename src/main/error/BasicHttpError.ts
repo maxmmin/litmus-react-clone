@@ -54,7 +54,7 @@ class HttpErrorParser {
 
             if ("detail" in err) {
                 detail = err["detail"] as ErrorResponse['detail'];
-            } if ("message" in err) {
+            } else if ("message" in err) {
                 detail = err["message"] as ErrorResponse['detail']
             }
 
