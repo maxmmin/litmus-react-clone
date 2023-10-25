@@ -24,7 +24,9 @@ export default function SimpleImagesManager ({mainImageKey, images, imageStateMa
 
     function handleUploadError(e: unknown) {
         const error = HttpErrorParser.parseError(e);
-        notificationManager.error(HttpErrorParser.getErrorDescription(error));
+        const description = HttpErrorParser.getErrorDescription(error);
+        notificationManager.error(description);
+        console.error(description)
     }
 
     return (
