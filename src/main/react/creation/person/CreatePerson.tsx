@@ -37,7 +37,7 @@ const CreatePerson = () => {
 
     const validationService = litmusContext.creation.validation.person;
 
-    const fileService = litmusContext.files.fileService;
+    const fileService = litmusContext.files.fileRepo;
 
     const person = useAppSelector(state => state.creation.person?.emergingEntity)!
 

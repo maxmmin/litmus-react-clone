@@ -15,21 +15,37 @@ import JurPersonRequestDto from "../../rest/dto/jurPerson/JurPersonRequestDto";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
+import {RawRelationshipsPerson} from "../../model/human/person/Person";
+import getFilesFromMedia from "../../util/media/getFilesFromMedia";
+import FileRepo from "../media/FileRepo";
 
 class JurPersonCreationServiceImpl extends CreationServiceImpl<JurPersonRequestDto, JurPerson, JurPersonResponseDto,
     JurPersonCreationParams, JurPersonValidationObject, ServerJurPersonValidationObject> implements JurPersonCreationService {
     constructor(apiService: JurPersonCreationApiService,
                 creationStateManager: JurPersonCreationStateManager,
                 mapper: JurPersonDtoMapper,
-                validationService: JurPersonCreationValidationService) {
+                validationService: JurPersonCreationValidationService,
+                protected readonly fileService: FileRepo) {
         super(apiService, creationStateManager, mapper, validationService);
+    }
+
+    async createEntity(): Promise<JurPerson> {
+        const media = this.creationStateManager.getCreationParams().media;
+        const createdJurPerson: JurPerson = await super.defaultCreate();
+
+        const linkedFiles: string[] = getFilesFromMedia(media);
+        linkedFiles.forEach(file=>this.fileService.removeFile(file))
+        console.log("Local media buffer cleaned");
+
+        return createdJurPerson;
     }
 
     public static getInstance(apiService: JurPersonCreationApiService = JurPersonCreationApiServiceImpl.getInstance(),
                               stateManager: JurPersonCreationStateManager = new JurPersonCreationStateManagerImpl(),
                               mapper: JurPersonDtoMapper = new JurPersonDtoMapperImpl(),
-                              validationService: JurPersonCreationValidationService = new JurPersonCreationValidationServiceImpl()): JurPersonCreationServiceImpl {
-        return new JurPersonCreationServiceImpl(apiService, stateManager, mapper, validationService);
+                              validationService: JurPersonCreationValidationService = new JurPersonCreationValidationServiceImpl(),
+                              fileService: FileRepo): JurPersonCreationServiceImpl {
+        return new JurPersonCreationServiceImpl(apiService, stateManager, mapper, validationService, fileService);
     }
 }
 

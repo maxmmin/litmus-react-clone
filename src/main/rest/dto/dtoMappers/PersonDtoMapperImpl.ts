@@ -146,20 +146,20 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
 
         if (retrievedEntityDto.passportData) {
             passportData = {
-                rnokppCode: retrievedEntityDto.passportData.rnokppCode?retrievedEntityDto.passportData.rnokppCode:null,
-                passportSerial: retrievedEntityDto.passportData.passportSerial?retrievedEntityDto.passportData.passportSerial:null,
-                passportNumber: retrievedEntityDto.passportData.passportNumber?retrievedEntityDto.passportData.passportNumber:null
+                rnokppCode: retrievedEntityDto.passportData.rnokppCode||null,
+                passportSerial: retrievedEntityDto.passportData.passportSerial||null,
+                passportNumber: retrievedEntityDto.passportData.passportNumber||null
             }
         } else passportData = null;
 
         const person: RawRelationshipsPerson = {
-            media: retrievedEntityDto.media?retrievedEntityDto.media:{images: [], mainImage: null},
+            media: retrievedEntityDto.media,
             id: retrievedEntityDto.id,
             passportData: passportData,
             sex: retrievedEntityDto.sex,
-            location: retrievedEntityDto.location?retrievedEntityDto.location:null,
+            location: retrievedEntityDto.location||null,
             firstName: retrievedEntityDto.firstName,
-            middleName: retrievedEntityDto.middleName?retrievedEntityDto.middleName:null,
+            middleName: retrievedEntityDto.middleName||null,
             lastName: retrievedEntityDto.lastName,
             relationshipsInfo: retrievedEntityDto.relationshipsInfo,
             dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null

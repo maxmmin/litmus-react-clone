@@ -21,7 +21,11 @@ export const initialJurPersonCreationParams: JurPersonCreationParams = {
     edrpou:  "",
     name: "",
     owner: null,
-    location: null
+    location: null,
+    media: {
+        mainImage: null,
+        images: []
+    }
 }
 
 

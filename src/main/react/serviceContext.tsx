@@ -119,14 +119,14 @@ const authContext: AuthContext = {
 }
 
 type FileContext = {
-    fileService: FileRepo,
+    fileRepo: FileRepo,
     imageService: ImageRepo
 }
 
 const fileService = FileRepoFactory.getGlobalFileService();
 
 const fileContext: FileContext = {
-    fileService: fileService,
+    fileRepo: fileService,
     imageService: new ImageRepoImpl(fileService)
 }
 
@@ -198,7 +198,7 @@ type CreationContext = {
     formDataBuilder: MediaEntityFormDataBuilder,
 }
 
-const formDataBuilder: MediaEntityFormDataBuilder = new MediaEntityFormDataBuilderImpl(fileContext.fileService);
+const formDataBuilder: MediaEntityFormDataBuilder = new MediaEntityFormDataBuilderImpl(fileContext.fileRepo);
 
 const personCreationApiService: PersonCreationApiService = new PersonCreationApiServiceImpl(formDataBuilder);
 const jurPersonCreationApiService: JurPersonCreationApiService = new JurPersonCreationApiServiceImpl();
@@ -226,9 +226,9 @@ const creationContext: CreationContext = {
         user: userCreationStateManager
     },
     service: {
-        person: new PersonCreationServiceImpl(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService, fileContext.fileService),
+        person: new PersonCreationServiceImpl(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService, fileContext.fileRepo),
         user: new UserCreationServiceImpl(userCreationApiService,userCreationStateManager, mappers.user, userCreationValidationService),
-        jurPerson: new JurPersonCreationServiceImpl(jurPersonCreationApiService, jurPersonCreationStateManager, mappers.jurPerson, jurPersonCreationValidationService)
+        jurPerson: new JurPersonCreationServiceImpl(jurPersonCreationApiService, jurPersonCreationStateManager, mappers.jurPerson, jurPersonCreationValidationService, fileContext.fileRepo)
     },
     validation: {
         person: personCreationValidationService,

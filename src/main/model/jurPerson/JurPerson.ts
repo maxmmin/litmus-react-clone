@@ -2,8 +2,9 @@ import {GeoLocation} from "../GeoLocation";
 import Person from "../human/person/Person";
 import DateEntity from "../DateEntity";
 import CoreEntity from "../CoreEntity";
+import MediaEntity from "../MediaEntity";
 
-export interface JurPerson extends CoreEntity {
+export interface JurPerson extends CoreEntity, MediaEntity {
     name: string;
     edrpou: string;
     dateOfRegistration: DateEntity|null;

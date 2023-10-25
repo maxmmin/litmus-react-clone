@@ -16,7 +16,7 @@ export default function SimpleImagesManager ({mainImageKey, images, imageStateMa
 
     const litmusContext = useContext(LitmusServiceContext);
 
-    const fileService = litmusContext.files.fileService;
+    const fileService = litmusContext.files.fileRepo;
 
     const imageService = litmusContext.files.imageService;
 

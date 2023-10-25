@@ -42,15 +42,15 @@ export type NestedRelationshipsInfoResponseDto = {
 
 interface PersonResponseDto {
     id: number;
-    media: Media | null;
+    media: Media;
     firstName: string;
-    middleName?: string|null;
+    middleName: string|null;
     lastName: string;
     relationshipsInfo: RelationshipsInfoResponseDto,
     sex: Sex;
-    passportData?: Partial<PassportData> | null;
-    dateOfBirth?: string | null;
-    location?: GeoLocation | null
+    passportData: Partial<PassportData>;
+    dateOfBirth: string | null;
+    location: GeoLocation | null
 }
 
 export default PersonResponseDto;
