@@ -6,11 +6,11 @@ interface JurPersonResponseDto {
     id: number;
     media: MediaResponseDto;
     name: string;
-    edrpou?: string;
-    dateOfRegistration?: string;
-    owner?: Person | null;
-    benOwner?: Person | null;
-    location?: GeoLocation | null;
+    edrpou: string|null;
+    dateOfRegistration: string;
+    owner: Person | null;
+    benOwner: Person | null;
+    location: GeoLocation | null;
 }
 
 export default JurPersonResponseDto;
