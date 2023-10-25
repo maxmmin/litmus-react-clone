@@ -6,7 +6,7 @@ import MediaEntity from "../MediaEntity";
 
 export interface JurPerson extends CoreEntity, MediaEntity {
     name: string;
-    edrpou: string;
+    edrpou: string|null;
     dateOfRegistration: DateEntity|null;
     owner: Person | null;
     benOwner: Person | null;

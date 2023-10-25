@@ -16,11 +16,11 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
         return bindingResult;
     }
 
-    validateName(name: string): string | null {
+    validateName(name: JurPerson['name']): string | null {
         return hasContent(name)?null:"Ім'я не повинно бути пустим";
     }
 
-    validateEdrpou(edrpou: string): string | null {
+    validateEdrpou(edrpou: JurPerson['edrpou']): string | null {
         if (!edrpou) return null;
         //@todo validation
         return null;

@@ -11,6 +11,10 @@ type Props = {
     person: NoRelationshipsPerson
 }
 
+export function buildPersonLink(id: number) {
+    return <NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], id.toString())}>{id}</NavLink>
+}
+
 const PersonInfoTable = ({person}: Props) => {
     const passportData = person.passportData;
 
@@ -29,7 +33,7 @@ const PersonInfoTable = ({person}: Props) => {
 
             <div className="entity-container__value entity-container__value-block_person">
                 <p className="entity-container__value entity-container__value_person">
-                    <NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], person.id.toString())}>{person.id}</NavLink>
+                    {buildPersonLink(person.id)}
                 </p>
             </div>
             <div className="entity-container__value entity-container__value-block_person"><p className="entity-container__value entity-container__value_person">{person.lastName}</p></div>

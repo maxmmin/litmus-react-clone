@@ -14,8 +14,6 @@ import {Entity} from "../../../model/Entity";
 import {GeoLocation} from "../../../model/GeoLocation";
 import {LitmusServiceContext} from "../../App";
 import Loader from "../../loader/Loader";
-import GeoCoordinates from "../../../model/GeoCoordinates";
-import {retry} from "@reduxjs/toolkit/query";
 import getFullName from "../../../util/getFullName";
 
 type PersonProps = {
@@ -71,7 +69,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
             .finally(()=>setPending(false));
     }, [rawPerson])
 
-    const mainImg: string|undefined = rawPerson.media.mainImage?rawPerson.media.mainImage:rawPerson.media.images[0];
+    const mainImg: string|undefined = rawPerson.media.mainImage||rawPerson.media.images[0];
 
     if (isPending) return <Loader/>
 
