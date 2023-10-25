@@ -1,10 +1,10 @@
 import Person from "../../../model/human/person/Person";
 import {GeoLocation} from "../../../model/GeoLocation";
-import Media from "../../../model/Media";
+import Media, {MediaResponseDto} from "../../../model/Media";
 
 interface JurPersonResponseDto {
     id: number;
-    media: Media;
+    media: MediaResponseDto;
     name: string;
     edrpou?: string;
     dateOfRegistration?: string;

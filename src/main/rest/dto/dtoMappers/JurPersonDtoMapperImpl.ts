@@ -7,6 +7,7 @@ import JurPersonResponseDto from "../jurPerson/JurPersonResponseDto";
 import JurPersonDtoMapper from "./JurPersonDtoMapper";
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";
 import hasMediaContent from "../../../util/media/hasMediaContent";
+import Media from "../../../model/Media";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
     public mapToRequestDto (emergingEntity: JurPersonCreationParams): JurPersonRequestDto {
@@ -44,6 +45,11 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
     }
 
     mapToEntity(exploredEntityDto: JurPersonResponseDto): JurPerson {
+        const media: Media = {
+            mainImage: exploredEntityDto.media.mainImage,
+            images: exploredEntityDto.media.images||[]
+        }
+
         const jurPerson: JurPerson = {
             id: exploredEntityDto.id,
             name: exploredEntityDto.name,
@@ -52,7 +58,7 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             location: exploredEntityDto.location?exploredEntityDto.location:null,
             dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:"",
-            media: exploredEntityDto.media
+            media: media
         }
 
         return jurPerson
