@@ -9,8 +9,9 @@ import {
     ServerJurPersonValidationObject
 } from "../../validation/jurPerson/JurPersonCreationValidationService";
 import {JurPersonCreationParams} from "../../../../redux/types/creation/JurPersonCreationState";
+import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateManagerImpl";
 
-class JurPersonCreationStateManagerImpl extends CreationStateManagerImpl<JurPerson,JurPersonCreationParams, JurPersonValidationObject> implements JurPersonCreationStateManager {
+class JurPersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<JurPerson,JurPersonCreationParams, JurPersonValidationObject> implements JurPersonCreationStateManager {
     constructor() {
         const dispatch: AppDispatch = store.dispatch;
         const getState = () => store.getState().creation.jurPerson!;

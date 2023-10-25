@@ -20,11 +20,7 @@ import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
 import FileProps from "../../../model/FileProps";
 import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
-
-type PersonImages = {
-    mainImage: FileProps|null,
-    images: FileProps[]
-}
+import {Images} from "../../../model/Media";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -54,7 +50,7 @@ const CreatePerson = () => {
 
     const relationships = person?.relationships;
 
-    const {mainImage, images} = useMemo<PersonImages>(()=>{
+    const {mainImage, images} = useMemo<Images>(()=>{
         const media = person.media;
         return {
             mainImage: media.mainImage?{file: fileService.getFileOrThrow(media.mainImage), fileKey: media.mainImage}:null,

@@ -11,7 +11,7 @@ import {CreationModalModes} from "../../redux/types/creation/CreationModalModes"
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
 import {HttpErrorParser} from "../../error/BasicHttpError";
-import ErrorResponse, {ApplicationError} from "../../rest/ErrorResponse";
+import {ApplicationError} from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";

@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppSelector} from "../../../redux/hooks";
 import CreationGeoModal from "../geo/CreationGeoModal";
@@ -13,6 +13,8 @@ import {LitmusServiceContext} from "../../App";
 import InputError from "../../sharedComponents/InputError";
 import Human from "../../../model/human/Human";
 import getFullName from "../../../util/getFullName";
+import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
+import {Images} from "../../../model/Media";
 
 
 const getShortInfo = (person: Human&{id: number}): string => `${person.id}: ${getFullName(person)}`
@@ -32,9 +34,19 @@ const CreateJurPerson = () => {
 
     const validationService = context.creation.validation.jurPerson;
 
+    const fileService = context.files.fileRepo;
+
     if (!jurPersonCreationParams) {
         throw new Error("createPersonDto was null but it shouldn't")
     }
+
+    const {mainImage, images} = useMemo<Images>(()=>{
+        const media = jurPersonCreationParams.media;
+        return {
+            mainImage: media.mainImage?{file: fileService.getFileOrThrow(media.mainImage), fileKey: media.mainImage}:null,
+            images: media.images.map(fileKey=>({file: fileService.getFileOrThrow(fileKey), fileKey: fileKey}))
+        }
+    }, [jurPersonCreationParams.media])
 
     const {year, month, day} = jurPersonCreationParams.dateOfRegistration||{year: '', month: '', day: ''};
 
@@ -132,6 +144,16 @@ const CreateJurPerson = () => {
                         }}
                     />
                 </Form.Group>
+
+            <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
+                <Form.Label>Прикріпити зображення</Form.Label>
+                <SimpleImagesManager
+                    mainImageKey={mainImage?mainImage.fileKey:null}
+                    images={images}
+                    imageStateManager={creationStateManager}
+                    cssAnchor={"creation"}
+                />
+            </Form.Group>
 
         </>
 )
