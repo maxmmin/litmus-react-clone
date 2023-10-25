@@ -46,9 +46,9 @@ interface PersonResponseDto {
     firstName: string;
     middleName: string|null;
     lastName: string;
-    relationshipsInfo: RelationshipsInfoResponseDto,
+    relationshipsInfo: RelationshipsInfoResponseDto | null,
     sex: Sex;
-    passportData: Partial<PassportData>;
+    passportData: Partial<PassportData> | null;
     dateOfBirth: string | null;
     location: GeoLocation | null
 }
