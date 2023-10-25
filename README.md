@@ -37,7 +37,7 @@
 ![Screenshot from 2023-10-16 13-02-29](https://github.com/maxmmin/litmus-images/blob/main/Screenshot%20from%202023-10-16%2013-02-29.png)
 ![Screenshot from 2023-10-16 13-16-19](https://github.com/maxmmin/litmus-images/blob/main/Screenshot%20from%202023-10-16%2013-16-19.png)
 ![Screenshot from 2023-10-16 13-11-14](https://github.com/maxmmin/litmus-images/blob/main/Screenshot%20from%202023-10-16%2013-11-14.png)
-![Screenshot from 2023-10-16 13-02-45](https://github.com/maxmmin/litmus-images/blob/main/Screenshot%20from%202023-10-16%2013-02-45.png)
+![user_screen](https://github.com/maxmmin/litmus-images/blob/main/user-screen.png)
 
 
 
