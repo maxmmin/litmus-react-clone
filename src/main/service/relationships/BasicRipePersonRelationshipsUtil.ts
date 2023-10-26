@@ -39,26 +39,24 @@ export default class BasicRipePersonRelationshipsUtil implements RipePersonRelat
 
             for (let counter = 0; counter<relatedPersons.length; counter++) {
                 const related = relatedPersons[counter];
-                // check if the related person non root
-                if (person.relationships.findIndex(r=>r.to===related)===-1) {
-                    const relatedRelationships = related.relationships;
-                    let locationCounter: number = 0;
 
-                    for (let innerCounter=0;innerCounter<relatedRelationships.length; innerCounter++) {
-                        if (locationCounter>1) break;
-                        const innerRelatedPerson = relatedRelationships[innerCounter].to;
-                        if (relatedPersons.includes(innerRelatedPerson)&&person.location) locationCounter++;
-                    }
+                const relatedRelationships = related.relationships;
+                let locationCounter: number = 0;
 
-                    if (locationCounter<2) {
-                        const isLinkedByJurPerson = this.isLinkedByJurPerson(related, relatedPersons);
-                        if (isLinkedByJurPerson) locationCounter++;
-                    }
+                for (let innerCounter=0;innerCounter<relatedRelationships.length; innerCounter++) {
+                    if (locationCounter>1) break;
+                    const innerRelatedPerson = relatedRelationships[innerCounter].to;
+                    if (relatedPersons.includes(innerRelatedPerson)&&person.location) locationCounter++;
+                }
 
-                    if (locationCounter<2) {
-                        relatedPersons.splice(counter,1);
-                        changed = true;
-                    }
+                if (locationCounter<2) {
+                    const isLinkedByJurPerson = this.isLinkedByJurPerson(related, relatedPersons);
+                    if (isLinkedByJurPerson) locationCounter++;
+                }
+
+                if (locationCounter<2) {
+                    relatedPersons.splice(counter,1);
+                    changed = true;
                 }
             }
         }
@@ -67,7 +65,15 @@ export default class BasicRipePersonRelationshipsUtil implements RipePersonRelat
         return new Set<Person>(relatedPersons);
     }
 
-    extractRelatedPersons (person: Person, subBranchScanned: Set<Person> = new Set): Set<Person> {
+    extractRelatedPersons(person: Person): Set<Person> {
+        const relatedPersons = this._extractRelatedPersons(person);
+        const wasPresent = relatedPersons.delete(person);
+        // debug error. if it's being thrown extractor algorithm is wrong. contact the developer, please.
+        if (!wasPresent) throw new Error("extractor bug. there should be root entity present in internal extract call.");
+        return relatedPersons;
+    }
+
+    private _extractRelatedPersons (person: Person, subBranchScanned: Set<Person> = new Set()): Set<Person> {
         return person.relationships.reduce((accum, relationship)=>{
             const iteratedPerson = relationship.to;
 
@@ -75,7 +81,7 @@ export default class BasicRipePersonRelationshipsUtil implements RipePersonRelat
 
             if (!accum.has(iteratedPerson)&&!subBranchScanned.has(iteratedPerson)) {
                 subBranchScanned.add(iteratedPerson);
-                iterationSet = this.extractRelatedPersons(iteratedPerson,subBranchScanned);
+                iterationSet = this._extractRelatedPersons(iteratedPerson,subBranchScanned);
             }
 
             iterationSet.add(iteratedPerson);
