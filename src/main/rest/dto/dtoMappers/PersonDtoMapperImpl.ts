@@ -17,36 +17,18 @@ import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreatio
 import Media from "../../../model/Media";
 import JurPersonDtoMapper from "./JurPersonDtoMapper";
 import JurPersonDtoMapperImpl from "./JurPersonDtoMapperImpl";
+import SimplePersonDtoMapper from "./SimplePersonDtoMapper";
 
-export default class PersonDtoMapperImpl implements PersonDtoMapper {
+export default class PersonDtoMapperImpl extends SimplePersonDtoMapper implements PersonDtoMapper {
     protected readonly jurPersonDtoMapper: JurPersonDtoMapper;
 
     constructor(jurPersonDtoMapper: JurPersonDtoMapper) {
+        super();
         this.jurPersonDtoMapper = jurPersonDtoMapper;
     }
 
     static getInstance(jurPersonDtoMapper: JurPersonDtoMapper = JurPersonDtoMapperImpl.getInstance()): PersonDtoMapperImpl {
         return new PersonDtoMapperImpl(jurPersonDtoMapper);
-    }
-
-    mapSimpleResponseDtoToEntity(dto: SimplePersonResponseDto): Person {
-        const person: Person = {
-            id: dto.id,
-            media: {mainImage: dto.media.mainImage,
-            images: dto.media.images||[]},
-            passportData: null,
-            location: null,
-            firstName: dto.firstName,
-            middleName: dto.middleName,
-            lastName: dto.lastName,
-            relationships: [],
-            benOwnedJurPersons: [],
-            ownedJurPersons: [],
-            dateOfBirth: null,
-            sex: dto.sex
-        }
-
-        return person;
     }
 
     mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto, 'relationshipsInfo'>): NoRelationshipsPerson {
