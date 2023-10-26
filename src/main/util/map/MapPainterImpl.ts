@@ -14,11 +14,14 @@ import {LineString, Point} from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
 import Vector from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
+import {JurPerson} from "../../model/jurPerson/JurPerson";
 
 
 export type PersonLabelInfo = {person: PersonLabelRequiredFields, label: HTMLDivElement, labelOverlay: Overlay}
 
 type PersonLabelRequiredFields = Pick<Person, "id"|"firstName"|"middleName"|"lastName"|"location"|"media">;
+
+type JurPersonLabelRequiredFields = Pick<JurPerson, "id"|"name"|"location"|"media">;
 
 export type PersonPaintMetaData = {
     drawnPersons: PersonLabelInfo[]
@@ -40,7 +43,7 @@ export default class MapPainterImpl implements MapPainter {
         positioning: 'bottom-center'
     })
 
-    private readonly _lineStyle = new Style({
+    private readonly _relationshipLineStyle = new Style({
         fill: new Fill({ color: '#6750A4' }),
         stroke: new Stroke({
             color: '#6750A4',
@@ -49,8 +52,8 @@ export default class MapPainterImpl implements MapPainter {
     });
 
 
-    get lineStyle(): Style {
-        return this._lineStyle;
+    get relationshipLineStyle(): Style {
+        return this._relationshipLineStyle;
     }
 
     get popup(): Popup {
@@ -62,10 +65,10 @@ export default class MapPainterImpl implements MapPainter {
 
     private buildPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelRequiredFields, cssAnchor?: string}): HTMLDivElement {
         const personContainer = document.createElement("div");
-        personContainer.className = "person-map-label "+cssAnchor;
+        personContainer.className = "map-entity-label map-entity-label_person "+cssAnchor;
 
         const imgContainer = document.createElement("div")
-        imgContainer.className = 'person-map-label__img-wrapper'
+        imgContainer.className = 'map-entity-label__img-wrapper map-entity-label__img-wrapper_person'
 
         personContainer.append(imgContainer);
 
@@ -74,11 +77,11 @@ export default class MapPainterImpl implements MapPainter {
         if (mainImg) {
             const personImg = document.createElement("img");
             personImg.src = buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg);
-            personImg.className = "person-map-label__img"
+            personImg.className = "map-entity-label__img map-entity-label__img_person"
             imgContainer.append(personImg);
         } else {
             const personLetter = document.createElement("p")
-            personLetter.className = "person-map-label__surname-first-letter"
+            personLetter.className = "map-entity-label__img-placeholder map-entity-label__img-placeholder_person"
             personLetter.innerText = person.lastName[0];
             imgContainer.append(personLetter);
         }
@@ -117,7 +120,6 @@ export default class MapPainterImpl implements MapPainter {
         };
     }
 
-
     private buildRelationshipsLabels (person: Person, relatedPersons: Set<Person>): PersonLabelInfo[] {
         const labels: PersonLabelInfo[] = [...relatedPersons]
             .map(p=>this.buildSinglePersonLabel({
@@ -144,7 +146,7 @@ export default class MapPainterImpl implements MapPainter {
         return pairedId.sort((a,b)=>a-b).join("/");
     }
 
-    buildRelationshipLine({pair}: {pair: [Relationship, Relationship]}): LinesData  {
+    private buildRelationshipLine({pair}: {pair: [Relationship, Relationship]}): LinesData  {
         const personPair = pair.map(r=>r.to);
         const [personOne, personTwo] = personPair;
         if (personOne.location&&personTwo.location) {
@@ -153,7 +155,7 @@ export default class MapPainterImpl implements MapPainter {
             const line = new Feature({
                 geometry: new LineString(pairCoordinates)
             })
-            line.setStyle(this.lineStyle);
+            line.setStyle(this.relationshipLineStyle);
 
             return {
                 pair: pair,
@@ -194,6 +196,32 @@ export default class MapPainterImpl implements MapPainter {
         const lines = linesData.map(data=>data.line);
         source.addFeatures(lines);
         return vectorLayer;
+    }
+
+    private buildJurPersonLabelElement({jurPerson, cssAnchor=""}: {jurPerson: JurPersonLabelRequiredFields, cssAnchor: string}) {
+        const jurPersonContainer = document.createElement("div");
+        jurPersonContainer.className = "map-entity-label map-entity-label_jur-person "+cssAnchor;
+
+        const imgContainer = document.createElement("div")
+        imgContainer.className = 'map-entity-label__img-wrapper map-entity-label__img-wrapper_jur-person'
+
+        jurPersonContainer.append(imgContainer);
+
+        const mainImg = jurPerson.media.mainImage;
+
+        if (mainImg) {
+            const personImg = document.createElement("img");
+            personImg.src = buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg);
+            personImg.className = "map-entity-label__img map-entity-label__img_jur-person"
+            imgContainer.append(personImg);
+        } else {
+            const personLetter = document.createElement("p")
+            personLetter.className = "map-entity-label__img-placeholder map-entity-label__img-placeholder_jur-person"
+            personLetter.innerText = jurPerson.name[0];
+            imgContainer.append(personLetter);
+        }
+
+        return jurPersonContainer;
     }
 
     paintPersonData(person: Person, map: OlMap): PersonPaintMetaData {

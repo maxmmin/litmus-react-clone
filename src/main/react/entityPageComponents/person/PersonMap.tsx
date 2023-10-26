@@ -86,7 +86,7 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
         if (map) {
             const service = new MapPainterImpl(BasicRipePersonRelationshipsUtil.getInstance());
             if (person.location) {
-                console.log([...personRelationshipsUtil.extractRelatedPersons(person)])
+
                 const popup = service.popup;
                 map.addOverlay(popup);
 
