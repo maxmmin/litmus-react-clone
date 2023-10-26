@@ -6,6 +6,8 @@ import {
     RelationType
 } from "../../../model/human/person/Person";
 import Media, {MediaResponseDto} from "../../../model/Media";
+import {JurPerson} from "../../../model/jurPerson/JurPerson";
+import JurPersonResponseDto from "../jurPerson/JurPersonResponseDto";
 
 export interface RelationshipResponseDto {
     person: RelatedPersonResponseDto,
@@ -40,6 +42,10 @@ export type NestedRelationshipsInfoResponseDto = {
     relationships: NestedRelationshipResponseDto[]|null
 }
 
+export type NoRelationshipsPersonResponseDto = Omit<PersonResponseDto, 'relationships'>
+
+export type SimplePersonResponseDto = Pick<PersonResponseDto, 'id'|'firstName'|'middleName'|'lastName'|'sex'|'media'>
+
 interface PersonResponseDto {
     id: number;
     media: MediaResponseDto;
@@ -47,6 +53,8 @@ interface PersonResponseDto {
     middleName: string|null;
     lastName: string;
     relationshipsInfo: RelationshipsInfoResponseDto | null,
+    ownedJurPersons: JurPersonResponseDto[],
+    benOwnedJurPersons: JurPersonResponseDto[],
     sex: Sex;
     passportData: Partial<PassportData> | null;
     dateOfBirth: string | null;

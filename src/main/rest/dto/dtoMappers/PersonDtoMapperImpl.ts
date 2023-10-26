@@ -8,18 +8,45 @@ import {DateEntityTool} from "../../../model/DateEntity";
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import PassportData from "../../../model/human/person/PassportData";
 import PersonResponseDto, {
-    RelationshipResponseDto,
+    RelationshipResponseDto, SimplePersonResponseDto,
 } from "../person/PersonResponseDto";
 import PersonDtoMapper, {OptionalRawPersonIdMap} from "./PersonDtoMapper";
 import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
-import deepCopy from "../../../util/deepCopy";
 import Media from "../../../model/Media";
+import JurPersonDtoMapper from "./JurPersonDtoMapper";
+import JurPersonDtoMapperImpl from "./JurPersonDtoMapperImpl";
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
-    static getInstance(): PersonDtoMapperImpl {
-        return new PersonDtoMapperImpl();
+    protected readonly jurPersonDtoMapper: JurPersonDtoMapper;
+
+    constructor(jurPersonDtoMapper: JurPersonDtoMapper) {
+        this.jurPersonDtoMapper = jurPersonDtoMapper;
+    }
+
+    static getInstance(jurPersonDtoMapper: JurPersonDtoMapper = JurPersonDtoMapperImpl.getInstance()): PersonDtoMapperImpl {
+        return new PersonDtoMapperImpl(jurPersonDtoMapper);
+    }
+
+    mapSimpleResponseDtoToEntity(dto: SimplePersonResponseDto): Person {
+        const person: Person = {
+            id: dto.id,
+            media: {mainImage: dto.media.mainImage,
+            images: dto.media.images||[]},
+            passportData: null,
+            location: null,
+            firstName: dto.firstName,
+            middleName: dto.middleName,
+            lastName: dto.lastName,
+            relationships: [],
+            benOwnedJurPersons: [],
+            ownedJurPersons: [],
+            dateOfBirth: null,
+            sex: dto.sex
+        }
+
+        return person;
     }
 
     mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto, 'relationshipsInfo'>): NoRelationshipsPerson {
@@ -35,9 +62,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         return {...person}
     }
 
-
     mapPersonResponseIdMapDto(dto: PersonResponseIdMapDto): OptionalRawPersonIdMap {
-        const personMap: OptionalRawPersonIdMap = new Map<number, PreProcessedPerson | null>();
+        const personMap: OptionalRawPersonIdMap = new Map<number, PreProcessedPerson|null>();
 
         for (const id in dto) {
 
@@ -163,6 +189,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             id: retrievedEntityDto.id,
             passportData: passportData,
             sex: retrievedEntityDto.sex,
+            ownedJurPersons: retrievedEntityDto.ownedJurPersons.map(j=>this.jurPersonDtoMapper.mapToEntity(j)),
+            benOwnedJurPersons: retrievedEntityDto.benOwnedJurPersons.map(j=>this.jurPersonDtoMapper.mapToEntity(j)),
             location: retrievedEntityDto.location||null,
             firstName: retrievedEntityDto.firstName,
             middleName: retrievedEntityDto.middleName||null,
