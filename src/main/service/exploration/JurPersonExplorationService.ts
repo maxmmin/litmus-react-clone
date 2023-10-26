@@ -36,7 +36,7 @@ class JurPersonExplorationService implements ExplorationService {
 
     public static getInstance(stateManager: JurPersonExplorationStateManager = new JurPersonExplorationStateManagerImpl(),
                        service: JurPersonExplorationApiService = JurPersonExplorationApiServiceImpl.getInstance(),
-                       mapper: JurPersonExplorationMapper = new JurPersonDtoMapperImpl(),
+                       mapper: JurPersonExplorationMapper = JurPersonDtoMapperImpl.getInstance(),
                     ) {
         return new JurPersonExplorationService(stateManager,service,mapper)
     }

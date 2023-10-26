@@ -42,7 +42,7 @@ class PersonCreationServiceImpl
 
     public static getInstance(apiService: PersonCreationApiService = PersonCreationApiServiceImpl.getInstance(),
                               stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl(),
-                              mapper: PersonDtoMapper = new PersonDtoMapperImpl(),
+                              mapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
                               validationService: PersonCreationValidationService = new PersonCreationValidationServiceImpl(),
                               fileService: FileRepo = FileRepoFactory.getGlobalFileService()): PersonCreationServiceImpl {
         return new PersonCreationServiceImpl(apiService, stateManager, mapper,validationService,fileService);

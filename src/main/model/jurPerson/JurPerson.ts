@@ -1,5 +1,5 @@
 import {GeoLocation} from "../GeoLocation";
-import Person from "../human/person/Person";
+import Person, {PreProcessedPerson} from "../human/person/Person";
 import DateEntity from "../DateEntity";
 import CoreEntity from "../CoreEntity";
 import MediaEntity from "../MediaEntity";

@@ -44,7 +44,7 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationshi
         return this.load(new Set(idList));
     }
 
-    private async load (idSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
+    public async load (idSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
         const personMap: NoRelationshipsOptionalPersonMap = new Map();
 
         if (idSet.size>0) {

@@ -6,6 +6,7 @@ import {
     PersonValidationObject
 } from "../../../service/creation/validation/human/person/PersonCreationValidationService";
 import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
+import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
 
 export type NoRelationshipsPerson = Omit<Person, 'relationships'>
 

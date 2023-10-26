@@ -6,6 +6,29 @@ export default class BasicRipePersonRelationshipsUtil implements RipePersonRelat
         return new BasicRipePersonRelationshipsUtil();
     }
 
+    private isLinkedByJurPerson (currentPerson: Person, relatedPersons: Person[]): boolean {
+        let locationGeoRelationFlag: boolean = false;
+        for (const owned of currentPerson.ownedJurPersons) {
+            if (locationGeoRelationFlag) break;
+            if (owned.location) {
+                const benOwner = owned.benOwner;
+                if (benOwner&&benOwner!==currentPerson&&relatedPersons.includes(benOwner)&&benOwner.location) {
+                    locationGeoRelationFlag = true;
+                }
+            }
+        }
+        for (const benOwned of currentPerson.benOwnedJurPersons) {
+            if (locationGeoRelationFlag) break;
+            if (benOwned.location) {
+                const owner = benOwned.owner;
+                if (owner&&owner!==currentPerson&&relatedPersons.includes(owner)&&owner.location) {
+                    locationGeoRelationFlag = true;
+                }
+            }
+        }
+        return locationGeoRelationFlag;
+    }
+
     extractGeoRelatedPersons(person: Person): Set<Person> {
         const relatedPersons = [...this.extractRelatedPersons(person)].filter(p=>p.location);
 
@@ -25,6 +48,11 @@ export default class BasicRipePersonRelationshipsUtil implements RipePersonRelat
                         if (locationCounter>1) break;
                         const innerRelatedPerson = relatedRelationships[innerCounter].to;
                         if (relatedPersons.includes(innerRelatedPerson)&&person.location) locationCounter++;
+                    }
+
+                    if (locationCounter<2) {
+                        const isLinkedByJurPerson = this.isLinkedByJurPerson(related, relatedPersons);
+                        if (isLinkedByJurPerson) locationCounter++;
                     }
 
                     if (locationCounter<2) {

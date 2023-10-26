@@ -1,4 +1,4 @@
-import BasicPersonRelationshipsLoader from "./BasicPersonRelationshipsLoader";
+import BasicPersonRelationshipsLoader, {NoRelationshipsOptionalPersonMap} from "./BasicPersonRelationshipsLoader";
 import Person, {PreProcessedPerson, Relationship} from "../../model/human/person/Person";
 import BasicPersonRelationshipsResponseDtoScanner from "./BasicPersonRelationshipsResponseDtoScanner";
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
@@ -12,6 +12,9 @@ import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponse
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import RipePersonRelationshipsUtil from "./RipePersonRelationshipsUtil";
 import BasicRipePersonRelationshipsUtil from "./BasicRipePersonRelationshipsUtil";
+import {JurPerson} from "../../model/jurPerson/JurPerson";
+import PersonExplorationApiService from "../exploration/api/human/person/PersonExplorationApiService";
+import {PersonResponseIdMapDto} from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 
 export default class BasicPersonProcessor implements PersonProcessor{
     private readonly personsStore = new Map<number, NoRelationshipsPerson>();
@@ -63,13 +66,56 @@ export default class BasicPersonProcessor implements PersonProcessor{
         })
     }
 
+    private getPersonJurPersonsRelationsIdSet (person: NoRelationshipsPerson, matchList?: Set<number>): Set<number> {
+        const resultSet: Set<number> = new Set<number>();
+
+        const ownedJurPersons = person.ownedJurPersons;
+        ownedJurPersons.forEach(owned => {
+            const benOwner = owned.benOwner;
+            if (benOwner&&benOwner.id!==person.id) {
+                if (matchList) {
+                    if (matchList.has(benOwner.id)) {
+                        resultSet.add(benOwner.id)
+                    }
+                } else resultSet.add(benOwner.id)
+            }
+        })
+
+        const benOwnedJurPersons = person.benOwnedJurPersons;
+        benOwnedJurPersons.forEach(benOwned=>{
+            const owner = benOwned.owner;
+            if (owner&&owner.id!==person.id) {
+                if (matchList) {
+                    if (matchList.has(owner.id)) {
+                        resultSet.add(owner.id)
+                    }
+                } else resultSet.add(owner.id)
+            }
+        })
+
+        return resultSet;
+    }
+
+    private async loadPersonUnloadedJurPersonRelations (person: NoRelationshipsPerson, matchList?: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
+        const matchedIds = this.getPersonJurPersonsRelationsIdSet(person, matchList);
+        const unloadedIds = [...matchedIds].filter(id=>this.personsStore.has(id));
+        return await this.relationshipsLoader.load(new Set(unloadedIds));
+    }
+
+    private savePersonMap (map: NoRelationshipsOptionalPersonMap) {
+        [...map].forEach(([id, person])=>{
+            if (!person) throw new Error("person was not found "+id)
+            this.personsStore.set(id, person);
+        })
+    }
+
     async bindShared (rawPerson: PreProcessedPerson, scanDepth: number): Promise<Person> {
         if (scanDepth>rawPerson.relationshipsInfo.scanOptions.depth) {
             throw new Error("scan depth is higher that person scan depth");
         }
 
         this.loadRawPersonToStore(rawPerson);
-        const {shared} = this.relationshipScanService.scan(rawPerson, scanDepth);
+        const {shared, all} = this.relationshipScanService.scan(rawPerson, scanDepth);
 
         const loadedIdList = [...shared].filter(id=>this.personsStore.has(id));
 
@@ -77,10 +123,24 @@ export default class BasicPersonProcessor implements PersonProcessor{
 
         const loadedPersonsMap = await this.relationshipsLoader.loadSharedNestedPersons(rawPerson,scanDepth,new Set(loadedIdList));
 
-        [...loadedPersonsMap].forEach(([id, person])=>{
-            if (!person) throw new Error("person was not found "+id)
-            this.personsStore.set(id, person);
+        this.savePersonMap(loadedPersonsMap);
+
+        const iterationPersons: Set<NoRelationshipsPerson> = new Set();
+        shared.forEach(id => {
+            const person = this.personsStore.get(id);
+            if (!person) throw new Error("person was not loaded "+id);
+            iterationPersons.add(person)
         })
+
+        for (const p of iterationPersons) {
+            const jurPersonRelated = await this.loadPersonUnloadedJurPersonRelations(p, all);
+            this.savePersonMap(jurPersonRelated);
+            jurPersonRelated.forEach(r => {
+                if (!r) throw new Error();
+                shared.add(r.id);
+            })
+        }
+
         return this.buildRipePerson(rawPerson, shared);
     }
 
@@ -104,6 +164,19 @@ export default class BasicPersonProcessor implements PersonProcessor{
         })
 
         return this.buildRipePerson(rawPerson, all);
+    }
+
+    private bindJurPerson(jurPerson: JurPerson, createdPersons: Map<number,Person>, personsToInclude: Set<number>) {
+        const owner = jurPerson.owner;
+
+        if (owner&&personsToInclude.has(owner.id)) {
+            jurPerson.owner = this.getCreatedPerson(owner.id, createdPersons);
+        }
+
+        const benOwner = jurPerson.benOwner;
+        if (benOwner&&personsToInclude.has(benOwner.id)) {
+            jurPerson.benOwner = this.getCreatedPerson(benOwner.id, createdPersons);
+        }
     }
 
     private buildRipePerson (rawPerson: PreProcessedPerson, personsToInclude: Set<number>) {
@@ -146,6 +219,10 @@ export default class BasicPersonProcessor implements PersonProcessor{
                 }
             }
         }
+
+        createdPersons.forEach(person=>{
+            person.ownedJurPersons.forEach(j=>this.bindJurPerson(j, createdPersons, personsToInclude));
+        })
 
         return person;
     }

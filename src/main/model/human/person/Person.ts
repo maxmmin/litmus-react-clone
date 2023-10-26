@@ -18,7 +18,7 @@ interface Person extends Human, MediaEntity, CoreEntity {
     relationships: Relationship[],
     ownedJurPersons: JurPerson[],
     benOwnedJurPersons: JurPerson[],
-    sex: Sex | null;
+    sex: Sex;
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
     location: GeoLocation | null

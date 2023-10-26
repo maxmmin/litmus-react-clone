@@ -98,9 +98,9 @@ type Mappers = {
 }
 
 const mappers: Mappers = {
-    person: new PersonDtoMapperImpl(),
+    person: PersonDtoMapperImpl.getInstance(),
     user: new UserDtoMapperImpl(),
-    jurPerson: new JurPersonDtoMapperImpl(),
+    jurPerson: JurPersonDtoMapperImpl.getInstance(),
     userIdentity: new UserIdentityDtoMapperImpl()
 }
 

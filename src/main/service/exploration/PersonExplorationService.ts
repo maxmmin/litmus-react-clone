@@ -36,7 +36,7 @@ class PersonExplorationService implements ExplorationService {
 
     public static getInstance (stateManager: PersonExplorationStateManager = new PersonExplorationStateManagerImpl(),
                                service: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance(),
-                               mapper: PersonExplorationMapper = new PersonDtoMapperImpl()): PersonExplorationService {
+                               mapper: PersonExplorationMapper = PersonDtoMapperImpl.getInstance()): PersonExplorationService {
        return new PersonExplorationService(stateManager, service, mapper);
     }
 

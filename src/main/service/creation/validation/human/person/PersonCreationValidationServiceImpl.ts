@@ -72,7 +72,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
     }
 
 
-    validateSex(sex: Person["sex"]): string|null {
+    validateSex(sex: PersonCreationParams["sex"]): string|null {
         let sexErr = null;
 
         if (!sex) {
