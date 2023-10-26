@@ -19,7 +19,7 @@ import JurPersonCreationState, {BasicJurPersonCreationState} from "../types/crea
 import PersonCreationState, {BasicPersonCreationState, defaultScanOptions} from "../types/creation/PersonCreationState";
 import {ValidationErrors} from "../../service/ValidationErrors";
 import {PersonCreationParams, RelationshipCreationParams} from "../../service/creation/PersonCreationService";
-import RelationshipsLinkObject from "../../service/relationships/RelationshipsLinkObject";
+import RelationshipsLinkObject from "../../util/relationships/RelationshipsLinkObject";
 
 
 const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>, initialState: S): S => {

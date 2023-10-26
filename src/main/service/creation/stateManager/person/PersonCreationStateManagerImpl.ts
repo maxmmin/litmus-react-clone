@@ -13,7 +13,7 @@ import {
 } from "../../validation/human/person/PersonCreationValidationService";
 import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateManagerImpl";
 import {PersonCreationParams, RelationshipCreationParams} from "../../PersonCreationService";
-import RelationshipsLinkObject from "../../../relationships/RelationshipsLinkObject";
+import RelationshipsLinkObject from "../../../../util/relationships/RelationshipsLinkObject";
 
 class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<PreProcessedPerson,PersonCreationParams, PersonValidationObject> implements PersonCreationStateManager {
 

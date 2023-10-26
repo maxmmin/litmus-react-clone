@@ -10,8 +10,8 @@ import PersonProcessor from "./PersonProcessor";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
 import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponseDtoScanner";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
-import RipePersonRelationshipsUtil from "./RipePersonRelationshipsUtil";
-import BasicRipePersonRelationshipsUtil from "./BasicRipePersonRelationshipsUtil";
+import RipePersonRelationshipsUtil from "../../util/relationships/RipePersonRelationshipsUtil";
+import BasicRipePersonRelationshipsUtil from "../../util/relationships/BasicRipePersonRelationshipsUtil";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {checkNotEmpty} from "../../util/pureFunctions";
 

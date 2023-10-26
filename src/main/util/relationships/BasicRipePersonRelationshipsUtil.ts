@@ -40,6 +40,8 @@ export default class BasicRipePersonRelationshipsUtil implements RipePersonRelat
             for (let counter = 0; counter<relatedPersons.length; counter++) {
                 const related = relatedPersons[counter];
 
+                if (related.relationships.findIndex(r=>r.to===person)>-1) continue;
+
                 const relatedRelationships = related.relationships;
                 let locationCounter: number = 0;
 

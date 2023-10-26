@@ -8,7 +8,7 @@ import {Entity} from "../../model/Entity";
 import getFullName from "../functional/getFullName";
 import {transformLocationToCoordinates} from "./mapUtil";
 import Popup from "ol-ext/overlay/Popup";
-import RipePersonRelationshipsUtil from "../../service/relationships/RipePersonRelationshipsUtil";
+import RipePersonRelationshipsUtil from "../relationships/RipePersonRelationshipsUtil";
 import VectorSource from "ol/source/Vector";
 import {LineString, Point} from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
@@ -16,8 +16,11 @@ import Vector from "ol/source/Vector";
 import {Fill, Stroke, Style} from "ol/style";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 
+type LabelInfo<T> = {label: HTMLDivElement, labelOverlay: Overlay, entity: T}
 
-export type PersonLabelInfo = {person: PersonLabelRequiredFields, label: HTMLDivElement, labelOverlay: Overlay}
+export type PersonLabelInfo = LabelInfo<PersonLabelRequiredFields>
+
+export type JurPersonLabelInfo = LabelInfo<JurPersonLabelRequiredFields>
 
 type PersonLabelRequiredFields = Pick<Person, "id"|"firstName"|"middleName"|"lastName"|"location"|"media">;
 
@@ -63,7 +66,7 @@ export default class MapPainterImpl implements MapPainter {
     constructor(protected readonly relationshipsUtil: RipePersonRelationshipsUtil) {
     }
 
-    private buildPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelRequiredFields, cssAnchor?: string}): HTMLDivElement {
+    private buildPersonLabelHtmlElement({person, cssAnchor=""}: {person: PersonLabelRequiredFields, cssAnchor?: string}): HTMLDivElement {
         const personContainer = document.createElement("div");
         personContainer.className = "map-entity-label map-entity-label_person "+cssAnchor;
 
@@ -94,7 +97,7 @@ export default class MapPainterImpl implements MapPainter {
 
         const coordinates = transformLocationToCoordinates(person.location);
 
-        const personContainer = this.buildPersonLabelElement({person: person, cssAnchor: cssAnchor});
+        const personContainer = this.buildPersonLabelHtmlElement({person: person, cssAnchor: cssAnchor});
 
         const label = new Overlay({
             element: personContainer,
@@ -116,7 +119,7 @@ export default class MapPainterImpl implements MapPainter {
         return {
             label: personContainer,
             labelOverlay: label,
-            person: person
+            entity: person
         };
     }
 
@@ -131,12 +134,9 @@ export default class MapPainterImpl implements MapPainter {
             cssAnchor: "main"
         }))
 
-        const labelsSource = new VectorSource({});
-
         labels.forEach(labelData=>{
             const overlay = labelData.labelOverlay;
             const labelFeature = new Feature({geometry: new Point(checkNotEmpty(overlay.getPosition()))})
-            labelsSource.addFeature(labelFeature);
         })
 
         return labels;
@@ -198,7 +198,7 @@ export default class MapPainterImpl implements MapPainter {
         return vectorLayer;
     }
 
-    private buildJurPersonLabelElement({jurPerson, cssAnchor=""}: {jurPerson: JurPersonLabelRequiredFields, cssAnchor: string}) {
+    private buildJurPersonLabelHtmlElement({jurPerson, cssAnchor=""}: {jurPerson: JurPersonLabelRequiredFields, cssAnchor: string}) {
         const jurPersonContainer = document.createElement("div");
         jurPersonContainer.className = "map-entity-label map-entity-label_jur-person "+cssAnchor;
 
@@ -224,8 +224,14 @@ export default class MapPainterImpl implements MapPainter {
         return jurPersonContainer;
     }
 
+    // private buildJurPersonLabel({jurPerson, cssAnchor=""}: {jurPerson: JurPersonLabelRequiredFields, cssAnchor: string}): JurPersonLabelInfo  {
+    //
+    // }
+
     paintPersonData(person: Person, map: OlMap): PersonPaintMetaData {
         const relatedPersons = this.relationshipsUtil.extractGeoRelatedPersons(person);
+
+        console.log(relatedPersons)
 
         const personsLabels = this.buildRelationshipsLabels(person, relatedPersons);
         personsLabels.forEach(l=>l.labelOverlay.setMap(map))

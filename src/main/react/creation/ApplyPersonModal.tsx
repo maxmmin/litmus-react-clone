@@ -22,7 +22,7 @@ import PersonExplorationApiService from "../../service/exploration/api/human/per
 import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
-import RelationshipsLinkObject from "../../service/relationships/RelationshipsLinkObject";
+import RelationshipsLinkObject from "../../util/relationships/RelationshipsLinkObject";
 
 type Props = {
     modalSettings: CreationModalSettings,

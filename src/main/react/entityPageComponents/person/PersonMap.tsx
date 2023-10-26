@@ -10,7 +10,7 @@ import {defaultMapPosition, transformLocationToCoordinates} from "../../../util/
 import {ServiceContext} from "../../serviceContext";
 import {LitmusServiceContext} from "../../App";
 import MapPainterImpl, {PersonLabelInfo} from "../../../util/map/MapPainterImpl";
-import BasicRipePersonRelationshipsUtil from "../../../service/relationships/BasicRipePersonRelationshipsUtil";
+import BasicRipePersonRelationshipsUtil from "../../../util/relationships/BasicRipePersonRelationshipsUtil";
 
 
 type PersonMapProps = {
