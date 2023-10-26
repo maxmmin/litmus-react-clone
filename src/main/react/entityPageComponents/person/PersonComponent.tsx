@@ -65,7 +65,10 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
         setPending(true);
         bindService
             .bindShared(rawPerson, -1)
-            .then(person=>setPerson(person))
+            .then(person=>{
+                setPerson(person);
+                console.log(person)
+            })
             .finally(()=>setPending(false));
     }, [rawPerson])
 

@@ -13,8 +13,7 @@ import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import RipePersonRelationshipsUtil from "./RipePersonRelationshipsUtil";
 import BasicRipePersonRelationshipsUtil from "./BasicRipePersonRelationshipsUtil";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import PersonExplorationApiService from "../exploration/api/human/person/PersonExplorationApiService";
-import {PersonResponseIdMapDto} from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
+import {checkNotEmpty} from "../../util/pureFunctions";
 
 export default class BasicPersonProcessor implements PersonProcessor{
     private readonly personsStore = new Map<number, NoRelationshipsPerson>();
@@ -96,9 +95,12 @@ export default class BasicPersonProcessor implements PersonProcessor{
         return resultSet;
     }
 
-    private async loadPersonUnloadedJurPersonRelations (person: NoRelationshipsPerson, matchList?: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
-        const matchedIds = this.getPersonJurPersonsRelationsIdSet(person, matchList);
-        const unloadedIds = [...matchedIds].filter(id=>this.personsStore.has(id));
+    private async loadPersonsUnloadedJurPersonRelations (persons: Set<NoRelationshipsPerson>, matchList?: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
+        const matchedIds: number[] = []
+        persons.forEach(person=>{
+            matchedIds.push(...this.getPersonJurPersonsRelationsIdSet(person, matchList))
+        })
+        const unloadedIds = matchedIds.filter(id=>!this.personsStore.has(id));
         return await this.relationshipsLoader.load(new Set(unloadedIds));
     }
 
@@ -106,6 +108,16 @@ export default class BasicPersonProcessor implements PersonProcessor{
         [...map].forEach(([id, person])=>{
             if (!person) throw new Error("person was not found "+id)
             this.personsStore.set(id, person);
+        })
+    }
+
+    private async processJurPersons(personsToProcess: Set<NoRelationshipsPerson>, targetRelationsSet: Set<number>, matchSet?: Set<number>) {
+        const jurPersonLoadedRelated = await this.loadPersonsUnloadedJurPersonRelations(personsToProcess, matchSet);
+        this.savePersonMap(jurPersonLoadedRelated);
+
+        personsToProcess.forEach(p=>{
+            const matchPersons = this.getPersonJurPersonsRelationsIdSet(p,matchSet);
+            matchPersons.forEach(id=>targetRelationsSet.add(id))
         })
     }
 
@@ -124,22 +136,10 @@ export default class BasicPersonProcessor implements PersonProcessor{
         const loadedPersonsMap = await this.relationshipsLoader.loadSharedNestedPersons(rawPerson,scanDepth,new Set(loadedIdList));
 
         this.savePersonMap(loadedPersonsMap);
+        // make method that gon scan shared set for jurpersons
+        const iterationPersons: Set<NoRelationshipsPerson> = new Set([...shared].map(s=>checkNotEmpty(this.personsStore.get(s))));
 
-        const iterationPersons: Set<NoRelationshipsPerson> = new Set();
-        shared.forEach(id => {
-            const person = this.personsStore.get(id);
-            if (!person) throw new Error("person was not loaded "+id);
-            iterationPersons.add(person)
-        })
-
-        for (const p of iterationPersons) {
-            const jurPersonRelated = await this.loadPersonUnloadedJurPersonRelations(p, all);
-            this.savePersonMap(jurPersonRelated);
-            jurPersonRelated.forEach(r => {
-                if (!r) throw new Error();
-                shared.add(r.id);
-            })
-        }
+        await this.processJurPersons(iterationPersons, shared, all);
 
         return this.buildRipePerson(rawPerson, shared);
     }
@@ -158,10 +158,11 @@ export default class BasicPersonProcessor implements PersonProcessor{
 
         const loadedPersonsMap = await this.relationshipsLoader.loadAllNestedPersons(rawPerson,scanDepth,new Set(loadedIdList));
 
-        [...loadedPersonsMap].forEach(([id, person])=>{
-            if (!person) throw new Error("person was not found "+id)
-            this.personsStore.set(id, person);
-        })
+        this.savePersonMap(loadedPersonsMap);
+
+        const iterationPersons: Set<NoRelationshipsPerson> = new Set([...all].map(s=>checkNotEmpty(this.personsStore.get(s))));
+
+        await this.processJurPersons(iterationPersons, all);
 
         return this.buildRipePerson(rawPerson, all);
     }
