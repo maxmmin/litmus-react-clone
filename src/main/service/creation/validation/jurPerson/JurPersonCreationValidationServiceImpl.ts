@@ -3,8 +3,8 @@ import JurPersonCreationValidationService, {
     ServerJurPersonValidationObject
 } from "./JurPersonCreationValidationService";
 import {JurPerson} from "../../../../model/jurPerson/JurPerson";
-import valueOrNull from "../../../../util/valueOrNull";
-import {hasContent} from "../../../../util/isEmpty";
+import valueOrNull from "../../../../util/functional/valueOrNull";
+import {hasContent} from "../../../../util/functional/isEmpty";
 import {DateEntityTool} from "../../../../model/DateEntity";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {

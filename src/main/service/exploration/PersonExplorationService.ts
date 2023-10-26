@@ -8,7 +8,7 @@ import EntityExplorationData from "../../redux/types/exploration/EntityExplorati
 import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
-import deepCopy from "../../util/deepCopy";
+import deepCopy from "../../util/functional/deepCopy";
 import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";

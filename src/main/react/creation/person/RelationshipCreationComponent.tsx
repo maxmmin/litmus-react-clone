@@ -14,7 +14,7 @@ import {useSelector} from "react-redux";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
-import getFullName from "../../../util/getFullName";
+import getFullName from "../../../util/functional/getFullName";
 import {getRelationTypeFrom} from "../../../service/relationships/RelationshipsLinkObject";
 
 

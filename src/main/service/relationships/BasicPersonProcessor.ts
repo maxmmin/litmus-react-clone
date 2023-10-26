@@ -116,8 +116,8 @@ export default class BasicPersonProcessor implements PersonProcessor{
         this.savePersonMap(jurPersonLoadedRelated);
 
         personsToProcess.forEach(p=>{
-            const matchPersons = this.getPersonJurPersonsRelationsIdSet(p,matchSet);
-            matchPersons.forEach(id=>targetRelationsSet.add(id))
+            const matchedPersons = this.getPersonJurPersonsRelationsIdSet(p,matchSet);
+            matchedPersons.forEach(id=>targetRelationsSet.add(id))
         })
     }
 

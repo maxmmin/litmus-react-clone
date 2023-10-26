@@ -12,7 +12,7 @@ import {Entity} from "../../../model/Entity";
 import {LitmusServiceContext} from "../../App";
 import InputError from "../../sharedComponents/InputError";
 import Human from "../../../model/human/Human";
-import getFullName from "../../../util/getFullName";
+import getFullName from "../../../util/functional/getFullName";
 import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
 import {Images} from "../../../model/Media";
 

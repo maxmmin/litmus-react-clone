@@ -8,10 +8,10 @@ import Person from "../../../../../model/human/person/Person";
 import {ValidationErrors} from "../../../../ValidationErrors";
 import Human from "../../../../../model/human/Human";
 import {DateEntityTool} from "../../../../../model/DateEntity";
-import {hasContent} from "../../../../../util/isEmpty";
-import hasHtml from "../../../../../util/hasHtml";
+import {hasContent} from "../../../../../util/functional/isEmpty";
+import hasHtml from "../../../../../util/functional/hasHtml";
 import PassportData from "../../../../../model/human/person/PassportData";
-import valueOrNull from "../../../../../util/valueOrNull";
+import valueOrNull from "../../../../../util/functional/valueOrNull";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../PersonCreationService";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {

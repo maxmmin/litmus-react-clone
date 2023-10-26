@@ -1,103 +1,21 @@
-import Person, {Relationship} from "../../../model/human/person/Person";
+import Person from "../../../model/human/person/Person";
 import React, {useContext, useEffect, useRef, useState} from "react";
 import OlMap from "ol/Map";
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
-import {Feature, Overlay, View} from "ol";
+import {View} from "ol";
 import {FullScreen, Zoom} from "ol/control";
 import {GeoLocation} from "../../../model/GeoLocation";
-import {defaultMapPosition, transformToTarget} from "../../../util/mapUtil";
-import {buildUrl, checkNotEmpty} from "../../../util/pureFunctions";
-import appConfig from "../../../config/appConfig";
-import {LineString, Point} from "ol/geom";
-import {Vector as VectorLayer} from "ol/layer";
-import Vector from "ol/source/Vector";
-import VectorSource from "ol/source/Vector";
-import {Fill, Stroke, Style} from "ol/style";
+import {defaultMapPosition, transformLocationToCoordinates} from "../../../util/map/mapUtil";
 import {ServiceContext} from "../../serviceContext";
 import {LitmusServiceContext} from "../../App";
-import Popup from "ol-ext/overlay/Popup";
-import {Entity} from "../../../model/Entity";
-import getFullName from "../../../util/getFullName";
+import MapPainterImpl, {PersonLabelInfo} from "../../../util/map/MapPainterImpl";
+import BasicRipePersonRelationshipsUtil from "../../../service/relationships/BasicRipePersonRelationshipsUtil";
 
-type PairedRelationships = [Relationship, Relationship]
-
-type PairedRelationshipMap = Map<string, PairedRelationships>
-
-function buildPairedMapKey(pairedId: [number, number]): string {
-    return pairedId.sort((a,b)=>a-b).join("/");
-}
 
 type PersonMapProps = {
     person: Person,
     externalLocation: GeoLocation
-}
-
-function transformLocationToCoordinates (location: GeoLocation): [number, number] {
-    const sourceCoordinates = {lng: location.longitude, lat: location.latitude};
-    const targetCoordinates = transformToTarget(sourceCoordinates);
-    return [targetCoordinates.lng, targetCoordinates.lat];
-}
-
-type PersonLabelRequiredFields = Pick<Person, "id"|"firstName"|"middleName"|"lastName"|"location"|"media">;
-
-function getPersonLabelElement({person, cssAnchor=""}: {person: PersonLabelRequiredFields, cssAnchor?: string}): HTMLDivElement {
-    const personContainer = document.createElement("div");
-    personContainer.className = "person-map-label "+cssAnchor;
-
-    const imgContainer = document.createElement("div")
-    imgContainer.className = 'person-map-label__img-wrapper'
-
-    personContainer.append(imgContainer);
-
-    const mainImg = person.media.mainImage;
-
-    if (mainImg) {
-        const personImg = document.createElement("img");
-        personImg.src = buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg);
-        personImg.className = "person-map-label__img"
-        imgContainer.append(personImg);
-    } else {
-        const personLetter = document.createElement("p")
-        personLetter.className = "person-map-label__surname-first-letter"
-        personLetter.innerText = person.lastName[0];
-        imgContainer.append(personLetter);
-    }
-
-    return personContainer;
-}
-
-type PersonLabelInfo = {person: PersonLabelRequiredFields, label: HTMLDivElement, labelOverlay: Overlay}
-function addPersonGeoToMap({person, map, cssAnchor}: { person: PersonLabelRequiredFields, map: OlMap, cssAnchor?: string }): PersonLabelInfo {
-    if (!person.location) throw new Error("person has no location")
-
-    const coordinates = transformLocationToCoordinates(person.location);
-
-    const personContainer = getPersonLabelElement({person: person, cssAnchor: cssAnchor});
-
-    const label = new Overlay({
-        element: personContainer,
-        positioning: "center-center"
-    });
-
-    personContainer.onclick = (e=>{
-        if (popup.getVisible()) {
-            popup.hide();
-        }
-        popup.show(coordinates, `<a class="map-tooltip__person-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], person.id.toString())}>${getFullName(person)}</a>`)
-    })
-
-    label.setMap(map);
-    label.setPosition(coordinates);
-
-    label.set("personId", person.id);
-    label.set("fullName", getFullName(person));
-
-    return {
-        label: personContainer,
-        labelOverlay: label,
-        person: person
-    };
 }
 
 const resizeMapCallback = ({map, labels}: {map: OlMap, labels: HTMLDivElement[]}) => {
@@ -115,78 +33,7 @@ const resizeMapCallback = ({map, labels}: {map: OlMap, labels: HTMLDivElement[]}
     })
 }
 
-const lineStyle = new Style({
-    fill: new Fill({ color: '#6750A4' }),
-    stroke: new Stroke({
-        color: '#6750A4',
-        width: 3,
-    })
-});
-
-type LinesData = {pair: [Relationship, Relationship], line: Feature<LineString>}
-
-function buildRelationshipLine({pair}: {pair: [Relationship, Relationship]}): LinesData  {
-    const personPair = pair.map(r=>r.to);
-    const [personOne, personTwo] = personPair;
-    if (personOne.location&&personTwo.location) {
-        const pairCoordinates: [number, number][] = personPair.map(p=>transformLocationToCoordinates(p.location!))
-
-        const line = new Feature({
-            geometry: new LineString(pairCoordinates)
-        })
-        line.setStyle(lineStyle);
-
-            return {
-                pair: pair,
-                line: line
-            }
-    } else throw new Error(`one of persons has no location: ${pair[0].to.id}->${pair[1].to.id}`)
-}
-
-function drawRelationshipsLines ({personsToDraw, map}: {personsToDraw: Set<Person>, map: OlMap}) {
-    const source = new Vector<LineString>({
-    });
-
-    const vectorLayer = new VectorLayer({
-        source: source,
-        renderBuffer: 1e6
-    });
-
-    const drawnRelationshipsMap: PairedRelationshipMap = new Map<string, PairedRelationships>();
-
-    const linesData: LinesData[] = [];
-    console.log(personsToDraw)
-    personsToDraw.forEach(person=>{
-        person.relationships.forEach(r=>{
-            const relatedPerson = r.to;
-            const reverseRelation = relatedPerson.relationships.find(rel=>rel.to===person);
-            if (!reverseRelation) throw new Error("corrupted schema; reversed relation was not found");
-            if (!personsToDraw.has(relatedPerson)) return;
-
-            const key = buildPairedMapKey([person.id, relatedPerson.id]);
-            if (!drawnRelationshipsMap.has(key)) {
-                const buildData = buildRelationshipLine({pair: [r,reverseRelation]})
-                linesData.push(buildData);
-                drawnRelationshipsMap.set(key, [reverseRelation, r])
-            }
-        })
-    })
-
-    const lines = linesData.map(data=>data.line)
-
-    source.addFeatures(lines)
-    map.addLayer(vectorLayer);
-}
-
 const defaultZoom: number = 17;
-
-const popup: Popup = new Popup({
-    popupClass: "black person-popup",
-    closeBox: true,
-    autoPan: true,
-    anim: true,
-    positioning: 'bottom-center'
-})
 
 const PersonMap = ({person, externalLocation}: PersonMapProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null);
@@ -237,41 +84,14 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
 
     useEffect(()=>{
         if (map) {
-            const processedLabels: PersonLabelInfo[] = [];
-
+            const service = new MapPainterImpl(BasicRipePersonRelationshipsUtil.getInstance());
             if (person.location) {
+                const popup = service.popup;
                 map.addOverlay(popup);
 
-                const labelData = addPersonGeoToMap({person, map, cssAnchor: "main"})
-                processedLabels.push(labelData)
+                const metadata = service.paintPersonData(person,map);
 
-                const geoRelatedPersons = personRelationshipsUtil.extractGeoRelatedPersons(person);
-
-                const relLabels: PersonLabelInfo[] = [...geoRelatedPersons]
-                    .map(p=>addPersonGeoToMap({
-                        person: p,
-                        cssAnchor: p===person?"main":undefined,
-                        map: map
-                    }));
-
-                const labelsSource = new VectorSource({});
-
-                [...relLabels, labelData].map(labelData=>{
-                    const overlay = labelData.labelOverlay;
-                    const labelFeature = new Feature({geometry: new Point(checkNotEmpty(overlay.getPosition()))})
-                    labelsSource.addFeature(labelFeature);
-                })
-
-                processedLabels.push(...relLabels);
-
-                setPersonsLabels(processedLabels);
-
-                geoRelatedPersons.add(person);
-
-                drawRelationshipsLines({
-                    personsToDraw: geoRelatedPersons,
-                    map: map
-                });
+                setPersonsLabels([...metadata.drawnPersons])
             }
 
         }

@@ -6,7 +6,7 @@ import UserIdentity, {UserIdentityStateReducible} from "../../redux/types/userId
 import UserIdentityApiService from "./api/UserIdentityApiService";
 import UserIdentityManager from "./UserIdentityManager";
 import UserIdentityApiServiceImpl from "./api/UserIdentityApiServiceImpl";
-import deepCopy from "../../util/deepCopy";
+import deepCopy from "../../util/functional/deepCopy";
 import handleRequestError from "../creation/handleRequestError";
 
 

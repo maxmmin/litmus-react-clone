@@ -1,7 +1,7 @@
 import Person, {PreProcessedPerson, Relationship} from "../../../model/human/person/Person";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
-import {valueOrMessage} from "../../../util/valueOrNull";
+import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
 import "../../assets/css/entityPage/entityPage.scss";
 import "../../assets/css/entityPage/personPage.scss";
@@ -14,7 +14,7 @@ import {Entity} from "../../../model/Entity";
 import {GeoLocation} from "../../../model/GeoLocation";
 import {LitmusServiceContext} from "../../App";
 import Loader from "../../loader/Loader";
-import getFullName from "../../../util/getFullName";
+import getFullName from "../../../util/functional/getFullName";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson

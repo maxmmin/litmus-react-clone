@@ -10,7 +10,7 @@ import UserExplorationState, {BasicUserExplorationState} from "../types/explorat
 import {Entity} from "../../model/Entity";
 import EntityExplorationParams from "../types/exploration/EntityExplorationParams";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
-import deepCopy from "../../util/deepCopy";
+import deepCopy from "../../util/functional/deepCopy";
 import GeneralAction from "../GeneralAction";
 import {ExplorationTypedAction} from "../actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../actions/ExplorationActions";

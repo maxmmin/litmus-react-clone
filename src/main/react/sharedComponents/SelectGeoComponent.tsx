@@ -14,7 +14,7 @@ import {LitmusServiceContext} from "../App";
 import {transform} from "ol/proj";
 import Popup from "ol-ext/overlay/Popup";
 import "../assets/css/ol-ext-min.css";
-import {defaultMapPosition, transformToSource, transformToTarget} from "../../util/mapUtil";
+import {defaultMapPosition, transformToSource, transformToTarget} from "../../util/map/mapUtil";
 
 
 type LocationProps = {

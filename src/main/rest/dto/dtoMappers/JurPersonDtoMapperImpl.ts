@@ -1,5 +1,5 @@
 import {DateEntityTool} from "../../../model/DateEntity";
-import {hasContent} from "../../../util/isEmpty";
+import {hasContent} from "../../../util/functional/isEmpty";
 import JurPersonRequestDto from "../jurPerson/JurPersonRequestDto";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../jurPerson/JurPersonResponseDto";

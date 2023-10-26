@@ -3,7 +3,7 @@ import Person, {
     Relationship
 } from "../../../model/human/person/Person";
 import PersonRequestDto, {PassportDataRequestDto, RelationshipRequestDto} from "../person/PersonRequestDto";
-import {hasContent} from "../../../util/isEmpty";
+import {hasContent} from "../../../util/functional/isEmpty";
 import {DateEntityTool} from "../../../model/DateEntity";
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import PassportData from "../../../model/human/person/PassportData";

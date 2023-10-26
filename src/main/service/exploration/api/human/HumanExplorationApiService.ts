@@ -1,7 +1,7 @@
 import PagedData from "../../../../rest/PagedData";
 import LookupService from "../ExplorationApiService";
 import {FullName} from "../../../../model/human/Human";
-import {Nullable} from "../../../../util/Nullable";
+import {Nullable} from "../../../../util/types/Nullable";
 
 /**
  * E - entityPageComponents can be searched by FullName

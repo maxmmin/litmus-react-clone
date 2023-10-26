@@ -1,7 +1,7 @@
 import HumanExplorationApiService from "./HumanExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import BasicEntityLookupService from "../BasicExplorationApiService";
-import {isEmpty} from "../../../../util/isEmpty";
+import {isEmpty} from "../../../../util/functional/isEmpty";
 import {FullName} from "../../../../model/human/Human";
 
 export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookupService<P> implements HumanExplorationApiService<P> {

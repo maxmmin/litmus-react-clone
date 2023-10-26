@@ -1,7 +1,7 @@
 import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import CreationService from "./CreationService";
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import deepCopy from "../../util/deepCopy";
+import deepCopy from "../../util/functional/deepCopy";
 import handleRequestError from "./handleRequestError";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";

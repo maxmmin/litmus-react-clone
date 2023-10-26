@@ -1,5 +1,6 @@
-import GeoCoordinates from "../model/GeoCoordinates";
+import GeoCoordinates from "../../model/GeoCoordinates";
 import {transform} from "ol/proj";
+import {GeoLocation} from "../../model/GeoLocation";
 
 export const projections = {
     source: 'EPSG:4326',
@@ -31,4 +32,10 @@ export function transformToSource(coordinates: GeoCoordinates): GeoCoordinates {
         lng: sourceCoordinates[0],
         lat: sourceCoordinates[1]
     }
+}
+
+export function transformLocationToCoordinates (location: GeoLocation): [number, number] {
+    const sourceCoordinates = {lng: location.longitude, lat: location.latitude};
+    const targetCoordinates = transformToTarget(sourceCoordinates);
+    return [targetCoordinates.lng, targetCoordinates.lat];
 }

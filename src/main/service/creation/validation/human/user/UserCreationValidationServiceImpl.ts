@@ -5,8 +5,8 @@ import UserCreationValidationService, {
 import Human, {FullNameCreationParams, HumanCreationParams} from "../../../../../model/human/Human";
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
 import {ValidationErrors} from "../../../../ValidationErrors";
-import {hasContent} from "../../../../../util/isEmpty";
-import valueOrNull from "../../../../../util/valueOrNull";
+import {hasContent} from "../../../../../util/functional/isEmpty";
+import valueOrNull from "../../../../../util/functional/valueOrNull";
 import {UserCreationParams} from "../../../UserCreationService";
 import Role, {RoleName} from "../../../../../redux/types/userIdentity/Role";
 

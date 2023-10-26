@@ -2,7 +2,7 @@ import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {DashedUserIcon} from "../../assets/icons";
-import {valueOrMessage} from "../../../util/valueOrNull";
+import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
 import React from "react";
 import {buildPersonLink} from "../../exploration/EntityTables/PersonInfoTable";

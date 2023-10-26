@@ -9,7 +9,7 @@ import EntityExplorationData from "../../redux/types/exploration/EntityExplorati
 import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
-import deepCopy from "../../util/deepCopy";
+import deepCopy from "../../util/functional/deepCopy";
 import handleRequestError from "../creation/handleRequestError";
 import BasicJurPersonExplorationParams from "../../redux/types/exploration/jurPerson/BasicJurPersonExplorationParams";
 import jurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";

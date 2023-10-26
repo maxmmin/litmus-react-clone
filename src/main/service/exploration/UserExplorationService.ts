@@ -9,7 +9,7 @@ import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import UserExplorationParams from "../../redux/types/exploration/human/user/UserExplorationParams";
 import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
-import deepCopy from "../../util/deepCopy";
+import deepCopy from "../../util/functional/deepCopy";
 import handleRequestError from "../creation/handleRequestError";
 import UserExplorationApiService from "./api/human/user/UserExplorationApiService";
 import User from "../../model/human/user/User";

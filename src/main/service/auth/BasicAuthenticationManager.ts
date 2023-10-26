@@ -5,7 +5,7 @@ import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import {HttpStatus} from "../../rest/HttpStatus";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import AuthAction from "../../redux/actions/AuthAction";
-import deepCopy from "../../util/deepCopy";
+import deepCopy from "../../util/functional/deepCopy";
 import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "./stateManager/AuthenticationStateManagerImpl";
 import BasicAuthApiService from "./api/BasicAuthApiService";

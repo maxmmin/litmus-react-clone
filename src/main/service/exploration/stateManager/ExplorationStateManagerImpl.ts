@@ -6,7 +6,7 @@ import EntityExplorationParams from "../../../redux/types/exploration/EntityExpl
 import ExplorationMode from "../../../redux/types/exploration/ExplorationMode";
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import ExplorationStateManager from "./ExplorationStateManager";
-import deepCopy from "../../../util/deepCopy";
+import deepCopy from "../../../util/functional/deepCopy";
 import {ExplorationTypedAction} from "../../../redux/actions/ExplorationTypedAction";
 import {Entity} from "../../../model/Entity";
 

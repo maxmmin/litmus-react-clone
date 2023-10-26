@@ -7,7 +7,7 @@ import ErrorResponse from "../../../rest/ErrorResponse";
 import LoginPageDataActions, {LoginPageState} from "../../../redux/actions/LoginPageDataActions";
 import store, {AppDispatch} from "../../../redux/store";
 import {Action} from "redux";
-import deepCopy from "../../../util/deepCopy";
+import deepCopy from "../../../util/functional/deepCopy";
 import AuthenticationStateManager from "./AuthenticationStateManager";
 
 class AuthenticationStateManagerImpl implements AuthenticationStateManager{

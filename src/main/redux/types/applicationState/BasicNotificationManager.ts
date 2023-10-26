@@ -2,7 +2,7 @@ import store, {AppDispatch} from "../../store";
 import AppStateAction from "../../actions/AppStateAction";
 import React from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
-import deepCopy from "../../../util/deepCopy";
+import deepCopy from "../../../util/functional/deepCopy";
 import Notification, {BasicNotification, NotificationManager} from "./Notification";
 
 export class BasicNotificationManager implements NotificationManager {

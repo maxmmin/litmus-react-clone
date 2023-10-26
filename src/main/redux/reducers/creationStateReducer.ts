@@ -4,7 +4,7 @@ import CreationTypedAction from "../actions/CreationTypedAction";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import {combineReducers} from "redux";
 import EntityCreationState from "../types/creation/EntityCreationState";
-import deepCopy from "../../util/deepCopy";
+import deepCopy from "../../util/functional/deepCopy";
 import CreationCoreAction, {
     PersonCreationAction
 } from "../actions/CreationCoreAction";
