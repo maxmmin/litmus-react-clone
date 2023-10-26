@@ -250,12 +250,12 @@ export default class MapPainterImpl implements MapPainter {
         };
     }
 
-    private buildJurPersonsLabels(displayedPersons: Set<Person>): JurPersonLabelInfo[] {
-        const jurPersons = [...displayedPersons].reduce((acc, person) => {
-            const
-        }, new Se)
-        return [...jurPersons].map(j=>this.buildJurPersonLabel({jurPerson: j}))
-    }
+    // private buildJurPersonsLabels(displayedPersons: Set<Person>): JurPersonLabelInfo[] {
+    //     const jurPersons = [...displayedPersons].reduce((acc, person) => {
+    //         const
+    //     }, new Se)
+    //     return [...jurPersons].map(j=>this.buildJurPersonLabel({jurPerson: j}))
+    // }
 
     paintPersonData(person: Person, map: OlMap): PersonPaintMetaData {
         const relatedPersons = this.relationshipsUtil.extractGeoRelatedPersons(person);
@@ -268,7 +268,7 @@ export default class MapPainterImpl implements MapPainter {
         const linesLayer = this.buildRelationshipsLines(new Set(displayedPersons));
         map.addLayer(linesLayer);
 
-        const jurPersonsLabels = this.buildJurPersonsLabels();
+        // const jurPersonsLabels = this.buildJurPersonsLabels();
 
         return {
             drawnPersons: personsLabels

@@ -221,9 +221,34 @@ export default class BasicPersonProcessor implements PersonProcessor{
             }
         }
 
-        createdPersons.forEach(person=>{
-            person.ownedJurPersons.forEach(j=>this.bindJurPerson(j, createdPersons, personsToInclude));
-            person.benOwnedJurPersons.forEach(j=>this.bindJurPerson(j, createdPersons, personsToInclude));
+        const jurPersonsMap: Map<number, JurPerson> = new Map;
+
+        createdPersons.forEach(person => {
+            const ownedJurPersons = person.ownedJurPersons;
+            for (let i = 0; i<ownedJurPersons.length; i++) {
+                const currentJurPerson = ownedJurPersons[i];
+                if (jurPersonsMap.has(currentJurPerson.id))  {
+                    const originalJurPerson = jurPersonsMap.get(currentJurPerson.id)!;
+                    ownedJurPersons.splice(i,1,originalJurPerson);
+                } else {
+                    jurPersonsMap.set(currentJurPerson.id, currentJurPerson);
+                }
+            }
+
+            const benOwnedJurPersons = person.benOwnedJurPersons;
+            for (let i = 0; i<benOwnedJurPersons.length; i++) {
+                const currentJurPerson = benOwnedJurPersons[i];
+                if (jurPersonsMap.has(currentJurPerson.id))  {
+                    const originalJurPerson = jurPersonsMap.get(currentJurPerson.id)!;
+                    benOwnedJurPersons.splice(i,1,originalJurPerson);
+                } else {
+                    jurPersonsMap.set(currentJurPerson.id, currentJurPerson);
+                }
+            }
+        });
+
+        [...jurPersonsMap.values()].forEach(jurPerson => {
+            this.bindJurPerson(jurPerson, createdPersons, personsToInclude);
         })
 
         return person;
