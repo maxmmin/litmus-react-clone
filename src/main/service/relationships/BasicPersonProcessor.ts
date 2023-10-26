@@ -223,6 +223,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
 
         createdPersons.forEach(person=>{
             person.ownedJurPersons.forEach(j=>this.bindJurPerson(j, createdPersons, personsToInclude));
+            person.benOwnedJurPersons.forEach(j=>this.bindJurPerson(j, createdPersons, personsToInclude));
         })
 
         return person;

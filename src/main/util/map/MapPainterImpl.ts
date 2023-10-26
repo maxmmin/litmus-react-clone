@@ -113,7 +113,7 @@ export default class MapPainterImpl implements MapPainter {
 
         label.setPosition(coordinates);
 
-        label.set("personId", person.id);
+        label.set("id", person.id);
         label.set("fullName", getFullName(person));
 
         return {
@@ -123,21 +123,16 @@ export default class MapPainterImpl implements MapPainter {
         };
     }
 
-    private buildRelationshipsLabels (person: Person, relatedPersons: Set<Person>): PersonLabelInfo[] {
+    private buildPersonsLabels (rootPerson: Person, relatedPersons: Set<Person>): PersonLabelInfo[] {
         const labels: PersonLabelInfo[] = [...relatedPersons]
             .map(p=>this.buildSinglePersonLabel({
-                person: p,
+                person: p
             }));
 
         labels.push(this.buildSinglePersonLabel({
-            person: person,
+            person: rootPerson,
             cssAnchor: "main"
         }))
-
-        labels.forEach(labelData=>{
-            const overlay = labelData.labelOverlay;
-            const labelFeature = new Feature({geometry: new Point(checkNotEmpty(overlay.getPosition()))})
-        })
 
         return labels;
     }
@@ -224,21 +219,56 @@ export default class MapPainterImpl implements MapPainter {
         return jurPersonContainer;
     }
 
-    // private buildJurPersonLabel({jurPerson, cssAnchor=""}: {jurPerson: JurPersonLabelRequiredFields, cssAnchor: string}): JurPersonLabelInfo  {
-    //
-    // }
+    private buildJurPersonLabel({jurPerson, cssAnchor=""}: {jurPerson: JurPersonLabelRequiredFields, cssAnchor?: string}): JurPersonLabelInfo  {
+        if (!jurPerson.location) throw new Error("person has no location")
+
+        const coordinates = transformLocationToCoordinates(jurPerson.location);
+
+        const jurPersonContainer = this.buildJurPersonLabelHtmlElement({jurPerson: jurPerson, cssAnchor: cssAnchor});
+
+        const label = new Overlay({
+            element: jurPersonContainer,
+            positioning: "center-center"
+        });
+
+        jurPersonContainer.onclick = (e=>{
+            if (this._popup.getVisible()) {
+                this._popup.hide();
+            }
+            this._popup.show(coordinates, `<a class="map-tooltip__person-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON], jurPerson.id.toString())}>${jurPerson.name}</a>`)
+        })
+
+        label.setPosition(coordinates);
+
+        label.set("id", jurPerson.id);
+        label.set("name", jurPerson.name);
+
+        return {
+            label: jurPersonContainer,
+            labelOverlay: label,
+            entity: jurPerson
+        };
+    }
+
+    private buildJurPersonsLabels(displayedPersons: Set<Person>): JurPersonLabelInfo[] {
+        const jurPersons = [...displayedPersons].reduce((acc, person) => {
+            const
+        }, new Se)
+        return [...jurPersons].map(j=>this.buildJurPersonLabel({jurPerson: j}))
+    }
 
     paintPersonData(person: Person, map: OlMap): PersonPaintMetaData {
         const relatedPersons = this.relationshipsUtil.extractGeoRelatedPersons(person);
 
-        console.log(relatedPersons)
-
-        const personsLabels = this.buildRelationshipsLabels(person, relatedPersons);
+        const personsLabels = this.buildPersonsLabels(person, relatedPersons);
         personsLabels.forEach(l=>l.labelOverlay.setMap(map))
 
-        const linesLayer = this.buildRelationshipsLines(new Set<Person>([person, ...relatedPersons]))
+        const displayedPersons = [person, ...relatedPersons];
 
+        const linesLayer = this.buildRelationshipsLines(new Set(displayedPersons));
         map.addLayer(linesLayer);
+
+        const jurPersonsLabels = this.buildJurPersonsLabels();
 
         return {
             drawnPersons: personsLabels
