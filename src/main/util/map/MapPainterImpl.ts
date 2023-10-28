@@ -27,7 +27,8 @@ type PersonLabelRequiredFields = Pick<Person, "id"|"firstName"|"middleName"|"las
 type JurPersonLabelRequiredFields = Pick<JurPerson, "id"|"name"|"location"|"media">;
 
 export type PersonPaintMetaData = {
-    drawnPersons: PersonLabelInfo[]
+    drawnPersons: PersonLabelInfo[],
+    drawnJurPersons: JurPersonLabelInfo[]
 }
 
 type LinesData = {pair: [Relationship, Relationship], line: Feature<LineString>}
@@ -250,12 +251,26 @@ export default class MapPainterImpl implements MapPainter {
         };
     }
 
-    // private buildJurPersonsLabels(displayedPersons: Set<Person>): JurPersonLabelInfo[] {
-    //     const jurPersons = [...displayedPersons].reduce((acc, person) => {
-    //         const
-    //     }, new Se)
-    //     return [...jurPersons].map(j=>this.buildJurPersonLabel({jurPerson: j}))
-    // }
+    private buildJurPersonsLabels(personsToDisplay: Set<Person>): JurPersonLabelInfo[] {
+        const jurPersons = [...personsToDisplay].reduce((acc, person) => {
+            const jurPersons = [...person.ownedJurPersons, ...person.benOwnedJurPersons];
+            return new Set([...acc, ...jurPersons])
+        }, new Set<JurPerson>())
+        
+        const sharedJurPersons = [...jurPersons]
+            .filter(jurPerson => {
+                let counter = 0;
+                for (const person of personsToDisplay) {
+                    if (counter>1) break;
+                    if (person.benOwnedJurPersons.includes(jurPerson)||person.ownedJurPersons.includes(jurPerson)) {
+                        counter++;
+                    }
+                }
+                return counter>1;
+            })
+        
+        return sharedJurPersons.map(j=>this.buildJurPersonLabel({jurPerson: j}))
+    }
 
     paintPersonData(person: Person, map: OlMap): PersonPaintMetaData {
         const relatedPersons = this.relationshipsUtil.extractGeoRelatedPersons(person);
@@ -263,15 +278,17 @@ export default class MapPainterImpl implements MapPainter {
         const personsLabels = this.buildPersonsLabels(person, relatedPersons);
         personsLabels.forEach(l=>l.labelOverlay.setMap(map))
 
-        const displayedPersons = [person, ...relatedPersons];
+        const personsToDisplay = new Set([person, ...relatedPersons]);
 
-        const linesLayer = this.buildRelationshipsLines(new Set(displayedPersons));
+        const linesLayer = this.buildRelationshipsLines(personsToDisplay);
         map.addLayer(linesLayer);
 
-        // const jurPersonsLabels = this.buildJurPersonsLabels();
+        const jurPersonsLabels = this.buildJurPersonsLabels(personsToDisplay);
+        jurPersonsLabels.forEach(l=>l.labelOverlay.setMap(map));
 
         return {
-            drawnPersons: personsLabels
+            drawnPersons: personsLabels,
+            drawnJurPersons: jurPersonsLabels
         }
     }
 }
