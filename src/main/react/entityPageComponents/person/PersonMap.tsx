@@ -10,7 +10,7 @@ import {defaultMapPosition, transformLocationToCoordinates} from "../../../util/
 import {ServiceContext} from "../../serviceContext";
 import {LitmusServiceContext} from "../../App";
 import MapPainterImpl, {PersonLabelInfo} from "../../../util/map/MapPainterImpl";
-import BasicRipePersonRelationshipsUtil from "../../../util/relationships/BasicRipePersonRelationshipsUtil";
+import BasicRipePersonUtil from "../../../util/relationships/BasicRipePersonUtil";
 
 
 type PersonMapProps = {
@@ -84,7 +84,7 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
 
     useEffect(()=>{
         if (map) {
-            const service = new MapPainterImpl(BasicRipePersonRelationshipsUtil.getInstance());
+            const service = new MapPainterImpl(BasicRipePersonUtil.getInstance());
             if (person.location) {
 
                 const popup = service.popup;

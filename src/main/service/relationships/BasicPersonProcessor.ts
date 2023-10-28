@@ -10,8 +10,8 @@ import PersonProcessor from "./PersonProcessor";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
 import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponseDtoScanner";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
-import RipePersonRelationshipsUtil from "../../util/relationships/RipePersonRelationshipsUtil";
-import BasicRipePersonRelationshipsUtil from "../../util/relationships/BasicRipePersonRelationshipsUtil";
+import RipePersonUtil from "../../util/relationships/RipePersonUtil";
+import BasicRipePersonUtil from "../../util/relationships/BasicRipePersonUtil";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {checkNotEmpty} from "../../util/pureFunctions";
 
@@ -20,13 +20,13 @@ export default class BasicPersonProcessor implements PersonProcessor{
     constructor(protected readonly relationshipsLoader: PersonRelationshipsLoader,
                 protected readonly relationshipScanService: PersonRelationshipsResponseDtoScanner,
                 protected readonly dtoMapper: PersonDtoMapper,
-                protected readonly ripePersonRelationshipsUtil: RipePersonRelationshipsUtil) {
+                protected readonly ripePersonRelationshipsUtil: RipePersonUtil) {
     }
 
     public static getInstance(relationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(),
                               relationshipsDtoScanner: PersonRelationshipsResponseDtoScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
                               dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
-                              relationshipsUtil: RipePersonRelationshipsUtil = BasicRipePersonRelationshipsUtil.getInstance()): BasicPersonProcessor {
+                              relationshipsUtil: RipePersonUtil = BasicRipePersonUtil.getInstance()): BasicPersonProcessor {
         return new BasicPersonProcessor(relationshipsLoader, relationshipsDtoScanner, dtoMapper, relationshipsUtil);
     }
 

@@ -79,11 +79,11 @@ import UserDtoMapperImpl from "../rest/dto/dtoMappers/UserDtoMapperImpl";
 import PersonProcessor from "../service/relationships/PersonProcessor";
 import PersonRelationshipsLoader from "../service/relationships/PersonRelationshipsLoader";
 import PersonRelationshipsResponseDtoScanner from "../service/relationships/PersonRelationshipsResponseDtoScanner";
-import RipePersonRelationshipsUtil from "../util/relationships/RipePersonRelationshipsUtil";
+import RipePersonUtil from "../util/relationships/RipePersonUtil";
 import BasicPersonRelationshipsResponseDtoScanner from "../service/relationships/BasicPersonRelationshipsResponseDtoScanner";
 import BasicPersonRelationshipsLoader from "../service/relationships/BasicPersonRelationshipsLoader";
 import BasicPersonProcessor from "../service/relationships/BasicPersonProcessor";
-import BasicRipePersonRelationshipsUtil from "../util/relationships/BasicRipePersonRelationshipsUtil";
+import BasicRipePersonUtil from "../util/relationships/BasicRipePersonUtil";
 import UserIdentityDtoMapper from "../rest/dto/dtoMappers/UserIdentityDtoMapper";
 import UserIdentityDtoMapperImpl from "../rest/dto/dtoMappers/UserIdentityDtoMapperImpl";
 import PersonCreationServiceImpl from "../service/creation/PersonCreationServiceImpl";
@@ -281,7 +281,7 @@ export type ServiceContext = {
         personRelationshipsBinder: PersonProcessor,
         personRelationshipsLoader: PersonRelationshipsLoader,
         personRelationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner,
-        ripePersonRelationshipsUtil: RipePersonRelationshipsUtil
+        ripePersonRelationshipsUtil: RipePersonUtil
     }
 }
 
@@ -292,7 +292,7 @@ const personRelationshipsLoader: PersonRelationshipsLoader = BasicPersonRelation
     personExplorationApiService,
     mappers.person);
 
-const ripePersonRelationshipsUtil = BasicRipePersonRelationshipsUtil.getInstance();
+const ripePersonRelationshipsUtil = BasicRipePersonUtil.getInstance();
 
 const personRelationshipsBinder: PersonProcessor = BasicPersonProcessor.getInstance(
     personRelationshipsLoader,

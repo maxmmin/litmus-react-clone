@@ -1,9 +1,9 @@
 import Person from "../../model/human/person/Person";
-import RipePersonRelationshipsUtil from "./RipePersonRelationshipsUtil";
+import RipePersonUtil from "./RipePersonUtil";
 
-export default class BasicRipePersonRelationshipsUtil implements RipePersonRelationshipsUtil{
+export default class BasicRipePersonUtil implements RipePersonUtil{
     public static getInstance () {
-        return new BasicRipePersonRelationshipsUtil();
+        return new BasicRipePersonUtil();
     }
 
     private isLinkedByJurPerson (currentPerson: Person, relatedPersons: Person[]): boolean {
@@ -30,7 +30,6 @@ export default class BasicRipePersonRelationshipsUtil implements RipePersonRelat
     }
 
     extractGeoRelatedPersons(person: Person): Set<Person> {
-        console.log(this.extractRelatedPersons(person))
         const relatedPersons = [...this.extractRelatedPersons(person)].filter(p=>p.location);
 
         let changed: boolean = false;

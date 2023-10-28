@@ -8,7 +8,7 @@ import {Entity} from "../../model/Entity";
 import getFullName from "../functional/getFullName";
 import {transformLocationToCoordinates} from "./mapUtil";
 import Popup from "ol-ext/overlay/Popup";
-import RipePersonRelationshipsUtil from "../relationships/RipePersonRelationshipsUtil";
+import RipePersonUtil from "../relationships/RipePersonUtil";
 import VectorSource from "ol/source/Vector";
 import {LineString, Point} from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
@@ -64,7 +64,7 @@ export default class MapPainterImpl implements MapPainter {
         return this._popup;
     }
 
-    constructor(protected readonly relationshipsUtil: RipePersonRelationshipsUtil) {
+    constructor(protected readonly relationshipsUtil: RipePersonUtil) {
     }
 
     private buildPersonLabelHtmlElement({person, cssAnchor=""}: {person: PersonLabelRequiredFields, cssAnchor?: string}): HTMLDivElement {
