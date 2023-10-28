@@ -81,7 +81,13 @@ class HttpErrorParser {
     }
 
     static parseError(error: unknown): ApplicationError {
-        const errResponse: ErrorResponse = this.getErrorResponse(error);
+        if (!error) throw new Error("provided value isn't error type " + error)
+
+        let errResponse: ErrorResponse;
+        if (error instanceof AxiosError) {
+            errResponse = HttpErrorParser.parseAxiosError(error);
+        } else errResponse = this.getErrorResponse(error);
+
         let code: string|null = null;
 
         if (error&&typeof error === "object") {
@@ -96,7 +102,7 @@ class HttpErrorParser {
         }
     }
 
-    static parseAxiosError(error: AxiosError): ApplicationError {
+    private static parseAxiosError(error: AxiosError): ApplicationError {
         let errCode: string|null = error.code?error.code:null;
         let errStatus: number = -1;
         if (error.response?.status) errStatus = error.response.status;

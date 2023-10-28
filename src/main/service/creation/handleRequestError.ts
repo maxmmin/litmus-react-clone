@@ -5,7 +5,5 @@ import {AxiosError} from "axios";
 
 export default function handleRequestError (e: unknown): ApplicationError {
         console.error(e);
-        if (e instanceof AxiosError) {
-                return deepCopy(HttpErrorParser.parseAxiosError(e));
-        } else return deepCopy(HttpErrorParser.parseError(e));
+        return HttpErrorParser.parseError(e);
 }

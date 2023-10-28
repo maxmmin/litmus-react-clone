@@ -31,8 +31,8 @@ export default function PersonScreen () {
                     }
                 })
                 .catch(err => {
-                    const error = new BasicHttpError(HttpErrorParser.parseAxiosError(err));
-                    notificationManager.warning(error.getDescription())
+                    const error = new BasicHttpError(HttpErrorParser.parseError(err));
+                    notificationManager.error(error.getDescription())
                 })
                 .finally(()=>setFetching(false));
         }

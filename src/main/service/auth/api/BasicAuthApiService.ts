@@ -14,8 +14,8 @@ class BasicAuthApiService implements AuthApiService {
     async getAuth(credentials: Credentials): Promise<void> {
         await this.axiosInstance
             .post<Authentication, AxiosResponse<void>, Credentials>(appConfig.serverMappings.auth.signIn, credentials)
-            .catch((err: AxiosError)=>{
-                throw HttpErrorParser.parseAxiosError(err);
+            .catch((err)=>{
+                throw HttpErrorParser.parseError(err);
             });
     }
 
@@ -23,16 +23,16 @@ class BasicAuthApiService implements AuthApiService {
     async refreshAuth(): Promise<void> {
         await this.axiosInstance
             .post<any,AxiosResponse<void>>(appConfig.serverMappings.auth.refreshTokens, {})
-            .catch((err: AxiosError)=>{
-                throw HttpErrorParser.parseAxiosError(err);
+            .catch((err)=>{
+                throw HttpErrorParser.parseError(err);
             });
     }
 
     async logOut(): Promise<void> {
         await this.axiosInstance
             .post<any,AxiosResponse<void>>(appConfig.serverMappings.auth.logout, {})
-            .catch((err: AxiosError)=>{
-                throw HttpErrorParser.parseAxiosError(err);
+            .catch((err)=>{
+                throw HttpErrorParser.parseError(err);
             });
         return Promise.resolve();
     }
