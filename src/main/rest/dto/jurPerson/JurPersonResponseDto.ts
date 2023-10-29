@@ -17,6 +17,10 @@ export type EmbedJurPersonResponseDto = Omit<JurPersonResponseDto, 'owner'|'benO
     owner: EmbedPersonResponseDto | null,
     benOwner: EmbedPersonResponseDto | null
 }
+
+export type MinifiedJurPersonResponseDto = {
+    id: number
+}
     
 
 export default JurPersonResponseDto;

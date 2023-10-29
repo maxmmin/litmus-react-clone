@@ -1,40 +1,43 @@
 import BasicPersonRelationshipsLoader, {NoRelationshipsOptionalPersonMap} from "./BasicPersonRelationshipsLoader";
-import Person, {PreProcessedPerson, Relationship} from "../../model/human/person/Person";
-import BasicPersonRelationshipsResponseDtoScanner from "./BasicPersonRelationshipsResponseDtoScanner";
-import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
-import {
-    NestedRelationshipResponseDto
+import Person, {NoRelationsPerson, PreProcessedPerson, Relationship} from "../../model/human/person/Person";
+import PersonResponseDto, {
+    NestedPersonResponseDto,
+    RelatedPersonResponseDto,
 } from "../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonProcessor from "./PersonProcessor";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
-import PersonRelationsScanner from "./PersonRelationsScanner";
+import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsScanner";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import RipePersonUtil from "../../util/relationships/RipePersonUtil";
 import BasicRipePersonUtil from "../../util/relationships/BasicRipePersonUtil";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
-import {checkNotEmpty} from "../../util/pureFunctions";
+import {EmbedJurPersonResponseDto, MinifiedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonResponseDto";
+import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
+import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
+import checkJurPersonDto from "../../util/checkJurPersonDto";
 
 export default class BasicPersonProcessor implements PersonProcessor{
-    private readonly personsStore = new Map<number, NoRelationshipsPerson>();
+    private readonly personsStore = new Map<number, NoRelationsPerson>();
     constructor(protected readonly relationshipsLoader: PersonRelationshipsLoader,
-                protected readonly relationshipScanService: PersonRelationsScanner,
+                protected readonly relationshipScanService: PreprocessedPersonRelationsScanner,
                 protected readonly dtoMapper: PersonDtoMapper,
+                protected readonly jurPersonDtoMapper: JurPersonDtoMapper,
                 protected readonly ripePersonRelationshipsUtil: RipePersonUtil) {
     }
 
-    public static getInstance(relationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(),
-                              relationshipsDtoScanner: PersonRelationsScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
-                              dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
+    public static getInstance(jurPersonDtoMapper: JurPersonDtoMapper,
+                              relationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(),
+                              relationshipsDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance(),
+                              dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(jurPersonDtoMapper),
                               relationshipsUtil: RipePersonUtil = BasicRipePersonUtil.getInstance()): BasicPersonProcessor {
-        return new BasicPersonProcessor(relationshipsLoader, relationshipsDtoScanner, dtoMapper, relationshipsUtil);
+        return new BasicPersonProcessor(relationshipsLoader, relationshipsDtoScanner, dtoMapper, jurPersonDtoMapper, relationshipsUtil);
     }
 
     clearRawPersonsStorage(): void {
         this.personsStore.clear();
     }
 
-    getRawPersonsStorage(): Map<number, NoRelationshipsPerson> {
+    getRawPersonsStorage(): Map<number, NoRelationsPerson> {
         return new Map(this.personsStore);
     }
 
@@ -54,7 +57,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
     }
 
     private loadRawPersonToStore(rawPerson: PreProcessedPerson) {
-        const clonedPerson: NoRelationshipsPerson = {...rawPerson, ownedJurPersons: [], benOwnedJurPersons: []};
+        const clonedPerson: NoRelationsPerson = {...rawPerson};
         // @ts-ignore
         delete clonedPerson['relationshipsInfo'];
         this.personsStore.set(clonedPerson.id, clonedPerson)
@@ -65,59 +68,10 @@ export default class BasicPersonProcessor implements PersonProcessor{
         })
     }
 
-    private getPersonJurPersonsRelationsIdSet (person: NoRelationshipsPerson, matchList?: Set<number>): Set<number> {
-        const resultSet: Set<number> = new Set<number>();
-
-        const ownedJurPersons = person.ownedJurPersons;
-        ownedJurPersons.forEach(owned => {
-            const benOwner = owned.benOwner;
-            if (benOwner&&benOwner.id!==person.id) {
-                if (matchList) {
-                    if (matchList.has(benOwner.id)) {
-                        resultSet.add(benOwner.id)
-                    }
-                } else resultSet.add(benOwner.id)
-            }
-        })
-
-        const benOwnedJurPersons = person.benOwnedJurPersons;
-        benOwnedJurPersons.forEach(benOwned=>{
-            const owner = benOwned.owner;
-            if (owner&&owner.id!==person.id) {
-                if (matchList) {
-                    if (matchList.has(owner.id)) {
-                        resultSet.add(owner.id)
-                    }
-                } else resultSet.add(owner.id)
-            }
-        })
-
-        return resultSet;
-    }
-
-    private async loadPersonsUnloadedJurPersonRelations (persons: Set<NoRelationshipsPerson>, matchList?: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
-        const matchedIds: number[] = []
-        persons.forEach(person=>{
-            matchedIds.push(...this.getPersonJurPersonsRelationsIdSet(person, matchList))
-        })
-        const unloadedIds = matchedIds.filter(id=>!this.personsStore.has(id));
-        return await this.relationshipsLoader.load(new Set(unloadedIds));
-    }
-
     private savePersonMap (map: NoRelationshipsOptionalPersonMap) {
         [...map].forEach(([id, person])=>{
             if (!person) throw new Error("person was not found "+id)
             this.personsStore.set(id, person);
-        })
-    }
-
-    private async processJurPersons(personsToProcess: Set<NoRelationshipsPerson>, targetRelationsSet: Set<number>, matchSet?: Set<number>) {
-        const jurPersonLoadedRelated = await this.loadPersonsUnloadedJurPersonRelations(personsToProcess, matchSet);
-        this.savePersonMap(jurPersonLoadedRelated);
-
-        personsToProcess.forEach(p=>{
-            const matchedPersons = this.getPersonJurPersonsRelationsIdSet(p,matchSet);
-            matchedPersons.forEach(id=>targetRelationsSet.add(id))
         })
     }
 
@@ -136,10 +90,6 @@ export default class BasicPersonProcessor implements PersonProcessor{
         const loadedPersonsMap = await this.relationshipsLoader.loadSharedNestedPersons(rawPerson,scanDepth,new Set(loadedIdList));
 
         this.savePersonMap(loadedPersonsMap);
-        // make method that gon scan shared set for jurpersons
-        const iterationPersons: Set<NoRelationshipsPerson> = new Set([...shared].map(s=>checkNotEmpty(this.personsStore.get(s))));
-
-        await this.processJurPersons(iterationPersons, shared, all);
 
         return this.buildRipePerson(rawPerson, shared);
     }
@@ -160,98 +110,95 @@ export default class BasicPersonProcessor implements PersonProcessor{
 
         this.savePersonMap(loadedPersonsMap);
 
-        const iterationPersons: Set<NoRelationshipsPerson> = new Set([...all].map(s=>checkNotEmpty(this.personsStore.get(s))));
-
-        await this.processJurPersons(iterationPersons, all);
-
         return this.buildRipePerson(rawPerson, all);
     }
 
-    private bindJurPerson(jurPerson: JurPerson, createdPersons: Map<number,Person>, personsToInclude: Set<number>) {
-        const owner = jurPerson.owner;
-
-        if (owner&&personsToInclude.has(owner.id)) {
-            jurPerson.owner = this.getCreatedPerson(owner.id, createdPersons);
-        }
-
-        const benOwner = jurPerson.benOwner;
-        if (benOwner&&personsToInclude.has(benOwner.id)) {
-            jurPerson.benOwner = this.getCreatedPerson(benOwner.id, createdPersons);
-        }
-    }
-
-    private buildRipePerson (rawPerson: PreProcessedPerson, personsToInclude: Set<number>) {
+    private buildRipePerson (rawPerson: PreProcessedPerson, personsToInclude: Set<number>): Person {
         const createdPersons: Map<number,Person> = new Map<number,Person>();
 
-        const person: Person = {...rawPerson, ownedJurPersons: [], benOwnedJurPersons: [], relationships: []}
-        // @ts-ignore
-        delete person['relationshipsInfo']
-        createdPersons.set(person.id, person);
+        this.bindRelationships(rawPerson, personsToInclude, createdPersons);
 
-        if (rawPerson.relationshipsInfo.relationships) {
-            const stack: NestedRelationshipResponseDto[] = []
+        const jurPersonsContainable: Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>[] = [rawPerson]
+        rawPerson.relationshipsInfo.relationships?.forEach(r=>{
+           jurPersonsContainable.push(r.person);
+        })
+        jurPersonsContainable.forEach(personDto=>{
+            personDto.ownedJurPersons.concat(personDto.benOwnedJurPersons).forEach(j=>this.bindJurPerson(j, createdPersons));
+        })
 
-            rawPerson.relationshipsInfo.relationships.forEach(r=>{
-                if (personsToInclude.has(r.person.id)) {
-                    const toPerson = this.getCreatedPerson(r.person.id, createdPersons);
-                    const rootRelation = this.dtoMapper.mapRelationshipResponseDto(r, toPerson);
-                    person.relationships.push(rootRelation);
-                    stack.push(r);
-                }
-            })
+        return this.getCreatedPerson(rawPerson.id, createdPersons);
+    }
 
+
+    private bindRelationships(person: NestedPersonResponseDto, personsToInclude: Set<number>, createdPersons: Map<number, Person>): void {
+        if (person.relationshipsInfo.relationships) {
+            const stack: NestedPersonResponseDto[] = [person]
+            const scanned: Set<Person> = new Set()
             while (stack.length>0) {
-                const currentRelationship = stack.pop()!;
-
-                if (currentRelationship.person.relationshipsInfo.relationships) {
-                    currentRelationship.person.relationshipsInfo.relationships.forEach(r=>{
+                const currentPerson = stack.pop()!;
+                const personEntity = this.getCreatedPerson(currentPerson.id,createdPersons);
+                if (!scanned.has(personEntity)&&currentPerson.relationshipsInfo.relationships) {
+                    currentPerson.relationshipsInfo.relationships.forEach(r=>{
                         if (personsToInclude.has(r.person.id)) {
-                            const fromPerson = this.getCreatedPerson(currentRelationship.person.id, createdPersons);
                             const toPerson = this.getCreatedPerson(r.person.id, createdPersons);
-
-                            if (fromPerson.relationships.findIndex(rel=>rel.to.id===r.person.id)===-1) {
-                                const relationship = this.dtoMapper.mapRelationshipResponseDto(r, toPerson);
-                                fromPerson.relationships.push(relationship);
-                            }
-
-                            stack.push(r);
+                            const relationship = this.dtoMapper.mapRelationshipResponseDto(r, toPerson);
+                            personEntity.relationships.push(relationship);
+                            stack.push(r.person);
                         }
                     })
                 }
+                scanned.add(personEntity);
+            }
+        }
+    }
+
+    private bindJurPerson(embedJurPerson: EmbedJurPersonResponseDto|MinifiedJurPersonResponseDto, createdPersons: Map<number,Person>): void {
+        const dtoCheck = checkJurPersonDto(embedJurPerson);
+
+        if (!dtoCheck) return;
+
+        const ownerDto = embedJurPerson.owner;
+
+        let owner: Person|null = null;
+
+        if (ownerDto) {
+            if (this.personsStore.has(ownerDto.id)) {
+                owner = this.getCreatedPerson(ownerDto.id, createdPersons);
+            } else {
+                owner = {...this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(ownerDto),
+                    relationships: [],
+                    ownedJurPersons: [],
+                    benOwnedJurPersons: []
+                };
+                this.personsStore.set(owner.id, owner);
             }
         }
 
-        const jurPersonsMap: Map<number, JurPerson> = new Map;
+        const benOwnerDto = embedJurPerson.benOwner;
 
-        createdPersons.forEach(person => {
-            const ownedJurPersons = person.ownedJurPersons;
-            for (let i = 0; i<ownedJurPersons.length; i++) {
-                const currentJurPerson = ownedJurPersons[i];
-                if (jurPersonsMap.has(currentJurPerson.id))  {
-                    const originalJurPerson = jurPersonsMap.get(currentJurPerson.id)!;
-                    ownedJurPersons.splice(i,1,originalJurPerson);
-                } else {
-                    jurPersonsMap.set(currentJurPerson.id, currentJurPerson);
-                }
+        let benOwner: Person|null = null;
+
+        if (benOwnerDto) {
+            if (this.personsStore.has(benOwnerDto.id)) {
+                benOwner = this.getCreatedPerson(benOwnerDto.id, createdPersons);
+            } else {
+                benOwner = {...this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(benOwnerDto),
+                    relationships: [],
+                    ownedJurPersons: [],
+                    benOwnedJurPersons: []
+                };
+                this.personsStore.set(benOwner.id, benOwner);
             }
+        }
 
-            const benOwnedJurPersons = person.benOwnedJurPersons;
-            for (let i = 0; i<benOwnedJurPersons.length; i++) {
-                const currentJurPerson = benOwnedJurPersons[i];
-                if (jurPersonsMap.has(currentJurPerson.id))  {
-                    const originalJurPerson = jurPersonsMap.get(currentJurPerson.id)!;
-                    benOwnedJurPersons.splice(i,1,originalJurPerson);
-                } else {
-                    jurPersonsMap.set(currentJurPerson.id, currentJurPerson);
-                }
-            }
-        });
-
-        [...jurPersonsMap.values()].forEach(jurPerson => {
-            this.bindJurPerson(jurPerson, createdPersons, personsToInclude);
-        })
-
-        return person;
+        if (owner?.ownedJurPersons.some(j=>j.id===embedJurPerson.id)
+            ||benOwner?.benOwnedJurPersons.some(j=>j.id===embedJurPerson.id)) {
+            return;
+        } else {
+            const jurPerson = this.jurPersonDtoMapper.mapEmbedResponseDto(embedJurPerson, owner, benOwner);
+            if (owner) owner.ownedJurPersons.push(jurPerson);
+            if (benOwner) benOwner.benOwnedJurPersons.push(jurPerson);
+        }
     }
 
     private getCreatedPerson(personId: number,createdPersons: Map<number,Person>): Person {

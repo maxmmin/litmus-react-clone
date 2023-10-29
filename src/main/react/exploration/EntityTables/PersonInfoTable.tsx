@@ -1,14 +1,13 @@
 import {noInfoMessage} from "../../../error/BasicHttpError";
-import Person from "../../../model/human/person/Person";
+import Person, {NoRelationsPerson} from "../../../model/human/person/Person";
 import {DateEntityTool} from "../../../model/DateEntity";
 import {NavLink} from "react-router-dom";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {Entity} from "../../../model/Entity";
-import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
 
 type Props = {
-    person: NoRelationshipsPerson
+    person: NoRelationsPerson
 }
 
 export function buildPersonLink(id: number) {

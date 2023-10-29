@@ -78,9 +78,8 @@ import JurPersonDtoMapperImpl from "../rest/dto/dtoMappers/JurPersonDtoMapperImp
 import UserDtoMapperImpl from "../rest/dto/dtoMappers/UserDtoMapperImpl";
 import PersonProcessor from "../service/relationships/PersonProcessor";
 import PersonRelationshipsLoader from "../service/relationships/PersonRelationshipsLoader";
-import PersonRelationsScanner from "../service/relationships/PersonRelationsScanner";
+import PreprocessedPersonRelationsScanner from "../service/relationships/PreprocessedPersonRelationsScanner";
 import RipePersonUtil from "../util/relationships/RipePersonUtil";
-import BasicPersonRelationshipsResponseDtoScanner from "../service/relationships/BasicPersonRelationshipsResponseDtoScanner";
 import BasicPersonRelationshipsLoader from "../service/relationships/BasicPersonRelationshipsLoader";
 import BasicPersonProcessor from "../service/relationships/BasicPersonProcessor";
 import BasicRipePersonUtil from "../util/relationships/BasicRipePersonUtil";
@@ -89,6 +88,7 @@ import UserIdentityDtoMapperImpl from "../rest/dto/dtoMappers/UserIdentityDtoMap
 import PersonCreationServiceImpl from "../service/creation/PersonCreationServiceImpl";
 import UserCreationServiceImpl from "../service/creation/UserCreationServiceImpl";
 import JurPersonCreationServiceImpl from "../service/creation/JurPersonCreationServiceImpl";
+import PreprocessedPersonRelationsScannerImpl from "../service/relationships/PreprocessedPersonRelationsScannerImpl";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -280,12 +280,12 @@ export type ServiceContext = {
     personServices: {
         personRelationshipsBinder: PersonProcessor,
         personRelationshipsLoader: PersonRelationshipsLoader,
-        personRelationshipsResponseDtoScanner: PersonRelationsScanner,
+        personRelationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner,
         ripePersonRelationshipsUtil: RipePersonUtil
     }
 }
 
-const relationshipsResponseDtoScanner: PersonRelationsScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance();
+const relationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance();
 
 const personRelationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(
     relationshipsResponseDtoScanner,
@@ -295,6 +295,7 @@ const personRelationshipsLoader: PersonRelationshipsLoader = BasicPersonRelation
 const ripePersonRelationshipsUtil = BasicRipePersonUtil.getInstance();
 
 const personRelationshipsBinder: PersonProcessor = BasicPersonProcessor.getInstance(
+    mappers.jurPerson,
     personRelationshipsLoader,
     relationshipsResponseDtoScanner,
     mappers.person,

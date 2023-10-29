@@ -8,8 +8,6 @@ import {
 import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
 import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
 
-export type NoRelationshipsPerson = Omit<PreProcessedPerson, 'relationshipsInfo'>
-
 export default interface PersonCreationState extends EntityCreationState<PersonCreationParams, PersonValidationObject>{}
 
 export const defaultScanOptions: RelationshipsScanOptions = {depth: 0}

@@ -1,6 +1,5 @@
 
 import Person, {PreProcessedPerson, Relationship} from "../../model/human/person/Person";
-import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import Human, {HumanCreationParams} from "../../model/human/Human";
 import CreationService from "./CreationService";
 import Sex from "../../model/human/person/Sex";

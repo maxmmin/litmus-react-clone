@@ -6,7 +6,7 @@ import Human from "../Human";
 import MediaEntity from "../../MediaEntity";
 import CoreEntity from "../../CoreEntity";
 import {NestedRelationshipsInfo, RelationshipsInfo} from "../../../rest/dto/person/PersonResponseDto";
-import {JurPerson, PreProcessedJurPerson} from "../../jurPerson/JurPerson";
+import {JurPerson} from "../../jurPerson/JurPerson";
 import {EmbedJurPersonResponseDto} from "../../../rest/dto/jurPerson/JurPersonResponseDto";
 
 export type RelationshipsScanOptions = {
@@ -23,14 +23,12 @@ interface Person extends Human, MediaEntity, CoreEntity {
     location: GeoLocation | null
 }
 
+export type NoRelationsPerson = Omit<PreProcessedPerson, 'relationshipsInfo'|'ownedJurPersons'|'benOwnedJurPersons'>
+
 export type PreProcessedPerson = Omit<Person, 'relationships'|'ownedJurPersons'|'benOwnedJurPersons'>&{
     relationshipsInfo: RelationshipsInfo,
     ownedJurPersons: EmbedJurPersonResponseDto[],
     benOwnedJurPersons: EmbedJurPersonResponseDto[]
-}
-
-export type PreProcessedEmbedPerson = Omit<PreProcessedPerson, 'relationshipsInfo'>&{
-    relationshipsInfo: NestedRelationshipsInfo
 }
 
 export type Relationship = {

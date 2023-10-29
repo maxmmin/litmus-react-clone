@@ -1,7 +1,7 @@
 import {DateEntityTool} from "../../../model/DateEntity";
 import {hasContent} from "../../../util/functional/isEmpty";
 import JurPersonRequestDto from "../jurPerson/JurPersonRequestDto";
-import {PreProcessedEmbedJurPerson, PreProcessedJurPerson} from "../../../model/jurPerson/JurPerson";
+import {JurPerson, PreProcessedJurPerson} from "../../../model/jurPerson/JurPerson";
 import JurPersonResponseDto, {EmbedJurPersonResponseDto} from "../jurPerson/JurPersonResponseDto";
 import JurPersonDtoMapper from "./JurPersonDtoMapper";
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";
@@ -9,6 +9,7 @@ import hasMediaContent from "../../../util/media/hasMediaContent";
 import Media from "../../../model/Media";
 import PersonDtoMapper from "./PersonDtoMapper";
 import {checkNotEmpty} from "../../../util/pureFunctions";
+import Person from "../../../model/human/person/Person";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
     protected personDtoMapper: PersonDtoMapper|null = null;
@@ -57,8 +58,6 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
     }
 
     mapToEntity(exploredEntityDto: JurPersonResponseDto): PreProcessedJurPerson {
-        const dtoMapper = checkNotEmpty(this.personDtoMapper);
-
         const media: Media = {
             mainImage: exploredEntityDto.media.mainImage,
             images: exploredEntityDto.media.images||[]
@@ -78,17 +77,17 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
         return jurPerson;
     }
 
-    mapEmbedResponseDto(exploredEntityDto: EmbedJurPersonResponseDto): PreProcessedEmbedJurPerson {
+    mapEmbedResponseDto(exploredEntityDto: EmbedJurPersonResponseDto, owner: Person|null, benOwner: Person|null): JurPerson {
         const media: Media = {
             mainImage: exploredEntityDto.media.mainImage,
             images: exploredEntityDto.media.images||[]
         }
 
-        const jurPerson: PreProcessedEmbedJurPerson = {
+        const jurPerson: JurPerson = {
             id: exploredEntityDto.id,
             name: exploredEntityDto.name,
-            owner: exploredEntityDto.owner,
-            benOwner: exploredEntityDto.benOwner,
+            owner: owner,
+            benOwner: benOwner,
             location: exploredEntityDto.location,
             dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:"",

@@ -7,7 +7,10 @@ import {
 } from "../../../model/human/person/Person";
 import Media, {MediaResponseDto} from "../../../model/Media";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import JurPersonResponseDto, {EmbedJurPersonResponseDto} from "../jurPerson/JurPersonResponseDto";
+import JurPersonResponseDto, {
+    EmbedJurPersonResponseDto,
+    MinifiedJurPersonResponseDto
+} from "../jurPerson/JurPersonResponseDto";
 
 export interface RelationshipResponseDto {
     person: RelatedPersonResponseDto,
@@ -33,16 +36,16 @@ export type RelationshipsInfo = {
     relationships: RelationshipResponseDto[]|null
 }
 
-export type RelatedPersonResponseDto = Omit<PersonResponseDto, "relationshipsInfo"> & {
-    relationshipsInfo: NestedRelationshipsInfo
+export type RelatedPersonResponseDto = Omit<PersonResponseDto, "relationshipsInfo"|'ownedJurPersons'|'benOwnedJurPersons'> & {
+    relationshipsInfo: NestedRelationshipsInfo,
+    ownedJurPersons: (EmbedJurPersonResponseDto|MinifiedJurPersonResponseDto)[],
+    benOwnedJurPersons: (EmbedJurPersonResponseDto|MinifiedJurPersonResponseDto)[],
 }
 
 export type NestedRelationshipsInfo = {
     scanOptions: RelationshipsScanOptionsResponseDto,
     relationships: NestedRelationshipResponseDto[]|null
 }
-
-export type NoRelationshipsPersonResponseDto = Omit<PersonResponseDto, 'relationships'>
 
 export type SimplePersonResponseDto = Pick<PersonResponseDto, 'id'|'firstName'|'middleName'|'lastName'|'sex'|'media'|'location'>
 

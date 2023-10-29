@@ -1,14 +1,18 @@
-import PersonRelationsScanner from "./PersonRelationsScanner";
+import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsScanner";
 import {PreProcessedPerson} from "../../model/human/person/Person";
 import PersonResponseDto, {
     NestedRelationshipsInfo,
     RelatedPersonResponseDto
 } from "../../rest/dto/person/PersonResponseDto";
 import {EmbedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonResponseDto";
+import checkJurPersonDto from "../../util/checkJurPersonDto";
 
-type JurPersonsContainable = Pick<PersonResponseDto, "id"|"benOwnedJurPersons"|"ownedJurPersons">
+type JurPersonsContainable = Pick<RelatedPersonResponseDto, "id"|"benOwnedJurPersons"|"ownedJurPersons">
 
-class PersonRelationsScannerImpl implements PersonRelationsScanner {
+export default class PreprocessedPersonRelationsScannerImpl implements PreprocessedPersonRelationsScanner {
+    public static getInstance(): PreprocessedPersonRelationsScannerImpl {
+        return new PreprocessedPersonRelationsScannerImpl()
+    }
     private countRepeats (data: Set<number>[]): Map<number, number> {
         const repeatMap: Map<number, number> = new Map();
 
@@ -32,15 +36,21 @@ class PersonRelationsScannerImpl implements PersonRelationsScanner {
 
         const duplicatedPersons: Set<number> = new Set([person.id]);
 
-
         const rootPersons: RelatedPersonResponseDto[] = tree.map(r=>r.person);
 
-        const branchesScanned: Set<number>[] = rootPersons.map(p=>this.recursiveScan(p.relationshipsInfo, limit));
+        const branchesScanned: Set<number>[] = rootPersons.map(p=>{
+            const res = this.recursiveScan(p.relationshipsInfo, limit);
+            if (limit>0||limit===-1) {
+                res.add(p.id);
+            }
+            return res;
+        });
 
-        if (limit!==-1&&limit>0) {
+        if (limit>0||limit===-1) {
             rootPersons.forEach(p=>duplicatedPersons.add(p.id))
             const jpContainable = [...rootPersons, person];
-            const scans: Set<number>[] = jpContainable.map(p=>this.scanJurPersons(p, limit));
+            const scans: Set<number>[] = jpContainable
+                .map(p=>this.scanJurPersons(p, limit));
             branchesScanned.push(...scans);
         }
 
@@ -72,11 +82,17 @@ class PersonRelationsScannerImpl implements PersonRelationsScanner {
         const ownedJurPersons = mainEntity.ownedJurPersons;
         const benOwnedJurPersons = mainEntity.benOwnedJurPersons;
         const ownedScanSet = ownedJurPersons.reduce((acc,jurPerson)=>{
-            const scanned = this.scanJurPerson(jurPerson, limit);
+            let scanned: Set<number>
+            if (checkJurPersonDto(jurPerson)) {
+                scanned = this.scanJurPerson(jurPerson, limit);
+            } else scanned = new Set;
             return new Set([...scanned, ...acc]);
         }, new Set<number>)
         const benOwnedSet = benOwnedJurPersons.reduce((acc,jurPerson)=>{
-            const scanned = this.scanJurPerson(jurPerson, limit);
+            let scanned: Set<number>
+            if (checkJurPersonDto(jurPerson)) {
+                scanned = this.scanJurPerson(jurPerson, limit);
+            } else scanned = new Set;
             return new Set([...scanned, ...acc]);
         }, new Set<number>)
         return new Set([...ownedScanSet, ...benOwnedSet])

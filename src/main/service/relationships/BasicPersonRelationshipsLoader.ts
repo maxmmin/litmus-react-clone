@@ -1,27 +1,23 @@
-import {
-    RelationshipsInfo
-} from "../../rest/dto/person/PersonResponseDto";
 import PersonExplorationApiService from "../exploration/api/human/person/PersonExplorationApiService";
-import BasicPersonRelationshipsResponseDtoScanner from "./BasicPersonRelationshipsResponseDtoScanner";
-import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
-import {PreProcessedPerson} from "../../model/human/person/Person";
+import {NoRelationsPerson, PreProcessedPerson} from "../../model/human/person/Person";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
-import PersonRelationsScanner from "./PersonRelationsScanner";
+import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsScanner";
 import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
+import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
 
-export type NoRelationshipsOptionalPersonMap = Map<number, NoRelationshipsPerson|null>
+export type NoRelationshipsOptionalPersonMap = Map<number, NoRelationsPerson|null>
 
 export default class BasicPersonRelationshipsLoader implements PersonRelationshipsLoader{
 
-    public static getInstance(relationshipsResponseDtoScanner: PersonRelationsScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
+    public static getInstance(relationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance(),
                               personApiService: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance(),
                               personDtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance()): BasicPersonRelationshipsLoader {
         return new BasicPersonRelationshipsLoader(relationshipsResponseDtoScanner, personApiService, personDtoMapper);
     }
 
-    constructor(protected readonly relationshipsResponseDtoScanner: PersonRelationsScanner,
+    constructor(protected readonly relationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner,
                 protected readonly personApiService: PersonExplorationApiService,
                 protected readonly dtoMapper: PersonDtoMapper) {
     }
@@ -53,7 +49,7 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationshi
             for (let key in personMapResponseDto) {
                 if (!isNaN(+key)) {
                     const nullablePerson = personMapResponseDto[+key];
-                    let mappedPerson: NoRelationshipsPerson|null = null;
+                    let mappedPerson: NoRelationsPerson|null = null;
                     if (nullablePerson) {
                         mappedPerson = this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(nullablePerson);
                     }

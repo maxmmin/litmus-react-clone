@@ -1,42 +1,48 @@
-import Person, {
-    PreProcessedPerson,
-    Relationship
-} from "../../../model/human/person/Person";
+import Person, {NoRelationsPerson, PreProcessedPerson, Relationship} from "../../../model/human/person/Person";
 import PersonRequestDto, {PassportDataRequestDto, RelationshipRequestDto} from "../person/PersonRequestDto";
 import {hasContent} from "../../../util/functional/isEmpty";
 import {DateEntityTool} from "../../../model/DateEntity";
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import PassportData from "../../../model/human/person/PassportData";
 import PersonResponseDto, {
-    RelatedPersonResponseDto,
-    RelationshipResponseDto, SimplePersonResponseDto,
+    EmbedPersonResponseDto,
+    RelationshipResponseDto,
+    SimplePersonResponseDto,
 } from "../person/PersonResponseDto";
 import PersonDtoMapper, {OptionalRawPersonIdMap} from "./PersonDtoMapper";
 import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
-import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
 import Media from "../../../model/Media";
 import JurPersonDtoMapper from "./JurPersonDtoMapper";
 import JurPersonDtoMapperImpl from "./JurPersonDtoMapperImpl";
+import Sex from "../../../model/human/person/Sex";
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
     protected readonly jurPersonDtoMapper: JurPersonDtoMapper;
 
     constructor(jurPersonDtoMapper: JurPersonDtoMapper) {
         this.jurPersonDtoMapper = jurPersonDtoMapper;
+        jurPersonDtoMapper.setPersonDtoMapper(this);
     }
 
     static getInstance(jurPersonDtoMapper: JurPersonDtoMapper = JurPersonDtoMapperImpl.getInstance()): PersonDtoMapperImpl {
         return new PersonDtoMapperImpl(jurPersonDtoMapper);
     }
 
-    mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto, 'relationshipsInfo'>): NoRelationshipsPerson {
-        const person: NoRelationshipsPerson = this.mapToEntity({
+    mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto|EmbedPersonResponseDto|SimplePersonResponseDto, 'relationshipsInfo'>): NoRelationsPerson {
+        const person: NoRelationsPerson = this.mapToEntity({
             ...dto,
             relationshipsInfo: {
                 relationships: null,
                 scanOptions: {depth: 0}
-            }
+            },
+            ownedJurPersons: [],
+            benOwnedJurPersons: [],
+            media: {mainImage: null, images: null},
+            sex: Sex.unset,
+            passportData: null,
+            dateOfBirth: null,
+            location: null
         });
         // @ts-ignore
         delete person["relationshipsInfo"];
