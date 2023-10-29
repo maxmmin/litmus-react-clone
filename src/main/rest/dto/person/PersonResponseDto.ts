@@ -7,7 +7,7 @@ import {
 } from "../../../model/human/person/Person";
 import Media, {MediaResponseDto} from "../../../model/Media";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import JurPersonResponseDto from "../jurPerson/JurPersonResponseDto";
+import JurPersonResponseDto, {EmbedJurPersonResponseDto} from "../jurPerson/JurPersonResponseDto";
 
 export interface RelationshipResponseDto {
     person: RelatedPersonResponseDto,
@@ -17,7 +17,7 @@ export interface RelationshipResponseDto {
 
 export type NestedPersonResponseDto = Pick<PersonResponseDto, 'id'> & {
     id: number,
-    relationshipsInfo: NestedRelationshipsInfoResponseDto
+    relationshipsInfo: NestedRelationshipsInfo
 }
 
 export type NestedRelationshipResponseDto = Pick<Relationship, 'note'|'type'> & {
@@ -28,23 +28,25 @@ export type RelationshipsScanOptionsResponseDto = {
     depth: number
 }
 
-export type RelationshipsInfoResponseDto = {
+export type RelationshipsInfo = {
     scanOptions: RelationshipsScanOptionsResponseDto,
     relationships: RelationshipResponseDto[]|null
 }
 
 export type RelatedPersonResponseDto = Omit<PersonResponseDto, "relationshipsInfo"> & {
-    relationshipsInfo: NestedRelationshipsInfoResponseDto
+    relationshipsInfo: NestedRelationshipsInfo
 }
 
-export type NestedRelationshipsInfoResponseDto = {
+export type NestedRelationshipsInfo = {
     scanOptions: RelationshipsScanOptionsResponseDto,
     relationships: NestedRelationshipResponseDto[]|null
 }
 
 export type NoRelationshipsPersonResponseDto = Omit<PersonResponseDto, 'relationships'>
 
-export type SimplePersonResponseDto = Pick<PersonResponseDto, 'id'|'firstName'|'middleName'|'lastName'|'sex'|'media'>
+export type SimplePersonResponseDto = Pick<PersonResponseDto, 'id'|'firstName'|'middleName'|'lastName'|'sex'|'media'|'location'>
+
+export type EmbedPersonResponseDto = Pick<PersonResponseDto, 'firstName'|'middleName'|'lastName'>&NestedPersonResponseDto
 
 interface PersonResponseDto {
     id: number;
@@ -52,9 +54,9 @@ interface PersonResponseDto {
     firstName: string;
     middleName: string|null;
     lastName: string;
-    relationshipsInfo: RelationshipsInfoResponseDto | null,
-    ownedJurPersons: JurPersonResponseDto[],
-    benOwnedJurPersons: JurPersonResponseDto[],
+    relationshipsInfo: RelationshipsInfo | null,
+    ownedJurPersons: EmbedJurPersonResponseDto[],
+    benOwnedJurPersons: EmbedJurPersonResponseDto[],
     sex: Sex;
     passportData: Partial<PassportData> | null;
     dateOfBirth: string | null;

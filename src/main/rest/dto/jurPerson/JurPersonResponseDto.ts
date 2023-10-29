@@ -1,8 +1,6 @@
-import Person from "../../../model/human/person/Person";
 import {GeoLocation} from "../../../model/GeoLocation";
 import Media, {MediaResponseDto} from "../../../model/Media";
-import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";
-import {NoRelationshipsPersonResponseDto, SimplePersonResponseDto} from "../person/PersonResponseDto";
+import {EmbedPersonResponseDto, RelatedPersonResponseDto} from "../person/PersonResponseDto";
 
 interface JurPersonResponseDto {
     id: number;
@@ -10,9 +8,15 @@ interface JurPersonResponseDto {
     name: string;
     edrpou: string|null;
     dateOfRegistration: string;
-    owner: SimplePersonResponseDto | null;
-    benOwner: SimplePersonResponseDto | null;
+    owner: RelatedPersonResponseDto | null;
+    benOwner: RelatedPersonResponseDto | null;
     location: GeoLocation | null;
 }
+
+export type EmbedJurPersonResponseDto = Omit<JurPersonResponseDto, 'owner'|'benOwner'> & {
+    owner: EmbedPersonResponseDto | null,
+    benOwner: EmbedPersonResponseDto | null
+}
+    
 
 export default JurPersonResponseDto;

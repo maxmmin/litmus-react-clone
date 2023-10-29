@@ -1,6 +1,6 @@
 import {
     NestedPersonResponseDto,
-    NestedRelationshipsInfoResponseDto
+    NestedRelationshipsInfo
 } from "../../rest/dto/person/PersonResponseDto";
 import {PreProcessedPerson} from "../../model/human/person/Person";
 import PersonRelationshipsResponseDtoScanner, {ScanResult} from "./PersonRelationshipsResponseDtoScanner";
@@ -57,7 +57,7 @@ export default class BasicPersonRelationshipsResponseDtoScanner implements Perso
         }
     }
 
-    private scanForSharedRelationships(targetSet: Set<number>, relationshipsInfo: NestedRelationshipsInfoResponseDto, duplicateIdList: number[], limit: number, counter: number = 0, scannedPersons: Set<number> = new Set()) {
+    private scanForSharedRelationships(targetSet: Set<number>, relationshipsInfo: NestedRelationshipsInfo, duplicateIdList: number[], limit: number, counter: number = 0, scannedPersons: Set<number> = new Set()) {
         if (limit!==-1&&counter>=limit) return;
 
         if (relationshipsInfo.relationships) {

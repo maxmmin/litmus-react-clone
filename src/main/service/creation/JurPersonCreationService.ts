@@ -1,7 +1,7 @@
-import {JurPerson} from "../../model/jurPerson/JurPerson";
+import {JurPerson, PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
 import CreationService from "./CreationService";
 
-interface JurPersonCreationService extends CreationService<JurPerson> {
+interface JurPersonCreationService extends CreationService<PreProcessedJurPerson> {
 
 
 }

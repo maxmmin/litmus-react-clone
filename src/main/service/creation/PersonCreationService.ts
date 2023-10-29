@@ -4,9 +4,10 @@ import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationSt
 import Human, {HumanCreationParams} from "../../model/human/Human";
 import CreationService from "./CreationService";
 import Sex from "../../model/human/person/Sex";
+import {SimplePersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
 
 export type RelationshipCreationParams = Omit<Relationship, 'to'> & {
-    to: NoRelationshipsPerson
+    to: SimplePersonResponseDto
 }
 
 export type PersonCreationParams = Omit<Person, 'id'|'relationships'|'sex'|keyof Human|'ownedJurPersons'|'benOwnedJurPersons'> & {

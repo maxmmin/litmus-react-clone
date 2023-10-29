@@ -1,20 +1,27 @@
 import {DateEntityTool} from "../../../model/DateEntity";
 import {hasContent} from "../../../util/functional/isEmpty";
 import JurPersonRequestDto from "../jurPerson/JurPersonRequestDto";
-import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import JurPersonResponseDto from "../jurPerson/JurPersonResponseDto";
+import {PreProcessedEmbedJurPerson, PreProcessedJurPerson} from "../../../model/jurPerson/JurPerson";
+import JurPersonResponseDto, {EmbedJurPersonResponseDto} from "../jurPerson/JurPersonResponseDto";
 import JurPersonDtoMapper from "./JurPersonDtoMapper";
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import Media from "../../../model/Media";
-import PersonSimpleDtoMapper from "./SimplePersonDtoMapper";
+import PersonDtoMapper from "./PersonDtoMapper";
+import {checkNotEmpty} from "../../../util/pureFunctions";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
-    protected readonly personDtoMapper: PersonSimpleDtoMapper = PersonSimpleDtoMapper.getInstance();
+    protected personDtoMapper: PersonDtoMapper|null = null;
+
+    public setPersonDtoMapper (dtoMapper: PersonDtoMapper) {
+        this.personDtoMapper = dtoMapper;
+    }
 
     static getInstance(): JurPersonDtoMapperImpl {
         return new JurPersonDtoMapperImpl();
     }
+
+
     public mapToRequestDto (emergingEntity: JurPersonCreationParams): JurPersonRequestDto {
         const dto: Partial<JurPersonRequestDto> = {};
 
@@ -49,27 +56,47 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
         return dto;
     }
 
-    mapToEntity(exploredEntityDto: JurPersonResponseDto): JurPerson {
+    mapToEntity(exploredEntityDto: JurPersonResponseDto): PreProcessedJurPerson {
+        const dtoMapper = checkNotEmpty(this.personDtoMapper);
+
         const media: Media = {
             mainImage: exploredEntityDto.media.mainImage,
             images: exploredEntityDto.media.images||[]
         }
 
-        const jurPerson: JurPerson = {
+        const jurPerson: PreProcessedJurPerson = {
             id: exploredEntityDto.id,
             name: exploredEntityDto.name,
-            owner: exploredEntityDto.owner&&this.personDtoMapper.mapSimpleResponseDtoToEntity(exploredEntityDto.owner),
-            benOwner: exploredEntityDto.benOwner&&this.personDtoMapper.mapSimpleResponseDtoToEntity(exploredEntityDto.benOwner),
+            owner: exploredEntityDto.owner,
+            benOwner: exploredEntityDto.benOwner,
             location: exploredEntityDto.location,
             dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:"",
             media: media
         }
 
-        return jurPerson
+        return jurPerson;
     }
 
+    mapEmbedResponseDto(exploredEntityDto: EmbedJurPersonResponseDto): PreProcessedEmbedJurPerson {
+        const media: Media = {
+            mainImage: exploredEntityDto.media.mainImage,
+            images: exploredEntityDto.media.images||[]
+        }
 
+        const jurPerson: PreProcessedEmbedJurPerson = {
+            id: exploredEntityDto.id,
+            name: exploredEntityDto.name,
+            owner: exploredEntityDto.owner,
+            benOwner: exploredEntityDto.benOwner,
+            location: exploredEntityDto.location,
+            dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
+            edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:"",
+            media: media
+        }
+
+        return jurPerson;
+    }
 }
 
 export default JurPersonDtoMapperImpl;

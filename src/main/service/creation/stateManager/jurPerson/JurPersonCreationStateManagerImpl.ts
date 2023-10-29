@@ -2,7 +2,7 @@ import CreationStateManagerImpl from "../CreationStateManagerImpl";
 import store, {AppDispatch} from "../../../../redux/store";
 import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import JurPersonCreationStateManager from "./JurPersonCreationStateManager";
-import {JurPerson} from "../../../../model/jurPerson/JurPerson";
+import {JurPerson, PreProcessedJurPerson} from "../../../../model/jurPerson/JurPerson";
 import {GeoLocation} from "../../../../model/GeoLocation";
 import {
     JurPersonValidationObject,
@@ -11,7 +11,7 @@ import {
 import {JurPersonCreationParams} from "../../../../redux/types/creation/JurPersonCreationState";
 import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateManagerImpl";
 
-class JurPersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<JurPerson,JurPersonCreationParams, JurPersonValidationObject> implements JurPersonCreationStateManager {
+class JurPersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<PreProcessedJurPerson,JurPersonCreationParams, JurPersonValidationObject> implements JurPersonCreationStateManager {
     constructor() {
         const dispatch: AppDispatch = store.dispatch;
         const getState = () => store.getState().creation.jurPerson!;

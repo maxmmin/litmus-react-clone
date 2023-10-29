@@ -1,9 +1,9 @@
 import {noInfoMessage} from "../../../error/BasicHttpError";
-import {JurPerson} from "../../../model/jurPerson/JurPerson";
+import {JurPerson, PreProcessedJurPerson} from "../../../model/jurPerson/JurPerson";
 import {DateEntityTool} from "../../../model/DateEntity";
 
 type Props = {
-    jurPerson: JurPerson
+    jurPerson: PreProcessedJurPerson
 }
 
 const JurPersonInfoTable = ({jurPerson}: Props) => {

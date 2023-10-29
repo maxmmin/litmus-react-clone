@@ -4,15 +4,15 @@ import {DateEntityTool} from "../../../model/DateEntity";
 import {
     jurPersonDefaultValidationObject, JurPersonValidationObject
 } from "../../../service/creation/validation/jurPerson/JurPersonCreationValidationService";
-import {NoRelationshipsPerson} from "./PersonCreationState";
+import {SimplePersonResponseDto} from "../../../rest/dto/person/PersonResponseDto";
 
 export default interface JurPersonCreationState extends EntityCreationState<JurPersonCreationParams, JurPersonValidationObject> {
 
 }
 
 export type JurPersonCreationParams = Omit<JurPerson, 'id'|"owner"|"benOwner">&{
-    benOwner: NoRelationshipsPerson|null,
-    owner: NoRelationshipsPerson|null
+    benOwner: SimplePersonResponseDto|null,
+    owner: SimplePersonResponseDto|null
 }
 
 export const initialJurPersonCreationParams: JurPersonCreationParams = {

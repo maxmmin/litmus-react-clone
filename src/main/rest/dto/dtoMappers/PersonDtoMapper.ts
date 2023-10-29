@@ -4,7 +4,11 @@ import Person, {
     PreProcessedPerson,
     Relationship
 } from "../../../model/human/person/Person";
-import PersonResponseDto, {RelationshipResponseDto, SimplePersonResponseDto} from "../person/PersonResponseDto";
+import PersonResponseDto, {
+    RelatedPersonResponseDto,
+    RelationshipResponseDto,
+    SimplePersonResponseDto
+} from "../person/PersonResponseDto";
 import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
 import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreationState";

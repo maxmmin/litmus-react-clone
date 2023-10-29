@@ -1,5 +1,5 @@
 import {
-    RelationshipsInfoResponseDto
+    RelationshipsInfo
 } from "../../rest/dto/person/PersonResponseDto";
 import PersonExplorationApiService from "../exploration/api/human/person/PersonExplorationApiService";
 import BasicPersonRelationshipsResponseDtoScanner from "./BasicPersonRelationshipsResponseDtoScanner";

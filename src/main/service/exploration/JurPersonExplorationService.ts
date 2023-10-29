@@ -13,7 +13,7 @@ import deepCopy from "../../util/functional/deepCopy";
 import handleRequestError from "../creation/handleRequestError";
 import BasicJurPersonExplorationParams from "../../redux/types/exploration/jurPerson/BasicJurPersonExplorationParams";
 import jurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
+import {JurPerson, PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import JurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
 import UnsupportedModeError from "./UnsupportedModeError";
@@ -23,13 +23,13 @@ import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPe
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 
-type JurPersonExplorationMapper = DtoMapper<any, JurPerson, JurPersonResponseDto,any>
+type JurPersonExplorationMapper = DtoMapper<any, PreProcessedJurPerson, JurPersonResponseDto,any>
 
-type JurPersonExplorationCallbackType = (params: BasicJurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: JurPersonExplorationMapper) => Promise<PagedData<JurPerson>>;
+type JurPersonExplorationCallbackType = (params: JurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: JurPersonExplorationMapper) => Promise<PagedData<PreProcessedJurPerson>>;
 
 class JurPersonExplorationService implements ExplorationService {
 
-    constructor(private readonly stateManager: ExplorationStateManager<JurPerson, JurPersonExplorationParams>,
+    constructor(private readonly stateManager: ExplorationStateManager<PreProcessedJurPerson, JurPersonExplorationParams>,
                 private readonly service: JurPersonExplorationApiService,
                 private readonly mapper: JurPersonExplorationMapper) {
     }
@@ -44,10 +44,10 @@ class JurPersonExplorationService implements ExplorationService {
     private exploreByIdCallback: JurPersonExplorationCallbackType = async (params, service, mapper) => {
         //@todo write the way to get all entities
         const id = checkNotEmpty(params.id);
-        const content: JurPerson[] = []
+        const content: PreProcessedJurPerson[] = []
         const jurPersonResponseDto: JurPersonResponseDto|null = await service.findById(id);
         if (jurPersonResponseDto) {
-            const jurPerson: JurPerson = mapper.mapToEntity(jurPersonResponseDto);
+            const jurPerson: PreProcessedJurPerson = mapper.mapToEntity(jurPersonResponseDto);
             content.push(jurPerson)
         };
         return new UnPagedData(content);
@@ -64,7 +64,7 @@ class JurPersonExplorationService implements ExplorationService {
         this.stateManager.retrieveData(this.exploreJurPersonsThunk({params: this.stateManager.getExplorationParams(), globalPending: false})).catch(console.error)
     }
 
-    private async exploreUponMode (explorationParams: JurPersonExplorationParams): Promise<PagedData<JurPerson>> {
+    private async exploreUponMode (explorationParams: JurPersonExplorationParams): Promise<PagedData<PreProcessedJurPerson>> {
         const modeId = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         const callback = this.callbackMap.get(mode);
@@ -76,12 +76,12 @@ class JurPersonExplorationService implements ExplorationService {
             } else throw new UnsupportedModeError();}
     }
 
-    private exploreJurPersonsThunk = createAsyncThunk<EntityExplorationData<JurPerson, BasicJurPersonExplorationParams>,
+    private exploreJurPersonsThunk = createAsyncThunk<EntityExplorationData<PreProcessedJurPerson, JurPersonExplorationParams>,
         ThunkArg<{params: BasicJurPersonExplorationParams}>,
         LitmusAsyncThunkConfig>(ExplorationTypedAction.jurPerson[ExplorationCoreAction.RETRIEVE_DATA],(async ({params}, {rejectWithValue, fulfillWithValue}) => {
         try {
-            const response: PagedData<JurPerson> = await this.exploreUponMode(params);
-            const exploredData: EntityExplorationData<JurPerson, BasicJurPersonExplorationParams> = {requestParams: params, response: response}
+            const response: PagedData<PreProcessedJurPerson> = await this.exploreUponMode(params);
+            const exploredData: EntityExplorationData<PreProcessedJurPerson, JurPersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
             return rejectWithValue(handleRequestError(e), {notify: true});

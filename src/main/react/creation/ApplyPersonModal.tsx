@@ -13,16 +13,18 @@ import PersonCreationStateManager from "../../service/creation/stateManager/pers
 import {HttpErrorParser} from "../../error/BasicHttpError";
 import {ApplicationError} from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
-import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
+import PersonResponseDto, {
+    SimplePersonResponseDto
+} from "../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import JurPersonCreationStateManagerImpl
     from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
 import {LitmusServiceContext} from "../App";
 import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
-import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationState";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
 import RelationshipsLinkObject from "../../util/relationships/RelationshipsLinkObject";
+import PersonPreviewInfoTable from "./PersonPreviewInfoTable";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -39,7 +41,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const [searchError, setSearchError] = useState<ApplicationError|null>(null);
 
-    const [person, setPerson] = useState<NoRelationshipsPerson|null>(null);
+    const [person, setPerson] = useState<SimplePersonResponseDto|null>(null);
     /**
      * state of modal input pending
      */
@@ -274,7 +276,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                         </Form.Group>
 
                         <div className="apply-person-modal__found-person-container">
-                            {person&&!pending?<PersonInfoTable person={person}/>:null}
+                            {person&&!pending?<PersonPreviewInfoTable person={person}/>:null}
                         </div>
 
                     </Form>

@@ -6,8 +6,8 @@ import UserInfoTable from "./EntityTables/UserInfoTable";
 import PagedData, {isUnPaged} from "../../rest/PagedData";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import Loader from "../loader/Loader";
-import Person from "../../model/human/person/Person";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
+import Person, {PreProcessedPerson} from "../../model/human/person/Person";
+import {JurPerson, PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
 import User from "../../model/human/user/User";
 import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
@@ -18,13 +18,13 @@ import ExplorationService from "../../service/exploration/ExplorationService";
 const getProcessedResults = (entity: Entity, data: unknown[]) => {
     switch (entity) {
         case Entity.PERSON: {
-            return (data as Person[]).map(person=>{
+            return (data as PreProcessedPerson[]).map(person=>{
                 return <PersonInfoTable key={person.id} person={person}/>
             })
         }
 
         case Entity.JUR_PERSON: {
-            return (data as JurPerson[]).map(jurPerson=>{
+            return (data as PreProcessedJurPerson[]).map(jurPerson=>{
                 return <JurPersonInfoTable jurPerson={jurPerson} key={jurPerson.id}/>
             })
         }

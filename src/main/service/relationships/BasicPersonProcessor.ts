@@ -54,7 +54,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
     }
 
     private loadRawPersonToStore(rawPerson: PreProcessedPerson) {
-        const clonedPerson: NoRelationshipsPerson = {...rawPerson};
+        const clonedPerson: NoRelationshipsPerson = {...rawPerson, ownedJurPersons: [], benOwnedJurPersons: []};
         // @ts-ignore
         delete clonedPerson['relationshipsInfo'];
         this.personsStore.set(clonedPerson.id, clonedPerson)
@@ -183,7 +183,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
     private buildRipePerson (rawPerson: PreProcessedPerson, personsToInclude: Set<number>) {
         const createdPersons: Map<number,Person> = new Map<number,Person>();
 
-        const person: Person = {...rawPerson, relationships: []}
+        const person: Person = {...rawPerson, ownedJurPersons: [], benOwnedJurPersons: [], relationships: []}
         // @ts-ignore
         delete person['relationshipsInfo']
         createdPersons.set(person.id, person);
@@ -256,7 +256,10 @@ export default class BasicPersonProcessor implements PersonProcessor{
 
     private getCreatedPerson(personId: number,createdPersons: Map<number,Person>): Person {
         if (!this.personsStore.has(personId)) throw new Error("person is not loaded: "+personId)
-        const person: Person = createdPersons.get(personId)||{...this.personsStore.get(personId)!, relationships: []}
+        const person: Person = createdPersons.get(personId)||{...this.personsStore.get(personId)!,
+            ownedJurPersons: [],
+            benOwnedJurPersons: [],
+            relationships: []}
         if (!createdPersons.has(personId)) {
             createdPersons.set(personId, person);
         }

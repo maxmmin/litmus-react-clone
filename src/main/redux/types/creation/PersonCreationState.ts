@@ -1,5 +1,5 @@
 import EntityCreationState, {BasicEntityCreationState} from "./EntityCreationState";
-import Person, {RelationshipsScanOptions} from "../../../model/human/person/Person";
+import Person, {PreProcessedPerson, RelationshipsScanOptions} from "../../../model/human/person/Person";
 import {DateEntityTool} from "../../../model/DateEntity";
 import {
     personDefaultValidationObject,
@@ -8,7 +8,7 @@ import {
 import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
 import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
 
-export type NoRelationshipsPerson = Omit<Person, 'relationships'>
+export type NoRelationshipsPerson = Omit<PreProcessedPerson, 'relationshipsInfo'>
 
 export default interface PersonCreationState extends EntityCreationState<PersonCreationParams, PersonValidationObject>{}
 

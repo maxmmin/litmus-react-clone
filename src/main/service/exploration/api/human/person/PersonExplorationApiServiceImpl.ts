@@ -2,7 +2,7 @@ import PersonExplorationApiService from "./PersonExplorationApiService";
 import appConfig from "../../../../../config/appConfig";
 import HumanExplorationApiServiceImpl from "../HumanExplorationApiServiceImpl";
 import PersonResponseDto, {
-    RelationshipsInfoResponseDto
+    RelationshipsInfo
 } from "../../../../../rest/dto/person/PersonResponseDto";
 import {buildUrl} from "../../../../../util/pureFunctions";
 export type PersonResponseIdMapDto = Record<number, PersonResponseDto|null>
@@ -37,8 +37,8 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
         return response.data;
     }
 
-    async findPersonRelationships(id: string, d: number): Promise<RelationshipsInfoResponseDto> {
-        const response = await this.apiInstance<RelationshipsInfoResponseDto>(buildUrl(appConfig.serverMappings.persons.relationships(id)), {
+    async findPersonRelationships(id: string, d: number): Promise<RelationshipsInfo> {
+        const response = await this.apiInstance<RelationshipsInfo>(buildUrl(appConfig.serverMappings.persons.relationships(id)), {
             params: {
                 d: d
             }

@@ -8,6 +8,7 @@ import {DateEntityTool} from "../../../model/DateEntity";
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import PassportData from "../../../model/human/person/PassportData";
 import PersonResponseDto, {
+    RelatedPersonResponseDto,
     RelationshipResponseDto, SimplePersonResponseDto,
 } from "../person/PersonResponseDto";
 import PersonDtoMapper, {OptionalRawPersonIdMap} from "./PersonDtoMapper";
@@ -17,13 +18,11 @@ import {NoRelationshipsPerson} from "../../../redux/types/creation/PersonCreatio
 import Media from "../../../model/Media";
 import JurPersonDtoMapper from "./JurPersonDtoMapper";
 import JurPersonDtoMapperImpl from "./JurPersonDtoMapperImpl";
-import SimplePersonDtoMapper from "./SimplePersonDtoMapper";
 
-export default class PersonDtoMapperImpl extends SimplePersonDtoMapper implements PersonDtoMapper {
+export default class PersonDtoMapperImpl implements PersonDtoMapper {
     protected readonly jurPersonDtoMapper: JurPersonDtoMapper;
 
     constructor(jurPersonDtoMapper: JurPersonDtoMapper) {
-        super();
         this.jurPersonDtoMapper = jurPersonDtoMapper;
     }
 
@@ -150,6 +149,26 @@ export default class PersonDtoMapperImpl extends SimplePersonDtoMapper implement
         }
     }
 
+    mapSimpleResponseDtoToEntity(dto: SimplePersonResponseDto): Person {
+        const person: Person = {
+            id: dto.id,
+            media: {mainImage: dto.media.mainImage,
+                images: dto.media.images||[]},
+            passportData: null,
+            location: null,
+            firstName: dto.firstName,
+            middleName: dto.middleName,
+            lastName: dto.lastName,
+            relationships: [],
+            benOwnedJurPersons: [],
+            ownedJurPersons: [],
+            dateOfBirth: null,
+            sex: dto.sex
+        }
+
+        return person;
+    }
+
     mapToEntity(retrievedEntityDto: PersonResponseDto): PreProcessedPerson {
         let passportData: PassportData|null;
 
@@ -171,8 +190,8 @@ export default class PersonDtoMapperImpl extends SimplePersonDtoMapper implement
             id: retrievedEntityDto.id,
             passportData: passportData,
             sex: retrievedEntityDto.sex,
-            ownedJurPersons: retrievedEntityDto.ownedJurPersons.map(j=>this.jurPersonDtoMapper.mapToEntity(j)),
-            benOwnedJurPersons: retrievedEntityDto.benOwnedJurPersons.map(j=>this.jurPersonDtoMapper.mapToEntity(j)),
+            ownedJurPersons: retrievedEntityDto.ownedJurPersons,
+            benOwnedJurPersons: retrievedEntityDto.benOwnedJurPersons,
             location: retrievedEntityDto.location||null,
             firstName: retrievedEntityDto.firstName,
             middleName: retrievedEntityDto.middleName||null,

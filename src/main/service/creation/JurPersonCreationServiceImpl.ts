@@ -12,13 +12,13 @@ import JurPersonCreationValidationServiceImpl from "./validation/jurPerson/JurPe
 import JurPersonCreationService from "./JurPersonCreationService";
 import CreationServiceImpl from "./CreationServiceImpl";
 import JurPersonRequestDto from "../../rest/dto/jurPerson/JurPersonRequestDto";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
+import {JurPerson, PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 import getFilesFromMedia from "../../util/media/getFilesFromMedia";
 import FileRepo from "../media/FileRepo";
 
-class JurPersonCreationServiceImpl extends CreationServiceImpl<JurPersonRequestDto, JurPerson, JurPersonResponseDto,
+class JurPersonCreationServiceImpl extends CreationServiceImpl<JurPersonRequestDto, PreProcessedJurPerson, JurPersonResponseDto,
     JurPersonCreationParams, JurPersonValidationObject, ServerJurPersonValidationObject> implements JurPersonCreationService {
     constructor(apiService: JurPersonCreationApiService,
                 creationStateManager: JurPersonCreationStateManager,
@@ -28,9 +28,9 @@ class JurPersonCreationServiceImpl extends CreationServiceImpl<JurPersonRequestD
         super(apiService, creationStateManager, mapper, validationService);
     }
 
-    async createEntity(): Promise<JurPerson> {
+    async createEntity(): Promise<PreProcessedJurPerson> {
         const media = this.creationStateManager.getCreationParams().media;
-        const createdJurPerson: JurPerson = await super.defaultCreate();
+        const createdJurPerson: PreProcessedJurPerson = await super.defaultCreate();
 
         const linkedFiles: string[] = getFilesFromMedia(media);
         linkedFiles.forEach(file=>this.fileService.removeFile(file))

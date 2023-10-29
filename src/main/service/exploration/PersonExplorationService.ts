@@ -21,7 +21,6 @@ import PersonExplorationStateManager from "./stateManager/person/PersonExplorati
 import PersonExplorationStateManagerImpl from "./stateManager/person/PersonExplorationStateManagerImpl";
 import PersonExplorationApiServiceImpl from "./api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
-import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 
 type PersonExplorationMapper = DtoMapper<any, PreProcessedPerson, PersonResponseDto, any>
 
