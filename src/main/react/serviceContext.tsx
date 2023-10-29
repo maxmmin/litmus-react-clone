@@ -78,7 +78,7 @@ import JurPersonDtoMapperImpl from "../rest/dto/dtoMappers/JurPersonDtoMapperImp
 import UserDtoMapperImpl from "../rest/dto/dtoMappers/UserDtoMapperImpl";
 import PersonProcessor from "../service/relationships/PersonProcessor";
 import PersonRelationshipsLoader from "../service/relationships/PersonRelationshipsLoader";
-import PersonRelationshipsResponseDtoScanner from "../service/relationships/PersonRelationshipsResponseDtoScanner";
+import PersonRelationsScanner from "../service/relationships/PersonRelationsScanner";
 import RipePersonUtil from "../util/relationships/RipePersonUtil";
 import BasicPersonRelationshipsResponseDtoScanner from "../service/relationships/BasicPersonRelationshipsResponseDtoScanner";
 import BasicPersonRelationshipsLoader from "../service/relationships/BasicPersonRelationshipsLoader";
@@ -280,12 +280,12 @@ export type ServiceContext = {
     personServices: {
         personRelationshipsBinder: PersonProcessor,
         personRelationshipsLoader: PersonRelationshipsLoader,
-        personRelationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner,
+        personRelationshipsResponseDtoScanner: PersonRelationsScanner,
         ripePersonRelationshipsUtil: RipePersonUtil
     }
 }
 
-const relationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance();
+const relationshipsResponseDtoScanner: PersonRelationsScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance();
 
 const personRelationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(
     relationshipsResponseDtoScanner,

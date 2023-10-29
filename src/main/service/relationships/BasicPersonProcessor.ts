@@ -8,7 +8,7 @@ import {
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonProcessor from "./PersonProcessor";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
-import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponseDtoScanner";
+import PersonRelationsScanner from "./PersonRelationsScanner";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import RipePersonUtil from "../../util/relationships/RipePersonUtil";
 import BasicRipePersonUtil from "../../util/relationships/BasicRipePersonUtil";
@@ -18,13 +18,13 @@ import {checkNotEmpty} from "../../util/pureFunctions";
 export default class BasicPersonProcessor implements PersonProcessor{
     private readonly personsStore = new Map<number, NoRelationshipsPerson>();
     constructor(protected readonly relationshipsLoader: PersonRelationshipsLoader,
-                protected readonly relationshipScanService: PersonRelationshipsResponseDtoScanner,
+                protected readonly relationshipScanService: PersonRelationsScanner,
                 protected readonly dtoMapper: PersonDtoMapper,
                 protected readonly ripePersonRelationshipsUtil: RipePersonUtil) {
     }
 
     public static getInstance(relationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(),
-                              relationshipsDtoScanner: PersonRelationshipsResponseDtoScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
+                              relationshipsDtoScanner: PersonRelationsScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
                               dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
                               relationshipsUtil: RipePersonUtil = BasicRipePersonUtil.getInstance()): BasicPersonProcessor {
         return new BasicPersonProcessor(relationshipsLoader, relationshipsDtoScanner, dtoMapper, relationshipsUtil);

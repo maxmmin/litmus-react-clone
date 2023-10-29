@@ -3,15 +3,15 @@ import {
     NestedRelationshipsInfo
 } from "../../rest/dto/person/PersonResponseDto";
 import {PreProcessedPerson} from "../../model/human/person/Person";
-import PersonRelationshipsResponseDtoScanner, {ScanResult} from "./PersonRelationshipsResponseDtoScanner";
+import PersonRelationsScanner, {ScanResult} from "./PersonRelationsScanner";
 
-export default class BasicPersonRelationshipsResponseDtoScanner implements PersonRelationshipsResponseDtoScanner{
+export default class BasicPersonRelationshipsResponseDtoScanner implements PersonRelationsScanner{
     public static getInstance(): BasicPersonRelationshipsResponseDtoScanner {
         return new BasicPersonRelationshipsResponseDtoScanner();
     }
 
     scan(person: PreProcessedPerson, limit: number): ScanResult {
-        const tree = person.relationshipsInfo.relationships;
+        const tree = person.relationshipsInfo.relationships||[];
 
         const scannedPersons: Set<number> = new Set();
 
@@ -41,7 +41,7 @@ export default class BasicPersonRelationshipsResponseDtoScanner implements Perso
             }
         }
 
-        this.scanForSharedRelationships(sharedPersons,person.relationshipsInfo, [...duplicatedPersons], limit)
+        this.scanForSharedRelationships(sharedPersons,person.relationshipsInfo, [...duplicatedPersons], limit);
 
         return {all: scannedPersons, shared: sharedPersons};
     }

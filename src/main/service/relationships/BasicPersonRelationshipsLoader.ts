@@ -7,7 +7,7 @@ import {NoRelationshipsPerson} from "../../redux/types/creation/PersonCreationSt
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import {PreProcessedPerson} from "../../model/human/person/Person";
 import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
-import PersonRelationshipsResponseDtoScanner from "./PersonRelationshipsResponseDtoScanner";
+import PersonRelationsScanner from "./PersonRelationsScanner";
 import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
@@ -15,13 +15,13 @@ export type NoRelationshipsOptionalPersonMap = Map<number, NoRelationshipsPerson
 
 export default class BasicPersonRelationshipsLoader implements PersonRelationshipsLoader{
 
-    public static getInstance(relationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
+    public static getInstance(relationshipsResponseDtoScanner: PersonRelationsScanner = BasicPersonRelationshipsResponseDtoScanner.getInstance(),
                               personApiService: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance(),
                               personDtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance()): BasicPersonRelationshipsLoader {
         return new BasicPersonRelationshipsLoader(relationshipsResponseDtoScanner, personApiService, personDtoMapper);
     }
 
-    constructor(protected readonly relationshipsResponseDtoScanner: PersonRelationshipsResponseDtoScanner,
+    constructor(protected readonly relationshipsResponseDtoScanner: PersonRelationsScanner,
                 protected readonly personApiService: PersonExplorationApiService,
                 protected readonly dtoMapper: PersonDtoMapper) {
     }
