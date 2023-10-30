@@ -69,10 +69,8 @@ class ScanRelationsSetUtil {
     }
     public getDuplicatedPersonsIds (branchSets: ScanRelationsSet[]): Set<number> {
         const relations = this.getSharedRelations(branchSets);
-
         const ids: Set<number> = new Set;
-        relations.forEach(({from, to})=>{
-            ids.add(from);
+        relations.forEach(({ to})=>{
             ids.add(to);
         })
         return ids;
@@ -86,7 +84,6 @@ class ScanRelationsSetUtil {
                     for (const currentSet of branchSets) {
                         if (currentSet!==set) {
                             const relations = currentSet.getToRelations(r.to).filter(nestedR=>nestedR.from!==r.from);
-                            console.log(...relations)
                             return relations.length>0;
                         }
                     }
@@ -124,6 +121,29 @@ export default class PreprocessedPersonRelationsScannerImpl implements Preproces
                 this.recursiveScan(p, targetScanSet, limit);
                 scanSets.push(targetScanSet);
             });
+
+            rootPersons.forEach(p=>shared.add(p.id))
+            const jpContainable = [...rootPersons, person];
+            jpContainable
+                .forEach(p=>{
+                    [...p.benOwnedJurPersons, ...p.ownedJurPersons].forEach(jurPerson=>{
+                        if (checkJurPersonDto(jurPerson)) {
+                            const owner = jurPerson.owner;
+                            if (owner&&![...rootPersons, person].some(p=>p.id===owner.id)) {
+                                const targetScanSet = new ScanRelationsSet();
+                                this.recursiveScan(p, targetScanSet, limit);
+                                scanSets.push(targetScanSet);
+                            }
+
+                            const benOwner = jurPerson.benOwner;
+                            if (benOwner&&![...rootPersons, person].some(p=>p.id===benOwner.id)) {
+                                const targetScanSet = new ScanRelationsSet();
+                                this.recursiveScan(p, targetScanSet, limit);
+                                scanSets.push(targetScanSet);
+                            }
+                        }
+                    })
+                });
         }
 
         const sharedRelations: Set<number> = this.scanRelationsSetUtil.getDuplicatedPersonsIds(scanSets);
@@ -143,28 +163,6 @@ export default class PreprocessedPersonRelationsScannerImpl implements Preproces
             scannedPersons.add(r);
         })
 
-        // if (limit>0||limit===-1) {
-        //     rootPersons.forEach(p=>shared.add(p.id))
-        //     const jpContainable = [...rootPersons, person];
-        //     jpContainable
-        //         .forEach(p=>{
-        //             [...p.benOwnedJurPersons, ...p.ownedJurPersons].forEach(jurPerson=>{
-        //                 if (checkJurPersonDto(jurPerson)) {
-        //                     const owner = jurPerson.owner;
-        //                     if (owner&&![...branchesScanned.keys()].some(p=>p.id===owner.id)) {
-        //                         const branchData = this.recursiveScan(p, limit);
-        //                         branchesScanned.set(p, branchData);
-        //                     }
-        //
-        //                     const benOwner = jurPerson.benOwner;
-        //                     if (benOwner&&![...branchesScanned.keys()].some(p=>p.id===benOwner.id)) {
-        //                         const branchData = this.recursiveScan(p, limit);
-        //                         branchesScanned.set(p, branchData);
-        //                     }
-        //                 }
-        //             })
-        //         });
-        // }
         console.log(scannedPersons)
         console.log(shared)
 
