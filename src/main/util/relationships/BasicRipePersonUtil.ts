@@ -77,6 +77,16 @@ export default class BasicRipePersonUtil implements RipePersonUtil{
                 subBranchScanned.add(iteratedPerson);
                 iterationSet = this.extractRelatedPersons(iteratedPerson,subBranchScanned);
                 iterationSet.add(iteratedPerson);
+                const jurPersonsScan = person.ownedJurPersons
+                    .concat(person.benOwnedJurPersons)
+                    .reduce((acc, jurPerson) => {
+                        const ownerRelations = jurPerson.owner&&this.extractRelatedPersons(jurPerson.owner);
+                        const benOwnerRelations = jurPerson.benOwner&&this.extractRelatedPersons(jurPerson.benOwner);
+                        const resultSet = new Set(acc);
+                        if (ownerRelations) ownerRelations.forEach(r=>resultSet.add(r));
+                        if (benOwnerRelations) benOwnerRelations.forEach(r=>resultSet.add(r));
+                        return resultSet;
+                    }, new Set<Person>)
             }
 
             return new Set([...accum, ...iterationSet]);

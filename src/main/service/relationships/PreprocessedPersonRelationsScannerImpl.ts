@@ -1,6 +1,7 @@
 import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsScanner";
 import {PreProcessedPerson} from "../../model/human/person/Person";
 import PersonResponseDto, {
+    NestedPersonResponseDto,
     NestedRelationshipsInfo,
     RelatedPersonResponseDto
 } from "../../rest/dto/person/PersonResponseDto";
@@ -9,14 +10,16 @@ import checkJurPersonDto from "../../util/checkJurPersonDto";
 
 type JurPersonsContainable = Pick<RelatedPersonResponseDto, "id"|"benOwnedJurPersons"|"ownedJurPersons">
 
+type BranchScan = Map<NestedPersonResponseDto, Set<number>>
+
 export default class PreprocessedPersonRelationsScannerImpl implements PreprocessedPersonRelationsScanner {
     public static getInstance(): PreprocessedPersonRelationsScannerImpl {
         return new PreprocessedPersonRelationsScannerImpl()
     }
-    private countRepeats (data: Set<number>[]): Map<number, number> {
+    private countRepeats (data: BranchScan): Map<number, number> {
         const repeatMap: Map<number, number> = new Map();
 
-        data.forEach(scanned=>{
+        [...data.values()].forEach(scanned=>{
             scanned.forEach(n=>{
                 if (!repeatMap.has(n)) {
                     repeatMap.set(n, 0)
@@ -34,89 +37,84 @@ export default class PreprocessedPersonRelationsScannerImpl implements Preproces
 
         const scannedPersons: Set<number> = new Set([person.id]);
 
-        const duplicatedPersons: Set<number> = new Set([person.id]);
+        const shared: Set<number> = new Set([person.id]);
 
         const rootPersons: RelatedPersonResponseDto[] = tree.map(r=>r.person);
 
-        const branchesScanned: Set<number>[] = rootPersons.map(p=>{
-            const res = this.recursiveScan(p.relationshipsInfo, limit);
-            if (limit>0||limit===-1) {
-                res.add(p.id);
-            }
-            return res;
-        });
+        const branchesScanned: BranchScan = new Map;
 
         if (limit>0||limit===-1) {
-            rootPersons.forEach(p=>duplicatedPersons.add(p.id))
-            const jpContainable = [...rootPersons, person];
-            const scans: Set<number>[] = jpContainable
-                .map(p=>this.scanJurPersons(p, limit));
-            branchesScanned.push(...scans);
+            rootPersons.forEach(p=>{
+                const res = this.recursiveScan(p, limit);
+                branchesScanned.set(p, res);
+            });
         }
 
-        const repeats = this.countRepeats(branchesScanned);
+        if (limit>0||limit===-1) {
+            rootPersons.forEach(p=>shared.add(p.id))
+            const jpContainable = [...rootPersons, person];
+            jpContainable
+                .forEach(p=>{
+                    [...p.benOwnedJurPersons, ...p.ownedJurPersons].forEach(jurPerson=>{
+                        if (checkJurPersonDto(jurPerson)) {
+                            const owner = jurPerson.owner;
+                            if (owner&&![...branchesScanned.keys()].some(p=>p.id===owner.id)) {
+                                const branchData = this.recursiveScan(p, limit);
+                                branchesScanned.set(p, branchData);
+                            }
 
-        const shared = [...repeats.entries()].filter(([_id, repeats])=>{
-            return repeats>1;
-        }).map(e=>e[0]);
+                            const benOwner = jurPerson.benOwner;
+                            if (benOwner&&![...branchesScanned.keys()].some(p=>p.id===benOwner.id)) {
+                                const branchData = this.recursiveScan(p, limit);
+                                branchesScanned.set(p, branchData);
+                            }
+                        }
+                    })
+                });
+        }
 
-        shared.forEach(id=>duplicatedPersons.add(id));
+        branchesScanned.forEach(idSet=>idSet.forEach(id=>scannedPersons.add(id)));
 
-        return {all: scannedPersons, shared: duplicatedPersons};
+        const repeats = new Set([...this.countRepeats(branchesScanned).entries()]
+            .filter(([_id, repeats])=>{
+                return repeats>0;
+            }).map(e=>e[0]));
+
+        [...branchesScanned.entries()].forEach(([p, scannedSet])=>{
+            if ([...repeats].some(id=>scannedPersons.has(id))) {
+                this.scanForMiddlePersons(repeats, p,shared,limit, 1)
+            }
+        })
+        console.log(shared)
+        return {all: scannedPersons, shared: shared};
     }
 
-    private recursiveScan(nestedRelationships: NestedRelationshipsInfo, limit: number, counter=1): Set<number> {
-        const relations = nestedRelationships.relationships?.map(r=>r.person)||[];
+    private scanForMiddlePersons(duplicateSet: Set<number>, nestedPerson: NestedPersonResponseDto,
+                              shared: Set<number>, limit: number, counter: number, subBranchScanned: Set<number> = new Set([nestedPerson.id])) {
+        if (duplicateSet.has(nestedPerson.id)) {
+            subBranchScanned.forEach(s=>shared.add(s));
+        }
+
+        nestedPerson.relationshipsInfo.relationships?.forEach(r=>{
+            if (limit===-1||limit>counter) {
+                const newSubBranchScanned = new Set([...subBranchScanned, r.person.id]);
+                this.scanForMiddlePersons(duplicateSet, r.person, shared, limit, counter+1, newSubBranchScanned);
+            }
+        })
+    }
+
+    private recursiveScan(person: NestedPersonResponseDto, limit: number, counter=1): Set<number> {
         const result: Set<number> = new Set;
 
-        relations.forEach(relation=>{
-            result.add(relation.id)
-            const nestedRelations = this.recursiveScan(relation.relationshipsInfo, limit, counter+1);
+        result.add(person.id);
+
+        person.relationshipsInfo.relationships?.forEach(relation=>{
+            const nestedRelations = this.recursiveScan(relation.person, limit, counter+1);
             nestedRelations.forEach(n=>result.add(n));
         })
 
         return result;
     }
 
-    private scanJurPersons(mainEntity: JurPersonsContainable, limit: number): Set<number> {
-        const ownedJurPersons = mainEntity.ownedJurPersons;
-        const benOwnedJurPersons = mainEntity.benOwnedJurPersons;
-        const ownedScanSet = ownedJurPersons.reduce((acc,jurPerson)=>{
-            let scanned: Set<number>
-            if (checkJurPersonDto(jurPerson)) {
-                scanned = this.scanJurPerson(jurPerson, limit);
-            } else scanned = new Set;
-            return new Set([...scanned, ...acc]);
-        }, new Set<number>)
-        const benOwnedSet = benOwnedJurPersons.reduce((acc,jurPerson)=>{
-            let scanned: Set<number>
-            if (checkJurPersonDto(jurPerson)) {
-                scanned = this.scanJurPerson(jurPerson, limit);
-            } else scanned = new Set;
-            return new Set([...scanned, ...acc]);
-        }, new Set<number>)
-        return new Set([...ownedScanSet, ...benOwnedSet])
-    }
-
-    private scanJurPerson(mainEntity: EmbedJurPersonResponseDto, limit: number): Set<number> {
-        const owner = mainEntity.owner;
-        const benOwner = mainEntity.benOwner;
-
-        const res: Set<number> = new Set<number>();
-
-        if (owner) {
-            const relations = this.recursiveScan(owner.relationshipsInfo, limit);
-            relations.add(owner.id);
-            relations.forEach(r=>res.add(r));
-        }
-
-        if (benOwner) {
-            const relations = this.recursiveScan(benOwner.relationshipsInfo, limit);
-            relations.add(benOwner.id);
-            relations.forEach(r=>res.add(r));
-        }
-
-        return res;
-    }
 
 }
