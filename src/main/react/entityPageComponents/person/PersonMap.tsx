@@ -41,9 +41,6 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
 
     const [personsLabels, setPersonsLabels] = useState<PersonLabelInfo[]>([])
 
-    const serviceContext: ServiceContext = useContext(LitmusServiceContext)
-
-
     useEffect(()=>{
         if (mapTargetElement.current) {
             const center = transformLocationToCoordinates(externalLocation?externalLocation:
@@ -90,7 +87,7 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
                 map.addOverlay(popup);
 
                 const metadata = service.paintPersonData(person,map);
-
+                console.log(metadata.drawnPersons)
                 setPersonsLabels([...metadata.drawnPersons])
             }
 

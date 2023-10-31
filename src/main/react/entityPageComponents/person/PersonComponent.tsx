@@ -75,7 +75,6 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
             .finally(()=>setPending(false));
     }, [rawPerson])
 
-
     const mainImg: string|undefined = rawPerson.media.mainImage||rawPerson.media.images[0];
 
     if (isPending) return <Loader/>
@@ -142,7 +141,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                                    cssAnchor={cssAnchor}
                                                    geoBtnOnClick={(r,_e)=>{
                                                        if (location&&r.to.location) {
-                                                           setLocation(r.to.location);
+                                                           setLocation({...r.to.location});
                                                        }
                                                    }}
                             />)
