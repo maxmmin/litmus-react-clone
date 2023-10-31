@@ -29,21 +29,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         return new PersonDtoMapperImpl(jurPersonDtoMapper);
     }
 
-    mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto|EmbedPersonResponseDto|SimplePersonResponseDto, 'relationshipsInfo'>): NoRelationsPerson {
-        const person: NoRelationsPerson = this.mapToEntity({
-            ...dto,
-            relationshipsInfo: {
-                relationships: null,
-                scanOptions: {depth: 0}
-            },
-            ownedJurPersons: [],
-            benOwnedJurPersons: [],
-            media: {mainImage: null, images: null},
-            sex: Sex.unset,
-            passportData: null,
-            dateOfBirth: null,
-            location: null
-        });
+    mapPersonResponseDtoToNoRelationPerson(dto: PersonResponseDto): NoRelationsPerson {
+        const person = this.mapToEntity(dto);
         // @ts-ignore
         delete person["relationshipsInfo"];
         return {...person}

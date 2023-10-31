@@ -1,5 +1,5 @@
 enum Sex {
-    male="MALE", female="FEMALE", unset="UNSET"
+    MALE="MALE", FEMALE="FEMALE", UNKNOWN="UNSET"
 }
 
 export default Sex;

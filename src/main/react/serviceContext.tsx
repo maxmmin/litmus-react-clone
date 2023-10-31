@@ -281,7 +281,7 @@ export type ServiceContext = {
         personRelationshipsBinder: PersonProcessor,
         personRelationshipsLoader: PersonRelationsLoader,
         personRelationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner,
-        ripePersonRelationshipsUtil: RipePersonUtil
+        ripePersonUtil: RipePersonUtil
     }
 }
 
@@ -316,7 +316,7 @@ const serviceContext: ServiceContext = {
         personRelationshipsBinder: personRelationshipsBinder,
         personRelationshipsLoader: personRelationshipsLoader,
         personRelationshipsResponseDtoScanner: relationshipsResponseDtoScanner,
-        ripePersonRelationshipsUtil: ripePersonRelationshipsUtil
+        ripePersonUtil: ripePersonRelationshipsUtil
     }
 }
 

@@ -1,5 +1,5 @@
 import {GeoLocation} from "../../../model/GeoLocation";
-import Media, {MediaResponseDto} from "../../../model/Media";
+import {MediaResponseDto} from "../../../model/Media";
 import {EmbedPersonResponseDto, RelatedPersonResponseDto} from "../person/PersonResponseDto";
 
 interface JurPersonResponseDto {

@@ -152,16 +152,16 @@ const CreatePerson = () => {
                <p className="m-0">Стать</p>
 
                <div className="form-check">
-                   <input className="form-check-input maleRadioBtn" type="radio" checked={person.sex===Sex.male} name="sex" onChange={()=>{
-                       creationStateManager.updateEntityCreationParams({sex: Sex.male})
+                   <input className="form-check-input maleRadioBtn" type="radio" checked={person.sex===Sex.MALE} name="sex" onChange={()=>{
+                       creationStateManager.updateEntityCreationParams({sex: Sex.MALE})
                    }}/>
                    <label className="form-check-label" htmlFor="maleRadioBtn">
                        Чоловіча
                    </label>
                </div>
                <div className="form-check">
-                   <input className="form-check-input femaleRadioBtn" type="radio" checked={person.sex===Sex.female} name="sex" onChange={()=>{
-                       creationStateManager.updateEntityCreationParams({sex: Sex.female});
+                   <input className="form-check-input femaleRadioBtn" type="radio" checked={person.sex===Sex.FEMALE} name="sex" onChange={()=>{
+                       creationStateManager.updateEntityCreationParams({sex: Sex.FEMALE});
                    }}/>
                    <label className="form-check-label" htmlFor="femaleRadioBtn">
                        Жіноча

@@ -16,6 +16,8 @@ import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
 import checkJurPersonDto from "../../util/checkJurPersonDto";
 
+type JurPersonContainable = Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>
+
 export default class BasicPersonProcessor implements PersonProcessor{
     private readonly personsStore = new Map<number, NoRelationsPerson>();
     constructor(protected readonly relationshipsLoader: PersonRelationsLoader,
@@ -116,23 +118,28 @@ export default class BasicPersonProcessor implements PersonProcessor{
     private buildRipePerson (rawPerson: PreProcessedPerson, personsToInclude: Set<number>): Person {
         const createdPersons: Map<number,Person> = new Map<number,Person>();
 
-        this.bindRelationships(rawPerson, personsToInclude, createdPersons);
+        this.bindRelationships(rawPerson, createdPersons, personsToInclude);
 
-        const jurPersonsContainable: Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>[] = [rawPerson]
-        rawPerson.relationshipsInfo.relationships?.forEach(r=>{
-           jurPersonsContainable.push(r.person);
-        })
-        jurPersonsContainable.forEach(personDto=>{
-            personDto.ownedJurPersons.concat(personDto.benOwnedJurPersons).forEach(j=>this.bindJurPerson(j, createdPersons));
-        })
+        // this.bindJurPersons(rawPerson, createdPersons, personsToInclude);
 
         return this.getCreatedPerson(rawPerson.id, createdPersons);
     }
 
-
-    private bindRelationships(person: NestedPersonResponseDto, personsToInclude: Set<number>, createdPersons: Map<number, Person>): void {
+    private bindJurPersons(rawPerson: PreProcessedPerson, createdPersons: Map<number, Person>, personsToInclude: Set<number>) {
+        const jurPersonsContainable: JurPersonContainable[] = [rawPerson]
+        rawPerson.relationshipsInfo.relationships?.forEach(r=>{
+            jurPersonsContainable.push(r.person);
+        })
+        jurPersonsContainable.forEach(personDto=>{
+            personDto.ownedJurPersons.concat(personDto.benOwnedJurPersons)
+                .filter(checkJurPersonDto)
+                .forEach(j=>this.bindJurPerson(j, createdPersons, personsToInclude));
+        })
+    }
+    private bindRelationships(person: NestedPersonResponseDto, createdPersons: Map<number, Person>, personsToInclude: Set<number>): void {
         if (person.relationshipsInfo.relationships) {
             const stack: NestedPersonResponseDto[] = [person]
+
             const scanned: Set<Person> = new Set()
             while (stack.length>0) {
                 const currentPerson = stack.pop()!;
@@ -152,17 +159,13 @@ export default class BasicPersonProcessor implements PersonProcessor{
         }
     }
 
-    private bindJurPerson(embedJurPerson: EmbedJurPersonResponseDto|MinifiedJurPersonResponseDto, createdPersons: Map<number,Person>): void {
-        const dtoCheck = checkJurPersonDto(embedJurPerson);
-
-        if (!dtoCheck) return;
-
+    private bindJurPerson(embedJurPerson: EmbedJurPersonResponseDto, createdPersons: Map<number,Person>, personsToInclude: Set<number>): void {
         const ownerDto = embedJurPerson.owner;
 
         let owner: Person|null = null;
 
         if (ownerDto) {
-            if (this.personsStore.has(ownerDto.id)) {
+            if (personsToInclude.has(ownerDto.id)) {
                 owner = this.getCreatedPerson(ownerDto.id, createdPersons);
             } else {
                 owner = {...this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(ownerDto),
@@ -179,7 +182,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
         let benOwner: Person|null = null;
 
         if (benOwnerDto) {
-            if (this.personsStore.has(benOwnerDto.id)) {
+            if (createdPersons.has(benOwnerDto.id)) {
                 benOwner = this.getCreatedPerson(benOwnerDto.id, createdPersons);
             } else {
                 benOwner = {...this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(benOwnerDto),

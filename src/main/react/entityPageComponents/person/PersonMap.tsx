@@ -43,7 +43,6 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
 
     const serviceContext: ServiceContext = useContext(LitmusServiceContext)
 
-    const personRelationshipsUtil = serviceContext.personServices.ripePersonRelationshipsUtil;
 
     useEffect(()=>{
         if (mapTargetElement.current) {

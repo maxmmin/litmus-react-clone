@@ -15,6 +15,7 @@ import {GeoLocation} from "../../../model/GeoLocation";
 import {LitmusServiceContext} from "../../App";
 import Loader from "../../loader/Loader";
 import getFullName from "../../../util/functional/getFullName";
+import {ServiceContext} from "../../serviceContext";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson
@@ -57,7 +58,9 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
     
     const [person, setPerson] = useState<Person|null>(null);
 
-    const bindService = useContext(LitmusServiceContext).personServices.personRelationshipsBinder;
+    const serviceContext: ServiceContext = useContext(LitmusServiceContext);
+
+    const bindService = serviceContext.personServices.personRelationshipsBinder;
 
     const [location, setLocation] = useState<GeoLocation|null>(rawPerson.location)
 
@@ -71,6 +74,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
             })
             .finally(()=>setPending(false));
     }, [rawPerson])
+
 
     const mainImg: string|undefined = rawPerson.media.mainImage||rawPerson.media.images[0];
 
