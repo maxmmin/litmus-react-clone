@@ -76,19 +76,19 @@ import JurPersonCreationApiServiceImpl from "../service/creation/api/JurPersonCr
 import UserCreationApiServiceImpl from "../service/creation/api/UserCreationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 import UserDtoMapperImpl from "../rest/dto/dtoMappers/UserDtoMapperImpl";
-import PersonProcessor from "../service/relationships/PersonProcessor";
-import PersonRelationshipsLoader from "../service/relationships/PersonRelationshipsLoader";
-import PreprocessedPersonRelationsScanner from "../service/relationships/PreprocessedPersonRelationsScanner";
+import PersonProcessor from "../service/personRelations/PersonProcessor";
+import PersonRelationsLoader from "../service/personRelations/PersonRelationsLoader";
+import PreprocessedPersonRelationsScanner from "../service/personRelations/PreprocessedPersonRelationsScanner";
 import RipePersonUtil from "../util/relationships/RipePersonUtil";
-import BasicPersonRelationshipsLoader from "../service/relationships/BasicPersonRelationshipsLoader";
-import BasicPersonProcessor from "../service/relationships/BasicPersonProcessor";
+import BasicPersonRelationshipsLoader from "../service/personRelations/BasicPersonRelationshipsLoader";
+import BasicPersonProcessor from "../service/personRelations/BasicPersonProcessor";
 import BasicRipePersonUtil from "../util/relationships/BasicRipePersonUtil";
 import UserIdentityDtoMapper from "../rest/dto/dtoMappers/UserIdentityDtoMapper";
 import UserIdentityDtoMapperImpl from "../rest/dto/dtoMappers/UserIdentityDtoMapperImpl";
 import PersonCreationServiceImpl from "../service/creation/PersonCreationServiceImpl";
 import UserCreationServiceImpl from "../service/creation/UserCreationServiceImpl";
 import JurPersonCreationServiceImpl from "../service/creation/JurPersonCreationServiceImpl";
-import PreprocessedPersonRelationsScannerImpl from "../service/relationships/PreprocessedPersonRelationsScannerImpl";
+import PreprocessedPersonRelationsScannerImpl from "../service/personRelations/PreprocessedPersonRelationsScannerImpl";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -279,7 +279,7 @@ export type ServiceContext = {
     geocodingService: GeocodingService,
     personServices: {
         personRelationshipsBinder: PersonProcessor,
-        personRelationshipsLoader: PersonRelationshipsLoader,
+        personRelationshipsLoader: PersonRelationsLoader,
         personRelationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner,
         ripePersonRelationshipsUtil: RipePersonUtil
     }
@@ -287,7 +287,7 @@ export type ServiceContext = {
 
 const relationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance();
 
-const personRelationshipsLoader: PersonRelationshipsLoader = BasicPersonRelationshipsLoader.getInstance(
+const personRelationshipsLoader: PersonRelationsLoader = BasicPersonRelationshipsLoader.getInstance(
     relationshipsResponseDtoScanner,
     personExplorationApiService,
     mappers.person);

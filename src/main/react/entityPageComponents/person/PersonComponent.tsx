@@ -120,7 +120,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
             }
 
             <section className={"person-page__relationships-section"}>
-                <h4 className={'relationships-section__title'}>Пов'язані особи</h4>
+                <h4 className={'personRelations-section__title'}>Пов'язані особи</h4>
                 {
                     person.relationships.length > 0 ?
                     <div className={'person-page__relationships-container'}>

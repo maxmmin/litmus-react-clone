@@ -1,7 +1,7 @@
 import PersonExplorationApiService from "../exploration/api/human/person/PersonExplorationApiService";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import {NoRelationsPerson, PreProcessedPerson} from "../../model/human/person/Person";
-import PersonRelationshipsLoader from "./PersonRelationshipsLoader";
+import PersonRelationsLoader from "./PersonRelationsLoader";
 import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsScanner";
 import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
@@ -9,7 +9,7 @@ import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelation
 
 export type NoRelationshipsOptionalPersonMap = Map<number, NoRelationsPerson|null>
 
-export default class BasicPersonRelationshipsLoader implements PersonRelationshipsLoader{
+export default class BasicPersonRelationshipsLoader implements PersonRelationsLoader{
 
     public static getInstance(relationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance(),
                               personApiService: PersonExplorationApiService = PersonExplorationApiServiceImpl.getInstance(),
@@ -24,7 +24,7 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationshi
 
     loadSharedNestedPersons(person: PreProcessedPerson, limit: number, excludedIdSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
         const dto = person.relationshipsInfo;
-        if (!dto.relationships) throw new Error("dto relationships are null");
+        if (!dto.relationships) throw new Error("dto personRelations are null");
         dto.relationships.forEach(r=>excludedIdSet.add(r.person.id))
         const {shared} = this.relationshipsResponseDtoScanner.scan(person, limit);
         const idList = [...shared].filter(n=>!excludedIdSet.has(n))
@@ -33,7 +33,7 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationshi
 
     loadAllNestedPersons(person: PreProcessedPerson, limit: number, excludedIdSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
         const dto = person.relationshipsInfo;
-        if (!dto.relationships) throw new Error("dto relationships are null");
+        if (!dto.relationships) throw new Error("dto personRelations are null");
         dto.relationships.forEach(r=>excludedIdSet.add(r.person.id))
         const {all} = this.relationshipsResponseDtoScanner.scan(person, limit);
         const idList = [...all].filter(n=>!excludedIdSet.has(n))

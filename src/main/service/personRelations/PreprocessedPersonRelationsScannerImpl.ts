@@ -75,7 +75,6 @@ class ScanRelationsSetUtil {
         relations.forEach(({ to})=>{
             ids.add(to);
         })
-        console.log(JSON.stringify(relations))
         return ids;
     }
     public getSharedRelations (branchSets: ScanRelationsSet[]): Relation[] {
@@ -122,6 +121,7 @@ export default class PreprocessedPersonRelationsScannerImpl implements Preproces
             rootPersons.forEach(p=>{
                 const targetScanSet = new ScanRelationsSet();
                 this.scanPerson(p, targetScanSet, limit);
+                shared.add(p.id)
                 scanSets.push(targetScanSet);
             });
 
@@ -133,14 +133,14 @@ export default class PreprocessedPersonRelationsScannerImpl implements Preproces
                             const owner = jurPerson.owner;
                             if (owner&&![...rootPersons, person].some(p=>p.id===owner.id)) {
                                 const targetScanSet = new ScanRelationsSet();
-                                this.scanPerson(owner, targetScanSet, limit);
+                                this.scanPerson(owner, targetScanSet, limit, 1);
                                 scanSets.push(targetScanSet);
                             }
 
                             const benOwner = jurPerson.benOwner;
                             if (benOwner&&![...rootPersons, person].some(p=>p.id===benOwner.id)) {
                                 const targetScanSet = new ScanRelationsSet();
-                                this.scanPerson(benOwner, targetScanSet, limit);
+                                this.scanPerson(benOwner, targetScanSet, limit, 1);
                                 scanSets.push(targetScanSet);
                             }
                         }
@@ -209,15 +209,19 @@ export default class PreprocessedPersonRelationsScannerImpl implements Preproces
         }
     }
 
-    private scanPerson(person: NestedPersonResponseDto, targetScanSet: ScanRelationsSet, limit: number, counter: number = 1) {
-        targetScanSet.addRelation(null, person.id);
-        this.recursiveScan(person,targetScanSet,limit,counter);
+    private scanPerson(person: NestedPersonResponseDto, targetScanSet: ScanRelationsSet, limit: number, counter: number = 0) {
+        if (limit>counter||limit===-1) {
+            targetScanSet.addRelation(null, person.id);
+            this.recursiveScan(person,targetScanSet,limit,counter+1);
+        }
     }
 
     private recursiveScan(person: NestedPersonResponseDto, targetScanSet: ScanRelationsSet, limit: number, counter: number): void {
-        person.relationshipsInfo.relationships?.forEach(relation=>{
-            targetScanSet.addRelation(person.id, relation.person.id)
-            this.recursiveScan(relation.person, targetScanSet, limit, counter+1);
-        })
+        if (counter<limit||limit===-1) {
+            person.relationshipsInfo.relationships?.forEach(relation=>{
+                targetScanSet.addRelation(person.id, relation.person.id)
+                this.recursiveScan(relation.person, targetScanSet, limit, counter+1);
+            })
+        }
     }
 }

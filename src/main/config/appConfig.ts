@@ -37,7 +37,7 @@ const serverMappings = Object.freeze({
     persons: {
         root: personsRoot,
         getByIdList: buildUrl(personsRoot, "/id-list"),
-        relationships: (id: string)=>buildUrl(personsRoot, id, "/relationships")
+        relationships: (id: string)=>buildUrl(personsRoot, id, "/personRelations")
     },
     jurPersons: {
         root: buildUrl(apiRoot, entityDomains.JUR_PERSON)
