@@ -7,6 +7,9 @@ import GeoCoordinates from "../model/GeoCoordinates";
 import appConfig, {gmapsRegionOptions} from "../config/appConfig";
 import {Entity} from "../model/Entity";
 import {Action} from "redux";
+import {GeoLocation} from "../model/GeoLocation";
+import {LocationContainable} from "../react/entityPageComponents/person/PersonMap";
+import {LocationPresent} from "./map/MapPainter";
 
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
@@ -133,4 +136,8 @@ export function getEntityByDomain (domain: string): Entity|null {
     })
 
     return entity;
+}
+
+export function hasLocation<T extends {location?: GeoLocation|null}>(object: T): object is T&{location: GeoLocation} {
+    return Boolean(object.location);
 }

@@ -5,17 +5,22 @@ import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
 import {View} from "ol";
 import {FullScreen, Zoom} from "ol/control";
-import {GeoLocation} from "../../../model/GeoLocation";
 import {defaultMapPosition, transformLocationToCoordinates} from "../../../util/map/mapUtil";
-import {ServiceContext} from "../../serviceContext";
-import {LitmusServiceContext} from "../../App";
-import MapPainterImpl, {PersonLabelInfo} from "../../../util/map/MapPainterImpl";
+import MapPainterImpl from "../../../util/map/MapPainterImpl";
 import BasicRipePersonUtil from "../../../util/relationships/BasicRipePersonUtil";
+import {Entity} from "../../../model/Entity";
+import {GeoLocation} from "../../../model/GeoLocation";
+import {LabelInfo, LocationPresent} from "../../../util/map/MapPainter";
+import {checkNotEmpty} from "../../../util/pureFunctions";
 
+export type LocationContainable = {
+    id: number,
+    location: GeoLocation
+}
 
-type PersonMapProps = {
-    person: Person,
-    externalLocation: GeoLocation
+export type PersonMapProps = {
+    person: LocationPresent<Person>,
+    currentlyDisplayed: LocationContainable
 }
 
 const resizeMapCallback = ({map, labels}: {map: OlMap, labels: HTMLDivElement[]}) => {
@@ -35,15 +40,15 @@ const resizeMapCallback = ({map, labels}: {map: OlMap, labels: HTMLDivElement[]}
 
 const defaultZoom: number = 17;
 
-const PersonMap = ({person, externalLocation}: PersonMapProps) => {
+const PersonMap = ({person, currentlyDisplayed}: PersonMapProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<OlMap | undefined>();
-
-    const [personsLabels, setPersonsLabels] = useState<PersonLabelInfo[]>([])
+    const [labels, setLabels] = useState<LabelInfo<LocationContainable>[]>([]);
+    const [lastIndex, setLastIndex] = useState<number>(0);
 
     useEffect(()=>{
         if (mapTargetElement.current) {
-            const center = transformLocationToCoordinates(externalLocation?externalLocation:
+            const center = transformLocationToCoordinates(currentlyDisplayed?.location?currentlyDisplayed.location:
                 {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
 
             const olMap = new OlMap({
@@ -87,8 +92,10 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
                 map.addOverlay(popup);
 
                 const metadata = service.paintPersonData(person,map);
-                console.log(metadata.drawnPersons)
-                setPersonsLabels([...metadata.drawnPersons])
+                const drawnPersons = metadata.drawnPersons;
+                const drawnJurPersons = metadata.drawnJurPersons;
+                const drawnElems: LabelInfo<LocationContainable>[] = [...drawnPersons, ...drawnJurPersons];
+                setLabels(drawnElems)
             }
 
         }
@@ -97,19 +104,25 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
 
     useEffect(()=>{
         if (map) {
-            const coordinates = transformLocationToCoordinates(externalLocation?externalLocation:
+            const coordinates = transformLocationToCoordinates(currentlyDisplayed?.location?currentlyDisplayed?.location:
                 {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
+
+            const selected = checkNotEmpty(labels.find(l=>l.entity.id===currentlyDisplayed.id));
+
+            checkNotEmpty(selected.label.parentElement).style.zIndex = lastIndex+1+"";
+            setLastIndex(prev=>prev+1);
+
             const view = map.getView();
 
             view.setCenter(coordinates);
             view.setZoom(defaultZoom);
         }
-    }, [externalLocation])
+    }, [currentlyDisplayed])
 
     useEffect(()=>{
         if (map) {
             const resizeCallback = ()=>{
-                resizeMapCallback({map: map, labels: personsLabels.map(l=>l.label)})
+                resizeMapCallback({map: map, labels: labels.map(l=>l.label)})
             }
 
             map.getView().on("change:resolution", resizeCallback);
@@ -118,7 +131,7 @@ const PersonMap = ({person, externalLocation}: PersonMapProps) => {
 
             return ()=>map.getView().un("change:resolution", resizeCallback);
         }
-    }, [map, personsLabels])
+    }, [map, labels])
 
     useEffect(()=>{
         return ()=>{

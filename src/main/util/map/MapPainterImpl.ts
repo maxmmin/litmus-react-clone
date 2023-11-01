@@ -1,7 +1,12 @@
-import MapPainter from "./MapPainter";
+import MapPainter, {
+    JurPersonLabelInfo,
+    JurPersonLabelRequiredFields,
+    PersonLabelInfo,
+    PersonLabelRequiredFields, PersonPaintMetaData
+} from "./MapPainter";
 import Person, {Relationship} from "../../model/human/person/Person";
 import OlMap from "ol/Map";
-import {buildUrl, checkNotEmpty} from "../pureFunctions";
+import {buildUrl, hasLocation} from "../pureFunctions";
 import appConfig from "../../config/appConfig";
 import {Feature, Overlay} from "ol";
 import {Entity} from "../../model/Entity";
@@ -9,27 +14,12 @@ import getFullName from "../functional/getFullName";
 import {transformLocationToCoordinates} from "./mapUtil";
 import Popup from "ol-ext/overlay/Popup";
 import RipePersonUtil from "../relationships/RipePersonUtil";
-import VectorSource from "ol/source/Vector";
-import {LineString, Point} from "ol/geom";
-import VectorLayer from "ol/layer/Vector";
 import Vector from "ol/source/Vector";
+import {LineString} from "ol/geom";
+import VectorLayer from "ol/layer/Vector";
 import {Fill, Stroke, Style} from "ol/style";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 
-type LabelInfo<T> = {label: HTMLDivElement, labelOverlay: Overlay, entity: T}
-
-export type PersonLabelInfo = LabelInfo<PersonLabelRequiredFields>
-
-export type JurPersonLabelInfo = LabelInfo<JurPersonLabelRequiredFields>
-
-type PersonLabelRequiredFields = Pick<Person, "id"|"firstName"|"middleName"|"lastName"|"location"|"media">;
-
-type JurPersonLabelRequiredFields = Pick<JurPerson, "id"|"name"|"location"|"media">;
-
-export type PersonPaintMetaData = {
-    drawnPersons: PersonLabelInfo[],
-    drawnJurPersons: JurPersonLabelInfo[]
-}
 
 type LinesData = {pair: [Relationship, Relationship], line: Feature<LineString>}
 
@@ -120,20 +110,24 @@ export default class MapPainterImpl implements MapPainter {
         return {
             label: personContainer,
             labelOverlay: label,
-            entity: person
+            entity: person,
+            type: Entity.PERSON
         };
     }
 
     private buildPersonsLabels (rootPerson: Person, relatedPersons: Set<Person>): PersonLabelInfo[] {
         const labels: PersonLabelInfo[] = [...relatedPersons]
+            .filter(hasLocation)
             .map(p=>this.buildSinglePersonLabel({
                 person: p
             }));
 
-        labels.push(this.buildSinglePersonLabel({
-            person: rootPerson,
-            cssAnchor: "main"
-        }))
+        if (hasLocation(rootPerson)) {
+            labels.push(this.buildSinglePersonLabel({
+                person: rootPerson,
+                cssAnchor: "main"
+            }))
+        }
 
         return labels;
     }
@@ -247,7 +241,8 @@ export default class MapPainterImpl implements MapPainter {
         return {
             label: jurPersonContainer,
             labelOverlay: label,
-            entity: jurPerson
+            entity: jurPerson,
+            type: Entity.JUR_PERSON
         };
     }
 
@@ -269,7 +264,7 @@ export default class MapPainterImpl implements MapPainter {
                 return counter>1;
             })
         
-        return sharedJurPersons.map(j=>this.buildJurPersonLabel({jurPerson: j}))
+        return sharedJurPersons.filter(hasLocation).map(j=>this.buildJurPersonLabel({jurPerson: j}))
     }
 
     paintPersonData(person: Person, map: OlMap): PersonPaintMetaData {

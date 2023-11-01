@@ -1,5 +1,5 @@
 import Person, {PreProcessedPerson, Relationship} from "../../../model/human/person/Person";
-import {buildUrl} from "../../../util/pureFunctions";
+import {buildUrl, hasLocation} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
@@ -7,11 +7,10 @@ import "../../assets/css/entityPage/entityPage.scss";
 import "../../assets/css/entityPage/personPage.scss";
 import {DashedUserIcon, GeoLocationPinDropIcon} from "../../assets/icons";
 import ImageSlider from "../ImageSlider";
-import PersonMap from "./PersonMap";
+import PersonMap, {PersonMapProps} from "./PersonMap";
 import React, {useContext, useEffect, useState} from "react";
 import {NavLink} from "react-router-dom";
 import {Entity} from "../../../model/Entity";
-import {GeoLocation} from "../../../model/GeoLocation";
 import {LitmusServiceContext} from "../../App";
 import Loader from "../../loader/Loader";
 import getFullName from "../../../util/functional/getFullName";
@@ -62,7 +61,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
 
     const bindService = serviceContext.personServices.personRelationshipsBinder;
 
-    const [location, setLocation] = useState<GeoLocation|null>(rawPerson.location)
+    const [displayedEntity, setDisplayedEntity] = useState<PersonMapProps['currentlyDisplayed']|null>(null)
 
     useEffect(()=>{
         setPending(true);
@@ -70,7 +69,9 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
             .bindShared(rawPerson, -1)
             .then(person=>{
                 setPerson(person);
-                console.log(person)
+                if (hasLocation(person)) {
+                    setDisplayedEntity(person);
+                }
             })
             .finally(()=>setPending(false));
     }, [rawPerson])
@@ -114,10 +115,10 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                 }
             </section>
 
-            {location &&
+            {displayedEntity && hasLocation(person) &&
                 <section className={"person-page__map-section"}>
                     <div className="person-page__map-wrapper">
-                        <PersonMap person={person} externalLocation={location}/>
+                        <PersonMap person={person} currentlyDisplayed={displayedEntity}/>
                     </div>
                 </section>
             }
@@ -140,8 +141,9 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                                    relationship={relationship}
                                                    cssAnchor={cssAnchor}
                                                    geoBtnOnClick={(r,_e)=>{
-                                                       if (location&&r.to.location) {
-                                                           setLocation({...r.to.location});
+                                                       const toPerson = r.to;
+                                                       if (hasLocation(toPerson)&&toPerson!==displayedEntity) {
+                                                           setDisplayedEntity(toPerson);
                                                        }
                                                    }}
                             />)
