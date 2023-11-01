@@ -143,6 +143,12 @@ export default class BasicPersonProcessor implements PersonProcessor{
             personDto.ownedJurPersons.concat(personDto.benOwnedJurPersons)
                 .filter(isEmbedJurPersonDto)
                 .forEach(j=>{
+                    if (j.owner) {
+                        this.bindRelationships(j.owner, createdPersons, personsToInclude);
+                    }
+                    if (j.benOwner) {
+                        this.bindRelationships(j.benOwner, createdPersons, personsToInclude);
+                    }
                     this.bindJurPerson(j, createdPersons, personsToInclude);
                 });
         })
