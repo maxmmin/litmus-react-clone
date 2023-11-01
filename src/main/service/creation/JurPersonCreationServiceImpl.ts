@@ -12,7 +12,7 @@ import JurPersonCreationValidationServiceImpl from "./validation/jurPerson/JurPe
 import JurPersonCreationService from "./JurPersonCreationService";
 import CreationServiceImpl from "./CreationServiceImpl";
 import JurPersonRequestDto from "../../rest/dto/jurPerson/JurPersonRequestDto";
-import {JurPerson, PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
+import {PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 import getFilesFromMedia from "../../util/media/getFilesFromMedia";

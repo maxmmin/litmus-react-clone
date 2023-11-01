@@ -8,7 +8,6 @@ import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCr
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import Media from "../../../model/Media";
 import PersonDtoMapper from "./PersonDtoMapper";
-import {checkNotEmpty} from "../../../util/pureFunctions";
 import Person from "../../../model/human/person/Person";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {

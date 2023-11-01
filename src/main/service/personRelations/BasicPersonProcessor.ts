@@ -1,6 +1,6 @@
 import BasicPersonRelationshipsLoader, {NoRelationshipsOptionalPersonMap} from "./BasicPersonRelationshipsLoader";
 import Person, {NoRelationsPerson, PreProcessedPerson, Relationship} from "../../model/human/person/Person";
-import PersonResponseDto, {
+import {
     NestedPersonResponseDto,
     RelatedPersonResponseDto,
 } from "../../rest/dto/person/PersonResponseDto";
@@ -11,12 +11,20 @@ import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsSca
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import RipePersonUtil from "../../util/relationships/RipePersonUtil";
 import BasicRipePersonUtil from "../../util/relationships/BasicRipePersonUtil";
-import {EmbedJurPersonResponseDto, MinifiedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonResponseDto";
+import {EmbedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
-import checkJurPersonDto from "../../util/checkJurPersonDto";
+import isEmbedJurPersonDto from "../../util/checkJurPersonDto";
+import {JurPerson} from "../../model/jurPerson/JurPerson";
+import {checkNotEmpty} from "../../util/pureFunctions";
 
 type JurPersonContainable = Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>
+
+type JurPersonProcessingResult = {
+    personId: number,
+    ownerJurPersons: JurPerson[],
+    benOwnedJurPersons: JurPerson[]
+}
 
 export default class BasicPersonProcessor implements PersonProcessor{
     private readonly personsStore = new Map<number, NoRelationsPerson>();
@@ -120,7 +128,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
 
         this.bindRelationships(rawPerson, createdPersons, personsToInclude);
 
-        // this.bindJurPersons(rawPerson, createdPersons, personsToInclude);
+        this.bindJurPersons(rawPerson, createdPersons, personsToInclude);
 
         return this.getCreatedPerson(rawPerson.id, createdPersons);
     }
@@ -130,10 +138,13 @@ export default class BasicPersonProcessor implements PersonProcessor{
         rawPerson.relationshipsInfo.relationships?.forEach(r=>{
             jurPersonsContainable.push(r.person);
         })
+
         jurPersonsContainable.forEach(personDto=>{
             personDto.ownedJurPersons.concat(personDto.benOwnedJurPersons)
-                .filter(checkJurPersonDto)
-                .forEach(j=>this.bindJurPerson(j, createdPersons, personsToInclude));
+                .filter(isEmbedJurPersonDto)
+                .forEach(j=>{
+                    this.bindJurPerson(j, createdPersons, personsToInclude);
+                });
         })
     }
     private bindRelationships(person: NestedPersonResponseDto, createdPersons: Map<number, Person>, personsToInclude: Set<number>): void {
