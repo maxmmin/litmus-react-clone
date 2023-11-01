@@ -30,7 +30,7 @@ type PairedRelationshipMap = Map<string, PairedRelationships>
 
 export default class MapPainterImpl implements MapPainter {
     private readonly _popup: Popup = new Popup({
-        popupClass: "black person-popup",
+        popupClass: "black entity-popup",
         closeBox: true,
         autoPan: true,
         anim: true,

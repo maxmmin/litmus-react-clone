@@ -175,7 +175,8 @@
   }
 }
 
-.person-popup.ol-popup.black  {
+.entity-popup.ol-popup.black  {
+  z-index: 999999;
   & .closeBox {
     color: $md-sys-color-inverse-primary-light;
   }
