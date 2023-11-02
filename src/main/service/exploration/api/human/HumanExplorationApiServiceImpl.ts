@@ -4,7 +4,7 @@ import BasicEntityLookupService from "../BasicExplorationApiService";
 import {isEmpty} from "../../../../util/functional/isEmpty";
 import {FullName} from "../../../../model/human/Human";
 
-export default class HumanExplorationApiServiceImpl<P> extends BasicEntityLookupService<P> implements HumanExplorationApiService<P> {
+export default class HumanExplorationApiServiceImpl<P extends object> extends BasicEntityLookupService<P> implements HumanExplorationApiService<P> {
 
     constructor(apiMapping: string) {
         super(apiMapping);
