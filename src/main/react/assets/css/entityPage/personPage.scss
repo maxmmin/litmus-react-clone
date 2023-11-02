@@ -30,8 +30,9 @@
   height: 600px;
 }
 
-.person-map {
+.entity-map {
   height: 100%;
+  cursor: pointer;
   position: relative;
 }
 
@@ -131,9 +132,6 @@
 
 }
 
-.person-map {
-  cursor: pointer;
-}
 
 .map-entity-label__img-wrapper {
   width: 100%;
