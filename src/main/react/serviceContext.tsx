@@ -321,7 +321,7 @@ const serviceContext: ServiceContext = {
         preprocessedPersonRelationsScanner: relationshipsResponseDtoScanner,
         ripePersonUtil: ripePersonRelationshipsUtil
     },
-    mapPainter: MapPainterImpl.getInstance()
+    mapPainter: new MapPainterImpl(ripePersonRelationshipsUtil)
 }
 
 export default serviceContext;

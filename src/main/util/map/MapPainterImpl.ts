@@ -19,6 +19,7 @@ import {LineString} from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
 import {Fill, Stroke, Style} from "ol/style";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
+import BasicRipePersonUtil from "../relationships/BasicRipePersonUtil";
 
 
 type LinesData = {pair: Paired, line: Feature<LineString>}
@@ -45,11 +46,6 @@ export default class MapPainterImpl implements MapPainter {
         })
     });
 
-    public static getInstance (): MapPainterImpl {
-        return MapPainterImpl.getInstance();
-    }
-
-
     get relationshipLineStyle(): Style {
         return this._relationshipLineStyle;
     }
@@ -59,6 +55,10 @@ export default class MapPainterImpl implements MapPainter {
     }
 
     constructor(protected readonly relationshipsUtil: RipePersonUtil) {
+    }
+
+    public static getInstance (ripePersonsUtil: RipePersonUtil = BasicRipePersonUtil.getInstance()): MapPainterImpl {
+        return new MapPainterImpl(ripePersonsUtil);
     }
 
     private buildPersonLabelHtmlElement({person, cssAnchor=""}: {person: PersonLabelRequiredFields, cssAnchor?: string}): HTMLDivElement {
