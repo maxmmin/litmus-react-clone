@@ -2,18 +2,17 @@ import React, {useContext, useEffect, useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Modal from 'react-bootstrap/Modal';
-import PersonInfoTable from "../exploration/EntityTables/PersonInfoTable";
 import LoaderSpinner from "../loader/LoaderSpinner";
 import store, {RootState} from "../../redux/store";
 import {CreationModalSettings} from "./CreationScreen";
-import {PreProcessedPerson} from "../../model/human/person/Person";
+import Person from "../../model/human/person/Person";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import JurPersonCreationStateManager from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/creation/stateManager/person/PersonCreationStateManager";
 import {HttpErrorParser} from "../../error/BasicHttpError";
 import {ApplicationError} from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
-import PersonResponseDto, {
+import {
     SimplePersonResponseDto
 } from "../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
@@ -119,22 +118,21 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         if (isIdValid) {
             // TODO: Maybe write additional checkup for core, add global error handler and Authentication error: 05/09
             setPending(true)
-            const timerID = setTimeout(()=>fetchPerson(stringId, personDtoMapper),250)
+            const timerID = setTimeout(()=>fetchPerson(id, personDtoMapper),250)
             setRequestTimerId(timerID)
         }
 
     }
 
 
-    const fetchPerson = async (id: string, mapper: PersonDtoMapper) => {
+    const fetchPerson = async (id: number, mapper: PersonDtoMapper) => {
         const personService: PersonExplorationApiService = personApiService;
 
         setPending(true)
 
         try {
-            const personResponseDto: PersonResponseDto|null = await personService.findPersonByIdWithDepthOption(id, 0);
-            const person: PreProcessedPerson|null = personResponseDto?mapper.mapToEntity(personResponseDto):null;
-            //@todo я выбрасываю ошибку внутри или оно нормально обрабатывает? заменить search error моей нормальной ошибкой
+            const personResponseDto: SimplePersonResponseDto|null = await personService.findPersonSimpleDto(id);
+            const person: Person|null = personResponseDto?mapper.mapSimpleResponseDtoToEntity(personResponseDto):null;
             setPerson(person)
             if (!person) {
                 throw new Error(`Особу з ідентифікатором ${id} не знайдено`)

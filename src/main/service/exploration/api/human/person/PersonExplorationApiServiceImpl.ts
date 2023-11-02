@@ -2,7 +2,7 @@ import PersonExplorationApiService from "./PersonExplorationApiService";
 import appConfig from "../../../../../config/appConfig";
 import HumanExplorationApiServiceImpl from "../HumanExplorationApiServiceImpl";
 import PersonResponseDto, {
-    RelationshipsInfo
+    RelationshipsInfo, SimplePersonResponseDto
 } from "../../../../../rest/dto/person/PersonResponseDto";
 import {buildUrl} from "../../../../../util/pureFunctions";
 export type PersonResponseIdMapDto = Record<number, PersonResponseDto|null>
@@ -28,23 +28,34 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
 
 
 
-    async findPersonByIdWithDepthOption(id: string, d: number): Promise<PersonResponseDto> {
-        const response = await this.apiInstance<PersonResponseDto>(buildUrl(appConfig.serverMappings.persons.root,id), {
+    async findPersonByIdWithDepthOption(id: number, d: number): Promise<PersonResponseDto|null> {
+        const response = await this.apiInstance<PersonResponseDto>(buildUrl(appConfig.serverMappings.persons.root,id.toString()), {
             params: {
-                d: 12
+                d: d
             }
         });
-        return response.data;
+        return Object.keys(response.data).length>0?response.data:null;
     }
 
-    async findPersonRelationships(id: string, d: number): Promise<RelationshipsInfo> {
-        const response = await this.apiInstance<RelationshipsInfo>(buildUrl(appConfig.serverMappings.persons.relationships(id)), {
+    async findPersonRelationships(id: number, d: number): Promise<RelationshipsInfo> {
+        const response = await this.apiInstance<RelationshipsInfo>(buildUrl(appConfig.serverMappings.persons.relationships(id.toString())), {
             params: {
                 d: d
             }
         });
         return response.data;
     }
+
+    async findPersonSimpleDto(id: number): Promise<SimplePersonResponseDto|null> {
+        const response = await this.apiInstance<PersonResponseDto>(buildUrl(appConfig.serverMappings.persons.root,id.toString()), {
+            params: {
+                s: true
+            }
+        });
+        return Object.keys(response.data).length>0?response.data:null;
+    }
+
+
 
     public static getInstance (): PersonExplorationApiServiceImpl {
         return new PersonExplorationApiServiceImpl();

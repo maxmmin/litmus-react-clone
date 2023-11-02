@@ -6,7 +6,7 @@ import hasMediaContent from "../../../util/media/hasMediaContent";
 import PassportData from "../../../model/human/person/PassportData";
 import PersonResponseDto, {
     EmbedPersonResponseDto,
-    RelationshipResponseDto,
+    RelationshipResponseDto, RelationshipsInfo,
     SimplePersonResponseDto,
 } from "../person/PersonResponseDto";
 import PersonDtoMapper, {OptionalRawPersonIdMap} from "./PersonDtoMapper";

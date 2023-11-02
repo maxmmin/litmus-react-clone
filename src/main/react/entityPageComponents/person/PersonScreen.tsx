@@ -23,7 +23,7 @@ export default function PersonScreen () {
         if (!isFetching) setFetching(true);
 
         if (id!==undefined&&!isNaN(+id)) {
-            explorationApiService.findPersonByIdWithDepthOption(id, 12)
+            explorationApiService.findPersonByIdWithDepthOption(+id, 12)
                 .then(responseDto => {
                     if (responseDto) {
                         const foundPerson = dtoMapper.mapToEntity(responseDto);
