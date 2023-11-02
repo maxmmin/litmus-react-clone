@@ -4,6 +4,9 @@ import {GeoLocation} from "../../model/GeoLocation";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {Overlay} from "ol";
 import {Entity} from "../../model/Entity";
+import {LineString} from "ol/geom";
+import Vector from "ol/source/Vector";
+import VectorLayer from "ol/layer/Vector";
 
 export type LabelInfo<T> = {label: HTMLDivElement, labelOverlay: Overlay, entity: T, type: Entity}
 
@@ -17,11 +20,13 @@ export type JurPersonLabelInfo = LabelInfo<JurPersonLabelRequiredFields>
 
 export type PersonPaintMetaData = {
     drawnPersons: PersonLabelInfo[],
-    drawnJurPersons: JurPersonLabelInfo[]
+    drawnJurPersons: JurPersonLabelInfo[],
+    linesLayer:  VectorLayer<Vector<LineString>>
 }
 
 export type LocationPresent <T extends {location?: GeoLocation|null}> = Omit<T, 'location'>&{location: GeoLocation}
 
 export default interface MapPainter {
+    formPersonData (person: Person): PersonPaintMetaData;
     paintPersonData (person: Person, map: OlMap): PersonPaintMetaData;
 }

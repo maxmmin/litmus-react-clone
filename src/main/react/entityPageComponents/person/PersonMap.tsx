@@ -12,6 +12,7 @@ import {Entity} from "../../../model/Entity";
 import {GeoLocation} from "../../../model/GeoLocation";
 import {LabelInfo, LocationPresent} from "../../../util/map/MapPainter";
 import {checkNotEmpty} from "../../../util/pureFunctions";
+import {GeoLocationPinDropIcon} from "../../assets/icons";
 
 export type LocationContainable = {
     id: number,
@@ -139,7 +140,10 @@ const PersonMap = ({person, currentlyDisplayed}: PersonMapProps) => {
     }, [map])
 
     return (
-        <div ref={mapTargetElement} className="person-map">
+        <div ref={mapTargetElement} className="entity-map entity-map_person">
+            <div className="map__geo-btn-wrapper">
+                <GeoLocationPinDropIcon className={"map__geo-btn-wrapper"}/>
+            </div>
         </div>
     )
 }

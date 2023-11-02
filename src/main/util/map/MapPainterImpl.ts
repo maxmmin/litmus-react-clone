@@ -256,22 +256,32 @@ export default class MapPainterImpl implements MapPainter {
     }
 
     paintPersonData(person: Person, map: OlMap): PersonPaintMetaData {
+        const data = this.formPersonData(person);
+
+        data.drawnPersons.forEach(p=>p.labelOverlay.setMap(map));
+        data.drawnJurPersons.forEach(j=>j.labelOverlay.setMap(map));
+        map.addLayer(data.linesLayer);
+
+        return data;
+    }
+
+    formPersonData(person: Person): PersonPaintMetaData {
         const relatedPersons = this.relationshipsUtil.extractGeoRelatedPersons(person);
 
         const personsLabels = this.buildPersonsLabels(person, relatedPersons);
-        personsLabels.forEach(l=>l.labelOverlay.setMap(map))
 
         const personsToDisplay = new Set([person, ...relatedPersons]);
 
         const linesLayer = this.buildRelationshipsLines(personsToDisplay);
-        map.addLayer(linesLayer);
 
         const jurPersonsLabels = this.buildJurPersonsLabels(personsToDisplay);
-        jurPersonsLabels.forEach(l=>l.labelOverlay.setMap(map));
 
         return {
             drawnPersons: personsLabels,
-            drawnJurPersons: jurPersonsLabels
+            drawnJurPersons: jurPersonsLabels,
+            linesLayer: linesLayer
         }
     }
+
+
 }
