@@ -1,15 +1,9 @@
 import {Permissions} from "../redux/types/userIdentity/Role";
-import {AppDispatch} from "../redux/store";
-import jwtDecode, {JwtPayload} from "jwt-decode";
 import React from "react";
-import {getGeocode} from "use-places-autocomplete";
-import GeoCoordinates from "../model/GeoCoordinates";
-import appConfig, {gmapsRegionOptions} from "../config/appConfig";
+import appConfig from "../config/appConfig";
 import {Entity} from "../model/Entity";
 import {Action} from "redux";
 import {GeoLocation} from "../model/GeoLocation";
-import {LocationContainable} from "../react/entityPageComponents/person/PersonMap";
-import {LocationPresent} from "./map/MapPainter";
 
 
 function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
