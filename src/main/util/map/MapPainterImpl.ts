@@ -246,25 +246,13 @@ export default class MapPainterImpl implements MapPainter {
         };
     }
 
-    private buildJurPersonsLabels(personsToDisplay: Set<Person>): JurPersonLabelInfo[] {
-        const jurPersons = [...personsToDisplay].reduce((acc, person) => {
+    private buildJurPersonsLabels(jpContainable: Set<Person>): JurPersonLabelInfo[] {
+        const jurPersons = [...jpContainable].reduce((acc, person) => {
             const jurPersons = [...person.ownedJurPersons, ...person.benOwnedJurPersons];
             return new Set([...acc, ...jurPersons])
         }, new Set<JurPerson>())
-        
-        const sharedJurPersons = [...jurPersons]
-            .filter(jurPerson => {
-                let counter = 0;
-                for (const person of personsToDisplay) {
-                    if (counter>1) break;
-                    if (person.benOwnedJurPersons.includes(jurPerson)||person.ownedJurPersons.includes(jurPerson)) {
-                        counter++;
-                    }
-                }
-                return counter>1;
-            })
-        
-        return sharedJurPersons.filter(hasLocation).map(j=>this.buildJurPersonLabel({jurPerson: j}))
+
+        return [...jurPersons].filter(hasLocation).map(j=>this.buildJurPersonLabel({jurPerson: j}))
     }
 
     paintPersonData(person: Person, map: OlMap): PersonPaintMetaData {

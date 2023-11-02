@@ -101,7 +101,6 @@ const PersonMap = ({person, currentlyDisplayed}: PersonMapProps) => {
         }
     }, [map, person])
 
-
     useEffect(()=>{
         if (map) {
             const coordinates = transformLocationToCoordinates(currentlyDisplayed?.location?currentlyDisplayed?.location:
