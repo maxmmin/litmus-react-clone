@@ -15,16 +15,9 @@ import {EmbedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonRespo
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
 import isEmbedJurPersonDto from "../../util/checkJurPersonDto";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
-import {checkNotEmpty} from "../../util/pureFunctions";
 
 type JurPersonContainable = Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>
 
-type JurPersonProcessingResult = {
-    personId: number,
-    ownerJurPersons: JurPerson[],
-    benOwnedJurPersons: JurPerson[]
-}
 
 export default class BasicPersonProcessor implements PersonProcessor{
     private readonly personsStore = new Map<number, NoRelationsPerson>();
@@ -38,7 +31,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
     public static getInstance(jurPersonDtoMapper: JurPersonDtoMapper,
                               relationshipsLoader: PersonRelationsLoader = BasicPersonRelationshipsLoader.getInstance(),
                               relationshipsDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance(),
-                              dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(jurPersonDtoMapper),
+                              dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
                               relationshipsUtil: RipePersonUtil = BasicRipePersonUtil.getInstance()): BasicPersonProcessor {
         return new BasicPersonProcessor(relationshipsLoader, relationshipsDtoScanner, dtoMapper, jurPersonDtoMapper, relationshipsUtil);
     }
@@ -91,7 +84,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
         }
 
         this.loadRawPersonToStore(rawPerson);
-        const {shared, all} = this.relationshipScanService.scan(rawPerson, scanDepth);
+        const {shared} = this.relationshipScanService.scan(rawPerson, scanDepth);
 
         const loadedIdList = [...shared].filter(id=>this.personsStore.has(id));
 

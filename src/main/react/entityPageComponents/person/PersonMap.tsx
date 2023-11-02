@@ -13,7 +13,7 @@ import {GeoLocation} from "../../../model/GeoLocation";
 import MapPainter, {LabelInfo, LocationPresent} from "../../../util/map/MapPainter";
 import {checkNotEmpty} from "../../../util/pureFunctions";
 import {GeoLocationPinDropIcon} from "../../assets/icons";
-import {LocationContainable} from "../RelationsMap";
+import RelationsMap, {LocationContainable} from "../RelationsMap";
 import {ServiceContext} from "../../serviceContext";
 import {LitmusServiceContext} from "../../App";
 
@@ -28,14 +28,10 @@ export type PersonMapProps = {
 
 const PersonMap = ({person, currentlyDisplayed}: PersonMapProps) => {
     const context: ServiceContext = useContext(LitmusServiceContext);
-    const painter: MapPainter = context.
-    const metadata = useMemo(()=>buildP)
+    const painter: MapPainter = context.mapPainter;
+    const metadata = useMemo(()=>painter.buildPersonMetadata(person), [person])
     return (
-        <div ref={mapTargetElement} className="entity-map entity-map_person">
-            <div className="map__geo-btn-wrapper">
-                <GeoLocationPinDropIcon className={"map__geo-btn-wrapper"}/>
-            </div>
-        </div>
+        <RelationsMap metadata={metadata} currentlyDisplayed={currentlyDisplayed}/>
     )
 }
 
