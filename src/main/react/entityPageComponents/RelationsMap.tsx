@@ -1,6 +1,6 @@
 import {LabelInfo, RelationsLabelsMetaData} from "../../util/map/MapPainter";
 import {GeoLocationPinDropIcon} from "../assets/icons";
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import OlMap from "ol/Map";
 import {defaultMapPosition, transformLocationToCoordinates} from "../../util/map/mapUtil";
 import TileLayer from "ol/layer/Tile";
@@ -12,6 +12,7 @@ import {GeoLocation} from "../../model/GeoLocation";
 
 import '../assets/styles/map.scss'
 import '../assets/styles/entityPage/entityMap.scss'
+import {LitmusServiceContext} from "../App";
 
 type Props = {
     metadata: RelationsLabelsMetaData,
@@ -44,9 +45,20 @@ const resizeMapCallback = ({map, labels}: {map: OlMap, labels: HTMLDivElement[]}
 export default function RelationsMap ({metadata, currentlyDisplayed, cssAnchor}: Props) {
     const mapTargetElement = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<OlMap | undefined>();
-    const [lastIndex, setLastIndex] = useState<number>(0);
+    const [lastIndex, setLastIndex] = useState<number>(1);
     const [displayed, setDisplayed] = useState<LocationContainable>(currentlyDisplayed);
     const [firstShown] = useState<LocationContainable>(currentlyDisplayed);
+
+    const painter = useContext(LitmusServiceContext).mapPainter;
+
+    useEffect(()=>{
+        if (map) {
+            painter.putOnMap(metadata, map);
+            return ()=>{
+                painter.removeFromMap(metadata, map);
+            }
+        }
+    }, [metadata, map])
 
     useEffect(() => {
         setDisplayed(currentlyDisplayed);
@@ -69,7 +81,7 @@ export default function RelationsMap ({metadata, currentlyDisplayed, cssAnchor}:
             view.setCenter(coordinates);
             view.setZoom(defaultZoom);
         }
-    }, [displayed])
+    }, [displayed, map])
 
     useEffect(()=>{
         if (map) {

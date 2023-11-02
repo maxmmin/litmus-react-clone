@@ -3,8 +3,6 @@
 .map-entity-label  {
   width: 75px;
   height: 75px;
-  border: 5px solid rgba($md-sys-color-primary-light, 0.8);
-  outline: 10px solid rgba($md-sys-color-inverse-primary-light, 0.8);
   box-shadow: 0 0 15px 5px black;
   background: $md-sys-color-inverse-primary-light;
   overflow: hidden;
@@ -12,10 +10,14 @@
 
 .map-entity-label_person {
   border-radius: 50%;
+  border: 5px solid rgba($md-sys-color-primary-light, 0.8);
+  outline: 10px solid rgba($md-sys-color-inverse-primary-light, 0.8);
 }
 
 .map-entity-label_jur-person {
-  border-radius: 20px;
+  border: 5px solid rgba($md-sys-color-background-light, 0.8);
+  outline: 10px solid rgba($md-sys-color-background-light, 0.8);
+  border-radius: 10px;
 }
 
 .entity-map {

@@ -6,7 +6,7 @@ import MapPainter, {
 } from "./MapPainter";
 import Person, {Relationship} from "../../model/human/person/Person";
 import OlMap from "ol/Map";
-import {buildUrl, hasLocation} from "../pureFunctions";
+import {buildUrl, checkNotEmpty, hasLocation} from "../pureFunctions";
 import appConfig from "../../config/appConfig";
 import {Feature, Overlay} from "ol";
 import {Entity} from "../../model/Entity";
@@ -261,12 +261,23 @@ export default class MapPainterImpl implements MapPainter {
     paintPersonData(person: Person, map: OlMap): RelationsLabelsMetaData {
         const data = this.buildPersonMetadata(person);
 
-        data.drawnPersons.forEach(p=>p.labelOverlay.setMap(map));
-        data.drawnJurPersons.forEach(j=>j.labelOverlay.setMap(map));
-        map.addLayer(data.linesLayer);
+        this.putOnMap(data, map);
 
         return data;
     }
+
+    putOnMap(metadata: RelationsLabelsMetaData, map: OlMap): void {
+        [...metadata.drawnJurPersons,...metadata.drawnPersons].forEach(e=>map.addOverlay(e.labelOverlay));
+        map.addOverlay(metadata.popup);
+        map.addLayer(metadata.linesLayer);
+    }
+
+    removeFromMap(metadata: RelationsLabelsMetaData, map: OlMap): void {
+        [...metadata.drawnJurPersons,...metadata.drawnPersons].map(e=>map.removeOverlay(e.labelOverlay));
+        map.removeOverlay(metadata.popup);
+        map.removeLayer(metadata.linesLayer);
+    }
+
 
     buildPersonMetadata(person: Person): RelationsLabelsMetaData {
         const relatedPersons = this.relationshipsUtil.extractGeoRelatedPersons(person);
@@ -282,7 +293,8 @@ export default class MapPainterImpl implements MapPainter {
         return {
             drawnPersons: personsLabels,
             drawnJurPersons: jurPersonsLabels,
-            linesLayer: linesLayer
+            linesLayer: linesLayer,
+            popup: this.popup
         }
     }
 
