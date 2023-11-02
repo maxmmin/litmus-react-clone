@@ -1,5 +1,5 @@
 import Person, {PreProcessedPerson, Relationship} from "../../../model/human/person/Person";
-import {buildUrl, hasLocation} from "../../../util/pureFunctions";
+import {buildImgUrl, buildUrl, hasLocation} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
@@ -108,7 +108,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                     person.media.images.length>0
                     ?
                         <div className="entity-images-slider-container">
-                            <ImageSlider imageLinks={rawPerson.media.images.map(imagePath=>buildUrl(appConfig.serverMappings.mediaRootUrl,imagePath))}/>
+                            <ImageSlider imageLinks={rawPerson.media.images.map(buildImgUrl)}/>
                         </div>
                     :
                         <p>Фотографії особи відсутні</p>

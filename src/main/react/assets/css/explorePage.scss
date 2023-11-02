@@ -61,7 +61,7 @@
 .entity-container {
   padding: 10px;
   display: grid;
-  column-gap: 40px;
+  column-gap: 20px;
   height: 180px;
   overflow: auto;
   row-gap: 20px;
@@ -73,7 +73,11 @@
 }
 
 .person-container {
-  grid-template-columns: 30px repeat(8, 8.5%);
+  grid-template-columns: 30px repeat(9, 8.5%);
+}
+
+.entity-container__value_person-img {
+  max-width: 100%;
 }
 
 .jur-person-container {
@@ -86,6 +90,10 @@
 
 .entity-container__column-title  {
   font-size: 18px;
+}
+
+.entity-container__value-block {
+  overflow-wrap: break-word;
 }
 
 .entity-container__value {

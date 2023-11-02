@@ -24,7 +24,7 @@ const JurPersonInfoTable = ({jurPerson}: Props) => {
                         <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.dateOfRegistration?DateEntityTool.getStringFrom(jurPerson.dateOfRegistration):noInfoMessage}</p></div>
                         <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.owner?jurPerson.owner.lastName:noInfoMessage}</p></div>
                         <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.benOwner?jurPerson.benOwner.lastName:noInfoMessage}</p></div>
-                        <div className="entity-container__value entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.location?jurPerson.location.address:noInfoMessage}</p></div>
+                        <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.location?jurPerson.location.address:noInfoMessage}</p></div>
                 </div>
         </div>
         )

@@ -141,3 +141,7 @@ export function getEntityByDomain (domain: string): Entity|null {
 export function hasLocation<T extends {location?: GeoLocation|null}>(object: T): object is T&{location: GeoLocation} {
     return Boolean(object.location);
 }
+
+export function buildImgUrl(imagePath: string) {
+    return buildUrl(appConfig.serverMappings.mediaRootUrl,imagePath)
+}
