@@ -8,8 +8,10 @@ import {OSM} from "ol/source";
 import {View} from "ol";
 import {FullScreen, Zoom} from "ol/control";
 import {checkNotEmpty} from "../../util/pureFunctions";
-import '../assets/styles/map.scss'
 import {GeoLocation} from "../../model/GeoLocation";
+
+import '../assets/styles/map.scss'
+import '../assets/styles/entityPage/entityMap.scss'
 
 type Props = {
     metadata: RelationsLabelsMetaData,
