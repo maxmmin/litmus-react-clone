@@ -9,11 +9,11 @@ import {OSM} from "ol/source";
 import {View} from "ol";
 import Map from 'ol/Map';
 import {FullScreen, Zoom} from "ol/control";
-import "../assets/css/map.scss";
+import "../assets/styles/map.scss";
 import {LitmusServiceContext} from "../App";
 import {transform} from "ol/proj";
 import Popup from "ol-ext/overlay/Popup";
-import "../assets/css/ol-ext-min.css";
+import "../assets/styles/ol-ext-min.css";
 import {defaultMapPosition, transformToSource, transformToTarget} from "../../util/map/mapUtil";
 
 

@@ -7,20 +7,12 @@ import JurPersonDtoMapper from "./JurPersonDtoMapper";
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import Media from "../../../model/Media";
-import PersonDtoMapper from "./PersonDtoMapper";
 import Person from "../../../model/human/person/Person";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
-    protected personDtoMapper: PersonDtoMapper|null = null;
-
-    public setPersonDtoMapper (dtoMapper: PersonDtoMapper) {
-        this.personDtoMapper = dtoMapper;
-    }
-
     static getInstance(): JurPersonDtoMapperImpl {
         return new JurPersonDtoMapperImpl();
     }
-
 
     public mapToRequestDto (emergingEntity: JurPersonCreationParams): JurPersonRequestDto {
         const dto: Partial<JurPersonRequestDto> = {};

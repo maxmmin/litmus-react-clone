@@ -1,5 +1,5 @@
 import React from "react";
-import "../assets/css/imageUploader.scss";
+import "../assets/styles/imageUploader.scss";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import MimeMatcher, {matcher} from "mime-matcher";
 

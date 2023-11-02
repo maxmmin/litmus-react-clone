@@ -18,15 +18,9 @@ import JurPersonDtoMapperImpl from "./JurPersonDtoMapperImpl";
 import Sex from "../../../model/human/person/Sex";
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
-    protected readonly jurPersonDtoMapper: JurPersonDtoMapper;
 
-    constructor(jurPersonDtoMapper: JurPersonDtoMapper) {
-        this.jurPersonDtoMapper = jurPersonDtoMapper;
-        jurPersonDtoMapper.setPersonDtoMapper(this);
-    }
-
-    static getInstance(jurPersonDtoMapper: JurPersonDtoMapper = JurPersonDtoMapperImpl.getInstance()): PersonDtoMapperImpl {
-        return new PersonDtoMapperImpl(jurPersonDtoMapper);
+    static getInstance(): PersonDtoMapperImpl {
+        return new PersonDtoMapperImpl();
     }
 
     mapPersonResponseDtoToNoRelationPerson(dto: PersonResponseDto): NoRelationsPerson {

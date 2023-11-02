@@ -18,7 +18,7 @@ export type PersonLabelInfo = LabelInfo<PersonLabelRequiredFields>
 
 export type JurPersonLabelInfo = LabelInfo<JurPersonLabelRequiredFields>
 
-export type PersonPaintMetaData = {
+export type RelationsLabelsMetaData = {
     drawnPersons: PersonLabelInfo[],
     drawnJurPersons: JurPersonLabelInfo[],
     linesLayer:  VectorLayer<Vector<LineString>>
@@ -27,6 +27,6 @@ export type PersonPaintMetaData = {
 export type LocationPresent <T extends {location?: GeoLocation|null}> = Omit<T, 'location'>&{location: GeoLocation}
 
 export default interface MapPainter {
-    formPersonData (person: Person): PersonPaintMetaData;
-    paintPersonData (person: Person, map: OlMap): PersonPaintMetaData;
+    buildPersonMetadata (person: Person): RelationsLabelsMetaData;
+    paintPersonData (person: Person, map: OlMap): RelationsLabelsMetaData;
 }

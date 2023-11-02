@@ -4,7 +4,7 @@ import React, {createContext} from 'react';
 import HomeScreen from "./home/HomeScreen";
 import PrivateComponent from "./authorization/PrivateComponent";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './assets/css/index.scss';
+import './assets/styles/index.scss';
 import Explore from "./exploration/ExplorationScreen";
 import LitmusCore from "./LitmusCore";
 import Creation from "./creation/CreationScreen";

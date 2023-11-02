@@ -89,6 +89,8 @@ import PersonCreationServiceImpl from "../service/creation/PersonCreationService
 import UserCreationServiceImpl from "../service/creation/UserCreationServiceImpl";
 import JurPersonCreationServiceImpl from "../service/creation/JurPersonCreationServiceImpl";
 import PreprocessedPersonRelationsScannerImpl from "../service/personRelations/PreprocessedPersonRelationsScannerImpl";
+import MapPainter from "../util/map/MapPainter";
+import MapPainterImpl from "../util/map/MapPainterImpl";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -278,11 +280,12 @@ export type ServiceContext = {
     csrfTokenLoader: CsrfTokenLoader,
     geocodingService: GeocodingService,
     personServices: {
-        personRelationshipsBinder: PersonProcessor,
+        personProcessor: PersonProcessor,
         personRelationshipsLoader: PersonRelationsLoader,
-        personRelationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner,
+        preprocessedPersonRelationsScanner: PreprocessedPersonRelationsScanner,
         ripePersonUtil: RipePersonUtil
-    }
+    },
+    mapPainter: MapPainter
 }
 
 const relationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance();
@@ -313,11 +316,12 @@ const serviceContext: ServiceContext = {
     csrfTokenLoader: new BasicCsrfTokenLoader(),
     geocodingService: geocodingService,
     personServices: {
-        personRelationshipsBinder: personRelationshipsBinder,
+        personProcessor: personRelationshipsBinder,
         personRelationshipsLoader: personRelationshipsLoader,
-        personRelationshipsResponseDtoScanner: relationshipsResponseDtoScanner,
+        preprocessedPersonRelationsScanner: relationshipsResponseDtoScanner,
         ripePersonUtil: ripePersonRelationshipsUtil
-    }
+    },
+    mapPainter: MapPainterImpl.getInstance()
 }
 
 export default serviceContext;

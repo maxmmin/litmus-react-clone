@@ -3,8 +3,8 @@ import {buildImgUrl, buildUrl, hasLocation} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
-import "../../assets/css/entityPage/entityPage.scss";
-import "../../assets/css/entityPage/personPage.scss";
+import "../../assets/styles/entityPage/entityPage.scss";
+import "../../assets/styles/entityPage/personPage.scss";
 import {DashedUserIcon, GeoLocationPinDropIcon} from "../../assets/icons";
 import ImageSlider from "../ImageSlider";
 import PersonMap, {PersonMapProps} from "./PersonMap";
@@ -59,7 +59,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
 
     const serviceContext: ServiceContext = useContext(LitmusServiceContext);
 
-    const bindService = serviceContext.personServices.personRelationshipsBinder;
+    const bindService = serviceContext.personServices.personProcessor;
 
     const [displayedEntity, setDisplayedEntity] = useState<PersonMapProps['currentlyDisplayed']|null>(null)
 

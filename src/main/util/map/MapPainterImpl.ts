@@ -2,7 +2,7 @@ import MapPainter, {
     JurPersonLabelInfo,
     JurPersonLabelRequiredFields,
     PersonLabelInfo,
-    PersonLabelRequiredFields, PersonPaintMetaData
+    PersonLabelRequiredFields, RelationsLabelsMetaData
 } from "./MapPainter";
 import Person, {Relationship} from "../../model/human/person/Person";
 import OlMap from "ol/Map";
@@ -21,11 +21,11 @@ import {Fill, Stroke, Style} from "ol/style";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 
 
-type LinesData = {pair: [Relationship, Relationship], line: Feature<LineString>}
+type LinesData = {pair: Paired, line: Feature<LineString>}
 
-type PairedRelationships = [Relationship, Relationship]
+type Paired = [Person, Person]
 
-type PairedRelationshipMap = Map<string, PairedRelationships>
+type PairedRelationshipMap = Map<string, Paired>
 
 
 export default class MapPainterImpl implements MapPainter {
@@ -44,6 +44,10 @@ export default class MapPainterImpl implements MapPainter {
             width: 3,
         })
     });
+
+    public static getInstance (): MapPainterImpl {
+        return MapPainterImpl.getInstance();
+    }
 
 
     get relationshipLineStyle(): Style {
@@ -136,11 +140,10 @@ export default class MapPainterImpl implements MapPainter {
         return pairedId.sort((a,b)=>a-b).join("/");
     }
 
-    private buildRelationshipLine({pair}: {pair: [Relationship, Relationship]}): LinesData  {
-        const personPair = pair.map(r=>r.to);
-        const [personOne, personTwo] = personPair;
+    private buildRelationshipLine({pair}: {pair: Paired}): LinesData  {
+        const [personOne, personTwo]: Paired = pair;
         if (personOne.location&&personTwo.location) {
-            const pairCoordinates: [number, number][] = personPair.map(p=>transformLocationToCoordinates(p.location!))
+            const pairCoordinates: [number, number][] = pair.map(p=>transformLocationToCoordinates(p.location!))
 
             const line = new Feature({
                 geometry: new LineString(pairCoordinates)
@@ -151,7 +154,7 @@ export default class MapPainterImpl implements MapPainter {
                 pair: pair,
                 line: line
             }
-        } else throw new Error(`one of persons has no location: ${pair[0].to.id}->${pair[1].to.id}`)
+        } else throw new Error(`one of persons has no location: ${pair[0].id}->${pair[1].id}`)
     }
 
     private buildRelationshipsLines (persons: Set<Person>): VectorLayer<Vector<LineString>> {
@@ -163,7 +166,7 @@ export default class MapPainterImpl implements MapPainter {
             renderBuffer: 1e6
         });
 
-        const drawnRelationshipsMap: PairedRelationshipMap = new Map<string, PairedRelationships>();
+        const drawnRelationshipsMap: PairedRelationshipMap = new Map<string, Paired>();
 
         const linesData: LinesData[] = [];
 
@@ -176,9 +179,9 @@ export default class MapPainterImpl implements MapPainter {
 
                 const key = this.buildPairedMapKey([person.id, relatedPerson.id]);
                 if (!drawnRelationshipsMap.has(key)) {
-                    const buildData = this.buildRelationshipLine({pair: [r,reverseRelation]})
+                    const buildData = this.buildRelationshipLine({pair: [r.to,reverseRelation.to]})
                     linesData.push(buildData);
-                    drawnRelationshipsMap.set(key, [reverseRelation, r])
+                    drawnRelationshipsMap.set(key, [reverseRelation.to, r.to])
                 }
             })
         })
@@ -255,8 +258,8 @@ export default class MapPainterImpl implements MapPainter {
         return [...jurPersons].filter(hasLocation).map(j=>this.buildJurPersonLabel({jurPerson: j}))
     }
 
-    paintPersonData(person: Person, map: OlMap): PersonPaintMetaData {
-        const data = this.formPersonData(person);
+    paintPersonData(person: Person, map: OlMap): RelationsLabelsMetaData {
+        const data = this.buildPersonMetadata(person);
 
         data.drawnPersons.forEach(p=>p.labelOverlay.setMap(map));
         data.drawnJurPersons.forEach(j=>j.labelOverlay.setMap(map));
@@ -265,7 +268,7 @@ export default class MapPainterImpl implements MapPainter {
         return data;
     }
 
-    formPersonData(person: Person): PersonPaintMetaData {
+    buildPersonMetadata(person: Person): RelationsLabelsMetaData {
         const relatedPersons = this.relationshipsUtil.extractGeoRelatedPersons(person);
 
         const personsLabels = this.buildPersonsLabels(person, relatedPersons);

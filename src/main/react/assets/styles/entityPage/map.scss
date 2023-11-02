@@ -1,0 +1,66 @@
+@import "../colors";
+
+.map-entity-label  {
+  width: 75px;
+  height: 75px;
+  border: 5px solid rgba($md-sys-color-primary-light, 0.8);
+  outline: 10px solid rgba($md-sys-color-inverse-primary-light, 0.8);
+  box-shadow: 0 0 15px 5px black;
+  background: $md-sys-color-inverse-primary-light;
+  overflow: hidden;
+}
+
+.map-entity-label_person {
+  border-radius: 50%;
+}
+
+.map-entity-label_jur-person {
+  border-radius: 20px;
+}
+
+.entity-map {
+  height: 100%;
+  cursor: pointer;
+  position: relative;
+}
+
+.map-label__person.main {
+
+}
+
+.map-entity-label__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+}
+
+.map-entity-label__img-placeholder {
+  color: black;
+  font-size: 34px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.map-tooltip__person-link {
+  color: white;
+
+  &:hover {
+    color: $md-sys-color-inverse-primary-light;
+  }
+}
+
+.map-entity-label__img-wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+.map__geo-btn-wrapper {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+}
