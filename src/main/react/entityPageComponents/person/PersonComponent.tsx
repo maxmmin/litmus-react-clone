@@ -15,42 +15,14 @@ import {LitmusServiceContext} from "../../App";
 import Loader from "../../loader/Loader";
 import getFullName from "../../../util/functional/getFullName";
 import {ServiceContext} from "../../serviceContext";
+import RelationshipComponent from "../RelationshipComponent";
+import {JurPerson} from "../../../model/jurPerson/JurPerson";
+import RelatedJurPersonComponent from "../RelatedJurPersonComponent";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson
 }
 
-type RelationShipProps = {
-    relationship: Relationship,
-    cssAnchor?: string,
-    containerOnClick?: (relationship: Relationship, e: React.MouseEvent<HTMLDivElement>)=>void,
-    geoBtnOnClick?: (relationship: Relationship, e: React.MouseEvent<HTMLDivElement>)=>void
-}
-
-export function RelationshipComponent ({relationship, cssAnchor="", containerOnClick, geoBtnOnClick}: RelationShipProps) {
-    const person = relationship.to
-
-    const mainImg: string|null = person.media.mainImage;
-
-    return (
-        <div className={`person-page__relationship-container ${cssAnchor}`} onClick={
-            containerOnClick&&((e)=>containerOnClick(relationship, e))}>
-            <div className="relationship-container__main-block">
-                <div className="relationship-container_person-img-wrapper">
-                    { mainImg ? <img className={"relationship-container__person-img"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
-                </div>
-                <p className="relationship-container__person-name"><NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id.toString())}>{getFullName(person)}</NavLink></p>
-            </div>
-            <p className="relationship-container__relation-type">{relationship.type}</p>
-            <p className="relationship-container__relation-note">{relationship.note}</p>
-            <div className="relationship-container__location-btn-wrapper" onClick={
-                geoBtnOnClick&&(e=>geoBtnOnClick(relationship, e))
-            }>
-                <GeoLocationPinDropIcon className={"relationship-container__location-btn"}/>
-            </div>
-        </div>
-    )
-}
 
 export default function PersonComponent ({rawPerson}: PersonProps) {
     const [isPending, setPending] = useState<boolean>(true);
@@ -70,11 +42,13 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
             .then(person=>{
                 setPerson(person);
                 if (hasLocation(person)) {
-                    setDisplayedEntity(person);
+                    setDisplayedEntity({to: person});
                 }
             })
             .finally(()=>setPending(false));
     }, [rawPerson])
+
+    const rootJurPersons: JurPerson[] = (person?.ownedJurPersons||[]).concat(person?.benOwnedJurPersons||[]);
 
     const mainImg: string|undefined = rawPerson.media.mainImage||rawPerson.media.images[0];
 
@@ -124,10 +98,14 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
             }
 
             <section className={"person-page__relationships-section"}>
-                <h4 className={'personRelations-section__title'}>Пов'язані особи</h4>
+                <h4 className={'relationships-section__title'}>Пов'язані фізичні особи</h4>
                 {
                     person.relationships.length > 0 ?
                     <div className={'person-page__relationships-container'}>
+                        <div className="related-entity-table-header related-entity-table-header_person">
+                            <h6 className='related-entity-container__header-title related-entity-container__header-title_main'>Основна інформація</h6>
+                            <h6 className='related-entity-container__header-title'>Тип відношення</h6>
+                        </div>
                         {person.relationships.map(relationship=>{
 
                             let cssAnchor: string;
@@ -142,8 +120,8 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                                    cssAnchor={cssAnchor}
                                                    geoBtnOnClick={(r,_e)=>{
                                                        const toPerson = r.to;
-                                                       if (hasLocation(toPerson)&&toPerson!==displayedEntity) {
-                                                           setDisplayedEntity(toPerson);
+                                                       if (hasLocation(toPerson)) {
+                                                           setDisplayedEntity({to: toPerson});
                                                        }
                                                    }}
                             />)
@@ -151,6 +129,41 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                     </div>
                     :
                     <p>Пов'язані особи відсутні</p>
+                }
+            </section>
+
+            <section className="person-page__related-jur-persons-section">
+                <h4 className={'related-jur-person-section__title'}>Пов'язані юридичні особи</h4>
+                {
+                    rootJurPersons.length > 0 ?
+                        <div className={'person-page__related-jur-persons-container'}>
+                            <div className="related-entity-table-header related-entity-table-header_jur-person">
+                                <h6 className='related-entity-container__header-title related-entity-container__header-title_main'>Основна інформація</h6>
+                                <h6 className='related-entity-container__header-title'>Власник</h6>
+                                <h6 className='related-entity-container__header-title'>Бен. власник</h6>
+                            </div>
+                            {rootJurPersons.map(jurPerson=>{
+
+                                let cssAnchor: string;
+                                if (person.location) {
+                                    cssAnchor = jurPerson.location?"":"disabled-geo"
+                                } else {
+                                    cssAnchor = "no-geo";
+                                }
+
+                                return (<RelatedJurPersonComponent key={jurPerson.id}
+                                                                   jurPerson={jurPerson}
+                                                                   cssAnchor={cssAnchor}
+                                                                   geoBtnOnClick={(j,_e)=>{
+                                                                       if (hasLocation(j)) {
+                                                                           setDisplayedEntity({to: j});
+                                                                       }
+                                                                   }}
+                                />)
+                            })}
+                        </div>
+                        :
+                        <p>Пов'язані особи відсутні</p>
                 }
             </section>
         </div>

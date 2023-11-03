@@ -1,4 +1,4 @@
-import {LabelInfo, RelationsLabelsMetaData} from "../../util/map/MapPainter";
+import {LabelInfo, LocationPresent, RelationsLabelsMetaData} from "../../util/map/MapPainter";
 import {GeoLocationPinDropIcon} from "../assets/icons";
 import React, {useContext, useEffect, useRef, useState} from "react";
 import OlMap from "ol/Map";
@@ -13,11 +13,17 @@ import {GeoLocation} from "../../model/GeoLocation";
 import '../assets/styles/map.scss'
 import '../assets/styles/entityPage/entityMap.scss'
 import {LitmusServiceContext} from "../App";
+import {ObjectEvent} from "ol/Object";
+import BaseEvent from "ol/events/Event";
 
 type Props = {
     metadata: RelationsLabelsMetaData,
-    currentlyDisplayed: LocationContainable,
+    currentlyDisplayed: CurrentlyDisplayed,
     cssAnchor?: string
+}
+
+export type CurrentlyDisplayed = {
+    to: LocationPresent<LocationContainable>
 }
 
 export type LocationContainable = {
@@ -42,12 +48,13 @@ const resizeMapCallback = ({map, labels}: {map: OlMap, labels: HTMLDivElement[]}
     })
 }
 
+
 export default function RelationsMap ({metadata, currentlyDisplayed, cssAnchor}: Props) {
     const mapTargetElement = useRef<HTMLDivElement>(null);
     const [map, setMap] = useState<OlMap | undefined>();
     const [lastIndex, setLastIndex] = useState<number>(1);
-    const [displayed, setDisplayed] = useState<LocationContainable>(currentlyDisplayed);
-    const [firstShown] = useState<LocationContainable>(currentlyDisplayed);
+    const [displayed, setDisplayed] = useState<LocationContainable|null>(currentlyDisplayed.to);
+    const [firstShown] = useState<LocationContainable>(currentlyDisplayed.to);
 
     const painter = useContext(LitmusServiceContext).mapPainter;
 
@@ -61,17 +68,16 @@ export default function RelationsMap ({metadata, currentlyDisplayed, cssAnchor}:
     }, [metadata, map])
 
     useEffect(() => {
-        setDisplayed(currentlyDisplayed);
+        setDisplayed(currentlyDisplayed.to);
     }, [currentlyDisplayed]);
 
     useEffect(()=>{
-        if (map) {
-            const coordinates = transformLocationToCoordinates(currentlyDisplayed?.location?currentlyDisplayed?.location:
-                {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
+        if (map&&displayed) {
+            const coordinates = transformLocationToCoordinates(displayed.location);
 
             const labels: LabelInfo<LocationContainable>[] = [...metadata.drawnPersons, ...metadata.drawnJurPersons];
 
-            const selected = checkNotEmpty(labels.find(l=>l.entity.id===currentlyDisplayed.id));
+            const selected = checkNotEmpty(labels.find(l=>l.entity.id===displayed.id));
 
             checkNotEmpty(selected.label.parentElement).style.zIndex = lastIndex+1+"";
             setLastIndex(prev=>prev+1);
@@ -99,10 +105,16 @@ export default function RelationsMap ({metadata, currentlyDisplayed, cssAnchor}:
     }, [map, metadata])
 
     useEffect(()=>{
+        if (map) {
+            const callback = (_e: BaseEvent|Event) => {if (displayed) setDisplayed(null);}
+            map.getView().on(['change:center', 'change:resolution'], callback);
+            return ()=>map.getView().un(['change:center', 'change:resolution'], callback);
+        }
+    }, [map, displayed])
+
+    useEffect(()=>{
         if (mapTargetElement.current) {
-            const center = transformLocationToCoordinates(currentlyDisplayed.location
-                ||
-                {address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
+            const center = transformLocationToCoordinates({address: "", longitude: defaultMapPosition.lng, latitude: defaultMapPosition.lat});
 
             const olMap = new OlMap({
                 target: 'map',

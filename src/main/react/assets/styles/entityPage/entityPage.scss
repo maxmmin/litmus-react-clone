@@ -63,3 +63,105 @@
   height: 400px;
 }
 
+.entity-page__related-entity-container {
+  display: grid;
+  justify-items: center;
+  padding: 2% 5%;
+  background: rgba($md-sys-color-inverse-primary-light, 0.3);
+  column-gap: 20px;
+  align-items: center;
+  overflow: hidden;
+  margin-top: 15px;
+  & p {
+    margin: 0;
+  }
+}
+
+.entity-page__related-entity-container_relationship, .related-entity-table-header_person {
+  grid-template-columns: 1fr repeat(2,20%) 60px;
+}
+
+.related-entity-table-header {
+  display: grid;
+  padding: 1% 5%;
+  background: rgba($md-sys-color-inverse-primary-light, 0.3);
+  column-gap: 20px;
+  align-items: center;
+}
+
+.related-entity-container__header-title_main {
+  justify-self: start;
+}
+
+.related-entity-container__header-title {
+  text-align: center;
+  padding: 0;
+  margin: 0;
+}
+
+.entity-page__related-entity-container_jur-person, .related-entity-table-header_jur-person {
+  grid-template-columns: 1fr repeat(2,25%) 60px;
+}
+
+.related-entity-container__plain-text_relation-note {
+  width: 100%;
+  overflow: auto;
+}
+
+.related-entity-container__plain-text_relation-note::-webkit-scrollbar {
+  height: 3px;
+}
+
+.related-entity-container__plain-text_relation-note::-webkit-scrollbar-thumb {
+  background-color: white;
+  border: 1px solid transparent;
+}
+
+.related-entity-container__main-block {
+  display: flex;
+  column-gap: 15px;
+  align-items: center;
+  justify-self: start;
+}
+
+.related-entity-container__img-wrapper {
+  width: 50px;
+  height: 50px;
+  flex-shrink: 0;
+}
+
+.related-entity-container__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.related-entity-container__entity-name {
+  font-weight: 600;
+}
+
+.related-entity-container__link {
+  color: $md-sys-color-on-primary-container-light;
+  text-decoration: none;
+}
+
+.related-entity-container__location-btn-wrapper {
+  width: 30px;
+  height: 30px;
+  justify-self: end;
+}
+
+.related-entity-container__location-btn {
+  height: 100%;
+  width: 100%;
+  fill: $md-sys-color-primary-light;
+  cursor: pointer;
+}
+
+.entity-page__related-entity-container.disabled-geo .related-entity-container__location-btn {
+  fill: rgba(gray,0.4);
+  cursor: auto;
+}

@@ -66,3 +66,10 @@
   top: 40px;
   right: 40px;
 }
+
+.entity-popup.ol-popup.black  {
+  z-index: 999999;
+  & .closeBox {
+    color: $md-sys-color-inverse-primary-light;
+  }
+}

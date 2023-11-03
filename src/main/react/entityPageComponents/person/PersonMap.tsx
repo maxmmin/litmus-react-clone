@@ -13,14 +13,14 @@ import {GeoLocation} from "../../../model/GeoLocation";
 import MapPainter, {LabelInfo, LocationPresent} from "../../../util/map/MapPainter";
 import {checkNotEmpty} from "../../../util/pureFunctions";
 import {GeoLocationPinDropIcon} from "../../assets/icons";
-import RelationsMap, {LocationContainable} from "../RelationsMap";
+import RelationsMap, {CurrentlyDisplayed, LocationContainable} from "../RelationsMap";
 import {ServiceContext} from "../../serviceContext";
 import {LitmusServiceContext} from "../../App";
 
 
 export type PersonMapProps = {
     person: LocationPresent<Person>,
-    currentlyDisplayed: LocationContainable
+    currentlyDisplayed: CurrentlyDisplayed
 }
 
 
