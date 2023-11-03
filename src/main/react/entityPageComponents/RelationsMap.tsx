@@ -153,7 +153,7 @@ export default function RelationsMap ({metadata, currentlyDisplayed, cssAnchor}:
             map?.dispose();
         }
     }, [map])
-
+    //@todo pindrop icon
     return (
         <div ref={mapTargetElement} className={`entity-map ${cssAnchor||""}`}>
             <div className="map__geo-btn-wrapper" onClick={()=>{
