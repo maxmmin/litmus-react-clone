@@ -5,21 +5,23 @@ import {UserIdentityStateReducible} from "../../redux/types/userIdentity/UserIde
 import {useAppSelector} from "../../redux/hooks";
 import BackButton from "../sharedComponents/BackButton";
 import {LitmusServiceContext} from "../App";
+import {BackBtnOptions} from "../RootScreen";
 
 type PropsType = {
-    backButtonPath: string|null|number
+    backBtnOptions: BackBtnOptions,
 }
 
-const Header = ({backButtonPath}: PropsType) => {
+const Header = ({backBtnOptions: {backPath, displayBtn}}: PropsType) => {
     const userIdentity = useAppSelector<UserIdentityStateReducible>(state => state.userIdentity);
     const appStateManager = useContext(LitmusServiceContext).appState.manager;
+
     return (
         <header className="header">
             <h2 style={{
                 margin: 0
             }}>LITMUS</h2>
                 <div className="header__interact">
-                    {backButtonPath?<BackButton path={backButtonPath}/>:null}
+                    {displayBtn&&<BackButton path={backPath}/>}
                     <div className="header__avatar-container" onClick={e=>{
                         e.stopPropagation();
                         appStateManager.headerMenuToggle();

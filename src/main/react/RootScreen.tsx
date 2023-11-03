@@ -8,30 +8,47 @@ import {matchPath, useLocation} from "react-router";
 import {buildUrl} from "../util/pureFunctions";
 import {Entity} from "../model/Entity";
 
-const backButtonsPathMap: Record<string, string|number|null> = {
-    "/": null,
-    [buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')]: appConfig.applicationMappings.root,
-    [buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')]: appConfig.applicationMappings.root,
-    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: -1,
-    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: -1,
-    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: -1,
+export type BackBtnOptions = {
+    backPath?: string,
+    displayBtn: boolean
+}
+
+const backButtonsPathMap: Record<string, BackBtnOptions> = {
+    [buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')]: {
+        backPath: appConfig.applicationMappings.root,
+        displayBtn: true
+    },
+    [buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')]: {
+        backPath: appConfig.applicationMappings.root,
+        displayBtn: true
+    },
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: {
+        displayBtn: true
+    },
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: {
+        displayBtn: true
+    },
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: {
+        displayBtn: true
+    },
 }
 export default function RootScreen () {
     const isHeaderOpened = useAppSelector(state => state.appState?.isHeaderMenuOpened);
     const appStateManager = useContext(LitmusServiceContext).appState.manager;
     const path = useLocation().pathname;
-    const currentBackBtnUrl = useMemo<string|number|null>(()=>{
+    const backBtnOptions: BackBtnOptions|null = useMemo<BackBtnOptions|null>(()=>{
         const matchedPath = Object.keys(backButtonsPathMap).find(checkedPath=>matchPath(checkedPath, path));
         if (matchedPath) return backButtonsPathMap[matchedPath];
         else return null;
     }, [path])
+
     return (
         <div className={"root-screen"} onClick={e => {
             if (isHeaderOpened) {
                 appStateManager.headerMenuClose();
             }
         }}>
-            <Header backButtonPath={currentBackBtnUrl}/>
+            <Header backBtnOptions={backBtnOptions||{displayBtn: false}}/>
             <div className="root-screen__content-wrapper">
                 <Outlet/>
             </div>
