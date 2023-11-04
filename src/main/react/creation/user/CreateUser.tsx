@@ -44,7 +44,7 @@ const CreateUser = () => {
                 creationStateManager.updateValidationErrors({repeatPassword: null})
             }
         }
-    }, [user.password])
+    }, [user.password, user.repeatPassword])
 
     useEffect(()=>{
         const updatedFullNameErrors = validationService.validateFullName(user);
@@ -124,9 +124,10 @@ const CreateUser = () => {
                     setPasswordsVisibility(prev=>({...prev, password: !prev.password}))
                     }}>
                         {passwordsVisibility.password?
-                            <VisibilityDisabledIcon className={"password__visibility-icon password__visibility-icon_disabled"} color={"darkgrey"}/>
+                            <VisibilityEnabledIcon className={"password__visibility-icon password__visibility-icon_enabled"} color={"darkgrey"}/>
                             :
-                            <VisibilityEnabledIcon className={"password__visibility-icon password__visibility-icon_enabled"} color={"darkgrey"}/>}
+                            <VisibilityDisabledIcon className={"password__visibility-icon password__visibility-icon_disabled"} color={"darkgrey"}/>
+                            }
                     </span>
                 </Form.Label>
                 <input autoComplete={"new-password"} className={`passport-number form-control ${validationErrors?.password?'is-invalid':''}`}
@@ -145,9 +146,10 @@ const CreateUser = () => {
                         setPasswordsVisibility(prev=>({...prev, repeatPassword: !prev.repeatPassword}))
                     }}>
                         {passwordsVisibility.repeatPassword?
+                            <VisibilityEnabledIcon className={"password__visibility-icon password__visibility-icon_enabled"} color={"darkgrey"}/>
+                            :
                             <VisibilityDisabledIcon className={"password__visibility-icon password__visibility-icon_disabled"} color={"darkgrey"}/>
-                                :
-                            <VisibilityEnabledIcon className={"password__visibility-icon password__visibility-icon_enabled"} color={"darkgrey"}/>}
+                        }
                     </span>
                 </Form.Label>
                 <input autoComplete={"new-password"}
