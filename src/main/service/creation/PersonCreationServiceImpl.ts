@@ -16,7 +16,6 @@ import CreationServiceImpl from "./CreationServiceImpl";
 import PersonRequestDto from "../../rest/dto/person/PersonRequestDto";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import PersonCreationService, {PersonCreationParams} from "./PersonCreationService";
-import creationStateManager from "./stateManager/CreationStateManager";
 
 class PersonCreationServiceImpl
     extends CreationServiceImpl<PersonRequestDto, PreProcessedPerson, PersonResponseDto, PersonCreationParams,

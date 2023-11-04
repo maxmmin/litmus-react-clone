@@ -18,21 +18,18 @@ import userIdentityReducer, {initialUserIdentityState, UserIdentityState} from "
 import loginPageDataReducer, {initialLoginState} from "./reducers/loginPageDataReducer";
 import creationReducer, {
     CreationState,
-    CreationStateReducible,
     defaultCreationState
 } from "./reducers/creationStateReducer";
 import explorationStateReducer, {
     defaultExplorationState, ExplorationState,
-    ExplorationStateReducible
 } from "./reducers/explorationStateReducer";
 import ErrorResponse from "../rest/ErrorResponse";
 import errLoggingMiddleware from "./middlewares/errLoggingMiddleware";
 import {AppNotificationType} from "./types/applicationState/Notification";
 import AuthAction from "./actions/AuthAction";
-import {Authentication, AuthenticationReducible} from "./types/auth/Authentication";
-import AppState, {AppStateReducible} from "./types/applicationState/AppState";
-import UserIdentity, {UserIdentityStateReducible} from "./types/userIdentity/UserIdentity";
-import {LoginPageState, LoginPageStateReducible} from "./actions/LoginPageDataActions";
+import {Authentication} from "./types/auth/Authentication";
+import AppState from "./types/applicationState/AppState";
+import {LoginPageState} from "./actions/LoginPageDataActions";
 
 const persistConfig: PersistConfig<any> = {
     storage,

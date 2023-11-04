@@ -81,8 +81,6 @@ class HttpErrorParser {
     }
 
     static parseError(error: unknown): ApplicationError {
-        if (!error) throw new Error("provided value isn't error type " + error)
-
         let errResponse: ErrorResponse;
         if (error instanceof AxiosError) {
             errResponse = HttpErrorParser.parseAxiosError(error);

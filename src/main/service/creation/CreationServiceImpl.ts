@@ -62,13 +62,14 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
         try {
             const errors = this.validationService.validate(emergingEntity);
             if (this.validationService.hasErrors(errors)) {
-                throw new ValidationError(errors);
+                // throw new ValidationError(errors);
             }
             const requestDto: RequestDto = this.mapper.mapToRequestDto(emergingEntity);
             const responseDto: ResponseDto = await this.apiService.create(requestDto);
             const entity: E = this.mapper.mapToEntity(responseDto);
             return fulfillWithValue(deepCopy(entity), {notify: true});
         } catch (e: unknown) {
+            console.error(e)
             if (e instanceof ValidationError<unknown>) {
                 this.creationStateManager.setValidationErrors(e.properties.validationErrors);
             } else if (e instanceof AxiosError && e.response?.status===HttpStatus.UNPROCESSABLE_ENTITY) {

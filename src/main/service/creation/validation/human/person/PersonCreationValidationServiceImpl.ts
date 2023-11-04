@@ -102,21 +102,23 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
 
         const requestRelationships = model.relationships;
 
-        relationshipsErrors.map(r=>r.match(/relationships\[(\d+)]\.(\w+):\s(.+)/))
-            .filter(isEmptyValue)
-            .forEach(data=>{
-                const index = data[0];
-                const field = data[1];
-                const message = data[2];
-                const relationship = checkNotEmpty(requestRelationships[+index]);
-                const validationObject: RelationShipValidationObject = relationshipsValidationObjects
-                    .find(v=>v.relationship===relationship) || {
-                    relationship: relationship,
-                    type: null,
-                    note: null
-                };
-                (validationObject as any)[field] = message;
-                relationshipsValidationObjects.push(validationObject);
+        relationshipsErrors
+            .forEach(key=>{
+                const indexMatch = key.match(/\[(\d+)]/);
+                if (indexMatch) {
+                    const index= indexMatch[0];
+                    const field = key.substring(key.indexOf(".")+1);
+                    const message = serverValidationObject[field];
+                    const relationship = checkNotEmpty(requestRelationships[+index]);
+                    const validationObject: RelationShipValidationObject = relationshipsValidationObjects
+                        .find(v=>v.relationship===relationship) || {
+                        relationship: relationship,
+                        type: null,
+                        note: null
+                    };
+                    (validationObject as any)[field] = message;
+                    relationshipsValidationObjects.push(validationObject);
+                }
             })
 
         personValidationObject.relationships.push(...relationshipsValidationObjects);
