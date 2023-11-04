@@ -10,7 +10,7 @@ abstract class HumanCreationValidationServiceImpl<E extends Human, R=ValidationE
 
     private static readonly LAST_NAME_REGEXP = new RegExp("^(?=.{3,32}$)[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*(-[А-ЩЬЮЯҐІЇЄ][а-щьюяґіїє']*)?$");
 
-    abstract mapServerValidationErrors(response: S): R;
+    abstract mapServerValidationErrors(model: E, response: S): R;
 
     abstract validate(model: E): R;
 

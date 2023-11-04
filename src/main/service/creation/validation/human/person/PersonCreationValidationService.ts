@@ -4,9 +4,9 @@ import {ValidationErrors} from "../../../../ValidationErrors";
 import PassportData from "../../../../../model/human/person/PassportData";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../PersonCreationService";
 
-export type RelationShipValidationObject = ValidationErrors<{relationType: string, note: string}>&{relationship: RelationshipCreationParams}
+export type RelationShipValidationObject = ValidationErrors<{type: string, note: string}>&{relationship: RelationshipCreationParams}
 
-export const getRelationshipDefaultValidationObject = (relShip: RelationshipCreationParams): RelationShipValidationObject => ({relationship: relShip, relationType: null, note: null})
+export const getRelationshipDefaultValidationObject = (relShip: RelationshipCreationParams): RelationShipValidationObject => ({relationship: relShip, type: null, note: null})
 
 export type PersonValidationObject = ValidationErrors<Omit<PersonCreationParams, 'relationships'|'passportData'|'media'>>
     &ValidationErrors<{passportSerial: string, passportNumber: string, rnokppCode: string}>&{relationships: RelationShipValidationObject[]}
@@ -28,7 +28,7 @@ export type ServerPersonValidationObject = Omit<ValidationErrors<PersonCreationP
     'passportData.passportSerial'?: string,
     'passportData.passportNumber'?: string,
     'passportData.rnokppCode'?: string
-}
+}&Record<string, string>
 
 export default interface PersonCreationValidationService extends HumanCreationValidationService<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> {
     validateRelationship(relationship: RelationshipCreationParams): RelationShipValidationObject;

@@ -1,6 +1,5 @@
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
 import PersonCreationValidationService, {
-    personDefaultValidationObject,
     PersonValidationObject, RelationShipValidationObject,
     ServerPersonValidationObject
 } from "./PersonCreationValidationService";
@@ -13,6 +12,7 @@ import hasHtml from "../../../../../util/functional/hasHtml";
 import PassportData from "../../../../../model/human/person/PassportData";
 import valueOrNull from "../../../../../util/functional/valueOrNull";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../PersonCreationService";
+import {checkNotEmpty, isEmptyValue} from "../../../../../util/pureFunctions";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
@@ -45,7 +45,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
     }
 
     validateRelationship(relationship: RelationshipCreationParams): RelationShipValidationObject {
-        const bindingResult: RelationShipValidationObject = {relationship: relationship, relationType: null, note: null};
+        const bindingResult: RelationShipValidationObject = {relationship: relationship, type: null, note: null};
         if (relationship) {
             if (relationship.note) {
                 const noteTest = hasHtml(relationship.note);
@@ -54,7 +54,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
                 }
 
                 if (!relationship.type) {
-                    bindingResult.relationType = "Вкажіть тип відносин";
+                    bindingResult.type = "Вкажіть тип відносин";
                 }
             }
         }
@@ -82,16 +82,44 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         return sexErr;
     }
 
-    mapServerValidationErrors(response: ServerPersonValidationObject): PersonValidationObject {
-        const personValidationObject: PersonValidationObject = {...personDefaultValidationObject};
-        personValidationObject.firstName = valueOrNull(response.firstName);
-        personValidationObject.middleName = valueOrNull(response.middleName);
-        personValidationObject.lastName = valueOrNull(response.lastName);
-        personValidationObject.dateOfBirth = valueOrNull(response.dateOfBirth);
-        personValidationObject.sex = valueOrNull(response.sex);
-        personValidationObject.passportSerial = valueOrNull(response["passportData.passportSerial"]);
-        personValidationObject.passportNumber = valueOrNull(response["passportData.passportNumber"]);
-        personValidationObject.rnokppCode = valueOrNull(response["passportData.rnokppCode"]);
+
+    mapServerValidationErrors(model: PersonCreationParams, serverValidationObject: ServerPersonValidationObject): PersonValidationObject {
+        const personValidationObject: PersonValidationObject = {
+            firstName: valueOrNull(serverValidationObject.firstName),
+            middleName: valueOrNull(serverValidationObject.middleName),
+            lastName: valueOrNull(serverValidationObject.lastName),
+            dateOfBirth: valueOrNull(serverValidationObject.dateOfBirth),
+            sex: valueOrNull(serverValidationObject.sex),
+            passportSerial: valueOrNull(serverValidationObject["passportData.passportSerial"]),
+            passportNumber: valueOrNull(serverValidationObject["passportData.passportNumber"]),
+            rnokppCode: valueOrNull(serverValidationObject["passportData.rnokppCode"]),
+            location: valueOrNull(serverValidationObject["location"]),
+            relationships: []
+        };
+        const relationshipsErrors = Object.keys(serverValidationObject).filter(r=>r.startsWith("relationships"));
+
+        const relationshipsValidationObjects: RelationShipValidationObject[] = [];
+
+        const requestRelationships = model.relationships;
+
+        relationshipsErrors.map(r=>r.match(/relationships\[(\d+)]\.(\w+):\s(.+)/))
+            .filter(isEmptyValue)
+            .forEach(data=>{
+                const index = data[0];
+                const field = data[1];
+                const message = data[2];
+                const relationship = checkNotEmpty(requestRelationships[+index]);
+                const validationObject: RelationShipValidationObject = relationshipsValidationObjects
+                    .find(v=>v.relationship===relationship) || {
+                    relationship: relationship,
+                    type: null,
+                    note: null
+                };
+                (validationObject as any)[field] = message;
+                relationshipsValidationObjects.push(validationObject);
+            })
+
+        personValidationObject.relationships.push(...relationshipsValidationObjects);
         return personValidationObject;
     }
 

@@ -17,23 +17,24 @@ import {ValidationErrorResponse} from "../../rest/ErrorResponse";
 
 /**
  * Q - requestDto
- * E - entityPageComponents
+ * E - entity
  * P - response dto
  * C - creation params type
  * V - validation object
  * S - server validation type
  */
-class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=ValidationErrors<C>,S extends object=V> implements CreationService<E> {
+class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=ValidationErrors<C>,S extends object=V,
+    VService extends ValidationService<C,V,S> = ValidationService<C,V,S>> implements CreationService<E> {
 
     protected readonly mapper: DtoMapper<RequestDto, E, ResponseDto, C>;
     protected readonly apiService: CreationApiService<RequestDto, ResponseDto>;
     protected readonly creationStateManager: CreationStateManager<E,C,V>;
-    protected readonly validationService: ValidationService<C,V,S>
+    protected readonly validationService: VService
 
     constructor(apiService: CreationApiService<RequestDto, ResponseDto>,
                 creationStateManager: CreationStateManager<E,C,V>,
                 mapper: DtoMapper<RequestDto, E, ResponseDto, C>,
-                validationService: ValidationService<C, V, S>) {
+                validationService: VService) {
         this.mapper = mapper;
         this.apiService = apiService;
         this.creationStateManager = creationStateManager;
@@ -49,6 +50,10 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
         const prefix = this.creationStateManager.getCreationActions()[CreationCoreAction.CREATE_ENTITY];
         const thunkAction = this.createEntityThunk(prefix)({emergingEntity: emergedEntity, globalPending: true});
         return this.creationStateManager.create(thunkAction);
+    }
+
+    protected mapServerValidationObject (r: C, o: S): V {
+        return this.validationService.mapServerValidationErrors(r,o);
     }
 
     private createEntityThunk = (prefix: string) => createAsyncThunk<E,
@@ -70,7 +75,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
                 const validationResponse = (e as AxiosError<Partial<ValidationErrorResponse<S>>>).response?.data;
                 if (validationResponse) {
                     if (typeof validationResponse.detail === 'object'&&validationResponse.properties?.validationErrors) {
-                        const validationErrors = this.validationService.mapServerValidationErrors(validationResponse.properties?.validationErrors);
+                        const validationErrors = this.mapServerValidationObject(emergingEntity,validationResponse.properties?.validationErrors);
                         this.creationStateManager.setValidationErrors(validationErrors);
                         e = new ValidationError(validationErrors);
                     }

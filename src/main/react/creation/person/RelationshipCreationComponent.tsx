@@ -50,8 +50,8 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
 
     useEffect(()=>{
         const updatedValidationObject = validationService.validateRelationship(relationship);
-        if (validationObject.relationType&&!updatedValidationObject.relationType) {
-            stateManager.updateRelationshipValidationErrors({relationship: relationship, relationType: null});
+        if (validationObject.type&&!updatedValidationObject.type) {
+            stateManager.updateRelationshipValidationErrors({relationship: relationship, type: null});
         }
 
         if (validationObject.note&&!updatedValidationObject.note) {

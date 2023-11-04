@@ -6,6 +6,7 @@ import {JurPerson} from "../../../../model/jurPerson/JurPerson";
 import valueOrNull from "../../../../util/functional/valueOrNull";
 import {hasContent} from "../../../../util/functional/isEmpty";
 import {DateEntityTool} from "../../../../model/DateEntity";
+import {JurPersonCreationParams} from "../../../../redux/types/creation/JurPersonCreationState";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {
     validate(model: JurPerson): JurPersonValidationObject {
@@ -38,7 +39,7 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
         return dateErr;
     }
 
-    mapServerValidationErrors(response: ServerJurPersonValidationObject): JurPersonValidationObject {
+    mapServerValidationErrors(model: JurPersonCreationParams, response: ServerJurPersonValidationObject): JurPersonValidationObject {
         return {
             name: valueOrNull(response.name),
             edrpou: valueOrNull(response.edrpou),
