@@ -10,6 +10,7 @@ import UserIdentityManager from "../service/userIdentity/UserIdentityManager";
 import {LitmusServiceContext} from "./App";
 import CsrfTokenLoader from "../service/rest/CsrfTokenLoader";
 import AxiosApiManager from "../service/rest/AxiosApiManager";
+import {useNavigate} from "react-router-dom";
 
 type Props = {
     children: ReactNode
@@ -27,6 +28,8 @@ const LitmusCore = ({children}: Props) => {
     const authentication = useAppSelector(state => state.authentication)
 
     const csrfLoader: CsrfTokenLoader = serviceContext.csrfTokenLoader;
+
+    const navigate = useNavigate();
 
     useEffect(()=>{
         setCsrfLoading(true)
@@ -54,7 +57,9 @@ const LitmusCore = ({children}: Props) => {
 
     useEffect(()=>{
         if (authentication?.isAuthenticated) {
-            userIdentityManager.retrieveIdentity(true);
+            userIdentityManager.retrieveIdentity(true).then(u=>console.log('User data retrieved:\n'+JSON.stringify(u)));
+        } else {
+            navigate(appConfig.applicationMappings.signIn);
         }
     },[authentication])
 
