@@ -48,8 +48,10 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
        personCreationStateManager.updateRelationship(relShip)
     }
 
+
     useEffect(()=>{
         const updatedValidationObject = validationService.validateRelationship(relationship);
+
         if (validationObject.type&&!updatedValidationObject.type) {
             stateManager.updateRelationshipValidationErrors({relationship: relationship, type: null});
         }
@@ -58,6 +60,8 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
             stateManager.updateRelationshipValidationErrors({relationship: relationship, note: null})
         }
     }, [relationship])
+
+    console.log(validationObject)
 
     const relType = relationship.type?relationship.type:undefined;
 

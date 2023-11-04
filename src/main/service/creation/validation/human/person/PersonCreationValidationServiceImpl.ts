@@ -12,7 +12,7 @@ import hasHtml from "../../../../../util/functional/hasHtml";
 import PassportData from "../../../../../model/human/person/PassportData";
 import valueOrNull from "../../../../../util/functional/valueOrNull";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../PersonCreationService";
-import {checkNotEmpty, isEmptyValue} from "../../../../../util/pureFunctions";
+import {checkNotEmpty} from "../../../../../util/pureFunctions";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
@@ -46,17 +46,15 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
 
     validateRelationship(relationship: RelationshipCreationParams): RelationShipValidationObject {
         const bindingResult: RelationShipValidationObject = {relationship: relationship, type: null, note: null};
-        if (relationship) {
-            if (relationship.note) {
-                const noteTest = hasHtml(relationship.note);
-                if (noteTest) {
-                    bindingResult.note = "Поле містить заборонені символи";
-                }
-
-                if (!relationship.type) {
-                    bindingResult.type = "Вкажіть тип відносин";
-                }
+        if (relationship.note) {
+            const noteTest = hasHtml(relationship.note);
+            if (noteTest) {
+                bindingResult.note = "Поле містить заборонені символи";
             }
+        }
+
+        if (!relationship.type) {
+            bindingResult.type = "Вкажіть тип відносин";
         }
         return bindingResult;
     }
@@ -98,30 +96,32 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         };
         const relationshipsErrors = Object.keys(serverValidationObject).filter(r=>r.startsWith("relationships"));
 
-        const relationshipsValidationObjects: RelationShipValidationObject[] = [];
-
         const requestRelationships = model.relationships;
 
         relationshipsErrors
             .forEach(key=>{
                 const indexMatch = key.match(/\[(\d+)]/);
                 if (indexMatch) {
-                    const index= indexMatch[0];
+                    const index= indexMatch[0][1];
                     const field = key.substring(key.indexOf(".")+1);
-                    const message = serverValidationObject[field];
+
+                    const message = serverValidationObject[key];
+
                     const relationship = checkNotEmpty(requestRelationships[+index]);
-                    const validationObject: RelationShipValidationObject = relationshipsValidationObjects
+                    const validationObject: RelationShipValidationObject = personValidationObject.relationships
                         .find(v=>v.relationship===relationship) || {
                         relationship: relationship,
                         type: null,
                         note: null
                     };
+
                     (validationObject as any)[field] = message;
-                    relationshipsValidationObjects.push(validationObject);
+                    if (!personValidationObject.relationships.includes(validationObject)) {
+                        personValidationObject.relationships.push(validationObject);
+                    }
                 }
             })
 
-        personValidationObject.relationships.push(...relationshipsValidationObjects);
         return personValidationObject;
     }
 
