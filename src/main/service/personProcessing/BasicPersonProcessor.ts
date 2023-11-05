@@ -9,8 +9,8 @@ import PersonProcessor from "./PersonProcessor";
 import PersonRelationsLoader from "./PersonRelationsLoader";
 import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsScanner";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
-import RipePersonUtil from "../../util/relationships/RipePersonUtil";
-import BasicRipePersonUtil from "../../util/relationships/BasicRipePersonUtil";
+import RipePersonUtil from "../../util/person/RipePersonUtil";
+import BasicRipePersonUtil from "../../util/person/BasicRipePersonUtil";
 import {EmbedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
@@ -36,11 +36,11 @@ export default class BasicPersonProcessor implements PersonProcessor{
         return new BasicPersonProcessor(relationshipsLoader, relationshipsDtoScanner, dtoMapper, jurPersonDtoMapper, relationshipsUtil);
     }
 
-    clearRawPersonsStorage(): void {
+    clearPersonsStorage(): void {
         this.personsStore.clear();
     }
 
-    getRawPersonsStorage(): Map<number, NoRelationsPerson> {
+    getPersonsStorage(): Map<number, NoRelationsPerson> {
         return new Map(this.personsStore);
     }
 
@@ -53,6 +53,10 @@ export default class BasicPersonProcessor implements PersonProcessor{
     }
 
     private _destroySinglePerson(person: Person) {
+        [...person.ownedJurPersons, ...person.benOwnedJurPersons].forEach(j=> {
+            j.benOwner = null;
+            j.owner = null;
+        });
         person.relationships.forEach(r=>{
             delete (r as Partial<Relationship>)["to"]
         })

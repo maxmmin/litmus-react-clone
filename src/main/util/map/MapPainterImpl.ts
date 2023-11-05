@@ -13,13 +13,13 @@ import {Entity} from "../../model/Entity";
 import getFullName from "../functional/getFullName";
 import {transformLocationToCoordinates} from "./mapUtil";
 import Popup from "ol-ext/overlay/Popup";
-import RipePersonUtil from "../relationships/RipePersonUtil";
+import RipePersonUtil from "../person/RipePersonUtil";
 import Vector from "ol/source/Vector";
 import {LineString} from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
 import {Fill, Stroke, Style} from "ol/style";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import BasicRipePersonUtil from "../relationships/BasicRipePersonUtil";
+import BasicRipePersonUtil from "../person/BasicRipePersonUtil";
 
 
 type LinesData = {pair: Paired, line: Feature<LineString>}

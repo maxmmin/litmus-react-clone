@@ -15,7 +15,7 @@ import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 import getFullName from "../../../util/functional/getFullName";
-import {getRelationTypeFrom} from "../../../util/relationships/RelationshipsLinkObject";
+import {getRelationTypeFrom} from "../../../util/person/RelationshipsLinkObject";
 
 
 type Props = {

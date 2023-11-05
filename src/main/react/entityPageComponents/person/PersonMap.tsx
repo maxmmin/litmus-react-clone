@@ -7,7 +7,7 @@ import {View} from "ol";
 import {FullScreen, Zoom} from "ol/control";
 import {defaultMapPosition, transformLocationToCoordinates} from "../../../util/map/mapUtil";
 import MapPainterImpl from "../../../util/map/MapPainterImpl";
-import BasicRipePersonUtil from "../../../util/relationships/BasicRipePersonUtil";
+import BasicRipePersonUtil from "../../../util/person/BasicRipePersonUtil";
 import {Entity} from "../../../model/Entity";
 import {GeoLocation} from "../../../model/GeoLocation";
 import MapPainter, {LabelInfo, LocationPresent} from "../../../util/map/MapPainter";

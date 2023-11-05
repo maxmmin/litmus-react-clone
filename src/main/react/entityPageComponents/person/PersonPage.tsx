@@ -7,7 +7,7 @@ import PersonComponent from "./PersonComponent";
 import {useParams} from "react-router";
 
 
-export default function PersonScreen () {
+export default function PersonPage () {
     const context = useContext(LitmusServiceContext);
     const explorationApiService = context.exploration.apiService.person;
     const dtoMapper = context.mappers.person;

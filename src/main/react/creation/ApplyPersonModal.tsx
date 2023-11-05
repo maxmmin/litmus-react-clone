@@ -22,7 +22,7 @@ import {LitmusServiceContext} from "../App";
 import PersonExplorationApiService from "../../service/exploration/api/human/person/PersonExplorationApiService";
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
-import RelationshipsLinkObject from "../../util/relationships/RelationshipsLinkObject";
+import RelationshipsLinkObject from "../../util/person/RelationshipsLinkObject";
 import PersonPreviewInfoTable from "./PersonPreviewInfoTable";
 
 type Props = {

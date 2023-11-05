@@ -76,19 +76,19 @@ import JurPersonCreationApiServiceImpl from "../service/creation/api/JurPersonCr
 import UserCreationApiServiceImpl from "../service/creation/api/UserCreationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 import UserDtoMapperImpl from "../rest/dto/dtoMappers/UserDtoMapperImpl";
-import PersonProcessor from "../service/personRelations/PersonProcessor";
-import PersonRelationsLoader from "../service/personRelations/PersonRelationsLoader";
-import PreprocessedPersonRelationsScanner from "../service/personRelations/PreprocessedPersonRelationsScanner";
-import RipePersonUtil from "../util/relationships/RipePersonUtil";
-import BasicPersonRelationshipsLoader from "../service/personRelations/BasicPersonRelationshipsLoader";
-import BasicPersonProcessor from "../service/personRelations/BasicPersonProcessor";
-import BasicRipePersonUtil from "../util/relationships/BasicRipePersonUtil";
+import PersonProcessor from "../service/personProcessing/PersonProcessor";
+import PersonRelationsLoader from "../service/personProcessing/PersonRelationsLoader";
+import PreprocessedPersonRelationsScanner from "../service/personProcessing/PreprocessedPersonRelationsScanner";
+import RipePersonUtil from "../util/person/RipePersonUtil";
+import BasicPersonRelationshipsLoader from "../service/personProcessing/BasicPersonRelationshipsLoader";
+import BasicPersonProcessor from "../service/personProcessing/BasicPersonProcessor";
+import BasicRipePersonUtil from "../util/person/BasicRipePersonUtil";
 import UserIdentityDtoMapper from "../rest/dto/dtoMappers/UserIdentityDtoMapper";
 import UserIdentityDtoMapperImpl from "../rest/dto/dtoMappers/UserIdentityDtoMapperImpl";
 import PersonCreationServiceImpl from "../service/creation/PersonCreationServiceImpl";
 import UserCreationServiceImpl from "../service/creation/UserCreationServiceImpl";
 import JurPersonCreationServiceImpl from "../service/creation/JurPersonCreationServiceImpl";
-import PreprocessedPersonRelationsScannerImpl from "../service/personRelations/PreprocessedPersonRelationsScannerImpl";
+import PreprocessedPersonRelationsScannerImpl from "../service/personProcessing/PreprocessedPersonRelationsScannerImpl";
 import MapPainter from "../util/map/MapPainter";
 import MapPainterImpl from "../util/map/MapPainterImpl";
 

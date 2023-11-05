@@ -24,7 +24,7 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationsLo
 
     loadSharedNestedPersons(person: PreProcessedPerson, limit: number, excludedIdSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
         const dto = person.relationshipsInfo;
-        if (!dto.relationships) throw new Error("dto personRelations are null");
+        if (!dto.relationships) throw new Error("dto personProcessing are null");
         dto.relationships.forEach(r=>excludedIdSet.add(r.person.id))
         const {shared} = this.relationshipsResponseDtoScanner.scan(person, limit);
         const idList = [...shared].filter(n=>!excludedIdSet.has(n))
@@ -33,7 +33,7 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationsLo
 
     loadAllNestedPersons(person: PreProcessedPerson, limit: number, excludedIdSet: Set<number>): Promise<NoRelationshipsOptionalPersonMap> {
         const dto = person.relationshipsInfo;
-        if (!dto.relationships) throw new Error("dto personRelations are null");
+        if (!dto.relationships) throw new Error("dto personProcessing are null");
         dto.relationships.forEach(r=>excludedIdSet.add(r.person.id))
         const {all} = this.relationshipsResponseDtoScanner.scan(person, limit);
         const idList = [...all].filter(n=>!excludedIdSet.has(n))

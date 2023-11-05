@@ -57,7 +57,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
     if (!person) throw new Error("no person was loaded");
 
     return (
-        <div className={"entity-page-wrapper entityPageComponents-page-wrapper_person"}>
+        <div className={"entity-page-wrapper entity-page-wrapper_person"}>
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_person">
                 <div className={`main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person ${mainImg?"":"no-photo"}`}>
                     {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
@@ -98,7 +98,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
             }
 
             <section className={"person-page__relationships-section"}>
-                <h4 className={'relationships-section__title'}>Пов'язані фізичні особи</h4>
+                <h4 className={'person-section__title'}>Пов'язані фізичні особи</h4>
                 {
                     person.relationships.length > 0 ?
                     <div className={'person-page__relationships-container'}>
