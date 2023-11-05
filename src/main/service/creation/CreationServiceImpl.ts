@@ -62,7 +62,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
         try {
             const errors = this.validationService.validate(emergingEntity);
             if (this.validationService.hasErrors(errors)) {
-                // throw new ValidationError(errors);
+                throw new ValidationError(errors);
             }
             const requestDto: RequestDto = this.mapper.mapToRequestDto(emergingEntity);
             const responseDto: ResponseDto = await this.apiService.create(requestDto);

@@ -61,8 +61,6 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
         }
     }, [relationship])
 
-    console.log(validationObject)
-
     const relType = relationship.type?relationship.type:undefined;
 
     const image: string|null = relationship.to.media.mainImage;
@@ -84,7 +82,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
                     <li className={"create-relation__person-info-li"}>ID: <span className={"fw-light"}>{personTo.id}</span></li>
                     <li className={"create-relation__person-info-li"}>ФІО: <span className={"fw-light"}>{getFullName(personTo)}</span></li>
                     <li className={"create-relation__person-info-li select-relation-type__heading"}>Ступінь родинних відносин:
-                            <Form.Select className={"create-relation__select-relation-type"} value={relType} onChange={handleSelectChange}>
+                            <Form.Select className={`create-relation__select-relation-type ${validationObject.type?"is-invalid":""}`} value={relType} onChange={handleSelectChange}>
                                 <option value={undefined}>Не обрано</option>
                                 <option value={RelationType.PARENT}>Батько/мати/опікун</option>
                                 <option value={RelationType.SPOUSE}>Чоловік/дружина</option>
@@ -92,6 +90,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
                                 <option value={RelationType.RELATIVE}>Родич</option>
                                 <option value={RelationType.FRIEND}>Друг</option>
                             </Form.Select>
+                        <InputError error={validationObject.type}/>
                     </li>
                 </ul>
             </div>
