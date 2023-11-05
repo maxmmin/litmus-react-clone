@@ -182,7 +182,7 @@ const CreatePerson = () => {
                 <InputError error={validationErrors?.passportNumber}/>
             </Form.Group>
 
-            <Form.Group className="mb-3 creation-input-group__iteFm">
+            <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Серія паспорта</Form.Label>
                 <input  value={passportData!.passportSerial!} autoComplete={"new-password"} className={`passport-serial form-control ${validationErrors?.passportSerial?'is-invalid':''}`} type="text" placeholder="Введіть серію паспорта"
                        onKeyDown={keyPressHandler}
