@@ -51,11 +51,11 @@ const serverMappings = Object.freeze({
     csrfToken: '/csrf-token'
 })
 
-const explorationRoot = "/explore";
+const explorationRoot = "/exploration";
 
 const personExplorationMapping = buildUrl(explorationRoot, entityDomains.PERSON)
 
-const creationRoot = "/create";
+const creationRoot = "/creation";
 
 const personCreationMapping = buildUrl(creationRoot, entityDomains.PERSON)
 
