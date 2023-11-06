@@ -26,9 +26,7 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
         return response.data;
     }
 
-
-
-    async findPersonByIdWithDepthOption(id: number, d: number): Promise<PersonResponseDto|null> {
+    async findByIdWithDepthOption(id: number, d: number): Promise<PersonResponseDto|null> {
         const response = await this.apiInstance<PersonResponseDto>(buildUrl(appConfig.serverMappings.persons.root,id.toString()), {
             params: {
                 d: d

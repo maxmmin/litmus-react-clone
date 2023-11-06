@@ -3,10 +3,9 @@ import appConfig from "../../../../config/appConfig";
 import BasicEntityLookupService from "../BasicExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
-import jurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
-import axiosApiInstance from "../../../rest/AxiosApiManager";
+import {buildUrl} from "../../../../util/pureFunctions";
 
-class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPersonResponseDto> implements JurPersonExplorationApiService {
+class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPersonResponseDto> implements JurPersonExplorationApiService {
 
     constructor() {
         super(appConfig.serverMappings.jurPersons.root);
@@ -15,6 +14,16 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<jurPer
     public static getInstance (): JurPersonExplorationApiServiceImpl {
         return new JurPersonExplorationApiServiceImpl();
     }
+
+    async findByIdWithDepthOption(id: number, d: number): Promise<JurPersonResponseDto | null> {
+        const response = await this.apiInstance<JurPersonResponseDto>(buildUrl(appConfig.serverMappings.jurPersons.root,id.toString()), {
+            params: {
+                d: d
+            }
+        });
+        return Object.keys(response.data).length>0?response.data:null;
+    }
+
 
     async findByName(name: string): Promise<PagedData<JurPersonResponseDto>> {
 

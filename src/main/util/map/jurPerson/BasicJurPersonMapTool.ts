@@ -27,7 +27,14 @@ export default class BasicJurPersonMapTool implements JurPersonMapTool {
 
         const personsToDisplay: Set<LocationPresent<Person>> = new Set([...relatedPersons]);
 
-        return this.mapUtil.buildMetadata(personsToDisplay);
+        const metadata: RelationsLabelsMetaData = this.mapUtil.buildMetadata(personsToDisplay);
+
+        if (metadata.drawnJurPersons.findIndex(l=>l.entity===jurPerson)===-1) {
+            const jpLabel = this.mapPainter.buildJurPersonLabel({jurPerson: jurPerson});
+            metadata.drawnJurPersons.push(jpLabel);
+        }
+
+        return metadata;
     }
 
     paintEntityData(jurPerson: LocationPresent<JurPerson>, map: OlMap): RelationsLabelsMetaData {

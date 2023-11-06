@@ -14,6 +14,9 @@ export type BackBtnOptions = {
 }
 
 const backButtonsPathMap: Record<string, BackBtnOptions> = {
+    [appConfig.applicationMappings.root]: {
+        displayBtn: false
+    },
     [buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')]: {
         backPath: appConfig.applicationMappings.root,
         displayBtn: true
@@ -25,12 +28,9 @@ const backButtonsPathMap: Record<string, BackBtnOptions> = {
     [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: {
         displayBtn: true
     },
-    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: {
+    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON], '/:id')]: {
         displayBtn: true
-    },
-    [buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], '/:id')]: {
-        displayBtn: true
-    },
+    }
 }
 export default function RootScreen () {
     const isHeaderOpened = useAppSelector(state => state.appState?.isHeaderMenuOpened);
@@ -48,7 +48,7 @@ export default function RootScreen () {
                 appStateManager.headerMenuClose();
             }
         }}>
-            <Header backBtnOptions={backBtnOptions||{displayBtn: false}}/>
+            <Header backBtnOptions={backBtnOptions||{displayBtn: true}}/>
             <div className="root-screen__content-wrapper">
                 <Outlet/>
             </div>

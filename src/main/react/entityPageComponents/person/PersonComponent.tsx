@@ -52,11 +52,11 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
 
     const rootJurPersons: JurPerson[] = (person?.ownedJurPersons||[]).concat(person?.benOwnedJurPersons||[]);
 
-    const mainImg: string|undefined = rawPerson.media.mainImage||rawPerson.media.images[0];
-
     if (isPending) return <Loader/>
 
     if (!person) throw new Error("no person was loaded");
+
+    const mainImg: string|undefined = person.media.mainImage||person.media.images[0];
 
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>

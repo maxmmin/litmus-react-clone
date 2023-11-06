@@ -10,8 +10,8 @@ type Props = {
     person: NoRelationsPerson
 }
 
-export function buildPersonLink(id: number) {
-    return <NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], id.toString())}>{id}</NavLink>
+export function buildPersonLink(id: number, text?: string) {
+    return <NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], id.toString())}>{text||id}</NavLink>
 }
 
 const PersonInfoTable = ({person}: Props) => {

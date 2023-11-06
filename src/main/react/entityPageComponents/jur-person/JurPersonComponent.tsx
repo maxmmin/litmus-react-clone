@@ -1,18 +1,54 @@
-import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import {buildImgUrl, buildUrl} from "../../../util/pureFunctions";
+import {JurPerson, PreProcessedJurPerson} from "../../../model/jurPerson/JurPerson";
+import {buildImgUrl, buildUrl, hasLocation} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import {DashedUserIcon} from "../../assets/icons";
 import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {buildPersonLink} from "../../exploration/EntityTables/PersonInfoTable";
 import ImageSlider from "../ImageSlider";
+import JurPersonMap, {JurPersonMapProps} from "./JurPersonMap";
+import {ServiceContext} from "../../serviceContext";
+import {LitmusServiceContext} from "../../App";
+import JurPersonProcessor from "../../../service/jurPersonProcessing/JurPersonProcessor";
+import Loader from "../../loader/Loader";
+import "../../assets/styles/entityPage/jurPersonPage.scss";
+import getFullName from "../../../util/functional/getFullName";
 
-export default function JurPersonComponent({jurPerson}: {jurPerson: JurPerson}) {
+export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PreProcessedJurPerson}) {
+    const [isPending, setPending] = useState<boolean>(true);
+
+    const [jurPerson, setJurPerson] = useState<JurPerson|null>(null)
+
+    const [displayedEntity, setDisplayedEntity] = useState<JurPersonMapProps['currentlyDisplayed']|null>(null)
+
+
+    const serviceContext: ServiceContext = useContext(LitmusServiceContext);
+
+    const bindService: JurPersonProcessor = serviceContext.jurPersonServices.jurPersonProcessor;
+
+    useEffect(()=>{
+        setPending(true);
+        bindService
+            .bindShared(rawJurPerson, -1)
+            .then(jurPerson=>{
+                console.log(jurPerson);
+                setJurPerson(jurPerson);
+                if (hasLocation(jurPerson)) {
+                    setDisplayedEntity({to: jurPerson});
+                }
+            })
+            .finally(()=>setPending(false));
+    }, [rawJurPerson])
+
+    if (isPending) return <Loader/>
+
+    if (!jurPerson) throw new Error("no person was loaded");
+
     const mainImg: string|undefined = jurPerson.media.mainImage||jurPerson.media.images[0];
 
-    const ownerLink = jurPerson.owner&&buildPersonLink(jurPerson.owner.id);
-    const benOwnerLink = jurPerson.benOwner&&buildPersonLink(jurPerson.benOwner.id);
+    const ownerLink = jurPerson.owner&&buildPersonLink(jurPerson.owner.id, getFullName(jurPerson.owner));
+    const benOwnerLink = jurPerson.benOwner&&buildPersonLink(jurPerson.benOwner.id, getFullName(jurPerson.benOwner));
 
     const formattedDateOfRegistration = jurPerson.dateOfRegistration&&DateEntityTool.getTool(jurPerson.dateOfRegistration).buildStringDate();
 
@@ -26,8 +62,8 @@ export default function JurPersonComponent({jurPerson}: {jurPerson: JurPerson}) 
                 <div className="main-entity-section__main-entity-info-container">
                     <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Назва:</span> {jurPerson.name}</p>
                     <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>ЄДРПОУ:</span> {valueOrMessage(jurPerson.edrpou)}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>По-батькові:</span> {valueOrMessage(ownerLink)}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Стать:</span> {valueOrMessage(benOwnerLink)}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Власник:</span> {valueOrMessage(ownerLink)}</p>
+                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Бенефіціарний власник:</span> {valueOrMessage(benOwnerLink)}</p>
                     <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Дата реєстрації:</span> {valueOrMessage(formattedDateOfRegistration)}</p>
                     <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Адреса реєстрації:</span> {valueOrMessage(jurPerson.location?.address)}</p>
                 </div>
@@ -45,6 +81,14 @@ export default function JurPersonComponent({jurPerson}: {jurPerson: JurPerson}) 
                         <p>Фотографії відсутні</p>
                 }
             </section>
+
+            {displayedEntity && hasLocation(jurPerson) &&
+                <section className={"jur-person-page__map-section"}>
+                    <div className="jur-person-page__map-wrapper">
+                        <JurPersonMap jurPerson={jurPerson} currentlyDisplayed={displayedEntity}/>
+                    </div>
+                </section>
+            }
         </div>
     )
 }
