@@ -111,8 +111,9 @@
   font-size: 18px;
 }
 
-.entity-container__value-block {
+.entity-container__value-block, .related-entity-container__plain-text, .related-entity-container__entity-name {
   overflow-wrap: break-word;
+  word-break: break-word;
   text-align: center;
 }
 

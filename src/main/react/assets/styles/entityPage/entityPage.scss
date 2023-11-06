@@ -15,6 +15,11 @@
   padding-top: 50px;
 }
 
+.person-page__possible-related-persons-section {
+  max-width: 800px;
+  margin: 30px auto 0;
+}
+
 .entity-data-container {
   display: flex;
   justify-content: space-between;
@@ -81,11 +86,19 @@
   }
 }
 
-.entity-page__related-entity-container_relationship, .related-entity-table-header_person {
+.entity-page__related-entity-container_root-related-person, .related-entity-table-header_root-related-person {
   grid-template-columns: 2fr repeat(2,1fr) 60px;
 }
 
-.entity-page__related-entity-container_relationship.no-geo, .related-entity-table-header_person.no-geo {
+.entity-page__related-entity-container_root-related-person.no-geo, .related-entity-table-header_root-related-person.no-geo {
+  grid-template-columns: 2fr repeat(2, 1fr);
+}
+
+.entity-page__related-entity-container_possible-related-person, .related-entity-table-header_possible-related-person {
+  grid-template-columns: 2fr repeat(2,1fr) 60px;
+}
+
+.entity-page__related-entity-container_possible-related-person.no-geo, .related-entity-table-header_possible-related-person.no-geo {
   grid-template-columns: 2fr repeat(2, 1fr);
 }
 
@@ -117,6 +130,10 @@
 
 .entity-page__related-entity-container_jur-person.no-geo, .related-entity-table-header_jur-person.no-geo {
   grid-template-columns: 2fr repeat(2,1fr);
+}
+
+.related-entity-container__plain-text {
+  margin: 0;
 }
 
 .related-entity-container__plain-text_relation-note {

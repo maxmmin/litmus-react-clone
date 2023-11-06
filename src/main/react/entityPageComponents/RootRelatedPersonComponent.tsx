@@ -15,13 +15,13 @@ type RelationShipProps = {
     geoBtnOnClick?: (relationship: Relationship, e: React.MouseEvent<HTMLDivElement>)=>void
 }
 
-export default function RelationshipComponent ({relationship, cssAnchor="", containerOnClick, geoBtnOnClick}: RelationShipProps) {
+export default function RootRelatedPersonComponent ({relationship, cssAnchor="", containerOnClick, geoBtnOnClick}: RelationShipProps) {
     const person = relationship.to
 
     const mainImg: string|null = person.media.mainImage||person.media.images[0]
 
     return (
-        <div className={`entity-page__related-entity-container entity-page__related-entity-container_relationship ${cssAnchor}`} onClick={
+        <div className={`entity-page__related-entity-container entity-page__related-entity-container_root-related-person ${cssAnchor}`} onClick={
             containerOnClick&&((e)=>containerOnClick(relationship, e))}>
             <div className="related-entity-container__main-block">
                 <div className="related-entity-container__img-wrapper">
