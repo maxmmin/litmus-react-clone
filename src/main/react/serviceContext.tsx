@@ -95,6 +95,8 @@ import JurPersonProcessor from "../service/jurPersonProcessing/JurPersonProcesso
 import RipeJurPersonUtil from "../util/jurPerson/RipeJurPersonUtil";
 import BasicRipeJurPersonUtil from "../util/jurPerson/BasicRipeJurPersonUtil";
 import BasicJurPersonProcessor from "../service/jurPersonProcessing/BasicJurPersonProcessor";
+import PersonMapTool from "../util/map/person/PersonMapTool";
+import BasicPersonMapTool from "../util/map/person/BasicPersonMapTool";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -293,7 +295,10 @@ export type ServiceContext = {
         jurPersonProcessor: JurPersonProcessor,
         ripeJurPersonUtil: RipeJurPersonUtil
     },
-    mapPainter: MapPainter
+    map: {
+        mapPainter: MapPainter,
+        personMapTool: PersonMapTool
+    }
 }
 
 const relationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance();
@@ -311,6 +316,8 @@ const personRelationshipsBinder: PersonProcessor = BasicPersonProcessor.getInsta
     relationshipsResponseDtoScanner,
     mappers.person,
     ripePersonRelationshipsUtil)
+
+const mapPainter = new MapPainterImpl();
 
 const serviceContext: ServiceContext = {
     auth: authContext,
@@ -333,7 +340,10 @@ const serviceContext: ServiceContext = {
         ripeJurPersonUtil: new BasicRipeJurPersonUtil(ripePersonRelationshipsUtil),
         jurPersonProcessor: new BasicJurPersonProcessor(personRelationshipsBinder, mappers.jurPerson)
     },
-    mapPainter: new MapPainterImpl(ripePersonRelationshipsUtil)
+    map: {
+        mapPainter: mapPainter,
+        personMapTool: new BasicPersonMapTool(mapPainter, ripePersonRelationshipsUtil)
+    }
 }
 
 export default serviceContext;

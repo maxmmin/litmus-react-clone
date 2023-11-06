@@ -15,6 +15,8 @@ import {LineString} from "ol/geom";
 import VectorLayer from "ol/layer/Vector";
 import Vector from "ol/source/Vector";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
+import MapPainterImpl from "../MapPainterImpl";
+import BasicRipePersonUtil from "../../person/BasicRipePersonUtil";
 
 type LinesData = {pair: Paired, line: Feature<LineString>}
 
@@ -26,6 +28,11 @@ export default class BasicPersonMapTool implements PersonMapTool {
 
     constructor(protected readonly mapPainter: MapPainter,
                 protected readonly relationshipsUtil: RipePersonUtil) {
+    }
+
+    public static getInstance(mapPainter: MapPainter = MapPainterImpl.getInstance(),
+                              personUtil: RipePersonUtil = BasicRipePersonUtil.getInstance()): BasicPersonMapTool {
+        return new BasicPersonMapTool(mapPainter, personUtil);
     }
 
 

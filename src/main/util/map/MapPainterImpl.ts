@@ -39,11 +39,11 @@ export default class MapPainterImpl implements MapPainter {
         return this._relationLineStyle;
     }
 
-    constructor(protected readonly relationshipsUtil: RipePersonUtil) {
+    constructor() {
     }
 
-    public static getInstance (ripePersonsUtil: RipePersonUtil = BasicRipePersonUtil.getInstance()): MapPainterImpl {
-        return new MapPainterImpl(ripePersonsUtil);
+    public static getInstance (): MapPainterImpl {
+        return new MapPainterImpl();
     }
 
     private buildPersonLabelHtmlElement({person, cssAnchor=""}: {person: PersonLabelRequiredFields, cssAnchor?: string}): HTMLDivElement {
