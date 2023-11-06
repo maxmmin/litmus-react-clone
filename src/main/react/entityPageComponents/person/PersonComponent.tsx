@@ -40,6 +40,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
         bindService
             .bindShared(rawPerson, -1)
             .then(person=>{
+                console.log(person);
                 setPerson(person);
                 if (hasLocation(person)) {
                     setDisplayedEntity({to: person});

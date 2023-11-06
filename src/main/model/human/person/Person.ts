@@ -34,7 +34,7 @@ export type PreProcessedPerson = Omit<Person, 'relationships'|'ownedJurPersons'|
 export type Relationship = {
     to: Person,
     type: RelationType | null,
-    note: string
+    note: string | null
 }
 
 export enum RelationType {

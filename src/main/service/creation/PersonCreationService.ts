@@ -5,8 +5,9 @@ import CreationService from "./CreationService";
 import Sex from "../../model/human/person/Sex";
 import {SimplePersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
 
-export type RelationshipCreationParams = Omit<Relationship, 'to'> & {
-    to: SimplePersonResponseDto
+export type RelationshipCreationParams = Omit<Relationship, 'to' | 'note'> & {
+    to: SimplePersonResponseDto,
+    note: string
 }
 
 export type PersonCreationParams = Omit<Person, 'id'|'relationships'|'sex'|keyof Human|'ownedJurPersons'|'benOwnedJurPersons'> & {

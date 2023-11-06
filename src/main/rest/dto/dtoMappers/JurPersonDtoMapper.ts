@@ -10,5 +10,5 @@ import Person from "../../../model/human/person/Person";
 import PersonDtoMapper from "./PersonDtoMapper";
 
 export default interface JurPersonDtoMapper extends DtoMapper<JurPersonRequestDto, PreProcessedJurPerson, JurPersonResponseDto, JurPersonCreationParams> {
-    mapEmbedResponseDto(dto: EmbedJurPersonResponseDto, owner: Person|null, benOwner: Person|null): JurPerson;
+    mapPreProcessedJurPerson(dto: Omit<PreProcessedJurPerson, 'owner'|'benOwner'>, owner: Person|null, benOwner: Person|null): JurPerson;
 }

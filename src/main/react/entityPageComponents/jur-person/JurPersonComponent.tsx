@@ -42,7 +42,7 @@ export default function JurPersonComponent({jurPerson}: {jurPerson: JurPerson}) 
                             <ImageSlider imageLinks={jurPerson.media.images.map(buildImgUrl)}/>
                         </div>
                         :
-                        <p>Фотографії особи відсутні</p>
+                        <p>Фотографії відсутні</p>
                 }
             </section>
         </div>

@@ -62,7 +62,7 @@ export type PersonCreationStateReducible = PersonCreationState|undefined;
 const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadAction<PersonCreationParams>> = (prevState=initialPersonCreationState, action) => {
     switch (action.type) {
         case PersonCreationAction.ADD_PERSON_RELATION: {
-            const relToAdd = (action.payload as unknown as Relationship);
+            const relToAdd = (action.payload as unknown as RelationshipCreationParams);
 
             const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.addRelationship(relToAdd);
@@ -73,7 +73,7 @@ const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadA
         }
 
         case PersonCreationAction.REMOVE_PERSON_RELATION: {
-            const relToAdd = (action.payload as unknown as Relationship);
+            const relToAdd = (action.payload as unknown as RelationshipCreationParams);
 
             const relationshipsLinkObject = new RelationshipsLinkObject(prevState.emergingEntity.relationships);
             relationshipsLinkObject.removeRelationship(relToAdd);

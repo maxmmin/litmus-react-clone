@@ -12,10 +12,8 @@ import JurPersonResponseDto, {
     MinifiedJurPersonResponseDto
 } from "../jurPerson/JurPersonResponseDto";
 
-export interface RelationshipResponseDto {
-    person: RelatedPersonResponseDto,
-    type: RelationType | null,
-    note: string
+export type RelationshipResponseDto = Pick<Relationship, 'note'|'type'> & {
+    person: RelatedPersonResponseDto
 }
 
 export type NestedPersonResponseDto = Pick<PersonResponseDto, 'id'> & {

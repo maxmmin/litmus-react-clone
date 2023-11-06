@@ -68,7 +68,7 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
         return jurPerson;
     }
 
-    mapEmbedResponseDto(exploredEntityDto: EmbedJurPersonResponseDto, owner: Person|null, benOwner: Person|null): JurPerson {
+    mapPreProcessedJurPerson(exploredEntityDto: EmbedJurPersonResponseDto, owner: Person|null, benOwner: Person|null): JurPerson {
         const media: Media = {
             mainImage: exploredEntityDto.media.mainImage,
             images: exploredEntityDto.media.images||[]

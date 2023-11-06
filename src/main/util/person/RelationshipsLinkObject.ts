@@ -3,14 +3,14 @@ import {Relationship, RelationType} from "../../model/human/person/Person";
 
 class RelationshipAlreadyExists extends Error {
 
-    private readonly _presentRelation: Relationship;
+    private readonly _presentRelation: RelationshipCreationParams;
 
 
-    get presentRelation(): Relationship {
+    get presentRelation(): RelationshipCreationParams {
         return this._presentRelation;
     }
 
-    constructor(rel: Relationship) {
+    constructor(rel: RelationshipCreationParams) {
         super("Relationship already present in list");
         this._presentRelation = rel;
     }
@@ -55,7 +55,7 @@ export default class RelationshipsLinkObject {
         }
     }
 
-    addRelationship(rel: Relationship): boolean {
+    addRelationship(rel: RelationshipCreationParams): boolean {
         this.checkConstraints(rel);
 
         const present = this.isPresent(rel);
