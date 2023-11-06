@@ -55,7 +55,7 @@ export default class MapPainterImpl implements MapPainter {
 
         personContainer.append(imgContainer);
 
-        const mainImg = person.media.mainImage;
+        const mainImg = person.media.mainImage||person.media.images[0]||null;
 
         if (mainImg) {
             const personImg = document.createElement("img");
@@ -121,7 +121,7 @@ export default class MapPainterImpl implements MapPainter {
 
         jurPersonContainer.append(imgContainer);
 
-        const mainImg = jurPerson.media.mainImage;
+        const mainImg = jurPerson.media.mainImage||jurPerson.media.images[0]||null;
 
         if (mainImg) {
             const personImg = document.createElement("img");
