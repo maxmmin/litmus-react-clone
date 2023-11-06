@@ -1,3 +1,5 @@
+@import "../colors";
+
 .jur-person-page__map-section {
   max-width: 800px;
   margin: 20px auto 0;
@@ -5,4 +7,43 @@
 
 .jur-person-page__map-wrapper {
   height: 600px;
+}
+
+.jur-person-page__owners-section {
+    max-width: 800px;
+    margin: 40px auto 0;
+}
+
+.owners-section__owner-item+.owners-section__owner-item {
+  margin-top: 40px;
+}
+
+.owner-item__heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.owner-item__link-icon:hover {
+  fill: $md-sys-color-primary-light;
+}
+
+.owner-item__interact-container {
+  display: flex;
+  column-gap: 10px;
+}
+
+.owner-item__location-btn {
+  cursor: pointer;
+  &:hover {
+    fill: $md-sys-color-primary-light;
+  }
+}
+
+.owner-item__interact-container.disabled-geo .owner-item__location-btn-wrapper {
+  display: none;
+}
+
+.owner-item__interact-container.disabled-geo .owner-item__location-btn {
+  fill: rgba(gray,0.4);
+  cursor: auto;
 }

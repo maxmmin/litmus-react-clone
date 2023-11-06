@@ -6,6 +6,7 @@ import {DashedUserIcon, GeoLocationPinDropIcon} from "../assets/icons";
 import {NavLink} from "react-router-dom";
 import {Entity} from "../../model/Entity";
 import getFullName from "../../util/functional/getFullName";
+import {valueOrMessage} from "../../util/functional/valueOrNull";
 
 type RelationShipProps = {
     relationship: Relationship,
@@ -26,10 +27,10 @@ export default function RelationshipComponent ({relationship, cssAnchor="", cont
                 <div className="related-entity-container__img-wrapper">
                     { mainImg ? <img className={"related-entity-container__img"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
-                <p className="related-entity-container__entity-name"><NavLink className={"related-entity-container__link"} to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id.toString())}>{getFullName(person)}</NavLink></p>
+                <p className="related-entity-container__entity-name"><NavLink className={"related-entity-container__link link"} to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id.toString())}>{getFullName(person)}</NavLink></p>
             </div>
             <p className="related-entity-container__plain-text related-entity-container__plain-text_relation-type">{relationship.type}</p>
-            <p className="related-entity-container__plain-text related-entity-container__plain-text_relation-note">{relationship.note}</p>
+            <p className="related-entity-container__plain-text related-entity-container__plain-text_relation-note">{valueOrMessage(relationship.note)}</p>
             <div className="related-entity-container__location-btn-wrapper" onClick={
                 geoBtnOnClick&&(e=>geoBtnOnClick(relationship, e))
             }>

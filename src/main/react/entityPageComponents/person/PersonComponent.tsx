@@ -19,6 +19,7 @@ import RelationshipComponent from "../RelationshipComponent";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import RelatedJurPersonComponent from "../RelatedJurPersonComponent";
 import BasicRipePersonUtil from "../../../util/person/BasicRipePersonUtil";
+import PersonDataContainer from "./PersonDataContainer";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson
@@ -56,26 +57,10 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
 
     if (!person) throw new Error("no person was loaded");
 
-    const mainImg: string|undefined = person.media.mainImage||person.media.images[0];
-
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_person">
-                <div className={`main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_person ${mainImg?"":"no-photo"}`}>
-                    {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
-                </div>
-
-                <div className="main-entity-section__main-entity-info-container">
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Прізвище:</span> {rawPerson.lastName}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Ім'я:</span> {rawPerson.firstName}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>По-батькові:</span> {valueOrMessage(rawPerson.middleName)}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Стать:</span> {rawPerson.sex}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Дата народження:</span> {rawPerson.dateOfBirth?DateEntityTool.getTool(rawPerson.dateOfBirth).buildStringDate():valueOrMessage(null)}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Серія паспорту:</span> {valueOrMessage(rawPerson.passportData?.passportSerial)}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Номер паспорту:</span> {valueOrMessage(rawPerson.passportData?.passportNumber)}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>РНОКПП:</span> {valueOrMessage(rawPerson.passportData?.rnokppCode)}</p>
-                    <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Адреса:</span> {valueOrMessage(rawPerson.location?.address)}</p>
-                </div>
+                <PersonDataContainer person={person}/>
             </section>
 
             <section className="entity-images-slider-section">
@@ -103,10 +88,11 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                 <h4 className={'person-section__title'}>Пов'язані фізичні особи</h4>
                 {
                     person.relationships.length > 0 ?
-                    <div className={'person-page__relationships-container'}>
-                        <div className="related-entity-table-header related-entity-table-header_person">
+                    <div className={`person-page__relationships-container`}>
+                        <div className={`related-entity-table-header related-entity-table-header_person ${person.location ? "" : "no-geo"}`}>
                             <h6 className='related-entity-container__header-title related-entity-container__header-title_main'>Основна інформація</h6>
                             <h6 className='related-entity-container__header-title'>Тип відношення</h6>
+                            <h6 className='related-entity-container__header-title'>Примітка</h6>
                         </div>
                         {person.relationships.map(relationship=>{
 
@@ -138,8 +124,8 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                 <h4 className={'related-jur-person-section__title'}>Пов'язані юридичні особи</h4>
                 {
                     rootJurPersons.length > 0 ?
-                        <div className={'person-page__related-jur-persons-container'}>
-                            <div className="related-entity-table-header related-entity-table-header_jur-person">
+                        <div className={`person-page__related-jur-persons-container`}>
+                            <div className={`related-entity-table-header related-entity-table-header_jur-person ${person.location?"":"no-geo"}`}>
                                 <h6 className='related-entity-container__header-title related-entity-container__header-title_main'>Основна інформація</h6>
                                 <h6 className='related-entity-container__header-title'>Власник</h6>
                                 <h6 className='related-entity-container__header-title'>Бен. власник</h6>

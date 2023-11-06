@@ -1,5 +1,7 @@
 import {noInfoMessage} from "../../../error/BasicHttpError";
 import User from "../../../model/human/user/User";
+import {buildUserNavLink} from "../../../util/navLinkBuilders";
+import {GoBubbleIcon} from "../../assets/icons";
 
 type Props = {
     user: User
@@ -8,6 +10,9 @@ type Props = {
 const UserInfoTable = ({user}: Props) => {
     return (
         <div className="entity-container-wrapper user-container-wrapper">
+            <div className="entity-container-wrapper__entity-link-wrapper">
+                {buildUserNavLink(user.id,<GoBubbleIcon className={"entity-container-wrapper__entity-link-icon"}/>)}
+            </div>
             <div className={"entity-container user-container"}>
                 <div className="entity-container__column-title-block entity-container__column-title-block_user"><h6 className="entity-container__column-title entity-container__column-title_user">ID</h6></div>
                 <div className="entity-container__column-title-block entity-container__column-title-block_user"><h6 className="entity-container__column-title entity-container__column-title_user">Email</h6></div>

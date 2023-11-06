@@ -14,7 +14,7 @@ import BasicRipePersonUtil from "../../util/person/BasicRipePersonUtil";
 import {EmbedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
-import isEmbedJurPersonDto from "../../util/checkJurPersonDto";
+import isEmbedJurPersonDto from "../../util/jurPerson/checkJurPersonDto";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 
 type JurPersonContainable = Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>

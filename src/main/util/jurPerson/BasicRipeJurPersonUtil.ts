@@ -16,8 +16,6 @@ export default class BasicRipeJurPersonUtil implements RipeJurPersonUtil {
 
     extractGeoRelatedPersons(jurPerson: JurPerson): Set<LocationPresent<Person>> {
         const ignoreList: LocationPresent<Person>[] = [jurPerson.benOwner, jurPerson.owner].filter(hasValue).filter(hasLocation);
-        console.log(jurPerson)
-        console.log([...this.extractRelatedPersons(jurPerson)])
         const entrySet: Set<LocationPresent<Person>> = new Set([...this.extractRelatedPersons(jurPerson)].filter(hasLocation));
         return this.ripePersonUtil.filterForGeoRelatedPersons(entrySet, new Set(ignoreList));
     }

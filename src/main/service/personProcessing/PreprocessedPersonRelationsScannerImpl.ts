@@ -6,7 +6,7 @@ import PersonResponseDto, {
     RelatedPersonResponseDto
 } from "../../rest/dto/person/PersonResponseDto";
 import {EmbedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonResponseDto";
-import checkJurPersonDto from "../../util/checkJurPersonDto";
+import checkJurPersonDto from "../../util/jurPerson/checkJurPersonDto";
 import {retry} from "@reduxjs/toolkit/query";
 
 type BranchScan = Map<NestedPersonResponseDto, Set<number>>

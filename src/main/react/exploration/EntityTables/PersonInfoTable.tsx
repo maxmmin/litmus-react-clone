@@ -1,17 +1,12 @@
 import {noInfoMessage} from "../../../error/BasicHttpError";
-import Person, {NoRelationsPerson} from "../../../model/human/person/Person";
+import {NoRelationsPerson} from "../../../model/human/person/Person";
 import {DateEntityTool} from "../../../model/DateEntity";
-import {NavLink} from "react-router-dom";
 import {buildImgUrl, buildUrl} from "../../../util/pureFunctions";
-import appConfig from "../../../config/appConfig";
-import {Entity} from "../../../model/Entity";
+import {GoBubbleIcon} from "../../assets/icons";
+import {buildPersonNavLink} from "../../../util/navLinkBuilders";
 
 type Props = {
     person: NoRelationsPerson
-}
-
-export function buildPersonLink(id: number, text?: string) {
-    return <NavLink to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], id.toString())}>{text||id}</NavLink>
 }
 
 const PersonInfoTable = ({person}: Props) => {
@@ -20,8 +15,11 @@ const PersonInfoTable = ({person}: Props) => {
     const mainImg = person.media.mainImage||person.media.images[0];
 
     return (
-    <div className="entity-container-wrapper person-container-wrapper">
-        <div className={"entity-container person-container"}>
+    <div className="entity-container-wrapper entity-container-wrapper_person">
+        <div className="entity-container-wrapper__entity-link-wrapper">
+            {buildPersonNavLink(person.id,<GoBubbleIcon className={"entity-container-wrapper__entity-link-icon"}/>)}
+        </div>
+        <div className={"entity-container entity-container_person"}>
             <div className="entity-container__column-title-block entity-container__column-title-block_person"><h6 className="entity-container__column-title entity-container__column-title_person">ID</h6></div>
             <div className="entity-container__column-title-block entity-container__column-title-block_person"><h6 className="entity-container__column-title entity-container__column-title_person">Фото</h6></div>
             <div className="entity-container__column-title-block entity-container__column-title-block_person"><h6 className="entity-container__column-title entity-container__column-title_person">Прізвище</h6></div>
@@ -34,13 +32,11 @@ const PersonInfoTable = ({person}: Props) => {
             <div className="entity-container__column-title-block entity-container__column-title-block_person"><h6 className="entity-container__column-title entity-container__column-title_person">Адреса</h6></div>
 
             <div className="entity-container__value-block entity-container__value-block_person">
-                <p className="entity-container__value entity-container__value_person">
-                    {buildPersonLink(person.id)}
-                </p>
+                <p className="entity-container__value entity-container__value_person">{person.id}</p>
             </div>
-            <div className="entity-container__value-block entity-container__value-block_person">
+            <div className="entity-container__value-block entity-container__value-block_img entity-container__value-block_person">
                 {mainImg ?
-                    <img className={"entity-container__value entity-container__value_person entity-container__value_person-img"} src={buildImgUrl(mainImg)} alt="person photo"/>
+                    <img className={"entity-container__value entity-container__value_person entity-container__value_img"} src={buildImgUrl(mainImg)} alt="person photo"/>
                     :
                     <p className="entity-container__value entity-container__value_person">{noInfoMessage}</p>
                 }

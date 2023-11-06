@@ -1,22 +1,29 @@
 import {CSSProperties} from "react";
 
 type ComponentPropsType = {
-    className: string
+    className: string,
+    color?: string
 }
 
-export const VisibilityDisabledIcon = ({className, color}: ComponentPropsType&{color: string}) =>
+export const GoBubbleIcon = ({className, color}: ComponentPropsType) => {
+    return <svg xmlns="http://www.w3.org/2000/svg" className={className} fill={color} height="24" viewBox="0 -960 960 960" width="24">
+        <path d="M480-840q74 0 139.5 28.5T734-734q49 49 77.5 114.5T840-480q0 74-28.5 139.5T734-226q-49 49-114.5 77.5T480-120q-41 0-79-9t-76-26l61-61q23 8 46.5 12t47.5 4q116 0 198-82t82-198q0-116-82-198t-198-82q-116 0-198 82t-82 198q0 24 4 47.5t12 46.5l-60 60q-18-36-27-74.5t-9-79.5q0-74 28.5-139.5T226-734q49-49 114.5-77.5T480-840Zm40 520v-144L176-120l-56-56 344-344H320v-80h280v280h-80Z"/>
+    </svg>
+
+}
+export const VisibilityDisabledIcon = ({className, color}: ComponentPropsType) =>
     <svg xmlns="http://www.w3.org/2000/svg" fill={color} className={className} height="24" viewBox="0 -960 960 960" width="24"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
 
-export const VisibilityEnabledIcon = ({className, color}: ComponentPropsType&{color: string}) =>
+export const VisibilityEnabledIcon = ({className, color}: ComponentPropsType) =>
     <svg xmlns="http://www.w3.org/2000/svg" fill={color} className={className} height="24" viewBox="0 -960 960 960" width="24"><path d="M480-320q75 0 127.5-52.5T660-500q0-75-52.5-127.5T480-680q-75 0-127.5 52.5T300-500q0 75 52.5 127.5T480-320Zm0-72q-45 0-76.5-31.5T372-500q0-45 31.5-76.5T480-608q45 0 76.5 31.5T588-500q0 45-31.5 76.5T480-392Zm0 192q-146 0-266-81.5T40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200Zm0-300Zm0 220q113 0 207.5-59.5T832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280Z"/></svg>
 
-export const SearchIcon = ({className}: ComponentPropsType) => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+export const SearchIcon = ({className, color}: ComponentPropsType) => <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={color}
                                                                     className={className} viewBox="0 0 16 16">
     <path
         d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
 </svg>
 
-export const PersonIcon = ({className, color}: ComponentPropsType&{color: string}) =>
+export const PersonIcon = ({className, color}: ComponentPropsType) =>
     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill={color}
          className={className} viewBox="0 0 16 16">
         <path

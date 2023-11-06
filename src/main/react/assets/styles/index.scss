@@ -144,6 +144,11 @@ img {
   transform: translateY(50%);
 }
 
+.link {
+  color: $md-sys-color-on-primary-container-light;
+  text-decoration: none;
+}
+
 @import "header";
 @import "homePage";
 @import "signInPage";

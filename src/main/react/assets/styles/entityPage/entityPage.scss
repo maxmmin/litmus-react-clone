@@ -11,11 +11,14 @@
 
 .entity-page-wrapper__main-entity-section {
   max-width: 800px;
+  margin: 0 auto;
+  padding-top: 50px;
+}
+
+.entity-data-container {
   display: flex;
   justify-content: space-between;
-  margin: 0 auto;
   column-gap: 80px;
-  padding-top: 50px;
 }
 
 .main-entity-section__main-photo-wrapper {
@@ -70,6 +73,7 @@
   background: rgba($md-sys-color-inverse-primary-light, 0.3);
   column-gap: 20px;
   align-items: center;
+  text-align: center;
   overflow: hidden;
   margin-top: 15px;
   & p {
@@ -78,7 +82,15 @@
 }
 
 .entity-page__related-entity-container_relationship, .related-entity-table-header_person {
-  grid-template-columns: 1fr repeat(2,20%) 60px;
+  grid-template-columns: 2fr repeat(2,1fr) 60px;
+}
+
+.entity-page__related-entity-container_relationship.no-geo, .related-entity-table-header_person.no-geo {
+  grid-template-columns: 2fr repeat(2, 1fr);
+}
+
+.entity-page__related-entity-container.no-geo .related-entity-container__location-btn-wrapper {
+  display: none;
 }
 
 .related-entity-table-header {
@@ -100,7 +112,11 @@
 }
 
 .entity-page__related-entity-container_jur-person, .related-entity-table-header_jur-person {
-  grid-template-columns: 1fr repeat(2,25%) 60px;
+  grid-template-columns: 2fr repeat(2,1fr) 60px;
+}
+
+.entity-page__related-entity-container_jur-person.no-geo, .related-entity-table-header_jur-person.no-geo {
+  grid-template-columns: 2fr repeat(2,1fr);
 }
 
 .related-entity-container__plain-text_relation-note {
@@ -143,11 +159,6 @@
   font-weight: 600;
 }
 
-.related-entity-container__link {
-  color: $md-sys-color-on-primary-container-light;
-  text-decoration: none;
-}
-
 .related-entity-container__location-btn-wrapper {
   width: 30px;
   height: 30px;
@@ -161,7 +172,9 @@
   cursor: pointer;
 }
 
-.entity-page__related-entity-container.disabled-geo .related-entity-container__location-btn {
+.entity-page__related-entity-container.disabled-geo .related-entity-container__location-btn, .related-entity-container__location-btn.disabled-geo  {
   fill: rgba(gray,0.4);
   cursor: auto;
 }
+
+

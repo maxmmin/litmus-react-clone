@@ -1,6 +1,8 @@
 import {noInfoMessage} from "../../../error/BasicHttpError";
 import {JurPerson, PreProcessedJurPerson} from "../../../model/jurPerson/JurPerson";
 import {DateEntityTool} from "../../../model/DateEntity";
+import {buildJurPersonNavLink, buildPersonNavLink} from "../../../util/navLinkBuilders";
+import {GoBubbleIcon} from "../../assets/icons";
 
 type Props = {
     jurPerson: PreProcessedJurPerson
@@ -9,6 +11,10 @@ type Props = {
 const JurPersonInfoTable = ({jurPerson}: Props) => {
     return (
         <div className="entity-container-wrapper jur-person-container-wrapper">
+                <div className="entity-container-wrapper__entity-link-wrapper">
+                    {buildJurPersonNavLink(jurPerson.id,<GoBubbleIcon className={"entity-container-wrapper__entity-link-icon"}/>)}
+                </div>
+
                 <div className={"entity-container jur-person-container"}>
                         <div className="entity-container__column-title entity-container__column-title-block_jur-person"><h6 className="entity-container__column-title entity-container__column-title_jur-person">ID</h6></div>
                         <div className="entity-container__column-title entity-container__column-title-block_jur-person"><h6 className="entity-container__column-title entity-container__column-title_jur-person">Назва</h6></div>

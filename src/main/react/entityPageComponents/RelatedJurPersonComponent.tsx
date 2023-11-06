@@ -18,10 +18,10 @@ type RelatedJurPersonProps = {
 export default function ({jurPerson, cssAnchor="", containerOnClick, geoBtnOnClick}: RelatedJurPersonProps) {
     const mainImg: string|null = jurPerson.media.mainImage||jurPerson.media.images[0]
     const ownerLink = jurPerson.owner&&<NavLink
-        className={"related-entity-container__link"}
+        className={"related-entity-container__link link"}
         to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], jurPerson.owner.id.toString())}>{getFullName(jurPerson.owner)}</NavLink>
     const benOwnerLink  = jurPerson.benOwner&&<NavLink
-        className={"related-entity-container__link"}
+        className={"related-entity-container__link link"}
         to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], jurPerson.benOwner.id.toString())}>{getFullName(jurPerson.benOwner)}</NavLink>
     return (
         <div className={`entity-page__related-entity-container entity-page__related-entity-container_jur-person ${cssAnchor}`} onClick={
@@ -30,7 +30,7 @@ export default function ({jurPerson, cssAnchor="", containerOnClick, geoBtnOnCli
                 <div className="related-entity-container__img-wrapper">
                     { mainImg ? <img className={"related-entity-container__img"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="jur-person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
-                <p className="related-entity-container__entity-name"><NavLink className={"related-entity-container__link"} to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON],jurPerson.id.toString())}>{jurPerson.name}</NavLink></p>
+                <p className="related-entity-container__entity-name"><NavLink className={"related-entity-container__link link"} to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON],jurPerson.id.toString())}>{jurPerson.name}</NavLink></p>
             </div>
             <p className="related-entity-container__plain-text related-entity-container__plain-text_owner">{ownerLink}</p>
             <p className="related-entity-container__plain-text related-entity-container__plain-text_ben-owner">{benOwnerLink}</p>
