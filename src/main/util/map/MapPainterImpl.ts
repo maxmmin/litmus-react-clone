@@ -10,7 +10,7 @@ import appConfig from "../../config/appConfig";
 import {Feature, Overlay} from "ol";
 import {Entity} from "../../model/Entity";
 import getFullName from "../functional/getFullName";
-import {transformLocationToCoordinates} from "./mapUtil";
+import {transformLocationToCoordinates} from "./mapUtilites";
 import Popup from "ol-ext/overlay/Popup";
 import RipePersonUtil from "../person/RipePersonUtil";
 import {LineString} from "ol/geom";

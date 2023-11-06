@@ -2,7 +2,7 @@ import {LabelInfo, LocationPresent, RelationsLabelsMetaData} from "../../util/ma
 import {GeoLocationPinDropIcon} from "../assets/icons";
 import React, {useContext, useEffect, useRef, useState} from "react";
 import OlMap from "ol/Map";
-import {defaultMapPosition, transformLocationToCoordinates} from "../../util/map/mapUtil";
+import {defaultMapPosition, transformLocationToCoordinates} from "../../util/map/mapUtilites";
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
 import {View} from "ol";

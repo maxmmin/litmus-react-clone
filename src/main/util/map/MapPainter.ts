@@ -8,7 +8,7 @@ import {LineString} from "ol/geom";
 import Vector from "ol/source/Vector";
 import VectorLayer from "ol/layer/Vector";
 import Popup from "ol-ext/overlay/Popup";
-import {transformLocationToCoordinates} from "./mapUtil";
+import {transformLocationToCoordinates} from "./mapUtilites";
 import {buildUrl} from "../pureFunctions";
 import appConfig from "../../config/appConfig";
 import getFullName from "../functional/getFullName";
