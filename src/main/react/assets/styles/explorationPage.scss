@@ -73,7 +73,7 @@
 }
 
 .person-container {
-  grid-template-columns: 30px repeat(9, 8.5%);
+  grid-template-columns: 30px repeat(9, 1fr);
 }
 
 .entity-container__value_person-img {
@@ -81,11 +81,11 @@
 }
 
 .jur-person-container {
-  grid-template-columns: 30px repeat(6, 11.3%);
+  grid-template-columns: 30px repeat(6, 1fr);
 }
 
 .user-container {
-  grid-template-columns: 30px repeat(5, 13.6%);
+  grid-template-columns: 30px repeat(5, 1fr);
 }
 
 .entity-container__column-title  {

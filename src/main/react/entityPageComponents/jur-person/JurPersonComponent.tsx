@@ -5,7 +5,7 @@ import {DashedUserIcon} from "../../assets/icons";
 import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
 import React, {useContext, useEffect, useState} from "react";
-import {buildPersonLink} from "../../exploration/EntityTables/PersonInfoTable";
+import PersonInfoTable, {buildPersonLink} from "../../exploration/EntityTables/PersonInfoTable";
 import ImageSlider from "../ImageSlider";
 import JurPersonMap, {JurPersonMapProps} from "./JurPersonMap";
 import {ServiceContext} from "../../serviceContext";
@@ -14,6 +14,7 @@ import JurPersonProcessor from "../../../service/jurPersonProcessing/JurPersonPr
 import Loader from "../../loader/Loader";
 import "../../assets/styles/entityPage/jurPersonPage.scss";
 import getFullName from "../../../util/functional/getFullName";
+import {noInfoMessage} from "../../../error/BasicHttpError";
 
 export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PreProcessedJurPerson}) {
     const [isPending, setPending] = useState<boolean>(true);
@@ -89,6 +90,26 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                     </div>
                 </section>
             }
+
+            <section className="jur-person-page__owners-section">
+                <div className="owners-section__owner-item owners-section__owner-item_owner">
+                    <h6 className={"owner-item__title"}>Власник</h6>
+                    {jurPerson.owner ?
+                        <PersonInfoTable person={jurPerson.owner}/>
+                        :
+                        noInfoMessage
+                    }
+                </div>
+
+                <div className="owners-section__owner-item owners-section__owner-item_owner">
+                    <h6 className={"owner-item__title"}>Бенефіціарний власник</h6>
+                    {jurPerson.benOwner ?
+                        <PersonInfoTable person={jurPerson.benOwner}/>
+                        :
+                        noInfoMessage
+                    }
+                </div>
+            </section>
         </div>
     )
 }
