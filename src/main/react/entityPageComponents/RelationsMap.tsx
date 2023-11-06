@@ -56,7 +56,7 @@ export default function RelationsMap ({metadata, currentlyDisplayed, cssAnchor}:
     const [displayed, setDisplayed] = useState<LocationContainable|null>(currentlyDisplayed.to);
     const [firstShown] = useState<LocationContainable>(currentlyDisplayed.to);
 
-    const painter = useContext(LitmusServiceContext).mapPainter;
+    const painter = useContext(LitmusServiceContext).map.mapPainter;
 
     useEffect(()=>{
         if (map) {

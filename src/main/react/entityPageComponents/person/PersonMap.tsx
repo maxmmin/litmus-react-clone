@@ -4,6 +4,7 @@ import MapPainter, {LocationPresent} from "../../../util/map/MapPainter";
 import RelationsMap, {CurrentlyDisplayed} from "../RelationsMap";
 import {ServiceContext} from "../../serviceContext";
 import {LitmusServiceContext} from "../../App";
+import PersonMapTool from "../../../util/map/person/PersonMapTool";
 
 
 export type PersonMapProps = {
@@ -14,8 +15,8 @@ export type PersonMapProps = {
 
 const PersonMap = ({person, currentlyDisplayed}: PersonMapProps) => {
     const context: ServiceContext = useContext(LitmusServiceContext);
-    const painter: MapPainter = context.mapPainter;
-    const metadata = useMemo(()=>painter.buildPersonMetadata(person), [person])
+    const mapTool: PersonMapTool = context.map.personMapTool;
+    const metadata = useMemo(()=>mapTool.buildEntityMetadata(person), [person])
     return (
         <RelationsMap metadata={metadata} currentlyDisplayed={currentlyDisplayed}/>
     )
