@@ -80,7 +80,9 @@ export default class BasicMapUtil implements MapUtil {
                     if (!persons.has(relatedPerson)) return;
 
                     const reverseRelation = relatedPerson.relationships.find(rel=>rel.to===person);
-                    if (!reverseRelation) throw new Error("corrupted schema; reversed relation was not found");
+                    if (!reverseRelation) {
+                        throw new Error("corrupted schema; reversed relation was not found");
+                    };
 
                     const reversePerson = reverseRelation.to;
 

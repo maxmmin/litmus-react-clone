@@ -157,7 +157,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
 
             const scanned: Set<Person> = new Set()
             while (stack.length>0) {
-                const currentPerson = stack.pop()!;
+                const currentPerson = stack.shift()!;
                 const personEntity = this.getCreatedPerson(currentPerson.id,createdPersons);
                 if (!scanned.has(personEntity)&&currentPerson.relationshipsInfo.relationships) {
                     currentPerson.relationshipsInfo.relationships.forEach(r=>{
