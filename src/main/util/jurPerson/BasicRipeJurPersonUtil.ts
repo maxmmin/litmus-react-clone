@@ -4,9 +4,13 @@ import Person from "../../model/human/person/Person";
 import {LocationPresent} from "../map/MapPainter";
 import {hasLocation, hasValue} from "../pureFunctions";
 import RipePersonUtil from "../person/RipePersonUtil";
+import BasicRipePersonUtil from "../person/BasicRipePersonUtil";
 
 export default class BasicRipeJurPersonUtil implements RipeJurPersonUtil {
 
+    public static getInstance(ripePersonUtil: RipePersonUtil = BasicRipePersonUtil.getInstance()): BasicRipeJurPersonUtil {
+        return new BasicRipeJurPersonUtil(ripePersonUtil);
+    }
     constructor(protected readonly ripePersonUtil: RipePersonUtil) {
     }
 

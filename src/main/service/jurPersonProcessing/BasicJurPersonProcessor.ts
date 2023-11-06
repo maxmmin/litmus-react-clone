@@ -6,10 +6,17 @@ import BasicPersonProcessor from "../personProcessing/BasicPersonProcessor";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import {EmbedPersonResponseDto, RelatedPersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
+import PersonProcessor from "../personProcessing/PersonProcessor";
+import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 
-class BasicJurPersonProcessor implements JurPersonProcessor {
+export default class BasicJurPersonProcessor implements JurPersonProcessor {
 
-    constructor(protected readonly personProcessor: BasicPersonProcessor,
+    public static getInstance(dtoMapper: JurPersonDtoMapper = JurPersonDtoMapperImpl.getInstance(),
+        personProcessor: PersonProcessor = BasicPersonProcessor.getInstance(dtoMapper)): BasicJurPersonProcessor {
+            return new BasicJurPersonProcessor(personProcessor, dtoMapper);
+    }
+
+    constructor(protected readonly personProcessor: PersonProcessor,
                 protected readonly dtoMapper: JurPersonDtoMapper) {
     }
 

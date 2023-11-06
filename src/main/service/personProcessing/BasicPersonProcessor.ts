@@ -15,6 +15,7 @@ import {EmbedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonRespo
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
 import isEmbedJurPersonDto from "../../util/checkJurPersonDto";
+import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 
 type JurPersonContainable = Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>
 
@@ -28,7 +29,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
                 protected readonly ripePersonRelationshipsUtil: RipePersonUtil) {
     }
 
-    public static getInstance(jurPersonDtoMapper: JurPersonDtoMapper,
+    public static getInstance(jurPersonDtoMapper: JurPersonDtoMapper = JurPersonDtoMapperImpl.getInstance(),
                               relationshipsLoader: PersonRelationsLoader = BasicPersonRelationshipsLoader.getInstance(),
                               relationshipsDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance(),
                               dtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
