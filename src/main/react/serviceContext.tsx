@@ -99,6 +99,8 @@ import PersonMapTool from "../util/map/person/PersonMapTool";
 import BasicPersonMapTool from "../util/map/person/BasicPersonMapTool";
 import BasicMapUtil from "../util/map/util/BasicMapUtil";
 import MapUtil from "../util/map/util/MapUtil";
+import BasicJurPersonMapTool from "../util/map/jurPerson/BasicJurPersonMapTool";
+import JurPersonMapTool from "../util/map/jurPerson/JurPersonMapTool";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -300,6 +302,7 @@ export type ServiceContext = {
     map: {
         mapPainter: MapPainter,
         personMapTool: PersonMapTool,
+        jurPersonMapTool: JurPersonMapTool,
         mapUtil: MapUtil
     }
 }
@@ -324,6 +327,8 @@ const mapPainter = new MapPainterImpl();
 
 const mapUtil = new BasicMapUtil(mapPainter);
 
+const ripeJurPersonUtil = new BasicRipeJurPersonUtil(ripePersonRelationshipsUtil);
+
 const serviceContext: ServiceContext = {
     auth: authContext,
     exploration: explorationContext,
@@ -342,13 +347,14 @@ const serviceContext: ServiceContext = {
         ripePersonUtil: ripePersonRelationshipsUtil
     },
     jurPersonServices: {
-        ripeJurPersonUtil: new BasicRipeJurPersonUtil(ripePersonRelationshipsUtil),
+        ripeJurPersonUtil: ripeJurPersonUtil,
         jurPersonProcessor: new BasicJurPersonProcessor(personRelationshipsBinder, mappers.jurPerson)
     },
     map: {
         mapPainter: mapPainter,
         mapUtil: mapUtil,
-        personMapTool: new BasicPersonMapTool(mapUtil, mapPainter, ripePersonRelationshipsUtil)
+        personMapTool: new BasicPersonMapTool(mapUtil, mapPainter, ripePersonRelationshipsUtil),
+        jurPersonMapTool: new BasicJurPersonMapTool(mapUtil, mapPainter, ripeJurPersonUtil)
     }
 }
 

@@ -12,7 +12,7 @@ export default class BasicPersonMapTool implements PersonMapTool {
 
     constructor(protected readonly mapUtil: MapUtil,
                 protected readonly mapPainter: MapPainter,
-                protected readonly relationshipsUtil: RipePersonUtil) {
+                protected readonly personUtil: RipePersonUtil) {
     }
 
     public static getInstance(mapUtil: MapUtil = BasicMapUtil.getInstance(),
@@ -23,7 +23,7 @@ export default class BasicPersonMapTool implements PersonMapTool {
 
 
     buildEntityMetadata(person: LocationPresent<Person>): RelationsLabelsMetaData {
-        const relatedPersons = this.relationshipsUtil.extractGeoRelatedPersons(person);
+        const relatedPersons = this.personUtil.extractGeoRelatedPersons(person);
 
         const personsToDisplay: Set<LocationPresent<Person>> = new Set([person, ...relatedPersons]);
 
