@@ -81,7 +81,7 @@ class BasicJurPersonProcessor implements JurPersonProcessor {
         } else if (benOwner) {
             jurPerson = benOwner.benOwnedJurPersons.find(r=>r.id===preProcessedJurPerson.id)!;
         } else {
-            jurPerson = this.dtoMapper.mapPreProcessedJurPerson(preProcessedJurPerson, null, null);
+            jurPerson = this.dtoMapper.mapToRipeJurPerson(preProcessedJurPerson, null, null);
         }
 
         return checkNotEmpty(jurPerson);

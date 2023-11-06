@@ -18,6 +18,7 @@ import {ServiceContext} from "../../serviceContext";
 import RelationshipComponent from "../RelationshipComponent";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import RelatedJurPersonComponent from "../RelatedJurPersonComponent";
+import BasicRipePersonUtil from "../../../util/person/BasicRipePersonUtil";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson

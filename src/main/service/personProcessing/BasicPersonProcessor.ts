@@ -212,7 +212,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
             ||benOwner?.benOwnedJurPersons.some(j=>j.id===embedJurPerson.id)) {
             return;
         } else {
-            const jurPerson = this.jurPersonDtoMapper.mapPreProcessedJurPerson(embedJurPerson, owner, benOwner);
+            const jurPerson = this.jurPersonDtoMapper.mapToRipeJurPerson(embedJurPerson, owner, benOwner);
             if (owner) owner.ownedJurPersons.push(jurPerson);
             if (benOwner) benOwner.benOwnedJurPersons.push(jurPerson);
         }

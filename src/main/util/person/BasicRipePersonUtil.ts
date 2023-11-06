@@ -1,7 +1,8 @@
 import Person from "../../model/human/person/Person";
 import RipePersonUtil from "./RipePersonUtil";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
-import {isEmptyValue} from "../pureFunctions";
+import {hasLocation, hasValue} from "../pureFunctions";
+import {LocationPresent} from "../map/MapPainter";
 
 export default class BasicRipePersonUtil implements RipePersonUtil{
     public static getInstance () {
@@ -31,8 +32,8 @@ export default class BasicRipePersonUtil implements RipePersonUtil{
         return locationGeoRelationFlag;
     }
 
-    extractGeoRelatedPersons(person: Person): Set<Person> {
-        const relatedPersons = [...this.extractRelatedPersons(person)].filter(p=>p.location);
+    filterForGeoRelatedPersons(relatedPersonsSet: Set<LocationPresent<Person>>, ignoreList: Set<LocationPresent<Person>>): Set<LocationPresent<Person>> {
+        const relatedPersons: LocationPresent<Person>[] = [...relatedPersonsSet];
 
         let changed: boolean = false;
 
@@ -42,7 +43,7 @@ export default class BasicRipePersonUtil implements RipePersonUtil{
             for (let counter = 0; counter<relatedPersons.length; counter++) {
                 const related = relatedPersons[counter];
 
-                if (related.relationships.some(r=>r.to===person)) continue;
+                if (ignoreList.has(related)) continue;
 
                 const relatedRelationships = related.relationships;
                 let locationCounter: number = 0;
@@ -50,7 +51,9 @@ export default class BasicRipePersonUtil implements RipePersonUtil{
                 for (let innerCounter=0;innerCounter<relatedRelationships.length; innerCounter++) {
                     if (locationCounter>1) break;
                     const innerRelatedPerson = relatedRelationships[innerCounter].to;
-                    if (relatedPersons.includes(innerRelatedPerson)&&person.location) locationCounter++;
+                    if (hasLocation(innerRelatedPerson)) {
+                        if (relatedPersons.includes(innerRelatedPerson)) locationCounter++;
+                    }
                 }
 
                 if (locationCounter<2) {
@@ -66,11 +69,18 @@ export default class BasicRipePersonUtil implements RipePersonUtil{
         }
         while (changed);
 
-        return new Set<Person>(relatedPersons);
+        return new Set(relatedPersons);
+    }
+
+    extractGeoRelatedPersons(person: Person): Set<LocationPresent<Person>> {
+        if (hasLocation(person)) {
+            const relatedPersons: Set<LocationPresent<Person>> = new Set([...this.extractRelatedPersons(person)].filter(hasLocation));
+            return this.filterForGeoRelatedPersons(relatedPersons, new Set(person.relationships.map(r=>r.to).filter(hasLocation)));
+        } else return new Set;
     }
 
     private extractJurPersonRootPersons (jurPerson: JurPerson): Person[] {
-        return [jurPerson.benOwner, jurPerson.owner].filter(isEmptyValue);
+        return [jurPerson.benOwner, jurPerson.owner].filter(hasValue);
     }
 
     private extractJurPersons (person: Person) {

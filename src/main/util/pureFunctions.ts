@@ -91,7 +91,7 @@ export function checkNotEmpty <T> (arg: T): NotNullOrUndefined<T> {
     } else return arg as NotNullOrUndefined<T>;
 }
 
-export function isEmptyValue <T> (arg: T|undefined|null): arg is T {
+export function hasValue <T> (arg: T|undefined|null): arg is T {
     return arg!==null&&arg!==undefined;
 }
 
