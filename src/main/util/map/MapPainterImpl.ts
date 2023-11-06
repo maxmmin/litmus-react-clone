@@ -1,12 +1,11 @@
 import MapPainter, {
     JurPersonLabelInfo,
-    JurPersonLabelRequiredFields,
+    JurPersonLabelRequiredFields, PairCoordinates,
     PersonLabelInfo,
     PersonLabelRequiredFields, RelationsLabelsMetaData
 } from "./MapPainter";
-import Person, {Relationship} from "../../model/human/person/Person";
 import OlMap from "ol/Map";
-import {buildUrl, checkNotEmpty, hasLocation} from "../pureFunctions";
+import {buildUrl} from "../pureFunctions";
 import appConfig from "../../config/appConfig";
 import {Feature, Overlay} from "ol";
 import {Entity} from "../../model/Entity";
@@ -14,31 +13,13 @@ import getFullName from "../functional/getFullName";
 import {transformLocationToCoordinates} from "./mapUtil";
 import Popup from "ol-ext/overlay/Popup";
 import RipePersonUtil from "../person/RipePersonUtil";
-import Vector from "ol/source/Vector";
 import {LineString} from "ol/geom";
-import VectorLayer from "ol/layer/Vector";
 import {Fill, Stroke, Style} from "ol/style";
-import {JurPerson} from "../../model/jurPerson/JurPerson";
 import BasicRipePersonUtil from "../person/BasicRipePersonUtil";
 
 
-type LinesData = {pair: Paired, line: Feature<LineString>}
-
-type Paired = [Person, Person]
-
-type PairedRelationshipMap = Map<string, Paired>
-
-
 export default class MapPainterImpl implements MapPainter {
-    private readonly _popup: Popup = new Popup({
-        popupClass: "black entity-popup",
-        closeBox: true,
-        autoPan: true,
-        anim: true,
-        positioning: 'bottom-center'
-    })
-
-    private readonly _relationshipLineStyle = new Style({
+    private readonly _relationLineStyle = new Style({
         fill: new Fill({ color: '#6750A4' }),
         stroke: new Stroke({
             color: '#6750A4',
@@ -46,12 +27,16 @@ export default class MapPainterImpl implements MapPainter {
         })
     });
 
-    get relationshipLineStyle(): Style {
-        return this._relationshipLineStyle;
-    }
+    private readonly popup: Popup = new Popup({
+        popupClass: "black entity-popup",
+        closeBox: true,
+        autoPan: true,
+        anim: true,
+        positioning: 'bottom-center'
+    });
 
-    get popup(): Popup {
-        return this._popup;
+    get relationLineStyle(): Style {
+        return this._relationLineStyle;
     }
 
     constructor(protected readonly relationshipsUtil: RipePersonUtil) {
@@ -87,7 +72,7 @@ export default class MapPainterImpl implements MapPainter {
         return personContainer;
     }
 
-    private buildSinglePersonLabel({person, cssAnchor}: { person: PersonLabelRequiredFields, cssAnchor?: string }): PersonLabelInfo {
+    public buildPersonLabel({person, cssAnchor}: { person: PersonLabelRequiredFields, cssAnchor?: string }): PersonLabelInfo {
         if (!person.location) throw new Error("person has no location")
 
         const coordinates = transformLocationToCoordinates(person.location);
@@ -100,10 +85,10 @@ export default class MapPainterImpl implements MapPainter {
         });
 
         personContainer.onclick = (e=>{
-            if (this._popup.getVisible()) {
-                this._popup.hide();
+            if (this.popup.getVisible()) {
+                this.popup.hide();
             }
-            this._popup.show(coordinates, `<a class="map-tooltip__person-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], person.id.toString())}>${getFullName(person)}</a>`)
+            this.popup.show(coordinates, `<a class="map-tooltip__person-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], person.id.toString())}>${getFullName(person)}</a>`)
         })
 
         label.setPosition(coordinates);
@@ -119,76 +104,12 @@ export default class MapPainterImpl implements MapPainter {
         };
     }
 
-    private buildPersonsLabels (rootPerson: Person, relatedPersons: Set<Person>): PersonLabelInfo[] {
-        const labels: PersonLabelInfo[] = [...relatedPersons]
-            .filter(hasLocation)
-            .map(p=>this.buildSinglePersonLabel({
-                person: p
-            }));
-
-        if (hasLocation(rootPerson)) {
-            labels.push(this.buildSinglePersonLabel({
-                person: rootPerson,
-                cssAnchor: "main"
-            }))
-        }
-
-        return labels;
-    }
-
-    private buildPairedMapKey(pairedId: [number, number]): string {
-        return pairedId.sort((a,b)=>a-b).join("/");
-    }
-
-    private buildRelationshipLine({pair}: {pair: Paired}): LinesData  {
-        const [personOne, personTwo]: Paired = pair;
-        if (personOne.location&&personTwo.location) {
-            const pairCoordinates: [number, number][] = pair.map(p=>transformLocationToCoordinates(p.location!))
-
-            const line = new Feature({
-                geometry: new LineString(pairCoordinates)
-            })
-            line.setStyle(this.relationshipLineStyle);
-
-            return {
-                pair: pair,
-                line: line
-            }
-        } else throw new Error(`one of persons has no location: ${pair[0].id}->${pair[1].id}`)
-    }
-
-    private buildRelationshipsLines (persons: Set<Person>): VectorLayer<Vector<LineString>> {
-        const source = new Vector<LineString>({
-        });
-
-        const vectorLayer = new VectorLayer({
-            source: source,
-            renderBuffer: 1e6
-        });
-
-        const drawnRelationshipsMap: PairedRelationshipMap = new Map<string, Paired>();
-
-        const linesData: LinesData[] = [];
-
-        persons.forEach(person=>{
-            person.relationships.forEach(r=>{
-                const relatedPerson = r.to;
-                const reverseRelation = relatedPerson.relationships.find(rel=>rel.to===person);
-                if (!reverseRelation) throw new Error("corrupted schema; reversed relation was not found");
-                if (!persons.has(relatedPerson)) return;
-
-                const key = this.buildPairedMapKey([person.id, relatedPerson.id]);
-                if (!drawnRelationshipsMap.has(key)) {
-                    const buildData = this.buildRelationshipLine({pair: [r.to,reverseRelation.to]})
-                    linesData.push(buildData);
-                    drawnRelationshipsMap.set(key, [reverseRelation.to, r.to])
-                }
-            })
+    buildLine(coordinates: PairCoordinates): Feature<LineString> {
+        const line = new Feature({
+            geometry: new LineString(coordinates)
         })
-
-        const lines = linesData.map(data=>data.line);
-        source.addFeatures(lines);
-        return vectorLayer;
+        line.setStyle(this.relationLineStyle);
+        return line;
     }
 
     private buildJurPersonLabelHtmlElement({jurPerson, cssAnchor=""}: {jurPerson: JurPersonLabelRequiredFields, cssAnchor: string}) {
@@ -217,7 +138,7 @@ export default class MapPainterImpl implements MapPainter {
         return jurPersonContainer;
     }
 
-    private buildJurPersonLabel({jurPerson, cssAnchor=""}: {jurPerson: JurPersonLabelRequiredFields, cssAnchor?: string}): JurPersonLabelInfo  {
+    public buildJurPersonLabel({jurPerson, cssAnchor=""}: {jurPerson: JurPersonLabelRequiredFields, cssAnchor?: string}): JurPersonLabelInfo  {
         if (!jurPerson.location) throw new Error("person has no location")
 
         const coordinates = transformLocationToCoordinates(jurPerson.location);
@@ -230,10 +151,10 @@ export default class MapPainterImpl implements MapPainter {
         });
 
         jurPersonContainer.onclick = (e=>{
-            if (this._popup.getVisible()) {
-                this._popup.hide();
+            if (this.popup.getVisible()) {
+                this.popup.hide();
             }
-            this._popup.show(coordinates, `<a class="map-tooltip__person-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON], jurPerson.id.toString())}>${jurPerson.name}</a>`)
+            this.popup.show(coordinates, `<a class="map-tooltip__person-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON], jurPerson.id.toString())}>${jurPerson.name}</a>`)
         })
 
         label.setPosition(coordinates);
@@ -249,21 +170,8 @@ export default class MapPainterImpl implements MapPainter {
         };
     }
 
-    private buildJurPersonsLabels(jpContainable: Set<Person>): JurPersonLabelInfo[] {
-        const jurPersons = [...jpContainable].reduce((acc, person) => {
-            const jurPersons = [...person.ownedJurPersons, ...person.benOwnedJurPersons];
-            return new Set([...acc, ...jurPersons])
-        }, new Set<JurPerson>())
-
-        return [...jurPersons].filter(hasLocation).map(j=>this.buildJurPersonLabel({jurPerson: j}))
-    }
-
-    paintPersonData(person: Person, map: OlMap): RelationsLabelsMetaData {
-        const data = this.buildPersonMetadata(person);
-
-        this.putOnMap(data, map);
-
-        return data;
+    getPopup(): Popup {
+        return this.popup;
     }
 
     putOnMap(metadata: RelationsLabelsMetaData, map: OlMap): void {
@@ -277,26 +185,5 @@ export default class MapPainterImpl implements MapPainter {
         map.removeOverlay(metadata.popup);
         map.removeLayer(metadata.linesLayer);
     }
-
-
-    buildPersonMetadata(person: Person): RelationsLabelsMetaData {
-        const relatedPersons = this.relationshipsUtil.extractGeoRelatedPersons(person);
-
-        const personsLabels = this.buildPersonsLabels(person, relatedPersons);
-
-        const personsToDisplay = new Set([person, ...relatedPersons]);
-
-        const linesLayer = this.buildRelationshipsLines(personsToDisplay);
-
-        const jurPersonsLabels = this.buildJurPersonsLabels(personsToDisplay);
-
-        return {
-            drawnPersons: personsLabels,
-            drawnJurPersons: jurPersonsLabels,
-            linesLayer: linesLayer,
-            popup: this.popup
-        }
-    }
-
 
 }
