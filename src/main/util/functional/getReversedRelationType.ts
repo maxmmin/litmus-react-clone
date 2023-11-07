@@ -13,6 +13,8 @@ export default function getReversedRelationType(relationType: RelationType): Rel
 
         case RelationType.RELATIVE: return RelationType.RELATIVE;
 
+        case RelationType.UNSET: return RelationType.UNSET;
+
         default: throw new Error("unknown relation type: "+relationType)
     }
 }
