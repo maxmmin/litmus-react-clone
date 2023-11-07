@@ -158,18 +158,25 @@ export default class BasicPersonProcessor implements PersonProcessor{
             const scanned: Set<Person> = new Set()
             while (stack.length>0) {
                 const currentPerson = stack.shift()!;
-                const personEntity = this.getCreatedPerson(currentPerson.id,createdPersons);
-                if (!scanned.has(personEntity)&&currentPerson.relationshipsInfo.relationships) {
-                    currentPerson.relationshipsInfo.relationships.forEach(r=>{
-                        if (personsToInclude.has(r.person.id)) {
-                            const toPerson = this.getCreatedPerson(r.person.id, createdPersons);
-                            const relationship = this.dtoMapper.mapRelationshipResponseDto(r, toPerson);
-                            personEntity.relationships.push(relationship);
-                            stack.push(r.person);
-                        }
-                    })
+
+                if (currentPerson.relationshipsInfo.relationships) {
+                    const personEntity = this.getCreatedPerson(currentPerson.id,createdPersons);
+
+                    if (!scanned.has(personEntity)||personEntity.relationships.length<currentPerson.relationshipsInfo.relationships.length) {
+                        currentPerson.relationshipsInfo.relationships.forEach(r=>{
+                            if (personsToInclude.has(r.person.id)) {
+                                const toPerson = this.getCreatedPerson(r.person.id, createdPersons);
+                                const relationship = this.dtoMapper.mapRelationshipResponseDto(r, toPerson);
+                                if (personEntity.relationships.findIndex(r=>r.to===toPerson)===-1) {
+                                    personEntity.relationships.push(relationship);
+                                    stack.push(r.person);
+                                }
+                            }
+                        })
+                    }
+
+                    scanned.add(personEntity);
                 }
-                scanned.add(personEntity);
             }
         }
     }
