@@ -35,7 +35,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
     useEffect(()=>{
         setPending(true);
         bindService
-            .bindShared(rawPerson, -1)
+            .bindAll(rawPerson, -1)
             .then(person=>{
                 console.log(person);
                 setPerson(person);

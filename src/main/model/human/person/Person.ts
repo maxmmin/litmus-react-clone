@@ -33,12 +33,12 @@ export type PreProcessedPerson = Omit<Person, 'relationships'|'ownedJurPersons'|
 
 export type Relationship = {
     to: Person,
-    type: RelationType | null,
+    type: RelationType,
     note: string | null
 }
 
 export enum RelationType {
-    PARENT="PARENT", SPOUSE="SPOUSE", SIBLING="SIBLING", RELATIVE="RELATIVE", FRIEND="FRIEND"
+    PARENT="PARENT", SPOUSE="SPOUSE", SIBLING="SIBLING", RELATIVE="RELATIVE", FRIEND="FRIEND", CHILD="CHILD", UNSET="UNSET"
 }
 
 export default Person;

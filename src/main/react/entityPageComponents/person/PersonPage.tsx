@@ -23,7 +23,7 @@ export default function PersonPage () {
         if (!isFetching) setFetching(true);
 
         if (id!==undefined&&!isNaN(+id)) {
-            explorationApiService.findByIdWithDepthOption(+id, 12)
+            explorationApiService.findByIdWithDepthOption(+id, 2)
                 .then(responseDto => {
                     if (responseDto) {
                         const foundPerson = dtoMapper.mapToEntity(responseDto);

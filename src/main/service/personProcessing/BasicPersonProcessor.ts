@@ -16,6 +16,7 @@ import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
 import isEmbedJurPersonDto from "../../util/jurPerson/checkJurPersonDto";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
+import getReversedRelationType from "../../util/functional/getReversedRelationType";
 
 type JurPersonContainable = Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>
 
@@ -167,15 +168,27 @@ export default class BasicPersonProcessor implements PersonProcessor{
                             if (personsToInclude.has(r.person.id)) {
                                 const toPerson = this.getCreatedPerson(r.person.id, createdPersons);
                                 const relationship = this.dtoMapper.mapRelationshipResponseDto(r, toPerson);
-                                if (personEntity.relationships.findIndex(r=>r.to===toPerson)===-1) {
-                                    personEntity.relationships.push(relationship);
-                                    stack.push(r.person);
+
+                                const prevRelIndex = personEntity.relationships.findIndex(r=>r.to===toPerson);
+
+                                if (prevRelIndex>-1) {
+                                    personEntity.relationships.splice(prevRelIndex, 1);
                                 }
+                                personEntity.relationships.push(relationship);
+
+                                if (toPerson.relationships.findIndex(r=>r.to===personEntity)===-1) {
+                                    const reversedRelation: Relationship = {
+                                        to: personEntity,
+                                        type: getReversedRelationType(r.type),
+                                        note: null
+                                    }
+                                    toPerson.relationships.push(reversedRelation);
+                                }
+                                stack.push(r.person);
                             }
                         })
+                        scanned.add(personEntity);
                     }
-
-                    scanned.add(personEntity);
                 }
             }
         }

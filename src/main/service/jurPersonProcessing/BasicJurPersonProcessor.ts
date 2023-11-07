@@ -1,11 +1,11 @@
 import JurPersonProcessor from "./JurPersonProcessor";
 import {JurPerson, PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
-import Person, {PreProcessedPerson} from "../../model/human/person/Person";
+import Person, {PreProcessedPerson, RelationType} from "../../model/human/person/Person";
 import Sex from "../../model/human/person/Sex";
 import BasicPersonProcessor from "../personProcessing/BasicPersonProcessor";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
-import {EmbedPersonResponseDto, RelatedPersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
+import {RelatedPersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
 import PersonProcessor from "../personProcessing/PersonProcessor";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 
@@ -50,7 +50,7 @@ export default class BasicJurPersonProcessor implements JurPersonProcessor {
             const jpIndex = checkNotEmpty(ownerDto.ownedJurPersons.findIndex(j=>j.id===preProcessedJurPerson.id));
             ownerDto.ownedJurPersons.splice(jpIndex, 1, preProcessedJurPerson);
             virtualRootPerson.relationshipsInfo.relationships!.push({
-                type: null,
+                type: RelationType.UNSET,
                 person: ownerDto,
                 note: null
             });
@@ -60,7 +60,7 @@ export default class BasicJurPersonProcessor implements JurPersonProcessor {
             const jpIndex = checkNotEmpty(benOwnerDto.benOwnedJurPersons.findIndex(j=>j.id===preProcessedJurPerson.id));
             benOwnerDto.benOwnedJurPersons.splice(jpIndex, 1, preProcessedJurPerson);
             virtualRootPerson.relationshipsInfo.relationships!.push({
-                type: null,
+                type: RelationType.UNSET,
                 person: benOwnerDto,
                 note: null
             });
@@ -74,12 +74,16 @@ export default class BasicJurPersonProcessor implements JurPersonProcessor {
         const ownerDto: RelatedPersonResponseDto|null = preProcessedJurPerson.owner;
         if (ownerDto) {
             owner = vRipePerson.relationships.find(p=>p.to.id===ownerDto.id)!.to;
+            const vIndex = checkNotEmpty(owner.relationships.findIndex(r=>r.to===vRipePerson));
+            owner.relationships.splice(vIndex, 1);
         }
 
         let benOwner: Person|null = null;
         const benOwnerDto: RelatedPersonResponseDto|null = preProcessedJurPerson.benOwner;
         if (benOwnerDto) {
             benOwner = vRipePerson.relationships.find(p=>p.to.id===benOwnerDto.id)!.to;
+            const vIndex = checkNotEmpty(benOwner.relationships.findIndex(r=>r.to===vRipePerson));
+            benOwner.relationships.splice(vIndex, 1);
         }
 
         let jurPerson: JurPerson|null = null;
