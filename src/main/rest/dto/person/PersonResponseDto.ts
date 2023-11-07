@@ -3,11 +3,9 @@ import PassportData from "../../../model/human/person/PassportData";
 import {GeoLocation} from "../../../model/GeoLocation";
 import {
     Relationship,
-    RelationType
 } from "../../../model/human/person/Person";
-import Media, {MediaResponseDto} from "../../../model/Media";
-import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import JurPersonResponseDto, {
+import {MediaResponseDto} from "../../../model/Media";
+import {
     EmbedJurPersonResponseDto,
     MinifiedJurPersonResponseDto
 } from "../jurPerson/JurPersonResponseDto";

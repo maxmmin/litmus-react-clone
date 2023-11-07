@@ -6,7 +6,7 @@ import Person, {
     Relationship
 } from "../../../model/human/person/Person";
 import PersonResponseDto, {
-    EmbedPersonResponseDto,
+    EmbedPersonResponseDto, NestedPersonResponseDto, RelatedPersonResponseDto,
     RelationshipResponseDto,
     SimplePersonResponseDto
 } from "../person/PersonResponseDto";
@@ -17,8 +17,9 @@ export type OptionalRawPersonIdMap = Map<number, PreProcessedPerson|null>
 
 interface PersonDtoMapper extends DtoMapper<PersonRequestDto, PreProcessedPerson, PersonResponseDto, PersonCreationParams> {
     mapSimpleResponseDtoToEntity(dto: SimplePersonResponseDto): Person;
+    mapEmbedPersonResponseDtoToNoRelationPerson(dto: Omit<EmbedPersonResponseDto, "relationshipsInfo">): NoRelationsPerson;
     mapPersonResponseIdMapDto(dto: PersonResponseIdMapDto): OptionalRawPersonIdMap;
-    mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto|EmbedPersonResponseDto|SimplePersonResponseDto, 'relationshipsInfo'>): NoRelationsPerson;
+    mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto|RelatedPersonResponseDto, 'relationshipsInfo'>): NoRelationsPerson;
     mapRelationshipResponseDto (relationshipResponseDto: Omit<RelationshipResponseDto, 'person'>, to: Person): Relationship;
 }
 

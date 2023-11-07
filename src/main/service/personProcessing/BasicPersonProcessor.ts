@@ -92,13 +92,15 @@ export default class BasicPersonProcessor implements PersonProcessor{
         this.loadRawPersonToStore(rawPerson);
         const {shared} = this.relationshipScanService.scan(rawPerson, scanDepth);
 
-        const loadedIdList = [...shared].filter(id=>this.personsStore.has(id));
+        if (rawPerson.relationshipsInfo.relationships) {
+            const loadedIdList = [...shared].filter(id=>this.personsStore.has(id));
 
-        loadedIdList.push(rawPerson.id);
+            loadedIdList.push(rawPerson.id);
 
-        const loadedPersonsMap = await this.relationshipsLoader.loadSharedNestedPersons(rawPerson,scanDepth,new Set(loadedIdList));
+            const loadedPersonsMap = await this.relationshipsLoader.loadSharedNestedPersons(rawPerson,scanDepth,new Set(loadedIdList));
 
-        this.savePersonMap(loadedPersonsMap);
+            this.savePersonMap(loadedPersonsMap);
+        }
 
         return this.buildRipePerson(rawPerson, shared);
     }
@@ -111,13 +113,15 @@ export default class BasicPersonProcessor implements PersonProcessor{
         this.loadRawPersonToStore(rawPerson);
         const {all} = this.relationshipScanService.scan(rawPerson, scanDepth);
 
-        const loadedIdList = [...all].filter(id=>this.personsStore.has(id));
+        if (rawPerson.relationshipsInfo.relationships) {
+            const loadedIdList = [...all].filter(id=>this.personsStore.has(id));
 
-        loadedIdList.push(rawPerson.id);
+            loadedIdList.push(rawPerson.id);
 
-        const loadedPersonsMap = await this.relationshipsLoader.loadAllNestedPersons(rawPerson,scanDepth,new Set(loadedIdList));
+            const loadedPersonsMap = await this.relationshipsLoader.loadAllNestedPersons(rawPerson,scanDepth,new Set(loadedIdList));
 
-        this.savePersonMap(loadedPersonsMap);
+            this.savePersonMap(loadedPersonsMap);
+        }
 
         return this.buildRipePerson(rawPerson, all);
     }
@@ -203,7 +207,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
             if (personsToInclude.has(ownerDto.id)) {
                 owner = this.getCreatedPerson(ownerDto.id, createdPersons);
             } else {
-                owner = {...this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(ownerDto),
+                owner = {...this.dtoMapper.mapEmbedPersonResponseDtoToNoRelationPerson(ownerDto),
                     relationships: [],
                     ownedJurPersons: [],
                     benOwnedJurPersons: []
@@ -220,7 +224,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
             if (createdPersons.has(benOwnerDto.id)) {
                 benOwner = this.getCreatedPerson(benOwnerDto.id, createdPersons);
             } else {
-                benOwner = {...this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(benOwnerDto),
+                benOwner = {...this.dtoMapper.mapEmbedPersonResponseDtoToNoRelationPerson(benOwnerDto),
                     relationships: [],
                     ownedJurPersons: [],
                     benOwnedJurPersons: []

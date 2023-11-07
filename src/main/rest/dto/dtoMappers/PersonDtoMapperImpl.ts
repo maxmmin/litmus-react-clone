@@ -6,16 +6,16 @@ import hasMediaContent from "../../../util/media/hasMediaContent";
 import PassportData from "../../../model/human/person/PassportData";
 import PersonResponseDto, {
     EmbedPersonResponseDto,
-    RelationshipResponseDto, RelationshipsInfo,
+    RelatedPersonResponseDto,
+    RelationshipResponseDto,
     SimplePersonResponseDto,
 } from "../person/PersonResponseDto";
 import PersonDtoMapper, {OptionalRawPersonIdMap} from "./PersonDtoMapper";
 import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 import Media from "../../../model/Media";
-import JurPersonDtoMapper from "./JurPersonDtoMapper";
-import JurPersonDtoMapperImpl from "./JurPersonDtoMapperImpl";
 import Sex from "../../../model/human/person/Sex";
+
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
 
@@ -23,12 +23,34 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         return new PersonDtoMapperImpl();
     }
 
-    mapPersonResponseDtoToNoRelationPerson(dto: PersonResponseDto): NoRelationsPerson {
-        const person = this.mapToEntity(dto);
+    mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto|RelatedPersonResponseDto, 'relationshipsInfo'>): NoRelationsPerson {
+
+        const person = this.mapToEntity({...dto,
+            relationshipsInfo: {relationships: [], scanOptions: {depth: 0}},
+            ownedJurPersons: [],
+            benOwnedJurPersons: []
+        });
         // @ts-ignore
         delete person["relationshipsInfo"];
         return {...person}
     }
+
+    mapEmbedPersonResponseDtoToNoRelationPerson(dto: Omit<EmbedPersonResponseDto, "relationshipsInfo">): NoRelationsPerson {
+        return {
+            id: dto.id,
+            media: {mainImage: null,
+                images: []},
+            passportData: null,
+            location: null,
+            firstName: dto.firstName,
+            middleName: dto.middleName,
+            lastName: dto.lastName,
+            dateOfBirth: null,
+            sex: Sex.UNKNOWN
+        };
+    }
+
+
 
     mapPersonResponseIdMapDto(dto: PersonResponseIdMapDto): OptionalRawPersonIdMap {
         const personMap: OptionalRawPersonIdMap = new Map<number, PreProcessedPerson|null>();
