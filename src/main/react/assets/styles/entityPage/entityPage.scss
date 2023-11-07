@@ -15,7 +15,12 @@
   padding-top: 50px;
 }
 
-.person-page__possible-related-persons-section {
+.entity-page__possible-related-persons-section {
+  max-width: 800px;
+  margin: 30px auto 0;
+}
+
+.entity-page__related-jur-persons-section {
   max-width: 800px;
   margin: 30px auto 0;
 }

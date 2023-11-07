@@ -4,7 +4,7 @@ import appConfig from "../../../config/appConfig";
 import {DashedUserIcon, GeoLocationPinDropIcon, GoBubbleIcon} from "../../assets/icons";
 import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import ImageSlider from "../ImageSlider";
 import JurPersonMap, {JurPersonMapProps} from "./JurPersonMap";
 import {ServiceContext} from "../../serviceContext";
@@ -17,6 +17,8 @@ import {noInfoMessage} from "../../../error/BasicHttpError";
 import PersonDataContainer from "../person/PersonDataContainer";
 import {buildPersonNavLink} from "../../../util/navLinkBuilders";
 import Person from "../../../model/human/person/Person";
+import RelatedPersonComponent from "../person/RelatedPersonComponent";
+import RelatedJurPersonComponent from "../RelatedJurPersonComponent";
 
 function getRelatedGeoIconCssAnchor(jurPerson: JurPerson, person: Person, defaultAnchor: string = ""): string {
     if (jurPerson.location) {
@@ -38,6 +40,8 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
 
     const bindService: JurPersonProcessor = serviceContext.jurPersonServices.jurPersonProcessor;
 
+    const ripeUtil = serviceContext.jurPersonServices.ripeJurPersonUtil;
+
     useEffect(()=>{
         setPending(true);
         bindService
@@ -52,6 +56,12 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
             .finally(()=>setPending(false));
     }, [rawJurPerson])
 
+    const deepRelated = useMemo<Person[]>(()=>{
+        if (jurPerson) {
+            return [...ripeUtil.extractRelatedPersons(jurPerson)].filter(p=>jurPerson.owner!==p&&jurPerson.benOwner!==p);
+        } else return [];
+    }, [jurPerson])
+
     if (isPending) return <Loader/>
 
     if (!jurPerson) throw new Error("no person was loaded");
@@ -62,6 +72,12 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
     const benOwnerLink = jurPerson.benOwner&&buildPersonNavLink(jurPerson.benOwner.id, getFullName(jurPerson.benOwner));
 
     const formattedDateOfRegistration = jurPerson.dateOfRegistration&&DateEntityTool.getTool(jurPerson.dateOfRegistration).buildStringDate();
+
+    const possibleRelatedJurPersons: Set<JurPerson> = new Set(
+        ((jurPerson.owner?.relationships||[]).concat(jurPerson.benOwner?.relationships||[])
+            .flatMap(r=>r.to.ownedJurPersons.concat(r.to.benOwnedJurPersons))||[])
+            .filter(jp=>jp!==jurPerson)
+    );
 
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_jur-person"}>
@@ -158,6 +174,76 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                     }
                 </div>
             </section>
+
+            {
+                deepRelated.length > 0 &&
+                <section className={"entity-page__possible-related-persons-section"}>
+                    <h4 className={'jur-person-section__title'}>Можливо пов'язані фізичні особи</h4>
+
+                    <div className={`jur-person-page__possible-related-persons-container`}>
+                        <div className={`related-entity-table-header related-entity-table-header_possible-related-person ${jurPerson.location ? "" : "no-geo"}`}>
+                            <h6 className='related-entity-container__header-title related-entity-container__header-title_main'>Основна інформація</h6>
+                            <h6 className='related-entity-container__header-title'>Пов'язані фізичні особи</h6>
+                            <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
+                        </div>
+                        {deepRelated.map(possibleRelated=>{
+
+                            let cssAnchor: string;
+                            if (jurPerson.location) {
+                                cssAnchor = possibleRelated.location?"":"disabled-geo"
+                            } else {
+                                cssAnchor = "no-geo";
+                            }
+
+                            return (<RelatedPersonComponent key={possibleRelated.id}
+                                                            person={possibleRelated}
+                                                            cssAnchor={cssAnchor}
+                                                            geoBtnOnClick={(_p,_e)=>{
+                                                                if (hasLocation(possibleRelated)) {
+                                                                    setDisplayedEntity({to: possibleRelated});
+                                                                }
+                                                            }}
+                            />)
+                        })}
+                    </div>
+
+                </section>
+            }
+
+            {
+                possibleRelatedJurPersons.size>0 &&
+                <section className="entity-page__related-jur-persons-section">
+                    <h4 className={'related-jur-person-section__title'}>Можливо пов'язані юридичні особи</h4>
+                    {
+                        <div className={`person-page__related-jur-persons-container`}>
+                            <div className={`related-entity-table-header related-entity-table-header_jur-person ${jurPerson.location?"":"no-geo"}`}>
+                                <h6 className='related-entity-container__header-title related-entity-container__header-title_main'>Основна інформація</h6>
+                                <h6 className='related-entity-container__header-title'>Власник</h6>
+                                <h6 className='related-entity-container__header-title'>Бен. власник</h6>
+                            </div>
+                            {[...possibleRelatedJurPersons].map(jurPerson=>{
+
+                                let cssAnchor: string;
+                                if (jurPerson.location) {
+                                    cssAnchor = jurPerson.location?"":"disabled-geo"
+                                } else {
+                                    cssAnchor = "no-geo";
+                                }
+
+                                return (<RelatedJurPersonComponent key={jurPerson.id}
+                                                                   jurPerson={jurPerson}
+                                                                   cssAnchor={cssAnchor}
+                                                                   geoBtnOnClick={(j,_e)=>{
+                                                                       if (hasLocation(j)) {
+                                                                           setDisplayedEntity({to: j});
+                                                                       }
+                                                                   }}
+                                />)
+                            })}
+                        </div>
+                    }
+                </section>
+            }
         </div>
     )
 }

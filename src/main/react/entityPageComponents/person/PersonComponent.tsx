@@ -127,7 +127,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                 }
             </section>
 
-            <section className="person-page__related-jur-persons-section">
+            <section className="entity-page__related-jur-persons-section">
                 <h4 className={'related-jur-person-section__title'}>Пов'язані юридичні особи</h4>
                 {
                     rootJurPersons.length > 0 ?
@@ -164,7 +164,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
 
             {
                 deepRelated.length > 0 &&
-                    <section className={"person-page__possible-related-persons-section"}>
+                    <section className={"entity-page__possible-related-persons-section"}>
                         <h4 className={'person-section__title'}>Можливо пов'язані фізичні особи</h4>
 
                         <div className={`person-page__possible-related-persons-container`}>
@@ -199,7 +199,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
 
             {
                 possibleRelatedJurPersons.size>0 &&
-                <section className="person-page__related-jur-persons-section">
+                <section className="entity-page__related-jur-persons-section">
                     <h4 className={'related-jur-person-section__title'}>Можливо пов'язані юридичні особи</h4>
                     {
                             <div className={`person-page__related-jur-persons-container`}>
