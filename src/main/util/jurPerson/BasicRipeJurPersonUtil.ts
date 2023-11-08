@@ -16,8 +16,25 @@ export default class BasicRipeJurPersonUtil implements RipeJurPersonUtil {
 
     extractGeoRelatedPersons(jurPerson: JurPerson): Set<LocationPresent<Person>> {
         const ignoreList: LocationPresent<Person>[] = [jurPerson.benOwner, jurPerson.owner].filter(hasValue).filter(hasLocation);
-        const entrySet: Set<LocationPresent<Person>> = new Set([...this.extractRelatedPersons(jurPerson)].filter(hasLocation));
+        if (ignoreList.length>0) {
+
+        }
+        const entrySet: Set<LocationPresent<Person>> = new Set([...this._extractRelatedWithGeoCheck(jurPerson)].filter(hasLocation));
         return this.ripePersonUtil.filterForGeoRelatedPersons(entrySet, new Set(ignoreList));
+    }
+
+    // this method won't extract persons from branch if root entity has no location
+    private _extractRelatedWithGeoCheck(jurPerson: JurPerson): Set<Person> {
+        const resultArr: Person[] = [];
+        if (jurPerson.owner&&jurPerson.owner.location) {
+            resultArr.push(jurPerson.owner);
+            resultArr.push(...this.ripePersonUtil.extractRelatedPersons(jurPerson.owner));
+        }
+        if (jurPerson.benOwner&&jurPerson.benOwner.location) {
+            resultArr.push(jurPerson.benOwner)
+            resultArr.push(...this.ripePersonUtil.extractRelatedPersons(jurPerson.benOwner));
+        }
+        return new Set(resultArr);
     }
 
     extractRelatedPersons(jurPerson: JurPerson): Set<Person> {
