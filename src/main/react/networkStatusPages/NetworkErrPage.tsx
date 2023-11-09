@@ -12,7 +12,7 @@ export default function ({refresh}: NetworkStatusPageProps) {
             <h4>Seems it's something wrong with your connection</h4>
             <h5>Try again later</h5>
             <h6>or</h6>
-            <button className={"network-status-page__refresh-btn btn btn-primary"}>Refresh</button>
+            <button onClick={refresh} className={"network-status-page__refresh-btn btn btn-primary"}>Refresh</button>
         </div>
     )
 }

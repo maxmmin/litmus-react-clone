@@ -55,9 +55,18 @@ const LitmusCore = ({children}: Props) => {
 
     const navigate = useNavigate();
 
-    useEffect(()=>{
+    async function checkConnection(): Promise<void> {
         appStateManager.enablePending();
-        testConnection().then(status=>setNetworkStatus(status)).finally(()=>appStateManager.disablePending());
+        try {
+            const status = await testConnection();
+            return setNetworkStatus(status);
+        } finally {
+            appStateManager.disablePending();
+        }
+    }
+
+    useEffect(()=>{
+        checkConnection();
     }, [])
 
     useEffect(()=>{
@@ -85,7 +94,7 @@ const LitmusCore = ({children}: Props) => {
     if (isRefreshing) return <Loader/>;
 
     if (networkStatus===NetworkStatus.NETWORK_ERR) {
-        return <NetworkErrPage refresh={async ()=>{}}/>
+        return <NetworkErrPage refresh={checkConnection}/>
     }
 
     if (networkStatus===NetworkStatus.INITIAL) return null;
