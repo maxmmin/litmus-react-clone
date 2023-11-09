@@ -48,6 +48,8 @@ const LitmusCore = ({children}: Props) => {
 
     const authentication = useAppSelector(state => state.authentication)
 
+    const userIdentity = useAppSelector(s=>s.userIdentity)
+
     const csrfLoader: CsrfTokenLoader = serviceContext.csrfTokenLoader;
 
     const navigate = useNavigate();

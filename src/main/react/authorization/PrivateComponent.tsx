@@ -24,10 +24,7 @@ export {ERROR_PAGE, NO_OUTPUT}
 
 const PrivateComponent = ({component, mode, requiredPermissions}: Props) => {
 
-    const authentication = useAppSelector(state => state.authentication)
-
     const user = useAppSelector(state => state.userIdentity)
-
 
     const isAuthorized: boolean = useMemo(()=>{
             if (user) {
@@ -35,8 +32,6 @@ const PrivateComponent = ({component, mode, requiredPermissions}: Props) => {
             }
             return false;
     },[user, requiredPermissions]);
-
-    if (!authentication) return <Navigate to="/sign-in"/>
 
     if (!isAuthorized) {return <>{forbiddenOutputs[mode]()}</>}
 
