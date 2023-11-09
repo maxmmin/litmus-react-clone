@@ -31,9 +31,10 @@ function App() {
                     <div className={"wrapper"}>
                         <Routes>
                             <Route path={"/"} element={
-                                <PrivateComponent mode={"ERROR_PAGE"} component={<RootScreen/>} requiredPermissions={[Permissions.DATA_READ]}/>
+                                <PrivateComponent mode={"NO_OUTPUT"} component={<RootScreen/>} requiredPermissions={[Permissions.DATA_READ]}/>
                             }>
                                 <Route path={appConfig.applicationMappings.root} element={<HomeScreen/>}/>
+
                                 <Route path={buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={
                                     <Explore/>
                                 }/>

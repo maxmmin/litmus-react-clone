@@ -90,7 +90,7 @@ class HttpErrorParser {
 
         if (error&&typeof error === "object") {
             if ("code" in error) {
-                code = ''+error;
+                code = error["code"] as string;
             }
         }
 
