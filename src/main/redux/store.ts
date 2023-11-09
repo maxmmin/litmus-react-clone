@@ -70,11 +70,7 @@ const rootReducer: typeof _rootReducer = (state, action) => {
         const resetState = {...defaultStoreState};
         resetState.appState = {...defaultStoreState.appState};
         return {
-            ...defaultStoreState,
-            appState: {
-                ...defaultStoreState.appState,
-                gmapsApiState: state!.appState!.gmapsApiState
-            }
+            ...defaultStoreState
         }
     } else {
         return _rootReducer(state,action);

@@ -6,19 +6,11 @@
 import Notification from "./Notification";
 
 
-type GmapsApiError = {
-    name: string; message: string; stack?: string | undefined; cause?: unknown;
-} | null
-
-export type GmapsApiResponse = {
-    isLoaded: boolean;
-    loadError: GmapsApiError | undefined;
-}
-
 type AppState = {
     isRefreshing: boolean,
     isHeaderMenuOpened: boolean,
-    gmapsApiState: GmapsApiResponse | null,
+    isOffline: boolean,
+    isServerDown: boolean,
     notifications: Notification[]
 }
 

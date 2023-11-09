@@ -5,7 +5,6 @@ import store from "../redux/store";
 import {useLoadScript} from "@react-google-maps/api";
 import appConfig, {gmapsRegionOptions} from "../config/appConfig";
 import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
-import {setMapsApiResponse} from "../redux/actions/AppStateAction";
 import UserIdentityManager from "../service/userIdentity/UserIdentityManager";
 import {LitmusServiceContext} from "./App";
 import CsrfTokenLoader from "../service/rest/CsrfTokenLoader";
@@ -43,17 +42,6 @@ const LitmusCore = ({children}: Props) => {
 
     const isRefreshing = useAppSelector(state => state.appState?.isRefreshing)||isCsrfLoading;
 
-    const {isLoaded, loadError} = useLoadScript({
-        googleMapsApiKey: appConfig.geoApiKey,
-        libraries: libraries,
-        language: gmapsRegionOptions.language!,
-        region: gmapsRegionOptions.region!,
-    });
-
-    useEffect(()=>{
-        store.dispatch(setMapsApiResponse({isLoaded: isLoaded, loadError: loadError?{...loadError}:null}))
-    }, [isLoaded, loadError])
-    // fix err if no internet
 
     useEffect(()=>{
         if (authentication?.isAuthenticated) {

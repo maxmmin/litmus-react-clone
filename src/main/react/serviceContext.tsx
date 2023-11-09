@@ -101,6 +101,7 @@ import BasicMapUtil from "../util/map/util/BasicMapUtil";
 import MapUtil from "../util/map/util/MapUtil";
 import BasicJurPersonMapTool from "../util/map/jurPerson/BasicJurPersonMapTool";
 import JurPersonMapTool from "../util/map/jurPerson/JurPersonMapTool";
+import ApplicationStateManagerImpl from "../service/appState/ApplicationStateManagerImpl";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -267,7 +268,7 @@ type AppStateContext = {
 }
 
 const appStateContext: AppStateContext = {
-    manager: new ApplicationStateManager()
+    manager: new ApplicationStateManagerImpl()
 }
 
 type NotificationContext = {

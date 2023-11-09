@@ -25,8 +25,6 @@ type LocationProps = {
 
 
 const SelectGeoComponent = ({location, setLocation}: LocationProps) => {
-    const isLoaded = useAppSelector(state => state.appState?.gmapsApiState?.isLoaded)
-    if (!isLoaded) return <div>Loading...</div>;
     return <GeoComponent location={location} setLocation={setLocation} />;
 }
 

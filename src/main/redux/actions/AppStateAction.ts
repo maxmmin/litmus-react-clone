@@ -1,5 +1,4 @@
 import {Action} from "redux";
-import {GmapsApiResponse} from "../types/applicationState/AppState";
 import {PayloadAction} from "@reduxjs/toolkit";
 import Notification from "../types/applicationState/Notification";
 
@@ -8,7 +7,6 @@ enum AppStateAction {
     REFRESH_OFF="REFRESH_OFF",
     HEADER_MENU_TOGGLE="HEADER_MENU_TOGGLE",
     HEADER_MENU_CLOSE="HEADER_MENU_CLOSE",
-    SET_MAPS_API_RESPONSE="SET_MAPS_API_RESPONSE",
     /**
      * NOTIFICATIONS
      */
@@ -25,12 +23,6 @@ export const switchAppState = (action: AppStateAction): Action<string> => {
     }
 }
 
-export const setMapsApiResponse = (payload: GmapsApiResponse): PayloadAction<GmapsApiResponse> => {
-    return {
-        type: AppStateAction.SET_MAPS_API_RESPONSE,
-        payload: payload
-    }
-}
 
 export const setNotifications = (notifications: Notification[]): PayloadAction<Notification[]> => {
     return {

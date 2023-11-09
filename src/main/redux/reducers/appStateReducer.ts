@@ -1,20 +1,18 @@
 import AppState, {
-    AppStateReducible,
-    GmapsApiResponse
+    AppStateReducible
 } from "../types/applicationState/AppState";
 import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateAction from "../actions/AppStateAction";
-import AuthAction from "../actions/AuthAction";
 import {PayloadAction} from "@reduxjs/toolkit";
 import Notification, {AppNotificationType, BasicNotification, notificationTypes} from "../types/applicationState/Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
-import {FulfilledThunkAction, PendingThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
-import ErrorResponse, {ApplicationError} from "../../rest/ErrorResponse";
+import {FulfilledThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
+import {ApplicationError} from "../../rest/ErrorResponse";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import GeneralAction from "../GeneralAction";
 
-export const initialAppState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, gmapsApiState: null, notifications: []}
+export const initialAppState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, notifications: [], isOffline: false, isServerDown: false}
 
 
 
@@ -39,12 +37,7 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
 
 
         case GeneralAction.RESET_DATA: {
-            return {...initialAppState, notifications: prevState.notifications, gmapsApiState: prevState.gmapsApiState}
-        }
-
-        case AppStateAction.SET_MAPS_API_RESPONSE: {
-            const gmapsResponseAction = action as PayloadAction<GmapsApiResponse>
-            return {...prevState, gmapsApiState: gmapsResponseAction.payload}
+            return {...initialAppState, notifications: prevState.notifications}
         }
 
         /**
