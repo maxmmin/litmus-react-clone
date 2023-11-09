@@ -141,18 +141,3 @@ const GeoComponent = ({location, setLocation}: LocationProps) => {
 
 
 export default SelectGeoComponent;
-
-// <GoogleMap
-//     center={location?{lat: location.latitude, lng: location.longitude}:defaultMapPosition}
-//     zoom={15}
-//     mapContainerClassName={"geo-modal-map-container"}
-//     onClick={async (place)=>{
-//         const results = await geocode({lat: place.latLng?.lat()!, lng: place.latLng?.lng()!})
-//         const result = results[0];
-//         setLocation({address: result.formatted_address, latitude: result.geometry.location.lat(), longitude: result.geometry.location.lng()})
-//     }}
-// >
-//     <>
-//         {location && <Marker position={{lat: location.latitude, lng: location.longitude}} />}
-//     </>
-// </GoogleMap>

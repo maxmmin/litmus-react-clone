@@ -53,8 +53,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
         }}
 
      )
-    // @todo 12.10
-    // now if method checkAndRefreshAuth wont be invoked no more u will stay in ui even there is 401 error. Need to write global custom error handler
+
 
     async refreshAuth(): Promise<void> {
         const meta: ThunkArg = {globalPending: false};
