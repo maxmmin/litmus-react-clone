@@ -9,7 +9,7 @@ import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import UserExplorationParams from "../../redux/types/exploration/human/user/UserExplorationParams";
 import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
-import deepCopy from "../../util/functional/deepCopy";
+import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 import UserExplorationApiService from "./api/human/user/UserExplorationApiService";
 import User from "../../model/human/user/User";
 import UserResponseDto from "../../rest/dto/user/UserResponseDto";
@@ -89,9 +89,9 @@ class UserExplorationService implements ExplorationService {
         try {
             const response: PagedData<User> = await this.exploreUponMode(params);
             const exploredData: EntityExplorationData<User, UserExplorationParams> = {requestParams: params, response: response}
-            return fulfillWithValue(deepCopy(exploredData), {notify: false});
+            return fulfillWithValue(serializableDeepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            return rejectWithValue(deepCopy(e), {notify: true});
+            return rejectWithValue(serializableDeepCopy(e), {notify: true});
         }
     }))
 

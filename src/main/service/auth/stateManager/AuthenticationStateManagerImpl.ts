@@ -7,7 +7,7 @@ import ErrorResponse from "../../../rest/ErrorResponse";
 import LoginPageDataActions, {LoginPageState} from "../../../redux/actions/LoginPageDataActions";
 import store, {AppDispatch} from "../../../redux/store";
 import {Action} from "redux";
-import deepCopy from "../../../util/functional/deepCopy";
+import serializableDeepCopy from "../../../util/functional/serializableDeepCopy";
 import AuthenticationStateManager from "./AuthenticationStateManager";
 
 class AuthenticationStateManagerImpl implements AuthenticationStateManager{
@@ -32,7 +32,7 @@ class AuthenticationStateManagerImpl implements AuthenticationStateManager{
     }
 
     public setLoginError (error: ErrorResponse) {
-        const action: PayloadAction<Partial<LoginPageState>> = {type: LoginPageDataActions.UPDATE_STATE, payload: {error: deepCopy(error)}}
+        const action: PayloadAction<Partial<LoginPageState>> = {type: LoginPageDataActions.UPDATE_STATE, payload: {error: serializableDeepCopy(error)}}
         this.dispatch(action)
     }
 }

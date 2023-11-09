@@ -2,7 +2,7 @@ import store, {AppDispatch} from "../../store";
 import AppStateAction from "../../actions/AppStateAction";
 import React from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
-import deepCopy from "../../../util/functional/deepCopy";
+import serializableDeepCopy from "../../../util/functional/serializableDeepCopy";
 import Notification, {BasicNotification, NotificationManager} from "./Notification";
 
 export class BasicNotificationManager implements NotificationManager {
@@ -22,7 +22,7 @@ export class BasicNotificationManager implements NotificationManager {
             console.log("invalid")
             notification.content = JSON.stringify(content);
         }
-        const action: PayloadAction<Notification> = {type: this.ADD_NOTIFICATION, payload: deepCopy(notification)};
+        const action: PayloadAction<Notification> = {type: this.ADD_NOTIFICATION, payload: serializableDeepCopy(notification)};
         this.dispatch(action)
     }
 

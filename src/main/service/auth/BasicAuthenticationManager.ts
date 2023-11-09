@@ -5,7 +5,7 @@ import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import {HttpStatus} from "../../rest/HttpStatus";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import AuthAction from "../../redux/actions/AuthAction";
-import deepCopy from "../../util/functional/deepCopy";
+import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "./stateManager/AuthenticationStateManagerImpl";
 import BasicAuthApiService from "./api/BasicAuthApiService";
@@ -49,7 +49,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
                     type: null
                 })
             }
-            return rejectWithValue(deepCopy(thrownErr), {notify: true});
+            return rejectWithValue(serializableDeepCopy(thrownErr), {notify: true});
         }}
 
      )
@@ -75,7 +75,7 @@ class BasicAuthenticationManager implements AuthenticationManager {
                 return fulfillWithValue(await this._refreshAuth(), {notify: false});
             }
             catch (e: any) {
-                return rejectWithValue(deepCopy(e), {notify: true})
+                return rejectWithValue(serializableDeepCopy(e), {notify: true})
             }
         }
     );

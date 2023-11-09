@@ -12,7 +12,7 @@ import {ApplicationError} from "../../rest/ErrorResponse";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import GeneralAction from "../GeneralAction";
 
-export const initialAppState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, notifications: [], isOffline: false, isServerDown: false}
+export const initialAppState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, notifications: []}
 
 
 

@@ -6,7 +6,7 @@ import UserIdentity from "../../redux/types/userIdentity/UserIdentity";
 import UserIdentityApiService from "./api/UserIdentityApiService";
 import UserIdentityManager from "./UserIdentityManager";
 import UserIdentityApiServiceImpl from "./api/UserIdentityApiServiceImpl";
-import deepCopy from "../../util/functional/deepCopy";
+import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 
 
 type RetrieveIdentityThunkArg = ThunkArg<{
@@ -33,10 +33,10 @@ class UserIdentityManagerImpl implements UserIdentityManager{
     public _retrieveIdentityThunk = createAsyncThunk<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig>(UserIdentityActions.RETRIEVE_IDENTITY, async ({identityService}, {fulfillWithValue, rejectWithValue})=>{
         try {
             const userIdentity: UserIdentity = await identityService.retrieveIdentity();
-            return fulfillWithValue(deepCopy(userIdentity), {notify: false});
+            return fulfillWithValue(serializableDeepCopy(userIdentity), {notify: false});
         }
         catch (e: unknown) {
-            return rejectWithValue(deepCopy(e), {notify: true});
+            return rejectWithValue(serializableDeepCopy(e), {notify: true});
         }
     })
 

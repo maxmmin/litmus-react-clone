@@ -4,7 +4,7 @@ import CreationTypedAction from "../actions/CreationTypedAction";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import {combineReducers} from "redux";
 import EntityCreationState from "../types/creation/EntityCreationState";
-import deepCopy from "../../util/functional/deepCopy";
+import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 import CreationCoreAction, {
     PersonCreationAction
 } from "../actions/CreationCoreAction";
@@ -54,7 +54,7 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
     }
 }
 
-const initialPersonCreationState: PersonCreationState = deepCopy(new BasicPersonCreationState());
+const initialPersonCreationState: PersonCreationState = serializableDeepCopy(new BasicPersonCreationState());
 
 export type PersonCreationStateReducible = PersonCreationState|undefined;
 
@@ -109,7 +109,7 @@ const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadA
         }
     }
 }
-const initialJurPersonState: JurPersonCreationState = deepCopy(new BasicJurPersonCreationState())
+const initialJurPersonState: JurPersonCreationState = serializableDeepCopy(new BasicJurPersonCreationState())
 
 export type JurPersonCreationStateReducible = JurPersonCreationState|undefined;
 const jurPersonCreationStateReducer: Reducer<JurPersonCreationStateReducible, PayloadAction<JurPerson>> = (prevState=initialJurPersonState, action) => {
@@ -133,7 +133,7 @@ const jurPersonCreationStateReducer: Reducer<JurPersonCreationStateReducible, Pa
     }
 }
 
-const initialUserCreationState: UserCreationState = deepCopy(new BasicUserCreationState());
+const initialUserCreationState: UserCreationState = serializableDeepCopy(new BasicUserCreationState());
 
 type UserCreationStateReducible = UserCreationState|undefined;
 

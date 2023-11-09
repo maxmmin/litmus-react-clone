@@ -10,7 +10,7 @@ import UserExplorationState, {BasicUserExplorationState} from "../types/explorat
 import {Entity} from "../../model/Entity";
 import EntityExplorationParams from "../types/exploration/EntityExplorationParams";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
-import deepCopy from "../../util/functional/deepCopy";
+import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 import GeneralAction from "../GeneralAction";
 import {ExplorationTypedAction} from "../actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../actions/ExplorationActions";
@@ -70,7 +70,7 @@ const entityExplorationReducer = <S extends EntityExplorationState<any, EntityEx
     }
 }
 
-const initialPersonExplorationState = deepCopy(new BasicPersonExplorationState());
+const initialPersonExplorationState = serializableDeepCopy(new BasicPersonExplorationState());
 
 type PersonExplorationStateReducible = PersonExplorationState | undefined;
 
@@ -96,7 +96,7 @@ const personExplorationReducer: Reducer<PersonExplorationStateReducible, Payload
 }
 
 
-const initialJurPersonExplorationState = deepCopy(new BasicJurPersonExplorationState())
+const initialJurPersonExplorationState = serializableDeepCopy(new BasicJurPersonExplorationState())
 
 type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
 
@@ -119,7 +119,7 @@ const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, P
     }
 }
 
-const initialUserExplorationState = deepCopy(new BasicUserExplorationState());
+const initialUserExplorationState = serializableDeepCopy(new BasicUserExplorationState());
 
 type UserExplorationStateReducible = UserExplorationState | undefined;
 

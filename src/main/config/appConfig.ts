@@ -97,9 +97,3 @@ const appConfig: AppConfig = {
 }
 
 export default appConfig;
-
-
-export const gmapsRegionOptions: {region: string, language: string} = {
-    region: "UA",
-    language: "ua"
-}

@@ -9,8 +9,6 @@ import Notification from "./Notification";
 type AppState = {
     isRefreshing: boolean,
     isHeaderMenuOpened: boolean,
-    isOffline: boolean,
-    isServerDown: boolean,
     notifications: Notification[]
 }
 

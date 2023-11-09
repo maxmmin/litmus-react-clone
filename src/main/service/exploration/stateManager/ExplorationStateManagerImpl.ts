@@ -6,7 +6,7 @@ import EntityExplorationParams from "../../../redux/types/exploration/EntityExpl
 import ExplorationMode from "../../../redux/types/exploration/ExplorationMode";
 import {AsyncThunkAction, PayloadAction} from "@reduxjs/toolkit";
 import ExplorationStateManager from "./ExplorationStateManager";
-import deepCopy from "../../../util/functional/deepCopy";
+import serializableDeepCopy from "../../../util/functional/serializableDeepCopy";
 import {ExplorationTypedAction} from "../../../redux/actions/ExplorationTypedAction";
 import {Entity} from "../../../model/Entity";
 
@@ -45,21 +45,21 @@ class ExplorationStateManagerImpl<E,P extends EntityExplorationParams> implement
     setState (state: EntityExplorationState<E, P>): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_STATE],
-            payload: deepCopy(state)
+            payload: serializableDeepCopy(state)
         })
     }
 
     setParams (params: EntityExplorationState<E, P>['params']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.SET_EXPLORATION_PARAMS],
-            payload: deepCopy(params)
+            payload: serializableDeepCopy(params)
         })
     }
 
     updateParams (params: Partial<EntityExplorationState<E, P>['params']>): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.UPDATE_EXPLORATION_PARAMS],
-            payload: deepCopy(params)
+            payload: serializableDeepCopy(params)
         })
     }
 
@@ -67,7 +67,7 @@ class ExplorationStateManagerImpl<E,P extends EntityExplorationParams> implement
     setData (data: EntityExplorationState<E, P>['data']): void {
         this.dispatch({
             type: this.actions[ExplorationCoreAction.RETRIEVE_DATA],
-            payload: deepCopy(data)
+            payload: serializableDeepCopy(data)
         })
     }
 

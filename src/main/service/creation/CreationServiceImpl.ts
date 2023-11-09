@@ -1,7 +1,7 @@
 import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import CreationService from "./CreationService";
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import deepCopy from "../../util/functional/deepCopy";
+import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
@@ -66,7 +66,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
             const requestDto: RequestDto = this.mapper.mapToRequestDto(emergingEntity);
             const responseDto: ResponseDto = await this.apiService.create(requestDto);
             const entity: E = this.mapper.mapToEntity(responseDto);
-            return fulfillWithValue(deepCopy(entity), {notify: true});
+            return fulfillWithValue(serializableDeepCopy(entity), {notify: true});
         } catch (e: unknown) {
             console.error(e)
             if (e instanceof ValidationError<unknown>) {
@@ -81,7 +81,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
                     }
                 }
             }
-            return rejectWithValue(deepCopy(e), {notify: true});
+            return rejectWithValue(serializableDeepCopy(e), {notify: true});
         }
     })
 
