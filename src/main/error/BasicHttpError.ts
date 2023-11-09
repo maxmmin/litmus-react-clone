@@ -70,10 +70,10 @@ class HttpErrorParser {
         return {status, error: error, detail: detail, properties: properties, type: type};
     }
 
-    static getErrorDescription(error: ErrorResponse): string {
+    static getErrorDescription(error: ApplicationError): string {
         let msg = "Помилка "+error.status;
 
-        let desc = error.detail||error.error||'невідома помилка';
+        let desc = error.detail||error.error||error.code||'невідома помилка';
 
         msg += `: ${desc}`
 

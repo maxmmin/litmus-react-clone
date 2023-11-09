@@ -13,7 +13,6 @@ import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
 import {checkNotEmpty} from "../../util/pureFunctions";
 import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
-import handleRequestError from "../creation/handleRequestError";
 
 
 import UnsupportedModeError from "./UnsupportedModeError";
@@ -92,7 +91,7 @@ class PersonExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<PreProcessedPerson, PersonExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            return rejectWithValue(handleRequestError(e), {notify: true});
+            return rejectWithValue(deepCopy(e), {notify: true});
         }
     }))
 

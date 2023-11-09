@@ -142,7 +142,7 @@ export type LitmusAsyncThunkConfig = {
     state: RootState
     dispatch: AppDispatch
     extra?: unknown
-    rejectValue: ErrorResponse
+    rejectValue: unknown
     serializedErrorType?: unknown
     pendingMeta?: unknown
     fulfilledMeta: FulfillMeta

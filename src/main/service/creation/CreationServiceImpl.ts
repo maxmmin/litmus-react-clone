@@ -2,7 +2,6 @@ import {LitmusAsyncThunkConfig, ThunkArg} from "../../redux/store";
 import CreationService from "./CreationService";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import deepCopy from "../../util/functional/deepCopy";
-import handleRequestError from "./handleRequestError";
 import DtoMapper from "../../rest/dto/dtoMappers/DtoMapper";
 import CreationApiService from "./api/CreationApiService";
 import CreationStateManager from "./stateManager/CreationStateManager";
@@ -82,7 +81,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
                     }
                 }
             }
-            return rejectWithValue(handleRequestError(e as any), {notify: true});
+            return rejectWithValue(deepCopy(e), {notify: true});
         }
     })
 

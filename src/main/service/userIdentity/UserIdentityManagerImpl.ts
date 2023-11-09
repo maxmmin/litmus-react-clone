@@ -2,12 +2,11 @@ import store, {AppDispatch, LitmusAsyncThunkConfig, ThunkArg} from "../../redux/
 import {Action} from "redux";
 import UserIdentityActions from "../../redux/actions/UserIdentityActions";
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
-import UserIdentity, {UserIdentityStateReducible} from "../../redux/types/userIdentity/UserIdentity";
+import UserIdentity from "../../redux/types/userIdentity/UserIdentity";
 import UserIdentityApiService from "./api/UserIdentityApiService";
 import UserIdentityManager from "./UserIdentityManager";
 import UserIdentityApiServiceImpl from "./api/UserIdentityApiServiceImpl";
 import deepCopy from "../../util/functional/deepCopy";
-import handleRequestError from "../creation/handleRequestError";
 
 
 type RetrieveIdentityThunkArg = ThunkArg<{
@@ -36,8 +35,8 @@ class UserIdentityManagerImpl implements UserIdentityManager{
             const userIdentity: UserIdentity = await identityService.retrieveIdentity();
             return fulfillWithValue(deepCopy(userIdentity), {notify: false});
         }
-        catch (e: any) {
-            return rejectWithValue(handleRequestError(e), {notify: true});
+        catch (e: unknown) {
+            return rejectWithValue(deepCopy(e), {notify: true});
         }
     })
 

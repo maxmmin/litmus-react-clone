@@ -10,7 +10,6 @@ import UserExplorationParams from "../../redux/types/exploration/human/user/User
 import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
 import deepCopy from "../../util/functional/deepCopy";
-import handleRequestError from "../creation/handleRequestError";
 import UserExplorationApiService from "./api/human/user/UserExplorationApiService";
 import User from "../../model/human/user/User";
 import UserResponseDto from "../../rest/dto/user/UserResponseDto";
@@ -18,7 +17,6 @@ import UnsupportedModeError from "./UnsupportedModeError";
 import UserExplorationStateManager from "./stateManager/user/UserExplorationStateManager";
 import UserExplorationStateManagerImpl from "./stateManager/user/UserExplorationStateManagerImpl";
 import UserExplorationApiServiceImpl from "./api/human/user/UserExplorationApiServiceImpl";
-import UserDtoMapper from "../../rest/dto/dtoMappers/UserDtoMapper";
 import UserDtoMapperImpl from "../../rest/dto/dtoMappers/UserDtoMapperImpl";
 
 type UserExplorationDtoMapper = DtoMapper<any, User, UserResponseDto, any>;
@@ -93,7 +91,7 @@ class UserExplorationService implements ExplorationService {
             const exploredData: EntityExplorationData<User, UserExplorationParams> = {requestParams: params, response: response}
             return fulfillWithValue(deepCopy(exploredData), {notify: false});
         } catch (e: unknown) {
-            return rejectWithValue(handleRequestError(e), {notify: true});
+            return rejectWithValue(deepCopy(e), {notify: true});
         }
     }))
 
