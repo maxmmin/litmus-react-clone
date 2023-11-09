@@ -23,7 +23,7 @@ import PersonExplorationApiService from "../../service/exploration/api/human/per
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
 import RelationshipsLinkObject from "../../util/person/RelationshipsLinkObject";
-import PersonPreviewInfoTable from "./PersonPreviewInfoTable";
+import PersonPreviewInfoTable from "./SimplePersonPreview";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -40,7 +40,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const [searchError, setSearchError] = useState<ApplicationError|null>(null);
 
-    const [person, setPerson] = useState<SimplePersonResponseDto|null>(null);
+    const [person, setPerson] = useState<Person|null>(null);
     /**
      * state of modal input pending
      */

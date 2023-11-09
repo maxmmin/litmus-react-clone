@@ -46,7 +46,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             middleName: dto.middleName,
             lastName: dto.lastName,
             dateOfBirth: null,
-            sex: Sex.UNKNOWN
+            sex: dto.sex
         };
     }
 

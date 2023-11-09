@@ -9,7 +9,7 @@ import {DateEntityTool} from "../../../../model/DateEntity";
 import {JurPersonCreationParams} from "../../../../redux/types/creation/JurPersonCreationState";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {
-    validate(model: JurPerson): JurPersonValidationObject {
+    validate(model: JurPersonCreationParams): JurPersonValidationObject {
         const bindingResult: JurPersonValidationObject = {
             dateOfRegistration: this.validateDateOfRegistration(model.dateOfRegistration),
             edrpou: this.validateEdrpou(model.edrpou),
@@ -17,11 +17,11 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
         return bindingResult;
     }
 
-    validateName(name: JurPerson['name']): string | null {
+    validateName(name: JurPersonCreationParams['name']): string | null {
         return hasContent(name)?null:"Ім'я не повинно бути пустим";
     }
 
-    validateEdrpou(edrpou: JurPerson['edrpou']): string | null {
+    validateEdrpou(edrpou: JurPersonCreationParams['edrpou']): string | null {
         if (!edrpou) return null;
         //@todo validation
         return null;

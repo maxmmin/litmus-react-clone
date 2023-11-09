@@ -90,7 +90,11 @@
 }
 
 .entity-container_person {
-  grid-template-columns: 30px 100px repeat(8, 1fr);
+  grid-template-columns: 30px 100px repeat(9, 1fr);
+}
+
+.entity-container_simple-person {
+  grid-template-columns: 30px 100px repeat(6, 1fr);
 }
 
 .entity-container__value_img {

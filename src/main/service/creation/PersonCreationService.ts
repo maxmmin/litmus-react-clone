@@ -6,7 +6,7 @@ import Sex from "../../model/human/person/Sex";
 import {SimplePersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
 
 export type RelationshipCreationParams = {
-    to: SimplePersonResponseDto,
+    to: Person,
     type: RelationType|null,
     note: string
 }

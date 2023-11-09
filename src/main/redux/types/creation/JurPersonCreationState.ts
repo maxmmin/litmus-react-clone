@@ -5,14 +5,15 @@ import {
     jurPersonDefaultValidationObject, JurPersonValidationObject
 } from "../../../service/creation/validation/jurPerson/JurPersonCreationValidationService";
 import {SimplePersonResponseDto} from "../../../rest/dto/person/PersonResponseDto";
+import Person from "../../../model/human/person/Person";
 
 export default interface JurPersonCreationState extends EntityCreationState<JurPersonCreationParams, JurPersonValidationObject> {
 
 }
 
 export type JurPersonCreationParams = Omit<JurPerson, 'id'|"owner"|"benOwner">&{
-    benOwner: SimplePersonResponseDto|null,
-    owner: SimplePersonResponseDto|null
+    benOwner: Person|null,
+    owner: Person|null
 }
 
 export const initialJurPersonCreationParams: JurPersonCreationParams = {
