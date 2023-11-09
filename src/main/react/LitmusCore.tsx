@@ -2,21 +2,25 @@ import Loader from "./loader/Loader";
 import React, {ReactNode, useContext, useEffect, useMemo, useState} from "react";
 import {useAppSelector} from "../redux/hooks";
 import appConfig from "../config/appConfig";
-import {Libraries} from "@react-google-maps/api/dist/utils/make-load-script-url";
 import UserIdentityManager from "../service/userIdentity/UserIdentityManager";
 import {LitmusServiceContext} from "./App";
 import CsrfTokenLoader from "../service/rest/CsrfTokenLoader";
 import AxiosApiManager from "../service/rest/AxiosApiManager";
 import {useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
+import NetworkErrPage from "./networkStatusPages/NetworkErrPage";
 
 type Props = {
     children: ReactNode
 }
 
 enum NetworkStatus {
-    INITIAL, ONLINE,SERVER_DOWN,OFFLINE
+    INITIAL, ONLINE,NETWORK_ERR
 }
+
+const networkErrorCodes = [
+    'ERR_NETWORK'
+];
 
 async function testConnection (): Promise<NetworkStatus> {
     try {
@@ -24,17 +28,15 @@ async function testConnection (): Promise<NetworkStatus> {
         return NetworkStatus.ONLINE;
     } catch (error: unknown) {
         if (error instanceof AxiosError) {
-            if (error.code === 'ECONNREFUSED') {
-                return NetworkStatus.SERVER_DOWN;
-            } else if (error.code === 'ENOTFOUND'||error.code === 'ECONNABORTED') {
-                return NetworkStatus.OFFLINE;
+            if (error.code && networkErrorCodes.includes(error.code.toUpperCase())) {
+                return NetworkStatus.NETWORK_ERR;
             } else return NetworkStatus.ONLINE;
         } else throw new Error("unexpected err");
     }
 }
 
 const LitmusCore = ({children}: Props) => {
-    const [networkStatus, setNetworkStatus] = useState<NetworkStatus>(NetworkStatus.ONLINE);
+    const [networkStatus, setNetworkStatus] = useState<NetworkStatus>(NetworkStatus.INITIAL);
 
     const isRefreshing = useAppSelector(state => state.appState?.isRefreshing);
 
@@ -77,12 +79,16 @@ const LitmusCore = ({children}: Props) => {
         }
     },[authentication, networkStatus])
 
+    if (isRefreshing) return <Loader/>;
+
+    if (networkStatus===NetworkStatus.NETWORK_ERR) {
+        return <NetworkErrPage refresh={async ()=>{}}/>
+    }
+
+    if (networkStatus===NetworkStatus.INITIAL) return null;
+
     return (
-        <>
-            {
-                isRefreshing ? <Loader/> : <>{children}</>
-            }
-        </>
+        <>{children}</>
     )
 
 }
