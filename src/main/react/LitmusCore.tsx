@@ -31,7 +31,10 @@ async function testConnection (): Promise<NetworkStatus> {
             if (error.code && networkErrorCodes.includes(error.code.toUpperCase())) {
                 return NetworkStatus.NETWORK_ERR;
             } else return NetworkStatus.ONLINE;
-        } else throw new Error("unexpected err");
+        } else {
+            console.error("unexpected err")
+            throw error;
+        }
     }
 }
 

@@ -1,7 +1,9 @@
 import {buildUrl} from "../util/pureFunctions";
 import {Entity} from "../model/Entity";
+import backendOptionsData, {BackendOptions} from "./backendOptionsData";
 
 type AppConfig = {
+    backendOptions: BackendOptions,
     entitiesPerPage: number,
     geoApiKey: string,
     entityDomains: Readonly<Record<Entity, string>>,
@@ -12,8 +14,9 @@ type AppConfig = {
     csrfErrCode: string
 }
 
-const host = "http://localhost:8081";
+const backendOptions: BackendOptions = backendOptionsData;
 
+const backendUrl = backendOptions.url;
 const apiRoot = `/api`
 const authApiRoot = `/auth`
 const entitiesPerPage = 50;
@@ -28,9 +31,9 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
 const personsRoot = buildUrl(apiRoot, entityDomains.PERSON);
 
 const serverMappings = Object.freeze({
-    apiHost: host,
+    apiHost: backendUrl,
     apiRoot: apiRoot,
-    mediaRootUrl: buildUrl(host,apiRoot, "/media/"),
+    mediaRootUrl: buildUrl(backendUrl,apiRoot, "/media/"),
     users: {
         root: buildUrl(apiRoot, entityDomains.USER)
     },
@@ -86,6 +89,7 @@ const applicationMappings = Object.freeze({
 })
 
 const appConfig: AppConfig = {
+    backendOptions: backendOptionsData,
     entitiesPerPage: entitiesPerPage,
     geoApiKey: geoApiKEy,
     entityDomains: entityDomains,
