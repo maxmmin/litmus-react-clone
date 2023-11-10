@@ -1,5 +1,5 @@
-import Person, {PreProcessedPerson, Relationship} from "../../../model/human/person/Person";
-import {buildImgUrl, buildUrl, hasLocation} from "../../../util/pureFunctions";
+import Person, {PreProcessedPerson} from "../../../model/human/person/Person";
+import {buildImgUrl, hasLocation} from "../../../util/pureFunctions";
 import "../../assets/styles/entityPage/entityPage.scss";
 import "../../assets/styles/entityPage/personPage.scss";
 import ImageSlider from "../ImageSlider";
@@ -13,6 +13,9 @@ import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import RelatedJurPersonComponent from "../RelatedJurPersonComponent";
 import PersonDataContainer from "./PersonDataContainer";
 import RelatedPersonComponent from "./RelatedPersonComponent";
+import PersonMapTool from "../../../util/map/person/PersonMapTool";
+import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
+import {GeoBtnStateCssAnchor} from "../GeoBtnStateCssAnchor";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson
@@ -54,6 +57,13 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
         } else return [];
     }, [person])
 
+    const mapTool: PersonMapTool = serviceContext.map.personMapTool;
+    const mapMetadata = useMemo<RelationsLabelsMetaData|null>(()=>{
+        if (person&&hasLocation(person)) {
+            return mapTool.buildEntityMetadata(person);
+        } else return null;
+    }, [person])
+
     if (isPending) return <Loader/>
 
     if (!person) throw new Error("no person was loaded");
@@ -83,10 +93,10 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                 }
             </section>
 
-            {displayedEntity && hasLocation(person) &&
+            {mapMetadata && displayedEntity &&
                 <section className={"person-page__map-section"}>
                     <div className="person-page__map-wrapper">
-                        <PersonMap person={person} currentlyDisplayed={displayedEntity}/>
+                        <PersonMap metadata={mapMetadata} currentlyDisplayed={displayedEntity}/>
                     </div>
                 </section>
             }
@@ -138,19 +148,19 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                 <h6 className='related-entity-container__header-title'>Бен. власник</h6>
                             </div>
                             {rootJurPersons.map(jurPerson=>{
+                                let geoBtnStateCssAnchor: GeoBtnStateCssAnchor = GeoBtnStateCssAnchor.NONE;
 
-                                let cssAnchor: string;
-                                if (person.location) {
-                                    cssAnchor = jurPerson.location?"":"disabled-geo"
-                                } else {
-                                    cssAnchor = "no-geo";
+                                if (person.location&&mapMetadata) {
+                                    if (jurPerson.location&&mapMetadata.drawnJurPersons.findIndex(j=>j.entity===jurPerson)>-1) {
+                                        geoBtnStateCssAnchor = GeoBtnStateCssAnchor.ENABLED;
+                                    } else geoBtnStateCssAnchor = GeoBtnStateCssAnchor.DISABLED;
                                 }
 
                                 return (<RelatedJurPersonComponent key={jurPerson.id}
                                                                    jurPerson={jurPerson}
-                                                                   cssAnchor={cssAnchor}
+                                                                   cssAnchor={geoBtnStateCssAnchor}
                                                                    geoBtnOnClick={(j,_e)=>{
-                                                                       if (hasLocation(j)) {
+                                                                       if (geoBtnStateCssAnchor===GeoBtnStateCssAnchor.ENABLED&&hasLocation(j)) {
                                                                            setDisplayedEntity({to: j});
                                                                        }
                                                                    }}
@@ -174,19 +184,19 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                 <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
                             </div>
                             {deepRelated.map(possibleRelated=>{
+                                let geoBtnStateCssAnchor: GeoBtnStateCssAnchor = GeoBtnStateCssAnchor.NONE;
 
-                                let cssAnchor: string;
-                                if (person.location) {
-                                    cssAnchor = possibleRelated.location?"":"disabled-geo"
-                                } else {
-                                    cssAnchor = "no-geo";
+                                if (person.location&&mapMetadata) {
+                                    if (possibleRelated.location&&mapMetadata.drawnPersons.findIndex(p=>p.entity===possibleRelated)>-1) {
+                                        geoBtnStateCssAnchor = GeoBtnStateCssAnchor.ENABLED;
+                                    } else geoBtnStateCssAnchor = GeoBtnStateCssAnchor.DISABLED;
                                 }
 
                                 return (<RelatedPersonComponent key={possibleRelated.id}
                                                                 person={possibleRelated}
-                                                                cssAnchor={cssAnchor}
+                                                                cssAnchor={geoBtnStateCssAnchor}
                                                                 geoBtnOnClick={(_p,_e)=>{
-                                                                    if (hasLocation(possibleRelated)) {
+                                                                    if (geoBtnStateCssAnchor===GeoBtnStateCssAnchor.ENABLED&&hasLocation(possibleRelated)) {
                                                                         setDisplayedEntity({to: possibleRelated});
                                                                     }
                                                                 }}
@@ -209,19 +219,19 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                     <h6 className='related-entity-container__header-title'>Бен. власник</h6>
                                 </div>
                                 {[...possibleRelatedJurPersons].map(jurPerson=>{
+                                    let geoBtnStateCssAnchor: GeoBtnStateCssAnchor = GeoBtnStateCssAnchor.NONE;
 
-                                    let cssAnchor: string;
-                                    if (person.location) {
-                                        cssAnchor = jurPerson.location?"":"disabled-geo"
-                                    } else {
-                                        cssAnchor = "no-geo";
+                                    if (person.location&&mapMetadata) {
+                                        if (jurPerson.location&&mapMetadata.drawnJurPersons.findIndex(j=>j.entity===jurPerson)>-1) {
+                                            geoBtnStateCssAnchor = GeoBtnStateCssAnchor.ENABLED;
+                                        } else geoBtnStateCssAnchor = GeoBtnStateCssAnchor.DISABLED;
                                     }
 
                                     return (<RelatedJurPersonComponent key={jurPerson.id}
                                                                        jurPerson={jurPerson}
-                                                                       cssAnchor={cssAnchor}
+                                                                       cssAnchor={geoBtnStateCssAnchor}
                                                                        geoBtnOnClick={(j,_e)=>{
-                                                                           if (hasLocation(j)) {
+                                                                           if (geoBtnStateCssAnchor===GeoBtnStateCssAnchor.ENABLED&&hasLocation(j)) {
                                                                                setDisplayedEntity({to: j});
                                                                            }
                                                                        }}
