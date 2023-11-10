@@ -10,12 +10,10 @@ import Loader from "../../loader/Loader";
 import {ServiceContext} from "../../serviceContext";
 import RootRelatedPersonComponent from "../RootRelatedPersonComponent";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
-import RelatedJurPersonComponent from "../RelatedJurPersonComponent";
 import PersonDataContainer from "./PersonDataContainer";
-import RelatedPersonComponent from "./RelatedPersonComponent";
 import PersonMapTool from "../../../util/map/person/PersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
-import {GeoBtnStateCssAnchor} from "../GeoBtnStateCssAnchor";
+import {mapRelatedJurPerson, mapRelatedPerson} from "../mapFunctions";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson
@@ -147,25 +145,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                 <h6 className='related-entity-container__header-title'>Власник</h6>
                                 <h6 className='related-entity-container__header-title'>Бен. власник</h6>
                             </div>
-                            {rootJurPersons.map(jurPerson=>{
-                                let geoBtnStateCssAnchor: GeoBtnStateCssAnchor = GeoBtnStateCssAnchor.NONE;
-
-                                if (person.location&&mapMetadata) {
-                                    if (jurPerson.location&&mapMetadata.drawnJurPersons.findIndex(j=>j.entity===jurPerson)>-1) {
-                                        geoBtnStateCssAnchor = GeoBtnStateCssAnchor.ENABLED;
-                                    } else geoBtnStateCssAnchor = GeoBtnStateCssAnchor.DISABLED;
-                                }
-
-                                return (<RelatedJurPersonComponent key={jurPerson.id}
-                                                                   jurPerson={jurPerson}
-                                                                   cssAnchor={geoBtnStateCssAnchor}
-                                                                   geoBtnOnClick={(j,_e)=>{
-                                                                       if (geoBtnStateCssAnchor===GeoBtnStateCssAnchor.ENABLED&&hasLocation(j)) {
-                                                                           setDisplayedEntity({to: j});
-                                                                       }
-                                                                   }}
-                                />)
-                            })}
+                            {rootJurPersons.map(j=>mapRelatedJurPerson(j,mapMetadata,setDisplayedEntity))}
                         </div>
                         :
                         <p>Пов'язані особи відсутні</p>
@@ -183,25 +163,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                 <h6 className='related-entity-container__header-title'>Пов'язані фізичні особи</h6>
                                 <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
                             </div>
-                            {deepRelated.map(possibleRelated=>{
-                                let geoBtnStateCssAnchor: GeoBtnStateCssAnchor = GeoBtnStateCssAnchor.NONE;
-
-                                if (person.location&&mapMetadata) {
-                                    if (possibleRelated.location&&mapMetadata.drawnPersons.findIndex(p=>p.entity===possibleRelated)>-1) {
-                                        geoBtnStateCssAnchor = GeoBtnStateCssAnchor.ENABLED;
-                                    } else geoBtnStateCssAnchor = GeoBtnStateCssAnchor.DISABLED;
-                                }
-
-                                return (<RelatedPersonComponent key={possibleRelated.id}
-                                                                person={possibleRelated}
-                                                                cssAnchor={geoBtnStateCssAnchor}
-                                                                geoBtnOnClick={(_p,_e)=>{
-                                                                    if (geoBtnStateCssAnchor===GeoBtnStateCssAnchor.ENABLED&&hasLocation(possibleRelated)) {
-                                                                        setDisplayedEntity({to: possibleRelated});
-                                                                    }
-                                                                }}
-                                />)
-                            })}
+                            {deepRelated.map(possibleRelated=>mapRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
                         </div>
 
                     </section>
@@ -218,25 +180,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                     <h6 className='related-entity-container__header-title'>Власник</h6>
                                     <h6 className='related-entity-container__header-title'>Бен. власник</h6>
                                 </div>
-                                {[...possibleRelatedJurPersons].map(jurPerson=>{
-                                    let geoBtnStateCssAnchor: GeoBtnStateCssAnchor = GeoBtnStateCssAnchor.NONE;
-
-                                    if (person.location&&mapMetadata) {
-                                        if (jurPerson.location&&mapMetadata.drawnJurPersons.findIndex(j=>j.entity===jurPerson)>-1) {
-                                            geoBtnStateCssAnchor = GeoBtnStateCssAnchor.ENABLED;
-                                        } else geoBtnStateCssAnchor = GeoBtnStateCssAnchor.DISABLED;
-                                    }
-
-                                    return (<RelatedJurPersonComponent key={jurPerson.id}
-                                                                       jurPerson={jurPerson}
-                                                                       cssAnchor={geoBtnStateCssAnchor}
-                                                                       geoBtnOnClick={(j,_e)=>{
-                                                                           if (geoBtnStateCssAnchor===GeoBtnStateCssAnchor.ENABLED&&hasLocation(j)) {
-                                                                               setDisplayedEntity({to: j});
-                                                                           }
-                                                                       }}
-                                    />)
-                                })}
+                                {[...possibleRelatedJurPersons].map(j=>mapRelatedJurPerson(j, mapMetadata,setDisplayedEntity))}
                             </div>
                     }
                 </section>

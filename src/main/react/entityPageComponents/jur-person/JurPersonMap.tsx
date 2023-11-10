@@ -1,5 +1,5 @@
 import React, {useContext, useMemo} from "react";
-import {LocationPresent} from "../../../util/map/MapPainter";
+import {LocationPresent, RelationsLabelsMetaData} from "../../../util/map/MapPainter";
 import RelationsMap, {CurrentlyDisplayed} from "../RelationsMap";
 import {ServiceContext} from "../../serviceContext";
 import {LitmusServiceContext} from "../../App";
@@ -8,15 +8,13 @@ import JurPersonMapTool from "../../../util/map/jurPerson/JurPersonMapTool";
 
 
 export type JurPersonMapProps = {
-    jurPerson: LocationPresent<JurPerson>,
+    metadata: RelationsLabelsMetaData,
     currentlyDisplayed: CurrentlyDisplayed
 }
 
 
-const JurPersonMap = ({jurPerson, currentlyDisplayed}: JurPersonMapProps) => {
-    const context: ServiceContext = useContext(LitmusServiceContext);
-    const mapTool: JurPersonMapTool = context.map.jurPersonMapTool;
-    const metadata = useMemo(()=>mapTool.buildEntityMetadata(jurPerson), [jurPerson])
+const JurPersonMap = ({metadata, currentlyDisplayed}: JurPersonMapProps) => {
+
     return (
         <RelationsMap metadata={metadata} currentlyDisplayed={currentlyDisplayed}/>
 )

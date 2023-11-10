@@ -17,8 +17,10 @@ import {noInfoMessage} from "../../../error/BasicHttpError";
 import PersonDataContainer from "../person/PersonDataContainer";
 import {buildPersonNavLink} from "../../../util/navLinkBuilders";
 import Person from "../../../model/human/person/Person";
-import RelatedPersonComponent from "../person/RelatedPersonComponent";
 import RelatedJurPersonComponent from "../RelatedJurPersonComponent";
+import {mapRelatedJurPerson, mapRelatedPerson} from "../mapFunctions";
+import JurPersonMapTool from "../../../util/map/jurPerson/JurPersonMapTool";
+import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
 
 function getRelatedGeoIconCssAnchor(jurPerson: JurPerson, person: Person, defaultAnchor: string = ""): string {
     if (jurPerson.location) {
@@ -35,10 +37,11 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
 
     const [displayedEntity, setDisplayedEntity] = useState<JurPersonMapProps['currentlyDisplayed']|null>(null)
 
-
     const serviceContext: ServiceContext = useContext(LitmusServiceContext);
 
     const bindService: JurPersonProcessor = serviceContext.jurPersonServices.jurPersonProcessor;
+
+    const mapTool: JurPersonMapTool = serviceContext.map.jurPersonMapTool;
 
     const ripeUtil = serviceContext.jurPersonServices.ripeJurPersonUtil;
 
@@ -60,6 +63,12 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
         if (jurPerson) {
             return [...ripeUtil.extractRelatedPersons(jurPerson)].filter(p=>jurPerson.owner!==p&&jurPerson.benOwner!==p);
         } else return [];
+    }, [jurPerson])
+
+    const mapMetadata = useMemo<RelationsLabelsMetaData|null>(()=>{
+        if (jurPerson&&hasLocation(jurPerson)) {
+            return mapTool.buildEntityMetadata(jurPerson);
+        } else return null;
     }, [jurPerson])
 
     if (isPending) return <Loader/>
@@ -111,10 +120,10 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                 }
             </section>
 
-            {displayedEntity && hasLocation(jurPerson) &&
+            {mapMetadata && displayedEntity && hasLocation(jurPerson) &&
                 <section className={"jur-person-page__map-section"}>
                     <div className="jur-person-page__map-wrapper">
-                        <JurPersonMap jurPerson={jurPerson} currentlyDisplayed={displayedEntity}/>
+                        <JurPersonMap metadata={mapMetadata} currentlyDisplayed={displayedEntity}/>
                     </div>
                 </section>
             }
@@ -186,25 +195,7 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                             <h6 className='related-entity-container__header-title'>Пов'язані фізичні особи</h6>
                             <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
                         </div>
-                        {deepRelated.map(possibleRelated=>{
-
-                            let cssAnchor: string;
-                            if (jurPerson.location) {
-                                cssAnchor = possibleRelated.location?"":"disabled-geo"
-                            } else {
-                                cssAnchor = "no-geo";
-                            }
-
-                            return (<RelatedPersonComponent key={possibleRelated.id}
-                                                            person={possibleRelated}
-                                                            cssAnchor={cssAnchor}
-                                                            geoBtnOnClick={(_p,_e)=>{
-                                                                if (hasLocation(possibleRelated)) {
-                                                                    setDisplayedEntity({to: possibleRelated});
-                                                                }
-                                                            }}
-                            />)
-                        })}
+                        {deepRelated.map(possibleRelated=>mapRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
                     </div>
 
                 </section>
@@ -221,25 +212,7 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                                 <h6 className='related-entity-container__header-title'>Власник</h6>
                                 <h6 className='related-entity-container__header-title'>Бен. власник</h6>
                             </div>
-                            {[...possibleRelatedJurPersons].map(jurPerson=>{
-
-                                let cssAnchor: string;
-                                if (jurPerson.location) {
-                                    cssAnchor = jurPerson.location?"":"disabled-geo"
-                                } else {
-                                    cssAnchor = "no-geo";
-                                }
-
-                                return (<RelatedJurPersonComponent key={jurPerson.id}
-                                                                   jurPerson={jurPerson}
-                                                                   cssAnchor={cssAnchor}
-                                                                   geoBtnOnClick={(j,_e)=>{
-                                                                       if (hasLocation(j)) {
-                                                                           setDisplayedEntity({to: j});
-                                                                       }
-                                                                   }}
-                                />)
-                            })}
+                            {[...possibleRelatedJurPersons].map(jurPerson=>mapRelatedJurPerson(jurPerson,mapMetadata,setDisplayedEntity))}
                         </div>
                     }
                 </section>

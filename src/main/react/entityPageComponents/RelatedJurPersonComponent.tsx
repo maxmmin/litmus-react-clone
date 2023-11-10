@@ -7,6 +7,7 @@ import {DashedUserIcon, GeoLocationPinDropIcon} from "../assets/icons";
 import {NavLink} from "react-router-dom";
 import {Entity} from "../../model/Entity";
 import getFullName from "../../util/functional/getFullName";
+import {valueOrMessage} from "../../util/functional/valueOrNull";
 
 type RelatedJurPersonProps = {
     jurPerson: JurPerson,
@@ -32,8 +33,8 @@ export default function ({jurPerson, cssAnchor="", containerOnClick, geoBtnOnCli
                 </div>
                 <p className="related-entity-container__entity-name"><NavLink className={"related-entity-container__link link"} to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON],jurPerson.id.toString())}>{jurPerson.name}</NavLink></p>
             </div>
-            <p className="related-entity-container__plain-text related-entity-container__plain-text_owner">{ownerLink}</p>
-            <p className="related-entity-container__plain-text related-entity-container__plain-text_ben-owner">{benOwnerLink}</p>
+            <p className="related-entity-container__plain-text related-entity-container__plain-text_owner">{valueOrMessage(ownerLink)}</p>
+            <p className="related-entity-container__plain-text related-entity-container__plain-text_ben-owner">{valueOrMessage(benOwnerLink)}</p>
             <div className="related-entity-container__location-btn-wrapper" onClick={
                 geoBtnOnClick&&(e=>geoBtnOnClick(jurPerson, e))
             }>
