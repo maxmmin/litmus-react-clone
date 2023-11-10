@@ -105,7 +105,8 @@ export default class BasicMapUtil implements MapUtil {
         const data: Feature<LineString>[] = [];
         persons.forEach(person=>{
             const paintedJurPersons: Set<JurPerson> = new Set<JurPerson>();
-            person.ownedJurPersons.forEach(j=>{
+            const jurPersonSet: Set<JurPerson> = new Set([...person.ownedJurPersons, ...person.benOwnedJurPersons]);
+            jurPersonSet.forEach(j=>{
                 if (j.location&&!paintedJurPersons.has(j)) {
                     const pairCoordinates: [[number, number],[number, number]] = [transformLocationToCoordinates(person.location),
                         transformLocationToCoordinates(j.location)]
