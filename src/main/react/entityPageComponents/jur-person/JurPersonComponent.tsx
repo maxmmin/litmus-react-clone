@@ -30,6 +30,23 @@ function getRelatedGeoIconCssAnchor(jurPerson: JurPerson, person: Person, defaul
     } else return "no-geo"
 }
 
+function getPossibleRelatedJurPersons (jurPerson: JurPerson): Set<JurPerson> {
+    const jurPersons: JurPerson[] = ((jurPerson.owner?.relationships||[]).concat(jurPerson.benOwner?.relationships||[])
+        .flatMap(r=>r.to.ownedJurPersons.concat(r.to.benOwnedJurPersons))||[])
+        .filter(jp=>jp!==jurPerson);
+    if (jurPerson.owner) {
+        [...jurPerson.owner.ownedJurPersons, ...jurPerson.owner.benOwnedJurPersons].forEach(j=>{
+            if (j!==jurPerson) jurPersons.push(j);
+        })
+    }
+    if (jurPerson.benOwner) {
+        [...jurPerson.benOwner.ownedJurPersons, ...jurPerson.benOwner.benOwnedJurPersons].forEach(j=>{
+            if (j!==jurPerson) jurPersons.push(j);
+        })
+    }
+    return new Set<JurPerson>(jurPersons);
+}
+
 export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PreProcessedJurPerson}) {
     const [isPending, setPending] = useState<boolean>(true);
 
@@ -71,6 +88,13 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
         } else return null;
     }, [jurPerson])
 
+    const possibleRelatedJurPersons: Set<JurPerson> = useMemo(()=>{
+        if (jurPerson) {
+            return getPossibleRelatedJurPersons(jurPerson);
+        } else return new Set;
+    }, [jurPerson]);
+
+
     if (isPending) return <Loader/>
 
     if (!jurPerson) throw new Error("no person was loaded");
@@ -81,12 +105,6 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
     const benOwnerLink = jurPerson.benOwner&&buildPersonNavLink(jurPerson.benOwner.id, getFullName(jurPerson.benOwner));
 
     const formattedDateOfRegistration = jurPerson.dateOfRegistration&&DateEntityTool.getTool(jurPerson.dateOfRegistration).buildStringDate();
-
-    const possibleRelatedJurPersons: Set<JurPerson> = new Set(
-        ((jurPerson.owner?.relationships||[]).concat(jurPerson.benOwner?.relationships||[])
-            .flatMap(r=>r.to.ownedJurPersons.concat(r.to.benOwnedJurPersons))||[])
-            .filter(jp=>jp!==jurPerson)
-    );
 
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_jur-person"}>

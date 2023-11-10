@@ -69,7 +69,6 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
     }
 
     mapToRipeJurPerson(exploredEntityDto: Omit<PreProcessedJurPerson|EmbedJurPersonResponseDto, 'owner'|'benOwner'>, owner: Person|null, benOwner: Person|null): JurPerson {
-        console.log(exploredEntityDto);
 
         const media: Media = {
             mainImage: exploredEntityDto.media.mainImage,
