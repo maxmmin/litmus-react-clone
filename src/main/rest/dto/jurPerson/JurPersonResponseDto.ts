@@ -7,7 +7,7 @@ interface JurPersonResponseDto {
     media: MediaResponseDto;
     name: string;
     edrpou: string|null;
-    dateOfRegistration: string;
+    dateOfRegistration: string|null;
     owner: RelatedPersonResponseDto | null;
     benOwner: RelatedPersonResponseDto | null;
     location: GeoLocation | null;

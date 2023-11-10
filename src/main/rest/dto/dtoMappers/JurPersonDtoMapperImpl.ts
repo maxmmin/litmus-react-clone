@@ -1,4 +1,4 @@
-import {DateEntityTool} from "../../../model/DateEntity";
+import DateEntity, {DateEntityTool} from "../../../model/DateEntity";
 import {hasContent} from "../../../util/functional/isEmpty";
 import JurPersonRequestDto from "../jurPerson/JurPersonRequestDto";
 import {JurPerson, PreProcessedJurPerson} from "../../../model/jurPerson/JurPerson";
@@ -68,10 +68,19 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
         return jurPerson;
     }
 
-    mapToRipeJurPerson(exploredEntityDto: EmbedJurPersonResponseDto, owner: Person|null, benOwner: Person|null): JurPerson {
+    mapToRipeJurPerson(exploredEntityDto: Omit<PreProcessedJurPerson|EmbedJurPersonResponseDto, 'owner'|'benOwner'>, owner: Person|null, benOwner: Person|null): JurPerson {
+        console.log(exploredEntityDto);
+
         const media: Media = {
             mainImage: exploredEntityDto.media.mainImage,
             images: exploredEntityDto.media.images||[]
+        }
+
+        let dob: DateEntity|null = null;
+        if (exploredEntityDto.dateOfRegistration) {
+            if (typeof exploredEntityDto.dateOfRegistration === 'string') {
+                dob = DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration);
+            } else dob = exploredEntityDto.dateOfRegistration;
         }
 
         const jurPerson: JurPerson = {
@@ -80,7 +89,7 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             owner: owner,
             benOwner: benOwner,
             location: exploredEntityDto.location,
-            dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
+            dateOfRegistration: dob,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:"",
             media: media
         }
