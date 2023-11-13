@@ -11,6 +11,7 @@ import UserExplorationStateManagerImpl
 import PersonExplorationStateManagerImpl
     from "../../../service/exploration/stateManager/person/PersonExplorationStateManagerImpl";
 import InputError from "../../sharedComponents/InputError";
+import {getEntityExplorationStateManager} from "../../../util/getEntityExplorationService";
 
 
 const FindByFullNameGroup = () => {
@@ -19,16 +20,8 @@ const FindByFullNameGroup = () => {
 
     const stateManager: HumanExplorationStateManager<Human, HumanExplorationParams>|undefined = useMemo(()=>{
         if (exploredEntity) {
-            switch (exploredEntity) {
-                case Entity.USER: {
-                    return new UserExplorationStateManagerImpl();
-                }
-                case Entity.PERSON: {
-                    return new PersonExplorationStateManagerImpl();
-                }
-                default: throw new Error("unsupported entityPageComponents")
-            }
-        }
+            return getEntityExplorationStateManager(exploredEntity) as HumanExplorationStateManager<Human, HumanExplorationParams>;
+        };
     }, [exploredEntity])
 
     const explorationParams = useAppSelector(state => stateManager?.getExplorationParams());

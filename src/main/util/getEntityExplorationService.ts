@@ -27,7 +27,7 @@ entityExplorationStateManagerMap.set(Entity.USER, serviceContext.exploration.sta
 export function getEntityExplorationStateManager(entity: Entity): ExplorationStateManager<unknown,EntityExplorationParams> {
     const manager:  ExplorationStateManager<unknown,EntityExplorationParams>|undefined =  entityExplorationStateManagerMap.get(entity)
     if (!manager) {
-        throw new Error("unknown entityPageComponents");
+        throw new Error("unknown entity");
     } else {
         return manager;
     }
