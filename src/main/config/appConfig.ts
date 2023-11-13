@@ -30,17 +30,25 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
 
 const personsRoot = buildUrl(apiRoot, entityDomains.PERSON);
 
+const relativeMappings = {
+    getByFullName: "/find/full-name",
+    media: "/media",
+    findByIdList: "/find/id-list"
+}
+
 const serverMappings = Object.freeze({
     apiHost: backendUrl,
     apiRoot: apiRoot,
-    mediaRootUrl: buildUrl(backendUrl,apiRoot, "/media/"),
+    mediaRootUrl: buildUrl(backendUrl,apiRoot, relativeMappings.media),
+    relativeMappings: relativeMappings,
     users: {
         root: buildUrl(apiRoot, entityDomains.USER)
     },
     persons: {
         root: personsRoot,
-        getByIdList: buildUrl(personsRoot, "/id-list"),
-        relationships: (id: string)=>buildUrl(personsRoot, id, "/personProcessing")
+        getByFullName: buildUrl(personsRoot, relativeMappings.getByFullName),
+        getByIdList: buildUrl(personsRoot, relativeMappings.findByIdList),
+        relationships: (id: string)=>buildUrl(personsRoot, id, "/relationships")
     },
     jurPersons: {
         root: buildUrl(apiRoot, entityDomains.JUR_PERSON)

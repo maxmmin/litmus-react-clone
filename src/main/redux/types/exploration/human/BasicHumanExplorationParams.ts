@@ -4,10 +4,10 @@ abstract class BasicHumanExplorationParams implements HumanExplorationParams {
     abstract readonly modeId: number;
     abstract readonly supportedModesIdList: number[];
     readonly i: number = 0;
-    readonly id: string | null = null;
-    readonly firstName: string | null = null;
-    readonly middleName: string | null = null;
-    readonly lastName: string | null = null;
+    readonly id: string = "";
+    readonly firstName: string = "";
+    readonly middleName: string = "";
+    readonly lastName: string = "";
 
 
     protected constructor(i?: number, id?: string, firstName?: string, middleName?: string, lastName?: string) {

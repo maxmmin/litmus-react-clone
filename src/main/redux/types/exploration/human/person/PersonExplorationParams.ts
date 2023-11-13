@@ -2,7 +2,7 @@ import ExplorationMode from "../../ExplorationMode";
 import BasicHumanExplorationParams from "../BasicHumanExplorationParams";
 import HumanExplorationParams from "../HumanExplorationParams";
 
-interface PersonExplorationParams extends HumanExplorationParams {};
+interface PersonExplorationParams extends HumanExplorationParams {}
 
 export class BasicPersonExplorationParams extends BasicHumanExplorationParams {
     public static supportedModesIdList: number[] = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME]).map(mode => mode.id);

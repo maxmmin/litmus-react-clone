@@ -8,8 +8,8 @@ export default class BasicJurPersonExplorationParams implements JurPersonExplora
 
     readonly modeId: number = this.supportedModesIdList[0];
     readonly i: number = 0;
-    readonly id: string | null = null;
-    readonly name: string | null = null;
+    readonly id: string = "";
+    readonly name: string = "";
 
 
     constructor(mode?: ExplorationMode, i?: number, id?: string, name?: string) {

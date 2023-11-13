@@ -8,6 +8,12 @@ export interface FullName {
     lastName: string
 }
 
+export interface FullNameExploration {
+    firstName: string,
+    middleName: string,
+    lastName: string
+}
+
 export interface FullNameCreationParams {
     firstName: string,
     middleName: string,

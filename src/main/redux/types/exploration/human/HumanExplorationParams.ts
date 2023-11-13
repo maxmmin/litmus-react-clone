@@ -1,7 +1,5 @@
 import EntityExplorationParams from "../EntityExplorationParams";
+import {FullNameExploration} from "../../../../model/human/Human";
 
-export default interface HumanExplorationParams extends EntityExplorationParams {
-    firstName: string | null,
-    middleName: string | null,
-    lastName: string | null
+export default interface HumanExplorationParams extends EntityExplorationParams, FullNameExploration {
 }

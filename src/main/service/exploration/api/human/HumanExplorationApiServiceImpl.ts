@@ -2,7 +2,10 @@ import HumanExplorationApiService from "./HumanExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import BasicEntityLookupService from "../BasicExplorationApiService";
 import {isEmpty} from "../../../../util/functional/isEmpty";
-import {FullName} from "../../../../model/human/Human";
+import {FullNameExploration} from "../../../../model/human/Human";
+import {buildUrl} from "../../../../util/pureFunctions";
+import appConfig from "../../../../config/appConfig";
+
 
 export default class HumanExplorationApiServiceImpl<P extends object> extends BasicEntityLookupService<P> implements HumanExplorationApiService<P> {
 
@@ -10,22 +13,11 @@ export default class HumanExplorationApiServiceImpl<P extends object> extends Ba
         super(apiMapping);
     }
 
-    async findByFullName(fullName: Partial<FullName>, i: number): Promise<PagedData<P>> {
-        const params: Partial<{firstName: string, middleName: string, lastName: string}>&{i: number} = {i};
+    async findByFullName(fullName: FullNameExploration, i: number): Promise<PagedData<P>> {
+        const params: {i: number} = {i, ...fullName};
 
-        if (fullName.firstName&&!isEmpty(fullName.firstName)) {
-            params.firstName = fullName.firstName;
-        }
-
-        if (fullName.middleName&&!isEmpty(fullName.middleName)) {
-            params.middleName = fullName.middleName;
-        }
-
-        if (fullName.lastName&&!isEmpty(fullName.lastName)) {
-            params.lastName = fullName.lastName;
-        }
-
-        const response = await this.apiInstance.get<PagedData<P>>(this.apiUrl, {
+        const response = await
+            this.apiInstance.get<PagedData<P>>(buildUrl(this.apiUrl, appConfig.serverMappings.relativeMappings.getByFullName), {
             params: params
         })
 

@@ -1,12 +1,10 @@
 import {useAppSelector} from "../../redux/hooks";
-import {RootState} from "../../redux/store";
 import {Entity} from "../../model/Entity";
 import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
 import React from "react";
 import {Form} from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import ExplorationInputGroupByMode from "./ExplorationInputGroupByMode";
-import PersonExplorationParams from "../../redux/types/exploration/human/person/PersonExplorationParams";
 import {getEntityExplorationStateManager} from "../../util/getEntityExplorationService";
 
 export type ExplorationFormProps = {
