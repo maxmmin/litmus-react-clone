@@ -35,14 +35,13 @@ const FindByFullNameGroup = () => {
 
     const {firstName, middleName, lastName} = explorationParams||{};
 
-
     if (!stateManager) return null;
 
     return (
         <>
             <Form.Group className="mb-3">
                 <Form.Label>Прізвище</Form.Label>
-                <input autoComplete={"new-password"} value={lastName} onChange={e=>{
+                <input required={true} autoComplete={"new-password"} value={lastName} onChange={e=>{
                     stateManager.updateParams({lastName: e.currentTarget.value})
                 }} className={`last-name form-control`}  type="text" placeholder="Введіть прізвище"
                 onKeyDown={keyPressHandler}

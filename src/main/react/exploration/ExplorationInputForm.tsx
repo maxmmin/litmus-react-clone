@@ -8,7 +8,7 @@ import ExplorationInputGroupByMode from "./ExplorationInputGroupByMode";
 import {getEntityExplorationStateManager} from "../../util/getEntityExplorationService";
 
 export type ExplorationFormProps = {
-    exploredEntity: Entity, isPending: boolean, onSubmit: (e: React.MouseEvent<HTMLButtonElement>)=>void
+    exploredEntity: Entity, isPending: boolean, onSubmit: (e: React.FormEvent)=>void
 }
 
 function ExplorationInputForm ({exploredEntity, isPending, onSubmit}: ExplorationFormProps): JSX.Element|null {
@@ -24,10 +24,10 @@ function ExplorationInputForm ({exploredEntity, isPending, onSubmit}: Exploratio
 
     return (
         <div className="explore-page__input-group-container">
-            <Form className={"explore-input-group"}>
+            <Form onSubmit={onSubmit} className={"explore-input-group"}>
                 <ExplorationInputGroupByMode mode={explorationMode}/>
 
-                <Button disabled={isPending} onClick={onSubmit} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
+                <Button disabled={isPending} type={"submit"} variant="primary" className={`w-100 py-2 mt-3 litmus-primary-btn`}>
                     {isPending?"Завантаження...":"Пошук"}
                 </Button>
             </Form>

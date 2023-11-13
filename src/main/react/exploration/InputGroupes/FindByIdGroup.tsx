@@ -21,8 +21,10 @@ const FindByIdGroup = () => {
         <>
             <Form.Group className="mb-3">
                 <Form.Label>ID</Form.Label>
-                <input autoComplete={"new-password"} onChange={e=>{
-                    stateManager.updateParams({id: e.currentTarget.value});
+                <input required={true} pattern="[0-9]+" autoComplete={"new-password"} onChange={e=>{
+                    if (!isNaN(+e.currentTarget.value)) {
+                        stateManager.updateParams({id: e.currentTarget.value});
+                    }
                 }} className={`id form-control`} value={id?id:''} type="text" placeholder="Введіть id"
                 onKeyDown={keyPressHandler}
                 />
