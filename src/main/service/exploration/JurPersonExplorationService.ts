@@ -11,7 +11,6 @@ import {ExplorationTypedAction} from "../../redux/actions/ExplorationTypedAction
 import {ExplorationCoreAction} from "../../redux/actions/ExplorationActions";
 import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 import BasicJurPersonExplorationParams from "../../redux/types/exploration/jurPerson/BasicJurPersonExplorationParams";
-import jurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
 import {PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
 import JurPersonResponseDto from "../../rest/dto/jurPerson/JurPersonResponseDto";
 import JurPersonExplorationApiService from "./api/jurPerson/JurPersonExplorationApiService";
@@ -21,8 +20,6 @@ import JurPersonExplorationStateManager from "./stateManager/jurPerson/JurPerson
 import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
-import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
-import {PreProcessedPerson} from "../../model/human/person/Person";
 
 type JurPersonExplorationMapper = DtoMapper<any, PreProcessedJurPerson, JurPersonResponseDto,any>
 
@@ -60,11 +57,19 @@ class JurPersonExplorationService implements ExplorationService {
         return {...pagedData, content: jurPersonArray}
     }
 
+    private exploreByName: JurPersonExplorationCallbackType = async () => {
+        const params = this.stateManager.getExplorationParams();
+        const pagedData: PagedData<JurPersonResponseDto> = await this.service.findByName(params.name, params.i);
+        const jurPersonArray: PreProcessedJurPerson[] = pagedData.content.map(jurPerson=>this.mapper.mapToEntity(jurPerson));
+        return {...pagedData, content: jurPersonArray}
+    }
+
     private callbackMap: Map<ExplorationMode, JurPersonExplorationCallbackType>
         = new Map<ExplorationMode, JurPersonExplorationCallbackType>(
         [
             [ExplorationMode.BY_ID, this.exploreById],
-            [ExplorationMode.FIND_ALL, this.exploreAll]
+            [ExplorationMode.FIND_ALL, this.exploreAll],
+            [ExplorationMode.BY_JUR_NAME, this.exploreByName]
         ],
     )
 

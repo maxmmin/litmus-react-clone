@@ -36,6 +36,8 @@ const relativeMappings = {
     findByIdList: "/find/id-list"
 }
 
+const jpRoot = buildUrl(apiRoot, entityDomains.JUR_PERSON)
+
 const serverMappings = Object.freeze({
     apiHost: backendUrl,
     apiRoot: apiRoot,
@@ -51,7 +53,8 @@ const serverMappings = Object.freeze({
         relationships: (id: string)=>buildUrl(personsRoot, id, "/relationships")
     },
     jurPersons: {
-        root: buildUrl(apiRoot, entityDomains.JUR_PERSON)
+        root: jpRoot,
+        getByName: buildUrl(jpRoot, "/find/name")
     },
     auth: {
         refreshTokens: buildUrl(authApiRoot, "/refresh"),

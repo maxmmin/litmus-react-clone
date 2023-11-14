@@ -25,12 +25,16 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPer
     }
 
 
-    async findByName(name: string): Promise<PagedData<JurPersonResponseDto>> {
+    async findByName(name: string, i: number): Promise<PagedData<JurPersonResponseDto>> {
 
-        const params: {name?: string} = {}
-        if (name) params.name = name;
+        const params = {
+            i: i
+        }
 
-        const response = await this.apiInstance.get<PagedData<JurPersonResponseDto>>(this.apiUrl, {
+        const url = buildUrl(appConfig.serverMappings.jurPersons.getByName, encodeURIComponent(name));
+
+        const response = await this.apiInstance.get<PagedData<JurPersonResponseDto>>(
+            url, {
             params: params
         });
 

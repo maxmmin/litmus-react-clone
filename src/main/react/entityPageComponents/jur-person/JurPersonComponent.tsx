@@ -17,7 +17,6 @@ import {noInfoMessage} from "../../../error/BasicHttpError";
 import PersonDataContainer from "../person/PersonDataContainer";
 import {buildPersonNavLink} from "../../../util/navLinkBuilders";
 import Person from "../../../model/human/person/Person";
-import RelatedJurPersonComponent from "../RelatedJurPersonComponent";
 import {mapRelatedJurPerson, mapRelatedPerson} from "../mapFunctions";
 import JurPersonMapTool from "../../../util/map/jurPerson/JurPersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";

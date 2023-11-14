@@ -1,4 +1,4 @@
-import {JurPerson, PreProcessedJurPerson} from "../../../../model/jurPerson/JurPerson";
+import {PreProcessedJurPerson} from "../../../../model/jurPerson/JurPerson";
 import BasicJurPersonExplorationParams from "./BasicJurPersonExplorationParams";
 import EntityExplorationState from "../EntityExplorationState";
 import EntityExplorationData from "../EntityExplorationData";

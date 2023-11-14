@@ -1,5 +1,5 @@
 import ExplorationStateManagerImpl from "../ExplorationStateManagerImpl";
-import {JurPerson, PreProcessedJurPerson} from "../../../../model/jurPerson/JurPerson";
+import {PreProcessedJurPerson} from "../../../../model/jurPerson/JurPerson";
 import store from "../../../../redux/store";
 import {ExplorationTypedAction} from "../../../../redux/actions/ExplorationTypedAction";
 import JurPersonExplorationStateManager from "./JurPersonExplorationStateManager";

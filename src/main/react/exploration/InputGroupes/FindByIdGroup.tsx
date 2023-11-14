@@ -25,7 +25,7 @@ const FindByIdGroup = () => {
                     if (!isNaN(+e.currentTarget.value)) {
                         stateManager.updateParams({id: e.currentTarget.value});
                     }
-                }} className={`id form-control`} value={id?id:''} type="text" placeholder="Введіть id"
+                }} className={`id form-control`} value={id} type="text" placeholder="Введіть id"
                 onKeyDown={keyPressHandler}
                 />
             </Form.Group>

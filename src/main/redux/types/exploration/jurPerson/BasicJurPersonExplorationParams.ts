@@ -1,8 +1,11 @@
-import ExplorationMode from "../ExplorationMode";
+import ExplorationMode, {basicExplorationModes} from "../ExplorationMode";
 import JurPersonExplorationParams from "./JurPersonExplorationParams";
 
 export default class BasicJurPersonExplorationParams implements JurPersonExplorationParams {
-    public static readonly supportedModesIdList: number[] = Array.from([ExplorationMode.FIND_ALL, ExplorationMode.BY_ID]).map(mode=>mode.id);
+    public static readonly supportedModesIdList: number[] = Array.from([
+        ...basicExplorationModes,
+        ExplorationMode.BY_JUR_NAME
+    ]).map(mode=>mode.id);
 
     public readonly supportedModesIdList: number[] = BasicJurPersonExplorationParams.supportedModesIdList;
 

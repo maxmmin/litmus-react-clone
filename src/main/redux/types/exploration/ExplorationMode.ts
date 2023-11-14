@@ -1,5 +1,3 @@
-import PersonExplorationParams from "./human/person/PersonExplorationParams";
-
 /**
  * class used for fast access for all exploration modes.
  */
@@ -8,6 +6,7 @@ export default class ExplorationMode {
     private static readonly modes: ExplorationMode[] = []
 
     public static readonly BY_FULL_NAME: ExplorationMode = new ExplorationMode("За ФІО");
+    public static readonly BY_JUR_NAME: ExplorationMode = new ExplorationMode("За назвою");
     public static readonly FIND_ALL: ExplorationMode = new ExplorationMode("Без критеріїв");
     public static readonly BY_ID: ExplorationMode = new ExplorationMode("За ID");
 
@@ -33,3 +32,7 @@ class ModeNotFoundException extends Error {
         super("Mode with id "+id+" does not exist");
     }
 }
+
+export const basicExplorationModes: ExplorationMode[] = [ExplorationMode.FIND_ALL, ExplorationMode.BY_ID]
+
+export const basicHumanExplorationModes: ExplorationMode[] = [ExplorationMode.FIND_ALL, ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME]

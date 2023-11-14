@@ -88,7 +88,9 @@ const ExplorationPagination = ({pagedData, explorationStateManager, explorationS
                 refreshWithI(currentParams.i-1)
             }} />
             {indexes.map(index => <Pagination.Item onClick={()=>{
-                refreshWithI(index);
+                if (pagedData.index!==index) {
+                    refreshWithI(index);
+                }
             }} key={index} active={pagedData.index===index}>{index+1}</Pagination.Item>)}
             <Pagination.Next disabled={pagedData.last} onClick={() =>{
                 refreshWithI(currentParams.i+1)
