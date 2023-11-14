@@ -53,8 +53,6 @@ const ExplorationModesView = ({explorationStateManager}: {explorationStateManage
     if (explorationMode&&explorationModes) {
         return (
             <>
-                <p style={{marginBottom: '10px'}}>Пошук за:</p>
-
                 <Form.Select className="explore__select" value={explorationModes.indexOf(explorationMode)} onChange={handleSelectChange}>
                     {explorationModes.map((mode, index)=>
                         <option key={index} value={index}>{mode.title}</option>)

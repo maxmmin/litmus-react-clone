@@ -3,7 +3,6 @@ import BasicJurPersonExplorationParams from "./BasicJurPersonExplorationParams";
 import EntityExplorationState from "../EntityExplorationState";
 import EntityExplorationData from "../EntityExplorationData";
 import JurPersonExplorationParams from "./JurPersonExplorationParams";
-import {ValidationErrors} from "../../../../service/ValidationErrors";
 
 export default interface JurPersonExplorationState extends EntityExplorationState<PreProcessedJurPerson, JurPersonExplorationParams> {
 

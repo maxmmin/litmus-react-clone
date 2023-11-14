@@ -23,7 +23,7 @@ import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 
 type PersonExplorationMapper = DtoMapper<any, PreProcessedPerson, PersonResponseDto, any>
 
-type PersonExplorationCallbackType = (params: PersonExplorationParams, service: PersonExplorationApiService, mapper: PersonExplorationMapper) => Promise<PagedData<PreProcessedPerson>>;
+type PersonExplorationCallbackType = () => Promise<PagedData<PreProcessedPerson>>;
 
 class PersonExplorationService implements ExplorationService {
 
@@ -38,32 +38,41 @@ class PersonExplorationService implements ExplorationService {
        return new PersonExplorationService(stateManager, service, mapper);
     }
 
-    private exploreByIdCallback: PersonExplorationCallbackType = async (params, service, mapper) => {
-        const id = checkNotEmpty(params.id);
+    private exploreById: PersonExplorationCallbackType = async () => {
+        const id = checkNotEmpty(this.stateManager.getExplorationParams().id);
         const content: PreProcessedPerson[] = []
-        const personResponseDto: PersonResponseDto|null = await service.findById(id);
+        const personResponseDto: PersonResponseDto|null = await this.service.findById(id);
         if (personResponseDto) {
-            const person: PreProcessedPerson = mapper.mapToEntity(personResponseDto);
+            const person: PreProcessedPerson = this.mapper.mapToEntity(personResponseDto);
             content.push(person)
-        };
+        }
         return new UnPagedData(content);
     }
 
-    private exploreByFullNameCallback: PersonExplorationCallbackType = async (params, service, mapper) => {
+     exploreByFullName: PersonExplorationCallbackType = async () => {
+        const params = this.stateManager.getExplorationParams();
         const lastName = params.lastName;
         const middleName = params.middleName;
         const firstName = params.firstName;
         const i = params.i;
-        const pagedResponse: PagedData<PersonResponseDto> = await service.findByFullName({lastName, middleName, firstName}, i);
-        const personArray: PreProcessedPerson[] = pagedResponse.content.map(person=>mapper.mapToEntity(person));
+        const pagedResponse: PagedData<PersonResponseDto> = await this.service.findByFullName({lastName, middleName, firstName}, i);
+        const personArray: PreProcessedPerson[] = pagedResponse.content.map(person=>this.mapper.mapToEntity(person));
         return {...pagedResponse, content: personArray};
+    }
+
+    private exploreAll: PersonExplorationCallbackType = async () => {
+        const i: number = this.stateManager.getExplorationParams().i;
+        const pagedData: PagedData<PersonResponseDto> = await this.service.findAll(i);
+        const personArray: PreProcessedPerson[] = pagedData.content.map(person=>this.mapper.mapToEntity(person));
+        return {...pagedData, content: personArray}
     }
 
     private callbackMap: Map<ExplorationMode, PersonExplorationCallbackType>
         = new Map<ExplorationMode, PersonExplorationCallbackType>(
             [
-                [ExplorationMode.BY_FULL_NAME, this.exploreByFullNameCallback],
-                [ExplorationMode.BY_ID, this.exploreByIdCallback]
+                [ExplorationMode.BY_FULL_NAME, this.exploreByFullName],
+                [ExplorationMode.BY_ID, this.exploreById],
+                [ExplorationMode.FIND_ALL, this.exploreAll]
             ],
     )
 
@@ -76,11 +85,12 @@ class PersonExplorationService implements ExplorationService {
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         const callback = this.callbackMap.get(mode);
         if (callback) {
-            return callback(explorationParams,this.service, this.mapper);
+            return callback.bind(this)();
         } else {
-            if (explorationParams.supportedModesIdList.includes(modeId)) {
-                throw new Error("mod is supported by person exploration params but isn't added to switch branch")
-            } else throw new UnsupportedModeError();}
+                if (explorationParams.supportedModesIdList.includes(modeId)) {
+                    throw new Error("mod is supported by person exploration params but isn't present in switch branch")
+                } else throw new UnsupportedModeError()
+            }
         }
 
     private explorePersonsThunk = createAsyncThunk<EntityExplorationData<PreProcessedPerson, PersonExplorationParams>,

@@ -21,7 +21,7 @@ import UserDtoMapperImpl from "../../rest/dto/dtoMappers/UserDtoMapperImpl";
 
 type UserExplorationDtoMapper = DtoMapper<any, User, UserResponseDto, any>;
 
-type UserExplorationCallbackType = (params: UserExplorationParams, service: UserExplorationApiService, mapper: UserExplorationDtoMapper) => Promise<PagedData<User>>;
+type UserExplorationCallbackType = () => Promise<PagedData<User>>;
 
 
 class UserExplorationService implements ExplorationService {
@@ -38,24 +38,32 @@ class UserExplorationService implements ExplorationService {
         return new UserExplorationService(stateManager,service,mapper)
     }
 
-    private exploreByIdCallback: UserExplorationCallbackType = async (params, service, mapper) => {
-        const id = checkNotEmpty(params.id);
+    private exploreByIdCallback: UserExplorationCallbackType = async () => {
+        const id = checkNotEmpty(this.stateManager.getExplorationParams().id);
         const content: User[] = []
-        const userResponseDto: UserResponseDto|null = await service.findById(id);
+        const userResponseDto: UserResponseDto|null = await this.service.findById(id);
         if (userResponseDto) {
-            const user: User = mapper.mapToEntity(userResponseDto);
+            const user: User = this.mapper.mapToEntity(userResponseDto);
             content.push(user);
         }
         return new UnPagedData(content);
     }
 
-    private exploreByFullNameCallback: UserExplorationCallbackType = async (params, service, mapper) => {
+    private exploreByFullNameCallback: UserExplorationCallbackType = async () => {
+        const params = this.stateManager.getExplorationParams();
         const lastName = params.lastName;
         const middleName = params.middleName;
         const firstName = params.firstName;
         const i = params.i;
-        const pagedResponse: PagedData<UserResponseDto> = await service.findByFullName({lastName, middleName, firstName}, i);
-        const userArray: User[] = pagedResponse.content.map(user=>mapper.mapToEntity(user));
+        const pagedResponse: PagedData<UserResponseDto> = await this.service.findByFullName({lastName, middleName, firstName}, i);
+        const userArray: User[] = pagedResponse.content.map(user=>this.mapper.mapToEntity(user));
+        return {...pagedResponse, content: userArray};
+    }
+
+    private exploreAllCallback: UserExplorationCallbackType = async () => {
+        const i = this.stateManager.getExplorationParams().i;
+        const pagedResponse: PagedData<UserResponseDto> = await this.service.findAll(i);
+        const userArray: User[] = pagedResponse.content.map(user=>this.mapper.mapToEntity(user));
         return {...pagedResponse, content: userArray};
     }
 
@@ -63,7 +71,8 @@ class UserExplorationService implements ExplorationService {
         = new Map<ExplorationMode, UserExplorationCallbackType>(
         [
             [ExplorationMode.BY_FULL_NAME, this.exploreByFullNameCallback],
-            [ExplorationMode.BY_ID, this.exploreByIdCallback]
+            [ExplorationMode.BY_ID, this.exploreByIdCallback],
+            [ExplorationMode.FIND_ALL, this.exploreAllCallback]
         ],
     )
 
@@ -76,10 +85,10 @@ class UserExplorationService implements ExplorationService {
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         const callback = this.callbackMap.get(mode);
         if (callback) {
-            return callback(explorationParams, this.service, this.mapper);
+            return callback.bind(this)();
         } else {
             if (explorationParams.supportedModesIdList.includes(modeId)) {
-                throw new Error("mod is supported by person exploration params but isn't added to switch branch")
+                throw new Error("mod is supported by person exploration params but isn't present in switch branch")
             } else throw new UnsupportedModeError();}
     }
 

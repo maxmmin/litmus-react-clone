@@ -8,7 +8,7 @@ export default class ExplorationMode {
     private static readonly modes: ExplorationMode[] = []
 
     public static readonly BY_FULL_NAME: ExplorationMode = new ExplorationMode("За ФІО");
-    public static readonly FIND_ALL: ExplorationMode = new ExplorationMode("Усі");
+    public static readonly FIND_ALL: ExplorationMode = new ExplorationMode("Без критеріїв");
     public static readonly BY_ID: ExplorationMode = new ExplorationMode("За ID");
 
     public readonly id: number;

@@ -21,10 +21,12 @@ import JurPersonExplorationStateManager from "./stateManager/jurPerson/JurPerson
 import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
+import PersonResponseDto from "../../rest/dto/person/PersonResponseDto";
+import {PreProcessedPerson} from "../../model/human/person/Person";
 
 type JurPersonExplorationMapper = DtoMapper<any, PreProcessedJurPerson, JurPersonResponseDto,any>
 
-type JurPersonExplorationCallbackType = (params: JurPersonExplorationParams, service: jurPersonExplorationApiService, mapper: JurPersonExplorationMapper) => Promise<PagedData<PreProcessedJurPerson>>;
+type JurPersonExplorationCallbackType = () => Promise<PagedData<PreProcessedJurPerson>>;
 
 class JurPersonExplorationService implements ExplorationService {
 
@@ -40,22 +42,29 @@ class JurPersonExplorationService implements ExplorationService {
         return new JurPersonExplorationService(stateManager,service,mapper)
     }
 
-    private exploreByIdCallback: JurPersonExplorationCallbackType = async (params, service, mapper) => {
-        //@todo write the way to get all entities
-        const id = checkNotEmpty(params.id);
+    private exploreById: JurPersonExplorationCallbackType = async () => {
+        const id = checkNotEmpty(this.stateManager.getExplorationParams().id);
         const content: PreProcessedJurPerson[] = []
-        const jurPersonResponseDto: JurPersonResponseDto|null = await service.findById(id);
+        const jurPersonResponseDto: JurPersonResponseDto|null = await this.service.findById(id);
         if (jurPersonResponseDto) {
-            const jurPerson: PreProcessedJurPerson = mapper.mapToEntity(jurPersonResponseDto);
+            const jurPerson: PreProcessedJurPerson = this.mapper.mapToEntity(jurPersonResponseDto);
             content.push(jurPerson)
-        };
+        }
         return new UnPagedData(content);
+    }
+
+    private exploreAll: JurPersonExplorationCallbackType = async () => {
+        const i: number = this.stateManager.getExplorationParams().i;
+        const pagedData: PagedData<JurPersonResponseDto> = await this.service.findAll(i);
+        const jurPersonArray: PreProcessedJurPerson[] = pagedData.content.map(jurPerson=>this.mapper.mapToEntity(jurPerson));
+        return {...pagedData, content: jurPersonArray}
     }
 
     private callbackMap: Map<ExplorationMode, JurPersonExplorationCallbackType>
         = new Map<ExplorationMode, JurPersonExplorationCallbackType>(
         [
-            [ExplorationMode.BY_ID, this.exploreByIdCallback]
+            [ExplorationMode.BY_ID, this.exploreById],
+            [ExplorationMode.FIND_ALL, this.exploreAll]
         ],
     )
 
@@ -68,10 +77,10 @@ class JurPersonExplorationService implements ExplorationService {
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         const callback = this.callbackMap.get(mode);
         if (callback) {
-            return callback(explorationParams, this.service, this.mapper);
+            return callback.bind(this)();
         } else {
             if (explorationParams.supportedModesIdList.includes(modeId)) {
-                throw new Error("mod is supported by person exploration params but isn't added to switch branch")
+                throw new Error("mod is supported by person exploration params but isn't present in switch branch")
             } else throw new UnsupportedModeError();}
     }
 

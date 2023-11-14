@@ -4,7 +4,7 @@
  */
 import LookupService from "./ExplorationApiService";
 import {buildUrl} from "../../../util/pureFunctions";
-import axiosApiInstance from "../../rest/AxiosApiManager";
+import PagedData from "../../../rest/PagedData";
 import AxiosApiManager from "../../rest/AxiosApiManager";
 
 class BasicEntityLookupService<P extends object> implements LookupService<P>{
@@ -19,6 +19,13 @@ class BasicEntityLookupService<P extends object> implements LookupService<P>{
     async findById(id: string): Promise<P|null> {
         const response = await this.apiInstance<P>(buildUrl(this.apiUrl,id));
         return Object.keys(response.data).length>0?response.data:null;
+    }
+
+    async findAll(i: number): Promise<PagedData<P>> {
+        const response = await this.apiInstance.get<PagedData<P>>(this.apiUrl, {
+            params: {i: i}
+        });
+        return response.data;
     }
 }
 
