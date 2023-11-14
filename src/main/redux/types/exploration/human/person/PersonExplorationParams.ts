@@ -5,7 +5,7 @@ import HumanExplorationParams from "../HumanExplorationParams";
 interface PersonExplorationParams extends HumanExplorationParams {}
 
 export class BasicPersonExplorationParams extends BasicHumanExplorationParams {
-    public static supportedModesIdList: number[] = Array.from([ExplorationMode.BY_ID, ExplorationMode.BY_FULL_NAME]).map(mode => mode.id);
+    public static supportedModesIdList: number[] = Array.from([ExplorationMode.BY_ID, ExplorationMode.FIND_ALL, ExplorationMode.BY_FULL_NAME]).map(mode => mode.id);
     public readonly supportedModesIdList: number[] = BasicPersonExplorationParams.supportedModesIdList;
     readonly modeId: number = this.supportedModesIdList[0];
 

@@ -3,14 +3,8 @@ import React, {useMemo} from "react";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
 import HumanExplorationParams from "../../../redux/types/exploration/human/HumanExplorationParams";
-import {Entity} from "../../../model/Entity";
 import Human from "../../../model/human/Human";
 import HumanExplorationStateManager from "../../../service/exploration/stateManager/HumanExplorationStateManager";
-import UserExplorationStateManagerImpl
-    from "../../../service/exploration/stateManager/user/UserExplorationStateManagerImpl";
-import PersonExplorationStateManagerImpl
-    from "../../../service/exploration/stateManager/person/PersonExplorationStateManagerImpl";
-import InputError from "../../sharedComponents/InputError";
 import {getEntityExplorationStateManager} from "../../../util/getEntityExplorationService";
 
 

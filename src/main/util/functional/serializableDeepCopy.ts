@@ -9,6 +9,10 @@ export default function serializableDeepCopy<T>(obj: T): T {
         return obj;
     }
 
+    if (obj instanceof Error) {
+        obj = {...obj, message: obj.message}
+    }
+
     let copy: any;
     if (Array.isArray(obj)) {
         copy = [];
