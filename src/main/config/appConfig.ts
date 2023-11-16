@@ -38,13 +38,16 @@ const relativeMappings = {
 
 const jpRoot = buildUrl(apiRoot, entityDomains.JUR_PERSON)
 
+const usrRoot = buildUrl(apiRoot, entityDomains.USER);
+
 const serverMappings = Object.freeze({
     apiHost: backendUrl,
     apiRoot: apiRoot,
     mediaRootUrl: buildUrl(backendUrl,apiRoot, relativeMappings.media),
     relativeMappings: relativeMappings,
     users: {
-        root: buildUrl(apiRoot, entityDomains.USER)
+        root: usrRoot,
+        getByEmail: buildUrl(usrRoot, '/email')
     },
     persons: {
         root: personsRoot,

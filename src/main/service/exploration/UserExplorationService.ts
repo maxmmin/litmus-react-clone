@@ -60,6 +60,17 @@ class UserExplorationService implements ExplorationService {
         return {...pagedResponse, content: userArray};
     }
 
+    private exploreByEmailCallback: UserExplorationCallbackType = async () => {
+        const email = this.stateManager.getExplorationParams().email;
+
+        const userResponseDto: UserResponseDto|null = await this.service.findByEmail(email);
+        const content: User[] = []
+        if (userResponseDto) {
+            content.push(this.mapper.mapToEntity(userResponseDto))
+        }
+        return new UnPagedData(content);
+    }
+
     private exploreAllCallback: UserExplorationCallbackType = async () => {
         const i = this.stateManager.getExplorationParams().i;
         const pagedResponse: PagedData<UserResponseDto> = await this.service.findAll(i);
@@ -72,7 +83,8 @@ class UserExplorationService implements ExplorationService {
         [
             [ExplorationMode.BY_FULL_NAME, this.exploreByFullNameCallback],
             [ExplorationMode.BY_ID, this.exploreByIdCallback],
-            [ExplorationMode.FIND_ALL, this.exploreAllCallback]
+            [ExplorationMode.FIND_ALL, this.exploreAllCallback],
+            [ExplorationMode.BY_EMAIL, this.exploreByEmailCallback]
         ],
     )
 

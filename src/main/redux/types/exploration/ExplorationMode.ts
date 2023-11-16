@@ -9,6 +9,7 @@ export default class ExplorationMode {
     public static readonly BY_JUR_NAME: ExplorationMode = new ExplorationMode("За назвою");
     public static readonly FIND_ALL: ExplorationMode = new ExplorationMode("Без критеріїв");
     public static readonly BY_ID: ExplorationMode = new ExplorationMode("За ID");
+    public static readonly BY_EMAIL: ExplorationMode = new ExplorationMode("За email адресою")
 
     public readonly id: number;
     public readonly title: string;

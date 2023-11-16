@@ -6,6 +6,8 @@ const errLoggingMiddleware: Middleware<{}, {}> = () => (
 ) => (action: Action) => {
     if (isRejected(action)) {
         console.error(action)
+        const payload = JSON.stringify(action.payload);
+        console.error(`payload: ${payload}`)
     }
 
     next(action)
