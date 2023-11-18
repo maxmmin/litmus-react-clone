@@ -14,6 +14,7 @@ import PersonDataContainer from "./PersonDataContainer";
 import PersonMapTool from "../../../util/map/person/PersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
 import {mapRelatedJurPerson, mapRelatedPerson} from "../mapFunctions";
+import {TrashIcon} from "../../assets/icons";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson
@@ -76,6 +77,12 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_person">
                 <PersonDataContainer person={person}/>
+
+                <div className="main-entity-section__manage-entity-container">
+                    <button className="btn manage-entity-container__action-btn manage-entity-container__action-btn_remove">
+                        <TrashIcon color={"black"} className={"manage-entity-container__action-icon manage-entity-container__action-icon_remove"}/>
+                    </button>
+                </div>
             </section>
 
             <section className="entity-images-slider-section">

@@ -151,7 +151,7 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                         <h4 className={"owner-item__title"}>Власник</h4>
                         {jurPerson.owner&&
                             <div className={`owner-item__interact-container ${getRelatedGeoIconCssAnchor(jurPerson, jurPerson.owner)}`}>
-                                <div className="owner-item__location-btn-wrapper" onClick={()=>{
+                                {jurPerson.location && <div className="owner-item__location-btn-wrapper" onClick={()=>{
                                     if (jurPerson.owner&&hasLocation(jurPerson.owner)) {
                                         setDisplayedEntity({to: jurPerson.owner})
                                     }
@@ -159,7 +159,7 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                                     <GeoLocationPinDropIcon
                                         className={`owner-item__location-btn`}
                                     />
-                                </div>
+                                </div>}
 
                                 {buildPersonNavLink(jurPerson.owner.id,<GoBubbleIcon className={"owner-item__link-icon"}/>)}
                             </div>
@@ -177,17 +177,17 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                         <h4 className={"owner-item__title"}>Бенефіціарний власник</h4>
                             {jurPerson.benOwner&&
                                 <div className={`owner-item__interact-container ${getRelatedGeoIconCssAnchor(jurPerson, jurPerson.benOwner)}`}>
-                                    <div className="owner-item__location-btn-wrapper"
-                                         onClick={()=>{
-                                             if (jurPerson.benOwner&&hasLocation(jurPerson.benOwner)) {
-                                                 setDisplayedEntity({to: jurPerson.benOwner})
-                                             }
-                                         }}
+                                    {jurPerson.location && <div className="owner-item__location-btn-wrapper"
+                                                                onClick={()=>{
+                                                                    if (jurPerson.benOwner&&hasLocation(jurPerson.benOwner)) {
+                                                                        setDisplayedEntity({to: jurPerson.benOwner})
+                                                                    }
+                                                                }}
                                     >
                                         <GeoLocationPinDropIcon
                                             className={`owner-item__location-btn`}
                                         />
-                                    </div>
+                                    </div>}
 
                                     {buildPersonNavLink(jurPerson.benOwner.id,<GoBubbleIcon className={"owner-item__link-icon"}/>)}
                                 </div>

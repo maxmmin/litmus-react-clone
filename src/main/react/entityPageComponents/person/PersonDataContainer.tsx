@@ -1,6 +1,6 @@
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
-import {DashedUserIcon} from "../../assets/icons";
+import {DashedUserIcon, TrashIcon} from "../../assets/icons";
 import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
 import React from "react";
@@ -27,6 +27,8 @@ export default function PersonDataContainer ({person, cssAnchor=""}: {person: Om
                 <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>РНОКПП:</span> {valueOrMessage(person.passportData?.rnokppCode)}</p>
                 <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_person"}>Адреса:</span> {valueOrMessage(person.location?.address)}</p>
             </div>
+
+
         </div>
     )
 }

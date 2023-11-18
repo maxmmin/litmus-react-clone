@@ -4,6 +4,10 @@ html, body, #root, .wrapper, .root-screen {
   height: 100%;
 }
 
+img, svg {
+  vertical-align: initial;
+}
+
 .root-screen {
   display: flex;
   flex-direction: column;
@@ -35,9 +39,14 @@ img {
   user-select: none;
 }
 
+
+.btn {
+  border: none;
+  outline: none;
+}
+
 .btn.btn-primary {
   background: $primary-light;
-  border: none;
 }
 
 .btn.btn-primary.disabled {
