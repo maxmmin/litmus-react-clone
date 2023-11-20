@@ -13,13 +13,14 @@ type RemovalProps = {
 }
 
 type PanelProps = {
-    removalProps: RemovalProps
+    removalProps: RemovalProps,
+    cssAnchor?: string
 }
 
-export default function ManagePanel ({removalProps}: PanelProps) {
+export default function ManagePanel ({removalProps, cssAnchor=""}: PanelProps) {
     const [removalModalVisibility, setRemovalModalVisibility] = useState<boolean>(false);
     return (
-        <div className="main-entity-section__manage-entity-container">
+        <div className={`main-entity-section__manage-entity-container ${cssAnchor}`}>
             <PrivateComponentWrapper requiredPermissions={removalProps.removalPermissions} mode={"NO_OUTPUT"}>
                 <button className="btn manage-entity-container__action-btn manage-entity-container__action-btn_remove"
                         onClick={()=>{

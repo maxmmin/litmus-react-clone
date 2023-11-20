@@ -13,13 +13,18 @@ import JurPersonProcessor from "../../../service/jurPersonProcessing/JurPersonPr
 import Loader from "../../loader/Loader";
 import "../../assets/styles/entityPage/jurPersonPage.scss";
 import getFullName from "../../../util/functional/getFullName";
-import {noInfoMessage} from "../../../error/BasicHttpError";
+import {HttpErrorParser, noInfoMessage} from "../../../error/BasicHttpError";
 import PersonDataContainer from "../person/PersonDataContainer";
 import {buildPersonNavLink} from "../../../util/navLinkBuilders";
 import Person from "../../../model/human/person/Person";
 import {mapRelatedJurPerson, mapRelatedPerson} from "../mapFunctions";
 import JurPersonMapTool from "../../../util/map/jurPerson/JurPersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
+import {Permission} from "../../../redux/types/userIdentity/Role";
+import {ApplicationError} from "../../../rest/ErrorResponse";
+import ManagePanel from "../manage/ManagePanel";
+import {useLocation} from "react-router";
+import {useNavigate} from "react-router-dom";
 
 function getRelatedGeoIconCssAnchor(jurPerson: JurPerson, person: Person, defaultAnchor: string = ""): string {
     if (jurPerson.location) {
@@ -61,6 +66,17 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
 
     const ripeUtil = serviceContext.jurPersonServices.ripeJurPersonUtil;
 
+    const explorationService = serviceContext.exploration.service.jurPerson;
+
+    const explorationStateManager = serviceContext.exploration.stateManagers.jurPerson;
+
+    const apiService = serviceContext.api.jurPerson;
+
+    const notificationManager = serviceContext.notification.manager;
+
+    const navigate = useNavigate();
+    const location = useLocation();
+
     useEffect(()=>{
         setPending(true);
         bindService
@@ -94,6 +110,7 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
     }, [jurPerson]);
 
 
+
     if (isPending) return <Loader/>
 
     if (!jurPerson) throw new Error("no person was loaded");
@@ -108,6 +125,38 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_jur-person"}>
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_jur-person">
+                <ManagePanel removalProps={{
+                    title: `Щоб підтвердити видалення, введіть назву юридичної особи("${jurPerson.name}").`,
+                    match: (s)=>s===jurPerson.name,
+                    removalPermissions: [Permission.DATA_REMOVE],
+                    onSubmit: async ()=>{
+                        setPending(true);
+                        try {
+                            await apiService.remove(jurPerson.id);
+                            notificationManager.success("Особу було успішно видалено");
+
+                            if (location.key !== "default") navigate(-1);
+                            else navigate(appConfig.applicationMappings.root);
+
+                            const loadedJurPersons = explorationStateManager.getExplorationData()?.response.content;
+                            if (loadedJurPersons) {
+                                const content = explorationStateManager.getExplorationData()?.response.content;
+                                if (content) {
+                                    if (content.findIndex(p=>p.id===jurPerson.id)>-1) {
+                                        await explorationService.explore();
+                                    }
+                                }
+                            }
+                        } catch (e: unknown) {
+                            console.error(e);
+                            const processedErr: ApplicationError = HttpErrorParser.parseError(e);
+                            notificationManager.error(HttpErrorParser.getErrorDescription(processedErr));
+                        } finally {
+                            setPending(false);
+                        }
+                    }
+                }}/>
+
                 <div className="entity-data-container entity-data-container_jur-person">
                     <div className={`main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_jur-person ${mainImg?"":"no-photo"}`}>
                         {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}

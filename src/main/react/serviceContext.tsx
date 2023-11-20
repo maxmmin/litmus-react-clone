@@ -104,6 +104,8 @@ import JurPersonMapTool from "../util/map/jurPerson/JurPersonMapTool";
 import ApplicationStateManagerImpl from "../service/appState/ApplicationStateManagerImpl";
 import PersonApiService from "../service/api/person/PersonApiService";
 import PersonApiServiceImpl from "../service/api/person/PersonApiServiceImpl";
+import JurPersonApiService from "../service/api/jur-person/JurPersonApiService";
+import JurPersonApiServiceImpl from "../service/api/jur-person/JurPersonApiServiceImpl";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -282,7 +284,8 @@ const notificationContext: NotificationContext = {
 }
 
 type ApiServiceContext = {
-    person: PersonApiService
+    person: PersonApiService,
+    jurPerson: JurPersonApiService
 }
 
 export type ServiceContext = {
@@ -338,7 +341,8 @@ const mapUtil = new BasicMapUtil(mapPainter);
 const ripeJurPersonUtil = new BasicRipeJurPersonUtil(ripePersonRelationshipsUtil);
 
 const apiServiceContext: ApiServiceContext = {
-    person: new PersonApiServiceImpl(explorationContext.apiService.person, creationContext.apiService.person)
+    person: new PersonApiServiceImpl(explorationContext.apiService.person, creationContext.apiService.person),
+    jurPerson: new JurPersonApiServiceImpl(explorationContext.apiService.jurPerson, creationContext.apiService.jurPerson)
 }
 
 const serviceContext: ServiceContext = {
