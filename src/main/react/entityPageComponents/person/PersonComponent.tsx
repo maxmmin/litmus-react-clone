@@ -14,7 +14,13 @@ import PersonDataContainer from "./PersonDataContainer";
 import PersonMapTool from "../../../util/map/person/PersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
 import {mapRelatedJurPerson, mapRelatedPerson} from "../mapFunctions";
-import {TrashIcon} from "../../assets/icons";
+import ManagePanel from "../manage/ManagePanel";
+import {HttpErrorParser} from "../../../error/BasicHttpError";
+import {ApplicationError} from "../../../rest/ErrorResponse";
+import {useNavigate} from "react-router-dom";
+import {useLocation} from "react-router";
+import appConfig from "../../../config/appConfig";
+import {Permission} from "../../../redux/types/userIdentity/Role";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson
@@ -32,7 +38,18 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
 
     const personUtil = serviceContext.personServices.ripePersonUtil;
 
+    const notificationManager = serviceContext.notification.manager;
+
+    const explorationStateManager = serviceContext.exploration.stateManagers.person;
+
+    const explorationService = serviceContext.exploration.service.person;
+
+    const apiService = serviceContext.api.person;
+
     const [displayedEntity, setDisplayedEntity] = useState<PersonMapProps['currentlyDisplayed']|null>(null)
+
+    const navigate = useNavigate();
+    const location = useLocation();
 
     useEffect(()=>{
         setPending(true);
@@ -76,13 +93,39 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_person">
-                <PersonDataContainer person={person}/>
+                <ManagePanel removalProps={{
+                    title: `Щоб підтвердити видалення, введіть фамілію особи("${person.lastName}").`,
+                    match: (s)=>s===person.lastName,
+                    removalPermissions: [Permission.DATA_REMOVE],
+                    onSubmit: async ()=>{
+                        setPending(true);
+                        try {
+                            await apiService.remove(person.id);
+                            notificationManager.success("Особу було успішно видалено");
 
-                <div className="main-entity-section__manage-entity-container">
-                    <button className="btn manage-entity-container__action-btn manage-entity-container__action-btn_remove">
-                        <TrashIcon color={"black"} className={"manage-entity-container__action-icon manage-entity-container__action-icon_remove"}/>
-                    </button>
-                </div>
+                            if (location.key !== "default") navigate(-1);
+                            else navigate(appConfig.applicationMappings.root);
+
+                            const loadedPersons = explorationStateManager.getExplorationData()?.response.content;
+                            if (loadedPersons) {
+                                const content = explorationStateManager.getExplorationData()?.response.content;
+                                if (content) {
+                                    if (content.findIndex(p=>p.id===person.id)>-1) {
+                                        await explorationService.explore();
+                                    }
+                                }
+                            }
+                        } catch (e: unknown) {
+                            console.error(e);
+                            const processedErr: ApplicationError = HttpErrorParser.parseError(e);
+                            notificationManager.error(HttpErrorParser.getErrorDescription(processedErr));
+                        } finally {
+                            setPending(false);
+                        }
+                    }
+                }}/>
+
+                <PersonDataContainer person={person}/>
             </section>
 
             <section className="entity-images-slider-section">
@@ -152,7 +195,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                 <h6 className='related-entity-container__header-title'>Власник</h6>
                                 <h6 className='related-entity-container__header-title'>Бен. власник</h6>
                             </div>
-                            {rootJurPersons.map(j=>mapRelatedJurPerson(j,mapMetadata,setDisplayedEntity))}
+                            {[...new Set(rootJurPersons)].map(j=>mapRelatedJurPerson(j,mapMetadata,setDisplayedEntity))}
                         </div>
                         :
                         <p>Пов'язані особи відсутні</p>

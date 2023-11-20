@@ -1,7 +1,7 @@
 import ExplorationService from "./ExplorationService";
 import PersonExplorationApiService from "./api/human/person/PersonExplorationApiService";
 import PagedData, {UnPagedData} from "../../rest/PagedData";
-import Person, {PreProcessedPerson} from "../../model/human/person/Person";
+import {PreProcessedPerson} from "../../model/human/person/Person";
 import PersonExplorationParams from "../../redux/types/exploration/human/person/PersonExplorationParams";
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import EntityExplorationData from "../../redux/types/exploration/EntityExplorationData";
@@ -38,10 +38,10 @@ class PersonExplorationService implements ExplorationService {
        return new PersonExplorationService(stateManager, service, mapper);
     }
 
-    private exploreById: PersonExplorationCallbackType = async () => {
+    protected exploreById: PersonExplorationCallbackType = async () => {
         const id = checkNotEmpty(this.stateManager.getExplorationParams().id);
         const content: PreProcessedPerson[] = []
-        const personResponseDto: PersonResponseDto|null = await this.service.findById(id);
+        const personResponseDto: PersonResponseDto|null = await this.service.findById(+id);
         if (personResponseDto) {
             const person: PreProcessedPerson = this.mapper.mapToEntity(personResponseDto);
             content.push(person)
@@ -49,7 +49,7 @@ class PersonExplorationService implements ExplorationService {
         return new UnPagedData(content);
     }
 
-     exploreByFullName: PersonExplorationCallbackType = async () => {
+     protected exploreByFullName: PersonExplorationCallbackType = async () => {
         const params = this.stateManager.getExplorationParams();
         const lastName = params.lastName;
         const middleName = params.middleName;
@@ -60,14 +60,14 @@ class PersonExplorationService implements ExplorationService {
         return {...pagedResponse, content: personArray};
     }
 
-    private exploreAll: PersonExplorationCallbackType = async () => {
+    protected exploreAll: PersonExplorationCallbackType = async () => {
         const i: number = this.stateManager.getExplorationParams().i;
         const pagedData: PagedData<PersonResponseDto> = await this.service.findAll(i);
         const personArray: PreProcessedPerson[] = pagedData.content.map(person=>this.mapper.mapToEntity(person));
         return {...pagedData, content: personArray}
     }
 
-    private callbackMap: Map<ExplorationMode, PersonExplorationCallbackType>
+    protected callbackMap: Map<ExplorationMode, PersonExplorationCallbackType>
         = new Map<ExplorationMode, PersonExplorationCallbackType>(
             [
                 [ExplorationMode.BY_FULL_NAME, this.exploreByFullName],
@@ -80,7 +80,7 @@ class PersonExplorationService implements ExplorationService {
         this.stateManager.retrieveData(this.explorePersonsThunk({params: this.stateManager.getExplorationParams(), globalPending: false})).catch(console.error)
     }
 
-    private async exploreUponMode (explorationParams: PersonExplorationParams): Promise<PagedData<PreProcessedPerson>> {
+    protected async exploreUponMode (explorationParams: PersonExplorationParams): Promise<PagedData<PreProcessedPerson>> {
         const modeId = explorationParams.modeId;
         const mode: ExplorationMode = ExplorationMode.getModeById(modeId);
         const callback = this.callbackMap.get(mode);
@@ -93,7 +93,7 @@ class PersonExplorationService implements ExplorationService {
             }
         }
 
-    private explorePersonsThunk = createAsyncThunk<EntityExplorationData<PreProcessedPerson, PersonExplorationParams>,
+    protected explorePersonsThunk = createAsyncThunk<EntityExplorationData<PreProcessedPerson, PersonExplorationParams>,
         ThunkArg<{params: PersonExplorationParams}>,
         LitmusAsyncThunkConfig>(ExplorationTypedAction.person[ExplorationCoreAction.RETRIEVE_DATA],(async ({params}, {rejectWithValue, fulfillWithValue}) => {
         try {

@@ -1,12 +1,12 @@
 import React, {useMemo, ReactNode} from "react";
 import {useAppSelector} from "../../redux/hooks";
 import {Navigate} from 'react-router-dom'
-import {Permissions} from "../../redux/types/userIdentity/Role";
+import {Permission} from "../../redux/types/userIdentity/Role";
 import {checkAuthorization} from "../../util/pureFunctions";
 
 type Props = {
     component: ReactNode,
-    requiredPermissions: Permissions[],
+    requiredPermissions: Permission[],
     mode: ForbiddenOutputMode
 }
 

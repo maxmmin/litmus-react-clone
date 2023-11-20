@@ -1,4 +1,4 @@
-import {Permissions} from "../redux/types/userIdentity/Role";
+import {Permission} from "../redux/types/userIdentity/Role";
 import React from "react";
 import appConfig from "../config/appConfig";
 import {Entity} from "../model/Entity";
@@ -6,7 +6,7 @@ import {Action} from "redux";
 import {GeoLocation} from "../model/GeoLocation";
 
 
-function checkAuthorization (neededRights: Permissions[], userRights: Permissions[]): boolean {
+function checkAuthorization (neededRights: Permission[], userRights: Permission[]): boolean {
     const presentRights = neededRights.filter(right=>userRights.includes(right)?right:null)
     return presentRights.length===neededRights.length;
 }

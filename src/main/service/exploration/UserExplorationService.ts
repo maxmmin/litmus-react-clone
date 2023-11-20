@@ -41,7 +41,7 @@ class UserExplorationService implements ExplorationService {
     private exploreByIdCallback: UserExplorationCallbackType = async () => {
         const id = checkNotEmpty(this.stateManager.getExplorationParams().id);
         const content: User[] = []
-        const userResponseDto: UserResponseDto|null = await this.service.findById(id);
+        const userResponseDto: UserResponseDto|null = await this.service.findById(+id);
         if (userResponseDto) {
             const user: User = this.mapper.mapToEntity(userResponseDto);
             content.push(user);

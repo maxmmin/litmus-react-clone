@@ -2,12 +2,12 @@
  * E - entityPageComponents
  * creation which provides shared methods
  */
-import LookupService from "./ExplorationApiService";
+import ExplorationApiService from "./ExplorationApiService";
 import {buildUrl} from "../../../util/pureFunctions";
 import PagedData from "../../../rest/PagedData";
 import AxiosApiManager from "../../rest/AxiosApiManager";
 
-class BasicEntityLookupService<P extends object> implements LookupService<P>{
+class BasicEntityLookupService<P extends object> implements ExplorationApiService<P>{
     protected readonly apiUrl: string;
 
     protected readonly apiInstance = AxiosApiManager.globalApiInstance;
@@ -16,8 +16,8 @@ class BasicEntityLookupService<P extends object> implements LookupService<P>{
         this.apiUrl = apiUrl;
     }
 
-    async findById(id: string): Promise<P|null> {
-        const response = await this.apiInstance<P>(buildUrl(this.apiUrl,id));
+    async findById(id: number): Promise<P|null> {
+        const response = await this.apiInstance<P>(buildUrl(this.apiUrl,id.toString()));
         return Object.keys(response.data).length>0?response.data:null;
     }
 

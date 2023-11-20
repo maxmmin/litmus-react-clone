@@ -4,7 +4,7 @@ import {Entity} from "../../model/Entity";
 import ExplorationModeSelectContainer from "./ExplorationModesView";
 import {useAppSelector} from "../../redux/hooks";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
-import Role, {Permissions, RoleName} from "../../redux/types/userIdentity/Role";
+import Role, {Permission, RoleName} from "../../redux/types/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import {useNavigate} from "react-router-dom";
 import appConfig from "../../config/appConfig";
@@ -61,7 +61,7 @@ const ExplorationScreen = () => {
 
     const explorationService = getEntityExplorationService(exploredEntity);
 
-    let requiredPermissions: Permissions[] = getRequiredExplorationPermissions(exploredEntity);
+    let requiredPermissions: Permission[] = getRequiredExplorationPermissions(exploredEntity);
 
     function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
         navigate(event.currentTarget.value)
@@ -77,7 +77,7 @@ const ExplorationScreen = () => {
                        <Form.Select className={"explore__select"} value={appConfig.applicationMappings.exploration[exploredEntity]} onChange={handleSelectChange}>
                            <option value={appConfig.applicationMappings.exploration[Entity.PERSON]}>Фізичну особу</option>
                            <option value={appConfig.applicationMappings.exploration[Entity.JUR_PERSON]}>Юридичну особу</option>
-                           <PrivateComponentWrapper requiredPermissions={[Permissions.USERS_READ]} mode={NO_OUTPUT}>
+                           <PrivateComponentWrapper requiredPermissions={[Permission.USERS_READ]} mode={NO_OUTPUT}>
                                <option value={appConfig.applicationMappings.exploration[Entity.USER]}>Користувача</option>
                            </PrivateComponentWrapper>
                        </Form.Select>

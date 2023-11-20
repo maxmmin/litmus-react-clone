@@ -5,9 +5,9 @@
 import PagedData from "../../../rest/PagedData";
 
 
-interface LookupService<P> {
-    findById (id: string): Promise<P|null>;
+interface ExplorationApiService<P> {
+    findById (id: number): Promise<P|null>;
     findAll(index: number): Promise<PagedData<P>>;
 }
 
-export default LookupService;
+export default ExplorationApiService;
