@@ -6,6 +6,7 @@ import {noInfoMessage} from "../../error/BasicHttpError";
 import Person from "../../model/human/person/Person";
 import {DateEntityTool} from "../../model/DateEntity";
 import {valueOrMessage} from "../../util/functional/valueOrNull";
+import SecuredImage from "../sharedComponents/SecuredImage";
 
 type Props = {
     person: Pick<Person, keyof SimplePersonResponseDto>
@@ -33,7 +34,7 @@ export default function ({person}: Props) {
                 </div>
                 <div className="entity-container__value-block entity-container__value-block_img entity-container__value-block_simple-person">
                     {mainImg ?
-                        <img className={"entity-container__value entity-container__value_simple-person entity-container__value_img"} src={buildImgUrl(mainImg)} alt="person photo"/>
+                        <SecuredImage className={"entity-container__value entity-container__value_simple-person entity-container__value_img"} src={buildImgUrl(mainImg)} alt="person photo"/>
                         :
                         <p className="entity-container__value entity-container__value_simple-person">{noInfoMessage}</p>
                     }

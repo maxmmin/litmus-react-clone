@@ -35,6 +35,7 @@ class AuthenticationStateManagerImpl implements AuthenticationStateManager{
         const action: PayloadAction<Partial<LoginPageState>> = {type: LoginPageDataActions.UPDATE_STATE, payload: {error: serializableDeepCopy(error)}}
         this.dispatch(action)
     }
+
 }
 
 export default AuthenticationStateManagerImpl;

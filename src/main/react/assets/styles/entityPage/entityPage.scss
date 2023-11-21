@@ -1,5 +1,7 @@
 @import "../colors";
 
+$page-border-radius: 15px;
+
 .entity-page-wrapper {
   max-width: 1440px;
   margin: 0 auto;
@@ -19,6 +21,7 @@
   display: flex;
   justify-content: end;
   column-gap: 10px;
+  margin-bottom: 15px;
 }
 
 .manage-entity-container__action-btn {
@@ -58,6 +61,7 @@
   height: 400px;
   flex-shrink: 0;
   overflow: hidden;
+  border-radius: $page-border-radius;
   background: black;
   display: flex;
   justify-content: left;
@@ -79,8 +83,16 @@
   fill: #CAC4D0;
 }
 
+.entity-page__map-wrapper {
+  border-radius: $page-border-radius;
+  overflow: hidden;
+}
+
 .main-entity-info-container__item {
   font-size: 18px;
+  background: lighten($md-sys-color-primary-container-light, 3%);
+  padding: 7px 10px;
+  border-radius: $page-border-radius;
 }
 
 .main-entity-info-container__item-key {
@@ -95,9 +107,9 @@
 }
 
 .entity-images-slider-container {
-  //border: 2px dashed $md-sys-color-inverse-primary-light;
   background: black;
-  //padding: 10px;
+  border-radius: $page-border-radius;
+  overflow: hidden;
   margin: 20px auto 0;
   height: 400px;
 }
@@ -108,6 +120,7 @@
   padding: 2% 5%;
   background: rgba($md-sys-color-inverse-primary-light, 0.3);
   column-gap: 20px;
+  border-radius: $page-border-radius;
   align-items: center;
   text-align: center;
   overflow: hidden;
@@ -140,6 +153,7 @@
 .related-entity-table-header {
   display: grid;
   padding: 1% 5%;
+  border-radius: $page-border-radius;
   background: rgba($md-sys-color-inverse-primary-light, 0.3);
   column-gap: 20px;
   align-items: center;

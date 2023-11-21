@@ -142,8 +142,8 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
             </section>
 
             {mapMetadata && displayedEntity &&
-                <section className={"person-page__map-section"}>
-                    <div className="person-page__map-wrapper">
+                <section className={"entity-page__map-section entity-page__map-section_person"}>
+                    <div className="entity-page__map-wrapper entity-page__map-wrapper_person">
                         <PersonMap metadata={mapMetadata} currentlyDisplayed={displayedEntity}/>
                     </div>
                 </section>

@@ -9,6 +9,10 @@ import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 import AuthenticationStateManager from "./stateManager/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "./stateManager/AuthenticationStateManagerImpl";
 import BasicAuthApiService from "./api/BasicAuthApiService";
+import authApiService from "./api/AuthApiService";
+import authentication from "../../redux/types/auth/Authentication";
+import UserIdentityManager from "../userIdentity/UserIdentityManager";
+import UserIdentityApiService from "../userIdentity/api/UserIdentityApiService";
 
 class BasicAuthenticationManager implements AuthenticationManager {
 

@@ -8,6 +8,7 @@ import {NavLink} from "react-router-dom";
 import {Entity} from "../../model/Entity";
 import getFullName from "../../util/functional/getFullName";
 import {valueOrMessage} from "../../util/functional/valueOrNull";
+import SecuredImage from "../sharedComponents/SecuredImage";
 
 type RelatedJurPersonProps = {
     jurPerson: JurPerson,
@@ -29,7 +30,7 @@ export default function ({jurPerson, cssAnchor="", containerOnClick, geoBtnOnCli
             containerOnClick&&((e)=>containerOnClick(jurPerson, e))}>
             <div className="related-entity-container__main-block">
                 <div className="related-entity-container__img-wrapper">
-                    { mainImg ? <img className={"related-entity-container__img"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="jur-person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
+                    { mainImg ? <SecuredImage className={"related-entity-container__img"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="jur-person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
                 <p className="related-entity-container__entity-name"><NavLink className={"related-entity-container__link link"} to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON],jurPerson.id.toString())}>{jurPerson.name}</NavLink></p>
             </div>

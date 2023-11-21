@@ -2,6 +2,7 @@ import store from "../../redux/store";
 import {Action} from "redux";
 import AppStateAction from "../../redux/actions/AppStateAction";
 import ApplicationStateManager from "./ApplicationStateManager";
+import {checkNotEmpty} from "../../util/pureFunctions";
 
 class ApplicationStateManagerImpl implements ApplicationStateManager{
     private readonly _store: typeof store = store;
@@ -12,6 +13,16 @@ class ApplicationStateManagerImpl implements ApplicationStateManager{
         }
         this._store.dispatch(action)
     }
+
+    isMenuOpened(): boolean {
+        return checkNotEmpty(store.getState().appState?.isHeaderMenuOpened);
+    }
+
+    isPending(): boolean {
+        return checkNotEmpty(store.getState().appState?.isRefreshing);
+    }
+
+
 
     disablePending (): void {
         const action: Action<AppStateAction> = {

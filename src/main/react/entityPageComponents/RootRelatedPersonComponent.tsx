@@ -7,6 +7,7 @@ import {NavLink} from "react-router-dom";
 import {Entity} from "../../model/Entity";
 import getFullName from "../../util/functional/getFullName";
 import {valueOrMessage} from "../../util/functional/valueOrNull";
+import SecuredImage from "../sharedComponents/SecuredImage";
 
 type RelationShipProps = {
     relationship: Relationship,
@@ -25,7 +26,7 @@ export default function RootRelatedPersonComponent ({relationship, cssAnchor="",
             containerOnClick&&((e)=>containerOnClick(relationship, e))}>
             <div className="related-entity-container__main-block">
                 <div className="related-entity-container__img-wrapper">
-                    { mainImg ? <img className={"related-entity-container__img"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
+                    { mainImg ? <SecuredImage className={"related-entity-container__img"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                 </div>
                 <p className="related-entity-container__entity-name"><NavLink className={"related-entity-container__link link"} to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id.toString())}>{getFullName(person)}</NavLink></p>
             </div>

@@ -16,6 +16,7 @@ import appConfig from "../../../config/appConfig";
 import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 import getFullName from "../../../util/functional/getFullName";
 import {getRelationTypeFrom} from "../../../util/person/RelationshipsLinkObject";
+import SecuredImage from "../../sharedComponents/SecuredImage";
 
 
 type Props = {
@@ -71,7 +72,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
                 <div className="create-relation__person-avatar-wrapper">
                     {
                         image?
-                            <img src={buildUrl(appConfig.serverMappings.mediaRootUrl, image)} alt="avatar" className="create-relation__person-avatar"/>
+                            <SecuredImage src={buildUrl(appConfig.serverMappings.mediaRootUrl, image)} alt="avatar" className="create-relation__person-avatar"/>
                             :
                             <DashedUserIcon className={"create-relation__person-avatar"}/>
                     }

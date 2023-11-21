@@ -25,6 +25,7 @@ import {ApplicationError} from "../../../rest/ErrorResponse";
 import ManagePanel from "../manage/ManagePanel";
 import {useLocation} from "react-router";
 import {useNavigate} from "react-router-dom";
+import SecuredImage from "../../sharedComponents/SecuredImage";
 
 function getRelatedGeoIconCssAnchor(jurPerson: JurPerson, person: Person, defaultAnchor: string = ""): string {
     if (jurPerson.location) {
@@ -159,16 +160,17 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
 
                 <div className="entity-data-container entity-data-container_jur-person">
                     <div className={`main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_jur-person ${mainImg?"":"no-photo"}`}>
-                        {mainImg ? <img className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
+                        {mainImg ? <SecuredImage className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                     </div>
 
                     <div className="main-entity-section__main-entity-info-container">
-                        <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Назва:</span> {jurPerson.name}</p>
-                        <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>ЄДРПОУ:</span> {valueOrMessage(jurPerson.edrpou)}</p>
-                        <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Власник:</span> {valueOrMessage(ownerLink)}</p>
-                        <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Бенефіціарний власник:</span> {valueOrMessage(benOwnerLink)}</p>
-                        <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Дата реєстрації:</span> {valueOrMessage(formattedDateOfRegistration)}</p>
-                        <p className={"main-entity-info-container__item main-entityPageComponents-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entityPageComponents-info-container__item-key_jur-person"}>Адреса реєстрації:</span> {valueOrMessage(jurPerson.location?.address)}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>ID:</span> {jurPerson.id}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Назва:</span> {jurPerson.name}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>ЄДРПОУ:</span> {valueOrMessage(jurPerson.edrpou)}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Власник:</span> {valueOrMessage(ownerLink)}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Бенефіціарний власник:</span> {valueOrMessage(benOwnerLink)}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Дата реєстрації:</span> {valueOrMessage(formattedDateOfRegistration)}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Адреса реєстрації:</span> {valueOrMessage(jurPerson.location?.address)}</p>
                     </div>
                 </div>
             </section>
@@ -187,8 +189,8 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
             </section>
 
             {mapMetadata && displayedEntity && hasLocation(jurPerson) &&
-                <section className={"jur-person-page__map-section"}>
-                    <div className="jur-person-page__map-wrapper">
+                <section className={"entity-page__map-section entity-page__map-section_jur-person"}>
+                    <div className="entity-page__map-wrapper entity-page__map-wrapper_jur-person">
                         <JurPersonMap metadata={mapMetadata} currentlyDisplayed={displayedEntity}/>
                     </div>
                 </section>

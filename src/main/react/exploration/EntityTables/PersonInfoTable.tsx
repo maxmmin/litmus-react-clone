@@ -4,6 +4,7 @@ import {DateEntityTool} from "../../../model/DateEntity";
 import {buildImgUrl} from "../../../util/pureFunctions";
 import {GoBubbleIcon} from "../../assets/icons";
 import {buildPersonNavLink} from "../../../util/navLinkBuilders";
+import SecuredImage from "../../sharedComponents/SecuredImage";
 
 type Props = {
     person: NoRelationsPerson
@@ -37,7 +38,7 @@ const PersonInfoTable = ({person}: Props) => {
             </div>
             <div className="entity-container__value-block entity-container__value-block_img entity-container__value-block_person">
                 {mainImg ?
-                    <img className={"entity-container__value entity-container__value_person entity-container__value_img"} src={buildImgUrl(mainImg)} alt="person photo"/>
+                    <SecuredImage className={"entity-container__value entity-container__value_person entity-container__value_img"} src={buildImgUrl(mainImg)} alt="person photo"/>
                     :
                     <p className="entity-container__value entity-container__value_person">{noInfoMessage}</p>
                 }

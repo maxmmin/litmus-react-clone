@@ -1,6 +1,7 @@
 import {Splide, SplideSlide} from "@splidejs/react-splide";
 import "../assets/styles/imageSlider.scss";
 import '@splidejs/react-splide/css';
+import SecuredImage from "../sharedComponents/SecuredImage";
 
 type SliderProps = {
     imageLinks: string[],
@@ -17,7 +18,7 @@ export default function ImageSlider ({imageLinks, cssAnchor=""}: SliderProps) {
                 {imageLinks.map(link => {
                     return <SplideSlide key={link} className={"image-slider__slide"}>
                         <div className="image-slider__image-wrapper">
-                            <img className={"image-slider__image"} src={link} alt={"person image"}/>
+                            <SecuredImage className={"image-slider__image"} src={link} alt={"entity image"}/>
                         </div>
                     </SplideSlide>
                 })}
