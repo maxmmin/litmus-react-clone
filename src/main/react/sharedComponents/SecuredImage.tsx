@@ -27,6 +27,7 @@ export default function (props: React.DetailedHTMLProps<React.ImgHTMLAttributes<
                 onError={async e=>{
                     e.currentTarget.onerror = null;
                     const defaultSrc = e.currentTarget.src;
+                    e.currentTarget.src="";
 
                     if (!isPending&&authStateManager.isAuthenticated()) {
                         console.log("Resolving img load error");
