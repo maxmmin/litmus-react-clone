@@ -106,6 +106,8 @@ import PersonApiService from "../service/api/person/PersonApiService";
 import PersonApiServiceImpl from "../service/api/person/PersonApiServiceImpl";
 import JurPersonApiService from "../service/api/jur-person/JurPersonApiService";
 import JurPersonApiServiceImpl from "../service/api/jur-person/JurPersonApiServiceImpl";
+import UserApiService from "../service/api/user/UserApiService";
+import UserApiServiceImpl from "../service/api/user/UserApiServiceImpl";
 
 type Mappers = {
     user: UserDtoMapper,
@@ -285,7 +287,8 @@ const notificationContext: NotificationContext = {
 
 type ApiServiceContext = {
     person: PersonApiService,
-    jurPerson: JurPersonApiService
+    jurPerson: JurPersonApiService,
+    user: UserApiService
 }
 
 export type ServiceContext = {
@@ -342,7 +345,8 @@ const ripeJurPersonUtil = new BasicRipeJurPersonUtil(ripePersonRelationshipsUtil
 
 const apiServiceContext: ApiServiceContext = {
     person: new PersonApiServiceImpl(explorationContext.apiService.person, creationContext.apiService.person),
-    jurPerson: new JurPersonApiServiceImpl(explorationContext.apiService.jurPerson, creationContext.apiService.jurPerson)
+    jurPerson: new JurPersonApiServiceImpl(explorationContext.apiService.jurPerson, creationContext.apiService.jurPerson),
+    user: new UserApiServiceImpl(explorationContext.apiService.user, creationContext.apiService.user)
 }
 
 const serviceContext: ServiceContext = {
