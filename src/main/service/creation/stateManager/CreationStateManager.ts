@@ -5,7 +5,7 @@ import {ValidationErrors} from "../../ValidationErrors";
 import CreationTypedAction from "../../../redux/actions/CreationTypedAction";
 
 /**
- * E - entityPageComponents
+ * E - entity
  * C - creation params
  * V - validation object
  */

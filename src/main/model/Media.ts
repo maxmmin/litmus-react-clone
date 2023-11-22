@@ -7,7 +7,7 @@ export default interface Media {
 
 export interface MediaResponseDto {
     mainImage: string|null,
-    images: Array<string>|null
+    images: Array<string>
 }
 
 export type Images = {

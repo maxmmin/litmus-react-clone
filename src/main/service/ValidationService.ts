@@ -1,9 +1,9 @@
 import {ValidationErrors} from "./ValidationErrors";
 
 /**
- * E - entityPageComponents
- * R - application validation error type of entityPageComponents
- * S - server validation error type of entityPageComponents
+ * E - entity
+ * R - application validation error type of entity
+ * S - server validation error type of entity
  */
 
 export default interface ValidationService<E, R=ValidationErrors<E>, S=R> {

@@ -5,9 +5,10 @@ import UserResponseDto from "../../../../../rest/dto/user/UserResponseDto";
 import AuthenticationStateManager from "../../../../auth/stateManager/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "../../../../auth/stateManager/AuthenticationStateManagerImpl";
 import {buildUrl} from "../../../../../util/pureFunctions";
+import UserSimpleResponseDto from "../../../../../rest/dto/user/UserSimpleResponseDto";
 
 
-class UserExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<UserResponseDto> implements UserExplorationApiService {
+class UserExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<UserResponseDto, UserSimpleResponseDto> implements UserExplorationApiService {
 
     constructor() {
         super(appConfig.serverMappings.users.root);

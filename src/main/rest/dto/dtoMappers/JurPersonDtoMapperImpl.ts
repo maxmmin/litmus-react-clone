@@ -8,10 +8,50 @@ import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCr
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import Media from "../../../model/Media";
 import Person from "../../../model/human/person/Person";
+import {JurPersonSimpleResponseDto} from "../jurPerson/JurPersonSimpleResponseDto";
+import {RelatedPersonResponseDto} from "../person/PersonResponseDto";
+import {PersonShortResponseDto} from "../person/PersonShortResponseDto";
+import Sex from "../../../model/human/person/Sex";
+import {blankMedia, blankPassportData, blankRelationshipsInfo} from "../../../util/modelValueHolders";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
     static getInstance(): JurPersonDtoMapperImpl {
         return new JurPersonDtoMapperImpl();
+    }
+
+    private mapShortPersonDtoToRelated (dto: PersonShortResponseDto): RelatedPersonResponseDto {
+        return {
+            id: dto.id,
+            firstName: dto.firstName,
+            middleName: dto.middleName,
+            lastName: dto.lastName,
+            sex: Sex.UNKNOWN,
+            media: blankMedia,
+            location: null,
+            relationshipsInfo: blankRelationshipsInfo,
+            passportData: blankPassportData,
+            dateOfBirth: null,
+            ownedJurPersons: [],
+            benOwnedJurPersons: []
+        }
+    }
+
+    mapSimpleDtoToEntity(simpleDto: JurPersonSimpleResponseDto): PreProcessedJurPerson {
+        const media: Media = {
+            mainImage: simpleDto.media.mainImage,
+            images: simpleDto.media.images||[]
+        }
+
+        return {
+            id: simpleDto.id,
+            name: simpleDto.name,
+            owner: simpleDto.owner?this.mapShortPersonDtoToRelated(simpleDto.owner):null,
+            benOwner: simpleDto.benOwner?this.mapShortPersonDtoToRelated(simpleDto.benOwner):null,
+            location: simpleDto.location,
+            dateOfRegistration: hasContent(simpleDto.dateOfRegistration)?DateEntityTool.buildFromString(simpleDto.dateOfRegistration!):null,
+            edrpou: hasContent(simpleDto.edrpou)?simpleDto.edrpou:null,
+            media: media
+        };
     }
 
     public mapToRequestDto (emergingEntity: JurPersonCreationParams): JurPersonRequestDto {
@@ -89,7 +129,7 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             benOwner: benOwner,
             location: exploredEntityDto.location,
             dateOfRegistration: dob,
-            edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:"",
+            edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou:null,
             media: media
         }
 

@@ -33,7 +33,7 @@ const CreationGeoModal = ({entity, show, close}: Props) => {
             case Entity.PERSON: {
                 return new PersonCreationStateManagerImpl();
             }
-            default: throw new Error("unsupported entityPageComponents")
+            default: throw new Error("unsupported entity")
         }
     }, [entity])
 

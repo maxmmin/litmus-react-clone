@@ -22,6 +22,14 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         return new PersonDtoMapperImpl();
     }
 
+    mapSimpleDtoToEntity(simpleDto: PersonSimpleResponseDto): PreProcessedPerson {
+        return {...simpleDto,
+            ownedJurPersons: [],
+            benOwnedJurPersons: [],
+            dateOfBirth: simpleDto.dateOfBirth&&hasContent(simpleDto.dateOfBirth)?DateEntityTool.buildFromString(simpleDto.dateOfBirth):null,
+            relationshipsInfo: blankRelationshipsInfo}
+    }
+
     mapPreProcessedPersonWithLoss(preProcessed: Omit<PreProcessedPerson, "ownedJurPersons" | "benOwnedJurPersons" | "relationshipsInfo">): Person {
         return {
             id: preProcessed.id,
@@ -165,46 +173,11 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         }
     }
 
-    mapSimpleResponseDto(dto: PersonSimpleResponseDto): PreProcessedPerson {
-        const person: PreProcessedPerson = {
-            id: dto.id,
-            media: {mainImage: dto.media.mainImage,
-                images: dto.media.images||[]},
-            passportData: null,
-            location: null,
-            firstName: dto.firstName,
-            middleName: dto.middleName,
-            lastName: dto.lastName,
-            benOwnedJurPersons: [],
-            ownedJurPersons: [],
-            relationshipsInfo: {scanOptions: {depth: 0}, relationships: null},
-            dateOfBirth: null,
-            sex: dto.sex
-        }
-
-        return person;
-    }
-
     mapToEntity(retrievedEntityDto: PersonResponseDto): PreProcessedPerson {
-        let passportData: PassportData|null;
-
-        if (retrievedEntityDto.passportData) {
-            passportData = {
-                rnokppCode: retrievedEntityDto.passportData.rnokppCode||null,
-                passportSerial: retrievedEntityDto.passportData.passportSerial||null,
-                passportNumber: retrievedEntityDto.passportData.passportNumber||null
-            }
-        } else passportData = null;
-
-        const media: Media =  {
-            mainImage: retrievedEntityDto.media.mainImage,
-            images: retrievedEntityDto.media.images||[]
-        }
-
         const person: PreProcessedPerson = {
-            media: media,
+            media: retrievedEntityDto.media,
             id: retrievedEntityDto.id,
-            passportData: passportData,
+            passportData: retrievedEntityDto.passportData,
             sex: retrievedEntityDto.sex,
             ownedJurPersons: retrievedEntityDto.ownedJurPersons,
             benOwnedJurPersons: retrievedEntityDto.benOwnedJurPersons,

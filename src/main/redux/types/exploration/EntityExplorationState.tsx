@@ -3,7 +3,7 @@ import EntityExplorationData from "./EntityExplorationData";
 import {ValidationErrors} from "../../../service/ValidationErrors";
 
 /**
- * E - entityPageComponents
+ * E - entity
  * P - params type
  */
 export default interface EntityExplorationState <E,P extends EntityExplorationParams> {

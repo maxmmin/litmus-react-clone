@@ -32,7 +32,7 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
 
     constructor(apiService: CreationApiService<RequestDto, ResponseDto>,
                 creationStateManager: CreationStateManager<E,C,V>,
-                mapper: DtoMapper<RequestDto, E, ResponseDto, C>,
+                mapper: DtoMapper<RequestDto, E, ResponseDto, C, any>,
                 validationService: VService) {
         this.mapper = mapper;
         this.apiService = apiService;

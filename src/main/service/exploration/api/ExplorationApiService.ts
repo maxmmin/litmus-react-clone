@@ -1,13 +1,15 @@
 /**
  * P - response dto
+ * S - simple response dto
  * Service which provides work with REST API
  */
 import PagedData from "../../../rest/PagedData";
 
 
-interface ExplorationApiService<P> {
+interface ExplorationApiService<P, S=P> {
     findById (id: number): Promise<P|null>;
-    findAll(index: number): Promise<PagedData<P>>;
+    findSimpleById(id: number): Promise<S|null>;
+    findAll(index: number): Promise<PagedData<S>>;
 }
 
 export default ExplorationApiService;

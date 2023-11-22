@@ -51,11 +51,11 @@ interface PersonResponseDto {
     firstName: string;
     middleName: string|null;
     lastName: string;
-    relationshipsInfo: RelationshipsInfo | null,
+    relationshipsInfo: RelationshipsInfo,
     ownedJurPersons: EmbedJurPersonResponseDto[],
     benOwnedJurPersons: EmbedJurPersonResponseDto[],
     sex: Sex;
-    passportData: Partial<PassportData> | null;
+    passportData: PassportData;
     dateOfBirth: string | null;
     location: GeoLocation | null
 }

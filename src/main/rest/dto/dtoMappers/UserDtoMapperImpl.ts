@@ -7,9 +7,21 @@ import {UserCreationParams} from "../../../service/creation/UserCreationService"
 import UserDtoMapper from "./UserDtoMapper";
 import {checkNotEmpty} from "../../../util/pureFunctions";
 import Role from "../../../redux/types/userIdentity/Role";
+import UserSimpleResponseDto from "../user/UserSimpleResponseDto";
 
 
 class UserDtoMapperImpl implements UserDtoMapper {
+    mapSimpleDtoToEntity(simpleDto: UserSimpleResponseDto): User {
+        return {
+            email: simpleDto.email,
+            id: simpleDto.id,
+            firstName: simpleDto.firstName,
+            middleName: simpleDto.middleName,
+            lastName: simpleDto.lastName,
+            role: checkNotEmpty(Role[simpleDto.role])
+        }
+    }
+
     mapToRequestDto(emergingUser: UserCreationParams): UserRequestDto {
         const dto: UserRequestDto = {}
 

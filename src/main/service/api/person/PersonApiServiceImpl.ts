@@ -30,11 +30,11 @@ export default class PersonApiServiceImpl implements PersonApiService {
         return this.creationService.create(requestDto);
     }
 
-    findAll(index: number): Promise<PagedData<PersonResponseDto>> {
+    findAll(index: number): Promise<PagedData<PersonSimpleResponseDto>> {
         return this.explorationService.findAll(index);
     }
 
-    findByFullName(fullName: FullNameExploration, i: number): Promise<PagedData<PersonResponseDto>> {
+    findByFullName(fullName: FullNameExploration, i: number): Promise<PagedData<PersonSimpleResponseDto>> {
         return this.explorationService.findByFullName(fullName, i);
     }
 
@@ -55,13 +55,11 @@ export default class PersonApiServiceImpl implements PersonApiService {
         return this.explorationService.findPersonRelationships(id, d);
     }
 
-    findPersonSimpleDto(id: number): Promise<PersonSimpleResponseDto | null> {
-        return this.explorationService.findPersonSimpleDto(id);
-    }
-
     findPersons(idList: Set<number>, d: number): Promise<PersonResponseIdMapDto> {
         return this.explorationService.findPersons(idList, d);
     }
 
-
+    findSimpleById(id: number): Promise<PersonSimpleResponseDto | null> {
+        return this.explorationService.findSimpleById(id);
+    }
 }

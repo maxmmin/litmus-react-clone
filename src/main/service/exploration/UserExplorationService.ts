@@ -18,8 +18,10 @@ import UserExplorationStateManager from "./stateManager/user/UserExplorationStat
 import UserExplorationStateManagerImpl from "./stateManager/user/UserExplorationStateManagerImpl";
 import UserExplorationApiServiceImpl from "./api/human/user/UserExplorationApiServiceImpl";
 import UserDtoMapperImpl from "../../rest/dto/dtoMappers/UserDtoMapperImpl";
+import userSimpleResponseDto from "../../rest/dto/user/UserSimpleResponseDto";
+import UserSimpleResponseDto from "../../rest/dto/user/UserSimpleResponseDto";
 
-type UserExplorationDtoMapper = DtoMapper<any, User, UserResponseDto, any>;
+type UserExplorationDtoMapper = DtoMapper<any, User, UserResponseDto, any, UserSimpleResponseDto>;
 
 type UserExplorationCallbackType = () => Promise<PagedData<User>>;
 
@@ -55,8 +57,8 @@ class UserExplorationService implements ExplorationService {
         const middleName = params.middleName;
         const firstName = params.firstName;
         const i = params.i;
-        const pagedResponse: PagedData<UserResponseDto> = await this.service.findByFullName({lastName, middleName, firstName}, i);
-        const userArray: User[] = pagedResponse.content.map(user=>this.mapper.mapToEntity(user));
+        const pagedResponse: PagedData<userSimpleResponseDto> = await this.service.findByFullName({lastName, middleName, firstName}, i);
+        const userArray: User[] = pagedResponse.content.map(user=>this.mapper.mapSimpleDtoToEntity(user));
         return {...pagedResponse, content: userArray};
     }
 
@@ -73,8 +75,8 @@ class UserExplorationService implements ExplorationService {
 
     private exploreAllCallback: UserExplorationCallbackType = async () => {
         const i = this.stateManager.getExplorationParams().i;
-        const pagedResponse: PagedData<UserResponseDto> = await this.service.findAll(i);
-        const userArray: User[] = pagedResponse.content.map(user=>this.mapper.mapToEntity(user));
+        const pagedResponse: PagedData<UserSimpleResponseDto> = await this.service.findAll(i);
+        const userArray: User[] = pagedResponse.content.map(user=>this.mapper.mapSimpleDtoToEntity(user));
         return {...pagedResponse, content: userArray};
     }
 

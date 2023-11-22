@@ -1,11 +1,8 @@
 import PagedData from "../../../../rest/PagedData";
 import ExplorationApiService from "../ExplorationApiService";
-import {FullName, FullNameExploration} from "../../../../model/human/Human";
-import {Nullable} from "../../../../util/types/Nullable";
+import {FullNameExploration} from "../../../../model/human/Human";
 
-/**
- * E - entityPageComponents can be searched by FullName
- */
-export default interface HumanExplorationApiService<P> extends ExplorationApiService<P> {
-    findByFullName (fullName: FullNameExploration, i: number): Promise<PagedData<P>>;
+
+export default interface HumanExplorationApiService<P, S> extends ExplorationApiService<P, S> {
+    findByFullName (fullName: FullNameExploration, i: number): Promise<PagedData<S>>;
 }

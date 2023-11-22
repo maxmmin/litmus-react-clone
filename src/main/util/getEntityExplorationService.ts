@@ -13,7 +13,7 @@ entityExplorationServiceMap.set(Entity.JUR_PERSON, serviceContext.exploration.se
 export default function getEntityExplorationService(entity: Entity): ExplorationService {
     const explorationService = entityExplorationServiceMap.get(entity);
     if (!explorationService) {
-        throw new Error("unknown entityPageComponents")
+        throw new Error("unknown entity")
     } else return explorationService;
 }
 

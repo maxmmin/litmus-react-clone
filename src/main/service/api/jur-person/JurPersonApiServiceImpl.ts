@@ -10,6 +10,7 @@ import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import JurPersonExplorationApiServiceImpl from "../../exploration/api/jurPerson/JurPersonExplorationApiServiceImpl";
 import JurPersonCreationApiServiceImpl from "../../creation/api/JurPersonCreationApiServiceImpl";
+import {JurPersonSimpleResponseDto} from "../../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
 
 export default class JurPersonApiServiceImpl implements JurPersonApiService {
     protected readonly apiInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
@@ -28,8 +29,12 @@ export default class JurPersonApiServiceImpl implements JurPersonApiService {
         return this.jurPersonCreationService.create(requestDto);
     }
 
-    findAll(index: number): Promise<PagedData<JurPersonResponseDto>> {
+    findAll(index: number): Promise<PagedData<JurPersonSimpleResponseDto>> {
         return this.jurPersonExplorationService.findAll(index);
+    }
+
+    findSimpleById(id: number): Promise<JurPersonSimpleResponseDto | null> {
+        return this.jurPersonExplorationService.findSimpleById(id);
     }
 
     findById(id: number): Promise<JurPersonResponseDto | null> {
@@ -40,7 +45,7 @@ export default class JurPersonApiServiceImpl implements JurPersonApiService {
         return this.jurPersonExplorationService.findByIdWithDepthOption(id, d);
     }
 
-    findByName(name: string, i: number): Promise<PagedData<JurPersonResponseDto>> {
+    findByName(name: string, i: number): Promise<PagedData<JurPersonSimpleResponseDto>> {
         return this.jurPersonExplorationService.findByName(name, i);
     }
 

@@ -129,8 +129,8 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         setPending(true)
 
         try {
-            const personResponseDto: PersonSimpleResponseDto|null = await personService.findPersonSimpleDto(id);
-            const person: Person|null = personResponseDto?mapper.mapPreProcessedPersonWithLoss(mapper.mapSimpleResponseDto(personResponseDto)):null;
+            const personResponseDto: PersonSimpleResponseDto|null = await personService.findSimpleById(id);
+            const person: Person|null = personResponseDto?mapper.mapPreProcessedPersonWithLoss(mapper.mapSimpleDtoToEntity(personResponseDto)):null;
             setPerson(person)
             if (!person) {
                 throw new Error(`Особу з ідентифікатором ${id} не знайдено`)

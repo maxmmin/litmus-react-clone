@@ -83,7 +83,7 @@ const Creation = () => {
                 const validationErrors: UserValidationObject = state.creation.user?state.creation.user.validationErrors:userDefaultValidationObject;
                 return ServiceContext.creation.validation.user.hasErrors(validationErrors);
             }
-            default: throw new Error("unknown entityPageComponents")
+            default: throw new Error("unknown entity")
         }
     })
 

@@ -4,8 +4,10 @@ import BasicEntityLookupService from "../BasicExplorationApiService";
 import PagedData from "../../../../rest/PagedData";
 import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
 import {buildUrl} from "../../../../util/pureFunctions";
+import {JurPersonSimpleResponseDto} from "../../../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
 
-class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPersonResponseDto> implements JurPersonExplorationApiService {
+class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPersonResponseDto, JurPersonSimpleResponseDto>
+    implements JurPersonExplorationApiService {
 
     constructor() {
         super(appConfig.serverMappings.jurPersons.root);
@@ -25,7 +27,7 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPer
     }
 
 
-    async findByName(name: string, i: number): Promise<PagedData<JurPersonResponseDto>> {
+    async findByName(name: string, i: number): Promise<PagedData<JurPersonSimpleResponseDto>> {
 
         const params = {
             i: i
@@ -33,7 +35,7 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPer
 
         const url = buildUrl(appConfig.serverMappings.jurPersons.getByName, encodeURIComponent(name));
 
-        const response = await this.apiInstance.get<PagedData<JurPersonResponseDto>>(
+        const response = await this.apiInstance.get<PagedData<JurPersonSimpleResponseDto>>(
             url, {
             params: params
         });

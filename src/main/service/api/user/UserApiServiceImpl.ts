@@ -11,6 +11,7 @@ import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import UserExplorationApiServiceImpl from "../../exploration/api/human/user/UserExplorationApiServiceImpl";
 import UserCreationApiServiceImpl from "../../creation/api/UserCreationApiServiceImpl";
+import UserSimpleResponseDto from "../../../rest/dto/user/UserSimpleResponseDto";
 
 export default class UserApiServiceImpl implements UserApiService {
     protected readonly apiInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
@@ -24,11 +25,15 @@ export default class UserApiServiceImpl implements UserApiService {
         return new UserApiServiceImpl(userExplorationApiService, userCreationApiService);
     }
 
+    findSimpleById(id: number): Promise<UserSimpleResponseDto | null> {
+        return this.userExplorationApiService.findSimpleById(id);
+    }
+
     create(requestDto: UserRequestDto): Promise<UserResponseDto> {
         return this.userCreationApiService.create(requestDto);
     }
 
-    findAll(index: number): Promise<PagedData<UserResponseDto>> {
+    findAll(index: number): Promise<PagedData<UserSimpleResponseDto>> {
         return this.userExplorationApiService.findAll(index);
     }
 
@@ -36,7 +41,7 @@ export default class UserApiServiceImpl implements UserApiService {
         return this.userExplorationApiService.findByEmail(email);
     }
 
-    findByFullName(fullName: FullNameExploration, i: number): Promise<PagedData<UserResponseDto>> {
+    findByFullName(fullName: FullNameExploration, i: number): Promise<PagedData<UserSimpleResponseDto>> {
         return this.userExplorationApiService.findByFullName(fullName, i);
     }
 

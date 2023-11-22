@@ -14,9 +14,9 @@ import {PersonSimpleResponseDto} from "../person/PersonSimpleResponseDto";
 
 export type OptionalRawPersonIdMap = Map<number, PreProcessedPerson|null>
 
-interface PersonDtoMapper extends DtoMapper<PersonRequestDto, PreProcessedPerson, PersonResponseDto, PersonCreationParams> {
+interface PersonDtoMapper extends DtoMapper<PersonRequestDto, PreProcessedPerson, PersonResponseDto,
+    PersonCreationParams, PersonSimpleResponseDto> {
     mapPreProcessedPersonWithLoss(preProcessed: Omit<PreProcessedPerson, "ownedJurPersons"|"benOwnedJurPersons"|"relationshipsInfo">): Person;
-    mapSimpleResponseDto(dto: PersonSimpleResponseDto): PreProcessedPerson
     mapEmbedPersonResponseDto(dto: EmbedPersonResponseDto): PreProcessedPerson;
     mapPersonResponseIdMapDto(dto: PersonResponseIdMapDto): OptionalRawPersonIdMap;
     mapRelationshipResponseDto (relationshipResponseDto: Omit<RelationshipResponseDto, 'person'>, to: Person): Relationship;

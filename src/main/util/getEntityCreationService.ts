@@ -11,6 +11,6 @@ entityCreationServiceMap.set(Entity.JUR_PERSON, serviceContext.creation.service.
 export default function getEntityCreationService (entity: Entity): CreationService<unknown> {
     const service: CreationService<unknown>|undefined = entityCreationServiceMap.get(entity);
     if (!service) {
-        throw new Error("unknown entityPageComponents")
+        throw new Error("unknown entity")
     }   else return service;
 }

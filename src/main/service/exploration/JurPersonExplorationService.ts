@@ -20,8 +20,9 @@ import JurPersonExplorationStateManager from "./stateManager/jurPerson/JurPerson
 import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPersonExplorationStateManagerImpl";
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
+import {JurPersonSimpleResponseDto} from "../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
 
-type JurPersonExplorationMapper = DtoMapper<any, PreProcessedJurPerson, JurPersonResponseDto,any>
+type JurPersonExplorationMapper = DtoMapper<any, PreProcessedJurPerson, JurPersonResponseDto,any, JurPersonSimpleResponseDto>
 
 type JurPersonExplorationCallbackType = () => Promise<PagedData<PreProcessedJurPerson>>;
 
@@ -52,15 +53,15 @@ class JurPersonExplorationService implements ExplorationService {
 
     private exploreAll: JurPersonExplorationCallbackType = async () => {
         const i: number = this.stateManager.getExplorationParams().i;
-        const pagedData: PagedData<JurPersonResponseDto> = await this.service.findAll(i);
-        const jurPersonArray: PreProcessedJurPerson[] = pagedData.content.map(jurPerson=>this.mapper.mapToEntity(jurPerson));
+        const pagedData: PagedData<JurPersonSimpleResponseDto> = await this.service.findAll(i);
+        const jurPersonArray: PreProcessedJurPerson[] = pagedData.content.map(jurPerson=>this.mapper.mapSimpleDtoToEntity(jurPerson));
         return {...pagedData, content: jurPersonArray}
     }
 
     private exploreByName: JurPersonExplorationCallbackType = async () => {
         const params = this.stateManager.getExplorationParams();
-        const pagedData: PagedData<JurPersonResponseDto> = await this.service.findByName(params.name, params.i);
-        const jurPersonArray: PreProcessedJurPerson[] = pagedData.content.map(jurPerson=>this.mapper.mapToEntity(jurPerson));
+        const pagedData: PagedData<JurPersonSimpleResponseDto> = await this.service.findByName(params.name, params.i);
+        const jurPersonArray: PreProcessedJurPerson[] = pagedData.content.map(jurPerson=>this.mapper.mapSimpleDtoToEntity(jurPerson));
         return {...pagedData, content: jurPersonArray}
     }
 
