@@ -24,8 +24,6 @@ export default function (props: React.DetailedHTMLProps<React.ImgHTMLAttributes<
                 onError={async e=>{
                     if (!handled&&!appStateManager.isSecuredImgHandling()) {
                         appStateManager.enableSecuredImgHandling();
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src="";
 
                         try {
                             await testAuth();
