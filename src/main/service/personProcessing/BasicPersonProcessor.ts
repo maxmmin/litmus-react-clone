@@ -2,7 +2,7 @@ import BasicPersonRelationshipsLoader, {NoRelationshipsOptionalPersonMap} from "
 import Person, {NoRelationsPerson, PreProcessedPerson, Relationship} from "../../model/human/person/Person";
 import {
     NestedPersonResponseDto,
-    RelatedPersonResponseDto,
+    RelatedPersonResponseDto, RelationshipsInfo,
 } from "../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import PersonProcessor from "./PersonProcessor";
@@ -17,9 +17,10 @@ import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelation
 import isEmbedJurPersonDto from "../../util/jurPerson/checkJurPersonDto";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 import getReversedRelationType from "../../util/functional/getReversedRelationType";
+import Media from "../../model/Media";
+import {blankRelationshipsInfo} from "../../util/modelValueHolders";
 
 type JurPersonContainable = Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>
-
 
 export default class BasicPersonProcessor implements PersonProcessor{
     private readonly personsStore = new Map<number, NoRelationsPerson>();
@@ -66,14 +67,18 @@ export default class BasicPersonProcessor implements PersonProcessor{
     }
 
     private loadRawPersonToStore(rawPerson: PreProcessedPerson) {
-        const clonedPerson: NoRelationsPerson = {...rawPerson};
-        // @ts-ignore
-        delete clonedPerson['relationshipsInfo'];
+        const clonedPerson: PreProcessedPerson = {...rawPerson, relationshipsInfo: blankRelationshipsInfo};
         this.personsStore.set(clonedPerson.id, clonedPerson)
 
         rawPerson.relationshipsInfo.relationships?.forEach(r=>{
-            const noRelationsPerson = this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(r.person);
-            this.personsStore.set(noRelationsPerson.id, noRelationsPerson);
+            const preProcessedPerson: PreProcessedPerson = this.dtoMapper.mapToEntity({
+                ...r.person,
+                ownedJurPersons: [],
+                benOwnedJurPersons: [],
+                relationshipsInfo: blankRelationshipsInfo
+            });
+
+            this.personsStore.set(preProcessedPerson.id, preProcessedPerson);
         })
     }
 
@@ -207,7 +212,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
             if (personsToInclude.has(ownerDto.id)) {
                 owner = this.getCreatedPerson(ownerDto.id, createdPersons);
             } else {
-                owner = {...this.dtoMapper.mapEmbedPersonResponseDtoToNoRelationPerson(ownerDto),
+                owner = {...this.dtoMapper.mapEmbedPersonResponseDto(ownerDto),
                     relationships: [],
                     ownedJurPersons: [],
                     benOwnedJurPersons: []
@@ -224,11 +229,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
             if (createdPersons.has(benOwnerDto.id)) {
                 benOwner = this.getCreatedPerson(benOwnerDto.id, createdPersons);
             } else {
-                benOwner = {...this.dtoMapper.mapEmbedPersonResponseDtoToNoRelationPerson(benOwnerDto),
-                    relationships: [],
-                    ownedJurPersons: [],
-                    benOwnedJurPersons: []
-                };
+                benOwner = this.dtoMapper.mapPreProcessedPersonWithLoss(this.dtoMapper.mapEmbedPersonResponseDto(benOwnerDto));
                 this.personsStore.set(benOwner.id, benOwner);
             }
         }

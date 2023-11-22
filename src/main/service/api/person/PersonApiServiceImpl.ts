@@ -3,8 +3,7 @@ import PersonCreationApiService from "../../creation/api/PersonCreationApiServic
 import PersonApiService from "./PersonApiService";
 import PersonRequestDto from "../../../rest/dto/person/PersonRequestDto";
 import PersonResponseDto, {
-    RelationshipsInfo,
-    SimplePersonResponseDto
+    RelationshipsInfo
 } from "../../../rest/dto/person/PersonResponseDto";
 import PagedData from "../../../rest/PagedData";
 import {FullNameExploration} from "../../../model/human/Human";
@@ -14,6 +13,7 @@ import {buildUrl} from "../../../util/pureFunctions";
 import {AxiosInstance} from "axios";
 import AxiosApiManager from "../../rest/AxiosApiManager";
 import PersonCreationApiServiceImpl from "../../creation/api/PersonCreationApiServiceImpl";
+import {PersonSimpleResponseDto} from "../../../rest/dto/person/PersonSimpleResponseDto";
 
 export default class PersonApiServiceImpl implements PersonApiService {
     protected readonly apiInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
@@ -55,7 +55,7 @@ export default class PersonApiServiceImpl implements PersonApiService {
         return this.explorationService.findPersonRelationships(id, d);
     }
 
-    findPersonSimpleDto(id: number): Promise<SimplePersonResponseDto | null> {
+    findPersonSimpleDto(id: number): Promise<PersonSimpleResponseDto | null> {
         return this.explorationService.findPersonSimpleDto(id);
     }
 

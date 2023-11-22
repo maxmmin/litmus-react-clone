@@ -6,15 +6,14 @@ import hasMediaContent from "../../../util/media/hasMediaContent";
 import PassportData from "../../../model/human/person/PassportData";
 import PersonResponseDto, {
     EmbedPersonResponseDto,
-    RelatedPersonResponseDto,
-    RelationshipResponseDto,
-    SimplePersonResponseDto,
+    RelationshipResponseDto
 } from "../person/PersonResponseDto";
 import PersonDtoMapper, {OptionalRawPersonIdMap} from "./PersonDtoMapper";
 import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 import Media from "../../../model/Media";
-import Sex from "../../../model/human/person/Sex";
+import {PersonSimpleResponseDto} from "../person/PersonSimpleResponseDto";
+import {blankMedia, blankRelationshipsInfo} from "../../../util/modelValueHolders";
 
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
@@ -23,32 +22,40 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         return new PersonDtoMapperImpl();
     }
 
-    mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto|RelatedPersonResponseDto, 'relationshipsInfo'>): NoRelationsPerson {
-
-        const person = this.mapToEntity({...dto,
-            relationshipsInfo: {relationships: [], scanOptions: {depth: 0}},
+    mapPreProcessedPersonWithLoss(preProcessed: Omit<PreProcessedPerson, "ownedJurPersons" | "benOwnedJurPersons" | "relationshipsInfo">): Person {
+        return {
+            id: preProcessed.id,
+            media: preProcessed.media,
+            passportData: preProcessed.passportData,
+            location: preProcessed.location,
+            firstName: preProcessed.firstName,
+            middleName: preProcessed.middleName,
+            lastName: preProcessed.lastName,
+            benOwnedJurPersons: [],
             ownedJurPersons: [],
-            benOwnedJurPersons: []
-        });
-        // @ts-ignore
-        delete person["relationshipsInfo"];
-        return {...person}
+            relationships: [],
+            dateOfBirth: preProcessed.dateOfBirth,
+            sex: preProcessed.sex
+        }
     }
 
-    mapEmbedPersonResponseDtoToNoRelationPerson(dto: Omit<EmbedPersonResponseDto, "relationshipsInfo">): NoRelationsPerson {
+    mapEmbedPersonResponseDto(dto: EmbedPersonResponseDto): PreProcessedPerson {
         return {
             id: dto.id,
-            media: {mainImage: null,
-                images: []},
+            media: blankMedia,
             passportData: null,
             location: null,
             firstName: dto.firstName,
             middleName: dto.middleName,
             lastName: dto.lastName,
             dateOfBirth: null,
-            sex: dto.sex
+            sex: dto.sex,
+            ownedJurPersons: [],
+            benOwnedJurPersons: [],
+            relationshipsInfo: blankRelationshipsInfo
         };
     }
+
 
 
 
@@ -158,8 +165,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         }
     }
 
-    mapSimpleResponseDtoToEntity(dto: SimplePersonResponseDto): Person {
-        const person: Person = {
+    mapSimpleResponseDto(dto: PersonSimpleResponseDto): PreProcessedPerson {
+        const person: PreProcessedPerson = {
             id: dto.id,
             media: {mainImage: dto.media.mainImage,
                 images: dto.media.images||[]},
@@ -168,9 +175,9 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             firstName: dto.firstName,
             middleName: dto.middleName,
             lastName: dto.lastName,
-            relationships: [],
             benOwnedJurPersons: [],
             ownedJurPersons: [],
+            relationshipsInfo: {scanOptions: {depth: 0}, relationships: null},
             dateOfBirth: null,
             sex: dto.sex
         }

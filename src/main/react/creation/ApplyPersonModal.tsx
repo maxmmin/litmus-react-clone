@@ -12,9 +12,6 @@ import PersonCreationStateManager from "../../service/creation/stateManager/pers
 import {HttpErrorParser} from "../../error/BasicHttpError";
 import {ApplicationError} from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
-import {
-    SimplePersonResponseDto
-} from "../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import JurPersonCreationStateManagerImpl
     from "../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
@@ -24,6 +21,7 @@ import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreat
 import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
 import RelationshipsLinkObject from "../../util/person/RelationshipsLinkObject";
 import PersonPreviewInfoTable from "./SimplePersonPreview";
+import {PersonSimpleResponseDto} from "../../rest/dto/person/PersonSimpleResponseDto";
 
 type Props = {
     modalSettings: CreationModalSettings,
@@ -131,8 +129,8 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         setPending(true)
 
         try {
-            const personResponseDto: SimplePersonResponseDto|null = await personService.findPersonSimpleDto(id);
-            const person: Person|null = personResponseDto?mapper.mapSimpleResponseDtoToEntity(personResponseDto):null;
+            const personResponseDto: PersonSimpleResponseDto|null = await personService.findPersonSimpleDto(id);
+            const person: Person|null = personResponseDto?mapper.mapPreProcessedPersonWithLoss(mapper.mapSimpleResponseDto(personResponseDto)):null;
             setPerson(person)
             if (!person) {
                 throw new Error(`Особу з ідентифікатором ${id} не знайдено`)

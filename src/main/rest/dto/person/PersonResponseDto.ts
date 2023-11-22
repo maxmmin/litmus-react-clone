@@ -43,8 +43,6 @@ export type NestedRelationshipsInfo = {
     relationships: NestedRelationshipResponseDto[]|null
 }
 
-export type SimplePersonResponseDto = Pick<PersonResponseDto, 'id'|'firstName'|'middleName'|'lastName'|'sex'|'media'|'dateOfBirth'|'location'>
-
 export type EmbedPersonResponseDto = Pick<PersonResponseDto, 'firstName'|'middleName'|'lastName'|'sex'>&NestedPersonResponseDto
 
 interface PersonResponseDto {

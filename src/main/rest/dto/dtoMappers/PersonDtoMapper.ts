@@ -1,25 +1,24 @@
 import DtoMapper from "./DtoMapper";
 import PersonRequestDto  from "../person/PersonRequestDto";
 import Person, {
-    NoRelationsPerson,
     PreProcessedPerson,
     Relationship
 } from "../../../model/human/person/Person";
 import PersonResponseDto, {
-    EmbedPersonResponseDto, NestedPersonResponseDto, RelatedPersonResponseDto,
-    RelationshipResponseDto,
-    SimplePersonResponseDto
+    EmbedPersonResponseDto,
+    RelationshipResponseDto
 } from "../person/PersonResponseDto";
 import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
+import {PersonSimpleResponseDto} from "../person/PersonSimpleResponseDto";
 
 export type OptionalRawPersonIdMap = Map<number, PreProcessedPerson|null>
 
 interface PersonDtoMapper extends DtoMapper<PersonRequestDto, PreProcessedPerson, PersonResponseDto, PersonCreationParams> {
-    mapSimpleResponseDtoToEntity(dto: SimplePersonResponseDto): Person;
-    mapEmbedPersonResponseDtoToNoRelationPerson(dto: Omit<EmbedPersonResponseDto, "relationshipsInfo">): NoRelationsPerson;
+    mapPreProcessedPersonWithLoss(preProcessed: Omit<PreProcessedPerson, "ownedJurPersons"|"benOwnedJurPersons"|"relationshipsInfo">): Person;
+    mapSimpleResponseDto(dto: PersonSimpleResponseDto): PreProcessedPerson
+    mapEmbedPersonResponseDto(dto: EmbedPersonResponseDto): PreProcessedPerson;
     mapPersonResponseIdMapDto(dto: PersonResponseIdMapDto): OptionalRawPersonIdMap;
-    mapPersonResponseDtoToNoRelationPerson(dto: Omit<PersonResponseDto|RelatedPersonResponseDto, 'relationshipsInfo'>): NoRelationsPerson;
     mapRelationshipResponseDto (relationshipResponseDto: Omit<RelationshipResponseDto, 'person'>, to: Person): Relationship;
 }
 

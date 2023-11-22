@@ -1,4 +1,3 @@
-import {SimplePersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
 import {buildPersonNavLink} from "../../util/navLinkBuilders";
 import {GoBubbleIcon} from "../assets/icons";
 import {buildImgUrl} from "../../util/pureFunctions";
@@ -7,9 +6,10 @@ import Person from "../../model/human/person/Person";
 import {DateEntityTool} from "../../model/DateEntity";
 import {valueOrMessage} from "../../util/functional/valueOrNull";
 import SecuredImage from "../sharedComponents/SecuredImage";
+import {PersonSimpleResponseDto} from "../../rest/dto/person/PersonSimpleResponseDto";
 
 type Props = {
-    person: Pick<Person, keyof SimplePersonResponseDto>
+    person: Pick<Person, keyof PersonSimpleResponseDto>
 }
 export default function ({person}: Props) {
     const mainImg = person.media.mainImage||person.media.images[0];

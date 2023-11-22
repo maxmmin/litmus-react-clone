@@ -3,7 +3,6 @@ import Person, {PreProcessedPerson, Relationship, RelationType} from "../../mode
 import Human, {HumanCreationParams} from "../../model/human/Human";
 import CreationService from "./CreationService";
 import Sex from "../../model/human/person/Sex";
-import {SimplePersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
 
 export type RelationshipCreationParams = {
     to: Person,

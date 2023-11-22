@@ -6,6 +6,7 @@ import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsSca
 import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
+import {blankRelationshipsInfo} from "../../util/modelValueHolders";
 
 export type NoRelationshipsOptionalPersonMap = Map<number, NoRelationsPerson|null>
 
@@ -49,9 +50,12 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationsLo
             for (let key in personMapResponseDto) {
                 if (!isNaN(+key)) {
                     const nullablePerson = personMapResponseDto[+key];
-                    let mappedPerson: NoRelationsPerson|null = null;
+                    let mappedPerson: PreProcessedPerson|null = null;
                     if (nullablePerson) {
-                        mappedPerson = this.dtoMapper.mapPersonResponseDtoToNoRelationPerson(nullablePerson);
+                        mappedPerson = this.dtoMapper.mapToEntity(nullablePerson);
+                        mappedPerson.ownedJurPersons = [];
+                        mappedPerson.benOwnedJurPersons = [];
+                        mappedPerson.relationshipsInfo = blankRelationshipsInfo;
                     }
                     personMap.set(+key, mappedPerson)
                 }
