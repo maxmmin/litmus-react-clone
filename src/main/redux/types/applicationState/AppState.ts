@@ -9,6 +9,7 @@ import Notification from "./Notification";
 type AppState = {
     isRefreshing: boolean,
     isHeaderMenuOpened: boolean,
+    securedImgHandling: boolean,
     notifications: Notification[]
 }
 

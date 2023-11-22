@@ -22,7 +22,25 @@ class ApplicationStateManagerImpl implements ApplicationStateManager{
         return checkNotEmpty(store.getState().appState?.isRefreshing);
     }
 
+    disableSecuredImgHandling(): void {
+        const action: Action<AppStateAction> = {
+            type: AppStateAction.SECURED_IMG_HANDLING_OFF
+        }
 
+        this._store.dispatch(action);
+    }
+
+    enableSecuredImgHandling(): void {
+        const action: Action<AppStateAction> = {
+            type: AppStateAction.SECURED_IMG_HANDLING_ON
+        }
+
+        this._store.dispatch(action);
+    }
+
+    isSecuredImgHandling(): boolean {
+        return this._store.getState().appState!.securedImgHandling;
+    }
 
     disablePending (): void {
         const action: Action<AppStateAction> = {

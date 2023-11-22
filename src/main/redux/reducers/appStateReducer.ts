@@ -12,7 +12,7 @@ import {ApplicationError} from "../../rest/ErrorResponse";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 import GeneralAction from "../GeneralAction";
 
-export const initialAppState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, notifications: []}
+export const initialAppState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, notifications: [], securedImgHandling: false}
 
 
 
@@ -35,6 +35,13 @@ const appStateReducer: Reducer<AppStateReducible, Action<String>> = (prevState =
             return {...prevState, isHeaderMenuOpened: false}
         }
 
+        case AppStateAction.SECURED_IMG_HANDLING_OFF: {
+            return {...prevState, securedImgHandling: false}
+        }
+
+        case AppStateAction.SECURED_IMG_HANDLING_ON: {
+            return {...prevState, securedImgHandling: true}
+        }
 
         case GeneralAction.RESET_DATA: {
             return {...initialAppState, notifications: prevState.notifications}
