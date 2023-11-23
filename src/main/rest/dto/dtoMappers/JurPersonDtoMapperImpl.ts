@@ -13,11 +13,29 @@ import {RelatedPersonResponseDto} from "../person/PersonResponseDto";
 import {PersonShortResponseDto} from "../person/PersonShortResponseDto";
 import Sex from "../../../model/human/person/Sex";
 import {blankMedia, blankPassportData, blankRelationshipsInfo} from "../../../util/modelValueHolders";
+import PersonDtoMapper from "./PersonDtoMapper";
+import personDtoMapper from "./PersonDtoMapper";
+import PersonDtoMapperImpl from "./PersonDtoMapperImpl";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
-    static getInstance(): JurPersonDtoMapperImpl {
-        return new JurPersonDtoMapperImpl();
+
+    protected readonly personDtoMapper: PersonDtoMapper;
+
+    constructor(personDtoMapper: PersonDtoMapper) {
+        this.personDtoMapper = personDtoMapper;
     }
+
+    static getInstance(personDtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance()): JurPersonDtoMapperImpl {
+        return new JurPersonDtoMapperImpl(personDtoMapper);
+    }
+
+    mapPreprocessedJurPersonWithLoss(dto: PreProcessedJurPerson): JurPerson {
+        const owner: Person|null = dto.owner?this.personDtoMapper.mapPreProcessedPersonWithLoss(this.personDtoMapper.mapSimpleDtoToEntity(dto.owner)):null;
+        const benOwner: Person|null = dto.benOwner?this.personDtoMapper.mapPreProcessedPersonWithLoss(this.personDtoMapper.mapSimpleDtoToEntity(dto.benOwner)):null;
+        return this.mapToRipeJurPerson(dto, owner, benOwner);
+    }
+
+
 
     private mapShortPersonDtoToRelated (dto: PersonShortResponseDto): RelatedPersonResponseDto {
         return {

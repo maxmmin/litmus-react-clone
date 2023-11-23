@@ -35,7 +35,7 @@ class UserExplorationService implements ExplorationService {
 
     public static getInstance (stateManager: UserExplorationStateManager = new UserExplorationStateManagerImpl(),
                                service: UserExplorationApiService = UserExplorationApiServiceImpl.getInstance(),
-                               mapper: UserExplorationDtoMapper = new UserDtoMapperImpl(),
+                               mapper: UserExplorationDtoMapper = UserDtoMapperImpl.getInstance(),
                                 ): UserExplorationService {
         return new UserExplorationService(stateManager,service,mapper)
     }

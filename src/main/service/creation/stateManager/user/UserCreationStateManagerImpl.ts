@@ -5,6 +5,7 @@ import UserCreationStateManager from "./UserCreationStateManager";
 import User from "../../../../model/human/user/User";
 import {UserValidationObject} from "../../validation/human/user/UserCreationValidationService";
 import {UserCreationParams} from "../../UserCreationService";
+import UserCreationServiceImpl from "../../UserCreationServiceImpl";
 
 
 class UserCreationStateManagerImpl extends CreationStateManagerImpl<User,UserCreationParams, UserValidationObject> implements UserCreationStateManager {
@@ -13,6 +14,10 @@ class UserCreationStateManagerImpl extends CreationStateManagerImpl<User,UserCre
         const dispatch: AppDispatch = store.dispatch;
         const getState = ()=>store.getState().creation.user!;
         super(dispatch, getState, CreationTypedAction.user);
+    }
+
+    public static getInstance(): UserCreationStateManagerImpl {
+        return new UserCreationStateManagerImpl();
     }
 
 

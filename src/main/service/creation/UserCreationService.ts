@@ -4,7 +4,7 @@ import {RoleName} from "../../redux/types/userIdentity/Role";
 import Human, {HumanCreationParams} from "../../model/human/Human";
 import CreationService from "./CreationService";
 
-export type UserCreationParams = Omit<User, "id"|"role"|keyof Human>&{
+export type UserCreationParams = Omit<User, "id"|"role"|keyof HumanCreationParams|'createdEntities'>&{
     password: string,
     repeatPassword: string,
     role: RoleName

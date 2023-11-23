@@ -116,9 +116,13 @@ type Mappers = {
     userIdentity: UserIdentityDtoMapper
 }
 
+const personMapper: PersonDtoMapper = new PersonDtoMapperImpl();
+const jurPersonMapper: JurPersonDtoMapper = new JurPersonDtoMapperImpl(personMapper);
+const userMapper: UserDtoMapper = new UserDtoMapperImpl(personMapper, jurPersonMapper);
+
 const mappers: Mappers = {
-    person: PersonDtoMapperImpl.getInstance(),
-    user: new UserDtoMapperImpl(),
+    person: new PersonDtoMapperImpl(),
+    user: userMapper,
     jurPerson: JurPersonDtoMapperImpl.getInstance(),
     userIdentity: new UserIdentityDtoMapperImpl()
 }

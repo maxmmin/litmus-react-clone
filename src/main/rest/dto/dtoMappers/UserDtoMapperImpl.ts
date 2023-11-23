@@ -1,16 +1,33 @@
-import DtoMapper from "./DtoMapper";
-import User from "../../../model/human/user/User";
+import User, {CreatedEntities} from "../../../model/human/user/User";
 import UserRequestDto from "../user/UserRequestDto";
 import {hasContent} from "../../../util/functional/isEmpty";
-import UserResponseDto from "../user/UserResponseDto";
+import UserResponseDto, {CreatedEntitiesResponseDto} from "../user/UserResponseDto";
 import {UserCreationParams} from "../../../service/creation/UserCreationService";
 import UserDtoMapper from "./UserDtoMapper";
 import {checkNotEmpty} from "../../../util/pureFunctions";
 import Role from "../../../redux/types/userIdentity/Role";
 import UserSimpleResponseDto from "../user/UserSimpleResponseDto";
-
+import {blankCreatedEntities} from "../../../util/modelValueHolders";
+import JurPersonDtoMapper from "./JurPersonDtoMapper";
+import PersonDtoMapper from "./PersonDtoMapper";
+import JurPersonDtoMapperImpl from "./JurPersonDtoMapperImpl";
+import PersonDtoMapperImpl from "./PersonDtoMapperImpl";
 
 class UserDtoMapperImpl implements UserDtoMapper {
+    private readonly jurPersonDtoMapper: JurPersonDtoMapper;
+    private readonly personDtoMapper: PersonDtoMapper;
+
+
+    constructor(personDtoMapper: PersonDtoMapper, jurPersonDtoMapper: JurPersonDtoMapper) {
+        this.jurPersonDtoMapper = jurPersonDtoMapper;
+        this.personDtoMapper = personDtoMapper;
+    }
+
+    public static getInstance (personDtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
+                jurPersonDtoMapper: JurPersonDtoMapper = JurPersonDtoMapperImpl.getInstance()): UserDtoMapperImpl {
+        return new UserDtoMapperImpl(personDtoMapper, jurPersonDtoMapper);
+    }
+
     mapSimpleDtoToEntity(simpleDto: UserSimpleResponseDto): User {
         return {
             email: simpleDto.email,
@@ -18,7 +35,8 @@ class UserDtoMapperImpl implements UserDtoMapper {
             firstName: simpleDto.firstName,
             middleName: simpleDto.middleName,
             lastName: simpleDto.lastName,
-            role: checkNotEmpty(Role[simpleDto.role])
+            role: checkNotEmpty(Role[simpleDto.role]),
+            createdEntities: blankCreatedEntities
         }
     }
 
@@ -52,6 +70,18 @@ class UserDtoMapperImpl implements UserDtoMapper {
         return dto;
     }
 
+    protected mapCreatedEntities(createdEntities: CreatedEntitiesResponseDto): CreatedEntities {
+        return {
+            persons: createdEntities.persons.map(p=>{
+                return this.personDtoMapper.mapPreProcessedPersonWithLoss(this.personDtoMapper.mapSimpleDtoToEntity(p))
+            }),
+            jurPersons: createdEntities.jurPersons.map(j => {
+                return this.jurPersonDtoMapper.mapPreprocessedJurPersonWithLoss(this.jurPersonDtoMapper.mapSimpleDtoToEntity(j))
+            }),
+            users: createdEntities.users.map(u=>this.mapSimpleDtoToEntity(u))
+        }
+    }
+
     mapToEntity(exploredEntityDto: UserResponseDto): User {
         return {
             email: exploredEntityDto.email,
@@ -59,11 +89,10 @@ class UserDtoMapperImpl implements UserDtoMapper {
             firstName: exploredEntityDto.firstName,
             middleName: exploredEntityDto.middleName,
             lastName: exploredEntityDto.lastName,
-            role: checkNotEmpty(Role[exploredEntityDto.role])
+            role: checkNotEmpty(Role[exploredEntityDto.role]),
+            createdEntities: this.mapCreatedEntities(exploredEntityDto.createdEntities)
         }
     }
-
-
 
 }
 

@@ -1,7 +1,5 @@
 import React from "react";
 import User from "../../../model/human/user/User";
-import {valueOrMessage} from "../../../util/functional/valueOrNull";
-import {DateEntityTool} from "../../../model/DateEntity";
 
 type UserProps = {
     user: User
@@ -17,6 +15,18 @@ export default function ({user}: UserProps) {
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Ім'я:</span> {user.firstName}</p>
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>По-батькові:</span> {user.middleName}</p>
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Роль:</span> {user.role.canonicalName}</p>
+                </div>
+
+                <div className="user-page__created-entities">
+                    <div className="user-page__created-users">
+
+                    </div>
+                    <div className="user-page__created-persons">
+
+                    </div>
+                    <div className="user-page__created-jur-persons">
+
+                    </div>
                 </div>
             </section>
         </div>

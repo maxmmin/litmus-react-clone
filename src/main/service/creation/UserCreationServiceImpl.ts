@@ -28,8 +28,8 @@ class UserCreationServiceImpl
     }
 
     public static getInstance(apiService: UserCreationApiService = UserCreationApiServiceImpl.getInstance(),
-                              stateManager: UserCreationStateManager = new UserCreationStateManagerImpl(),
-                              mapper: UserDtoMapper = new UserDtoMapperImpl(),
+                              stateManager: UserCreationStateManager = UserCreationStateManagerImpl.getInstance(),
+                              mapper: UserDtoMapper = UserDtoMapperImpl.getInstance(),
                               validationService: UserCreationValidationService = new UserCreationValidationServiceImpl()): UserCreationServiceImpl {
         return new UserCreationServiceImpl(apiService, stateManager, mapper, validationService);
     }

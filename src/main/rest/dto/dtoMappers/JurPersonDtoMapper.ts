@@ -13,4 +13,5 @@ import {JurPersonSimpleResponseDto} from "../jurPerson/JurPersonSimpleResponseDt
 export default interface JurPersonDtoMapper extends DtoMapper<JurPersonRequestDto, PreProcessedJurPerson, JurPersonResponseDto, JurPersonCreationParams,
     JurPersonSimpleResponseDto> {
     mapToRipeJurPerson(dto: Omit<PreProcessedJurPerson|EmbedJurPersonResponseDto, 'owner'|'benOwner'>, owner: Person|null, benOwner: Person|null): JurPerson;
+    mapPreprocessedJurPersonWithLoss(dto: PreProcessedJurPerson): JurPerson;
 }
