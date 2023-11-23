@@ -1,9 +1,6 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 import {LitmusServiceContext} from "../App";
-import {AxiosError} from "axios";
-import {HttpStatus} from "../../rest/HttpStatus";
 import {useAppSelector} from "../../redux/hooks";
-import {set} from "ol/transform";
 
 export default function (props: React.DetailedHTMLProps<React.ImgHTMLAttributes<HTMLImageElement>, HTMLImageElement>) {
     const context = useContext(LitmusServiceContext);
@@ -19,19 +16,42 @@ export default function (props: React.DetailedHTMLProps<React.ImgHTMLAttributes<
 
     const [handled, setHandled] = useState<boolean>(false);
 
+    const isParallelHandling = useAppSelector(state => state.appState!.securedImgHandling)
+
+    const [path, setPath] = useState(props.src)
+
+
+    useEffect(()=>{
+        if (!isParallelHandling) {
+            if (path) {
+                const param = "timestamp="+Date.now();
+                if (path.includes("?")) {
+                    setPath(prev=>prev!.concat("&").concat(param));
+                } else setPath(prev=>prev!.concat("?").concat(param));
+            }
+        }
+    }, [handled, isParallelHandling])
+
     return <img {...props}
                 alt={props.alt}
-                onError={async e=>{
-                    if (!handled&&!appStateManager.isSecuredImgHandling()) {
-                        appStateManager.enableSecuredImgHandling();
+                src={path}
+                onError={handled ?
+                    undefined
+                        :
+                    (async e=>{
+                        e.currentTarget.onerror = null;
 
-                        try {
-                            await testAuth();
-                        } finally {
-                            appStateManager.disableSecuredImgHandling();
-                            setHandled(true);
+                        if (!isParallelHandling) {
+                            appStateManager.enableSecuredImgHandling();
+
+                            try {
+                                await testAuth();
+                            } finally {
+                                setHandled(true);
+                                appStateManager.disableSecuredImgHandling();
+                            }
                         }
-                    }
-                }}
+                    })
+                }
     ></img>
 }
