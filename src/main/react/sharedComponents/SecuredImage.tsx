@@ -16,13 +16,14 @@ export default function (props: React.DetailedHTMLProps<React.ImgHTMLAttributes<
 
     const [handled, setHandled] = useState<boolean>(false);
 
+    const [error, setError] = useState<boolean>(false);
+
     const isParallelHandling = useAppSelector(state => state.appState!.securedImgHandling)
 
     const [path, setPath] = useState(props.src)
 
-
     useEffect(()=>{
-        if (!isParallelHandling) {
+        if (!isParallelHandling&&error) {
             if (path) {
                 const param = "timestamp="+Date.now();
                 if (path.includes("?")) {
@@ -35,10 +36,13 @@ export default function (props: React.DetailedHTMLProps<React.ImgHTMLAttributes<
     return <img {...props}
                 alt={props.alt}
                 src={path}
+                onLoad={()=>setError(false)}
                 onError={handled ?
                     undefined
                         :
                     (async e=>{
+                        setError(true);
+
                         e.currentTarget.onerror = null;
 
                         if (!isParallelHandling) {
