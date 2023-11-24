@@ -13,7 +13,7 @@ import JurPersonCreationApiServiceImpl from "../../creation/api/JurPersonCreatio
 import {JurPersonSimpleResponseDto} from "../../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
 import jurPersonExplorationService from "../../exploration/JurPersonExplorationService";
 import jurPersonCreationService from "../../creation/JurPersonCreationService";
-import {JurPersonShortRequestDto} from "../../../rest/dto/jurPerson/JurPersonShortRequestDto";
+import {JurPersonShortResponseDto} from "../../../rest/dto/jurPerson/JurPersonShortResponseDto";
 
 export default class JurPersonApiServiceImpl implements JurPersonApiService {
     protected readonly apiInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
@@ -40,7 +40,7 @@ export default class JurPersonApiServiceImpl implements JurPersonApiService {
         return this.jurPersonExplorationService.findSimpleById(id);
     }
 
-    findShortById(id: number): Promise<JurPersonShortRequestDto | null> {
+    findShortById(id: number): Promise<JurPersonShortResponseDto | null> {
         return this.jurPersonExplorationService.findShortById(id);
     }
 

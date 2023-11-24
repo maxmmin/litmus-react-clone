@@ -14,8 +14,8 @@ import {PersonShortResponseDto} from "../person/PersonShortResponseDto";
 import Sex from "../../../model/human/person/Sex";
 import {blankMedia, blankPassportData, blankRelationshipsInfo} from "../../../util/modelValueHolders";
 import PersonDtoMapper from "./PersonDtoMapper";
-import personDtoMapper from "./PersonDtoMapper";
 import PersonDtoMapperImpl from "./PersonDtoMapperImpl";
+import {JurPersonShortResponseDto} from "../jurPerson/JurPersonShortResponseDto";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
 
@@ -53,6 +53,21 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             benOwnedJurPersons: []
         }
     }
+
+    mapShortDtoToEntity(shortDto: JurPersonShortResponseDto): PreProcessedJurPerson {
+        return {
+            id: shortDto.id,
+            edrpou: shortDto.edrpou,
+            name: shortDto.name,
+            owner: null,
+            benOwner: null,
+            media: blankMedia,
+            dateOfRegistration: null,
+            location: null
+        };
+    }
+
+
 
     mapSimpleDtoToEntity(simpleDto: JurPersonSimpleResponseDto): PreProcessedJurPerson {
         const media: Media = {

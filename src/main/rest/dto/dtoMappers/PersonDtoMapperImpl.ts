@@ -1,4 +1,4 @@
-import Person, {NoRelationsPerson, PreProcessedPerson, Relationship} from "../../../model/human/person/Person";
+import Person, {PreProcessedPerson, Relationship} from "../../../model/human/person/Person";
 import PersonRequestDto, {PassportDataRequestDto, RelationshipRequestDto} from "../person/PersonRequestDto";
 import {hasContent} from "../../../util/functional/isEmpty";
 import {DateEntityTool} from "../../../model/DateEntity";
@@ -12,8 +12,9 @@ import PersonDtoMapper, {OptionalRawPersonIdMap} from "./PersonDtoMapper";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
 import Media from "../../../model/Media";
 import {PersonSimpleResponseDto} from "../person/PersonSimpleResponseDto";
-import {blankMedia, blankRelationshipsInfo} from "../../../util/modelValueHolders";
+import {blankMedia, blankPassportData, blankRelationshipsInfo} from "../../../util/modelValueHolders";
 import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiService";
+import {PersonShortResponseDto} from "../person/PersonShortResponseDto";
 
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
@@ -64,8 +65,22 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         };
     }
 
-
-
+    mapShortDtoToEntity(shortDto: PersonShortResponseDto): PreProcessedPerson {
+        return {
+            id: shortDto.id,
+            firstName: shortDto.firstName,
+            middleName: shortDto.middleName,
+            lastName: shortDto.lastName,
+            sex: shortDto.sex,
+            passportData: blankPassportData,
+            media: blankMedia,
+            location: null,
+            dateOfBirth: null,
+            relationshipsInfo: blankRelationshipsInfo,
+            benOwnedJurPersons: [],
+            ownedJurPersons: []
+        }
+    }
 
     mapPersonResponseIdMapDto(dto: PersonResponseIdMapDto): OptionalRawPersonIdMap {
         const personMap: OptionalRawPersonIdMap = new Map<number, PreProcessedPerson|null>();

@@ -20,8 +20,9 @@ import UserExplorationApiServiceImpl from "./api/human/user/UserExplorationApiSe
 import UserDtoMapperImpl from "../../rest/dto/dtoMappers/UserDtoMapperImpl";
 import userSimpleResponseDto from "../../rest/dto/user/UserSimpleResponseDto";
 import UserSimpleResponseDto from "../../rest/dto/user/UserSimpleResponseDto";
+import {UserShortResponseDto} from "../../rest/dto/user/UserShortResponseDto";
 
-type UserExplorationDtoMapper = DtoMapper<any, User, UserResponseDto, any, UserSimpleResponseDto>;
+type UserExplorationDtoMapper = DtoMapper<any, User, UserResponseDto, any, UserSimpleResponseDto, UserShortResponseDto>;
 
 type UserExplorationCallbackType = () => Promise<PagedData<User>>;
 

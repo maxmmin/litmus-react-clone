@@ -21,8 +21,9 @@ import JurPersonExplorationStateManagerImpl from "./stateManager/jurPerson/JurPe
 import JurPersonExplorationApiServiceImpl from "./api/jurPerson/JurPersonExplorationApiServiceImpl";
 import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
 import {JurPersonSimpleResponseDto} from "../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
+import {JurPersonShortResponseDto} from "../../rest/dto/jurPerson/JurPersonShortResponseDto";
 
-type JurPersonExplorationMapper = DtoMapper<any, PreProcessedJurPerson, JurPersonResponseDto,any, JurPersonSimpleResponseDto>
+type JurPersonExplorationMapper = DtoMapper<any, PreProcessedJurPerson, JurPersonResponseDto,any, JurPersonSimpleResponseDto, JurPersonShortResponseDto>
 
 type JurPersonExplorationCallbackType = () => Promise<PagedData<PreProcessedJurPerson>>;
 

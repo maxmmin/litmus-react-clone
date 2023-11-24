@@ -12,6 +12,7 @@ import JurPersonDtoMapper from "./JurPersonDtoMapper";
 import PersonDtoMapper from "./PersonDtoMapper";
 import JurPersonDtoMapperImpl from "./JurPersonDtoMapperImpl";
 import PersonDtoMapperImpl from "./PersonDtoMapperImpl";
+import {UserShortResponseDto} from "../user/UserShortResponseDto";
 
 class UserDtoMapperImpl implements UserDtoMapper {
     private readonly jurPersonDtoMapper: JurPersonDtoMapper;
@@ -39,6 +40,21 @@ class UserDtoMapperImpl implements UserDtoMapper {
             createdEntities: blankCreatedEntities
         }
     }
+
+    mapShortDtoToEntity(shortDto: UserShortResponseDto): User {
+        const holder = "_UNKNOWN";
+        return {
+            id: shortDto.id,
+            role: checkNotEmpty(Role[shortDto.role]),
+            email: shortDto.email,
+            firstName: holder,
+            middleName: holder,
+            lastName: holder,
+            createdEntities: blankCreatedEntities
+        };
+    }
+
+
 
     mapToRequestDto(emergingUser: UserCreationParams): UserRequestDto {
         const dto: UserRequestDto = {}
@@ -73,12 +89,12 @@ class UserDtoMapperImpl implements UserDtoMapper {
     protected mapCreatedEntities(createdEntities: CreatedEntitiesResponseDto): CreatedEntities {
         return {
             persons: createdEntities.persons.map(p=>{
-                return this.personDtoMapper.mapPreProcessedPersonWithLoss(this.personDtoMapper.mapSimpleDtoToEntity(p))
+                return this.personDtoMapper.mapPreProcessedPersonWithLoss(this.personDtoMapper.mapShortDtoToEntity(p))
             }),
             jurPersons: createdEntities.jurPersons.map(j => {
-                return this.jurPersonDtoMapper.mapPreprocessedJurPersonWithLoss(this.jurPersonDtoMapper.mapSimpleDtoToEntity(j))
+                return this.jurPersonDtoMapper.mapPreprocessedJurPersonWithLoss(this.jurPersonDtoMapper.mapShortDtoToEntity(j))
             }),
-            users: createdEntities.users.map(u=>this.mapSimpleDtoToEntity(u))
+            users: createdEntities.users.map(u=>this.mapShortDtoToEntity(u))
         }
     }
 

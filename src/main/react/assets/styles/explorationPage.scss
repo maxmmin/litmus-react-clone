@@ -86,15 +86,15 @@
 }
 
 .explore-page__main {
-  padding: 0px 50px;
+  padding: 0 50px;
 }
 
 .entity-container_person {
-  grid-template-columns: auto 100px repeat(9, 1fr);
+  grid-template-columns: 1fr 100px repeat(9, 1fr);
 }
 
 .entity-container_simple-person {
-  grid-template-columns: auto 100px repeat(6, 1fr);
+  grid-template-columns: 1fr 100px repeat(6, 1fr);
 }
 
 .entity-container__value_img {
@@ -104,11 +104,11 @@
 }
 
 .jur-person-container {
-  grid-template-columns: auto repeat(6, 1fr);
+  grid-template-columns: 1fr repeat(6, 1fr);
 }
 
 .user-container {
-  grid-template-columns: auto repeat(5, 1fr);
+  grid-template-columns: 1fr repeat(5, 1fr);
 }
 
 .entity-container__column-title  {
@@ -122,7 +122,9 @@
 }
 
 .entity-container__value_id {
-  width: max-content;
+  width: 100%;
+  min-width: fit-content;
+  word-break: keep-all;
 }
 
 .entity-container__value {

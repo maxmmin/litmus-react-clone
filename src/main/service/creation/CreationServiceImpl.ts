@@ -25,14 +25,14 @@ import {ValidationErrorResponse} from "../../rest/ErrorResponse";
 class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=ValidationErrors<C>,S extends object=V,
     VService extends ValidationService<C,V,S> = ValidationService<C,V,S>> implements CreationService<E> {
 
-    protected readonly mapper: DtoMapper<RequestDto, E, ResponseDto, C>;
+    protected readonly mapper: DtoMapper<RequestDto, E, ResponseDto, C, any, any>;
     protected readonly apiService: CreationApiService<RequestDto, ResponseDto>;
     protected readonly creationStateManager: CreationStateManager<E,C,V>;
     protected readonly validationService: VService
 
     constructor(apiService: CreationApiService<RequestDto, ResponseDto>,
                 creationStateManager: CreationStateManager<E,C,V>,
-                mapper: DtoMapper<RequestDto, E, ResponseDto, C, any>,
+                mapper: DtoMapper<RequestDto, E, ResponseDto, C, any, any>,
                 validationService: VService) {
         this.mapper = mapper;
         this.apiService = apiService;

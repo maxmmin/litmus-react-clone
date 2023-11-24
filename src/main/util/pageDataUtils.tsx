@@ -3,13 +3,14 @@ import Pagination from "react-bootstrap/Pagination";
 import React from "react";
 
 export const getVisibleIndexes = (pagedData: PagedData<unknown>) => {
+    console.log(pagedData)
     const desirableLength = 5;
 
     const sideLength = Math.trunc(desirableLength/2);
 
     const indexes: number[] = [pagedData.index]
 
-    for (let cursor = pagedData.index-1; cursor>0&&cursor>pagedData.index-sideLength-1; cursor--) {
+    for (let cursor = pagedData.index-1; cursor>-1&&cursor>pagedData.index-sideLength-1; cursor--) {
         indexes.unshift(cursor);
     }
 
@@ -64,7 +65,7 @@ export class LocalPager<T> {
         return {
             content: fullContent.slice(startPoint, startPoint+pageSize),
             totalPages: totalPages,
-            last: pageIndex===totalPages-1,
+            last: totalPages===0||pageIndex===totalPages-1,
             empty: fullContent.length===0,
             size: pageSize,
             totalElements: fullContent.length,

@@ -21,8 +21,9 @@ import PersonExplorationStateManagerImpl from "./stateManager/person/PersonExplo
 import PersonExplorationApiServiceImpl from "./api/human/person/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import {PersonSimpleResponseDto} from "../../rest/dto/person/PersonSimpleResponseDto";
+import {PersonShortResponseDto} from "../../rest/dto/person/PersonShortResponseDto";
 
-type PersonExplorationMapper = DtoMapper<any, PreProcessedPerson, PersonResponseDto, any, PersonSimpleResponseDto>
+type PersonExplorationMapper = DtoMapper<any, PreProcessedPerson, PersonResponseDto, any, PersonSimpleResponseDto, PersonShortResponseDto>
 
 type PersonExplorationCallbackType = () => Promise<PagedData<PreProcessedPerson>>;
 

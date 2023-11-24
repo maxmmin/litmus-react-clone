@@ -9,9 +9,10 @@ import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCr
 import Person from "../../../model/human/person/Person";
 import PersonDtoMapper from "./PersonDtoMapper";
 import {JurPersonSimpleResponseDto} from "../jurPerson/JurPersonSimpleResponseDto";
+import {JurPersonShortResponseDto} from "../jurPerson/JurPersonShortResponseDto";
 
 export default interface JurPersonDtoMapper extends DtoMapper<JurPersonRequestDto, PreProcessedJurPerson, JurPersonResponseDto, JurPersonCreationParams,
-    JurPersonSimpleResponseDto> {
+    JurPersonSimpleResponseDto, JurPersonShortResponseDto> {
     mapToRipeJurPerson(dto: Omit<PreProcessedJurPerson|EmbedJurPersonResponseDto, 'owner'|'benOwner'>, owner: Person|null, benOwner: Person|null): JurPerson;
     mapPreprocessedJurPersonWithLoss(dto: PreProcessedJurPerson): JurPerson;
 }
