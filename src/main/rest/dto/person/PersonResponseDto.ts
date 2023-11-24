@@ -9,6 +9,7 @@ import {
     EmbedJurPersonResponseDto,
     MinifiedJurPersonResponseDto
 } from "../jurPerson/JurPersonResponseDto";
+import {PersonShortResponseDto} from "./PersonShortResponseDto";
 
 export type RelationshipResponseDto = Pick<Relationship, 'note'|'type'> & {
     person: RelatedPersonResponseDto
@@ -43,7 +44,7 @@ export type NestedRelationshipsInfo = {
     relationships: NestedRelationshipResponseDto[]|null
 }
 
-export type EmbedPersonResponseDto = Pick<PersonResponseDto, 'firstName'|'middleName'|'lastName'|'sex'>&NestedPersonResponseDto
+export type EmbedPersonResponseDto = PersonShortResponseDto&NestedPersonResponseDto
 
 interface PersonResponseDto {
     id: number;

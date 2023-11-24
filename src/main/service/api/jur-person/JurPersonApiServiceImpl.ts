@@ -11,6 +11,9 @@ import appConfig from "../../../config/appConfig";
 import JurPersonExplorationApiServiceImpl from "../../exploration/api/jurPerson/JurPersonExplorationApiServiceImpl";
 import JurPersonCreationApiServiceImpl from "../../creation/api/JurPersonCreationApiServiceImpl";
 import {JurPersonSimpleResponseDto} from "../../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
+import jurPersonExplorationService from "../../exploration/JurPersonExplorationService";
+import jurPersonCreationService from "../../creation/JurPersonCreationService";
+import {JurPersonShortRequestDto} from "../../../rest/dto/jurPerson/JurPersonShortRequestDto";
 
 export default class JurPersonApiServiceImpl implements JurPersonApiService {
     protected readonly apiInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
@@ -35,6 +38,10 @@ export default class JurPersonApiServiceImpl implements JurPersonApiService {
 
     findSimpleById(id: number): Promise<JurPersonSimpleResponseDto | null> {
         return this.jurPersonExplorationService.findSimpleById(id);
+    }
+
+    findShortById(id: number): Promise<JurPersonShortRequestDto | null> {
+        return this.jurPersonExplorationService.findShortById(id);
     }
 
     findById(id: number): Promise<JurPersonResponseDto | null> {

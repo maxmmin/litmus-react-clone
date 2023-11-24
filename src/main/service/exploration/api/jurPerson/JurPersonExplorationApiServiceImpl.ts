@@ -5,8 +5,9 @@ import PagedData from "../../../../rest/PagedData";
 import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonResponseDto";
 import {buildUrl} from "../../../../util/pureFunctions";
 import {JurPersonSimpleResponseDto} from "../../../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
+import {JurPersonShortRequestDto} from "../../../../rest/dto/jurPerson/JurPersonShortRequestDto";
 
-class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPersonResponseDto, JurPersonSimpleResponseDto>
+class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPersonResponseDto, JurPersonSimpleResponseDto, JurPersonShortRequestDto>
     implements JurPersonExplorationApiService {
 
     constructor() {

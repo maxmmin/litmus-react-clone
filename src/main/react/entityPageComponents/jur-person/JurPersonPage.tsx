@@ -30,6 +30,7 @@ export default function JurPersonPage () {
                     }
                 })
                 .catch(err => {
+                    console.error(err)
                     const error = new BasicHttpError(HttpErrorParser.parseError(err));
                     notificationManager.error(error.getDescription())
                 })

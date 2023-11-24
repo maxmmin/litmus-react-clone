@@ -1,4 +1,6 @@
-import PersonExplorationApiService from "../../exploration/api/human/person/PersonExplorationApiService";
+import PersonExplorationApiService, {
+    PersonResponseIdMapDto
+} from "../../exploration/api/human/person/PersonExplorationApiService";
 import PersonCreationApiService from "../../creation/api/PersonCreationApiService";
 import PersonApiService from "./PersonApiService";
 import PersonRequestDto from "../../../rest/dto/person/PersonRequestDto";
@@ -7,13 +9,14 @@ import PersonResponseDto, {
 } from "../../../rest/dto/person/PersonResponseDto";
 import PagedData from "../../../rest/PagedData";
 import {FullNameExploration} from "../../../model/human/Human";
-import PersonExplorationApiServiceImpl, {PersonResponseIdMapDto} from "../../exploration/api/human/person/PersonExplorationApiServiceImpl";
+import PersonExplorationApiServiceImpl from "../../exploration/api/human/person/PersonExplorationApiServiceImpl";
 import appConfig from "../../../config/appConfig";
 import {buildUrl} from "../../../util/pureFunctions";
 import {AxiosInstance} from "axios";
 import AxiosApiManager from "../../rest/AxiosApiManager";
 import PersonCreationApiServiceImpl from "../../creation/api/PersonCreationApiServiceImpl";
 import {PersonSimpleResponseDto} from "../../../rest/dto/person/PersonSimpleResponseDto";
+import {PersonShortResponseDto} from "../../../rest/dto/person/PersonShortResponseDto";
 
 export default class PersonApiServiceImpl implements PersonApiService {
     protected readonly apiInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
@@ -49,6 +52,10 @@ export default class PersonApiServiceImpl implements PersonApiService {
 
     findByIdWithDepthOption(id: number, d: number): Promise<PersonResponseDto | null> {
         return this.explorationService.findByIdWithDepthOption(id, d);
+    }
+
+    findShortById(id: number): Promise<PersonShortResponseDto | null> {
+        return this.explorationService.findSimpleById(id);
     }
 
     findPersonRelationships(id: number, d: number): Promise<RelationshipsInfo> {

@@ -7,7 +7,8 @@ import {buildUrl} from "../../../../util/pureFunctions";
 import appConfig from "../../../../config/appConfig";
 
 
-export default class HumanExplorationApiServiceImpl<P extends object, S extends object> extends BasicEntityLookupService<P,S> implements HumanExplorationApiService<P, S> {
+export default class HumanExplorationApiServiceImpl<P extends object, S extends object, H extends object> extends BasicEntityLookupService<P,S, H>
+    implements HumanExplorationApiService<P, S, H> {
 
     constructor(apiMapping: string) {
         super(apiMapping);

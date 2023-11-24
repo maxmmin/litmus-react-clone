@@ -8,9 +8,9 @@ import PersonResponseDto, {
     EmbedPersonResponseDto,
     RelationshipResponseDto
 } from "../person/PersonResponseDto";
-import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiServiceImpl";
 import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
 import {PersonSimpleResponseDto} from "../person/PersonSimpleResponseDto";
+import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiService";
 
 export type OptionalRawPersonIdMap = Map<number, PreProcessedPerson|null>
 

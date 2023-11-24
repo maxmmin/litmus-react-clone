@@ -12,6 +12,7 @@ import appConfig from "../../../config/appConfig";
 import UserExplorationApiServiceImpl from "../../exploration/api/human/user/UserExplorationApiServiceImpl";
 import UserCreationApiServiceImpl from "../../creation/api/UserCreationApiServiceImpl";
 import UserSimpleResponseDto from "../../../rest/dto/user/UserSimpleResponseDto";
+import {UserShortResponseDto} from "../../../rest/dto/user/UserShortResponseDto";
 
 export default class UserApiServiceImpl implements UserApiService {
     protected readonly apiInstance: AxiosInstance = AxiosApiManager.globalApiInstance;
@@ -27,6 +28,10 @@ export default class UserApiServiceImpl implements UserApiService {
 
     findSimpleById(id: number): Promise<UserSimpleResponseDto | null> {
         return this.userExplorationApiService.findSimpleById(id);
+    }
+
+    findShortById(id: number): Promise<UserShortResponseDto | null> {
+        return this.userExplorationApiService.findShortById(id);
     }
 
     create(requestDto: UserRequestDto): Promise<UserResponseDto> {

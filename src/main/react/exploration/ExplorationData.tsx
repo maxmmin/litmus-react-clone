@@ -6,25 +6,30 @@ import UserInfoTable from "./EntityTables/UserInfoTable";
 import PagedData, {isUnPaged} from "../../rest/PagedData";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 import Loader from "../loader/Loader";
-import {PreProcessedPerson} from "../../model/human/person/Person";
-import {PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
+import Person, {PreProcessedPerson} from "../../model/human/person/Person";
+import {JurPerson, PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
 import User from "../../model/human/user/User";
 import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import getEntityExplorationService, {getEntityExplorationStateManager} from "../../util/getEntityExplorationService";
 import {useAppSelector} from "../../redux/hooks";
 import ExplorationService from "../../service/exploration/ExplorationService";
+import {getVisibleIndexes} from "../../util/pageDataUtils";
+import serviceContext from "../serviceContext";
 
 const getProcessedResults = (entity: Entity, data: unknown[]) => {
+    const {jurPerson: jurPersonDtoMapper, person: personDtoMapper} = serviceContext.mappers;
     switch (entity) {
         case Entity.PERSON: {
-            return (data as PreProcessedPerson[]).map(person=>{
+            return (data as PreProcessedPerson[]).map(rawPerson=>{
+                const person: Person = personDtoMapper.mapPreProcessedPersonWithLoss(rawPerson);
                 return <PersonInfoTable key={person.id} person={person}/>
             })
         }
 
         case Entity.JUR_PERSON: {
-            return (data as PreProcessedJurPerson[]).map(jurPerson=>{
+            return (data as PreProcessedJurPerson[]).map(rawJurPerson=>{
+                const jurPerson: JurPerson = jurPersonDtoMapper.mapPreprocessedJurPersonWithLoss(rawJurPerson)
                 return <JurPersonInfoTable jurPerson={jurPerson} key={jurPerson.id}/>
             })
         }
@@ -50,23 +55,6 @@ type PaginationProps = {
     explorationService: ExplorationService
 }
 
-const getVisibleIndexes = (pagedData: PagedData<unknown>) => {
-    const desirableLength = 5;
-
-    const sideLength = Math.trunc(desirableLength/2);
-
-    const indexes: number[] = [pagedData.index]
-
-    for (let cursor = pagedData.index-1; cursor>-1&&cursor>pagedData.index-1-sideLength; cursor--) {
-        indexes.unshift(cursor);
-    }
-
-    for (let cursor = pagedData.index+1; cursor<pagedData.totalPages&&cursor<pagedData.index+1+sideLength; cursor++) {
-        indexes.push(cursor);
-    }
-
-    return indexes;
-}
 
 const ExplorationPagination = ({pagedData, explorationStateManager, explorationService}: PaginationProps) => {
 
@@ -80,7 +68,7 @@ const ExplorationPagination = ({pagedData, explorationStateManager, explorationS
     }
 
     return (
-        <Pagination className={"exploration-pagination"}>
+        <Pagination className={"litmus-pagination"}>
             <Pagination.First disabled={pagedData.first} onClick={()=>{
                 refreshWithI(0);
             }} />

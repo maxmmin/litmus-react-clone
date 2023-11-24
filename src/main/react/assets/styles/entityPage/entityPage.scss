@@ -17,6 +17,10 @@ $page-border-radius: 15px;
   padding-top: 50px;
 }
 
+.entity-page-wrapper__main-entity-section_user {
+  max-width: 100%;
+}
+
 .main-entity-section__manage-entity-container {
   display: flex;
   justify-content: end;

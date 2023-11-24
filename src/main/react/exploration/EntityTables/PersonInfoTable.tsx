@@ -34,7 +34,7 @@ const PersonInfoTable = ({person}: Props) => {
             <div className="entity-container__column-title-block entity-container__column-title-block_person"><h6 className="entity-container__column-title entity-container__column-title_person">Адреса</h6></div>
 
             <div className="entity-container__value-block entity-container__value-block_person">
-                <p className="entity-container__value entity-container__value_person">{person.id}</p>
+                <p className="entity-container__value entity-container__value_person entity-container__value_id">{person.id}</p>
             </div>
             <div className="entity-container__value-block entity-container__value-block_img entity-container__value-block_person">
                 {mainImg ?

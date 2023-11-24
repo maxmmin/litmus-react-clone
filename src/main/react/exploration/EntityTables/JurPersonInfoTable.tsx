@@ -5,7 +5,7 @@ import {buildJurPersonNavLink, buildPersonNavLink} from "../../../util/navLinkBu
 import {GoBubbleIcon} from "../../assets/icons";
 
 type Props = {
-    jurPerson: PreProcessedJurPerson
+    jurPerson: JurPerson
 }
 
 const JurPersonInfoTable = ({jurPerson}: Props) => {
@@ -24,7 +24,7 @@ const JurPersonInfoTable = ({jurPerson}: Props) => {
                         <div className="entity-container__column-title entity-container__column-title-block_jur-person"><h6 className="entity-container__column-title entity-container__column-title_jur-person">Бенефіціарний власник</h6></div>
                         <div className="entity-container__column-title entity-container__column-title-block_jur-person"><h6 className="entity-container__column-title entity-container__column-title_jur-person">Адреса</h6></div>
 
-                        <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.id?jurPerson.id:noInfoMessage}</p></div>
+                        <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person entity-container__value_id">{jurPerson.id?jurPerson.id:noInfoMessage}</p></div>
                         <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.name?jurPerson.name:noInfoMessage}</p></div>
                         <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.edrpou?jurPerson.edrpou:noInfoMessage}</p></div>
                         <div className="entity-container__value-block entity-container__value-block_jur-person"><p className="entity-container__value entity-container__value_jur-person">{jurPerson.dateOfRegistration?DateEntityTool.getStringFrom(jurPerson.dateOfRegistration):noInfoMessage}</p></div>

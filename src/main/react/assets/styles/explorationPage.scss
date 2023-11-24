@@ -33,7 +33,7 @@
   align-items: center;
 }
 
-.exploration-pagination {
+.litmus-pagination {
   & .page-item.active>.page-link {
     background: $primary-light;
     color: white;
@@ -90,11 +90,11 @@
 }
 
 .entity-container_person {
-  grid-template-columns: 30px 100px repeat(9, 1fr);
+  grid-template-columns: auto 100px repeat(9, 1fr);
 }
 
 .entity-container_simple-person {
-  grid-template-columns: 30px 100px repeat(6, 1fr);
+  grid-template-columns: auto 100px repeat(6, 1fr);
 }
 
 .entity-container__value_img {
@@ -104,11 +104,11 @@
 }
 
 .jur-person-container {
-  grid-template-columns: 30px repeat(6, 1fr);
+  grid-template-columns: auto repeat(6, 1fr);
 }
 
 .user-container {
-  grid-template-columns: 30px repeat(5, 1fr);
+  grid-template-columns: auto repeat(5, 1fr);
 }
 
 .entity-container__column-title  {
@@ -119,6 +119,10 @@
   overflow-wrap: break-word;
   word-break: break-word;
   text-align: center;
+}
+
+.entity-container__value_id {
+  width: max-content;
 }
 
 .entity-container__value {

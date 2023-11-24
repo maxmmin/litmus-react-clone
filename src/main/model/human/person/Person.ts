@@ -23,7 +23,7 @@ interface Person extends Human, MediaEntity, CoreEntity {
     location: GeoLocation | null
 }
 
-export type NoRelationsPerson = Omit<PreProcessedPerson, 'relationshipsInfo'|'ownedJurPersons'|'benOwnedJurPersons'>
+export type NoRelationsPerson = Omit<Person, 'relationships'|'ownedJurPersons'|'benOwnedJurPersons'>
 
 export type PreProcessedPerson = Omit<Person, 'relationships'|'ownedJurPersons'|'benOwnedJurPersons'>&{
     relationshipsInfo: RelationshipsInfo,

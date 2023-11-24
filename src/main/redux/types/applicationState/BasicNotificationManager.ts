@@ -17,9 +17,10 @@ export class BasicNotificationManager implements NotificationManager {
     }
 
     addNotification(notification: Notification): void {
+        console.log(notification.content)
         let content = notification.content;
         if (!this.isValid(content)) {
-            console.log("invalid")
+            console.log("invalid notification content: "+JSON.stringify(content))
             notification.content = JSON.stringify(content);
         }
         const action: PayloadAction<Notification> = {type: this.ADD_NOTIFICATION, payload: serializableDeepCopy(notification)};

@@ -4,7 +4,6 @@ import backendOptionsData, {BackendOptions} from "./backendOptionsData";
 
 type AppConfig = {
     backendOptions: BackendOptions,
-    entitiesPerPage: number,
     geoApiKey: string,
     entityDomains: Readonly<Record<Entity, string>>,
     serverMappings: Readonly<typeof serverMappings>,
@@ -19,7 +18,6 @@ const backendOptions: BackendOptions = backendOptionsData;
 const backendUrl = backendOptions.url;
 const apiRoot = `/api`
 const authApiRoot = `/auth`
-const entitiesPerPage = 50;
 const geoApiKEy = "AplsM3q0nzBnkkYGFC3NOXLr_XIeqbG2NQRxONopsPIeneujRujL86u_PWQC5hfh";
 
 const entityDomains: AppConfig['entityDomains'] = Object.freeze({
@@ -104,7 +102,6 @@ const applicationMappings = Object.freeze({
 
 const appConfig: AppConfig = {
     backendOptions: backendOptionsData,
-    entitiesPerPage: entitiesPerPage,
     geoApiKey: geoApiKEy,
     entityDomains: entityDomains,
     serverMappings: serverMappings,

@@ -19,6 +19,7 @@ import RootScreen from "./RootScreen";
 import {Entity} from "../model/Entity";
 import PersonPage from "./entityPageComponents/person/PersonPage";
 import JurPersonPage from "./entityPageComponents/jur-person/JurPersonPage";
+import UserPage from "./entityPageComponents/user/UserPage";
 
 export const LitmusServiceContext = createContext(serviceContext);
 
@@ -45,6 +46,10 @@ function App() {
 
                                 <Route path={buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON],':id')} element={
                                     <JurPersonPage/>
+                                }/>
+
+                                <Route path={buildUrl(appConfig.applicationMappings.entityRoot[Entity.USER],':id')} element={
+                                    <UserPage/>
                                 }/>
 
                                 <Route path={buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')} element={

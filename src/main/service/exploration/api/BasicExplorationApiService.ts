@@ -3,12 +3,13 @@ import ExplorationApiService from "./ExplorationApiService";
 import {buildUrl} from "../../../util/pureFunctions";
 import PagedData from "../../../rest/PagedData";
 import AxiosApiManager from "../../rest/AxiosApiManager";
+import {LookupMode} from "../../../model/LookupMode";
 
 /**
  * P - ResponseDto
  * S - SimpleResponseDto
  */
-class BasicEntityLookupService<P extends object, S extends object> implements ExplorationApiService<P, S>{
+class BasicEntityLookupService<P extends object, S extends object, H extends object> implements ExplorationApiService<P, S, H>{
     protected readonly apiUrl: string;
 
     protected readonly apiInstance = AxiosApiManager.globalApiInstance;
@@ -25,7 +26,16 @@ class BasicEntityLookupService<P extends object, S extends object> implements Ex
     async findSimpleById(id: number): Promise<S | null> {
         const response = await this.apiInstance<S>(buildUrl(this.apiUrl,id.toString()), {
             params: {
-                s: true
+                mode: LookupMode.SHORT
+            }
+        });
+        return Object.keys(response.data).length>0?response.data:null;
+    }
+
+    async findShortById(id: number): Promise<H | null> {
+        const response = await this.apiInstance<H>(buildUrl(this.apiUrl,id.toString()), {
+            params: {
+                mode: LookupMode.SHORT,
             }
         });
         return Object.keys(response.data).length>0?response.data:null;
