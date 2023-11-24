@@ -8,6 +8,7 @@ import UserInfoTable from "../../exploration/EntityTables/UserInfoTable";
 import {EntitiesPaginator, LocalPager} from "../../../util/pageDataUtils";
 import PersonInfoTable from "../../exploration/EntityTables/PersonInfoTable";
 import JurPersonInfoTable from "../../exploration/EntityTables/JurPersonInfoTable";
+import "../../assets/styles/entityPage/userPage.scss"
 
 type UserProps = {
     user: User
@@ -58,25 +59,48 @@ export default function ({user}: UserProps) {
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>По-батькові:</span> {user.middleName}</p>
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Роль:</span> {user.role.canonicalName}</p>
                 </div>
-
-                <div className="user-page__created-entities-container">
-                    <div className="user-page__created-entities user-page__created-entities_users">
-                        <EntitiesPaginator page={usersPage} pager={usersPager.current!}/>
-
-                        {usersPage.content.map(user=><UserInfoTable key={user.email} user={user}/>)}
-                    </div>
-                    <div className="user-page__created-entities user-page__created-entities_persons">
-                        <EntitiesPaginator page={personsPage} pager={personsPager.current!}/>
-
-                        {personsPage.content.map(person=><PersonInfoTable key={person.id} person={person}/>)}
-                    </div>
-                    <div className="user-page__created-entities user-page__created-entities_jur-persons">
-                        <EntitiesPaginator page={jurPersonsPage} pager={jurPersonsPager.current!}/>
-
-                        {jurPersonsPage.content.map(jurPerson=><JurPersonInfoTable jurPerson={jurPerson}/>)}
-                    </div>
-                </div>
             </section>
+
+            <section className="user-page__created-entities-section">
+                <section className="user-page__created-entities user-page__created-entities_users">
+                    <div className="created-entities__heading-container">
+                        <h4 className={"created-entities__heading-title"}>Створені користувачі</h4>
+                        {!usersPage.empty && <EntitiesPaginator page={usersPage} pager={usersPager.current!}/>}
+                    </div>
+
+                    {usersPage.empty
+                        ?
+                        <p className={"created-entities__no-entities-label"}>Створених існуючих користувачів не знайдено</p>
+                        :
+                        usersPage.content.map(user=><UserInfoTable key={user.email} user={user}/>)}
+                </section>
+                <section className="user-page__created-entities user-page__created-entities_persons">
+                    <div className="created-entities__heading-container">
+                        <h4 className={"created-entities__heading-title"}>Створені особи</h4>
+                        {!personsPage.empty && <EntitiesPaginator page={personsPage} pager={personsPager.current!}/>}
+                    </div>
+
+                    {personsPage.empty
+                        ?
+                        <p className={"created-entities__no-entities-label"}>Створених існуючих осіб не знайдено</p>
+                        :
+                        personsPage.content.map(person=><PersonInfoTable key={person.id} person={person}/>)
+                    }
+                </section>
+                <section className="user-page__created-entities user-page__created-entities_jur-persons">
+                    <div className="created-entities__heading-container">
+                        <h4 className={"created-entities__heading-title"}>Створені юридичні особи</h4>
+                        {!jurPersonsPage.empty && <EntitiesPaginator page={jurPersonsPage} pager={jurPersonsPager.current!}/>}
+                    </div>
+
+                    {jurPersonsPage.empty
+                        ?
+                        <p className={"created-entities__no-entities-label"}>Створених існуючих юридичних осіб не знайдено</p>
+                        :
+                        jurPersonsPage.content.map(jurPerson=><JurPersonInfoTable jurPerson={jurPerson}/>)}
+                </section>
+            </section>
+
         </div>
     )
 }
