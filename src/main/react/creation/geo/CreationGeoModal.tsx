@@ -6,13 +6,13 @@ import {useAppSelector} from "../../../redux/hooks";
 import {GeoLocation} from "../../../model/GeoLocation";
 import {Entity} from "../../../model/Entity";
 import JurPersonCreationStateManager
-    from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManager";
-import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
-import GeoStateManager from "../../../service/creation/stateManager/GeoStateManager";
+    from "../../../service/stateManagers/creation/jurPerson/JurPersonCreationStateManager";
+import PersonCreationStateManager from "../../../service/stateManagers/creation/person/PersonCreationStateManager";
+import GeoStateManager from "../../../service/stateManagers/creation/GeoStateManager";
 import JurPersonCreationStateManagerImpl
-    from "../../../service/creation/stateManager/jurPerson/JurPersonCreationStateManagerImpl";
+    from "../../../service/stateManagers/creation/jurPerson/JurPersonCreationStateManagerImpl";
 import PersonCreationStateManagerImpl
-    from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
+    from "../../../service/stateManagers/creation/person/PersonCreationStateManagerImpl";
 
 
 type Props = {

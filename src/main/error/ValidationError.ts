@@ -6,7 +6,7 @@ import {HttpStatus} from "../rest/HttpStatus";
 
 
 /**
- * S - server validation object type
+ * S - server creation object type
  */
 export default class ValidationError<S> extends Error implements ValidationErrorResponse<S> {
     detail: string = "Деякі поля мають невалідні значення";
@@ -18,7 +18,7 @@ export default class ValidationError<S> extends Error implements ValidationError
 
 
     constructor(errors: S) {
-        super("Some validation errors were found.");
+        super("Some creation errors were found.");
         this.properties = {
             validationErrors: errors
         }

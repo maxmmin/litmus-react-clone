@@ -8,7 +8,6 @@ import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 import CreationCoreAction, {
     PersonCreationAction
 } from "../actions/CreationCoreAction";
-import {Relationship} from "../../model/human/person/Person";
 import GeneralAction from "../GeneralAction";
 import {Entity} from "../../model/Entity";
 import PassportData from "../../model/human/person/PassportData";
@@ -17,12 +16,12 @@ import User from "../../model/human/user/User";
 import UserCreationState, {BasicUserCreationState} from "../types/creation/UserCreationState";
 import JurPersonCreationState, {BasicJurPersonCreationState} from "../types/creation/JurPersonCreationState";
 import PersonCreationState, {BasicPersonCreationState, defaultScanOptions} from "../types/creation/PersonCreationState";
-import {ValidationErrors} from "../../service/ValidationErrors";
-import {PersonCreationParams, RelationshipCreationParams} from "../../service/creation/PersonCreationService";
+import {ValidationErrors} from "../../model/ValidationErrors";
+import {PersonCreationParams, RelationshipCreationParams} from "../../service/coreServices/creation/PersonCreationService";
 import RelationshipsLinkObject from "../../util/person/RelationshipsLinkObject";
 
 
-const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown, string>, initialState: S): S => {
+const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevState: S, action: PayloadAction<unknown>, initialState: S): S => {
     switch (action.type) {
 
         case CreationCoreAction.UPDATE_ENTITY_CREATION_PARAMS: {

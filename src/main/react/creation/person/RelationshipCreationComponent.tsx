@@ -2,18 +2,18 @@ import {RelationType} from "../../../model/human/person/Person";
 import {FloatingLabel, Form} from "react-bootstrap";
 import React, {useEffect} from "react";
 import {CrossIcon, DashedUserIcon} from "../../assets/icons";
-import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
+import PersonCreationStateManager from "../../../service/stateManagers/creation/person/PersonCreationStateManager";
 import PersonCreationStateManagerImpl
-    from "../../../service/creation/stateManager/person/PersonCreationStateManagerImpl";
+    from "../../../service/stateManagers/creation/person/PersonCreationStateManagerImpl";
 import PersonCreationValidationService, {
     getRelationshipDefaultValidationObject,
     RelationShipValidationObject
-} from "../../../service/creation/validation/human/person/PersonCreationValidationService";
+} from "../../../service/validation/human/person/PersonCreationValidationService";
 import InputError from "../../sharedComponents/InputError";
 import {useSelector} from "react-redux";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
-import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
+import {RelationshipCreationParams} from "../../../service/coreServices/creation/PersonCreationService";
 import getFullName from "../../../util/functional/getFullName";
 import {getRelationTypeFrom} from "../../../util/person/RelationshipsLinkObject";
 import SecuredImage from "../../sharedComponents/SecuredImage";
@@ -34,7 +34,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
         try {
             return stateManager.getRelationshipValidationErrors(relationship);
         } catch (e) {
-            // relationship validation object can not exist if there was no validation checks before
+            // relationship creation object can not exist if there was no creation checks before
            return getRelationshipDefaultValidationObject(relationship);
         }
     })

@@ -2,10 +2,10 @@ import {Dropdown} from "react-bootstrap";
 import React, {useContext} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import {useAppSelector} from "../../redux/hooks";
-import AuthenticationManager from "../../service/auth/AuthenticationManager";
+import AuthenticationManager from "../../service/coreServices/auth/AuthenticationManager";
 import {LitmusServiceContext} from "../App";
 import appConfig from "../../config/appConfig";
-import ApplicationStateManager from "../../service/appState/ApplicationStateManager";
+import ApplicationStateManager from "../../service/stateManagers/appState/ApplicationStateManager";
 import {HttpErrorParser} from "../../error/BasicHttpError";
 
 

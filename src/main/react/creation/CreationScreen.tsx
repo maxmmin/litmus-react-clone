@@ -16,22 +16,22 @@ import store from "../../redux/store";
 import {CreationModalModes} from "../../redux/types/creation/CreationModalModes";
 import appConfig from "../../config/appConfig";
 import {useAppSelector} from "../../redux/hooks";
-import CreationStateManagerImpl from "../../service/creation/stateManager/CreationStateManagerImpl";
-import CreationService from "../../service/creation/CreationService";
+import CreationStateManagerImpl from "../../service/stateManagers/creation/CreationStateManagerImpl";
+import CreationService from "../../service/coreServices/creation/CreationService";
 import getEntityCreationService from "../../util/getEntityCreationService";
 import ServiceContext from "../serviceContext";
 import {
     personDefaultValidationObject,
     PersonValidationObject
-} from "../../service/creation/validation/human/person/PersonCreationValidationService";
+} from "../../service/validation/human/person/PersonCreationValidationService";
 import {
     jurPersonDefaultValidationObject,
     JurPersonValidationObject
-} from "../../service/creation/validation/jurPerson/JurPersonCreationValidationService";
+} from "../../service/validation/jurPerson/JurPersonCreationValidationService";
 import {
     userDefaultValidationObject,
     UserValidationObject
-} from "../../service/creation/validation/human/user/UserCreationValidationService";
+} from "../../service/validation/human/user/UserCreationValidationService";
 import CoreEntity from "../../model/CoreEntity";
 
 

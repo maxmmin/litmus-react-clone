@@ -1,5 +1,5 @@
 import JurPersonExplorationStateManager
-    from "../../../service/exploration/stateManager/jurPerson/JurPersonExplorationStateManager";
+    from "../../../service/stateManagers/exploration/jurPerson/JurPersonExplorationStateManager";
 import React, {useContext} from "react";
 import {LitmusServiceContext} from "../../App";
 import Form from "react-bootstrap/Form";

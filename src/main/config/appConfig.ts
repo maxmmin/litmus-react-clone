@@ -28,9 +28,8 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
 
 const personsRoot = buildUrl(apiRoot, entityDomains.PERSON);
 
-const relativeMappings = {
+const relativeApiPaths = {
     getByFullName: "/find/full-name",
-    media: "/media",
     findByIdList: "/find/id-list"
 }
 
@@ -41,16 +40,16 @@ const usrRoot = buildUrl(apiRoot, entityDomains.USER);
 const serverMappings = Object.freeze({
     apiHost: backendUrl,
     apiRoot: apiRoot,
-    mediaRootUrl: buildUrl(backendUrl,apiRoot, relativeMappings.media),
-    relativeMappings: relativeMappings,
+    mediaRootUrl: buildUrl(backendUrl, apiRoot, '/media'),
+    sharedApiPaths: relativeApiPaths,
     users: {
         root: usrRoot,
         getByEmail: buildUrl(usrRoot, '/email')
     },
     persons: {
         root: personsRoot,
-        getByFullName: buildUrl(personsRoot, relativeMappings.getByFullName),
-        getByIdList: buildUrl(personsRoot, relativeMappings.findByIdList),
+        getByFullName: buildUrl(personsRoot, relativeApiPaths.getByFullName),
+        getByIdList: buildUrl(personsRoot, relativeApiPaths.findByIdList),
         relationships: (id: string)=>buildUrl(personsRoot, id, "/relationships")
     },
     jurPersons: {
@@ -61,7 +60,8 @@ const serverMappings = Object.freeze({
         refreshTokens: buildUrl(authApiRoot, "/refresh"),
         logout: buildUrl(authApiRoot,"/logout"),
         signIn: buildUrl(authApiRoot, "/sign-in"),
-        getCurrentUser: buildUrl(authApiRoot)
+        getCurrentUser: buildUrl(authApiRoot),
+        roles: buildUrl(authApiRoot, '/roles')
     },
     csrfToken: '/csrf-token'
 })

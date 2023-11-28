@@ -9,11 +9,11 @@ import PersonResponseDto, {
     RelationshipResponseDto
 } from "../person/PersonResponseDto";
 import PersonDtoMapper, {OptionalRawPersonIdMap} from "./PersonDtoMapper";
-import {PersonCreationParams, RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
+import {PersonCreationParams, RelationshipCreationParams} from "../../../service/coreServices/creation/PersonCreationService";
 import Media from "../../../model/Media";
 import {PersonSimpleResponseDto} from "../person/PersonSimpleResponseDto";
 import {blankMedia, blankPassportData, blankRelationshipsInfo} from "../../../util/modelValueHolders";
-import {PersonResponseIdMapDto} from "../../../service/exploration/api/human/person/PersonExplorationApiService";
+import {PersonResponseIdMapDto} from "../../../service/api/person/exploration/PersonExplorationApiService";
 import {PersonShortResponseDto} from "../person/PersonShortResponseDto";
 
 

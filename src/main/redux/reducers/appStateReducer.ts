@@ -5,7 +5,7 @@ import {Reducer} from "react";
 import {Action} from "redux";
 import AppStateAction from "../actions/AppStateAction";
 import {PayloadAction} from "@reduxjs/toolkit";
-import Notification, {AppNotificationType, BasicNotification, notificationTypes} from "../types/applicationState/Notification";
+import Notification, {AppNotificationType, BasicNotification} from "../types/applicationState/Notification";
 import {isActionFulfilled, isActionPending, isActionRejected} from "../../util/pureFunctions";
 import {FulfilledThunkAction, PossiblePendingThunkAction, RejectedThunkAction} from "../store";
 import {ApplicationError} from "../../rest/ErrorResponse";

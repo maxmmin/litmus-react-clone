@@ -1,9 +1,9 @@
 import axios, {AxiosError, AxiosInstance} from "axios";
 import appConfig from "../../config/appConfig";
 import {HttpStatus} from "../../rest/HttpStatus";
-import AuthenticationStateManager from "../auth/stateManager/AuthenticationStateManager";
+import AuthenticationStateManager from "../stateManagers/auth/AuthenticationStateManager";
 import ErrorResponse from "../../rest/ErrorResponse";
-import AuthenticationStateManagerImpl from "../auth/stateManager/AuthenticationStateManagerImpl";
+import AuthenticationStateManagerImpl from "../stateManagers/auth/AuthenticationStateManagerImpl";
 import {HttpMethod} from "./Http";
 
 type CsrfResponse = {

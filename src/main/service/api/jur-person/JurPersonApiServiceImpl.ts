@@ -2,17 +2,17 @@ import JurPersonApiService from "./JurPersonApiService";
 import JurPersonRequestDto from "../../../rest/dto/jurPerson/JurPersonRequestDto";
 import PagedData from "../../../rest/PagedData";
 import JurPersonResponseDto from "../../../rest/dto/jurPerson/JurPersonResponseDto";
-import JurPersonExplorationApiService from "../../exploration/api/jurPerson/JurPersonExplorationApiService";
-import JurPersonCreationApiService from "../../creation/api/JurPersonCreationApiService";
+import JurPersonExplorationApiService from "./exploration/JurPersonExplorationApiService";
+import JurPersonCreationApiService from "./creation/JurPersonCreationApiService";
 import {AxiosInstance} from "axios";
 import AxiosApiManager from "../../rest/AxiosApiManager";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
-import JurPersonExplorationApiServiceImpl from "../../exploration/api/jurPerson/JurPersonExplorationApiServiceImpl";
-import JurPersonCreationApiServiceImpl from "../../creation/api/JurPersonCreationApiServiceImpl";
+import JurPersonExplorationApiServiceImpl from "./exploration/JurPersonExplorationApiServiceImpl";
+import JurPersonCreationApiServiceImpl from "./creation/JurPersonCreationApiServiceImpl";
 import {JurPersonSimpleResponseDto} from "../../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
-import jurPersonExplorationService from "../../exploration/JurPersonExplorationService";
-import jurPersonCreationService from "../../creation/JurPersonCreationService";
+import jurPersonExplorationService from "../../coreServices/exploration/JurPersonExplorationService";
+import jurPersonCreationService from "../../coreServices/creation/JurPersonCreationService";
 import {JurPersonShortResponseDto} from "../../../rest/dto/jurPerson/JurPersonShortResponseDto";
 
 export default class JurPersonApiServiceImpl implements JurPersonApiService {

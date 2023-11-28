@@ -7,7 +7,7 @@ import BasicJurPersonExplorationState from "../../redux/types/exploration/jurPer
 import UserExplorationState from "../../redux/types/exploration/human/user/UserExplorationState";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
-import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
+import ExplorationStateManager from "../../service/stateManagers/exploration/ExplorationStateManager";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 
 

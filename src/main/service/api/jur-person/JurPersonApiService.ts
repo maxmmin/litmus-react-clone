@@ -1,11 +1,11 @@
-import ApiService from "../ApiService";
+import EntityApiService from "../EntityApiService";
 import JurPersonRequestDto from "../../../rest/dto/jurPerson/JurPersonRequestDto";
 import JurPersonResponseDto from "../../../rest/dto/jurPerson/JurPersonResponseDto";
-import JurPersonExplorationApiService from "../../exploration/api/jurPerson/JurPersonExplorationApiService";
-import JurPersonCreationApiService from "../../creation/api/JurPersonCreationApiService";
+import JurPersonExplorationApiService from "./exploration/JurPersonExplorationApiService";
+import JurPersonCreationApiService from "./creation/JurPersonCreationApiService";
 import {JurPersonSimpleResponseDto} from "../../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
 import {JurPersonShortResponseDto} from "../../../rest/dto/jurPerson/JurPersonShortResponseDto";
 
-export default interface JurPersonApiService extends ApiService<JurPersonRequestDto, JurPersonResponseDto, JurPersonSimpleResponseDto, JurPersonShortResponseDto> {
+export default interface JurPersonApiService extends EntityApiService<JurPersonRequestDto, JurPersonResponseDto, JurPersonSimpleResponseDto, JurPersonShortResponseDto> {
 
 }

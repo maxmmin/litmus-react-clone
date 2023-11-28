@@ -1,12 +1,12 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import React, {useContext, useEffect, useState} from "react";
-import UserCreationStateManager from "../../../service/creation/stateManager/user/UserCreationStateManager";
+import UserCreationStateManager from "../../../service/stateManagers/creation/user/UserCreationStateManager";
 import {useAppSelector} from "../../../redux/hooks";
 import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
 import UserCreationValidationService
-    from "../../../service/creation/validation/human/user/UserCreationValidationService";
+    from "../../../service/validation/human/user/UserCreationValidationService";
 import Role, {RoleName} from "../../../redux/types/userIdentity/Role";
 import {VisibilityDisabledIcon, VisibilityEnabledIcon} from "../../assets/icons";
 

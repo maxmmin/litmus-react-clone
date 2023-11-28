@@ -1,4 +1,4 @@
-import {RelationshipCreationParams} from "../../service/creation/PersonCreationService";
+import {RelationshipCreationParams} from "../../service/coreServices/creation/PersonCreationService";
 import {RelationType} from "../../model/human/person/Person";
 
 class RelationshipAlreadyExists extends Error {

@@ -10,13 +10,13 @@ import {useNavigate} from "react-router-dom";
 import appConfig from "../../config/appConfig";
 import {useLocation, useParams} from "react-router";
 import ExplorationInputForm from "./ExplorationInputForm";
-import ExplorationStateManagerImpl from "../../service/exploration/stateManager/ExplorationStateManagerImpl";
+import ExplorationStateManagerImpl from "../../service/stateManagers/exploration/ExplorationStateManagerImpl";
 import store from "../../redux/store";
 import ExplorationData from "./ExplorationData";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import {getEntityByDomain} from "../../util/pureFunctions";
 import getEntityExplorationService, {getEntityExplorationStateManager} from "../../util/getEntityExplorationService";
-import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
+import ExplorationStateManager from "../../service/stateManagers/exploration/ExplorationStateManager";
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 
 

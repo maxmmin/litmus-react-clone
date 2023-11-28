@@ -1,4 +1,4 @@
-import {ValidationErrors} from "../../../service/ValidationErrors";
+import {ValidationErrors} from "../../../model/ValidationErrors";
 
 export default interface EntityCreationState<P,E=ValidationErrors<P>> {
     emergingEntity: P;

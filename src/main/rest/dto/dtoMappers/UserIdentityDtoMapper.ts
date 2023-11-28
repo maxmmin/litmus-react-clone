@@ -1,4 +1,4 @@
-import UserIdentityResponseDto from "../../UserIdentityResponseDto";
+import UserIdentityResponseDto from "../UserIdentityResponseDto";
 import UserIdentity from "../../../redux/types/userIdentity/UserIdentity";
 
 export default interface UserIdentityDtoMapper {

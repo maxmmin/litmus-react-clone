@@ -4,7 +4,7 @@ import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureF
 import {useAppSelector} from "../../../redux/hooks";
 import HumanExplorationParams from "../../../redux/types/exploration/human/HumanExplorationParams";
 import Human from "../../../model/human/Human";
-import HumanExplorationStateManager from "../../../service/exploration/stateManager/HumanExplorationStateManager";
+import HumanExplorationStateManager from "../../../service/stateManagers/exploration/HumanExplorationStateManager";
 import {getEntityExplorationStateManager} from "../../../util/getEntityExplorationService";
 
 

@@ -1,7 +1,7 @@
 import {Entity} from "../model/Entity";
-import ExplorationService from "../service/exploration/ExplorationService";
-import EntityExplorationService from "../service/exploration/ExplorationService";
-import ExplorationStateManager from "../service/exploration/stateManager/ExplorationStateManager";
+import ExplorationService from "../service/coreServices/exploration/ExplorationService";
+import EntityExplorationService from "../service/coreServices/exploration/ExplorationService";
+import ExplorationStateManager from "../service/stateManagers/exploration/ExplorationStateManager";
 import EntityExplorationParams from "../redux/types/exploration/EntityExplorationParams";
 import serviceContext from "../react/serviceContext";
 const entityExplorationServiceMap: Map<Entity, ExplorationService> = new Map<Entity, EntityExplorationService>();

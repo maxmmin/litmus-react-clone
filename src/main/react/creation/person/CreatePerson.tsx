@@ -15,7 +15,7 @@ import ApplyPersonModal from "../ApplyPersonModal";
 import {CreationModalModes} from "../../../redux/types/creation/CreationModalModes";
 import PersonRelationshipsCreation from "./PersonRelationshipsCreation";
 import {Entity} from "../../../model/Entity";
-import PersonCreationStateManager from "../../../service/creation/stateManager/person/PersonCreationStateManager";
+import PersonCreationStateManager from "../../../service/stateManagers/creation/person/PersonCreationStateManager";
 import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
 import FileProps from "../../../model/FileProps";

@@ -2,7 +2,7 @@ import {Relationship} from "../../../model/human/person/Person";
 import RelationshipCreationComponent from "./RelationshipCreationComponent";
 import {useContext} from "react";
 import {LitmusServiceContext} from "../../App";
-import {RelationshipCreationParams} from "../../../service/creation/PersonCreationService";
+import {RelationshipCreationParams} from "../../../service/coreServices/creation/PersonCreationService";
 
 type props = {relationships: RelationshipCreationParams[]}
 

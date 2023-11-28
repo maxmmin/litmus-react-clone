@@ -9,11 +9,11 @@ import Loader from "../loader/Loader";
 import Person, {PreProcessedPerson} from "../../model/human/person/Person";
 import {JurPerson, PreProcessedJurPerson} from "../../model/jurPerson/JurPerson";
 import User from "../../model/human/user/User";
-import ExplorationStateManager from "../../service/exploration/stateManager/ExplorationStateManager";
+import ExplorationStateManager from "../../service/stateManagers/exploration/ExplorationStateManager";
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import getEntityExplorationService, {getEntityExplorationStateManager} from "../../util/getEntityExplorationService";
 import {useAppSelector} from "../../redux/hooks";
-import ExplorationService from "../../service/exploration/ExplorationService";
+import ExplorationService from "../../service/coreServices/exploration/ExplorationService";
 import {getVisibleIndexes} from "../../util/pageDataUtils";
 import serviceContext from "../serviceContext";
 

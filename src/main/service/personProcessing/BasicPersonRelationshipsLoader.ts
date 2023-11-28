@@ -1,9 +1,9 @@
-import PersonExplorationApiService from "../exploration/api/human/person/PersonExplorationApiService";
+import PersonExplorationApiService from "../api/person/exploration/PersonExplorationApiService";
 import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
 import {NoRelationsPerson, PreProcessedPerson} from "../../model/human/person/Person";
 import PersonRelationsLoader from "./PersonRelationsLoader";
 import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsScanner";
-import PersonExplorationApiServiceImpl from "../exploration/api/human/person/PersonExplorationApiServiceImpl";
+import PersonExplorationApiServiceImpl from "../api/person/exploration/PersonExplorationApiServiceImpl";
 import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
 import {blankRelationshipsInfo} from "../../util/modelValueHolders";

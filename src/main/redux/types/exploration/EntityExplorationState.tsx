@@ -1,6 +1,6 @@
 import EntityExplorationParams from "./EntityExplorationParams";
 import EntityExplorationData from "./EntityExplorationData";
-import {ValidationErrors} from "../../../service/ValidationErrors";
+import {ValidationErrors} from "../../../model/ValidationErrors";
 
 /**
  * E - entity

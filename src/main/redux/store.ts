@@ -30,6 +30,8 @@ import AuthAction from "./actions/AuthAction";
 import {Authentication} from "./types/auth/Authentication";
 import AppState from "./types/applicationState/AppState";
 import {LoginPageState} from "./actions/LoginPageDataActions";
+import appResourcesReducer, {initialApplicationResources} from "./reducers/appResourcesReducer";
+import ApplicationResources from "./types/applicationResources/ApplicationResources";
 
 const persistConfig: PersistConfig<any> = {
     storage,
@@ -42,6 +44,7 @@ type StoreState = {
     authentication: Authentication,
     appState: AppState,
     userIdentity: UserIdentityState,
+    appResources: ApplicationResources,
     exploration: ExplorationState,
     loginPageState: LoginPageState,
     creation: CreationState
@@ -49,6 +52,7 @@ type StoreState = {
 
 const defaultStoreState: StoreState = {
     appState: initialAppState,
+    appResources: initialApplicationResources,
     authentication: defaultAuthState,
     creation: defaultCreationState,
     exploration: defaultExplorationState,
@@ -61,14 +65,13 @@ const _rootReducer = combineReducers({
     appState: appStateReducer,
     userIdentity: userIdentityReducer,
     exploration: explorationStateReducer,
+    appResources: appResourcesReducer,
     loginPageState: loginPageDataReducer,
     creation: creationReducer
 })
 
 const rootReducer: typeof _rootReducer = (state, action) => {
     if (action.type===AuthAction.LOGOUT) {
-        const resetState = {...defaultStoreState};
-        resetState.appState = {...defaultStoreState.appState};
         return {
             ...defaultStoreState
         }

@@ -1,7 +1,7 @@
 import PersonExplorationApiService, {
     PersonResponseIdMapDto
-} from "../../exploration/api/human/person/PersonExplorationApiService";
-import PersonCreationApiService from "../../creation/api/PersonCreationApiService";
+} from "./exploration/PersonExplorationApiService";
+import PersonCreationApiService from "./creation/PersonCreationApiService";
 import PersonApiService from "./PersonApiService";
 import PersonRequestDto from "../../../rest/dto/person/PersonRequestDto";
 import PersonResponseDto, {
@@ -9,12 +9,12 @@ import PersonResponseDto, {
 } from "../../../rest/dto/person/PersonResponseDto";
 import PagedData from "../../../rest/PagedData";
 import {FullNameExploration} from "../../../model/human/Human";
-import PersonExplorationApiServiceImpl from "../../exploration/api/human/person/PersonExplorationApiServiceImpl";
+import PersonExplorationApiServiceImpl from "./exploration/PersonExplorationApiServiceImpl";
 import appConfig from "../../../config/appConfig";
 import {buildUrl} from "../../../util/pureFunctions";
 import {AxiosInstance} from "axios";
 import AxiosApiManager from "../../rest/AxiosApiManager";
-import PersonCreationApiServiceImpl from "../../creation/api/PersonCreationApiServiceImpl";
+import PersonCreationApiServiceImpl from "./creation/PersonCreationApiServiceImpl";
 import {PersonSimpleResponseDto} from "../../../rest/dto/person/PersonSimpleResponseDto";
 import {PersonShortResponseDto} from "../../../rest/dto/person/PersonShortResponseDto";
 

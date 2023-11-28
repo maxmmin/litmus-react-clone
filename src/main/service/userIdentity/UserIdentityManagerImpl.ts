@@ -3,9 +3,9 @@ import {Action} from "redux";
 import UserIdentityActions from "../../redux/actions/UserIdentityActions";
 import {AsyncThunkAction, createAsyncThunk} from "@reduxjs/toolkit";
 import UserIdentity from "../../redux/types/userIdentity/UserIdentity";
-import UserIdentityApiService from "./api/UserIdentityApiService";
+import UserIdentityApiService from "../api/userIdentity/UserIdentityApiService";
 import UserIdentityManager from "./UserIdentityManager";
-import UserIdentityApiServiceImpl from "./api/UserIdentityApiServiceImpl";
+import UserIdentityApiServiceImpl from "../api/userIdentity/UserIdentityApiServiceImpl";
 import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 
 

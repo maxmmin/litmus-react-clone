@@ -4,8 +4,8 @@ import {DateEntityTool} from "../../../model/DateEntity";
 import {
     personDefaultValidationObject,
     PersonValidationObject
-} from "../../../service/creation/validation/human/person/PersonCreationValidationService";
-import {PersonCreationParams} from "../../../service/creation/PersonCreationService";
+} from "../../../service/validation/human/person/PersonCreationValidationService";
+import {PersonCreationParams} from "../../../service/coreServices/creation/PersonCreationService";
 import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
 
 export default interface PersonCreationState extends EntityCreationState<PersonCreationParams, PersonValidationObject>{}

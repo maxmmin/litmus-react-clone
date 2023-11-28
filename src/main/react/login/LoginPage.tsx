@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import {Navigate} from "react-router-dom";
 import {LoginPageState, updateLoginPageState} from "../../redux/actions/LoginPageDataActions";
-import AuthenticationManager from "../../service/auth/AuthenticationManager";
+import AuthenticationManager from "../../service/coreServices/auth/AuthenticationManager";
 import {LitmusServiceContext} from "../App";
 
 

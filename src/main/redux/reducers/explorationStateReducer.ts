@@ -158,7 +158,6 @@ const exploredEntityReducer:  Reducer<Entity|undefined, PayloadAction<Entity>> =
 }
 
 export type ExplorationState = {person: PersonExplorationStateReducible, jurPerson: JurPersonExplorationStateReducible, user: UserExplorationStateReducible, exploredEntity: Entity | undefined}
-export type ExplorationStateReducible = ExplorationState|undefined;
 
 export const defaultExplorationState: ExplorationState = {
     exploredEntity: initialEntity, jurPerson: initialJurPersonExplorationState, person: initialPersonExplorationState, user: initialUserExplorationState

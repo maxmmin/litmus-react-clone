@@ -3,7 +3,7 @@ import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import {DateEntityTool} from "../../../model/DateEntity";
 import {
     jurPersonDefaultValidationObject, JurPersonValidationObject
-} from "../../../service/creation/validation/jurPerson/JurPersonCreationValidationService";
+} from "../../../service/validation/jurPerson/JurPersonCreationValidationService";
 import Person from "../../../model/human/person/Person";
 
 export default interface JurPersonCreationState extends EntityCreationState<JurPersonCreationParams, JurPersonValidationObject> {

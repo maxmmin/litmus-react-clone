@@ -2,7 +2,7 @@ import User, {CreatedEntities} from "../../../model/human/user/User";
 import UserRequestDto from "../user/UserRequestDto";
 import {hasContent} from "../../../util/functional/isEmpty";
 import UserResponseDto, {CreatedEntitiesResponseDto} from "../user/UserResponseDto";
-import {UserCreationParams} from "../../../service/creation/UserCreationService";
+import {UserCreationParams} from "../../../service/coreServices/creation/UserCreationService";
 import UserDtoMapper from "./UserDtoMapper";
 import {checkNotEmpty} from "../../../util/pureFunctions";
 import Role from "../../../redux/types/userIdentity/Role";
