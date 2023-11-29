@@ -3,7 +3,6 @@ import Pagination from "react-bootstrap/Pagination";
 import React from "react";
 
 export const getVisibleIndexes = (pagedData: PagedData<unknown>) => {
-    console.log(pagedData)
     const desirableLength = 5;
 
     const sideLength = Math.trunc(desirableLength/2);
@@ -49,7 +48,6 @@ export class LocalPager<T> {
     }
 
     public getPageData () {
-        console.log(this.pageData)
         return this.pageData;
     }
 
