@@ -10,7 +10,7 @@ export default interface JurPersonCreationState extends EntityCreationState<JurP
 
 }
 
-export type JurPersonCreationParams = Omit<JurPerson, 'id'|"owner"|"benOwner">&{
+export type JurPersonCreationParams = Pick<JurPerson, 'name'|'edrpou'|'dateOfRegistration'|'location'|'media'>&{
     benOwner: Person|null,
     owner: Person|null
 }

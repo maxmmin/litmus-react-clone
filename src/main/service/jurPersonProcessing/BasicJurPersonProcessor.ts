@@ -8,6 +8,7 @@ import JurPersonDtoMapper from "../dtoMappers/jurPerson/JurPersonDtoMapper";
 import {RelatedPersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
 import PersonProcessor from "../personProcessing/PersonProcessor";
 import JurPersonDtoMapperImpl from "../dtoMappers/jurPerson/JurPersonDtoMapperImpl";
+import {blankMetadata} from "../../util/modelValueHolders";
 
 export default class BasicJurPersonProcessor implements JurPersonProcessor {
 
@@ -23,9 +24,9 @@ export default class BasicJurPersonProcessor implements JurPersonProcessor {
     private createVirtualPerson(): PreProcessedPerson {
         return  {
             id: -1,
-            firstName: "",
-            middleName: "",
-            lastName: "",
+            firstName: "VIRTUAL-PERSON",
+            middleName: "VIRTUAL-PERSON",
+            lastName: "VIRTUAL-PERSON",
             media: {mainImage: null, images: []},
             sex: Sex.UNKNOWN,
             relationshipsInfo: {
@@ -36,7 +37,8 @@ export default class BasicJurPersonProcessor implements JurPersonProcessor {
             benOwnedJurPersons: [],
             dateOfBirth: null,
             location: null,
-            passportData: null
+            passportData: null,
+            metadata: {...blankMetadata}
         }
     }
 

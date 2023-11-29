@@ -119,28 +119,44 @@ import ApplicationResourcesServiceImpl
     from "../service/coreServices/applicationResources/ApplicationResourcesServiceImpl";
 import BasicHierarchyPermissionsChecker from "../service/userHierarchy/BasicHierarchyPermissionsChecker";
 import HierarchyPermissionChecker from "../service/userHierarchy/HierarchyPermissionChecker";
+import MetadataDtoMapper from "../service/dtoMappers/metadata/MetadataDtoMapper";
+import MetadataDtoMapperImpl from "../service/dtoMappers/metadata/MetadataDtoMapperImpl";
+import UserShortDtoMapper from "../service/dtoMappers/user/UserShortDtoMapper";
+import UserShortDtoMapperImpl from "../service/dtoMappers/user/UserShortDtoMapperImpl";
 
 type Mappers = {
-    user: UserDtoMapper,
+    user: {
+        short: UserShortDtoMapper,
+        default: UserDtoMapper
+    },
     person: PersonDtoMapper,
     jurPerson: JurPersonDtoMapper,
     userIdentity: UserIdentityDtoMapper,
-    role: RoleDtoMapper
+    role: RoleDtoMapper,
+    metadata: MetadataDtoMapper
 }
 
 const roleMapper: RoleDtoMapper = new RoleDtoMapperImpl();
 const applicationResourcesStateManager: ApplicationResourcesStateManager = new ApplicationResourcesStateManagerImpl(roleMapper);
 
-const personMapper: PersonDtoMapper = new PersonDtoMapperImpl();
-const jurPersonMapper: JurPersonDtoMapper = new JurPersonDtoMapperImpl(personMapper);
-const userMapper: UserDtoMapper = new UserDtoMapperImpl(personMapper, jurPersonMapper, applicationResourcesStateManager);
+const userShortDtoMapper: UserShortDtoMapper = new UserShortDtoMapperImpl(applicationResourcesStateManager);
+const metadataDtoMapper: MetadataDtoMapper = new MetadataDtoMapperImpl(userShortDtoMapper);
+
+const personMapper: PersonDtoMapper = new PersonDtoMapperImpl(metadataDtoMapper);
+const jurPersonMapper: JurPersonDtoMapper = new JurPersonDtoMapperImpl(personMapper, metadataDtoMapper);
+
+const userMapper: UserDtoMapper = new UserDtoMapperImpl(personMapper, jurPersonMapper, applicationResourcesStateManager, metadataDtoMapper, userShortDtoMapper);
 
 const mappers: Mappers = {
-    person: new PersonDtoMapperImpl(),
-    user: userMapper,
-    jurPerson: JurPersonDtoMapperImpl.getInstance(),
-    userIdentity: new UserIdentityDtoMapperImpl(applicationResourcesStateManager),
-    role: roleMapper
+    person: personMapper,
+    user: {
+        short: userShortDtoMapper,
+        default: userMapper
+    },
+    jurPerson: jurPersonMapper,
+    userIdentity: new UserIdentityDtoMapperImpl(applicationResourcesStateManager, metadataDtoMapper),
+    role: roleMapper,
+    metadata: metadataDtoMapper
 }
 
 export type ApplicationResourcesContext = {
@@ -221,7 +237,7 @@ const explorationContext: ExplorationContext = {
         jurPerson: jurPersonExplorationApiService
     },
     service: {
-        user: new UserExplorationService(userExplorationStateManager,userExplorationApiService, mappers.user),
+        user: new UserExplorationService(userExplorationStateManager,userExplorationApiService, mappers.user.default),
         person: new PersonExplorationService(personExplorationStateManager, personExplorationApiService, mappers.person),
         jurPerson: new JurPersonExplorationService(jurPersonExplorationStateManager, jurPersonExplorationApiService, mappers.jurPerson)
     }
@@ -280,7 +296,7 @@ const creationContext: CreationContext = {
     },
     service: {
         person: new PersonCreationServiceImpl(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService, fileContext.fileRepo),
-        user: new UserCreationServiceImpl(userCreationApiService,userCreationStateManager, mappers.user, userCreationValidationService),
+        user: new UserCreationServiceImpl(userCreationApiService,userCreationStateManager, mappers.user.default, userCreationValidationService),
         jurPerson: new JurPersonCreationServiceImpl(jurPersonCreationApiService, jurPersonCreationStateManager, mappers.jurPerson, jurPersonCreationValidationService, fileContext.fileRepo)
     },
     validation: {

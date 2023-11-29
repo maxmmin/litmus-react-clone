@@ -10,7 +10,7 @@ export type RelationshipCreationParams = {
     note: string
 }
 
-export type PersonCreationParams = Omit<Person, 'id'|'relationships'|'sex'|keyof Human|'ownedJurPersons'|'benOwnedJurPersons'> & {
+export type PersonCreationParams = Pick<Person, 'media'|'dateOfBirth'|'passportData'|'location'> & {
     relationships: RelationshipCreationParams[],
     sex: Sex|null
 } & HumanCreationParams

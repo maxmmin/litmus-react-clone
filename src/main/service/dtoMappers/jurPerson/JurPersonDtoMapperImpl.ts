@@ -12,21 +12,29 @@ import {JurPersonSimpleResponseDto} from "../../../rest/dto/jurPerson/JurPersonS
 import {RelatedPersonResponseDto} from "../../../rest/dto/person/PersonResponseDto";
 import {PersonShortResponseDto} from "../../../rest/dto/person/PersonShortResponseDto";
 import Sex from "../../../model/human/person/Sex";
-import {blankMedia, blankPassportData, blankRelationshipsInfo} from "../../../util/modelValueHolders";
+import {blankMedia, blankMetadata, blankPassportData, blankRelationshipsInfo} from "../../../util/modelValueHolders";
 import PersonDtoMapper from "../person/PersonDtoMapper";
 import PersonDtoMapperImpl from "../person/PersonDtoMapperImpl";
 import {JurPersonShortResponseDto} from "../../../rest/dto/jurPerson/JurPersonShortResponseDto";
+import MetadataDtoMapper from "../metadata/MetadataDtoMapper";
+import MetadataDtoMapperImpl from "../metadata/MetadataDtoMapperImpl";
+import {Metadata} from "../../../model/MetadataContainable";
 
 class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
 
     protected readonly personDtoMapper: PersonDtoMapper;
 
-    constructor(personDtoMapper: PersonDtoMapper) {
+    protected readonly metadataDtoMapper: MetadataDtoMapper
+
+    constructor(personDtoMapper: PersonDtoMapper,
+                metadataDtoMapper: MetadataDtoMapper) {
         this.personDtoMapper = personDtoMapper;
+        this.metadataDtoMapper = metadataDtoMapper;
     }
 
-    static getInstance(personDtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance()): JurPersonDtoMapperImpl {
-        return new JurPersonDtoMapperImpl(personDtoMapper);
+    static getInstance(personDtoMapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
+                       metadataDtoMapper: MetadataDtoMapper = MetadataDtoMapperImpl.getInstance()): JurPersonDtoMapperImpl {
+        return new JurPersonDtoMapperImpl(personDtoMapper, metadataDtoMapper);
     }
 
     mapPreprocessedJurPersonWithLoss(dto: PreProcessedJurPerson): JurPerson {
@@ -44,10 +52,10 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             middleName: dto.middleName,
             lastName: dto.lastName,
             sex: Sex.UNKNOWN,
-            media: blankMedia,
+            media: {...blankMedia},
             location: null,
-            relationshipsInfo: blankRelationshipsInfo,
-            passportData: blankPassportData,
+            relationshipsInfo: {...blankRelationshipsInfo},
+            passportData: {...blankPassportData},
             dateOfBirth: null,
             ownedJurPersons: [],
             benOwnedJurPersons: []
@@ -61,9 +69,10 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             name: shortDto.name,
             owner: null,
             benOwner: null,
-            media: blankMedia,
+            media: {...blankMedia},
             dateOfRegistration: null,
-            location: null
+            location: null,
+            metadata: {...blankMetadata}
         };
     }
 
@@ -83,7 +92,8 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             location: simpleDto.location,
             dateOfRegistration: hasContent(simpleDto.dateOfRegistration)?DateEntityTool.buildFromString(simpleDto.dateOfRegistration!):null,
             edrpou: hasContent(simpleDto.edrpou)?simpleDto.edrpou:null,
-            media: media
+            media: media,
+            metadata: {...blankMetadata}
         };
     }
 
@@ -135,7 +145,8 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             location: exploredEntityDto.location,
             dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:"",
-            media: media
+            media: media,
+            metadata: this.metadataDtoMapper.map(exploredEntityDto.metadata)
         }
 
         return jurPerson;
@@ -155,6 +166,11 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             } else dob = exploredEntityDto.dateOfRegistration;
         }
 
+        let metadata: Metadata = {...blankMetadata};
+        if (Object.hasOwn(exploredEntityDto, "metadata")) {
+            metadata = (<PreProcessedJurPerson>exploredEntityDto).metadata;
+        }
+
         const jurPerson: JurPerson = {
             id: exploredEntityDto.id,
             name: exploredEntityDto.name,
@@ -163,7 +179,8 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             location: exploredEntityDto.location,
             dateOfRegistration: dob,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou:null,
-            media: media
+            media: media,
+            metadata: metadata
         }
 
         return jurPerson;

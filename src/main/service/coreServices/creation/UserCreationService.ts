@@ -4,7 +4,7 @@ import {RoleName} from "../../../model/userIdentity/Role";
 import Human, {HumanCreationParams} from "../../../model/human/Human";
 import CreationService from "./CreationService";
 
-export type UserCreationParams = Omit<User, "id"|"role"|keyof HumanCreationParams|'createdEntities'>&{
+export type UserCreationParams = Pick<User, "email">&{
     password: string,
     repeatPassword: string,
     role: string

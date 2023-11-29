@@ -20,7 +20,8 @@ interface Person extends Human, MediaEntity, CoreEntity {
     sex: Sex;
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
-    location: GeoLocation | null
+    location: GeoLocation | null;
+
 }
 
 export type NoRelationsPerson = Omit<Person, 'relationships'|'ownedJurPersons'|'benOwnedJurPersons'>

@@ -55,7 +55,7 @@ export default class BasicPersonRelationshipsLoader implements PersonRelationsLo
                         mappedPerson = this.dtoMapper.mapToEntity(nullablePerson);
                         mappedPerson.ownedJurPersons = [];
                         mappedPerson.benOwnedJurPersons = [];
-                        mappedPerson.relationshipsInfo = blankRelationshipsInfo;
+                        mappedPerson.relationshipsInfo = {...blankRelationshipsInfo};
                     }
                     personMap.set(+key, mappedPerson)
                 }

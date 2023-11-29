@@ -10,17 +10,25 @@ import PersonResponseDto, {
 } from "../../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper, {OptionalRawPersonIdMap} from "./PersonDtoMapper";
 import {PersonCreationParams, RelationshipCreationParams} from "../../coreServices/creation/PersonCreationService";
-import Media from "../../../model/Media";
 import {PersonSimpleResponseDto} from "../../../rest/dto/person/PersonSimpleResponseDto";
-import {blankMedia, blankPassportData, blankRelationshipsInfo} from "../../../util/modelValueHolders";
+import {blankMedia, blankMetadata, blankPassportData, blankRelationshipsInfo} from "../../../util/modelValueHolders";
 import {PersonResponseIdMapDto} from "../../api/person/exploration/PersonExplorationApiService";
 import {PersonShortResponseDto} from "../../../rest/dto/person/PersonShortResponseDto";
+import MetadataDtoMapper from "../metadata/MetadataDtoMapper";
+import MetadataDtoMapperImpl from "../metadata/MetadataDtoMapperImpl";
 
 
 export default class PersonDtoMapperImpl implements PersonDtoMapper {
 
-    static getInstance(): PersonDtoMapperImpl {
-        return new PersonDtoMapperImpl();
+    protected readonly metadataDtoMapper: MetadataDtoMapper;
+
+
+    constructor(metadataDtoMapper: MetadataDtoMapper) {
+        this.metadataDtoMapper = metadataDtoMapper;
+    }
+
+    static getInstance(metadataDtoMapper: MetadataDtoMapper = MetadataDtoMapperImpl.getInstance()): PersonDtoMapperImpl {
+        return new PersonDtoMapperImpl(metadataDtoMapper);
     }
 
     mapSimpleDtoToEntity(simpleDto: PersonSimpleResponseDto): PreProcessedPerson {
@@ -28,7 +36,9 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             ownedJurPersons: [],
             benOwnedJurPersons: [],
             dateOfBirth: simpleDto.dateOfBirth&&hasContent(simpleDto.dateOfBirth)?DateEntityTool.buildFromString(simpleDto.dateOfBirth):null,
-            relationshipsInfo: blankRelationshipsInfo}
+            relationshipsInfo: {...blankRelationshipsInfo},
+            metadata: {...blankMetadata}
+        }
     }
 
     mapPreProcessedPersonWithLoss(preProcessed: Omit<PreProcessedPerson, "ownedJurPersons" | "benOwnedJurPersons" | "relationshipsInfo">): Person {
@@ -44,14 +54,15 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             ownedJurPersons: [],
             relationships: [],
             dateOfBirth: preProcessed.dateOfBirth,
-            sex: preProcessed.sex
+            sex: preProcessed.sex,
+            metadata: preProcessed.metadata
         }
     }
 
     mapEmbedPersonResponseDto(dto: EmbedPersonResponseDto): PreProcessedPerson {
         return {
             id: dto.id,
-            media: blankMedia,
+            media: {...blankMedia},
             passportData: null,
             location: null,
             firstName: dto.firstName,
@@ -61,7 +72,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             sex: dto.sex,
             ownedJurPersons: [],
             benOwnedJurPersons: [],
-            relationshipsInfo: blankRelationshipsInfo
+            relationshipsInfo: {...blankRelationshipsInfo},
+            metadata: {...blankMetadata}
         };
     }
 
@@ -72,13 +84,14 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             middleName: shortDto.middleName,
             lastName: shortDto.lastName,
             sex: shortDto.sex,
-            passportData: blankPassportData,
-            media: blankMedia,
+            passportData: {...blankPassportData},
+            media: {...blankMedia},
             location: null,
             dateOfBirth: null,
-            relationshipsInfo: blankRelationshipsInfo,
+            relationshipsInfo: {...blankRelationshipsInfo},
             benOwnedJurPersons: [],
-            ownedJurPersons: []
+            ownedJurPersons: [],
+            metadata: {...blankMetadata}
         }
     }
 
@@ -201,7 +214,9 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             middleName: retrievedEntityDto.middleName||null,
             lastName: retrievedEntityDto.lastName,
             relationshipsInfo: retrievedEntityDto.relationshipsInfo||{scanOptions: {depth: 0}, relationships: []},
-            dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null
+            dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?
+                DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null,
+            metadata: this.metadataDtoMapper.map(retrievedEntityDto.metadata)
         };
 
         return person;

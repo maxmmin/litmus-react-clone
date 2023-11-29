@@ -10,6 +10,8 @@ import {
     MinifiedJurPersonResponseDto
 } from "../jurPerson/JurPersonResponseDto";
 import {PersonShortResponseDto} from "./PersonShortResponseDto";
+import MetadataContainableResponseDto from "../MetadataContainableResponseDto";
+import {FullName} from "../../../model/human/Human";
 
 export type RelationshipResponseDto = Pick<Relationship, 'note'|'type'> & {
     person: RelatedPersonResponseDto
@@ -33,7 +35,7 @@ export type RelationshipsInfo = {
     relationships: RelationshipResponseDto[]|null
 }
 
-export type RelatedPersonResponseDto = Omit<PersonResponseDto, "relationshipsInfo"|'ownedJurPersons'|'benOwnedJurPersons'> & {
+export type RelatedPersonResponseDto = Pick<PersonResponseDto, "id"|"sex"|"media"|"location"|"passportData"|"dateOfBirth"|keyof FullName> & {
     relationshipsInfo: NestedRelationshipsInfo,
     ownedJurPersons: (EmbedJurPersonResponseDto|MinifiedJurPersonResponseDto)[],
     benOwnedJurPersons: (EmbedJurPersonResponseDto|MinifiedJurPersonResponseDto)[],
@@ -46,7 +48,7 @@ export type NestedRelationshipsInfo = {
 
 export type EmbedPersonResponseDto = PersonShortResponseDto&NestedPersonResponseDto
 
-interface PersonResponseDto {
+interface PersonResponseDto extends MetadataContainableResponseDto{
     id: number;
     media: MediaResponseDto;
     firstName: string;

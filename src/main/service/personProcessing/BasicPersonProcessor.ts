@@ -17,8 +17,7 @@ import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelation
 import isEmbedJurPersonDto from "../../util/jurPerson/checkJurPersonDto";
 import JurPersonDtoMapperImpl from "../dtoMappers/jurPerson/JurPersonDtoMapperImpl";
 import getReversedRelationType from "../../util/functional/getReversedRelationType";
-import Media from "../../model/Media";
-import {blankRelationshipsInfo} from "../../util/modelValueHolders";
+import {blankMetadata, blankRelationshipsInfo} from "../../util/modelValueHolders";
 
 type JurPersonContainable = Pick<RelatedPersonResponseDto, 'id'|'ownedJurPersons'|'benOwnedJurPersons'>
 
@@ -67,7 +66,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
     }
 
     private loadRawPersonToStore(rawPerson: PreProcessedPerson) {
-        const clonedPerson: PreProcessedPerson = {...rawPerson, relationshipsInfo: blankRelationshipsInfo};
+        const clonedPerson: PreProcessedPerson = {...rawPerson, relationshipsInfo: {...blankRelationshipsInfo}};
         this.personsStore.set(clonedPerson.id, clonedPerson)
 
         rawPerson.relationshipsInfo.relationships?.forEach(r=>{
@@ -75,7 +74,8 @@ export default class BasicPersonProcessor implements PersonProcessor{
                 ...r.person,
                 ownedJurPersons: [],
                 benOwnedJurPersons: [],
-                relationshipsInfo: blankRelationshipsInfo
+                relationshipsInfo: {...blankRelationshipsInfo},
+                metadata: {...blankMetadata, updatedBy: null, createdBy: null}
             });
 
             this.personsStore.set(preProcessedPerson.id, preProcessedPerson);

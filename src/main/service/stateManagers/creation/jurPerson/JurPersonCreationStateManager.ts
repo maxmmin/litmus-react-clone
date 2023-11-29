@@ -1,5 +1,5 @@
 import CreationStateManager from "../CreationStateManager";
-import {JurPerson, PreProcessedJurPerson} from "../../../../model/jurPerson/JurPerson";
+import {PreProcessedJurPerson} from "../../../../model/jurPerson/JurPerson";
 import GeoStateManager from "../GeoStateManager";
 import {
     JurPersonValidationObject

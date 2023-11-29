@@ -1,24 +1,26 @@
 import UserIdentityDtoMapper from "./UserIdentityDtoMapper";
 import UserIdentityResponseDto from "../../../rest/dto/UserIdentityResponseDto";
 import UserIdentity from "../../../model/userIdentity/UserIdentity";
-import {checkNotEmpty} from "../../../util/pureFunctions";
-import Role from "../../../model/userIdentity/Role";
-import ApplicationGlobalStateManager from "../../stateManagers/applicationGlobalState/ApplicationGlobalStateManager";
 import ApplicationResourcesStateManager from "../../stateManagers/applicationResources/ApplicationResourcesStateManager";
 import getRoleByName from "../../../util/functional/getRoleByName";
 import ApplicationResourcesStateManagerImpl
     from "../../stateManagers/applicationResources/ApplicationResourcesStateManagerImpl";
+import MetadataDtoMapper from "../metadata/MetadataDtoMapper";
+import MetadataDtoMapperImpl from "../metadata/MetadataDtoMapperImpl";
 
 class UserIdentityDtoMapperImpl implements UserIdentityDtoMapper {
     protected readonly applicationResourcesStateManager: ApplicationResourcesStateManager;
 
-
-    constructor(applicationResourcesStateManager: ApplicationResourcesStateManager) {
+    protected readonly metadataDtoMapper: MetadataDtoMapper;
+    constructor(applicationResourcesStateManager: ApplicationResourcesStateManager,
+                metadataDtoMapper: MetadataDtoMapper) {
         this.applicationResourcesStateManager = applicationResourcesStateManager;
+        this.metadataDtoMapper = metadataDtoMapper;
     }
 
-    public static getInstance(appResourcesStateManager: ApplicationResourcesStateManager = ApplicationResourcesStateManagerImpl.getInstance()): UserIdentityDtoMapperImpl {
-        return new UserIdentityDtoMapperImpl(appResourcesStateManager);
+    public static getInstance(appResourcesStateManager: ApplicationResourcesStateManager = ApplicationResourcesStateManagerImpl.getInstance(),
+                              metadataDtoMapper: MetadataDtoMapper = MetadataDtoMapperImpl.getInstance()): UserIdentityDtoMapperImpl {
+        return new UserIdentityDtoMapperImpl(appResourcesStateManager, metadataDtoMapper);
     }
 
     map(dto: UserIdentityResponseDto): UserIdentity {

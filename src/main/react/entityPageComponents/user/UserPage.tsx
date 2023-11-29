@@ -9,7 +9,7 @@ import Loader from "../../loader/Loader";
 export default function UserPage () {
     const context = useContext(LitmusServiceContext);
     const explorationApiService = context.exploration.apiService.user;
-    const dtoMapper = context.mappers.user;
+    const dtoMapper = context.mappers.user.default;
     const notificationManager = context.notification.manager;
 
     const {id} = useParams<{id: string}>();
