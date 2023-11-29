@@ -26,7 +26,7 @@ const UserInfoTable = ({user}: Props) => {
                 <div className="entity-container__value entity-container__value_user-block entity-container__value-block_user"><p className="entity-container__value entity-container__value_user">{user.lastName}</p></div>
                 <div className="entity-container__value entity-container__value_user-block entity-container__value-block_user"><p className="entity-container__value entity-container__value_user">{user.middleName?user.middleName:noInfoMessage}</p></div>
                 <div className="entity-container__value entity-container__value_user-block entity-container__value-block_user"><p className="entity-container__value entity-container__value_user">{user.firstName}</p></div>
-                <div className="entity-container__value entity-container__value_user-block entity-container__value-block_user"><p className="entity-container__value entity-container__value_user">{user.role.role}</p></div>
+                <div className="entity-container__value entity-container__value_user-block entity-container__value-block_user"><p className="entity-container__value entity-container__value_user">{user.role.canonicalName}</p></div>
             </div>
         </div>
     )

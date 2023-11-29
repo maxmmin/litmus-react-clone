@@ -1,14 +1,18 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import UserCreationStateManager from "../../../service/stateManagers/creation/user/UserCreationStateManager";
 import {useAppSelector} from "../../../redux/hooks";
 import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
-import UserCreationValidationService
-    from "../../../service/validation/human/user/UserCreationValidationService";
-import Role, {RoleName} from "../../../redux/types/userIdentity/Role";
+import UserCreationValidationService from "../../../service/validation/human/user/UserCreationValidationService";
 import {VisibilityDisabledIcon, VisibilityEnabledIcon} from "../../assets/icons";
+import Role from "../../../model/userIdentity/Role";
+import ApplicationResourcesStateManager
+    from "../../../service/stateManagers/applicationResources/ApplicationResourcesStateManager";
+import {RoleMap} from "../../../redux/types/applicationResources/ApplicationResources";
+import {UserAction} from "../../../service/userHierarchy/HierarchyPermissionChecker";
+
 
 const CreateUser = () => {
     const context = useContext(LitmusServiceContext);
@@ -16,8 +20,20 @@ const CreateUser = () => {
 
     const creationStateManager: UserCreationStateManager = context.creation.stateManagers.user;
     const validationService: UserCreationValidationService = context.creation.validation.user;
-
     const validationErrors = useAppSelector(state => state.creation.user?.validationErrors);
+    const applicationResourcesStateManager: ApplicationResourcesStateManager = context.applicationResources.stateManager;
+
+    const permissionsChecker = context.hierarchyPermissionsChecker;
+
+    const userIdentity = useAppSelector(state => state.userIdentity!);
+
+    const roles = applicationResourcesStateManager.getRoles();
+
+    const creationAvailableRoles: Role[] = useMemo(()=>{
+        const clientRole = userIdentity.role;
+        return Object.values(applicationResourcesStateManager.getRoles()!)
+            .filter(role=>permissionsChecker.isPermittedByRole(clientRole, role, UserAction.CREATE))
+    }, [roles])
 
     useEffect(()=>{
         if (validationErrors?.email) {
@@ -168,12 +184,12 @@ const CreateUser = () => {
             <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Роль</Form.Label>
                 <Form.Select className="explore__select" value={user.role} onChange={e=>{
-                    const roleName = RoleName[e.currentTarget.value as RoleName];
+                    const roleName = e.currentTarget.value;
                     if (!roleName) throw new Error("unknown role");
                     creationStateManager.updateEntityCreationParams({role: roleName})
                 }}>
-                    {Object.keys(RoleName).map((mode, index)=>
-                        <option key={index} value={mode}>{Role[mode as RoleName].canonicalName}</option>)
+                    {creationAvailableRoles.map((role, index)=>
+                        <option key={index} value={role.name}>{role.canonicalName}</option>)
                     }
                 </Form.Select>
             </Form.Group>

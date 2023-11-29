@@ -9,10 +9,6 @@ import serializableDeepCopy from "../../../util/functional/serializableDeepCopy"
 import AuthenticationStateManager from "../../stateManagers/auth/AuthenticationStateManager";
 import AuthenticationStateManagerImpl from "../../stateManagers/auth/AuthenticationStateManagerImpl";
 import BasicAuthApiService from "./api/BasicAuthApiService";
-import authApiService from "./api/AuthApiService";
-import authentication from "../../../redux/types/auth/Authentication";
-import UserIdentityManager from "../../userIdentity/UserIdentityManager";
-import UserIdentityApiService from "../../api/userIdentity/UserIdentityApiService";
 
 class BasicAuthenticationManager implements AuthenticationManager {
 
@@ -37,10 +33,10 @@ class BasicAuthenticationManager implements AuthenticationManager {
         return this.authService.getAuth({email, password});
 }
 
-    _loginThunk = createAsyncThunk<void, Credentials, LitmusAsyncThunkConfig>(AuthAction.AUTHENTICATE, async (credentials, {rejectWithValue, fulfillWithValue }) => {
+    protected _loginThunk = createAsyncThunk<void, ThunkArg<Credentials>, LitmusAsyncThunkConfig>(AuthAction.AUTHENTICATE, async (options, {rejectWithValue, fulfillWithValue }) => {
 
         try {
-            const authentication: void  = await this._login(credentials)
+            const authentication: void  = await this._login(options)
             return fulfillWithValue(authentication, {notify: true, successMessage: "Вхід в акаунт успішно виконано"});
         }
         catch (thrownErr: any) {

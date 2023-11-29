@@ -8,7 +8,7 @@ import {ValidationErrors} from "../../../../model/ValidationErrors";
 import {hasContent} from "../../../../util/functional/isEmpty";
 import valueOrNull from "../../../../util/functional/valueOrNull";
 import {UserCreationParams} from "../../../coreServices/creation/UserCreationService";
-import Role, {RoleName} from "../../../../redux/types/userIdentity/Role";
+import Role, {RoleName} from "../../../../model/userIdentity/Role";
 
 class UserCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<UserCreationParams, UserValidationObject, ServerUserValidationObject> implements UserCreationValidationService {
 
@@ -28,8 +28,8 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
         return bindingResult;
     }
 
-    validateRole(role: RoleName): string|null {
-        if (Role[role]) {
+    validateRole(role: UserCreationParams['role']): string|null {
+        if (role) {
             return null;
         } else return "Невалідна роль "+role.toString();
     }

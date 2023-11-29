@@ -1,4 +1,4 @@
-import DtoMapper from "../../../rest/dto/dtoMappers/DtoMapper";
+import DtoMapper from "../../dtoMappers/DtoMapper";
 import PagedData, {UnPagedData} from "../../../rest/PagedData";
 import ExplorationService from "./ExplorationService";
 import ExplorationStateManager from "../../stateManagers/exploration/ExplorationStateManager";
@@ -19,7 +19,7 @@ import JurPersonExplorationParams from "../../../redux/types/exploration/jurPers
 import JurPersonExplorationStateManager from "../../stateManagers/exploration/jurPerson/JurPersonExplorationStateManager";
 import JurPersonExplorationStateManagerImpl from "../../stateManagers/exploration/jurPerson/JurPersonExplorationStateManagerImpl";
 import JurPersonExplorationApiServiceImpl from "../../api/jur-person/exploration/JurPersonExplorationApiServiceImpl";
-import JurPersonDtoMapperImpl from "../../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
+import JurPersonDtoMapperImpl from "../../dtoMappers/jurPerson/JurPersonDtoMapperImpl";
 import {JurPersonSimpleResponseDto} from "../../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
 import {JurPersonShortResponseDto} from "../../../rest/dto/jurPerson/JurPersonShortResponseDto";
 

@@ -2,7 +2,7 @@ import Header from "../header/Header";
 import {Form} from "react-bootstrap";
 import {Entity} from "../../model/Entity";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
-import {Permission} from "../../redux/types/userIdentity/Role";
+import {Permission} from "../../model/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import React, {ChangeEvent, useEffect, useMemo} from "react";
 import CreationInputSection from "./CreationInputSection";
@@ -100,7 +100,7 @@ const Creation = () => {
                            <Form.Select className={"create__select"} value={appConfig.applicationMappings.creation[emergingEntity]} onChange={handleSelectChange}>
                                <option value={appConfig.applicationMappings.creation[Entity.PERSON]}>Фізичну особу</option>
                                <option value={appConfig.applicationMappings.creation[Entity.JUR_PERSON]}>Юридичну особу</option>
-                               <PrivateComponentWrapper requiredPermissions={[Permission.USERS_WRITE]} mode={NO_OUTPUT}>
+                               <PrivateComponentWrapper requiredPermissions={[Permission.USERS_CREATE]} mode={NO_OUTPUT}>
                                    <option value={appConfig.applicationMappings.creation[Entity.USER]}>Користувача</option>
                                </PrivateComponentWrapper>
                            </Form.Select>

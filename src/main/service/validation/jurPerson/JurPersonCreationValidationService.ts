@@ -1,4 +1,4 @@
-import ValidationService from "../../ValidationService";
+import ValidationService from "../ValidationService";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import {ValidationErrors} from "../../../model/ValidationErrors";
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";

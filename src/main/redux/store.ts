@@ -1,7 +1,7 @@
 import {configureStore, PayloadAction} from '@reduxjs/toolkit'
 import thunk from 'redux-thunk'
 import authReducer, {defaultAuthState} from "./reducers/authReducer";
-import appStateReducer, {initialAppState} from "./reducers/appStateReducer";
+import applicationGlobalStateReducer, {initialAppState} from "./reducers/applicationGlobalStateReducer";
 import {Action, combineReducers} from "redux"
 import {
     persistReducer,
@@ -30,7 +30,7 @@ import AuthAction from "./actions/AuthAction";
 import {Authentication} from "./types/auth/Authentication";
 import AppState from "./types/applicationState/AppState";
 import {LoginPageState} from "./actions/LoginPageDataActions";
-import appResourcesReducer, {initialApplicationResources} from "./reducers/appResourcesReducer";
+import applicationResourcesReducer, {initialApplicationResources} from "./reducers/applicationResourcesReducer";
 import ApplicationResources from "./types/applicationResources/ApplicationResources";
 
 const persistConfig: PersistConfig<any> = {
@@ -62,18 +62,20 @@ const defaultStoreState: StoreState = {
 
 const _rootReducer = combineReducers({
     authentication: authReducer,
-    appState: appStateReducer,
+    appState: applicationGlobalStateReducer,
     userIdentity: userIdentityReducer,
     exploration: explorationStateReducer,
-    appResources: appResourcesReducer,
+    appResources: applicationResourcesReducer,
     loginPageState: loginPageDataReducer,
     creation: creationReducer
 })
 
 const rootReducer: typeof _rootReducer = (state, action) => {
     if (action.type===AuthAction.LOGOUT) {
+        const resources = state?.appResources;
         return {
-            ...defaultStoreState
+            ...defaultStoreState,
+            appResources: resources
         }
     } else {
         return _rootReducer(state,action);

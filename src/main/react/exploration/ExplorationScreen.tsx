@@ -4,7 +4,7 @@ import {Entity} from "../../model/Entity";
 import ExplorationModeSelectContainer from "./ExplorationModesView";
 import {useAppSelector} from "../../redux/hooks";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
-import Role, {Permission, RoleName} from "../../redux/types/userIdentity/Role";
+import {Permission} from "../../model/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import {useNavigate} from "react-router-dom";
 import appConfig from "../../config/appConfig";
@@ -20,10 +20,10 @@ import ExplorationStateManager from "../../service/stateManagers/exploration/Exp
 import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 
 
-function getRequiredExplorationPermissions(exploredEntity: Entity|undefined) {
+function getRequiredExplorationPermissions(exploredEntity: Entity|undefined): Permission[] {
     if (exploredEntity===Entity.USER) {
-        return Role[RoleName.ADMIN].permissions;
-    } else return Role[RoleName.USER].permissions
+        return [Permission.DATA_READ];
+    } else return [Permission.USERS_READ]
 }
 
 const ExplorationScreen = () => {

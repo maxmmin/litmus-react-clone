@@ -5,7 +5,7 @@ import {useAppSelector} from "../../redux/hooks";
 import AuthenticationManager from "../../service/coreServices/auth/AuthenticationManager";
 import {LitmusServiceContext} from "../App";
 import appConfig from "../../config/appConfig";
-import ApplicationStateManager from "../../service/stateManagers/appState/ApplicationStateManager";
+import ApplicationGlobalStateManager from "../../service/stateManagers/applicationGlobalState/ApplicationGlobalStateManager";
 import {HttpErrorParser} from "../../error/BasicHttpError";
 
 
@@ -16,7 +16,7 @@ function HeaderMenu () {
     const serviceContext = useContext(LitmusServiceContext);
 
     const authManager: AuthenticationManager = serviceContext.auth.manager;
-    const appStateManager: ApplicationStateManager = serviceContext.appState.manager;
+    const appStateManager: ApplicationGlobalStateManager = serviceContext.appGlobalState.manager;
 
     const notificationManager = serviceContext.notification.manager;
 

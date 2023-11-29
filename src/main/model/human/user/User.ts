@@ -1,4 +1,4 @@
-import Role, {RoleName} from "../../../redux/types/userIdentity/Role";
+import Role, {RoleName} from "../../userIdentity/Role";
 import Human from "../Human";
 import CoreEntity from "../../CoreEntity";
 import Person from "../person/Person";

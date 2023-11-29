@@ -1,4 +1,3 @@
-import {RoleName} from "../../../redux/types/userIdentity/Role";
 import UserSimpleResponseDto from "./UserSimpleResponseDto";
 import {PersonSimpleResponseDto} from "../person/PersonSimpleResponseDto";
 import {JurPersonSimpleResponseDto} from "../jurPerson/JurPersonSimpleResponseDto";
@@ -21,7 +20,7 @@ interface UserResponseDto {
 
     password: string
 
-    role: RoleName;
+    role: string;
 
     createdEntities: CreatedEntitiesResponseDto;
 }

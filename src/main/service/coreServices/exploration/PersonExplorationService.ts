@@ -12,14 +12,14 @@ import serializableDeepCopy from "../../../util/functional/serializableDeepCopy"
 import ExplorationMode from "../../../redux/types/exploration/ExplorationMode";
 import {checkNotEmpty} from "../../../util/pureFunctions";
 import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
-import DtoMapper from "../../../rest/dto/dtoMappers/DtoMapper";
+import DtoMapper from "../../dtoMappers/DtoMapper";
 
 
 import UnsupportedModeError from "./UnsupportedModeError";
 import PersonExplorationStateManager from "../../stateManagers/exploration/person/PersonExplorationStateManager";
 import PersonExplorationStateManagerImpl from "../../stateManagers/exploration/person/PersonExplorationStateManagerImpl";
 import PersonExplorationApiServiceImpl from "../../api/person/exploration/PersonExplorationApiServiceImpl";
-import PersonDtoMapperImpl from "../../../rest/dto/dtoMappers/PersonDtoMapperImpl";
+import PersonDtoMapperImpl from "../../dtoMappers/person/PersonDtoMapperImpl";
 import {PersonSimpleResponseDto} from "../../../rest/dto/person/PersonSimpleResponseDto";
 import {PersonShortResponseDto} from "../../../rest/dto/person/PersonShortResponseDto";
 

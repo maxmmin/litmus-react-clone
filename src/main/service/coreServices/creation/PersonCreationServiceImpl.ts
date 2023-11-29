@@ -1,6 +1,6 @@
 import PersonCreationApiService from "../../api/person/creation/PersonCreationApiService";
 import PersonCreationStateManager from "../../stateManagers/creation/person/PersonCreationStateManager";
-import PersonDtoMapper from "../../../rest/dto/dtoMappers/PersonDtoMapper";
+import PersonDtoMapper from "../../dtoMappers/person/PersonDtoMapper";
 import PersonCreationValidationService, {
     PersonValidationObject, ServerPersonValidationObject
 } from "../../validation/human/person/PersonCreationValidationService";
@@ -9,7 +9,7 @@ import {PreProcessedPerson} from "../../../model/human/person/Person";
 import getFilesFromMedia from "../../../util/media/getFilesFromMedia";
 import PersonCreationApiServiceImpl from "../../api/person/creation/PersonCreationApiServiceImpl";
 import PersonCreationStateManagerImpl from "../../stateManagers/creation/person/PersonCreationStateManagerImpl";
-import PersonDtoMapperImpl from "../../../rest/dto/dtoMappers/PersonDtoMapperImpl";
+import PersonDtoMapperImpl from "../../dtoMappers/person/PersonDtoMapperImpl";
 import PersonCreationValidationServiceImpl from "../../validation/human/person/PersonCreationValidationServiceImpl";
 import FileRepoFactory from "../../media/FileRepoFactory";
 import CreationServiceImpl from "./CreationServiceImpl";

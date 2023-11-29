@@ -1,5 +1,3 @@
-import {RoleName} from "../../../redux/types/userIdentity/Role";
-
 export default interface UserRequestDto {
     email?: string;
 
@@ -11,5 +9,5 @@ export default interface UserRequestDto {
 
     password?: string
 
-    role?: RoleName;
+    role?: string;
 }

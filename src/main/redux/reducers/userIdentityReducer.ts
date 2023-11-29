@@ -1,9 +1,8 @@
-import UserIdentity, {UserIdentityStateReducible} from "../types/userIdentity/UserIdentity";
+import UserIdentity, {UserIdentityStateReducible} from "../../model/userIdentity/UserIdentity";
 import {Reducer} from "react";
 import UserIdentityActions from "../actions/UserIdentityActions";
 import AuthAction from "../actions/AuthAction";
 import {PayloadAction} from "@reduxjs/toolkit";
-import GeneralAction from "../GeneralAction";
 
 export type UserIdentityState = UserIdentity|null
 export const initialUserIdentityState: UserIdentity|null = null;
@@ -16,8 +15,7 @@ const userIdentityReducer: Reducer<UserIdentityStateReducible, PayloadAction<Use
         }
 
         case `${AuthAction.AUTHENTICATE}/rejected`:
-        case UserIdentityActions.CLEAR_IDENTITY:
-        case GeneralAction.RESET_DATA: {
+        case UserIdentityActions.CLEAR_IDENTITY: {
             return initialUserIdentityState;
         }
 

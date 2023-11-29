@@ -8,7 +8,7 @@ import './assets/styles/index.scss';
 import Explore from "./exploration/ExplorationScreen";
 import LitmusCore from "./LitmusCore";
 import Creation from "./creation/CreationScreen";
-import {Permission} from "../redux/types/userIdentity/Role";
+import {Permission} from "../model/userIdentity/Role";
 import {buildUrl} from "../util/pureFunctions";
 import LoginPage from "./login/LoginPage";
 import NotificationCenter from "./notifications/NotificationCenter";

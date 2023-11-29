@@ -1,4 +1,4 @@
-import React, {Ref, useEffect, useMemo, useRef, useState} from "react";
+import React, {Ref, useContext, useEffect, useRef, useState} from "react";
 import User from "../../../model/human/user/User";
 import PagedData from "../../../rest/PagedData";
 import Person from "../../../model/human/person/Person";
@@ -9,6 +9,19 @@ import {EntitiesPaginator, LocalPager} from "../../../util/pageDataUtils";
 import PersonInfoTable from "../../exploration/EntityTables/PersonInfoTable";
 import JurPersonInfoTable from "../../exploration/EntityTables/JurPersonInfoTable";
 import "../../assets/styles/entityPage/userPage.scss"
+import {ServiceContext} from "../../serviceContext";
+import {LitmusServiceContext} from "../../App";
+import ManagePanel from "../manage/ManagePanel";
+import UserApiService from "../../../service/api/user/UserApiService";
+import {useLocation} from "react-router";
+import {useNavigate} from "react-router-dom";
+import {useAppSelector} from "../../../redux/hooks";
+import {checkNotEmpty} from "../../../util/pureFunctions";
+import {UserAction} from "../../../service/userHierarchy/HierarchyPermissionChecker";
+import {Permission} from "../../../model/userIdentity/Role";
+import appConfig from "../../../config/appConfig";
+import {ApplicationError} from "../../../rest/ErrorResponse";
+import {HttpErrorParser} from "../../../error/BasicHttpError";
 
 type UserProps = {
     user: User
@@ -17,6 +30,19 @@ type UserProps = {
 const createdEntitiesPageSize = 5;
 
 export default function ({user}: UserProps) {
+    const [isPending, setPending] = useState<boolean>(false);
+
+    const serviceContext: ServiceContext = useContext(LitmusServiceContext);
+
+    const notificationManager = serviceContext.notification.manager;
+
+    const explorationStateManager = serviceContext.exploration.stateManagers.user;
+    const explorationService = serviceContext.exploration.service.user;
+
+    const apiService: UserApiService = serviceContext.api.user;
+
+    const location = useLocation();
+    const navigate = useNavigate();
 
     const usersPager: Ref<LocalPager<User>> = useRef<LocalPager<User>>(new LocalPager<User>(user.createdEntities.users, createdEntitiesPageSize));
     const personsPager: Ref<LocalPager<Person>> = useRef<LocalPager<Person>>(new LocalPager<Person>(user.createdEntities.persons, createdEntitiesPageSize));
@@ -25,6 +51,8 @@ export default function ({user}: UserProps) {
     const [usersPage, setUsersPage] = useState<PagedData<User>|null>(null);
     const [personsPage, setPersonsPage] = useState<PagedData<Person>|null>(null);
     const [jurPersonsPage, setJurPersonsPage] = useState<PagedData<JurPerson>|null>(null);
+
+    const hierarchyPermissionsChecker = serviceContext.hierarchyPermissionsChecker;
 
     useEffect(()=>{
         if (usersPager.current) {
@@ -44,14 +72,47 @@ export default function ({user}: UserProps) {
         }
     }, [jurPersonsPager.current?.getPageData()])
 
-    if (!usersPage||!personsPage||!jurPersonsPage) return <Loader/>
+    const currentUser = useAppSelector(state => checkNotEmpty(state.userIdentity));
 
-    console.log(user.createdEntities)
-    console.log(personsPager.current)
+    if (isPending||!usersPage||!personsPage||!jurPersonsPage) return <Loader/>
 
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_user"}>
+
             <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_user">
+                <ManagePanel removalProps={{
+                    title: `Щоб підтвердити видалення, введіть email користувача("${user.email}").`,
+                    match: (s)=>s===user.lastName,
+                    hide: !hierarchyPermissionsChecker.isPermittedByRole(currentUser.role, user.role, UserAction.DELETE),
+                    removalPermissions: [Permission.USERS_REMOVE],
+                    onSubmit: async ()=>{
+                        setPending(true);
+                        try {
+                            await apiService.remove(user.id);
+                            notificationManager.success("Особу було успішно видалено");
+
+                            if (location.key !== "default") navigate(-1);
+                            else navigate(appConfig.applicationMappings.root);
+
+                            const loadedUsers = explorationStateManager.getExplorationData()?.response.content;
+                            if (loadedUsers) {
+                                const content = explorationStateManager.getExplorationData()?.response.content;
+                                if (content) {
+                                    if (content.findIndex(p=>p.id===user.id)>-1) {
+                                        await explorationService.explore();
+                                    }
+                                }
+                            }
+                        } catch (e: unknown) {
+                            console.error(e);
+                            const processedErr: ApplicationError = HttpErrorParser.parseError(e);
+                            notificationManager.error(HttpErrorParser.getErrorDescription(processedErr));
+                        } finally {
+                            setPending(false);
+                        }
+                    }
+                }}/>
+
                 <div className="main-entity-section__main-entity-info-container">
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Email:</span> {user.email}</p>
                     <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Прізвище:</span> {user.lastName}</p>

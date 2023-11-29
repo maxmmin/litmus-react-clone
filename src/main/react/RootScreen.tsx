@@ -34,7 +34,7 @@ const backButtonsPathMap: Record<string, BackBtnOptions> = {
 }
 export default function RootScreen () {
     const isHeaderOpened = useAppSelector(state => state.appState?.isHeaderMenuOpened);
-    const appStateManager = useContext(LitmusServiceContext).appState.manager;
+    const appStateManager = useContext(LitmusServiceContext).appGlobalState.manager;
     const path = useLocation().pathname;
     const backBtnOptions: BackBtnOptions|null = useMemo<BackBtnOptions|null>(()=>{
         const matchedPath = Object.keys(backButtonsPathMap).find(checkedPath=>matchPath(checkedPath, path));

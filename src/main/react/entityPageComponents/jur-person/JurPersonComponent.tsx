@@ -20,7 +20,7 @@ import Person from "../../../model/human/person/Person";
 import {mapRelatedJurPerson, mapRelatedPerson} from "../mapFunctions";
 import JurPersonMapTool from "../../../util/map/jurPerson/JurPersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
-import {Permission} from "../../../redux/types/userIdentity/Role";
+import {Permission} from "../../../model/userIdentity/Role";
 import {ApplicationError} from "../../../rest/ErrorResponse";
 import ManagePanel from "../manage/ManagePanel";
 import {useLocation} from "react-router";

@@ -11,10 +11,8 @@ import {Entity} from "../../model/Entity";
 import EntityExplorationParams from "../types/exploration/EntityExplorationParams";
 import TypedActionsUtil from "../../util/TypedActionsUtil";
 import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
-import GeneralAction from "../GeneralAction";
 import {ExplorationTypedAction} from "../actions/ExplorationTypedAction";
 import {ExplorationCoreAction} from "../actions/ExplorationActions";
-import {CombinedState} from "@reduxjs/toolkit/dist/query/core/apiState";
 
 const entityExplorationReducer = <S extends EntityExplorationState<any, EntityExplorationParams>> (prevState: S, action: PayloadAction<unknown, string>): S => {
     switch (action.type) {
@@ -77,11 +75,6 @@ type PersonExplorationStateReducible = PersonExplorationState | undefined;
 const personExplorationReducer: Reducer<PersonExplorationStateReducible, PayloadAction<unknown>> = (prevState=initialPersonExplorationState, action) => {
     const actions = ExplorationTypedAction.person;
     switch (action.type) {
-        // code-place for jur person specific actions
-        // @todo write getClear action
-        case GeneralAction.RESET_DATA: {
-            return initialPersonExplorationState;
-        }
 
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
@@ -103,9 +96,7 @@ type JurPersonExplorationStateReducible = JurPersonExplorationState | undefined;
 const jurPersonExplorationReducer: Reducer<JurPersonExplorationStateReducible, PayloadAction<unknown>> = (prevState=initialJurPersonExplorationState, action) => {
     switch (action.type) {
         // code-place for jur person specific actions
-        case GeneralAction.RESET_DATA: {
-            return initialJurPersonExplorationState
-        }
+
 
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);
@@ -129,9 +120,6 @@ const userExplorationReducer: Reducer<UserExplorationStateReducible, PayloadActi
         // code-place for jur person specific actions
         // @todo write getClear action
 
-        case GeneralAction.RESET_DATA: {
-            return initialUserExplorationState
-        }
 
         default: {
             const parsedAction = TypedActionsUtil.parseAction(action.type);

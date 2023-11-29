@@ -1,4 +1,4 @@
-import ValidationService from "../../ValidationService";
+import ValidationService from "../ValidationService";
 import Human, {FullNameCreationParams} from "../../../model/human/Human";
 import {ValidationErrors} from "../../../model/ValidationErrors";
 

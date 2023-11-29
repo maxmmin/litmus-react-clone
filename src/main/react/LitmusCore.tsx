@@ -2,7 +2,7 @@ import Loader from "./loader/Loader";
 import React, {ReactNode, useContext, useEffect, useMemo, useState} from "react";
 import {useAppSelector} from "../redux/hooks";
 import appConfig from "../config/appConfig";
-import UserIdentityManager from "../service/userIdentity/UserIdentityManager";
+import UserIdentityManager from "../service/coreServices/userIdentity/UserIdentityManager";
 import {LitmusServiceContext} from "./App";
 import CsrfTokenLoader from "../service/rest/CsrfTokenLoader";
 import AxiosApiManager from "../service/rest/AxiosApiManager";
@@ -45,7 +45,7 @@ const LitmusCore = ({children}: Props) => {
 
     const serviceContext = useContext(LitmusServiceContext);
 
-    const appStateManager = serviceContext.appState.manager;
+    const appStateManager = serviceContext.appGlobalState.manager;
 
     const userIdentityManager: UserIdentityManager = serviceContext.userIdentity.manager;
 
@@ -54,6 +54,14 @@ const LitmusCore = ({children}: Props) => {
     const csrfLoader: CsrfTokenLoader = serviceContext.csrfTokenLoader;
 
     const navigate = useNavigate();
+
+    const appResourcesService = serviceContext.applicationResources.service;
+
+    useEffect(()=>{
+        appResourcesService.retrieveRoles().then(()=>{
+            console.log('roles were successfully loaded')
+        });
+    }, [])
 
     async function checkConnection(): Promise<void> {
         appStateManager.enablePending();

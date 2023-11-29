@@ -1,4 +1,4 @@
-import Role from "../userIdentity/Role";
+import Role from "../../../model/userIdentity/Role";
 
 export type RoleMap = Record<string, Role>
 

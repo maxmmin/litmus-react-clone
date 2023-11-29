@@ -6,7 +6,7 @@ export default function (props: React.DetailedHTMLProps<React.ImgHTMLAttributes<
     const context = useContext(LitmusServiceContext);
 
     const userIdentityManager = context.userIdentity.manager;
-    const appStateManager = context.appState.manager;
+    const appStateManager = context.appGlobalState.manager;
 
     async function testAuth (): Promise<void> {
         try {

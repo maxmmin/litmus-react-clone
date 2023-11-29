@@ -4,18 +4,18 @@ import {
     NestedPersonResponseDto,
     RelatedPersonResponseDto, RelationshipsInfo,
 } from "../../rest/dto/person/PersonResponseDto";
-import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
+import PersonDtoMapper from "../dtoMappers/person/PersonDtoMapper";
 import PersonProcessor from "./PersonProcessor";
 import PersonRelationsLoader from "./PersonRelationsLoader";
 import PreprocessedPersonRelationsScanner from "./PreprocessedPersonRelationsScanner";
-import PersonDtoMapperImpl from "../../rest/dto/dtoMappers/PersonDtoMapperImpl";
+import PersonDtoMapperImpl from "../dtoMappers/person/PersonDtoMapperImpl";
 import RipePersonUtil from "../../util/person/RipePersonUtil";
 import BasicRipePersonUtil from "../../util/person/BasicRipePersonUtil";
 import {EmbedJurPersonResponseDto} from "../../rest/dto/jurPerson/JurPersonResponseDto";
-import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
+import JurPersonDtoMapper from "../dtoMappers/jurPerson/JurPersonDtoMapper";
 import PreprocessedPersonRelationsScannerImpl from "./PreprocessedPersonRelationsScannerImpl";
 import isEmbedJurPersonDto from "../../util/jurPerson/checkJurPersonDto";
-import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
+import JurPersonDtoMapperImpl from "../dtoMappers/jurPerson/JurPersonDtoMapperImpl";
 import getReversedRelationType from "../../util/functional/getReversedRelationType";
 import Media from "../../model/Media";
 import {blankRelationshipsInfo} from "../../util/modelValueHolders";

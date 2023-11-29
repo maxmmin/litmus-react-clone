@@ -1,4 +1,4 @@
-import {Permission} from "../redux/types/userIdentity/Role";
+import {Permission} from "../model/userIdentity/Role";
 import React from "react";
 import appConfig from "../config/appConfig";
 import {Entity} from "../model/Entity";

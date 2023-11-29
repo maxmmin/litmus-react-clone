@@ -4,10 +4,10 @@ import Person, {PreProcessedPerson, RelationType} from "../../model/human/person
 import Sex from "../../model/human/person/Sex";
 import BasicPersonProcessor from "../personProcessing/BasicPersonProcessor";
 import {checkNotEmpty} from "../../util/pureFunctions";
-import JurPersonDtoMapper from "../../rest/dto/dtoMappers/JurPersonDtoMapper";
+import JurPersonDtoMapper from "../dtoMappers/jurPerson/JurPersonDtoMapper";
 import {RelatedPersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
 import PersonProcessor from "../personProcessing/PersonProcessor";
-import JurPersonDtoMapperImpl from "../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
+import JurPersonDtoMapperImpl from "../dtoMappers/jurPerson/JurPersonDtoMapperImpl";
 
 export default class BasicJurPersonProcessor implements JurPersonProcessor {
 

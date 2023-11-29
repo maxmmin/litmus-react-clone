@@ -1,13 +1,13 @@
 import JurPersonCreationApiService from "../../api/jur-person/creation/JurPersonCreationApiService";
 import JurPersonCreationStateManager from "../../stateManagers/creation/jurPerson/JurPersonCreationStateManager";
-import JurPersonDtoMapper from "../../../rest/dto/dtoMappers/JurPersonDtoMapper";
+import JurPersonDtoMapper from "../../dtoMappers/jurPerson/JurPersonDtoMapper";
 import JurPersonCreationValidationService, {
     JurPersonValidationObject,
     ServerJurPersonValidationObject
 } from "../../validation/jurPerson/JurPersonCreationValidationService";
 import JurPersonCreationApiServiceImpl from "../../api/jur-person/creation/JurPersonCreationApiServiceImpl";
 import JurPersonCreationStateManagerImpl from "../../stateManagers/creation/jurPerson/JurPersonCreationStateManagerImpl";
-import JurPersonDtoMapperImpl from "../../../rest/dto/dtoMappers/JurPersonDtoMapperImpl";
+import JurPersonDtoMapperImpl from "../../dtoMappers/jurPerson/JurPersonDtoMapperImpl";
 import JurPersonCreationValidationServiceImpl from "../../validation/jurPerson/JurPersonCreationValidationServiceImpl";
 import JurPersonCreationService from "./JurPersonCreationService";
 import CreationServiceImpl from "./CreationServiceImpl";

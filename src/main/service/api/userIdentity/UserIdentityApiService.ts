@@ -1,7 +1,7 @@
-import UserIdentity from "../../../redux/types/userIdentity/UserIdentity";
+import UserIdentityResponseDto from "../../../rest/dto/UserIdentityResponseDto";
 
 interface UserIdentityApiService {
-    retrieveIdentity (): Promise<UserIdentity>
+    retrieveIdentity (): Promise<UserIdentityResponseDto>
 }
 
 export default UserIdentityApiService;

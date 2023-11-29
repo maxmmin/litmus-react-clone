@@ -2,7 +2,7 @@ import HumanCreationValidationService from "../HumanCreationValidationService";
 import User from "../../../../model/human/user/User";
 import {ValidationErrors} from "../../../../model/ValidationErrors";
 import {UserCreationParams} from "../../../coreServices/creation/UserCreationService";
-import {RoleName} from "../../../../redux/types/userIdentity/Role";
+import {RoleName} from "../../../../model/userIdentity/Role";
 
 export type UserValidationObject = ValidationErrors<UserCreationParams>;
 
@@ -22,5 +22,5 @@ export default interface UserCreationValidationService extends HumanCreationVali
     validatePassword(password: UserCreationParams["password"]): string|null
     isPasswordConfirmed(model: Pick<UserCreationParams, "password"|"repeatPassword">): string|null
     validateEmail(email: UserCreationParams["email"]): string|null;
-    validateRole(role: RoleName): string|null;
+    validateRole(role: UserCreationParams['role']): string|null;
 }

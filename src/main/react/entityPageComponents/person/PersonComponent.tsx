@@ -20,7 +20,7 @@ import {ApplicationError} from "../../../rest/ErrorResponse";
 import {useNavigate} from "react-router-dom";
 import {useLocation} from "react-router";
 import appConfig from "../../../config/appConfig";
-import {Permission} from "../../../redux/types/userIdentity/Role";
+import {Permission} from "../../../model/userIdentity/Role";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson

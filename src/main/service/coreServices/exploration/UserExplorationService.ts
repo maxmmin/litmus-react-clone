@@ -1,4 +1,4 @@
-import DtoMapper from "../../../rest/dto/dtoMappers/DtoMapper";
+import DtoMapper from "../../dtoMappers/DtoMapper";
 import PagedData, {UnPagedData} from "../../../rest/PagedData";
 import ExplorationService from "./ExplorationService";
 import {checkNotEmpty} from "../../../util/pureFunctions";
@@ -17,7 +17,7 @@ import UnsupportedModeError from "./UnsupportedModeError";
 import UserExplorationStateManager from "../../stateManagers/exploration/user/UserExplorationStateManager";
 import UserExplorationStateManagerImpl from "../../stateManagers/exploration/user/UserExplorationStateManagerImpl";
 import UserExplorationApiServiceImpl from "../../api/user/exploration/UserExplorationApiServiceImpl";
-import UserDtoMapperImpl from "../../../rest/dto/dtoMappers/UserDtoMapperImpl";
+import UserDtoMapperImpl from "../../dtoMappers/user/UserDtoMapperImpl";
 import userSimpleResponseDto from "../../../rest/dto/user/UserSimpleResponseDto";
 import UserSimpleResponseDto from "../../../rest/dto/user/UserSimpleResponseDto";
 import {UserShortResponseDto} from "../../../rest/dto/user/UserShortResponseDto";

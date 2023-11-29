@@ -1,7 +1,7 @@
 import {PersonIcon} from "../assets/icons";
 import HeaderMenu from "./HeaderMenu";
 import React, {useContext} from "react";
-import {UserIdentityStateReducible} from "../../redux/types/userIdentity/UserIdentity";
+import {UserIdentityStateReducible} from "../../model/userIdentity/UserIdentity";
 import {useAppSelector} from "../../redux/hooks";
 import BackButton from "../sharedComponents/BackButton";
 import {LitmusServiceContext} from "../App";
@@ -13,7 +13,7 @@ type PropsType = {
 
 const Header = ({backBtnOptions: {backPath, displayBtn}}: PropsType) => {
     const userIdentity = useAppSelector<UserIdentityStateReducible>(state => state.userIdentity);
-    const appStateManager = useContext(LitmusServiceContext).appState.manager;
+    const appStateManager = useContext(LitmusServiceContext).appGlobalState.manager;
 
     return (
         <header className="header">

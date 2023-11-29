@@ -8,7 +8,6 @@ import serializableDeepCopy from "../../util/functional/serializableDeepCopy";
 import CreationCoreAction, {
     PersonCreationAction
 } from "../actions/CreationCoreAction";
-import GeneralAction from "../GeneralAction";
 import {Entity} from "../../model/Entity";
 import PassportData from "../../model/human/person/PassportData";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
@@ -42,8 +41,7 @@ const entityCreationReducer = <S extends EntityCreationState<unknown>> (prevStat
             return {...prevState, emergingEntity: {...params}};
         }
 
-        case `${CreationCoreAction.CREATE_ENTITY}/fulfilled`:
-        case GeneralAction.RESET_DATA: {
+        case `${CreationCoreAction.CREATE_ENTITY}/fulfilled`: {
             return initialState;
         }
 
@@ -100,8 +98,6 @@ const personCreationStateReducer: Reducer<PersonCreationStateReducible, PayloadA
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.personDomain) {
                 const coreAction: PayloadAction<any> = {...action, type: parsedAction.core}
                 return entityCreationReducer(prevState, coreAction, initialPersonCreationState);
-            } else if (action.type===GeneralAction.RESET_DATA) {
-                return entityCreationReducer(prevState, action, initialPersonCreationState);
             } else {
                 return prevState;
             }
@@ -123,9 +119,7 @@ const jurPersonCreationStateReducer: Reducer<JurPersonCreationStateReducible, Pa
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.jurPersonDomain) {
                 const coreAction: PayloadAction<any> = {...action, type: parsedAction.core}
                 return entityCreationReducer(prevState, coreAction, initialJurPersonState);
-            } else if (action.type===GeneralAction.RESET_DATA) {
-                return entityCreationReducer(prevState, action, initialJurPersonState);
-            } else {
+            }  else {
                 return prevState;
             }
         }
@@ -145,8 +139,6 @@ const userCreationStateReducer: Reducer<UserCreationStateReducible, PayloadActio
             if (parsedAction!==null&&parsedAction.domain===TypedActionsUtil.userDomain) {
                 const coreAction: PayloadAction<any> = {...action, type: parsedAction.core}
                 return entityCreationReducer(prevState, coreAction, initialUserCreationState);
-            } else if (action.type===GeneralAction.RESET_DATA) {
-                return entityCreationReducer(prevState, action, initialUserCreationState);
             } else {
                 return prevState;
             }
@@ -160,8 +152,6 @@ const initialEntity = Entity.PERSON;
 const emergingEntitySelectReducer:  Reducer<Entity|undefined, PayloadAction<Entity>> = (prevState=initialEntity, action) => {
     if (action.type===selectEmergingEntityAction) {
         return action.payload;
-    } else if (action.type===GeneralAction.RESET_DATA) {
-        return initialEntity;
     } else {
         return prevState;
     }

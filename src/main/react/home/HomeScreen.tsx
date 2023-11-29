@@ -3,10 +3,9 @@ import {AddUserIcon, SearchIcon, SetUpUser} from "../assets/icons";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
 import {useNavigate} from 'react-router-dom'
-import Header from "../header/Header";
 import appConfig from "../../config/appConfig";
 import {useAppSelector} from "../../redux/hooks";
-import Role, {RoleName} from "../../redux/types/userIdentity/Role";
+import {LocalRole, Permission, RoleName} from "../../model/userIdentity/Role";
 
 
 function HomeScreen () {
@@ -33,7 +32,7 @@ function HomeScreen () {
                             <h4 className="homepage-actions__title homepage-actions__title_search">Аналіз</h4>
                         </div>
                     </div>
-                    <PrivateComponentWrapper mode={NO_OUTPUT} requiredPermissions={Role[RoleName.MODERATOR].permissions}>
+                    <PrivateComponentWrapper mode={NO_OUTPUT} requiredPermissions={[Permission.DATA_CREATE]}>
                         <div itemProp={appConfig.applicationMappings.creation[emergingEntity!]} className="homepage-actions__action" onClick={actionOnClick}>
                             <div className="homepage-actions__icon-container">
                                 <AddUserIcon className='homepage-actions__icon'/>
@@ -41,7 +40,7 @@ function HomeScreen () {
                             </div>
                         </div>
                     </PrivateComponentWrapper>
-                    <PrivateComponentWrapper mode={NO_OUTPUT} requiredPermissions={Role[RoleName.ADMIN].permissions}>
+                    <PrivateComponentWrapper mode={NO_OUTPUT} requiredPermissions={LocalRole[RoleName.ADMIN].permissions}>
                         <div itemProp={"/admin"} className="homepage-actions__action" onClick={actionOnClick}>
                             <div className="homepage-actions__icon-container">
                                 <SetUpUser className='homepage-actions__icon'/>

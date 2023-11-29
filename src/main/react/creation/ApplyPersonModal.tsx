@@ -12,7 +12,7 @@ import PersonCreationStateManager from "../../service/stateManagers/creation/per
 import {HttpErrorParser} from "../../error/BasicHttpError";
 import {ApplicationError} from "../../rest/ErrorResponse";
 import {HttpStatus} from "../../rest/HttpStatus";
-import PersonDtoMapper from "../../rest/dto/dtoMappers/PersonDtoMapper";
+import PersonDtoMapper from "../../service/dtoMappers/person/PersonDtoMapper";
 import JurPersonCreationStateManagerImpl
     from "../../service/stateManagers/creation/jurPerson/JurPersonCreationStateManagerImpl";
 import {LitmusServiceContext} from "../App";

@@ -2,7 +2,7 @@ import Media from "../../model/Media";
 import MediaEntityFormDataBuilder from "./MediaEntityFormDataBuilder";
 import FileRepoFactory from "../media/FileRepoFactory";
 import FileRepo from "../media/FileRepo";
-import {ContentType} from "../rest/Http";
+import {ContentType} from "../../util/Http";
 
 export default class MediaEntityFormDataBuilderImpl implements MediaEntityFormDataBuilder{
     private readonly fileService: FileRepo;
