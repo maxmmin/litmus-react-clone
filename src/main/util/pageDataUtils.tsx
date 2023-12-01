@@ -23,12 +23,12 @@ export const getVisibleIndexes = (pagedData: PagedData<unknown>) => {
 export class LocalPager<T> {
     private pageData: PagedData<T>;
 
-    constructor(private readonly fullContent: T[], pageSize: number, initialPageIndex: number = 0) {
-        this.pageData = LocalPager.constructPageData(fullContent,pageSize, initialPageIndex);
+    constructor(private readonly fullContent: T[], options: PageOptions) {
+        this.pageData = LocalPager.constructPageData(fullContent, options);
     }
 
     public goTo(i: number) {
-        this.pageData = LocalPager.constructPageData(this.fullContent, this.pageData.size, i);
+        this.pageData = LocalPager.constructPageData(this.fullContent, {pageSize: this.pageData.size, pageIndex: i});
     }
 
     public goNext() {
@@ -51,7 +51,7 @@ export class LocalPager<T> {
         return this.pageData;
     }
 
-    public static constructPageData <U> (fullContent: U[], pageSize: number, pageIndex: number): PagedData<U> {
+    public static constructPageData <U> (fullContent: U[], {pageSize, pageIndex}: PageOptions): PagedData<U> {
         const totalPages: number = Math.ceil(fullContent.length/pageSize);
 
         if (pageIndex<0) throw new Error("index should be >= 0")
@@ -74,25 +74,32 @@ export class LocalPager<T> {
     }
 }
 
-export function EntitiesPaginator ({page, pager, cssAnchor=""}: {page: PagedData<any>, pager: LocalPager<any>, cssAnchor?: string}) {
+export type PageOptions = {pageSize: number, pageIndex: number}
+
+export function EntitiesPaginator ({page, pager, cssAnchor="", refresh}: {page: PagedData<any>, pager: LocalPager<any>, cssAnchor?: string, refresh: ()=>any}) {
     return (
         <Pagination className={"litmus-pagination "+cssAnchor}>
             <Pagination.First disabled={page.first} onClick={()=>{
                 pager.goFirst();
+                refresh();
             }} />
             <Pagination.Prev disabled={page.first} onClick={()=>{
                 pager.goPrev();
+                refresh();
             }} />
             {getVisibleIndexes(page).map(index => <Pagination.Item onClick={()=>{
                 if (page.index!==index) {
                     pager.goTo(index)
+                    refresh();
                 }
             }} key={index} active={page.index===index}>{index+1}</Pagination.Item>)}
             <Pagination.Next disabled={page.last} onClick={() =>{
                 pager.goNext();
+                refresh();
             }} />
             <Pagination.Last disabled={page.last} onClick={()=>{
                 pager.goLast();
+                refresh();
             }} />
         </Pagination>
     )

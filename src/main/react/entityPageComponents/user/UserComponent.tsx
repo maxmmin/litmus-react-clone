@@ -44,9 +44,18 @@ export default function ({user}: UserProps) {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const usersPager: Ref<LocalPager<User>> = useRef<LocalPager<User>>(new LocalPager<User>(user.createdEntities.users, createdEntitiesPageSize));
-    const personsPager: Ref<LocalPager<Person>> = useRef<LocalPager<Person>>(new LocalPager<Person>(user.createdEntities.persons, createdEntitiesPageSize));
-    const jurPersonsPager: Ref<LocalPager<JurPerson>> = useRef<LocalPager<JurPerson>>(new LocalPager<JurPerson>(user.createdEntities.jurPersons, createdEntitiesPageSize));
+    const [dirtyCheckMonitor, setDirtyCheckMonitor] = useState<object>({})
+
+    const refresh = () => setDirtyCheckMonitor({})
+
+    const usersPager: Ref<LocalPager<User>> = useRef<LocalPager<User>>(new LocalPager<User>(user.createdEntities.users,
+        {pageSize: createdEntitiesPageSize, pageIndex: 0}));
+    const personsPager: Ref<LocalPager<Person>> = useRef<LocalPager<Person>>(new LocalPager<Person>(user.createdEntities.persons,
+        {pageSize: createdEntitiesPageSize, pageIndex: 0}
+    ));
+    const jurPersonsPager: Ref<LocalPager<JurPerson>> = useRef<LocalPager<JurPerson>>(new LocalPager<JurPerson>(user.createdEntities.jurPersons,
+        {pageSize: createdEntitiesPageSize, pageIndex: 0}
+    ));
 
     const [usersPage, setUsersPage] = useState<PagedData<User>|null>(null);
     const [personsPage, setPersonsPage] = useState<PagedData<Person>|null>(null);
@@ -127,7 +136,7 @@ export default function ({user}: UserProps) {
                     <section className="user-page__created-entities user-page__created-entities_users">
                         <div className="created-entities__heading-container">
                             <h4 className={"created-entities__heading-title"}>Створені користувачі</h4>
-                            {!usersPage.empty && <EntitiesPaginator page={usersPage} pager={usersPager.current!}/>}
+                            {!usersPage.empty && <EntitiesPaginator refresh={refresh} page={usersPage} pager={usersPager.current!}/>}
                         </div>
 
                         {usersPage.empty
@@ -139,7 +148,7 @@ export default function ({user}: UserProps) {
                     <section className="user-page__created-entities user-page__created-entities_persons">
                         <div className="created-entities__heading-container">
                             <h4 className={"created-entities__heading-title"}>Створені особи</h4>
-                            {!personsPage.empty && <EntitiesPaginator page={personsPage} pager={personsPager.current!}/>}
+                            {!personsPage.empty && <EntitiesPaginator refresh={refresh} page={personsPage} pager={personsPager.current!}/>}
                         </div>
 
                         {personsPage.empty
@@ -152,7 +161,7 @@ export default function ({user}: UserProps) {
                     <section className="user-page__created-entities user-page__created-entities_jur-persons">
                         <div className="created-entities__heading-container">
                             <h4 className={"created-entities__heading-title"}>Створені юридичні особи</h4>
-                            {!jurPersonsPage.empty && <EntitiesPaginator page={jurPersonsPage} pager={jurPersonsPager.current!}/>}
+                            {!jurPersonsPage.empty && <EntitiesPaginator refresh={refresh} page={jurPersonsPage} pager={jurPersonsPager.current!}/>}
                         </div>
 
                         {jurPersonsPage.empty
