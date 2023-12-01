@@ -19,8 +19,7 @@ class ScanRelationsSet {
         if (!this.scanMap.has(from)) {
             this.scanMap.set(from, new Set);
         }
-        const numberSet: Set<number> = this.scanMap.get(from)!;
-        numberSet.add(to);
+        this.scanMap.get(from)!.add(to);
     }
 
     getRelations(): Relation[] {
@@ -80,7 +79,8 @@ class ScanRelationsSetUtil {
                 .filter(r => {
                     for (const currentSet of branchSets) {
                         if (currentSet!==set) {
-                            const relations = currentSet.getToRelations(r.to).filter(nestedR=>nestedR.from!==r.from);
+                            const relations = currentSet.getToRelations(r.to).filter(nestedR=>nestedR.from === null || nestedR.from!==r.from);
+
                             return relations.length>0;
                         }
                     }
