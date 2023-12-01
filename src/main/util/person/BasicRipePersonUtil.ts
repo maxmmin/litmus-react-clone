@@ -91,7 +91,7 @@ export default class BasicRipePersonUtil implements RipePersonUtil{
         const resultSet: Set<Person> = new Set;
 
         const initialPersons: Set<Person> = new Set([...person.relationships.map(r=>r.to)]);
-        [...initialPersons]
+        [...initialPersons, person]
             .map(p=>this.extractJurPersons(p))
             .flat()
             .map(j=>this.extractJurPersonRootPersons(j))
