@@ -13,7 +13,7 @@ import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import PersonDataContainer from "./PersonDataContainer";
 import PersonMapTool from "../../../util/map/person/PersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
-import {mapRelatedJurPerson, mapRelatedPerson} from "../mapFunctions";
+import {mapRelatedJurPerson, mapPossibleRelatedPerson} from "../mapFunctions";
 import ManagePanel from "../manage/ManagePanel";
 import {HttpErrorParser} from "../../../error/BasicHttpError";
 import {ApplicationError} from "../../../rest/ErrorResponse";
@@ -214,7 +214,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                 <h6 className='related-entity-container__header-title'>Пов'язані фізичні особи</h6>
                                 <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
                             </div>
-                            {deepRelated.map(possibleRelated=>mapRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
+                            {deepRelated.map(possibleRelated=>mapPossibleRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
                         </div>
 
                     </section>

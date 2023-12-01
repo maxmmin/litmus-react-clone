@@ -17,7 +17,7 @@ import {HttpErrorParser, noInfoMessage} from "../../../error/BasicHttpError";
 import PersonDataContainer from "../person/PersonDataContainer";
 import {buildPersonNavLink} from "../../../util/navLinkBuilders";
 import Person from "../../../model/human/person/Person";
-import {mapRelatedJurPerson, mapRelatedPerson} from "../mapFunctions";
+import {mapRelatedJurPerson, mapPossibleRelatedPerson} from "../mapFunctions";
 import JurPersonMapTool from "../../../util/map/jurPerson/JurPersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
 import {Permission} from "../../../model/userIdentity/Role";
@@ -264,7 +264,7 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                                 <h6 className='related-entity-container__header-title'>Пов'язані фізичні особи</h6>
                                 <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
                             </div>
-                            {deepRelated.map(possibleRelated=>mapRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
+                            {deepRelated.map(possibleRelated=>mapPossibleRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
                         </div>
 
                     </section>

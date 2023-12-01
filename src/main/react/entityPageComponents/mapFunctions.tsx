@@ -6,7 +6,7 @@ import React, {Dispatch, SetStateAction} from "react";
 import Person from "../../model/human/person/Person";
 import {RelationsLabelsMetaData} from "../../util/map/MapPainter";
 import {CurrentlyDisplayed} from "./RelationsMap";
-import RelatedPersonComponent from "./person/RelatedPersonComponent";
+import PossibleRelatedPersonComponent from "./person/RelatedPersonComponent";
 
 export function mapRelatedJurPerson (jurPerson: JurPerson, mapMetadata: RelationsLabelsMetaData|null,
                                      setDisplayedEntity: Dispatch<SetStateAction<CurrentlyDisplayed | null>>) {
@@ -29,8 +29,8 @@ export function mapRelatedJurPerson (jurPerson: JurPerson, mapMetadata: Relation
         />
 }
 
-export function mapRelatedPerson (possibleRelated: Person, mapMetadata: RelationsLabelsMetaData|null,
-                                  setDisplayedEntity: Dispatch<SetStateAction<CurrentlyDisplayed | null>>) {
+export function mapPossibleRelatedPerson (possibleRelated: Person, mapMetadata: RelationsLabelsMetaData|null,
+                                          setDisplayedEntity: Dispatch<SetStateAction<CurrentlyDisplayed | null>>) {
     let geoBtnStateCssAnchor: GeoBtnStateCssAnchor = GeoBtnStateCssAnchor.NONE;
 
     if (mapMetadata) {
@@ -39,7 +39,7 @@ export function mapRelatedPerson (possibleRelated: Person, mapMetadata: Relation
         } else geoBtnStateCssAnchor = GeoBtnStateCssAnchor.DISABLED;
     }
 
-    return <RelatedPersonComponent key={possibleRelated.id}
+    return <PossibleRelatedPersonComponent key={possibleRelated.id}
                                     person={possibleRelated}
                                     cssAnchor={geoBtnStateCssAnchor}
                                     geoBtnOnClick={(_p,_e)=>{
