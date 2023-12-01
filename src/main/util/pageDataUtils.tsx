@@ -76,30 +76,25 @@ export class LocalPager<T> {
 
 export type PageOptions = {pageSize: number, pageIndex: number}
 
-export function EntitiesPaginator ({page, pager, cssAnchor="", refresh}: {page: PagedData<any>, pager: LocalPager<any>, cssAnchor?: string, refresh: ()=>any}) {
+export function EntitiesPaginator ({page, goTo, cssAnchor=""}: {page: PagedData<any>, goTo: (i: number)=>any, cssAnchor?: string}) {
     return (
         <Pagination className={"litmus-pagination "+cssAnchor}>
             <Pagination.First disabled={page.first} onClick={()=>{
-                pager.goFirst();
-                refresh();
+                if (!page.first) goTo(0)
             }} />
             <Pagination.Prev disabled={page.first} onClick={()=>{
-                pager.goPrev();
-                refresh();
+               if (!page.first) goTo(page.index-1)
             }} />
             {getVisibleIndexes(page).map(index => <Pagination.Item onClick={()=>{
                 if (page.index!==index) {
-                    pager.goTo(index)
-                    refresh();
+                    goTo(index)
                 }
             }} key={index} active={page.index===index}>{index+1}</Pagination.Item>)}
             <Pagination.Next disabled={page.last} onClick={() =>{
-                pager.goNext();
-                refresh();
+                if (!page.last) goTo(page.index+1)
             }} />
             <Pagination.Last disabled={page.last} onClick={()=>{
-                pager.goLast();
-                refresh();
+                if (!page.last&&page.totalPages>0) goTo(page.totalPages-1)
             }} />
         </Pagination>
     )

@@ -93,6 +93,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_person"}>
             <div className="entity-page-inner-wrapper">
+                <h2>Сторінка фізичної особи</h2>
                 <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_person">
                     <ManagePanel removalProps={{
                         title: `Щоб підтвердити видалення, введіть фамілію особи("${person.lastName}").`,

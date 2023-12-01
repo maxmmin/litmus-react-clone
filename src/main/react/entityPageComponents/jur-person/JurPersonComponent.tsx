@@ -126,6 +126,7 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_jur-person"}>
             <div className="entity-page-inner-wrapper">
+                <h2>Сторінка юридичної особи</h2>
                 <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_jur-person">
                     <ManagePanel removalProps={{
                         title: `Щоб підтвердити видалення, введіть назву юридичної особи("${jurPerson.name}").`,

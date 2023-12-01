@@ -2,3 +2,19 @@
   display: flex;
   justify-content: space-between;
 }
+
+.user-page__created-entities {
+  margin-top: 60px;
+}
+
+.main-entity-section__main-entity-info-container_user {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 3%;
+}
+
+.main-entity-info-container__item_user {
+  flex-basis: 48.5%;
+  flex-shrink: 1;
+  flex-grow: 1;
+}
