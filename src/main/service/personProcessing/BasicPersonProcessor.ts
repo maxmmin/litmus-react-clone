@@ -151,10 +151,10 @@ export default class BasicPersonProcessor implements PersonProcessor{
             personDto.ownedJurPersons.concat(personDto.benOwnedJurPersons)
                 .filter(isEmbedJurPersonDto)
                 .forEach(j=>{
-                    if (j.owner) {
+                    if (j.owner&&personsToInclude.has(j.owner.id)) {
                         this.bindRelationships(j.owner, createdPersons, personsToInclude);
                     }
-                    if (j.benOwner) {
+                    if (j.benOwner&&personsToInclude.has(j.benOwner.id)) {
                         this.bindRelationships(j.benOwner, createdPersons, personsToInclude);
                     }
                     this.bindJurPerson(j, createdPersons, personsToInclude);
@@ -212,12 +212,7 @@ export default class BasicPersonProcessor implements PersonProcessor{
             if (personsToInclude.has(ownerDto.id)) {
                 owner = this.getCreatedPerson(ownerDto.id, createdPersons);
             } else {
-                owner = {...this.dtoMapper.mapEmbedPersonResponseDto(ownerDto),
-                    relationships: [],
-                    ownedJurPersons: [],
-                    benOwnedJurPersons: []
-                };
-                this.personsStore.set(owner.id, owner);
+                owner = this.dtoMapper.mapPreProcessedPersonWithLoss(this.dtoMapper.mapEmbedPersonResponseDto(ownerDto));
             }
         }
 
@@ -230,7 +225,6 @@ export default class BasicPersonProcessor implements PersonProcessor{
                 benOwner = this.getCreatedPerson(benOwnerDto.id, createdPersons);
             } else {
                 benOwner = this.dtoMapper.mapPreProcessedPersonWithLoss(this.dtoMapper.mapEmbedPersonResponseDto(benOwnerDto));
-                this.personsStore.set(benOwner.id, benOwner);
             }
         }
 
