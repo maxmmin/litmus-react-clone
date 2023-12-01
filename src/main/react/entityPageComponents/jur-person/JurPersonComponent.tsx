@@ -15,7 +15,7 @@ import "../../assets/styles/entityPage/jurPersonPage.scss";
 import getFullName from "../../../util/functional/getFullName";
 import {HttpErrorParser, noInfoMessage} from "../../../error/BasicHttpError";
 import PersonDataContainer from "../person/PersonDataContainer";
-import {buildPersonNavLink} from "../../../util/navLinkBuilders";
+import {PersonNavLink} from "../../../util/navLinkBuilders";
 import Person from "../../../model/human/person/Person";
 import {mapRelatedJurPerson, mapPossibleRelatedPerson} from "../mapFunctions";
 import JurPersonMapTool from "../../../util/map/jurPerson/JurPersonMapTool";
@@ -118,8 +118,8 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
 
     const mainImg: string|undefined = jurPerson.media.mainImage||jurPerson.media.images[0];
 
-    const ownerLink = jurPerson.owner&&buildPersonNavLink(jurPerson.owner.id, getFullName(jurPerson.owner));
-    const benOwnerLink = jurPerson.benOwner&&buildPersonNavLink(jurPerson.benOwner.id, getFullName(jurPerson.benOwner));
+    const owner = jurPerson.owner;
+    const benOwner = jurPerson.benOwner
 
     const formattedDateOfRegistration = jurPerson.dateOfRegistration&&DateEntityTool.getTool(jurPerson.dateOfRegistration).buildStringDate();
 
@@ -165,13 +165,47 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                         </div>
 
                         <div className="main-entity-section__main-entity-info-container">
-                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>ID:</span> {jurPerson.id}</p>
-                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Назва:</span> {jurPerson.name}</p>
-                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>ЄДРПОУ:</span> {valueOrMessage(jurPerson.edrpou)}</p>
-                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Власник:</span> {valueOrMessage(ownerLink)}</p>
-                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Бенефіціарний власник:</span> {valueOrMessage(benOwnerLink)}</p>
-                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Дата реєстрації:</span> {valueOrMessage(formattedDateOfRegistration)}</p>
-                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Адреса реєстрації:</span> {valueOrMessage(jurPerson.location?.address)}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}>
+                                <span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>
+                                ID:
+                                </span> {jurPerson.id}
+                            </p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}>
+                                <span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>
+                                    Назва:
+                                </span> {jurPerson.name}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}>
+                                <span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>ЄДРПОУ:
+                                </span> {valueOrMessage(jurPerson.edrpou)}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}>
+                                <span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>
+                                    Власник:
+                                </span> {
+                                owner?
+                                    <PersonNavLink person={owner}>{getFullName(owner)}</PersonNavLink>
+                                    :
+                                    noInfoMessage
+                                }
+                            </p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}>
+                                <span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>
+                                    Бенефіціарний власник:
+                                </span>
+                                {benOwner?
+                                    <PersonNavLink person={benOwner}>{getFullName(benOwner)}</PersonNavLink>
+                                    :
+                                    noInfoMessage
+                                }
+                            </p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}>
+                                <span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>
+                                    Дата реєстрації:
+                                </span> {valueOrMessage(formattedDateOfRegistration)}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}>
+                                <span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>
+                                    Адреса реєстрації:
+                                </span> {valueOrMessage(jurPerson.location?.address)}
+                            </p>
                         </div>
                     </div>
                 </section>
@@ -201,11 +235,11 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                     <div className="owners-section__owner-item owners-section__owner-item_owner">
                         <div className={"owner-item__heading"}>
                             <h4 className={"owner-item__title"}>Власник</h4>
-                            {jurPerson.owner&&
-                                <div className={`owner-item__interact-container ${getRelatedGeoIconCssAnchor(jurPerson, jurPerson.owner)}`}>
+                            {owner &&
+                                <div className={`owner-item__interact-container ${getRelatedGeoIconCssAnchor(jurPerson, owner)}`}>
                                     {jurPerson.location && <div className="owner-item__location-btn-wrapper" onClick={()=>{
-                                        if (jurPerson.owner&&hasLocation(jurPerson.owner)) {
-                                            setDisplayedEntity({to: jurPerson.owner})
+                                        if (hasLocation(owner)) {
+                                            setDisplayedEntity({to: owner})
                                         }
                                     }}>
                                         <GeoLocationPinDropIcon
@@ -213,12 +247,14 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                                         />
                                     </div>}
 
-                                    {buildPersonNavLink(jurPerson.owner.id,<GoBubbleIcon className={"owner-item__link-icon"}/>)}
+                                    <PersonNavLink person={owner}>
+                                        <GoBubbleIcon className={"owner-item__link-icon"}/>
+                                    </PersonNavLink>
                                 </div>
                             }
                         </div>
-                        {jurPerson.owner ?
-                            <PersonDataContainer cssAnchor={"jur-person-page-embed"} person={jurPerson.owner}/>
+                        {owner ?
+                            <PersonDataContainer cssAnchor={"jur-person-page-embed"} person={owner}/>
                             :
                             noInfoMessage
                         }
@@ -227,12 +263,12 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                     <div className="owners-section__owner-item owners-section__owner-item_owner">
                         <div className={"owner-item__heading"}>
                             <h4 className={"owner-item__title"}>Бенефіціарний власник</h4>
-                            {jurPerson.benOwner&&
-                                <div className={`owner-item__interact-container ${getRelatedGeoIconCssAnchor(jurPerson, jurPerson.benOwner)}`}>
+                            {benOwner &&
+                                <div className={`owner-item__interact-container ${getRelatedGeoIconCssAnchor(jurPerson, benOwner)}`}>
                                     {jurPerson.location && <div className="owner-item__location-btn-wrapper"
                                                                 onClick={()=>{
-                                                                    if (jurPerson.benOwner&&hasLocation(jurPerson.benOwner)) {
-                                                                        setDisplayedEntity({to: jurPerson.benOwner})
+                                                                    if (hasLocation(benOwner)) {
+                                                                        setDisplayedEntity({to: benOwner})
                                                                     }
                                                                 }}
                                     >
@@ -241,12 +277,12 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                                         />
                                     </div>}
 
-                                    {buildPersonNavLink(jurPerson.benOwner.id,<GoBubbleIcon className={"owner-item__link-icon"}/>)}
+                                    <PersonNavLink person={benOwner}><GoBubbleIcon className={"owner-item__link-icon"}/></PersonNavLink>
                                 </div>
                             }
                         </div>
-                        {jurPerson.benOwner ?
-                            <PersonDataContainer cssAnchor={"jur-person-page-embed"} person={jurPerson.benOwner}/>
+                        {benOwner ?
+                            <PersonDataContainer cssAnchor={"jur-person-page-embed"} person={benOwner}/>
                             :
                             noInfoMessage
                         }

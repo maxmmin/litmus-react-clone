@@ -22,6 +22,7 @@ import {Permission} from "../../../model/userIdentity/Role";
 import appConfig from "../../../config/appConfig";
 import {ApplicationError} from "../../../rest/ErrorResponse";
 import {HttpErrorParser} from "../../../error/BasicHttpError";
+import {JurPersonNavLink, PersonNavLink, UserNavLink} from "../../../util/navLinkBuilders";
 
 type UserProps = {
     user: User
@@ -143,7 +144,7 @@ export default function ({user}: UserProps) {
                             ?
                             <p className={"created-entities__no-entities-label"}>Створених існуючих користувачів не знайдено</p>
                             :
-                            usersPage.content.map(user=><UserInfoTable key={user.email} user={user}/>)}
+                            usersPage.content.map(user=><><UserNavLink key={user.email} user={user}/><br/></>)}
                     </section>
                     <section className="user-page__created-entities user-page__created-entities_persons">
                         <div className="created-entities__heading-container">
@@ -155,7 +156,7 @@ export default function ({user}: UserProps) {
                             ?
                             <p className={"created-entities__no-entities-label"}>Створених існуючих осіб не знайдено</p>
                             :
-                            personsPage.content.map(person=><PersonInfoTable key={person.id} person={person}/>)
+                            personsPage.content.map(person=><><PersonNavLink person={person} key={person.id}/><br/></>)
                         }
                     </section>
                     <section className="user-page__created-entities user-page__created-entities_jur-persons">
@@ -168,7 +169,7 @@ export default function ({user}: UserProps) {
                             ?
                             <p className={"created-entities__no-entities-label"}>Створених існуючих юридичних осіб не знайдено</p>
                             :
-                            jurPersonsPage.content.map(jurPerson=><JurPersonInfoTable jurPerson={jurPerson}/>)}
+                            jurPersonsPage.content.map(jurPerson=><><JurPersonNavLink key={jurPerson.id} jurPerson={jurPerson}/><br/></>)}
                     </section>
                 </section>
             </div>

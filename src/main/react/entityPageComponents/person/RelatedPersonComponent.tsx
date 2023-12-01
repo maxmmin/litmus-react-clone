@@ -7,7 +7,7 @@ import {NavLink} from "react-router-dom";
 import {Entity} from "../../../model/Entity";
 import getFullName from "../../../util/functional/getFullName";
 import {valueOrMessage} from "../../../util/functional/valueOrNull";
-import {buildJurPersonNavLink, buildPersonNavLink} from "../../../util/navLinkBuilders";
+import {JurPersonNavLink, PersonNavLink} from "../../../util/navLinkBuilders";
 import SecuredImage from "../../sharedComponents/SecuredImage";
 
 type Props = {
@@ -30,10 +30,14 @@ export default function RelatedPersonComponent ({person, cssAnchor="", container
                 <p className="related-entity-container__entity-name"><NavLink className={"related-entity-container__link link"} to={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],person.id.toString())}>{getFullName(person)}</NavLink></p>
             </div>
             <ul className="related-entity-container__plain-text related-entity-container__plain-text_related-person-relationships">
-                {person.relationships.map(r=><li key={r.to.id} className={"related-person-relationships__relationship"}>{buildPersonNavLink(r.to.id,getFullName(r.to))}</li>)}
+                {person.relationships.map(r=><li key={r.to.id} className={"related-person-relationships__relationship"}>
+                    <PersonNavLink person={r.to}>
+                        {getFullName(r.to)}
+                    </PersonNavLink>
+                </li>)}
             </ul>
             <ul className="related-entity-container__plain-text related-entity-container__plain-text_related-person-jur-persons">
-                {[...person.ownedJurPersons, ...person.benOwnedJurPersons].map(j=><li key={j.id} className={"related-person-jur-persons__jur=person"}>{buildJurPersonNavLink(j.id,j.name)}</li>)}
+                {[...person.ownedJurPersons, ...person.benOwnedJurPersons].map(j=><li key={j.id} className={"related-person-jur-persons__jur=person"}><JurPersonNavLink jurPerson={j}>{j.name}</JurPersonNavLink></li>)}
             </ul>
             <div className="related-entity-container__location-btn-wrapper" onClick={
                 geoBtnOnClick&&(e=>geoBtnOnClick(person, e))

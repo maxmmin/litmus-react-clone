@@ -3,7 +3,7 @@ import {NoRelationsPerson} from "../../../model/human/person/Person";
 import {DateEntityTool} from "../../../model/DateEntity";
 import {buildImgUrl} from "../../../util/pureFunctions";
 import {GoBubbleIcon} from "../../assets/icons";
-import {buildPersonNavLink} from "../../../util/navLinkBuilders";
+import {PersonNavLink} from "../../../util/navLinkBuilders";
 import SecuredImage from "../../sharedComponents/SecuredImage";
 
 type Props = {
@@ -18,7 +18,9 @@ const PersonInfoTable = ({person}: Props) => {
     return (
     <div className="entity-container-wrapper entity-container-wrapper_person">
         <div className="entity-container-wrapper__entity-link-wrapper">
-            {buildPersonNavLink(person.id,<GoBubbleIcon className={"entity-container-wrapper__entity-link-icon"}/>)}
+            <PersonNavLink person={person}>
+                <GoBubbleIcon className={"entity-container-wrapper__entity-link-icon"}/>
+            </PersonNavLink>
         </div>
         <div className={"entity-container entity-container_person"}>
             <div className="entity-container__column-title-block entity-container__column-title-block_person"><h6 className="entity-container__column-title entity-container__column-title_person">ID</h6></div>
