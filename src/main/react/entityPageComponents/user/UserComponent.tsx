@@ -79,88 +79,90 @@ export default function ({user}: UserProps) {
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_user"}>
 
-            <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_user">
-                <ManagePanel removalProps={{
-                    title: `Щоб підтвердити видалення, введіть email користувача("${user.email}").`,
-                    match: (s)=>s===user.lastName,
-                    hide: !hierarchyPermissionsChecker.isPermittedByRole(currentUser.role, user.role, UserAction.DELETE),
-                    removalPermissions: [Permission.USERS_REMOVE],
-                    onSubmit: async ()=>{
-                        setPending(true);
-                        try {
-                            await apiService.remove(user.id);
-                            notificationManager.success("Особу було успішно видалено");
+            <div className="entity-page-inner-wrapper">
+                <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_user">
+                    <ManagePanel removalProps={{
+                        title: `Щоб підтвердити видалення, введіть email користувача("${user.email}").`,
+                        match: (s)=>s===user.lastName,
+                        hide: !hierarchyPermissionsChecker.isPermittedByRole(currentUser.role, user.role, UserAction.DELETE),
+                        removalPermissions: [Permission.USERS_REMOVE],
+                        onSubmit: async ()=>{
+                            setPending(true);
+                            try {
+                                await apiService.remove(user.id);
+                                notificationManager.success("Особу було успішно видалено");
 
-                            if (location.key !== "default") navigate(-1);
-                            else navigate(appConfig.applicationMappings.root);
+                                if (location.key !== "default") navigate(-1);
+                                else navigate(appConfig.applicationMappings.root);
 
-                            const loadedUsers = explorationStateManager.getExplorationData()?.response.content;
-                            if (loadedUsers) {
-                                const content = explorationStateManager.getExplorationData()?.response.content;
-                                if (content) {
-                                    if (content.findIndex(p=>p.id===user.id)>-1) {
-                                        await explorationService.explore();
+                                const loadedUsers = explorationStateManager.getExplorationData()?.response.content;
+                                if (loadedUsers) {
+                                    const content = explorationStateManager.getExplorationData()?.response.content;
+                                    if (content) {
+                                        if (content.findIndex(p=>p.id===user.id)>-1) {
+                                            await explorationService.explore();
+                                        }
                                     }
                                 }
+                            } catch (e: unknown) {
+                                console.error(e);
+                                const processedErr: ApplicationError = HttpErrorParser.parseError(e);
+                                notificationManager.error(HttpErrorParser.getErrorDescription(processedErr));
+                            } finally {
+                                setPending(false);
                             }
-                        } catch (e: unknown) {
-                            console.error(e);
-                            const processedErr: ApplicationError = HttpErrorParser.parseError(e);
-                            notificationManager.error(HttpErrorParser.getErrorDescription(processedErr));
-                        } finally {
-                            setPending(false);
                         }
-                    }
-                }}/>
+                    }}/>
 
-                <div className="main-entity-section__main-entity-info-container">
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Email:</span> {user.email}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Прізвище:</span> {user.lastName}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Ім'я:</span> {user.firstName}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>По-батькові:</span> {user.middleName}</p>
-                    <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Роль:</span> {user.role.canonicalName}</p>
-                </div>
-            </section>
-
-            <section className="user-page__created-entities-section">
-                <section className="user-page__created-entities user-page__created-entities_users">
-                    <div className="created-entities__heading-container">
-                        <h4 className={"created-entities__heading-title"}>Створені користувачі</h4>
-                        {!usersPage.empty && <EntitiesPaginator page={usersPage} pager={usersPager.current!}/>}
+                    <div className="main-entity-section__main-entity-info-container">
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Email:</span> {user.email}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Прізвище:</span> {user.lastName}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Ім'я:</span> {user.firstName}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>По-батькові:</span> {user.middleName}</p>
+                        <p className={"main-entity-info-container__item main-entity-info-container__item_person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_person"}>Роль:</span> {user.role.canonicalName}</p>
                     </div>
-
-                    {usersPage.empty
-                        ?
-                        <p className={"created-entities__no-entities-label"}>Створених існуючих користувачів не знайдено</p>
-                        :
-                        usersPage.content.map(user=><UserInfoTable key={user.email} user={user}/>)}
                 </section>
-                <section className="user-page__created-entities user-page__created-entities_persons">
-                    <div className="created-entities__heading-container">
-                        <h4 className={"created-entities__heading-title"}>Створені особи</h4>
-                        {!personsPage.empty && <EntitiesPaginator page={personsPage} pager={personsPager.current!}/>}
-                    </div>
 
-                    {personsPage.empty
-                        ?
-                        <p className={"created-entities__no-entities-label"}>Створених існуючих осіб не знайдено</p>
-                        :
-                        personsPage.content.map(person=><PersonInfoTable key={person.id} person={person}/>)
-                    }
-                </section>
-                <section className="user-page__created-entities user-page__created-entities_jur-persons">
-                    <div className="created-entities__heading-container">
-                        <h4 className={"created-entities__heading-title"}>Створені юридичні особи</h4>
-                        {!jurPersonsPage.empty && <EntitiesPaginator page={jurPersonsPage} pager={jurPersonsPager.current!}/>}
-                    </div>
+                <section className="user-page__created-entities-section">
+                    <section className="user-page__created-entities user-page__created-entities_users">
+                        <div className="created-entities__heading-container">
+                            <h4 className={"created-entities__heading-title"}>Створені користувачі</h4>
+                            {!usersPage.empty && <EntitiesPaginator page={usersPage} pager={usersPager.current!}/>}
+                        </div>
 
-                    {jurPersonsPage.empty
-                        ?
-                        <p className={"created-entities__no-entities-label"}>Створених існуючих юридичних осіб не знайдено</p>
-                        :
-                        jurPersonsPage.content.map(jurPerson=><JurPersonInfoTable jurPerson={jurPerson}/>)}
+                        {usersPage.empty
+                            ?
+                            <p className={"created-entities__no-entities-label"}>Створених існуючих користувачів не знайдено</p>
+                            :
+                            usersPage.content.map(user=><UserInfoTable key={user.email} user={user}/>)}
+                    </section>
+                    <section className="user-page__created-entities user-page__created-entities_persons">
+                        <div className="created-entities__heading-container">
+                            <h4 className={"created-entities__heading-title"}>Створені особи</h4>
+                            {!personsPage.empty && <EntitiesPaginator page={personsPage} pager={personsPager.current!}/>}
+                        </div>
+
+                        {personsPage.empty
+                            ?
+                            <p className={"created-entities__no-entities-label"}>Створених існуючих осіб не знайдено</p>
+                            :
+                            personsPage.content.map(person=><PersonInfoTable key={person.id} person={person}/>)
+                        }
+                    </section>
+                    <section className="user-page__created-entities user-page__created-entities_jur-persons">
+                        <div className="created-entities__heading-container">
+                            <h4 className={"created-entities__heading-title"}>Створені юридичні особи</h4>
+                            {!jurPersonsPage.empty && <EntitiesPaginator page={jurPersonsPage} pager={jurPersonsPager.current!}/>}
+                        </div>
+
+                        {jurPersonsPage.empty
+                            ?
+                            <p className={"created-entities__no-entities-label"}>Створених існуючих юридичних осіб не знайдено</p>
+                            :
+                            jurPersonsPage.content.map(jurPerson=><JurPersonInfoTable jurPerson={jurPerson}/>)}
+                    </section>
                 </section>
-            </section>
+            </div>
 
         </div>
     )

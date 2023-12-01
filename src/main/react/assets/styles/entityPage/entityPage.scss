@@ -11,9 +11,13 @@ $page-border-radius: 15px;
   height: 100%;
 }
 
-.entity-page-wrapper__main-entity-section {
+.entity-page-inner-wrapper {
   max-width: 800px;
   margin: 0 auto;
+}
+
+.entity-page-wrapper__main-entity-section {
+  
   padding-top: 50px;
 }
 
@@ -41,12 +45,11 @@ $page-border-radius: 15px;
 }
 
 .entity-page__possible-related-persons-section {
-  max-width: 800px;
   margin: 30px auto 0;
 }
 
 .entity-page__related-jur-persons-section {
-  max-width: 800px;
+
   margin: 30px auto 0;
 }
 
@@ -102,7 +105,7 @@ $page-border-radius: 15px;
 }
 
 .entity-images-slider-section {
-  max-width: 800px;
+
   margin: 60px auto 0;
 }
 

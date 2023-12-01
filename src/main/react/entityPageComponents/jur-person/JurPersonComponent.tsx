@@ -125,107 +125,108 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
 
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_jur-person"}>
-            <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_jur-person">
-                <ManagePanel removalProps={{
-                    title: `Щоб підтвердити видалення, введіть назву юридичної особи("${jurPerson.name}").`,
-                    match: (s)=>s===jurPerson.name,
-                    removalPermissions: [Permission.DATA_REMOVE],
-                    onSubmit: async ()=>{
-                        setPending(true);
-                        try {
-                            await apiService.remove(jurPerson.id);
-                            notificationManager.success("Особу було успішно видалено");
+            <div className="entity-page-inner-wrapper">
+                <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_jur-person">
+                    <ManagePanel removalProps={{
+                        title: `Щоб підтвердити видалення, введіть назву юридичної особи("${jurPerson.name}").`,
+                        match: (s)=>s===jurPerson.name,
+                        removalPermissions: [Permission.DATA_REMOVE],
+                        onSubmit: async ()=>{
+                            setPending(true);
+                            try {
+                                await apiService.remove(jurPerson.id);
+                                notificationManager.success("Особу було успішно видалено");
 
-                            if (location.key !== "default") navigate(-1);
-                            else navigate(appConfig.applicationMappings.root);
+                                if (location.key !== "default") navigate(-1);
+                                else navigate(appConfig.applicationMappings.root);
 
-                            const loadedJurPersons = explorationStateManager.getExplorationData()?.response.content;
-                            if (loadedJurPersons) {
-                                const content = explorationStateManager.getExplorationData()?.response.content;
-                                if (content) {
-                                    if (content.findIndex(p=>p.id===jurPerson.id)>-1) {
-                                        await explorationService.explore();
+                                const loadedJurPersons = explorationStateManager.getExplorationData()?.response.content;
+                                if (loadedJurPersons) {
+                                    const content = explorationStateManager.getExplorationData()?.response.content;
+                                    if (content) {
+                                        if (content.findIndex(p=>p.id===jurPerson.id)>-1) {
+                                            await explorationService.explore();
+                                        }
                                     }
                                 }
+                            } catch (e: unknown) {
+                                console.error(e);
+                                const processedErr: ApplicationError = HttpErrorParser.parseError(e);
+                                notificationManager.error(HttpErrorParser.getErrorDescription(processedErr));
+                            } finally {
+                                setPending(false);
                             }
-                        } catch (e: unknown) {
-                            console.error(e);
-                            const processedErr: ApplicationError = HttpErrorParser.parseError(e);
-                            notificationManager.error(HttpErrorParser.getErrorDescription(processedErr));
-                        } finally {
-                            setPending(false);
                         }
-                    }
-                }}/>
+                    }}/>
 
-                <div className="entity-data-container entity-data-container_jur-person">
-                    <div className={`main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_jur-person ${mainImg?"":"no-photo"}`}>
-                        {mainImg ? <SecuredImage className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
-                    </div>
-
-                    <div className="main-entity-section__main-entity-info-container">
-                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>ID:</span> {jurPerson.id}</p>
-                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Назва:</span> {jurPerson.name}</p>
-                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>ЄДРПОУ:</span> {valueOrMessage(jurPerson.edrpou)}</p>
-                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Власник:</span> {valueOrMessage(ownerLink)}</p>
-                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Бенефіціарний власник:</span> {valueOrMessage(benOwnerLink)}</p>
-                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Дата реєстрації:</span> {valueOrMessage(formattedDateOfRegistration)}</p>
-                        <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Адреса реєстрації:</span> {valueOrMessage(jurPerson.location?.address)}</p>
-                    </div>
-                </div>
-            </section>
-
-            <section className="entity-images-slider-section">
-                <h4>Фотографії</h4>
-                {
-                    jurPerson.media.images.length>0
-                        ?
-                        <div className="entity-images-slider-container">
-                            <ImageSlider imageLinks={jurPerson.media.images.map(buildImgUrl)}/>
+                    <div className="entity-data-container entity-data-container_jur-person">
+                        <div className={`main-entity-section__main-photo-wrapper main-entity-section__main-photo-wrapper_jur-person ${mainImg?"":"no-photo"}`}>
+                            {mainImg ? <SecuredImage className={"main-entity-section__main-photo"} src={buildUrl(appConfig.serverMappings.mediaRootUrl, mainImg)} alt="person photo"/> : <DashedUserIcon className={"main-entity-section__main-photo main-entity-section__main-photo_placeholder"}/>}
                         </div>
-                        :
-                        <p>Фотографії відсутні</p>
-                }
-            </section>
 
-            {mapMetadata && displayedEntity && hasLocation(jurPerson) &&
-                <section className={"entity-page__map-section entity-page__map-section_jur-person"}>
-                    <div className="entity-page__map-wrapper entity-page__map-wrapper_jur-person">
-                        <JurPersonMap metadata={mapMetadata} currentlyDisplayed={displayedEntity}/>
+                        <div className="main-entity-section__main-entity-info-container">
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>ID:</span> {jurPerson.id}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Назва:</span> {jurPerson.name}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>ЄДРПОУ:</span> {valueOrMessage(jurPerson.edrpou)}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Власник:</span> {valueOrMessage(ownerLink)}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Бенефіціарний власник:</span> {valueOrMessage(benOwnerLink)}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Дата реєстрації:</span> {valueOrMessage(formattedDateOfRegistration)}</p>
+                            <p className={"main-entity-info-container__item main-entity-info-container__item_jur-person"}><span className={"main-entity-info-container__item-key main-entity-info-container__item-key_jur-person"}>Адреса реєстрації:</span> {valueOrMessage(jurPerson.location?.address)}</p>
+                        </div>
                     </div>
                 </section>
-            }
 
-            <section className="jur-person-page__owners-section">
-                <div className="owners-section__owner-item owners-section__owner-item_owner">
-                    <div className={"owner-item__heading"}>
-                        <h4 className={"owner-item__title"}>Власник</h4>
-                        {jurPerson.owner&&
-                            <div className={`owner-item__interact-container ${getRelatedGeoIconCssAnchor(jurPerson, jurPerson.owner)}`}>
-                                {jurPerson.location && <div className="owner-item__location-btn-wrapper" onClick={()=>{
-                                    if (jurPerson.owner&&hasLocation(jurPerson.owner)) {
-                                        setDisplayedEntity({to: jurPerson.owner})
-                                    }
-                                }}>
-                                    <GeoLocationPinDropIcon
-                                        className={`owner-item__location-btn`}
-                                    />
-                                </div>}
-
-                                {buildPersonNavLink(jurPerson.owner.id,<GoBubbleIcon className={"owner-item__link-icon"}/>)}
+                <section className="entity-images-slider-section">
+                    <h4>Фотографії</h4>
+                    {
+                        jurPerson.media.images.length>0
+                            ?
+                            <div className="entity-images-slider-container">
+                                <ImageSlider imageLinks={jurPerson.media.images.map(buildImgUrl)}/>
                             </div>
+                            :
+                            <p>Фотографії відсутні</p>
+                    }
+                </section>
+
+                {mapMetadata && displayedEntity && hasLocation(jurPerson) &&
+                    <section className={"entity-page__map-section entity-page__map-section_jur-person"}>
+                        <div className="entity-page__map-wrapper entity-page__map-wrapper_jur-person">
+                            <JurPersonMap metadata={mapMetadata} currentlyDisplayed={displayedEntity}/>
+                        </div>
+                    </section>
+                }
+
+                <section className="jur-person-page__owners-section">
+                    <div className="owners-section__owner-item owners-section__owner-item_owner">
+                        <div className={"owner-item__heading"}>
+                            <h4 className={"owner-item__title"}>Власник</h4>
+                            {jurPerson.owner&&
+                                <div className={`owner-item__interact-container ${getRelatedGeoIconCssAnchor(jurPerson, jurPerson.owner)}`}>
+                                    {jurPerson.location && <div className="owner-item__location-btn-wrapper" onClick={()=>{
+                                        if (jurPerson.owner&&hasLocation(jurPerson.owner)) {
+                                            setDisplayedEntity({to: jurPerson.owner})
+                                        }
+                                    }}>
+                                        <GeoLocationPinDropIcon
+                                            className={`owner-item__location-btn`}
+                                        />
+                                    </div>}
+
+                                    {buildPersonNavLink(jurPerson.owner.id,<GoBubbleIcon className={"owner-item__link-icon"}/>)}
+                                </div>
+                            }
+                        </div>
+                        {jurPerson.owner ?
+                            <PersonDataContainer cssAnchor={"jur-person-page-embed"} person={jurPerson.owner}/>
+                            :
+                            noInfoMessage
                         }
                     </div>
-                    {jurPerson.owner ?
-                        <PersonDataContainer cssAnchor={"jur-person-page-embed"} person={jurPerson.owner}/>
-                        :
-                        noInfoMessage
-                    }
-                </div>
 
-                <div className="owners-section__owner-item owners-section__owner-item_owner">
-                    <div className={"owner-item__heading"}>
-                        <h4 className={"owner-item__title"}>Бенефіціарний власник</h4>
+                    <div className="owners-section__owner-item owners-section__owner-item_owner">
+                        <div className={"owner-item__heading"}>
+                            <h4 className={"owner-item__title"}>Бенефіціарний власник</h4>
                             {jurPerson.benOwner&&
                                 <div className={`owner-item__interact-container ${getRelatedGeoIconCssAnchor(jurPerson, jurPerson.benOwner)}`}>
                                     {jurPerson.location && <div className="owner-item__location-btn-wrapper"
@@ -243,48 +244,49 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                                     {buildPersonNavLink(jurPerson.benOwner.id,<GoBubbleIcon className={"owner-item__link-icon"}/>)}
                                 </div>
                             }
-                    </div>
-                    {jurPerson.benOwner ?
-                        <PersonDataContainer cssAnchor={"jur-person-page-embed"} person={jurPerson.benOwner}/>
-                        :
-                        noInfoMessage
-                    }
-                </div>
-            </section>
-
-            {
-                deepRelated.length > 0 &&
-                <section className={"entity-page__possible-related-persons-section"}>
-                    <h4 className={'jur-person-section__title'}>Можливо пов'язані фізичні особи</h4>
-
-                    <div className={`jur-person-page__possible-related-persons-container`}>
-                        <div className={`related-entity-table-header related-entity-table-header_possible-related-person ${jurPerson.location ? "" : "no-geo"}`}>
-                            <h6 className='related-entity-container__header-title related-entity-container__header-title_main'>Основна інформація</h6>
-                            <h6 className='related-entity-container__header-title'>Пов'язані фізичні особи</h6>
-                            <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
                         </div>
-                        {deepRelated.map(possibleRelated=>mapRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
+                        {jurPerson.benOwner ?
+                            <PersonDataContainer cssAnchor={"jur-person-page-embed"} person={jurPerson.benOwner}/>
+                            :
+                            noInfoMessage
+                        }
                     </div>
-
                 </section>
-            }
 
-            {
-                possibleRelatedJurPersons.size>0 &&
-                <section className="entity-page__related-jur-persons-section">
-                    <h4 className={'related-jur-person-section__title'}>Можливо пов'язані юридичні особи</h4>
-                    {
-                        <div className={`person-page__related-jur-persons-container`}>
-                            <div className={`related-entity-table-header related-entity-table-header_jur-person ${jurPerson.location?"":"no-geo"}`}>
+                {
+                    deepRelated.length > 0 &&
+                    <section className={"entity-page__possible-related-persons-section"}>
+                        <h4 className={'jur-person-section__title'}>Можливо пов'язані фізичні особи</h4>
+
+                        <div className={`jur-person-page__possible-related-persons-container`}>
+                            <div className={`related-entity-table-header related-entity-table-header_possible-related-person ${jurPerson.location ? "" : "no-geo"}`}>
                                 <h6 className='related-entity-container__header-title related-entity-container__header-title_main'>Основна інформація</h6>
-                                <h6 className='related-entity-container__header-title'>Власник</h6>
-                                <h6 className='related-entity-container__header-title'>Бен. власник</h6>
+                                <h6 className='related-entity-container__header-title'>Пов'язані фізичні особи</h6>
+                                <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
                             </div>
-                            {[...possibleRelatedJurPersons].map(jurPerson=>mapRelatedJurPerson(jurPerson,mapMetadata,setDisplayedEntity))}
+                            {deepRelated.map(possibleRelated=>mapRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
                         </div>
-                    }
-                </section>
-            }
+
+                    </section>
+                }
+
+                {
+                    possibleRelatedJurPersons.size>0 &&
+                    <section className="entity-page__related-jur-persons-section">
+                        <h4 className={'related-jur-person-section__title'}>Можливо пов'язані юридичні особи</h4>
+                        {
+                            <div className={`person-page__related-jur-persons-container`}>
+                                <div className={`related-entity-table-header related-entity-table-header_jur-person ${jurPerson.location?"":"no-geo"}`}>
+                                    <h6 className='related-entity-container__header-title related-entity-container__header-title_main'>Основна інформація</h6>
+                                    <h6 className='related-entity-container__header-title'>Власник</h6>
+                                    <h6 className='related-entity-container__header-title'>Бен. власник</h6>
+                                </div>
+                                {[...possibleRelatedJurPersons].map(jurPerson=>mapRelatedJurPerson(jurPerson,mapMetadata,setDisplayedEntity))}
+                            </div>
+                        }
+                    </section>
+                }
+            </div>
         </div>
     )
 }
