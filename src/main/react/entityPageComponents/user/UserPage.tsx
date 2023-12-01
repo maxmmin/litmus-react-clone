@@ -25,8 +25,9 @@ export default function UserPage () {
             explorationApiService.findById(+id)
                 .then(responseDto => {
                     if (responseDto) {
-                        const foundPerson = dtoMapper.mapToEntity(responseDto);
-                        setUser(foundPerson);
+                        const foundUser = dtoMapper.mapToEntity(responseDto);
+                        console.log(foundUser)
+                        setUser(foundUser);
                     }
                 })
                 .catch(err => {
