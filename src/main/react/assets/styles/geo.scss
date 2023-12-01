@@ -45,10 +45,6 @@
   max-width: 100%;
 }
 
-.autocomplete-items__item:hover {
-  background: rgba($md-sys-color-outline-light, 0.1);
-}
-
 .selected-location-popup-layout>.ol-popup {
 
 }
@@ -60,4 +56,10 @@
 .user-location-icon {
   width: 100%;
   fill: $md-sys-color-primary-light;
+}
+
+@media all and (pointer: fine) {
+  .autocomplete-items__item:hover {
+    background: rgba($md-sys-color-outline-light, 0.1);
+  }
 }

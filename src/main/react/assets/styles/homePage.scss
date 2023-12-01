@@ -31,21 +31,6 @@
   user-select: none;
 }
 
-.homepage-actions__action:hover {
-  transform: scale(1.02);
-
-  background: rgba($md-sys-color-surface-tint-light, 0.9);
-
-  .homepage-actions__icon-container {
-    transform: translateY(-20px);
-  }
-
-  .homepage-actions__title {
-    opacity: 1;
-  }
-
-}
-
 .homepage-actions__action:active {
   transform: scale(1.05);
 
@@ -86,4 +71,20 @@
   text-align: center;
 }
 
+@media all and (pointer: fine) {
+  .homepage-actions__action:hover {
+    transform: scale(1.02);
+
+    background: rgba($md-sys-color-surface-tint-light, 0.9);
+
+    .homepage-actions__icon-container {
+      transform: translateY(-20px);
+    }
+
+    .homepage-actions__title {
+      opacity: 1;
+    }
+
+  }
+}
 

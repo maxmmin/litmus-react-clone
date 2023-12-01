@@ -23,10 +23,6 @@
   justify-content: space-between;
 }
 
-.owner-item__link-icon:hover {
-  fill: $md-sys-color-primary-light;
-}
-
 .owner-item__interact-container {
   display: flex;
   column-gap: 10px;
@@ -34,9 +30,6 @@
 
 .owner-item__location-btn {
   cursor: pointer;
-  &:hover {
-    fill: $md-sys-color-primary-light;
-  }
 }
 
 .owner-item__interact-container.no-geo .owner-item__location-btn-wrapper {
@@ -46,5 +39,15 @@
 .owner-item__interact-container.disabled-geo .owner-item__location-btn {
   fill: rgba(gray,0.4);
   cursor: auto;
+}
+
+@media all and (pointer: fine) {
+  .owner-item__link-icon:hover {
+    fill: $md-sys-color-primary-light;
+  }
+
+  .owner-item__location-btn:hover {
+    fill: $md-sys-color-primary-light;
+  }
 }
 

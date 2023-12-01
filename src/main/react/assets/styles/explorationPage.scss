@@ -70,9 +70,6 @@
   position: relative;
   top: -3px;
   right: -12px;
-  &:hover {
-    fill: $md-sys-color-primary-light;
-  }
 }
 
 .entity-container {
@@ -134,4 +131,10 @@
 .entity-container__column-title , .entity-container__value {
   text-align: center;
   margin: 0;
+}
+
+@media all and (pointer: fine) {
+  .entity-container-wrapper__entity-link-icon:hover {
+    fill: $md-sys-color-primary-light;
+  }
 }

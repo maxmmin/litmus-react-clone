@@ -45,10 +45,6 @@
   }
 }
 
-.create-relationships-section__add-person-btn:hover {
-  background: rgba($md-sys-color-outline-light, 0.6);
-}
-
 .create-relationships-section__add-person-btn:active {
   box-shadow: 0 0 0 0.2rem rgba($md-sys-color-tertiary-light, 0.4);
 }
@@ -190,4 +186,10 @@
   width: fit-content;
   height: fit-content;
   padding: 4px 7px;
+}
+
+@media all and (pointer: fine) {
+  .create-relationships-section__add-person-btn:hover {
+    background: rgba($md-sys-color-outline-light, 0.6);
+  }
 }

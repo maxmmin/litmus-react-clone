@@ -53,9 +53,11 @@ img {
   background: lighten($primary-light, 2%);
 }
 
-.btn.btn-primary:hover {
-  background: $md-sys-color-primary-light;
-  border-color: $md-sys-color-inverse-primary-light;
+@media all and (pointer: fine) {
+  .btn.btn-primary:hover {
+    background: $md-sys-color-primary-light;
+    border-color: $md-sys-color-inverse-primary-light;
+  }
 }
 
 .btn.btn-primary {

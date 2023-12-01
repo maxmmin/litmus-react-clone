@@ -88,7 +88,7 @@ export default class MapPainterImpl implements MapPainter {
             if (this.popup.getVisible()) {
                 this.popup.hide();
             }
-            this.popup.show(coordinates, `<a class="map-tooltip__person-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], person.id.toString())}>${getFullName(person)}</a>`)
+            this.popup.show(coordinates, `<a class="map-tooltip__entity-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON], person.id.toString())}>${getFullName(person)}</a>`)
         })
 
         label.setPosition(coordinates);
@@ -154,7 +154,7 @@ export default class MapPainterImpl implements MapPainter {
             if (this.popup.getVisible()) {
                 this.popup.hide();
             }
-            this.popup.show(coordinates, `<a class="map-tooltip__person-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON], jurPerson.id.toString())}>${jurPerson.name}</a>`)
+            this.popup.show(coordinates, `<a class="map-tooltip__entity-link" href=${buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON], jurPerson.id.toString())}>${jurPerson.name}</a>`)
         })
 
         label.setPosition(coordinates);

@@ -32,10 +32,6 @@ $page-border-radius: 15px;
   height: 30px;
   background: lighten($md-sys-color-primary-container-light, 2%);
   padding: 5px;
-
-  &:hover {
-    background: $md-sys-color-primary-container-light;
-  }
 }
 
 .manage-entity-container__action-icon {
@@ -241,4 +237,9 @@ $page-border-radius: 15px;
   cursor: auto;
 }
 
+@media all and (pointer: fine) {
+  .manage-entity-container__action-btn:hover {
+    background: $md-sys-color-primary-container-light;
+  }
+}
 

@@ -44,12 +44,6 @@
   left: 5px;
 }
 
-
-.back-button-container:hover {
-  border-radius: 20px;
-  background: $backButtonColorHover;
-}
-
 .back-button-container:active {
   border-radius: 15px;
   background: $backButtonColorActive;
@@ -86,4 +80,11 @@
   position: absolute;
   right: 0;
   top: 20px;
+}
+
+@media all and (pointer: fine) {
+  .back-button-container:hover {
+    border-radius: 20px;
+    background: $backButtonColorHover;
+  }
 }
