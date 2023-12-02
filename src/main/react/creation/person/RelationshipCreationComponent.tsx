@@ -50,8 +50,10 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
 
         const updatedValidationObject = validationService.validateRelationship(relShip);
 
-        if (validationObject.type&&!updatedValidationObject.type) {
-            stateManager.updateRelationshipValidationErrors({relationship: relationship, type: null});
+        if (validationObject.type) {
+            if (!updatedValidationObject.type) {
+                stateManager.updateRelationshipValidationErrors({relationship: relShip, type: null});
+            } else if (updatedValidationObject.type !== validationObject.type) stateManager.updateRelationshipValidationErrors({relationship: updatedValidationObject.relationship, type: updatedValidationObject.type});
         }
     }
 
@@ -104,8 +106,10 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
 
                             const updatedValidationObject = validationService.validateRelationship(relShip);
 
-                            if (validationObject.note&&!updatedValidationObject.note) {
-                                stateManager.updateRelationshipValidationErrors({relationship: relationship, note: null})
+                            if (validationObject.note) {
+                                if (!updatedValidationObject.note) {
+                                    stateManager.updateRelationshipValidationErrors({relationship: relShip, note: null});
+                                } else if (updatedValidationObject.note !== validationObject.note) stateManager.updateRelationshipValidationErrors(updatedValidationObject)
                             }
                         }}
                     />
