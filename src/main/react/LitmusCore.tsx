@@ -57,11 +57,25 @@ const LitmusCore = ({children}: Props) => {
 
     const appResourcesService = serviceContext.applicationResources.service;
 
+    const resources = useAppSelector(state => state.appResources)
+
     useEffect(()=>{
-        appResourcesService.retrieveRoles().then(()=>{
-            console.log('roles were successfully loaded')
-        });
-    }, [appResourcesService])
+        if (networkStatus===NetworkStatus.ONLINE&&!resources?.roles) {
+            appResourcesService.retrieveRoles().then(()=>{
+                console.log('roles were successfully loaded')
+            });
+        }
+    }, [networkStatus, resources?.roles])
+
+    useEffect(()=>{
+        if (networkStatus===NetworkStatus.ONLINE&&resources?.roles) {
+            if (authentication?.isAuthenticated) {
+                userIdentityManager.retrieveIdentity(true).then(u=>console.log('User data retrieved:\n'+JSON.stringify(u)));
+            } else {
+                navigate(appConfig.applicationMappings.signIn);
+            }
+        }
+    },[authentication, networkStatus, userIdentityManager, resources])
 
     async function checkConnection(): Promise<void> {
         appStateManager.enablePending();
@@ -88,16 +102,6 @@ const LitmusCore = ({children}: Props) => {
                 .finally(()=>appStateManager.disablePending())
         }
     }, [authentication, networkStatus])
-
-    useEffect(()=>{
-        if (networkStatus===NetworkStatus.ONLINE) {
-            if (authentication?.isAuthenticated) {
-                userIdentityManager.retrieveIdentity(true).then(u=>console.log('User data retrieved:\n'+JSON.stringify(u)));
-            } else {
-                navigate(appConfig.applicationMappings.signIn);
-            }
-        }
-    },[authentication, networkStatus, navigate, userIdentityManager])
 
     if (isRefreshing) return <Loader/>;
 

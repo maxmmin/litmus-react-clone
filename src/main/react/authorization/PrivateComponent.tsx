@@ -1,6 +1,5 @@
 import React, {useMemo, ReactNode} from "react";
 import {useAppSelector} from "../../redux/hooks";
-import {Navigate} from 'react-router-dom'
 import {Permission} from "../../model/userIdentity/Role";
 import {checkAuthorization} from "../../util/pureFunctions";
 
