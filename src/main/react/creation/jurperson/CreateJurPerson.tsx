@@ -50,34 +50,6 @@ const CreateJurPerson = () => {
 
     const {year, month, day} = jurPersonCreationParams.dateOfRegistration||{year: '', month: '', day: ''};
 
-    useEffect(()=>{
-        if (validationErrors?.dateOfRegistration) {
-            const updatedDateOfRegistrationErr = validationService.validateDateOfRegistration(jurPersonCreationParams.dateOfRegistration);
-            if (!updatedDateOfRegistrationErr) {
-                creationStateManager.updateValidationErrors({dateOfRegistration: null})
-            }
-        }
-    }, [jurPersonCreationParams.dateOfRegistration])
-
-    useEffect(()=>{
-        if (validationErrors?.name) {
-            const updatedNameErr = validationService.validateName(jurPersonCreationParams.name);
-            if (!updatedNameErr) {
-                creationStateManager.updateValidationErrors({name: null})
-            }
-        }
-    }, [jurPersonCreationParams.name])
-
-    useEffect(()=>{
-        if (validationErrors?.edrpou) {
-            const updatedEdrpouErr = validationService.validateEdrpou(jurPersonCreationParams.edrpou);
-            if (!updatedEdrpouErr) {
-                creationStateManager.updateValidationErrors({edrpou: null})
-            }
-        }
-    }, [jurPersonCreationParams.edrpou])
-
-
     return (
         <>
             <ApplyPersonModal modalSettings={modalSettings} close={closeModal}/>
@@ -91,6 +63,13 @@ const CreateJurPerson = () => {
                            onKeyDown={keyPressHandler}
                            onChange={e=>{
                                creationStateManager.updateEntityCreationParams({name: e.currentTarget.value});
+
+                               if (validationErrors?.name) {
+                                   const updatedNameErr = validationService.validateName(creationStateManager.getCreationParams().name);
+                                   if (!updatedNameErr) {
+                                       creationStateManager.updateValidationErrors({name: null})
+                                   } else if (updatedNameErr !== validationErrors.name) creationStateManager.updateValidationErrors({name: updatedNameErr})
+                               }
                            }}
                     />
                     <InputError error={validationErrors?.name}/>
@@ -102,6 +81,13 @@ const CreateJurPerson = () => {
                            onKeyDown={keyPressHandler}
                            onChange={e=>{
                                creationStateManager.updateEntityCreationParams({edrpou: e.currentTarget.value});
+
+                               if (validationErrors?.edrpou) {
+                                   const updatedEdrpouErr = validationService.validateEdrpou(creationStateManager.getCreationParams().edrpou);
+                                   if (!updatedEdrpouErr) {
+                                       creationStateManager.updateValidationErrors({edrpou: null})
+                                   } else if (updatedEdrpouErr !== validationErrors.edrpou) creationStateManager.updateValidationErrors({edrpou: updatedEdrpouErr})
+                               }
                            }}
                     />
                     <InputError error={validationErrors?.edrpou}/>
@@ -130,7 +116,21 @@ const CreateJurPerson = () => {
                 <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                     <Form.Label>Дата реєстрації юридичної особи</Form.Label>
 
-                    <InputDate inputPrefix={validationErrors?.dateOfRegistration?'is-invalid':''} date={new DateEntityTool().setDay(day).setMonth(month).setYear(year).build()} setDate={date=>creationStateManager.updateEntityCreationParams({dateOfRegistration: date})} className={"date-of-registration"}/>
+                    <InputDate inputPrefix={validationErrors?.dateOfRegistration?'is-invalid':''}
+                               date={new DateEntityTool().setDay(day).setMonth(month).setYear(year).build()}
+                               setDate={date=>{
+                                   creationStateManager.updateEntityCreationParams({dateOfRegistration: date})
+
+                                   if (validationErrors?.dateOfRegistration) {
+                                       const updatedDateOfRegistrationErr = validationService.validateDateOfRegistration(creationStateManager.getCreationParams().dateOfRegistration);
+                                       if (!updatedDateOfRegistrationErr) {
+                                           creationStateManager.updateValidationErrors({dateOfRegistration: null})
+                                       } else if (updatedDateOfRegistrationErr !== validationErrors.dateOfRegistration) creationStateManager.updateValidationErrors({dateOfRegistration: updatedDateOfRegistrationErr})
+                                   }
+                               }}
+                               className={"date-of-registration"}
+
+                    />
 
                     <InputError error={validationErrors?.dateOfRegistration}/>
                 </Form.Group>

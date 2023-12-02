@@ -10,7 +10,6 @@ import {VisibilityDisabledIcon, VisibilityEnabledIcon} from "../../assets/icons"
 import Role from "../../../model/userIdentity/Role";
 import ApplicationResourcesStateManager
     from "../../../service/stateManagers/applicationResources/ApplicationResourcesStateManager";
-import {RoleMap} from "../../../redux/types/applicationResources/ApplicationResources";
 import {UserAction} from "../../../service/userHierarchy/HierarchyPermissionChecker";
 
 
@@ -35,48 +34,14 @@ const CreateUser = () => {
             .filter(role=>permissionsChecker.isPermittedByRole(clientRole, role, UserAction.CREATE))
     }, [roles])
 
-    useEffect(()=>{
-        if (validationErrors?.email) {
-            const updatedEmailErr = validationService.validateEmail(user.email);
-            if (!updatedEmailErr) {
-                creationStateManager.updateValidationErrors({email: null})
-            }
-        }
-    }, [user.email])
-
-    useEffect(()=>{
-        if (validationErrors?.password) {
-            const updatedPwdErr = validationService.validatePassword(user.password);
-            if (!updatedPwdErr) {
-                creationStateManager.updateValidationErrors({password: null})
-            }
-        }
-    }, [user.password])
-
-    useEffect(()=>{
+    function checkExistingRepeatPwdValidityErr () {
         if (validationErrors?.repeatPassword) {
-            const updatedPwdErr = validationService.isPasswordConfirmed(user);
+            const updatedPwdErr = validationService.isPasswordConfirmed(creationStateManager.getCreationParams());
             if (!updatedPwdErr) {
                 creationStateManager.updateValidationErrors({repeatPassword: null})
-            }
+            } else if (updatedPwdErr !== validationErrors.repeatPassword) creationStateManager.updateValidationErrors({repeatPassword: updatedPwdErr})
         }
-    }, [user.password, user.repeatPassword])
-
-    useEffect(()=>{
-        const updatedFullNameErrors = validationService.validateFullName(user);
-
-        if (validationErrors?.middleName&&!updatedFullNameErrors?.middleName) {
-            creationStateManager.updateValidationErrors({middleName: null})
-        }
-
-        if (validationErrors?.lastName&&!updatedFullNameErrors.lastName) {
-            creationStateManager.updateValidationErrors({lastName: null})
-        }
-
-        if (validationErrors?.firstName&&!updatedFullNameErrors.firstName) {
-            creationStateManager.updateValidationErrors({firstName: null})
-        }
-    }, [user.firstName, user.middleName, user.lastName])
+    }
 
     const [passwordsVisibility, setPasswordsVisibility] = useState<{password: boolean, repeatPassword: boolean}>({
         password: false,
@@ -94,6 +59,13 @@ const CreateUser = () => {
                        onKeyDown={keyPressHandler}
                        onChange={e=>{
                            creationStateManager.updateEntityCreationParams({email: e.currentTarget.value});
+
+                           if (validationErrors?.email) {
+                               const updatedEmailErr = validationService.validateEmail(creationStateManager.getCreationParams().email);
+                               if (!updatedEmailErr) {
+                                   creationStateManager.updateValidationErrors({email: null})
+                               } else if (updatedEmailErr !== validationErrors.email) creationStateManager.updateValidationErrors({email: updatedEmailErr})
+                           }
                        }}
                 />
                 <InputError error={validationErrors?.email}/>
@@ -106,6 +78,13 @@ const CreateUser = () => {
                        value={user.lastName}
                        onChange={e=>{
                            creationStateManager.updateEntityCreationParams({lastName: e.currentTarget.value});
+                           const updatedFullNameErrors = validationService.validateFullName(creationStateManager.getCreationParams());
+
+                           if (validationErrors?.lastName) {
+                               if (!updatedFullNameErrors.lastName) {
+                                   creationStateManager.updateValidationErrors({lastName: null})
+                               } else if (updatedFullNameErrors.lastName !== validationErrors.lastName) creationStateManager.updateValidationErrors({lastName: updatedFullNameErrors.lastName});
+                           }
                        }}
                 />
                 <InputError error={validationErrors?.lastName}/>
@@ -118,6 +97,14 @@ const CreateUser = () => {
                        value={user.firstName}
                        onChange={e=>{
                            creationStateManager.updateEntityCreationParams({firstName: e.currentTarget.value});
+
+                           const updatedFullNameErrors = validationService.validateFullName(creationStateManager.getCreationParams());
+
+                           if (validationErrors?.firstName) {
+                               if (!updatedFullNameErrors.firstName) {
+                                   creationStateManager.updateValidationErrors({firstName: null})
+                               } else if (updatedFullNameErrors.firstName !== validationErrors.firstName) creationStateManager.updateValidationErrors({firstName: updatedFullNameErrors.firstName})
+                           }
                        }}
                 />
                 <InputError error={validationErrors?.firstName}/>
@@ -130,6 +117,14 @@ const CreateUser = () => {
                        value={user.middleName}
                        onChange={e=>{
                            creationStateManager.updateEntityCreationParams({middleName: e.currentTarget.value});
+
+                           const updatedFullNameErrors = validationService.validateFullName(creationStateManager.getCreationParams());
+
+                           if (validationErrors?.middleName) {
+                               if (!updatedFullNameErrors?.middleName) {
+                                   creationStateManager.updateValidationErrors({middleName: null})
+                               } else if (updatedFullNameErrors.middleName !== validationErrors.middleName) creationStateManager.updateValidationErrors({middleName: updatedFullNameErrors.middleName})
+                           }
                        }}
                 />
                 <InputError error={validationErrors?.middleName}/>
@@ -152,6 +147,13 @@ const CreateUser = () => {
                        value={user.password}
                        onChange={e=>{
                            creationStateManager.updateEntityCreationParams({password: e.currentTarget.value});
+
+                           if (validationErrors?.password) {
+                               const updatedPwdErr = validationService.validatePassword(creationStateManager.getCreationParams().password);
+                               if (!updatedPwdErr) {
+                                   creationStateManager.updateValidationErrors({password: null})
+                               } else if (updatedPwdErr !== validationErrors.password) creationStateManager.updateValidationErrors({password: updatedPwdErr})
+                           } else checkExistingRepeatPwdValidityErr()
                        }}
                 />
                 <InputError error={validationErrors?.password}/>
@@ -174,9 +176,13 @@ const CreateUser = () => {
                        placeholder="Повторіть пароль"
                        onKeyDown={keyPressHandler}
                        value={user.repeatPassword}
-                       onChange={(e)=>creationStateManager.updateEntityCreationParams({
-                           repeatPassword: e.currentTarget.value
-                       })}
+                       onChange={(e)=>{
+                           creationStateManager.updateEntityCreationParams({
+                               repeatPassword: e.currentTarget.value
+                           })
+
+                           checkExistingRepeatPwdValidityErr()
+                       }}
                 />
                 <InputError error={validationErrors?.repeatPassword}/>
             </Form.Group>

@@ -47,20 +47,13 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
             relShip.type = null;
         }
        personCreationStateManager.updateRelationship(relShip)
-    }
 
-
-    useEffect(()=>{
-        const updatedValidationObject = validationService.validateRelationship(relationship);
+        const updatedValidationObject = validationService.validateRelationship(relShip);
 
         if (validationObject.type&&!updatedValidationObject.type) {
             stateManager.updateRelationshipValidationErrors({relationship: relationship, type: null});
         }
-
-        if (validationObject.note&&!updatedValidationObject.note) {
-            stateManager.updateRelationshipValidationErrors({relationship: relationship, note: null})
-        }
-    }, [relationship])
+    }
 
     const relType = relationship.type?relationship.type:undefined;
 
@@ -108,6 +101,12 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
                             const relShip = {...relationship};
                             relShip.note = e.currentTarget.value;
                             personCreationStateManager.updateRelationship(relShip);
+
+                            const updatedValidationObject = validationService.validateRelationship(relShip);
+
+                            if (validationObject.note&&!updatedValidationObject.note) {
+                                stateManager.updateRelationshipValidationErrors({relationship: relationship, note: null})
+                            }
                         }}
                     />
                 </FloatingLabel>
