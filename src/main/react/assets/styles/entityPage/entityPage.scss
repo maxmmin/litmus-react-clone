@@ -230,6 +230,7 @@ $page-border-radius: 15px;
 .related-entity-container__location-btn-wrapper {
   width: 30px;
   height: 30px;
+  flex-shrink: 0;
   justify-self: end;
 }
 
@@ -238,6 +239,11 @@ $page-border-radius: 15px;
   width: 100%;
   fill: $md-sys-color-primary-light;
   cursor: pointer;
+}
+
+.related-entity-container__mobile-key {
+  display: none;
+  font-weight: 500;
 }
 
 .entity-page__related-entity-container.disabled-geo .related-entity-container__location-btn, .related-entity-container__location-btn.disabled-geo  {
@@ -251,3 +257,55 @@ $page-border-radius: 15px;
   }
 }
 
+@media all and (max-width: 768px) {
+  .relations-container {
+    display: flex;
+    flex-wrap: wrap;
+    row-gap: 30px;
+    column-gap: 30px;
+  }
+
+  //.entity-page__related-entity-container_jur-person, .related-entity-table-header_jur-person {
+  .entity-page__related-entity-container {
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    flex-direction: column;
+    row-gap: 10px;
+    width: fit-content;
+    flex-grow: 1;
+    min-width: 250px;
+    flex-basis: 0;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  //.related-entity-container__main-block_jur-person {
+  .related-entity-container__main-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  //.related-entity-container__main-block_jur-person .related-entity-container__entity-name {
+  .related-entity-container__main-block .related-entity-container__entity-name {
+    font-size: 20px;
+    margin-top: 10px;
+  }
+
+  .related-entity-container__img-wrapper {
+    width: 75px;
+    height: 75px;
+  }
+
+  .related-entity-table-header {
+    display: none;
+  }
+
+  .related-entity-container__mobile-key {
+    display: initial;
+  }
+
+  .related-entity-container__mobile-key_br {
+    display: block;
+  }
+}

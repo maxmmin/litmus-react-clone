@@ -7,19 +7,16 @@
     min-height: 100%;
 }
 
-.homepage-actions {
-  flex-grow: 1;
-}
-
-
+//noinspection CssOverwrittenProperties
 .homepage-actions {
   flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   align-content: flex-start;
-  row-gap: 50px;
+  row-gap: 60px;
   column-gap: 6%;
+  column-gap: max(60px, 6%);
   padding: 100px 0;
 }
 

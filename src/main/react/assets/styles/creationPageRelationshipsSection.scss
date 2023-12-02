@@ -82,6 +82,7 @@
   //border: 2px dashed $md-sys-color-inverse-primary-light;
   border-radius: 50%;
   width: 100px;
+  flex-shrink: 0;
   height: 100px;
   overflow: hidden;
   display: flex;

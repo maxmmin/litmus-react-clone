@@ -11,7 +11,7 @@ import {PersonSimpleResponseDto} from "../../rest/dto/person/PersonSimpleRespons
 type Props = {
     person: Pick<Person, keyof PersonSimpleResponseDto>
 }
-export default function SimplePersonPreview ({person}: Props) {
+export default function FastPersonPreview ({person}: Props) {
     const mainImg = person.media.mainImage||person.media.images[0];
     return (
         <div className="entity-container-wrapper entity-container-wrapper_simple-person">
@@ -20,7 +20,7 @@ export default function SimplePersonPreview ({person}: Props) {
                     <GoBubbleIcon className={"entity-container-wrapper__entity-link-icon"}/>
                 </PersonNavLink>
             </div>
-            <div className={"entity-container entity-container_simple-person"}>
+            <div className={"entity-container entity-container_fast-person-preview"}>
                 <div className="entity-container__column-title-block entity-container__column-title-block_simple-person"><h6 className="entity-container__column-title entity-container__column-title_simple-person">ID</h6></div>
                 <div className="entity-container__column-title-block entity-container__column-title-block_simple-person"><h6 className="entity-container__column-title entity-container__column-title_simple-person">Фото</h6></div>
                 <div className="entity-container__column-title-block entity-container__column-title-block_simple-person"><h6 className="entity-container__column-title entity-container__column-title_simple-person">Прізвище</h6></div>

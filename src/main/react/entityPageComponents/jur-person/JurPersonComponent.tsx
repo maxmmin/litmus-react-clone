@@ -301,7 +301,9 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                                 <h6 className='related-entity-container__header-title'>Пов'язані фізичні особи</h6>
                                 <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
                             </div>
-                            {deepRelated.map(possibleRelated=>mapPossibleRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
+                            <div className="relations-container">
+                                {deepRelated.map(possibleRelated=>mapPossibleRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
+                            </div>
                         </div>
 
                     </section>
@@ -318,7 +320,9 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                                     <h6 className='related-entity-container__header-title'>Власник</h6>
                                     <h6 className='related-entity-container__header-title'>Бен. власник</h6>
                                 </div>
-                                {[...possibleRelatedJurPersons].map(jurPerson=>mapRelatedJurPerson(jurPerson,mapMetadata,setDisplayedEntity))}
+                                <div className={'relations-container'}>
+                                    {[...possibleRelatedJurPersons].map(jurPerson=>mapRelatedJurPerson(jurPerson,mapMetadata,setDisplayedEntity))}
+                                </div>
                             </div>
                         }
                     </section>

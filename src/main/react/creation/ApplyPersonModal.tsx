@@ -20,7 +20,7 @@ import PersonExplorationApiService from "../../service/api/person/exploration/Pe
 import {JurPersonCreationParams} from "../../redux/types/creation/JurPersonCreationState";
 import {RelationshipCreationParams} from "../../service/coreServices/creation/PersonCreationService";
 import RelationshipsLinkObject from "../../util/person/RelationshipsLinkObject";
-import PersonPreviewInfoTable from "./SimplePersonPreview";
+import PersonPreviewInfoTable from "./FastPersonPreview";
 import {PersonSimpleResponseDto} from "../../rest/dto/person/PersonSimpleResponseDto";
 
 type Props = {

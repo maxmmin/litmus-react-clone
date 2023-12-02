@@ -15,7 +15,7 @@ import PersonMapTool from "../../../util/map/person/PersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
 import {mapRelatedJurPerson, mapPossibleRelatedPerson} from "../mapFunctions";
 import ManagePanel from "../manage/ManagePanel";
-import {HttpErrorParser} from "../../../error/BasicHttpError";
+import {HttpErrorParser, noInfoMessage} from "../../../error/BasicHttpError";
 import {ApplicationError} from "../../../rest/ErrorResponse";
 import {useNavigate} from "react-router-dom";
 import {useLocation} from "react-router";
@@ -161,26 +161,29 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                     <h6 className='related-entity-container__header-title'>Тип відношення</h6>
                                     <h6 className='related-entity-container__header-title'>Примітка</h6>
                                 </div>
-                                {person.relationships.map(relationship=>{
 
-                                    let cssAnchor: string;
-                                    if (person.location) {
-                                        cssAnchor = relationship.to.location?"":"disabled-geo"
-                                    } else {
-                                        cssAnchor = "no-geo";
-                                    }
+                                <div className="relations-container">
+                                    {person.relationships.map(relationship=>{
 
-                                    return (<RootRelatedPersonComponent key={relationship.to.id}
-                                                                        relationship={relationship}
-                                                                        cssAnchor={cssAnchor}
-                                                                        geoBtnOnClick={(r,_e)=>{
-                                                                            const toPerson = r.to;
-                                                                            if (hasLocation(toPerson)) {
-                                                                                setDisplayedEntity({to: toPerson});
-                                                                            }
-                                                                        }}
-                                    />)
-                                })}
+                                        let cssAnchor: string;
+                                        if (person.location) {
+                                            cssAnchor = relationship.to.location?"":"disabled-geo"
+                                        } else {
+                                            cssAnchor = "no-geo";
+                                        }
+
+                                        return (<RootRelatedPersonComponent key={relationship.to.id}
+                                                                            relationship={relationship}
+                                                                            cssAnchor={cssAnchor}
+                                                                            geoBtnOnClick={(r,_e)=>{
+                                                                                const toPerson = r.to;
+                                                                                if (hasLocation(toPerson)) {
+                                                                                    setDisplayedEntity({to: toPerson});
+                                                                                }
+                                                                            }}
+                                        />)
+                                    })}
+                                </div>
                             </div>
                             :
                             <p>Пов'язані особи відсутні</p>
@@ -197,7 +200,9 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                     <h6 className='related-entity-container__header-title'>Власник</h6>
                                     <h6 className='related-entity-container__header-title'>Бен. власник</h6>
                                 </div>
-                                {[...new Set(rootJurPersons)].map(j=>mapRelatedJurPerson(j,mapMetadata,setDisplayedEntity))}
+                                <div className="relations-container">
+                                    {[...new Set(rootJurPersons)].map(j=>mapRelatedJurPerson(j,mapMetadata,setDisplayedEntity))}
+                                </div>
                             </div>
                             :
                             <p>Пов'язані особи відсутні</p>
@@ -215,7 +220,10 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                 <h6 className='related-entity-container__header-title'>Пов'язані фізичні особи</h6>
                                 <h6 className='related-entity-container__header-title'>Пов'язані юридичні особи</h6>
                             </div>
-                            {deepRelated.map(possibleRelated=>mapPossibleRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
+
+                            <div className={"relations-container"}>
+                                {deepRelated.map(possibleRelated=>mapPossibleRelatedPerson(possibleRelated,mapMetadata,setDisplayedEntity))}
+                            </div>
                         </div>
 
                     </section>
@@ -232,7 +240,9 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                                     <h6 className='related-entity-container__header-title'>Власник</h6>
                                     <h6 className='related-entity-container__header-title'>Бен. власник</h6>
                                 </div>
-                                {[...possibleRelatedJurPersons].map(j=>mapRelatedJurPerson(j, mapMetadata,setDisplayedEntity))}
+                                <div className="relations-container">
+                                    {[...possibleRelatedJurPersons].map(j=>mapRelatedJurPerson(j, mapMetadata,setDisplayedEntity))}
+                                </div>
                             </div>
                         }
                     </section>

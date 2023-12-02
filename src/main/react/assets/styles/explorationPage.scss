@@ -91,10 +91,6 @@
   grid-template-columns: 1fr 150px repeat(9, 1fr);
 }
 
-.entity-container_simple-person {
-  grid-template-columns: 1fr 150px repeat(6, 1fr);
-}
-
 .entity-container__value_img {
   max-width: 100%;
   max-height: 100px;
@@ -150,6 +146,10 @@
 
   .entity-container_person {
     grid-template-rows: repeat(11, auto);
+  }
+
+  .entity-container_fast-person-preview {
+    grid-template-rows: repeat(8, auto);
   }
 
   .entity-container_jur-person {
