@@ -77,13 +77,16 @@ class AxiosApiManager {
         return globalInstance;
     }
 
-    private static createRawApiInstance (): AxiosInstance {
-        const axiosInstance =  axios.create({
+    private static newClearInstance(): AxiosInstance {
+        return axios.create({
             baseURL: appConfig.serverMappings.apiHost,
             xsrfCookieName: "",
             xsrfHeaderName: "",
             withCredentials: true
         });
+    }
+    private static createRawApiInstance (): AxiosInstance {
+        const axiosInstance =  this.newClearInstance();
 
         axiosInstance.interceptors.response.use((response) => response,
             async (err: AxiosError<ErrorResponse>)=>{
@@ -100,7 +103,10 @@ class AxiosApiManager {
                             this.setCsrfToken(csrfResponse.data.token);
                             AxiosApiManager.setCsrfTokenToInstance(axiosInstance, token);
 
-                            return await axiosInstance.request(config)
+                            const clearInstance = this.newClearInstance();
+                            AxiosApiManager.setCsrfTokenToInstance(clearInstance, token);
+
+                            return await clearInstance.request(config)
                         }
                     }
                     return Promise.reject(err);

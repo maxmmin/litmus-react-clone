@@ -2,7 +2,6 @@ import {AxiosInstance} from "axios";
 import AxiosApiManager from "../../rest/AxiosApiManager";
 import appConfig from "../../../config/appConfig";
 import RoleResponseDto from "../../../rest/dto/RoleResponseDto";
-import ApplicationResourcesStateManagerImpl from "../../stateManagers/applicationResources/ApplicationResourcesStateManagerImpl";
 import ApplicationResourcesApiService from "./ApplicationResourcesApiService";
 
 export default class ApplicationResourcesApiServiceImpl implements ApplicationResourcesApiService {
