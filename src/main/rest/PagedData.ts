@@ -1,5 +1,3 @@
-import appConfig from "../config/appConfig";
-
 export default interface PagedData<E> {
     content: E[];
 
