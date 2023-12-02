@@ -1,6 +1,6 @@
 import {Entity} from "../../model/Entity";
 import {Form} from "react-bootstrap";
-import React, {ChangeEvent, useMemo} from "react";
+import React, {ChangeEvent} from "react";
 import {useAppSelector} from "../../redux/hooks";
 import PersonExplorationState from "../../redux/types/exploration/human/person/PersonExplorationState";
 import BasicJurPersonExplorationState from "../../redux/types/exploration/jurPerson/JurPersonExplorationState";
@@ -8,7 +8,6 @@ import UserExplorationState from "../../redux/types/exploration/human/user/UserE
 import EntityExplorationParams from "../../redux/types/exploration/EntityExplorationParams";
 import ExplorationMode from "../../redux/types/exploration/ExplorationMode";
 import ExplorationStateManager from "../../service/stateManagers/exploration/ExplorationStateManager";
-import EntityExplorationState from "../../redux/types/exploration/EntityExplorationState";
 
 
 

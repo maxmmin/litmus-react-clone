@@ -1,5 +1,4 @@
 import HumanCreationValidationService from "../HumanCreationValidationService";
-import Person from "../../../../model/human/person/Person";
 import {ValidationErrors} from "../../../../model/ValidationErrors";
 import PassportData from "../../../../model/human/person/PassportData";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";

@@ -1,6 +1,6 @@
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
-import {DashedUserIcon, TrashIcon} from "../../assets/icons";
+import {DashedUserIcon} from "../../assets/icons";
 import {valueOrMessage} from "../../../util/functional/valueOrNull";
 import {DateEntityTool} from "../../../model/DateEntity";
 import React from "react";

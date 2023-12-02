@@ -1,7 +1,6 @@
 import ExplorationMode, {basicHumanExplorationModes} from "../../ExplorationMode";
 import BasicHumanExplorationParams from "../BasicHumanExplorationParams";
 import HumanExplorationParams from "../HumanExplorationParams";
-import basicHumanExplorationParams from "../BasicHumanExplorationParams";
 
 interface PersonExplorationParams extends HumanExplorationParams {}
 

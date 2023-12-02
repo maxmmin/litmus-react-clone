@@ -1,4 +1,4 @@
-import Person, {Relationship} from "../../../model/human/person/Person";
+import Person from "../../../model/human/person/Person";
 import React from "react";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";

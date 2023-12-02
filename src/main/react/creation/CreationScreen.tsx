@@ -1,4 +1,3 @@
-import Header from "../header/Header";
 import {Form} from "react-bootstrap";
 import {Entity} from "../../model/Entity";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";

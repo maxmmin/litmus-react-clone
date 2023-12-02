@@ -46,7 +46,7 @@ export const switchNext = (e: React.SyntheticEvent) => {
         } else if (nextElem instanceof HTMLButtonElement) {
             nextElem.click()
         } else {
-            (<HTMLInputElement>e.currentTarget).blur()
+            (e.currentTarget as HTMLInputElement).blur()
         }
     }
 }

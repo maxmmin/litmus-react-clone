@@ -1,12 +1,10 @@
-import CreationStateManagerImpl from "../CreationStateManagerImpl";
 import store, {AppDispatch} from "../../../../redux/store";
 import CreationTypedAction from "../../../../redux/actions/CreationTypedAction";
 import JurPersonCreationStateManager from "./JurPersonCreationStateManager";
-import {JurPerson, PreProcessedJurPerson} from "../../../../model/jurPerson/JurPerson";
+import {PreProcessedJurPerson} from "../../../../model/jurPerson/JurPerson";
 import {GeoLocation} from "../../../../model/GeoLocation";
 import {
-    JurPersonValidationObject,
-    ServerJurPersonValidationObject
+    JurPersonValidationObject
 } from "../../../validation/jurPerson/JurPersonCreationValidationService";
 import {JurPersonCreationParams} from "../../../../redux/types/creation/JurPersonCreationState";
 import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateManagerImpl";

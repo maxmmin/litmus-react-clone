@@ -168,7 +168,7 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
 
         let metadata: Metadata = {...blankMetadata};
         if (Object.hasOwn(exploredEntityDto, "metadata")) {
-            metadata = (<PreProcessedJurPerson>exploredEntityDto).metadata;
+            metadata = (exploredEntityDto as PreProcessedJurPerson).metadata;
         }
 
         const jurPerson: JurPerson = {

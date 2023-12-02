@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import React, {useContext, useEffect, useMemo, useState} from "react";
+import React, {useContext, useMemo, useState} from "react";
 import UserCreationStateManager from "../../../service/stateManagers/creation/user/UserCreationStateManager";
 import {useAppSelector} from "../../../redux/hooks";
 import InputError from "../../sharedComponents/InputError";
@@ -32,7 +32,7 @@ const CreateUser = () => {
         const clientRole = userIdentity.role;
         return Object.values(applicationResourcesStateManager.getRoles()!)
             .filter(role=>permissionsChecker.isPermittedByRole(clientRole, role, UserAction.CREATE))
-    }, [roles])
+    }, [roles, permissionsChecker, applicationResourcesStateManager, userIdentity.role])
 
     function checkExistingRepeatPwdValidityErr () {
         if (validationErrors?.repeatPassword) {

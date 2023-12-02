@@ -12,10 +12,8 @@ import {Entity} from "../../model/Entity";
 import getFullName from "../functional/getFullName";
 import {transformLocationToCoordinates} from "./mapUtilites";
 import Popup from "ol-ext/overlay/Popup";
-import RipePersonUtil from "../person/RipePersonUtil";
 import {LineString} from "ol/geom";
 import {Fill, Stroke, Style} from "ol/style";
-import BasicRipePersonUtil from "../person/BasicRipePersonUtil";
 
 
 export default class MapPainterImpl implements MapPainter {
@@ -37,9 +35,6 @@ export default class MapPainterImpl implements MapPainter {
 
     get relationLineStyle(): Style {
         return this._relationLineStyle;
-    }
-
-    constructor() {
     }
 
     public static getInstance (): MapPainterImpl {

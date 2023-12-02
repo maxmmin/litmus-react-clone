@@ -49,6 +49,7 @@ const ExplorationScreen = () => {
         } else if (urlEntity!==exploredEntity) {
             ExplorationStateManagerImpl.switchEntity(urlEntity, store.dispatch);
         }
+        // tslint:disable-next-line
     }, [location])
 
     const stateManager: ExplorationStateManager<unknown, EntityExplorationParams>|undefined = exploredEntity?getEntityExplorationStateManager(exploredEntity):undefined;

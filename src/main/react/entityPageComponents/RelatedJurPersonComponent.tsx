@@ -1,4 +1,3 @@
-import {Relationship} from "../../model/human/person/Person";
 import React from "react";
 import {JurPerson} from "../../model/jurPerson/JurPerson";
 import {buildUrl} from "../../util/pureFunctions";

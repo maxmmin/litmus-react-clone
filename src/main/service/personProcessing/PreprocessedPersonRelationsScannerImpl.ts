@@ -13,11 +13,11 @@ type Relation = {
 
 class ScanRelationsSet {
     // from, toArray
-    private readonly scanMap: Map<number|null, Set<number>> = new Map;
+    private readonly scanMap: Map<number|null, Set<number>> = new Map();
 
     addRelation(from: number|null, to: number) {
         if (!this.scanMap.has(from)) {
-            this.scanMap.set(from, new Set);
+            this.scanMap.set(from, new Set());
         }
         this.scanMap.get(from)!.add(to);
     }
@@ -65,7 +65,7 @@ class ScanRelationsSetUtil {
     }
     public getDuplicatedPersonsIds (branchSets: ScanRelationsSet[]): Set<number> {
         const relations = this.getSharedRelations(branchSets);
-        const ids: Set<number> = new Set;
+        const ids: Set<number> = new Set();
         relations.forEach(({ to})=>{
             ids.add(to);
         })
@@ -149,14 +149,14 @@ export default class PreprocessedPersonRelationsScannerImpl implements Preproces
             shared.add(r);
         });
 
-        const targetMiddleSet: Set<number> = new Set;
+        const targetMiddleSet: Set<number> = new Set();
         this.loadMiddlePersonsFromRoot(targetMiddleSet,new Set(shared),person, limit, 0);
         targetMiddleSet.forEach(id=>shared.add(id));
 
         const scannedRelations: Set<number> = scanSets.reduce((acc, set)=>{
             const idSet = this.scanRelationsSetUtil.extractPersonIds(set);
             return new Set([...idSet, ...acc]);
-        }, new Set<number>)
+        }, new Set<number>())
 
         scannedRelations.forEach(r=>{
             scannedPersons.add(r);
@@ -188,7 +188,7 @@ export default class PreprocessedPersonRelationsScannerImpl implements Preproces
     }
 
     private loadMiddlePersonsIdFromNested(targetSet: Set<number>, personToFind: number, scanPerson: NestedPersonResponseDto,
-                                limit: number, counter: number, subBranchScanned: Set<number> = new Set) {
+                                limit: number, counter: number, subBranchScanned: Set<number> = new Set()) {
         subBranchScanned.add(scanPerson.id);
 
         if (personToFind===scanPerson.id) {

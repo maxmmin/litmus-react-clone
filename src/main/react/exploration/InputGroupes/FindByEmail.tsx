@@ -4,7 +4,7 @@ import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
 
-export default function () {
+export default function FindByEmail () {
     const stateManager = useContext(LitmusServiceContext).exploration.stateManagers.user;
 
     const email = useAppSelector(state => state.exploration.user?.params.email);

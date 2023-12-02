@@ -1,8 +1,6 @@
 import HumanCreationValidationService from "../HumanCreationValidationService";
-import User from "../../../../model/human/user/User";
 import {ValidationErrors} from "../../../../model/ValidationErrors";
 import {UserCreationParams} from "../../../coreServices/creation/UserCreationService";
-import {RoleName} from "../../../../model/userIdentity/Role";
 
 export type UserValidationObject = ValidationErrors<UserCreationParams>;
 

@@ -24,7 +24,7 @@ class UserCreationServiceImpl
         creationStateManager: UserCreationStateManager,
         mapper: UserDtoMapper,
         validationService: UserCreationValidationService) {
-        super(apiService, creationStateManager, mapper, validationService);
+            super(apiService, creationStateManager, mapper, validationService);
     }
 
     public static getInstance(apiService: UserCreationApiService = UserCreationApiServiceImpl.getInstance(),

@@ -11,7 +11,7 @@ import {PersonSimpleResponseDto} from "../../rest/dto/person/PersonSimpleRespons
 type Props = {
     person: Pick<Person, keyof PersonSimpleResponseDto>
 }
-export default function ({person}: Props) {
+export default function SimplePersonPreview ({person}: Props) {
     const mainImg = person.media.mainImage||person.media.images[0];
     return (
         <div className="entity-container-wrapper entity-container-wrapper_simple-person">

@@ -14,7 +14,7 @@ import {JurPerson} from "../../model/jurPerson/JurPerson";
 import User from "../../model/human/user/User";
 import UserCreationState, {BasicUserCreationState} from "../types/creation/UserCreationState";
 import JurPersonCreationState, {BasicJurPersonCreationState} from "../types/creation/JurPersonCreationState";
-import PersonCreationState, {BasicPersonCreationState, defaultScanOptions} from "../types/creation/PersonCreationState";
+import PersonCreationState, {BasicPersonCreationState} from "../types/creation/PersonCreationState";
 import {ValidationErrors} from "../../model/ValidationErrors";
 import {PersonCreationParams, RelationshipCreationParams} from "../../service/coreServices/creation/PersonCreationService";
 import RelationshipsLinkObject from "../../util/person/RelationshipsLinkObject";

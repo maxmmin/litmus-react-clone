@@ -14,7 +14,7 @@ const applicationResourcesReducer: Reducer<ApplicationResourcesReducible, Payloa
                                                                                                      action): ApplicationResources => {
     switch (action.type) {
         case (`${ApplicationResourcesAction.RETRIEVE_ROLES}/fulfilled`): {
-            const roles: Role[] = <Role[]>action.payload;
+            const roles: Role[] = action.payload as Role[];
             const roleMap: RoleMap = {};
             roles.forEach( role => {
                 roleMap[role.name] = role;

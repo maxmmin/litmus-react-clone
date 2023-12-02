@@ -1,5 +1,5 @@
 import Loader from "./loader/Loader";
-import React, {ReactNode, useContext, useEffect, useMemo, useState} from "react";
+import React, {ReactNode, useContext, useEffect, useState} from "react";
 import {useAppSelector} from "../redux/hooks";
 import appConfig from "../config/appConfig";
 import UserIdentityManager from "../service/coreServices/userIdentity/UserIdentityManager";
@@ -61,7 +61,7 @@ const LitmusCore = ({children}: Props) => {
         appResourcesService.retrieveRoles().then(()=>{
             console.log('roles were successfully loaded')
         });
-    }, [])
+    }, [appResourcesService])
 
     async function checkConnection(): Promise<void> {
         appStateManager.enablePending();
@@ -74,7 +74,7 @@ const LitmusCore = ({children}: Props) => {
     }
 
     useEffect(()=>{
-        checkConnection();
+        checkConnection().then(()=>{});
     }, [])
 
     useEffect(()=>{
@@ -97,7 +97,7 @@ const LitmusCore = ({children}: Props) => {
                 navigate(appConfig.applicationMappings.signIn);
             }
         }
-    },[authentication, networkStatus])
+    },[authentication, networkStatus, navigate, userIdentityManager])
 
     if (isRefreshing) return <Loader/>;
 

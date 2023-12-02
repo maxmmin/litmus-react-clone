@@ -76,7 +76,7 @@ export default class BasicRipePersonUtil implements RipePersonUtil{
         if (hasLocation(person)) {
             const relatedPersons: Set<LocationPresent<Person>> = new Set([...this.extractRelatedPersons(person)].filter(hasLocation));
             return this.filterForGeoRelatedPersons(relatedPersons, new Set(person.relationships.map(r=>r.to).filter(hasLocation)));
-        } else return new Set;
+        } else return new Set();
     }
 
     private extractJurPersonRootPersons (jurPerson: JurPerson): Person[] {
@@ -88,7 +88,7 @@ export default class BasicRipePersonUtil implements RipePersonUtil{
     }
 
     public extractRelatedPersons (person: Person): Set<Person> {
-        const resultSet: Set<Person> = new Set;
+        const resultSet: Set<Person> = new Set();
 
         const initialPersons: Set<Person> = new Set([...person.relationships.map(r=>r.to)]);
         [...initialPersons, person]

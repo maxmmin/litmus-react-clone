@@ -2,7 +2,7 @@ import BasicPersonRelationshipsLoader, {NoRelationshipsOptionalPersonMap} from "
 import Person, {NoRelationsPerson, PreProcessedPerson, Relationship} from "../../model/human/person/Person";
 import {
     NestedPersonResponseDto,
-    RelatedPersonResponseDto, RelationshipsInfo,
+    RelatedPersonResponseDto,
 } from "../../rest/dto/person/PersonResponseDto";
 import PersonDtoMapper from "../dtoMappers/person/PersonDtoMapper";
 import PersonProcessor from "./PersonProcessor";
