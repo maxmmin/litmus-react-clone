@@ -86,7 +86,7 @@ export default function ({user}: UserProps) {
         <div className={"entity-page-wrapper entity-page-wrapper_user"}>
 
             <div className="entity-page-inner-wrapper">
-                <h2>Сторінка користувача</h2>
+                <h2>{currentUser.email !== user.email ? "Сторінка користувача" : "Мій профіль"}</h2>
 
                 <section className="entity-page-wrapper__main-entity-section entity-page-wrapper__main-entity-section_user">
                     <ManagePanel removalProps={{
