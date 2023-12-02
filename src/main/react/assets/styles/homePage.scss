@@ -15,14 +15,18 @@
 .homepage-actions {
   flex-grow: 1;
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
+  align-content: flex-start;
+  row-gap: 50px;
   column-gap: 6%;
-  padding-top: 100px;
+  padding: 100px 0;
 }
 
 .homepage-actions__action {
   width: 200px;
   border-radius: 15px;
+  flex-shrink: 0;
   height: 200px;
   background: rgba($md-sys-color-surface-tint-light, 0.8);
   padding: 60px;

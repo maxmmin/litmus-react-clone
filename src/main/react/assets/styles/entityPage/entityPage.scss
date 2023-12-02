@@ -52,18 +52,25 @@ $page-border-radius: 15px;
   display: flex;
   justify-content: space-between;
   column-gap: 80px;
+  flex-wrap: wrap;
+  row-gap: 50px;
 }
 
 .main-entity-section__main-photo-wrapper {
   width: 300px;
   height: 400px;
   flex-shrink: 0;
+  flex-grow: 1;
   overflow: hidden;
   border-radius: $page-border-radius;
   background: black;
   display: flex;
   justify-content: left;
   align-items: center;
+}
+
+.main-entity-section__main-entity-info-container {
+  flex-grow: 1;
 }
 
 .main-entity-section__main-photo-wrapper.no-photo {
@@ -90,6 +97,7 @@ $page-border-radius: 15px;
   font-size: 18px;
   background: lighten($md-sys-color-primary-container-light, 3%);
   padding: 7px 10px;
+  min-width: fit-content;
   border-radius: $page-border-radius;
 }
 
