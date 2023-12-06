@@ -9,6 +9,14 @@
   align-items: center;
 }
 
+.header-logo-nav {
+  text-decoration: none;
+  color: $md-sys-color-on-secondary-container-light;
+
+  &:hover {
+    color: $md-sys-color-on-secondary-container-light;
+  }
+}
 
 .header__interact {
   display: flex;
