@@ -59,7 +59,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
 
     const relType = relationship.type?relationship.type:undefined;
 
-    const image: string|null = relationship.to.media.mainImage;
+    const image: string|null = relationship.to.media.mainImage||relationship.to.media.images[0];
 
     return (
         <div className={"create-relationships-section__create-relation"}>
