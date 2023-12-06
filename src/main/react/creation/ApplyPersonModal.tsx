@@ -101,9 +101,9 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         let isIdValid = false;
 
         if (isNaN(id)) {
-            setSearchError({detail: null,
+            setSearchError({detail: "Невалідний ідентифікатор",
                 status: HttpStatus.UNKNOWN_ERROR,
-                error: "Невалідний ідентифікатор",
+                error: null,
                 code: null,
                 type: null,
                 properties: null
@@ -137,6 +137,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             }
         } catch (e: unknown) {
             const err = HttpErrorParser.parseError(e);
+            console.error(e)
             setSearchError(err);
         }
 
@@ -264,7 +265,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                             </div>
 
                             {searchError?
-                                <p className="apply-person-modal__error-description">{searchError.error}</p>
+                                <p className="apply-person-modal__error-description">{searchError.error||searchError.detail||"Невідома помилка"}</p>
                                 :
                                 null
                             }
