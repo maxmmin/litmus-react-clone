@@ -15,14 +15,14 @@ const CanonicalRoleName: Record<RoleName, string> = {
 }
 
 enum Permission {
-    USERS_READ = "users:read",
-    USERS_CREATE="users:create",
-    USERS_UPDATE="users:update",
-    USERS_REMOVE="users:remove",
-    DATA_READ="data:read",
-    DATA_CREATE="data:create",
-    DATA_UPDATE="data:update",
-    DATA_REMOVE="data:remove"
+    USERS_READ = "USERS_READ",
+    USERS_CREATE="USERS_CREATE",
+    USERS_UPDATE="USERS_UPDATE",
+    USERS_REMOVE="USERS_REMOVE",
+    DATA_READ="DATA_READ",
+    DATA_CREATE="DATA_CREATE",
+    DATA_UPDATE="DATA_UPDATE",
+    DATA_REMOVE="DATA_REMOVE"
 }
 
 export interface HierarchyProperties {
