@@ -10,7 +10,8 @@ type AppConfig = {
     applicationMappings: Readonly<typeof applicationMappings>
     xsrfCookieName: string,
     xsrfHeaderName: string,
-    csrfErrCode: string
+    csrfErrCode: string,
+    paramsConfig: ParamsConfig
 }
 
 const backendOptions: BackendOptions = backendOptionsData;
@@ -100,6 +101,16 @@ const applicationMappings = Object.freeze({
     }
 })
 
+type ParamsConfig = {
+    lookupModeKeyName: string,
+    indexKeyName: string
+}
+
+const paramsConfig: ParamsConfig = {
+    lookupModeKeyName: "m",
+    indexKeyName: "i"
+}
+
 const appConfig: AppConfig = {
     backendOptions: backendOptionsData,
     geoApiKey: geoApiKEy,
@@ -108,7 +119,8 @@ const appConfig: AppConfig = {
     applicationMappings: applicationMappings,
     xsrfCookieName: 'XSRF-TOKEN',
     xsrfHeaderName: 'X-XSRF-TOKEN',
-    csrfErrCode: 'csrf:error'
+    csrfErrCode: 'csrf:error',
+    paramsConfig: paramsConfig
 }
 
 export default appConfig;

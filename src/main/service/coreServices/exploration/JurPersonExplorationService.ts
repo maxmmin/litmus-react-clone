@@ -44,9 +44,9 @@ class JurPersonExplorationService implements ExplorationService {
     private exploreById: JurPersonExplorationCallbackType = async () => {
         const id = checkNotEmpty(this.stateManager.getExplorationParams().id);
         const content: PreProcessedJurPerson[] = []
-        const jurPersonResponseDto: JurPersonResponseDto|null = await this.service.findById(+id);
+        const jurPersonResponseDto: JurPersonSimpleResponseDto|null = await this.service.findSimpleById(+id);
         if (jurPersonResponseDto) {
-            const jurPerson: PreProcessedJurPerson = this.mapper.mapToEntity(jurPersonResponseDto);
+            const jurPerson: PreProcessedJurPerson = this.mapper.mapSimpleDtoToEntity(jurPersonResponseDto);
             content.push(jurPerson)
         }
         return new UnPagedData(content);

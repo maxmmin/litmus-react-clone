@@ -44,9 +44,9 @@ class UserExplorationService implements ExplorationService {
     private exploreByIdCallback: UserExplorationCallbackType = async () => {
         const id = checkNotEmpty(this.stateManager.getExplorationParams().id);
         const content: User[] = []
-        const userResponseDto: UserResponseDto|null = await this.service.findById(+id);
+        const userResponseDto: UserSimpleResponseDto|null = await this.service.findSimpleById(+id);
         if (userResponseDto) {
-            const user: User = this.mapper.mapToEntity(userResponseDto);
+            const user: User = this.mapper.mapSimpleDtoToEntity(userResponseDto);
             content.push(user);
         }
         return new UnPagedData(content);
@@ -66,10 +66,10 @@ class UserExplorationService implements ExplorationService {
     private exploreByEmailCallback: UserExplorationCallbackType = async () => {
         const email = this.stateManager.getExplorationParams().email;
 
-        const userResponseDto: UserResponseDto|null = await this.service.findByEmail(email);
+        const userResponseDto: UserSimpleResponseDto|null = await this.service.findSimpleByEmail(email);
         const content: User[] = []
         if (userResponseDto) {
-            content.push(this.mapper.mapToEntity(userResponseDto))
+            content.push(this.mapper.mapSimpleDtoToEntity(userResponseDto))
         }
         return new UnPagedData(content);
     }

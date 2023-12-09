@@ -11,7 +11,7 @@ import PersonResponseDto, {
 import {buildUrl} from "../../../../util/pureFunctions";
 import {PersonSimpleResponseDto} from "../../../../rest/dto/person/PersonSimpleResponseDto";
 import {PersonShortResponseDto} from "../../../../rest/dto/person/PersonShortResponseDto";
-import {LookupMode} from "../../../../model/LookupMode";
+import {LookupMode} from "../../../../rest/LookupMode";
 
 
 
@@ -25,7 +25,7 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
     async findPersons(idSet: Set<number>, d: number): Promise<PersonResponseIdMapDto> {
         const response = await this.apiInstance<PersonResponseIdMapDto>(buildUrl(appConfig.serverMappings.persons.getByIdList), {
             params: {
-                mode: LookupMode.DETAILED,
+                [appConfig.paramsConfig.lookupModeKeyName]: LookupMode.DETAILED,
                 d: d,
                 id: [...idSet]
             },
@@ -39,7 +39,7 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
     async findSimplePersons(idList: Set<number>): Promise<SimplePersonIdMapDto> {
         const response = await this.apiInstance<SimplePersonIdMapDto>(buildUrl(appConfig.serverMappings.persons.getByIdList), {
             params: {
-                mode: LookupMode.SIMPLE,
+                [appConfig.paramsConfig.lookupModeKeyName]: LookupMode.SIMPLE,
                 id: [...idList]
             },
             paramsSerializer: {
@@ -52,7 +52,7 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
     async findShortPersons(idList: Set<number>): Promise<ShortPersonIdMapDto> {
         const response = await this.apiInstance<ShortPersonIdMapDto>(buildUrl(appConfig.serverMappings.persons.getByIdList), {
             params: {
-                mode: LookupMode.SHORT,
+                [appConfig.paramsConfig.lookupModeKeyName]: LookupMode.SHORT,
                 id: [...idList]
             },
             paramsSerializer: {
@@ -65,7 +65,7 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
     async findByIdWithDepthOption(id: number, d: number): Promise<PersonResponseDto|null> {
         const response = await this.apiInstance<PersonResponseDto>(buildUrl(appConfig.serverMappings.persons.root,id.toString()), {
             params: {
-                mode: LookupMode.DETAILED,
+                [appConfig.paramsConfig.lookupModeKeyName]: LookupMode.DETAILED,
                 d: d
             }
         });
@@ -84,7 +84,7 @@ class PersonExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<Per
     async findPersonSimpleDto(id: number): Promise<PersonSimpleResponseDto|null> {
         const response = await this.apiInstance<PersonResponseDto>(buildUrl(appConfig.serverMappings.persons.root,id.toString()), {
             params: {
-                mode: LookupMode.SIMPLE
+                [appConfig.paramsConfig.lookupModeKeyName]: LookupMode.SIMPLE
             }
         });
         return Object.keys(response.data).length>0?response.data:null;

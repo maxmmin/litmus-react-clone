@@ -43,9 +43,9 @@ class PersonExplorationService implements ExplorationService {
     protected exploreById: PersonExplorationCallbackType = async () => {
         const id = checkNotEmpty(this.stateManager.getExplorationParams().id);
         const content: PreProcessedPerson[] = []
-        const personResponseDto: PersonResponseDto|null = await this.service.findById(+id);
+        const personResponseDto: PersonSimpleResponseDto|null = await this.service.findSimpleById(+id);
         if (personResponseDto) {
-            const person: PreProcessedPerson = this.mapper.mapToEntity(personResponseDto);
+            const person: PreProcessedPerson = this.mapper.mapSimpleDtoToEntity(personResponseDto);
             content.push(person)
         }
         return new UnPagedData(content);

@@ -6,6 +6,7 @@ import JurPersonResponseDto from "../../../../rest/dto/jurPerson/JurPersonRespon
 import {buildUrl} from "../../../../util/pureFunctions";
 import {JurPersonSimpleResponseDto} from "../../../../rest/dto/jurPerson/JurPersonSimpleResponseDto";
 import {JurPersonShortResponseDto} from "../../../../rest/dto/jurPerson/JurPersonShortResponseDto";
+import {LookupMode} from "../../../../rest/LookupMode";
 
 class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPersonResponseDto, JurPersonSimpleResponseDto, JurPersonShortResponseDto>
     implements JurPersonExplorationApiService {
@@ -21,6 +22,7 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPer
     async findByIdWithDepthOption(id: number, d: number): Promise<JurPersonResponseDto | null> {
         const response = await this.apiInstance<JurPersonResponseDto>(buildUrl(appConfig.serverMappings.jurPersons.root,id.toString()), {
             params: {
+                [appConfig.paramsConfig.lookupModeKeyName]: LookupMode.DETAILED,
                 d: d
             }
         });
@@ -31,7 +33,7 @@ class JurPersonExplorationApiServiceImpl extends BasicEntityLookupService<JurPer
     async findByName(name: string, i: number): Promise<PagedData<JurPersonSimpleResponseDto>> {
 
         const params = {
-            i: i
+            [appConfig.paramsConfig.indexKeyName]: i
         }
 
         const url = buildUrl(appConfig.serverMappings.jurPersons.getByName, encodeURIComponent(name));
