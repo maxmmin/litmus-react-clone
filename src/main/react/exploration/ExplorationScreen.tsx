@@ -22,8 +22,8 @@ import EntityExplorationState from "../../redux/types/exploration/EntityExplorat
 
 function getRequiredExplorationPermissions(exploredEntity: Entity|undefined): Permission[] {
     if (exploredEntity===Entity.USER) {
-        return [Permission.DATA_READ];
-    } else return [Permission.USERS_READ]
+        return [Permission.USERS_READ];
+    } else return [Permission.DATA_READ]
 }
 
 const ExplorationScreen = () => {
