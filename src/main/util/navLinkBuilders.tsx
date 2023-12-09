@@ -37,7 +37,7 @@ export function PersonNavLink ({children, cssAnchor = "", person}: EntityNavLink
 export function JurPersonNavLink({cssAnchor = "", jurPerson, children}: EntityNavLinkProps&{jurPerson: Pick<JurPerson, 'id'|'name'>}): JSX.Element {
     return (
         <LitmusNavLink url={buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON], jurPerson.id.toString())} cssAnchor={"jur-person-link "+cssAnchor}>
-            {children || `ID ${jurPerson.id}: ${jurPerson.name}}`}
+            {children || `ID ${jurPerson.id}: ${jurPerson.name}`}
         </LitmusNavLink>
     )
 }
