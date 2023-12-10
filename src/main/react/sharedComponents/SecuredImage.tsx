@@ -23,15 +23,17 @@ export default function (props: React.DetailedHTMLProps<React.ImgHTMLAttributes<
     const [path, setPath] = useState(props.src)
 
     useEffect(()=>{
-        if (!isParallelHandling&&error) {
+        if (!handled&&!isParallelHandling&&error) {
             if (path) {
+                setHandled(true);
+
                 const param = "timestamp="+Date.now();
                 if (path.includes("?")) {
                     setPath(prev=>prev!.concat("&").concat(param));
                 } else setPath(prev=>prev!.concat("?").concat(param));
             }
         }
-    }, [handled, isParallelHandling])
+    }, [handled,isParallelHandling])
 
     return <img {...props}
                 alt={props.alt}
@@ -47,11 +49,10 @@ export default function (props: React.DetailedHTMLProps<React.ImgHTMLAttributes<
 
                         if (!isParallelHandling) {
                             appStateManager.enableSecuredImgHandling();
-
+                            setHandled(true);
                             try {
                                 await testAuth();
                             } finally {
-                                setHandled(true);
                                 appStateManager.disableSecuredImgHandling();
                             }
                         }
