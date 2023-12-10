@@ -15,6 +15,7 @@ import Human from "../../../model/human/Human";
 import getFullName from "../../../util/functional/getFullName";
 import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
 import {Images} from "../../../model/Media";
+import getBundledImages from "../../../util/functional/getBundledImages";
 
 
 const getShortInfo = (person: Human&{id: number}): string => `${person.id}: ${getFullName(person)}`
@@ -34,42 +35,22 @@ const CreateJurPerson = () => {
 
     const validationService = context.creation.validation.jurPerson;
 
-    const fileService = context.files.fileRepo;
+    const fileRepo = context.files.fileRepo;
 
     if (!jurPersonCreationParams) {
         throw new Error("createPersonDto was null but it shouldn't")
     }
 
-    const {mainImage, images} = useMemo<Images>(()=>{
-        const media = jurPersonCreationParams.media;
-        return {
-            mainImage: media.mainImage?{
-                file: fileService.getFileOrThrow(media.mainImage),
-                error: (validationErrors?.images.find(i => i.imageKey === media.mainImage))?.message,
-                fileKey: media.mainImage
-            }:null,
-            images: media.images.map(fileKey=>(
-                {
-                    file: fileService.getFileOrThrow(fileKey), fileKey: fileKey,
-                    error: (validationErrors?.images.find(i => i.imageKey === fileKey))?.message
-                }
-            ))
-        }
-    }, [jurPersonCreationParams.media])
-
+    const {mainImage, images} = useMemo<Images>(()=>
+            getBundledImages(jurPersonCreationParams.media, fileRepo, validationErrors?.images),
+        [jurPersonCreationParams.media])
 
     useEffect(()=>{
         if (validationErrors?.images) {
-            validationErrors.images.forEach(imageValObj => {
-                if (
-                    imageValObj.imageKey !== mainImage?.fileKey
-                    &&
-                    (images.findIndex(img => img.fileKey === imageValObj.imageKey) === -1)
-                ) {
-                    const newImgErrors = validationErrors.images.filter(i => i !== imageValObj)
-                    creationStateManager.updateValidationErrors({images: newImgErrors})
-                }
-            })
+            const newImgErrors = validationErrors
+                .images.filter(i => i.fileKey === mainImage?.fileKey || images.findIndex(img => img.fileKey === i.fileKey) > -1 );
+
+            if (validationErrors.images.length !== newImgErrors.length) creationStateManager.updateValidationErrors({images: newImgErrors})
         }
     }, [jurPersonCreationParams.media, validationErrors?.images])
 

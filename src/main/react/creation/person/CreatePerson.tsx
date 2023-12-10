@@ -21,6 +21,7 @@ import InputError from "../../sharedComponents/InputError";
 import {LitmusServiceContext} from "../../App";
 import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
 import {Images} from "../../../model/Media";
+import getBundledImages from "../../../util/functional/getBundledImages";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -33,7 +34,7 @@ const CreatePerson = () => {
 
     const validationService = litmusContext.creation.validation.person;
 
-    const fileService = litmusContext.files.fileRepo;
+    const fileRepo = litmusContext.files.fileRepo;
 
     const person = useAppSelector(state => state.creation.person?.emergingEntity)!
 
@@ -49,36 +50,14 @@ const CreatePerson = () => {
 
     const relationships = person?.relationships;
 
-    const {mainImage, images} = useMemo<Images>(()=>{
-        const media = person.media;
-        return {
-            mainImage: media.mainImage?{
-                file: fileService.getFileOrThrow(media.mainImage),
-                error: (validationErrors?.images.find(i => i.imageKey === media.mainImage))?.message,
-                fileKey: media.mainImage
-            }:null,
-            images: media.images.map(fileKey=>(
-                {
-                    file: fileService.getFileOrThrow(fileKey), fileKey: fileKey,
-                    error: (validationErrors?.images.find(i => i.imageKey === fileKey))?.message
-                }
-            ))
-        }
-    }, [person.media])
-
+    const {mainImage, images} = useMemo<Images>(()=>getBundledImages(person.media, fileRepo, validationErrors?.images), [person.media])
 
     useEffect(()=>{
         if (validationErrors?.images) {
-            validationErrors.images.forEach(imageValObj => {
-                if (
-                        imageValObj.imageKey !== mainImage?.fileKey
-                        &&
-                        (images.findIndex(img => img.fileKey === imageValObj.imageKey) === -1)
-                    ) {
-                    const newImgErrors = validationErrors.images.filter(i => i !== imageValObj)
-                    creationStateManager.updateValidationErrors({images: newImgErrors})
-                }
-            })
+            const newImgErrors = validationErrors
+                .images.filter(i => i.fileKey === mainImage?.fileKey || images.findIndex(img => img.fileKey === i.fileKey) > -1 );
+
+            if (validationErrors.images.length !== newImgErrors.length) creationStateManager.updateValidationErrors({images: newImgErrors})
         }
     }, [person.media, validationErrors?.images])
 

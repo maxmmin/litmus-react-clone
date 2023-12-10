@@ -1,4 +1,4 @@
 export type ImageValidationObject = {
-    imageKey: string,
+    fileKey: string,
     message: string
 }

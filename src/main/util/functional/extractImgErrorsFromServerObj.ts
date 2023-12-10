@@ -1,4 +1,4 @@
-import getArrayValidationKeyI from "./getArrayValidationKeyI";
+import getArrayValidationKeyIndex from "./getArrayValidationKeyIndex";
 import {checkNotEmpty} from "../pureFunctions";
 import {ImageValidationObject} from "../../rest/dto/ImageValidationObject";
 import Media from "../../model/Media";
@@ -13,13 +13,13 @@ export default function extractImgErrorsFromServerObj
 
     imgErrors
         .forEach(key => {
-            const index = getArrayValidationKeyI(key);
+            const index = getArrayValidationKeyIndex(key);
             if (index !== null) {
                 const img = checkNotEmpty(model.media.images[index]);
                 const message = serverValidationObject[key];
 
                 const validationObject: ImageValidationObject = {
-                    imageKey: img,
+                    fileKey: img,
                     message: message
                 }
 
@@ -28,7 +28,7 @@ export default function extractImgErrorsFromServerObj
         })
 
     if (serverValidationObject["media.mainImg"]) {
-        images.push({imageKey: checkNotEmpty(model.media.mainImage), message: serverValidationObject["media.mainImg"]})
+        images.push({fileKey: checkNotEmpty(model.media.mainImage), message: serverValidationObject["media.mainImg"]})
     }
 
     return images;

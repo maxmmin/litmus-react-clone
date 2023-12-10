@@ -1,4 +1,4 @@
-export default function getArrayValidationKeyI (key: string): number | null {
+export default function getArrayValidationKeyIndex (key: string): number | null {
     const indexMatch = key.match(/\[(\d+)]/);
     if (indexMatch) {
         const index = +indexMatch[1];

@@ -14,7 +14,7 @@ import valueOrNull from "../../../../util/functional/valueOrNull";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
 import {checkNotEmpty} from "../../../../util/pureFunctions";
 import {ImageValidationObject} from "../../../../rest/dto/ImageValidationObject";
-import getArrayValidationKeyI from "../../../../util/functional/getArrayValidationKeyI";
+import getArrayValidationKeyIndex from "../../../../util/functional/getArrayValidationKeyIndex";
 import extractImgErrorsFromServerObj from "../../../../util/functional/extractImgErrorsFromServerObj";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
@@ -107,7 +107,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
 
         relationshipsErrors
             .forEach(key=>{
-                const index = getArrayValidationKeyI(key);
+                const index = getArrayValidationKeyIndex(key);
 
                 if (index) {
                     const message = serverValidationObject[key];
