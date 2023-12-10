@@ -13,6 +13,7 @@ import PassportData from "../../../../model/human/person/PassportData";
 import valueOrNull from "../../../../util/functional/valueOrNull";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
 import {checkNotEmpty} from "../../../../util/pureFunctions";
+import {ImageValidationObject} from "../../ImageValidationObject";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
@@ -28,7 +29,8 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
             location: null,
             sex: sexErr,
             dateOfBirth: dateErr,
-            relationships: relationShipsErrors
+            relationships: relationShipsErrors,
+            images: []
         };
         return bindingResult;
     };
@@ -92,22 +94,25 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
             passportNumber: valueOrNull(serverValidationObject["passportData.passportNumber"]),
             rnokppCode: valueOrNull(serverValidationObject["passportData.rnokppCode"]),
             location: valueOrNull(serverValidationObject["location"]),
-            relationships: []
+            relationships: [],
+            images: []
         };
-        const relationshipsErrors = Object.keys(serverValidationObject).filter(r=>r.startsWith("relationships"));
+
+        const serverValidationKeys = Object.keys(serverValidationObject);
+
+        const relationshipsErrors = serverValidationKeys.filter(r=>r.startsWith("relationships"));
 
         const requestRelationships = model.relationships;
 
         relationshipsErrors
             .forEach(key=>{
-                const indexMatch = key.match(/\[(\d+)]/);
-                if (indexMatch) {
-                    const index= indexMatch[1];
-                    const field = key.substring(key.lastIndexOf(".")+1);
+                const index = getArrayValidationKeyI(key);
 
+                if (index) {
                     const message = serverValidationObject[key];
+                    const field = key.substring(key.indexOf(".") + 1);
 
-                    const relationship = checkNotEmpty(requestRelationships[+index]);
+                    const relationship = checkNotEmpty(requestRelationships[index]);
                     const validationObject: RelationShipValidationObject = personValidationObject.relationships
                         .find(v=>v.relationship===relationship) || {
                         relationship: relationship,
@@ -121,6 +126,28 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
                     }
                 }
             })
+
+        const imgErrors = serverValidationKeys.filter(r=>r.startsWith("media.img"))
+
+        imgErrors
+            .forEach(key => {
+                const index = getArrayValidationKeyI(key);
+                if (index) {
+                    const img = checkNotEmpty(model.media.images[index]);
+                    const message = serverValidationObject[key];
+
+                    const validationObject: ImageValidationObject = {
+                        image: img,
+                        message: message
+                    }
+
+                    personValidationObject.images.push(validationObject)
+                }
+            })
+
+        if (serverValidationObject["media.mainImg"]) {
+            personValidationObject.images.push({image: checkNotEmpty(model.media.mainImage), message: serverValidationObject["media.mainImg"]})
+        }
 
         return personValidationObject;
     }
