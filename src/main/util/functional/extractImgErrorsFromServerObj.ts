@@ -1,6 +1,6 @@
 import getArrayValidationKeyIndex from "./getArrayValidationKeyIndex";
 import {checkNotEmpty} from "../pureFunctions";
-import {ImageValidationObject} from "../../rest/dto/ImageValidationObject";
+import {ImageValidationObject} from "../../service/validation/validationModels/ImageValidationObject";
 import Media from "../../model/Media";
 import {ServerMediaContainableValidationObject} from "../../rest/dto/ServerMediaContainableValidationObject";
 

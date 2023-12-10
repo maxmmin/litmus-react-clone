@@ -8,12 +8,9 @@ import CoreEntity from "../../CoreEntity";
 import {NestedRelationshipsInfo, RelationshipsInfo} from "../../../rest/dto/person/PersonResponseDto";
 import {JurPerson} from "../../jurPerson/JurPerson";
 import {EmbedJurPersonResponseDto} from "../../../rest/dto/jurPerson/JurPersonResponseDto";
+import SourceInEntity from "../../SourceInEntity";
 
-export type RelationshipsScanOptions = {
-    depth: number
-}
-
-interface Person extends Human, MediaEntity, CoreEntity {
+interface Person extends Human, MediaEntity, CoreEntity, SourceInEntity {
     relationships: Relationship[],
     ownedJurPersons: JurPerson[],
     benOwnedJurPersons: JurPerson[],
@@ -21,7 +18,6 @@ interface Person extends Human, MediaEntity, CoreEntity {
     passportData: PassportData | null;
     dateOfBirth: DateEntity | null;
     location: GeoLocation | null;
-
 }
 
 export type NoRelationsPerson = Omit<Person, 'relationships'|'ownedJurPersons'|'benOwnedJurPersons'>

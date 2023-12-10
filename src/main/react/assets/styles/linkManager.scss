@@ -1,0 +1,27 @@
+@import "colors";
+
+.link-saver-wrapper {
+  display: flex;
+}
+
+.btn.link-saver-btn {
+  background: $md-sys-color-outline-variant-light;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+@media all and (pointer: fine) {
+  .btn.link-saver-btn:hover {
+    background: rgba($md-sys-color-outline-light, 0.6);
+  }
+}
+
+.form-control.link-saver-input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.link-saver-input:focus ~ .link-saver-btn {
+  outline: 3px solid rgba($md-sys-color-tertiary-light, 0.2);
+  box-shadow: 0 0 0 3px #D0BCFF;
+}

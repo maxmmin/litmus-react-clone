@@ -257,7 +257,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                                 />
 
                                 {pending ?
-                                    <div className="loader-container loader-container__apply-person">
+                                    <div className="apply-person__loader-container">
                                         <LoaderSpinner/>
                                     </div>
                                 :   null

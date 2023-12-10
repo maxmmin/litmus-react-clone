@@ -1,6 +1,6 @@
 import FileRepo from "../../service/media/FileRepo";
 import Media, {Images} from "../../model/Media";
-import {ImageValidationObject} from "../../rest/dto/ImageValidationObject";
+import {ImageValidationObject} from "../../service/validation/validationModels/ImageValidationObject";
 
 export default function getBundledImages (media: Media, fileRepo: FileRepo, validationErrs: ImageValidationObject[] = []): Images {
     return {

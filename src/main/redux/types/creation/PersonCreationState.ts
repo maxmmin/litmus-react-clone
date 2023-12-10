@@ -17,7 +17,8 @@ export const initialPersonCreationParams: PersonCreationParams = {
     relationships: [],
     sex: null,
     passportData: {passportSerial: "", passportNumber: "", rnokppCode: ""},
-    location: null
+    location: null,
+    sources: []
 }
 
 export class BasicPersonCreationState extends BasicEntityCreationState<PersonCreationParams, PersonValidationObject> implements PersonCreationState {

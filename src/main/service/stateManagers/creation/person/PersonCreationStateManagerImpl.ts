@@ -15,14 +15,40 @@ import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateMana
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
 import RelationshipsLinkObject from "../../../../util/person/RelationshipsLinkObject";
 
+
 class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<PreProcessedPerson,PersonCreationParams, PersonValidationObject> implements PersonCreationStateManager {
-
-
     constructor() {
         const dispatch: AppDispatch = store.dispatch;
         const getState = ()=>store.getState().creation.person!;
         super(dispatch, getState, CreationTypedAction.person);
     }
+
+    appendSource(source: string): number {
+        const sources: string[] = [...this.getSources(), source];
+        this.setSources(sources);
+        return sources.length;
+    }
+
+    getSources(): string[] {
+        return this.getCreationParams().sources;
+    }
+
+    removeSource(source: string): number {
+        const sources = this.getSources();
+        const sIndex = sources.indexOf(source);
+        if (sIndex === -1) throw new Error("source does not found")
+        else {
+            const copy = [...sources];
+            copy.splice(sIndex, 1);
+            this.setSources(copy);
+            return copy.length;
+        }
+    }
+
+    setSources(sources: string[]): void {
+        this.updateEntityCreationParams({sources: sources})
+    }
+
 
 
     updateRelationshipValidationErrors(relObject: Partial<RelationShipValidationObject>&Pick<RelationShipValidationObject,'relationship'>): void {

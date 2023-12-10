@@ -58,7 +58,8 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             passportData: {...blankPassportData},
             dateOfBirth: null,
             ownedJurPersons: [],
-            benOwnedJurPersons: []
+            benOwnedJurPersons: [],
+            sources: []
         }
     }
 
@@ -72,7 +73,8 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             media: {...blankMedia},
             dateOfRegistration: null,
             location: null,
-            metadata: {...blankMetadata}
+            metadata: {...blankMetadata},
+            sources: []
         };
     }
 
@@ -93,7 +95,8 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             dateOfRegistration: hasContent(simpleDto.dateOfRegistration)?DateEntityTool.buildFromString(simpleDto.dateOfRegistration!):null,
             edrpou: hasContent(simpleDto.edrpou)?simpleDto.edrpou:null,
             media: media,
-            metadata: {...blankMetadata}
+            metadata: {...blankMetadata},
+            sources: simpleDto.sources
         };
     }
 
@@ -146,7 +149,8 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             dateOfRegistration: hasContent(exploredEntityDto.dateOfRegistration)?DateEntityTool.buildFromString(exploredEntityDto.dateOfRegistration!):null,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou!:"",
             media: media,
-            metadata: this.metadataDtoMapper.map(exploredEntityDto.metadata)
+            metadata: this.metadataDtoMapper.map(exploredEntityDto.metadata),
+            sources: exploredEntityDto.sources
         }
 
         return jurPerson;
@@ -180,7 +184,8 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             dateOfRegistration: dob,
             edrpou: hasContent(exploredEntityDto.edrpou)?exploredEntityDto.edrpou:null,
             media: media,
-            metadata: metadata
+            metadata: metadata,
+            sources: exploredEntityDto.sources
         }
 
         return jurPerson;

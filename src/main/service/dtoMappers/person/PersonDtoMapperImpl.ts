@@ -37,7 +37,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             benOwnedJurPersons: [],
             dateOfBirth: simpleDto.dateOfBirth&&hasContent(simpleDto.dateOfBirth)?DateEntityTool.buildFromString(simpleDto.dateOfBirth):null,
             relationshipsInfo: {...blankRelationshipsInfo},
-            metadata: {...blankMetadata}
+            metadata: {...blankMetadata},
+            sources: simpleDto.sources
         }
     }
 
@@ -55,7 +56,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             relationships: [],
             dateOfBirth: preProcessed.dateOfBirth,
             sex: preProcessed.sex,
-            metadata: preProcessed.metadata
+            metadata: preProcessed.metadata,
+            sources: preProcessed.sources
         }
     }
 
@@ -73,7 +75,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             ownedJurPersons: [],
             benOwnedJurPersons: [],
             relationshipsInfo: {...blankRelationshipsInfo},
-            metadata: {...blankMetadata}
+            metadata: {...blankMetadata},
+            sources: []
         };
     }
 
@@ -91,7 +94,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             relationshipsInfo: {...blankRelationshipsInfo},
             benOwnedJurPersons: [],
             ownedJurPersons: [],
-            metadata: {...blankMetadata}
+            metadata: {...blankMetadata},
+            sources: []
         }
     }
 
@@ -216,7 +220,8 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             relationshipsInfo: retrievedEntityDto.relationshipsInfo||{scanOptions: {depth: 0}, relationships: []},
             dateOfBirth: retrievedEntityDto.dateOfBirth&&hasContent(retrievedEntityDto.dateOfBirth)?
                 DateEntityTool.buildFromString(retrievedEntityDto.dateOfBirth):null,
-            metadata: this.metadataDtoMapper.map(retrievedEntityDto.metadata)
+            metadata: this.metadataDtoMapper.map(retrievedEntityDto.metadata),
+            sources: retrievedEntityDto.sources
         };
 
         return person;

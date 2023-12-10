@@ -38,7 +38,8 @@ export default class BasicJurPersonProcessor implements JurPersonProcessor {
             dateOfBirth: null,
             location: null,
             passportData: null,
-            metadata: {...blankMetadata}
+            metadata: {...blankMetadata},
+            sources: []
         }
     }
 

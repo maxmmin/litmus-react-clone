@@ -13,7 +13,7 @@ import PassportData from "../../../../model/human/person/PassportData";
 import valueOrNull from "../../../../util/functional/valueOrNull";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
 import {checkNotEmpty} from "../../../../util/pureFunctions";
-import {ImageValidationObject} from "../../../../rest/dto/ImageValidationObject";
+import {ImageValidationObject} from "../../validationModels/ImageValidationObject";
 import getArrayValidationKeyIndex from "../../../../util/functional/getArrayValidationKeyIndex";
 import extractImgErrorsFromServerObj from "../../../../util/functional/extractImgErrorsFromServerObj";
 
@@ -32,7 +32,8 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
             sex: sexErr,
             dateOfBirth: dateErr,
             relationships: relationShipsErrors,
-            images: []
+            images: [],
+            sources: []
         };
         return bindingResult;
     };
@@ -96,7 +97,8 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
             rnokppCode: valueOrNull(serverValidationObject["passportData.rnokppCode"]),
             location: valueOrNull(serverValidationObject["location"]),
             relationships: [],
-            images: extractImgErrorsFromServerObj(model,serverValidationObject)
+            images: extractImgErrorsFromServerObj(model,serverValidationObject),
+            sources: []
         };
 
         const serverValidationKeys = Object.keys(serverValidationObject);

@@ -35,7 +35,7 @@ export type RelationshipsInfo = {
     relationships: RelationshipResponseDto[]|null
 }
 
-export type RelatedPersonResponseDto = Pick<PersonResponseDto, "id"|"sex"|"media"|"location"|"passportData"|"dateOfBirth"|keyof FullName> & {
+export type RelatedPersonResponseDto = Pick<PersonResponseDto, "id"|"sex"|"media"|"location"|"passportData"|"dateOfBirth"|keyof FullName|"sources"> & {
     relationshipsInfo: NestedRelationshipsInfo,
     ownedJurPersons: (EmbedJurPersonResponseDto|MinifiedJurPersonResponseDto)[],
     benOwnedJurPersons: (EmbedJurPersonResponseDto|MinifiedJurPersonResponseDto)[],
@@ -60,7 +60,8 @@ interface PersonResponseDto extends MetadataContainableResponseDto{
     sex: Sex;
     passportData: PassportData;
     dateOfBirth: string | null;
-    location: GeoLocation | null
+    location: GeoLocation | null,
+    sources: string[]
 }
 
 export default PersonResponseDto;

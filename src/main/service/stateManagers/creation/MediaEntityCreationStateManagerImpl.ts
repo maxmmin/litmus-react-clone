@@ -1,4 +1,4 @@
-import MediaEntityCreationStateManager from "./MediaCreationStateManager";
+import MediaEntityCreationStateManager from "./MediaEntityCreationStateManager";
 import MediaEntity from "../../../model/MediaEntity";
 import CreationStateManagerImpl from "./CreationStateManagerImpl";
 import Media from "../../../model/Media";

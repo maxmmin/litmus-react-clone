@@ -10,7 +10,7 @@ export type RelationshipCreationParams = {
     note: string
 }
 
-export type PersonCreationParams = Pick<Person, 'media'|'dateOfBirth'|'passportData'|'location'> & {
+export type PersonCreationParams = Pick<Person, 'media'|'dateOfBirth'|'passportData'|'location'|'sources'> & {
     relationships: RelationshipCreationParams[],
     sex: Sex|null
 } & HumanCreationParams

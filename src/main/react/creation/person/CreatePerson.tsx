@@ -22,6 +22,8 @@ import {LitmusServiceContext} from "../../App";
 import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
 import {Images} from "../../../model/Media";
 import getBundledImages from "../../../util/functional/getBundledImages";
+import LinkSaver from "../LinkSaver";
+import LinksManager from "../LinksManager";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -219,7 +221,7 @@ const CreatePerson = () => {
                 <InputError error={validationErrors?.rnokppCode}/>
             </Form.Group>
 
-            <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
+            <Form.Group className="mb-3 creation-input-group__item">
                 <Form.Label>Дата народження</Form.Label>
 
                 <InputDate inputPrefix={validationErrors?.dateOfBirth?"is-invalid":undefined} date={new DateEntityTool().setYear(year).setMonth(month).setDay(day).build()}
@@ -276,6 +278,11 @@ const CreatePerson = () => {
                     imageStateManager={creationStateManager}
                     cssAnchor={"creation"}
                 />
+            </Form.Group>
+
+            <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
+                <Form.Label>Використані джерела</Form.Label>
+                {/*<LinksManager/>*/}
             </Form.Group>
 
     </>

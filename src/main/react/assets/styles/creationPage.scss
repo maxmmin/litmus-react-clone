@@ -17,7 +17,6 @@
   display: flex;
   flex-wrap: wrap;
   column-gap: 4%;
-  padding: 15px;
   background: $md-sys-color-on-primary-light;
   border-radius: 10px;
 }
@@ -30,6 +29,7 @@
 
 .creation-input-group__item_long {
   max-width: 100%;
+  flex-basis: 100%;
 }
 
 .date-container {
@@ -64,7 +64,7 @@
   font-size: 13px;
 }
 
-.loader-container {
+.apply-person__loader-container {
   height: 100%;
   display: flex;
   align-items: center;
@@ -73,7 +73,7 @@
   top: 0;
 }
 
-.loader-container .application-loader {
+.apply-person__loader-container .application-loader {
   width: 20px;
   height: 20px;
 }

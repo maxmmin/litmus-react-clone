@@ -1,7 +1,7 @@
 import ValidationService from "../ValidationService";
 import {ValidationErrors} from "../../../model/ValidationErrors";
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";
-import {ImageValidationObject} from "../../../rest/dto/ImageValidationObject";
+import {ImageValidationObject} from "../validationModels/ImageValidationObject";
 import {ServerMediaContainableValidationObject} from "../../../rest/dto/ServerMediaContainableValidationObject";
 
 export type JurPersonValidationObject = ValidationErrors<Pick<JurPersonCreationParams, 'name'|'dateOfRegistration'|'edrpou'>> & {

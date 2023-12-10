@@ -3,7 +3,7 @@ import {MediaResponseDto} from "../../../model/Media";
 import {EmbedPersonResponseDto, RelatedPersonResponseDto} from "../person/PersonResponseDto";
 import MetadataContainableResponseDto from "../MetadataContainableResponseDto";
 
-interface JurPersonResponseDto extends MetadataContainableResponseDto{
+interface JurPersonResponseDto extends MetadataContainableResponseDto {
     id: number;
     media: MediaResponseDto;
     name: string;
@@ -12,6 +12,7 @@ interface JurPersonResponseDto extends MetadataContainableResponseDto{
     owner: RelatedPersonResponseDto | null;
     benOwner: RelatedPersonResponseDto | null;
     location: GeoLocation | null;
+    sources: string[]
 }
 
 export type EmbedJurPersonResponseDto = Omit<JurPersonResponseDto, 'owner'|'benOwner'|'metadata'> & {

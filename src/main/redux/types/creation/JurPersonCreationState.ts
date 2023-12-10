@@ -10,7 +10,7 @@ export default interface JurPersonCreationState extends EntityCreationState<JurP
 
 }
 
-export type JurPersonCreationParams = Pick<JurPerson, 'name'|'edrpou'|'dateOfRegistration'|'location'|'media'>&{
+export type JurPersonCreationParams = Pick<JurPerson, 'name'|'edrpou'|'dateOfRegistration'|'location'|'media'|'sources'>&{
     benOwner: Person|null,
     owner: Person|null
 }
@@ -25,7 +25,8 @@ export const initialJurPersonCreationParams: JurPersonCreationParams = {
     media: {
         mainImage: null,
         images: []
-    }
+    },
+    sources: []
 }
 
 
