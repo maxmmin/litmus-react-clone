@@ -1,4 +1,5 @@
 export default interface FileProps {
     fileKey: string,
-    file: File
+    file: File,
+    error?: string
 }

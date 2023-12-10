@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
-import React, {useContext, useMemo, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import ApplyPersonModal from "../ApplyPersonModal";
 import {useAppSelector} from "../../../redux/hooks";
 import CreationGeoModal from "../geo/CreationGeoModal";
@@ -43,10 +43,35 @@ const CreateJurPerson = () => {
     const {mainImage, images} = useMemo<Images>(()=>{
         const media = jurPersonCreationParams.media;
         return {
-            mainImage: media.mainImage?{file: fileService.getFileOrThrow(media.mainImage), fileKey: media.mainImage}:null,
-            images: media.images.map(fileKey=>({file: fileService.getFileOrThrow(fileKey), fileKey: fileKey}))
+            mainImage: media.mainImage?{
+                file: fileService.getFileOrThrow(media.mainImage),
+                error: (validationErrors?.images.find(i => i.imageKey === media.mainImage))?.message,
+                fileKey: media.mainImage
+            }:null,
+            images: media.images.map(fileKey=>(
+                {
+                    file: fileService.getFileOrThrow(fileKey), fileKey: fileKey,
+                    error: (validationErrors?.images.find(i => i.imageKey === fileKey))?.message
+                }
+            ))
         }
     }, [jurPersonCreationParams.media])
+
+
+    useEffect(()=>{
+        if (validationErrors?.images) {
+            validationErrors.images.forEach(imageValObj => {
+                if (
+                    imageValObj.imageKey !== mainImage?.fileKey
+                    &&
+                    (images.findIndex(img => img.fileKey === imageValObj.imageKey) === -1)
+                ) {
+                    const newImgErrors = validationErrors.images.filter(i => i !== imageValObj)
+                    creationStateManager.updateValidationErrors({images: newImgErrors})
+                }
+            })
+        }
+    }, [jurPersonCreationParams.media, validationErrors?.images])
 
     const {year, month, day} = jurPersonCreationParams.dateOfRegistration||{year: '', month: '', day: ''};
 

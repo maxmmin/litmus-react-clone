@@ -1,9 +1,10 @@
 import Form from "react-bootstrap/Form";
 import {
+    checkNotEmpty,
     inputBeforeDateContainerHandler,
     inputGroupsKeyPressHandler as keyPressHandler
 } from "../../../util/pureFunctions";
-import React, {useContext, useEffect, useMemo, useState} from "react";
+import React, {useContext, useEffect, useLayoutEffect, useMemo, useState} from "react";
 import {useAppSelector} from "../../../redux/hooks";
 import InputDate from "../../sharedComponents/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
@@ -36,7 +37,6 @@ const CreatePerson = () => {
 
     const person = useAppSelector(state => state.creation.person?.emergingEntity)!
 
-
     if (!person) {
         throw new Error("createPersonDto was null but it shouldn't be")
     }
@@ -52,10 +52,35 @@ const CreatePerson = () => {
     const {mainImage, images} = useMemo<Images>(()=>{
         const media = person.media;
         return {
-            mainImage: media.mainImage?{file: fileService.getFileOrThrow(media.mainImage), fileKey: media.mainImage}:null,
-            images: media.images.map(fileKey=>({file: fileService.getFileOrThrow(fileKey), fileKey: fileKey}))
+            mainImage: media.mainImage?{
+                file: fileService.getFileOrThrow(media.mainImage),
+                error: (validationErrors?.images.find(i => i.imageKey === media.mainImage))?.message,
+                fileKey: media.mainImage
+            }:null,
+            images: media.images.map(fileKey=>(
+                {
+                    file: fileService.getFileOrThrow(fileKey), fileKey: fileKey,
+                    error: (validationErrors?.images.find(i => i.imageKey === fileKey))?.message
+                }
+            ))
         }
     }, [person.media])
+
+
+    useEffect(()=>{
+        if (validationErrors?.images) {
+            validationErrors.images.forEach(imageValObj => {
+                if (
+                        imageValObj.imageKey !== mainImage?.fileKey
+                        &&
+                        (images.findIndex(img => img.fileKey === imageValObj.imageKey) === -1)
+                    ) {
+                    const newImgErrors = validationErrors.images.filter(i => i !== imageValObj)
+                    creationStateManager.updateValidationErrors({images: newImgErrors})
+                }
+            })
+        }
+    }, [person.media, validationErrors?.images])
 
     const closeModal = () => setModalSettings(null)
 

@@ -74,6 +74,9 @@
 .form-control.uploaded-image {
   border-style: dashed;
   border-color:  rgba($md-sys-color-primary-light, 0.4);
+  &.is-invalid {
+    border-color: $md-sys-color-error-light;
+  }
 }
 
 @media all and (pointer: fine) {

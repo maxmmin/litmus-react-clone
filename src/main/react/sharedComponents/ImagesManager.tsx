@@ -3,6 +3,7 @@ import FilesUploader from "./FilesUploader";
 import FileProps from "../../model/FileProps";
 import {PersonIcon, TrashIcon} from "../assets/icons";
 import ImageRepoImpl from "../../service/media/ImageRepoImpl";
+import InputError from "./InputError";
 
 type ImageManagerProps = {
     mainImageKey: string|null,
@@ -24,7 +25,7 @@ type ImageComponentProps = {
 
 export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: ImageComponentProps) {
     return (
-        <div className={`uploaded-image form-control ${cssAnchor}`}>
+        <div className={`uploaded-image form-control ${image.error ? 'is-invalid': ''} ${cssAnchor}`}>
             <div className="uploaded-image__info">{image.file.name}</div>
             <div className="uploaded-image__actions-block">
                 <div className="uploaded-image__action uploaded-image__action_set-main-wrapper"
@@ -38,7 +39,8 @@ export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: I
     )
 }
 
-export default function ImagesManager ({images, uploadErrorHandler, mainImageKey, clearMainImage, selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
+export default function ImagesManager ({images, uploadErrorHandler, mainImageKey, clearMainImage,
+                                           selectAsMain, uploadImage, removeImage, cssAnchor=""}: ImageManagerProps) {
 
     const hasImages = images.length>0;
 
@@ -55,6 +57,7 @@ export default function ImagesManager ({images, uploadErrorHandler, mainImageKey
                         {images.map(imageProps => <div key={imageProps.fileKey} className={`uploaded-image-wrapper ${isMain(imageProps.fileKey)?"main":""}`}>
                                 <>
                                     {isMain(imageProps.fileKey) && <label className={"uploaded-image-wrapper__main-photo-label"}>Головне фото:</label>}
+                                    <InputError cssAnchor={"m-0"} error={imageProps.error}/>
                                     <ImageComponent
                                         image={imageProps}
                                         remove={removeImage}

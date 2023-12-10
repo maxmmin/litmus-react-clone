@@ -2,7 +2,7 @@ import HumanCreationValidationService from "../HumanCreationValidationService";
 import {ValidationErrors} from "../../../../model/ValidationErrors";
 import PassportData from "../../../../model/human/person/PassportData";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
-import {ImageValidationObject} from "../../ImageValidationObject";
+import {ImageValidationObject} from "../../../../rest/dto/ImageValidationObject";
 
 export type RelationShipValidationObject = ValidationErrors<{type: string, note: string}>&{relationship: RelationshipCreationParams}
 

@@ -7,13 +7,16 @@ import valueOrNull from "../../../util/functional/valueOrNull";
 import {hasContent} from "../../../util/functional/isEmpty";
 import {DateEntityTool} from "../../../model/DateEntity";
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";
+import extractImgErrorsFromServerObj from "../../../util/functional/extractImgErrorsFromServerObj";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {
     validate(model: JurPersonCreationParams): JurPersonValidationObject {
         const bindingResult: JurPersonValidationObject = {
             dateOfRegistration: this.validateDateOfRegistration(model.dateOfRegistration),
             edrpou: this.validateEdrpou(model.edrpou),
-            name: this.validateName(model.name)};
+            name: this.validateName(model.name),
+            images: []
+        };
         return bindingResult;
     }
 
@@ -43,12 +46,13 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
         return {
             name: valueOrNull(response.name),
             edrpou: valueOrNull(response.edrpou),
-            dateOfRegistration: valueOrNull(response.dateOfRegistration)
+            dateOfRegistration: valueOrNull(response.dateOfRegistration),
+            images: extractImgErrorsFromServerObj(model, response)
         };
     }
 
     hasErrors(bindingResult: JurPersonValidationObject): boolean {
-        return bindingResult.name!==null||bindingResult.edrpou!==null||bindingResult.dateOfRegistration!==null;
+        return hasContent(bindingResult);
     }
 
 }

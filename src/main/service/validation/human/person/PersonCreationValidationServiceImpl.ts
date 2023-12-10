@@ -13,7 +13,9 @@ import PassportData from "../../../../model/human/person/PassportData";
 import valueOrNull from "../../../../util/functional/valueOrNull";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
 import {checkNotEmpty} from "../../../../util/pureFunctions";
-import {ImageValidationObject} from "../../ImageValidationObject";
+import {ImageValidationObject} from "../../../../rest/dto/ImageValidationObject";
+import getArrayValidationKeyI from "../../../../util/functional/getArrayValidationKeyI";
+import extractImgErrorsFromServerObj from "../../../../util/functional/extractImgErrorsFromServerObj";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
@@ -36,8 +38,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
     };
 
     hasErrors(bindingResult: PersonValidationObject): boolean {
-        const main = {...bindingResult, relationships: undefined}
-        if (hasContent(main)) return true;
+        if (hasContent(bindingResult)) return true;
 
         return  bindingResult.relationships.some(relationshipValidationObject => hasContent(({...relationshipValidationObject, relationship: undefined} as Partial<RelationShipValidationObject>)))
     }
@@ -95,7 +96,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
             rnokppCode: valueOrNull(serverValidationObject["passportData.rnokppCode"]),
             location: valueOrNull(serverValidationObject["location"]),
             relationships: [],
-            images: []
+            images: extractImgErrorsFromServerObj(model,serverValidationObject)
         };
 
         const serverValidationKeys = Object.keys(serverValidationObject);
@@ -121,33 +122,10 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
                     };
 
                     (validationObject as any)[field] = message;
-                    if (!personValidationObject.relationships.includes(validationObject)) {
-                        personValidationObject.relationships.push(validationObject);
-                    }
+
+                    personValidationObject.relationships.push(validationObject);
                 }
             })
-
-        const imgErrors = serverValidationKeys.filter(r=>r.startsWith("media.img"))
-
-        imgErrors
-            .forEach(key => {
-                const index = getArrayValidationKeyI(key);
-                if (index) {
-                    const img = checkNotEmpty(model.media.images[index]);
-                    const message = serverValidationObject[key];
-
-                    const validationObject: ImageValidationObject = {
-                        image: img,
-                        message: message
-                    }
-
-                    personValidationObject.images.push(validationObject)
-                }
-            })
-
-        if (serverValidationObject["media.mainImg"]) {
-            personValidationObject.images.push({image: checkNotEmpty(model.media.mainImage), message: serverValidationObject["media.mainImg"]})
-        }
 
         return personValidationObject;
     }
