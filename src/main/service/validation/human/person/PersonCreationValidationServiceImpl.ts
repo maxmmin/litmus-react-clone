@@ -102,8 +102,8 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
             .forEach(key=>{
                 const indexMatch = key.match(/\[(\d+)]/);
                 if (indexMatch) {
-                    const index= indexMatch[0][1];
-                    const field = key.substring(key.indexOf(".")+1);
+                    const index= indexMatch[1];
+                    const field = key.substring(key.lastIndexOf(".")+1);
 
                     const message = serverValidationObject[key];
 
