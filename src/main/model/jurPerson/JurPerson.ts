@@ -4,9 +4,9 @@ import DateEntity from "../DateEntity";
 import CoreEntity from "../CoreEntity";
 import MediaEntity from "../MediaEntity";
 import {RelatedPersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
-import SourceInEntity from "../SourceInEntity";
+import SourceContainableEntity from "../SourceContainableEntity";
 
-export interface JurPerson extends CoreEntity, MediaEntity, SourceInEntity {
+export interface JurPerson extends CoreEntity, MediaEntity, SourceContainableEntity {
     name: string;
     edrpou: string|null;
     dateOfRegistration: DateEntity|null;

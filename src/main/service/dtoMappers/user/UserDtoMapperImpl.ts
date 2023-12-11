@@ -1,6 +1,6 @@
 import User, {CreatedEntities} from "../../../model/human/user/User";
 import UserRequestDto from "../../../rest/dto/user/UserRequestDto";
-import {hasContent} from "../../../util/functional/isEmpty";
+import {hasContent} from "../../../util/functional/validation/isEmpty";
 import UserResponseDto, {CreatedEntitiesResponseDto} from "../../../rest/dto/user/UserResponseDto";
 import {UserCreationParams} from "../../coreServices/creation/UserCreationService";
 import UserDtoMapper from "./UserDtoMapper";

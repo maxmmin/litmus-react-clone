@@ -8,9 +8,9 @@ import CoreEntity from "../../CoreEntity";
 import {NestedRelationshipsInfo, RelationshipsInfo} from "../../../rest/dto/person/PersonResponseDto";
 import {JurPerson} from "../../jurPerson/JurPerson";
 import {EmbedJurPersonResponseDto} from "../../../rest/dto/jurPerson/JurPersonResponseDto";
-import SourceInEntity from "../../SourceInEntity";
+import SourceContainableEntity from "../../SourceContainableEntity";
 
-interface Person extends Human, MediaEntity, CoreEntity, SourceInEntity {
+interface Person extends Human, MediaEntity, CoreEntity, SourceContainableEntity {
     relationships: Relationship[],
     ownedJurPersons: JurPerson[],
     benOwnedJurPersons: JurPerson[],

@@ -1,8 +1,8 @@
 import getArrayValidationKeyIndex from "./getArrayValidationKeyIndex";
-import {checkNotEmpty} from "../pureFunctions";
-import {ImageValidationObject} from "../../service/validation/validationModels/ImageValidationObject";
-import Media from "../../model/Media";
-import {ServerMediaContainableValidationObject} from "../../rest/dto/ServerMediaContainableValidationObject";
+import {checkNotEmpty} from "../../pureFunctions";
+import {ImageValidationObject} from "../../../service/validation/validationModels/ImageValidationObject";
+import Media from "../../../model/Media";
+import {ServerMediaContainableValidationObject} from "../../../rest/dto/ServerMediaContainableValidationObject";
 
 export default function extractImgErrorsFromServerObj
     (model: {media: Media},serverValidationObject: ServerMediaContainableValidationObject): ImageValidationObject[] {

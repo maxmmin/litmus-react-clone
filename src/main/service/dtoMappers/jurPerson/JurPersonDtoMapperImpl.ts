@@ -1,5 +1,5 @@
 import DateEntity, {DateEntityTool} from "../../../model/DateEntity";
-import {hasContent} from "../../../util/functional/isEmpty";
+import {hasContent} from "../../../util/functional/validation/isEmpty";
 import JurPersonRequestDto from "../../../rest/dto/jurPerson/JurPersonRequestDto";
 import {JurPerson, PreProcessedJurPerson} from "../../../model/jurPerson/JurPerson";
 import JurPersonResponseDto, {EmbedJurPersonResponseDto} from "../../../rest/dto/jurPerson/JurPersonResponseDto";

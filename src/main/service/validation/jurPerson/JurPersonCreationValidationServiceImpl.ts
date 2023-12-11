@@ -4,10 +4,11 @@ import JurPersonCreationValidationService, {
 } from "./JurPersonCreationValidationService";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import valueOrNull from "../../../util/functional/valueOrNull";
-import {hasContent} from "../../../util/functional/isEmpty";
+import {hasContent} from "../../../util/functional/validation/isEmpty";
 import {DateEntityTool} from "../../../model/DateEntity";
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";
-import extractImgErrorsFromServerObj from "../../../util/functional/extractImgErrorsFromServerObj";
+import extractImgErrorsFromServerObj from "../../../util/functional/validation/extractImgErrorsFromServerObj";
+import extractSourceErrorsFromServerObj from "../../../util/functional/validation/extractSourceErrorsFromServerObj";
 
 class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidationService {
     validate(model: JurPersonCreationParams): JurPersonValidationObject {
@@ -15,7 +16,8 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
             dateOfRegistration: this.validateDateOfRegistration(model.dateOfRegistration),
             edrpou: this.validateEdrpou(model.edrpou),
             name: this.validateName(model.name),
-            images: []
+            images: [],
+            sources: []
         };
         return bindingResult;
     }
@@ -47,7 +49,8 @@ class JurPersonCreationValidationServiceImpl implements JurPersonCreationValidat
             name: valueOrNull(response.name),
             edrpou: valueOrNull(response.edrpou),
             dateOfRegistration: valueOrNull(response.dateOfRegistration),
-            images: extractImgErrorsFromServerObj(model, response)
+            images: extractImgErrorsFromServerObj(model, response),
+            sources: extractSourceErrorsFromServerObj(model, response)
         };
     }
 

@@ -1,6 +1,6 @@
 import Person, {PreProcessedPerson, Relationship} from "../../../model/human/person/Person";
 import PersonRequestDto, {PassportDataRequestDto, RelationshipRequestDto} from "../../../rest/dto/person/PersonRequestDto";
-import {hasContent} from "../../../util/functional/isEmpty";
+import {hasContent} from "../../../util/functional/validation/isEmpty";
 import {DateEntityTool} from "../../../model/DateEntity";
 import hasMediaContent from "../../../util/media/hasMediaContent";
 import PassportData from "../../../model/human/person/PassportData";

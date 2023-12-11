@@ -4,7 +4,7 @@ import UserCreationValidationService, {
 } from "./UserCreationValidationService";
 import {HumanCreationParams} from "../../../../model/human/Human";
 import HumanCreationValidationServiceImpl from "../HumanCreationValidationServiceImpl";
-import {hasContent} from "../../../../util/functional/isEmpty";
+import {hasContent} from "../../../../util/functional/validation/isEmpty";
 import valueOrNull from "../../../../util/functional/valueOrNull";
 import {UserCreationParams} from "../../../coreServices/creation/UserCreationService";
 

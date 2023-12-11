@@ -7,15 +7,16 @@ import Person from "../../../../model/human/person/Person";
 import {ValidationErrors} from "../../../../model/ValidationErrors";
 import Human from "../../../../model/human/Human";
 import {DateEntityTool} from "../../../../model/DateEntity";
-import {hasContent} from "../../../../util/functional/isEmpty";
-import hasHtml from "../../../../util/functional/hasHtml";
+import {hasContent} from "../../../../util/functional/validation/isEmpty";
+import hasHtml from "../../../../util/functional/validation/hasHtml";
 import PassportData from "../../../../model/human/person/PassportData";
 import valueOrNull from "../../../../util/functional/valueOrNull";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
 import {checkNotEmpty} from "../../../../util/pureFunctions";
 import {ImageValidationObject} from "../../validationModels/ImageValidationObject";
-import getArrayValidationKeyIndex from "../../../../util/functional/getArrayValidationKeyIndex";
-import extractImgErrorsFromServerObj from "../../../../util/functional/extractImgErrorsFromServerObj";
+import getArrayValidationKeyIndex from "../../../../util/functional/validation/getArrayValidationKeyIndex";
+import extractImgErrorsFromServerObj from "../../../../util/functional/validation/extractImgErrorsFromServerObj";
+import extractSourceErrorsFromServerObj from "../../../../util/functional/validation/extractSourceErrorsFromServerObj";
 
 class PersonCreationValidationServiceImpl extends HumanCreationValidationServiceImpl<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> implements PersonCreationValidationService {
 
@@ -98,7 +99,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
             location: valueOrNull(serverValidationObject["location"]),
             relationships: [],
             images: extractImgErrorsFromServerObj(model,serverValidationObject),
-            sources: []
+            sources: extractSourceErrorsFromServerObj(model, serverValidationObject)
         };
 
         const serverValidationKeys = Object.keys(serverValidationObject);
