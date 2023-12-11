@@ -3,7 +3,7 @@ import JurPersonExplorationStateManager
 import React, {useContext} from "react";
 import {LitmusServiceContext} from "../../App";
 import Form from "react-bootstrap/Form";
-import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
+import {keyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {useSelector} from "react-redux";
 
 export default function () {

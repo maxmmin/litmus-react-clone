@@ -3,7 +3,7 @@ import {Entity} from "../../model/Entity";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import {Permission} from "../../model/userIdentity/Role";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
-import React, {ChangeEvent, useEffect, useMemo} from "react";
+import React, {ChangeEvent, useEffect} from "react";
 import CreationInputSection from "./CreationInputSection";
 import {
     buildUrl,

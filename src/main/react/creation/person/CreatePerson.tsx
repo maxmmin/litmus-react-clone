@@ -1,10 +1,9 @@
 import Form from "react-bootstrap/Form";
 import {
-    checkNotEmpty,
     inputBeforeDateContainerHandler,
-    inputGroupsKeyPressHandler as keyPressHandler
+    keyPressHandler as keyPressHandler
 } from "../../../util/pureFunctions";
-import React, {useContext, useEffect, useLayoutEffect, useMemo, useState} from "react";
+import React, {useContext, useEffect, useMemo, useState} from "react";
 import {useAppSelector} from "../../../redux/hooks";
 import InputDate from "../../sharedComponents/InputDate";
 import {CreationModalSettings} from "../CreationScreen";
@@ -23,7 +22,7 @@ import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
 import {Images} from "../../../model/Media";
 import getBundledImages from "../../../util/functional/getBundledImages";
 import LinkSaver from "../LinkSaver";
-import LinksManager from "../LinksManager";
+import SourcesManager from "../SourcesManager";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -247,10 +246,10 @@ const CreatePerson = () => {
                 />
             </Form.Group>
 
-            <div className="mb-3 create-relationships-section">
+            <Form.Group className="mb-3 create-relationships-section">
                 <div className="create-relationships-section__heading-block">
                     <p className={"create-relationships-section__heading"}>Пов'язані особи</p>
-                    <button className="create-relationships-section__add-person-btn"
+                    <button type={"button"} className="create-relationships-section__add-person-btn"
                         onClick={event => {
                             event.preventDefault();
                             setModalSettings({mode: CreationModalModes.SET_RELATIONSHIP})
@@ -268,7 +267,7 @@ const CreatePerson = () => {
                             <p className={"m-0 placeholder-ltm"}>Немає зв'язків</p>
                     }
                 </div>
-            </div>
+            </Form.Group>
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Зображення особи</Form.Label>
@@ -282,7 +281,7 @@ const CreatePerson = () => {
 
             <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
                 <Form.Label>Використані джерела</Form.Label>
-                {/*<LinksManager/>*/}
+                <SourcesManager sourceManager={creationStateManager}/>
             </Form.Group>
 
     </>

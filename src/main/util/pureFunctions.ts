@@ -11,7 +11,7 @@ function checkAuthorization (neededRights: Permission[], userRights: Permission[
     return presentRights.length===neededRights.length;
 }
 
-export const inputGroupsKeyPressHandler = (e: React.KeyboardEvent) => {
+export const keyPressHandler = (e: React.KeyboardEvent) => {
     if (e.key==="Enter") {
         e.preventDefault()
         switchNext(e)

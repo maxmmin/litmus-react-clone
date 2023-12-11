@@ -1,9 +1,8 @@
 import Form from "react-bootstrap/Form";
 import React from "react";
 import {useAppSelector} from "../../../redux/hooks";
-import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
+import {keyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {getEntityExplorationStateManager} from "../../../util/getEntityExplorationService";
-import InputError from "../../sharedComponents/InputError";
 
 const FindByIdGroup = () => {
     const entity = useAppSelector(state => state.exploration?.exploredEntity)

@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import React, {useMemo} from "react";
-import {inputGroupsKeyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
+import {keyPressHandler as keyPressHandler} from "../../../util/pureFunctions";
 import {useAppSelector} from "../../../redux/hooks";
 import HumanExplorationParams from "../../../redux/types/exploration/human/HumanExplorationParams";
 import Human from "../../../model/human/Human";
