@@ -61,10 +61,12 @@ const serverMappings = Object.freeze({
         refreshTokens: buildUrl(authApiRoot, "/refresh"),
         logout: buildUrl(authApiRoot,"/logout"),
         signIn: buildUrl(authApiRoot, "/sign-in"),
-        getCurrentUser: buildUrl(authApiRoot),
-        roles: buildUrl(authApiRoot, '/roles')
+        getCurrentUser: buildUrl(authApiRoot)
     },
-    csrfToken: '/csrf-token'
+    csrfToken: '/csrf-token',
+    config: {
+        roles: buildUrl(authApiRoot, '/roles')
+    }
 })
 
 const explorationRoot = "/exploration";

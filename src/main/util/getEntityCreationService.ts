@@ -1,6 +1,6 @@
 import {Entity} from "../model/Entity";
 import CreationService from "../service/coreServices/creation/CreationService";
-import serviceContext from "../react/serviceContext";
+import serviceContext from "../serviceContext";
 
 const entityCreationServiceMap: Map<Entity, CreationService<unknown>> = new Map<Entity, CreationService<unknown>>();
 

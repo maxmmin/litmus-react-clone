@@ -13,7 +13,7 @@ import PersonExplorationApiServiceImpl from "./exploration/PersonExplorationApiS
 import appConfig from "../../../config/appConfig";
 import {buildUrl} from "../../../util/pureFunctions";
 import {AxiosInstance} from "axios";
-import AxiosApiManager from "../../rest/AxiosApiManager";
+import AxiosApiManager from "../core/AxiosApiManager";
 import PersonCreationApiServiceImpl from "./creation/PersonCreationApiServiceImpl";
 import {PersonSimpleResponseDto} from "../../../rest/dto/person/PersonSimpleResponseDto";
 import {PersonShortResponseDto} from "../../../rest/dto/person/PersonShortResponseDto";

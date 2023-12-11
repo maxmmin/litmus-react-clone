@@ -27,7 +27,7 @@ export default function SourcesManager ({sourceManager}: SourceManagerProps) {
                         return (
                             <div key={i} className={"links-manger__link-container-wrapper"}>
                                 <div className={`links-manager__link-container ${hasError?"is-invalid":""}`}>
-                                    <div className="links-manager__manager-link-wrapper no-scrollbar">
+                                    <div className="links-manager__link-wrapper no-scrollbar">
                                         <a href={link} className="links-manager__link">{link}</a>
                                     </div>
                                     <button onClick={e=>    {
@@ -43,7 +43,7 @@ export default function SourcesManager ({sourceManager}: SourceManagerProps) {
                                         <CrossIcon color={"black"} className={"links-manager__remove-btn-icon rotate45"}/>
                                     </button>
                                 </div>
-                                <InputError error={linksErrors.find(obj =>obj.source===link)?.error}/>
+                                <InputError cssAnchor={"link-error"} error={linksErrors.find(obj =>obj.source===link)?.error}/>
                             </div>
                         )
                     }

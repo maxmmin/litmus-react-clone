@@ -5,7 +5,7 @@ import JurPersonResponseDto from "../../../rest/dto/jurPerson/JurPersonResponseD
 import JurPersonExplorationApiService from "./exploration/JurPersonExplorationApiService";
 import JurPersonCreationApiService from "./creation/JurPersonCreationApiService";
 import {AxiosInstance} from "axios";
-import AxiosApiManager from "../../rest/AxiosApiManager";
+import AxiosApiManager from "../core/AxiosApiManager";
 import {buildUrl} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";
 import JurPersonExplorationApiServiceImpl from "./exploration/JurPersonExplorationApiServiceImpl";

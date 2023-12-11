@@ -2,7 +2,7 @@
 import ExplorationApiService from "./ExplorationApiService";
 import {buildUrl} from "../../util/pureFunctions";
 import PagedData from "../../rest/PagedData";
-import AxiosApiManager from "../rest/AxiosApiManager";
+import AxiosApiManager from "./core/AxiosApiManager";
 import {LookupMode} from "../../rest/LookupMode";
 import appConfig from "../../config/appConfig";
 

@@ -4,7 +4,7 @@ import UserResponseDto from "../../../rest/dto/user/UserResponseDto";
 import UserExplorationApiService from "./exploration/UserExplorationApiService";
 import UserCreationApiService from "./creation/UserCreationApiService";
 import {AxiosInstance} from "axios";
-import AxiosApiManager from "../../rest/AxiosApiManager";
+import AxiosApiManager from "../core/AxiosApiManager";
 import PagedData from "../../../rest/PagedData";
 import {FullNameExploration} from "../../../model/human/Human";
 import {buildUrl} from "../../../util/pureFunctions";

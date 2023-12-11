@@ -15,7 +15,7 @@ import getEntityExplorationService, {getEntityExplorationStateManager} from "../
 import {useAppSelector} from "../../redux/hooks";
 import ExplorationService from "../../service/coreServices/exploration/ExplorationService";
 import {getVisibleIndexes} from "../../util/pageDataUtils";
-import serviceContext from "../serviceContext";
+import serviceContext from "../../serviceContext";
 
 const getProcessedResults = (entity: Entity, data: unknown[]) => {
     const {jurPerson: jurPersonDtoMapper, person: personDtoMapper} = serviceContext.mappers;

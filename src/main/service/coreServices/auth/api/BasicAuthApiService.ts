@@ -4,7 +4,7 @@ import AuthApiService, {Credentials} from "./AuthApiService";
 import appConfig from "../../../../config/appConfig";
 import {HttpErrorParser} from "../../../../error/BasicHttpError";
 import {AxiosError, AxiosInstance, AxiosResponse} from "axios";
-import AxiosApiManager from "../../../rest/AxiosApiManager";
+import AxiosApiManager from "../../../api/core/AxiosApiManager";
 import Authentication from "../../../../redux/types/auth/Authentication";
 
 class BasicAuthApiService implements AuthApiService {

@@ -17,6 +17,8 @@ import JurPersonResponseDto from "../../../rest/dto/jurPerson/JurPersonResponseD
 import {JurPersonCreationParams} from "../../../redux/types/creation/JurPersonCreationState";
 import getFilesFromMedia from "../../../util/media/getFilesFromMedia";
 import FileRepo from "../../media/FileRepo";
+import GeneralWebArchiver from "../../api/webArch/general/GeneralWebArchiver";
+import GeneralWebArchiverImpl from "../../api/webArch/general/GeneralWebArchiverImpl";
 
 class JurPersonCreationServiceImpl extends CreationServiceImpl<JurPersonRequestDto, PreProcessedJurPerson, JurPersonResponseDto,
     JurPersonCreationParams, JurPersonValidationObject, ServerJurPersonValidationObject> implements JurPersonCreationService {
@@ -24,12 +26,17 @@ class JurPersonCreationServiceImpl extends CreationServiceImpl<JurPersonRequestD
                 creationStateManager: JurPersonCreationStateManager,
                 mapper: JurPersonDtoMapper,
                 validationService: JurPersonCreationValidationService,
-                protected readonly fileService: FileRepo) {
+                protected readonly fileService: FileRepo,
+                protected readonly genArchiver: GeneralWebArchiver) {
         super(apiService, creationStateManager, mapper, validationService);
     }
 
     async createEntity(): Promise<PreProcessedJurPerson> {
         const media = this.creationStateManager.getCreationParams().media;
+
+        const sources = this.creationStateManager.getCreationParams().sources;
+        if (sources.length > 0) sources.forEach(source => this.genArchiver.archive(source));
+
         const createdJurPerson: PreProcessedJurPerson = await super.defaultCreate();
 
         const linkedFiles: string[] = getFilesFromMedia(media);
@@ -43,8 +50,9 @@ class JurPersonCreationServiceImpl extends CreationServiceImpl<JurPersonRequestD
                               stateManager: JurPersonCreationStateManager = new JurPersonCreationStateManagerImpl(),
                               mapper: JurPersonDtoMapper = JurPersonDtoMapperImpl.getInstance(),
                               validationService: JurPersonCreationValidationService = new JurPersonCreationValidationServiceImpl(),
-                              fileService: FileRepo): JurPersonCreationServiceImpl {
-        return new JurPersonCreationServiceImpl(apiService, stateManager, mapper, validationService, fileService);
+                              fileService: FileRepo,
+                              genArchiver: GeneralWebArchiver = GeneralWebArchiverImpl.getInstance()): JurPersonCreationServiceImpl {
+        return new JurPersonCreationServiceImpl(apiService, stateManager, mapper, validationService, fileService, genArchiver);
     }
 }
 

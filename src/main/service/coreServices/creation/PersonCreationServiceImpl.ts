@@ -16,6 +16,8 @@ import CreationServiceImpl from "./CreationServiceImpl";
 import PersonRequestDto from "../../../rest/dto/person/PersonRequestDto";
 import PersonResponseDto from "../../../rest/dto/person/PersonResponseDto";
 import PersonCreationService, {PersonCreationParams} from "./PersonCreationService";
+import GeneralWebArchiver from "../../api/webArch/general/GeneralWebArchiver";
+import GeneralWebArchiverImpl from "../../api/webArch/general/GeneralWebArchiverImpl";
 
 class PersonCreationServiceImpl
     extends CreationServiceImpl<PersonRequestDto, PreProcessedPerson, PersonResponseDto, PersonCreationParams,
@@ -25,13 +27,18 @@ class PersonCreationServiceImpl
                 creationStateManager: PersonCreationStateManager,
                 mapper: PersonDtoMapper,
                 validationService: PersonCreationValidationService,
-                protected readonly fileService: FileRepo) {
+                protected readonly fileService: FileRepo,
+                protected readonly genArchiver: GeneralWebArchiver) {
         super(apiService, creationStateManager, mapper, validationService);
     }
 
 
     async createEntity(): Promise<PreProcessedPerson> {
         const media = this.creationStateManager.getCreationParams().media;
+
+        const sources = this.creationStateManager.getCreationParams().sources;
+        if (sources.length > 0) sources.forEach(source => this.genArchiver.archive(source));
+
         const createdPerson: PreProcessedPerson = await super.defaultCreate();
 
         const linkedFiles: string[] = getFilesFromMedia(media);
@@ -45,8 +52,9 @@ class PersonCreationServiceImpl
                               stateManager: PersonCreationStateManager = new PersonCreationStateManagerImpl(),
                               mapper: PersonDtoMapper = PersonDtoMapperImpl.getInstance(),
                               validationService: PersonCreationValidationService = new PersonCreationValidationServiceImpl(),
-                              fileService: FileRepo = FileRepoFactory.getGlobalFileService()): PersonCreationServiceImpl {
-        return new PersonCreationServiceImpl(apiService, stateManager, mapper,validationService,fileService);
+                              fileService: FileRepo = FileRepoFactory.getGlobalFileService(),
+                              genArch: GeneralWebArchiver = GeneralWebArchiverImpl.getInstance()): PersonCreationServiceImpl {
+        return new PersonCreationServiceImpl(apiService, stateManager, mapper,validationService,fileService, genArch);
     }
 }
 

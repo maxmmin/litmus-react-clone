@@ -2,7 +2,7 @@ import appConfig from "../../../../config/appConfig";
 import UserRequestDto from "../../../../rest/dto/user/UserRequestDto";
 import UserResponseDto from "../../../../rest/dto/user/UserResponseDto";
 import {AxiosResponse} from "axios";
-import AxiosApiManager from "../../../rest/AxiosApiManager";
+import AxiosApiManager from "../../core/AxiosApiManager";
 import UserCreationApiService from "./UserCreationApiService";
 
 class UserCreationApiServiceImpl implements UserCreationApiService {

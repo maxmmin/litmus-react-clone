@@ -33,7 +33,6 @@ class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl
     }
 
 
-
     appendSource(source: string): number {
         const sources: string[] = [...this.getSources(), source];
         this.setSources(sources);

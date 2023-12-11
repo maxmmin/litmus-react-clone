@@ -5,7 +5,7 @@ import MediaEntityFormDataBuilder from "../../../multipartBuilder/MediaEntityFor
 import MediaEntityFormDataBuilderImpl from "../../../multipartBuilder/MediaEntityFormDataBuilderImpl";
 import {AxiosResponse} from "axios";
 import {AxiosInstance} from "axios";
-import AxiosApiManager from "../../../rest/AxiosApiManager";
+import AxiosApiManager from "../../core/AxiosApiManager";
 import PersonCreationApiService from "./PersonCreationApiService";
 
 class PersonCreationApiServiceImpl implements PersonCreationApiService {

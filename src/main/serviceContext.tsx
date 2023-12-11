@@ -1,130 +1,134 @@
-import AuthenticationStateManager from "../service/stateManagers/auth/AuthenticationStateManager";
-import AuthApiService from "../service/coreServices/auth/api/AuthApiService";
-import AuthenticationManager from "../service/coreServices/auth/AuthenticationManager";
-import BasicAuthenticationManager from "../service/coreServices/auth/BasicAuthenticationManager";
-import BasicAuthApiService from "../service/coreServices/auth/api/BasicAuthApiService";
-import AuthenticationStateManagerImpl from "../service/stateManagers/auth/AuthenticationStateManagerImpl";
-import PersonExplorationStateManager from "../service/stateManagers/exploration/person/PersonExplorationStateManager";
+import AuthenticationStateManager from "./service/stateManagers/auth/AuthenticationStateManager";
+import AuthApiService from "./service/coreServices/auth/api/AuthApiService";
+import AuthenticationManager from "./service/coreServices/auth/AuthenticationManager";
+import BasicAuthenticationManager from "./service/coreServices/auth/BasicAuthenticationManager";
+import BasicAuthApiService from "./service/coreServices/auth/api/BasicAuthApiService";
+import AuthenticationStateManagerImpl from "./service/stateManagers/auth/AuthenticationStateManagerImpl";
+import PersonExplorationStateManager from "./service/stateManagers/exploration/person/PersonExplorationStateManager";
 import JurPersonExplorationStateManager
-    from "../service/stateManagers/exploration/jurPerson/JurPersonExplorationStateManager";
-import UserExplorationStateManager from "../service/stateManagers/exploration/user/UserExplorationStateManager";
-import JurPersonExplorationApiService from "../service/api/jur-person/exploration/JurPersonExplorationApiService";
-import UserExplorationApiService from "../service/api/user/exploration/UserExplorationApiService";
-import PersonCreationStateManager from "../service/stateManagers/creation/person/PersonCreationStateManager";
-import JurPersonCreationStateManager from "../service/stateManagers/creation/jurPerson/JurPersonCreationStateManager";
-import UserCreationStateManager from "../service/stateManagers/creation/user/UserCreationStateManager";
-import PersonCreationApiService from "../service/api/person/creation/PersonCreationApiService";
-import JurPersonCreationApiService from "../service/api/jur-person/creation/JurPersonCreationApiService";
-import UserCreationApiService from "../service/api/user/creation/UserCreationApiService";
-import PersonCreationStateManagerImpl from "../service/stateManagers/creation/person/PersonCreationStateManagerImpl";
+    from "./service/stateManagers/exploration/jurPerson/JurPersonExplorationStateManager";
+import UserExplorationStateManager from "./service/stateManagers/exploration/user/UserExplorationStateManager";
+import JurPersonExplorationApiService from "./service/api/jur-person/exploration/JurPersonExplorationApiService";
+import UserExplorationApiService from "./service/api/user/exploration/UserExplorationApiService";
+import PersonCreationStateManager from "./service/stateManagers/creation/person/PersonCreationStateManager";
+import JurPersonCreationStateManager from "./service/stateManagers/creation/jurPerson/JurPersonCreationStateManager";
+import UserCreationStateManager from "./service/stateManagers/creation/user/UserCreationStateManager";
+import PersonCreationApiService from "./service/api/person/creation/PersonCreationApiService";
+import JurPersonCreationApiService from "./service/api/jur-person/creation/JurPersonCreationApiService";
+import UserCreationApiService from "./service/api/user/creation/UserCreationApiService";
+import PersonCreationStateManagerImpl from "./service/stateManagers/creation/person/PersonCreationStateManagerImpl";
 import JurPersonCreationStateManagerImpl
-    from "../service/stateManagers/creation/jurPerson/JurPersonCreationStateManagerImpl";
-import UserCreationStateManagerImpl from "../service/stateManagers/creation/user/UserCreationStateManagerImpl";
-import PersonExplorationService from "../service/coreServices/exploration/PersonExplorationService";
-import UserExplorationService from "../service/coreServices/exploration/UserExplorationService";
-import JurPersonExplorationService from "../service/coreServices/exploration/JurPersonExplorationService";
+    from "./service/stateManagers/creation/jurPerson/JurPersonCreationStateManagerImpl";
+import UserCreationStateManagerImpl from "./service/stateManagers/creation/user/UserCreationStateManagerImpl";
+import PersonExplorationService from "./service/coreServices/exploration/PersonExplorationService";
+import UserExplorationService from "./service/coreServices/exploration/UserExplorationService";
+import JurPersonExplorationService from "./service/coreServices/exploration/JurPersonExplorationService";
 import PersonExplorationStateManagerImpl
-    from "../service/stateManagers/exploration/person/PersonExplorationStateManagerImpl";
+    from "./service/stateManagers/exploration/person/PersonExplorationStateManagerImpl";
 import UserExplorationStateManagerImpl
-    from "../service/stateManagers/exploration/user/UserExplorationStateManagerImpl";
+    from "./service/stateManagers/exploration/user/UserExplorationStateManagerImpl";
 import JurPersonExplorationStateManagerImpl
-    from "../service/stateManagers/exploration/jurPerson/JurPersonExplorationStateManagerImpl";
+    from "./service/stateManagers/exploration/jurPerson/JurPersonExplorationStateManagerImpl";
 import PersonExplorationApiServiceImpl
-    from "../service/api/person/exploration/PersonExplorationApiServiceImpl";
-import UserExplorationApiServiceImpl from "../service/api/user/exploration/UserExplorationApiServiceImpl";
+    from "./service/api/person/exploration/PersonExplorationApiServiceImpl";
+import UserExplorationApiServiceImpl from "./service/api/user/exploration/UserExplorationApiServiceImpl";
 import JurPersonExplorationApiServiceImpl
-    from "../service/api/jur-person/exploration/JurPersonExplorationApiServiceImpl";
-import UserIdentityApiService from "../service/api/userIdentity/UserIdentityApiService";
-import UserIdentityManager from "../service/coreServices/userIdentity/UserIdentityManager";
-import UserIdentityApiServiceImpl from "../service/api/userIdentity/UserIdentityApiServiceImpl";
-import UserIdentityManagerImpl from "../service/coreServices/userIdentity/UserIdentityManagerImpl";
-import PersonCreationService from "../service/coreServices/creation/PersonCreationService";
-import UserCreationService from "../service/coreServices/creation/UserCreationService";
-import JurPersonCreationService from "../service/coreServices/creation/JurPersonCreationService";
-import ApplicationGlobalStateManager from "../service/stateManagers/applicationGlobalState/ApplicationGlobalStateManager";
-import {NotificationManager} from "../redux/types/applicationState/Notification";
-import {BasicNotificationManager} from "../redux/types/applicationState/BasicNotificationManager";
-import UserDtoMapper from "../service/dtoMappers/user/UserDtoMapper";
-import PersonDtoMapper from "../service/dtoMappers/person/PersonDtoMapper";
-import JurPersonDtoMapper from "../service/dtoMappers/jurPerson/JurPersonDtoMapper";
+    from "./service/api/jur-person/exploration/JurPersonExplorationApiServiceImpl";
+import UserIdentityApiService from "./service/api/userIdentity/UserIdentityApiService";
+import UserIdentityManager from "./service/coreServices/userIdentity/UserIdentityManager";
+import UserIdentityApiServiceImpl from "./service/api/userIdentity/UserIdentityApiServiceImpl";
+import UserIdentityManagerImpl from "./service/coreServices/userIdentity/UserIdentityManagerImpl";
+import PersonCreationService from "./service/coreServices/creation/PersonCreationService";
+import UserCreationService from "./service/coreServices/creation/UserCreationService";
+import JurPersonCreationService from "./service/coreServices/creation/JurPersonCreationService";
+import ApplicationGlobalStateManager from "./service/stateManagers/applicationGlobalState/ApplicationGlobalStateManager";
+import {NotificationManager} from "./redux/types/applicationState/Notification";
+import {BasicNotificationManager} from "./redux/types/applicationState/BasicNotificationManager";
+import UserDtoMapper from "./service/dtoMappers/user/UserDtoMapper";
+import PersonDtoMapper from "./service/dtoMappers/person/PersonDtoMapper";
+import JurPersonDtoMapper from "./service/dtoMappers/jurPerson/JurPersonDtoMapper";
 import PersonCreationValidationServiceImpl
-    from "../service/validation/human/person/PersonCreationValidationServiceImpl";
+    from "./service/validation/human/person/PersonCreationValidationServiceImpl";
 import JurPersonCreationValidationServiceImpl
-    from "../service/validation/jurPerson/JurPersonCreationValidationServiceImpl";
+    from "./service/validation/jurPerson/JurPersonCreationValidationServiceImpl";
 import UserCreationValidationServiceImpl
-    from "../service/validation/human/user/UserCreationValidationServiceImpl";
+    from "./service/validation/human/user/UserCreationValidationServiceImpl";
 import PersonCreationValidationService
-    from "../service/validation/human/person/PersonCreationValidationService";
-import UserCreationValidationService from "../service/validation/human/user/UserCreationValidationService";
+    from "./service/validation/human/person/PersonCreationValidationService";
+import UserCreationValidationService from "./service/validation/human/user/UserCreationValidationService";
 import JurPersonCreationValidationService
-    from "../service/validation/jurPerson/JurPersonCreationValidationService";
-import FileRepoFactory from "../service/media/FileRepoFactory";
-import MediaEntityFormDataBuilder from "../service/multipartBuilder/MediaEntityFormDataBuilder";
-import MediaEntityFormDataBuilderImpl from "../service/multipartBuilder/MediaEntityFormDataBuilderImpl";
-import ImageRepoImpl from "../service/media/ImageRepoImpl";
-import ImageRepo from "../service/media/ImageRepo";
-import FileRepo from "../service/media/FileRepo";
-import CsrfTokenLoader from "../service/rest/CsrfTokenLoader";
-import BasicCsrfTokenLoader from "../service/rest/BasicCsrfTokenLoader";
-import PersonExplorationApiService from "../service/api/person/exploration/PersonExplorationApiService";
-import GeocodingService from "../service/geocoding/GeocodingService";
-import BingGeocodingService from "../service/geocoding/BingGeocodingService";
-import appConfig from "../config/appConfig";
-import PersonDtoMapperImpl from "../service/dtoMappers/person/PersonDtoMapperImpl";
-import PersonCreationApiServiceImpl from "../service/api/person/creation/PersonCreationApiServiceImpl";
-import JurPersonCreationApiServiceImpl from "../service/api/jur-person/creation/JurPersonCreationApiServiceImpl";
-import UserCreationApiServiceImpl from "../service/api/user/creation/UserCreationApiServiceImpl";
-import JurPersonDtoMapperImpl from "../service/dtoMappers/jurPerson/JurPersonDtoMapperImpl";
-import UserDtoMapperImpl from "../service/dtoMappers/user/UserDtoMapperImpl";
-import PersonProcessor from "../service/personProcessing/PersonProcessor";
-import PersonRelationsLoader from "../service/personProcessing/PersonRelationsLoader";
-import PreprocessedPersonRelationsScanner from "../service/personProcessing/PreprocessedPersonRelationsScanner";
-import RipePersonUtil from "../util/person/RipePersonUtil";
-import BasicPersonRelationshipsLoader from "../service/personProcessing/BasicPersonRelationshipsLoader";
-import BasicPersonProcessor from "../service/personProcessing/BasicPersonProcessor";
-import BasicRipePersonUtil from "../util/person/BasicRipePersonUtil";
-import UserIdentityDtoMapper from "../service/dtoMappers/userIdentity/UserIdentityDtoMapper";
-import UserIdentityDtoMapperImpl from "../service/dtoMappers/userIdentity/UserIdentityDtoMapperImpl";
-import PersonCreationServiceImpl from "../service/coreServices/creation/PersonCreationServiceImpl";
-import UserCreationServiceImpl from "../service/coreServices/creation/UserCreationServiceImpl";
-import JurPersonCreationServiceImpl from "../service/coreServices/creation/JurPersonCreationServiceImpl";
-import PreprocessedPersonRelationsScannerImpl from "../service/personProcessing/PreprocessedPersonRelationsScannerImpl";
-import MapPainter from "../util/map/MapPainter";
-import MapPainterImpl from "../util/map/MapPainterImpl";
-import JurPersonProcessor from "../service/jurPersonProcessing/JurPersonProcessor";
-import RipeJurPersonUtil from "../util/jurPerson/RipeJurPersonUtil";
-import BasicRipeJurPersonUtil from "../util/jurPerson/BasicRipeJurPersonUtil";
-import BasicJurPersonProcessor from "../service/jurPersonProcessing/BasicJurPersonProcessor";
-import PersonMapTool from "../util/map/person/PersonMapTool";
-import BasicPersonMapTool from "../util/map/person/BasicPersonMapTool";
-import BasicMapUtil from "../util/map/util/BasicMapUtil";
-import MapUtil from "../util/map/util/MapUtil";
-import BasicJurPersonMapTool from "../util/map/jurPerson/BasicJurPersonMapTool";
-import JurPersonMapTool from "../util/map/jurPerson/JurPersonMapTool";
-import ApplicationGlobalStateManagerImpl from "../service/stateManagers/applicationGlobalState/ApplicationGlobalStateManagerImpl";
-import PersonApiService from "../service/api/person/PersonApiService";
-import PersonApiServiceImpl from "../service/api/person/PersonApiServiceImpl";
-import JurPersonApiService from "../service/api/jur-person/JurPersonApiService";
-import JurPersonApiServiceImpl from "../service/api/jur-person/JurPersonApiServiceImpl";
-import UserApiService from "../service/api/user/UserApiService";
-import UserApiServiceImpl from "../service/api/user/UserApiServiceImpl";
-import RoleDtoMapper from "../service/dtoMappers/user/RoleDtoMapper";
-import RoleDtoMapperImpl from "../service/dtoMappers/user/RoleDtoMapperImpl";
-import ApplicationResourcesStateManager from "../service/stateManagers/applicationResources/ApplicationResourcesStateManager";
-import ApplicationResourcesStateManagerImpl from "../service/stateManagers/applicationResources/ApplicationResourcesStateManagerImpl";
-import ApplicationResourcesApiService from "../service/api/appResources/ApplicationResourcesApiService";
-import ApplicationResourcesService from "../service/coreServices/applicationResources/ApplicationResourcesService";
-import ApplicationResourcesApiServiceImpl from "../service/api/appResources/ApplicationResourcesApiServiceImpl";
+    from "./service/validation/jurPerson/JurPersonCreationValidationService";
+import FileRepoFactory from "./service/media/FileRepoFactory";
+import MediaEntityFormDataBuilder from "./service/multipartBuilder/MediaEntityFormDataBuilder";
+import MediaEntityFormDataBuilderImpl from "./service/multipartBuilder/MediaEntityFormDataBuilderImpl";
+import ImageRepoImpl from "./service/media/ImageRepoImpl";
+import ImageRepo from "./service/media/ImageRepo";
+import FileRepo from "./service/media/FileRepo";
+import CsrfTokenLoader from "./service/api/core/CsrfTokenLoader";
+import BasicCsrfTokenLoader from "./service/api/core/BasicCsrfTokenLoader";
+import PersonExplorationApiService from "./service/api/person/exploration/PersonExplorationApiService";
+import GeocodingService from "./service/geocoding/GeocodingService";
+import BingGeocodingService from "./service/geocoding/BingGeocodingService";
+import appConfig from "./config/appConfig";
+import PersonDtoMapperImpl from "./service/dtoMappers/person/PersonDtoMapperImpl";
+import PersonCreationApiServiceImpl from "./service/api/person/creation/PersonCreationApiServiceImpl";
+import JurPersonCreationApiServiceImpl from "./service/api/jur-person/creation/JurPersonCreationApiServiceImpl";
+import UserCreationApiServiceImpl from "./service/api/user/creation/UserCreationApiServiceImpl";
+import JurPersonDtoMapperImpl from "./service/dtoMappers/jurPerson/JurPersonDtoMapperImpl";
+import UserDtoMapperImpl from "./service/dtoMappers/user/UserDtoMapperImpl";
+import PersonProcessor from "./service/personProcessing/PersonProcessor";
+import PersonRelationsLoader from "./service/personProcessing/PersonRelationsLoader";
+import PreprocessedPersonRelationsScanner from "./service/personProcessing/PreprocessedPersonRelationsScanner";
+import RipePersonUtil from "./util/person/RipePersonUtil";
+import BasicPersonRelationshipsLoader from "./service/personProcessing/BasicPersonRelationshipsLoader";
+import BasicPersonProcessor from "./service/personProcessing/BasicPersonProcessor";
+import BasicRipePersonUtil from "./util/person/BasicRipePersonUtil";
+import UserIdentityDtoMapper from "./service/dtoMappers/userIdentity/UserIdentityDtoMapper";
+import UserIdentityDtoMapperImpl from "./service/dtoMappers/userIdentity/UserIdentityDtoMapperImpl";
+import PersonCreationServiceImpl from "./service/coreServices/creation/PersonCreationServiceImpl";
+import UserCreationServiceImpl from "./service/coreServices/creation/UserCreationServiceImpl";
+import JurPersonCreationServiceImpl from "./service/coreServices/creation/JurPersonCreationServiceImpl";
+import PreprocessedPersonRelationsScannerImpl from "./service/personProcessing/PreprocessedPersonRelationsScannerImpl";
+import MapPainter from "./util/map/MapPainter";
+import MapPainterImpl from "./util/map/MapPainterImpl";
+import JurPersonProcessor from "./service/jurPersonProcessing/JurPersonProcessor";
+import RipeJurPersonUtil from "./util/jurPerson/RipeJurPersonUtil";
+import BasicRipeJurPersonUtil from "./util/jurPerson/BasicRipeJurPersonUtil";
+import BasicJurPersonProcessor from "./service/jurPersonProcessing/BasicJurPersonProcessor";
+import PersonMapTool from "./util/map/person/PersonMapTool";
+import BasicPersonMapTool from "./util/map/person/BasicPersonMapTool";
+import BasicMapUtil from "./util/map/util/BasicMapUtil";
+import MapUtil from "./util/map/util/MapUtil";
+import BasicJurPersonMapTool from "./util/map/jurPerson/BasicJurPersonMapTool";
+import JurPersonMapTool from "./util/map/jurPerson/JurPersonMapTool";
+import ApplicationGlobalStateManagerImpl from "./service/stateManagers/applicationGlobalState/ApplicationGlobalStateManagerImpl";
+import PersonApiService from "./service/api/person/PersonApiService";
+import PersonApiServiceImpl from "./service/api/person/PersonApiServiceImpl";
+import JurPersonApiService from "./service/api/jur-person/JurPersonApiService";
+import JurPersonApiServiceImpl from "./service/api/jur-person/JurPersonApiServiceImpl";
+import UserApiService from "./service/api/user/UserApiService";
+import UserApiServiceImpl from "./service/api/user/UserApiServiceImpl";
+import RoleDtoMapper from "./service/dtoMappers/user/RoleDtoMapper";
+import RoleDtoMapperImpl from "./service/dtoMappers/user/RoleDtoMapperImpl";
+import ApplicationResourcesStateManager from "./service/stateManagers/applicationResources/ApplicationResourcesStateManager";
+import ApplicationResourcesStateManagerImpl from "./service/stateManagers/applicationResources/ApplicationResourcesStateManagerImpl";
+import ApplicationResourcesApiService from "./service/api/appResources/ApplicationResourcesApiService";
+import ApplicationResourcesService from "./service/coreServices/applicationResources/ApplicationResourcesService";
+import ApplicationResourcesApiServiceImpl from "./service/api/appResources/ApplicationResourcesApiServiceImpl";
 import ApplicationResourcesServiceImpl
-    from "../service/coreServices/applicationResources/ApplicationResourcesServiceImpl";
-import BasicHierarchyPermissionsChecker from "../service/userHierarchy/BasicHierarchyPermissionsChecker";
-import HierarchyPermissionChecker from "../service/userHierarchy/HierarchyPermissionChecker";
-import MetadataDtoMapper from "../service/dtoMappers/metadata/MetadataDtoMapper";
-import MetadataDtoMapperImpl from "../service/dtoMappers/metadata/MetadataDtoMapperImpl";
-import UserShortDtoMapper from "../service/dtoMappers/user/UserShortDtoMapper";
-import UserShortDtoMapperImpl from "../service/dtoMappers/user/UserShortDtoMapperImpl";
-import LinkValidator from "../service/validation/link/LinkValidator";
-import SimpleLinkValidator from "../service/validation/link/SimpleLinkValidator";
+    from "./service/coreServices/applicationResources/ApplicationResourcesServiceImpl";
+import BasicHierarchyPermissionsChecker from "./service/userHierarchy/BasicHierarchyPermissionsChecker";
+import HierarchyPermissionChecker from "./service/userHierarchy/HierarchyPermissionChecker";
+import MetadataDtoMapper from "./service/dtoMappers/metadata/MetadataDtoMapper";
+import MetadataDtoMapperImpl from "./service/dtoMappers/metadata/MetadataDtoMapperImpl";
+import UserShortDtoMapper from "./service/dtoMappers/user/UserShortDtoMapper";
+import UserShortDtoMapperImpl from "./service/dtoMappers/user/UserShortDtoMapperImpl";
+import LinkValidator from "./service/validation/link/LinkValidator";
+import SimpleLinkValidator from "./service/validation/link/SimpleLinkValidator";
+import GeneralWebArchiver from "./service/api/webArch/general/GeneralWebArchiver";
+import WayBackMachineArchiver from "./service/api/webArch/wayback/WayBackMachineArchiver";
+import SimpleWayBackMachineArchiver from "./service/api/webArch/wayback/SimpleWayBackMachineArchiver";
+import GeneralWebArchiverImpl from "./service/api/webArch/general/GeneralWebArchiverImpl";
 
 type Mappers = {
     user: {
@@ -285,6 +289,13 @@ const userCreationValidationService = new UserCreationValidationServiceImpl();
 
 const geocodingService = new BingGeocodingService(appConfig.geoApiKey);
 
+const wayBackArchiver: WayBackMachineArchiver = new SimpleWayBackMachineArchiver();
+
+const webArchContext: WebArchContext = {
+    wayBack: wayBackArchiver,
+    general: new GeneralWebArchiverImpl(wayBackArchiver)
+}
+
 const creationContext: CreationContext = {
     apiService: {
         person: personCreationApiService,
@@ -297,9 +308,9 @@ const creationContext: CreationContext = {
         user: userCreationStateManager
     },
     service: {
-        person: new PersonCreationServiceImpl(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService, fileContext.fileRepo),
+        person: new PersonCreationServiceImpl(personCreationApiService, personCreationStateManager, mappers.person, personCreationValidationService, fileContext.fileRepo, webArchContext.general),
         user: new UserCreationServiceImpl(userCreationApiService,userCreationStateManager, mappers.user.default, userCreationValidationService),
-        jurPerson: new JurPersonCreationServiceImpl(jurPersonCreationApiService, jurPersonCreationStateManager, mappers.jurPerson, jurPersonCreationValidationService, fileContext.fileRepo)
+        jurPerson: new JurPersonCreationServiceImpl(jurPersonCreationApiService, jurPersonCreationStateManager, mappers.jurPerson, jurPersonCreationValidationService, fileContext.fileRepo, webArchContext.general)
     },
     validation: {
         person: personCreationValidationService,
@@ -341,6 +352,12 @@ type ApiServiceContext = {
     person: PersonApiService,
     jurPerson: JurPersonApiService,
     user: UserApiService
+    webArch: WebArchContext
+}
+
+type WebArchContext = {
+    general: GeneralWebArchiver,
+    wayBack: WayBackMachineArchiver
 }
 
 export type ServiceContext = {
@@ -400,10 +417,12 @@ const mapUtil = new BasicMapUtil(mapPainter);
 
 const ripeJurPersonUtil = new BasicRipeJurPersonUtil(ripePersonRelationshipsUtil);
 
+
 const apiServiceContext: ApiServiceContext = {
     person: new PersonApiServiceImpl(explorationContext.apiService.person, creationContext.apiService.person),
     jurPerson: new JurPersonApiServiceImpl(explorationContext.apiService.jurPerson, creationContext.apiService.jurPerson),
-    user: new UserApiServiceImpl(explorationContext.apiService.user, creationContext.apiService.user)
+    user: new UserApiServiceImpl(explorationContext.apiService.user, creationContext.apiService.user),
+    webArch: webArchContext
 }
 
 const serviceContext: ServiceContext = {

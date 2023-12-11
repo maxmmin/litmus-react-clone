@@ -7,7 +7,7 @@ import PersonMap, {PersonMapProps} from "./PersonMap";
 import React, {useContext, useEffect, useMemo, useState} from "react";
 import {LitmusServiceContext} from "../../App";
 import Loader from "../../loader/Loader";
-import {ServiceContext} from "../../serviceContext";
+import {ServiceContext} from "../../../serviceContext";
 import RootRelatedPersonComponent from "../RootRelatedPersonComponent";
 import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import PersonDataContainer from "./PersonDataContainer";

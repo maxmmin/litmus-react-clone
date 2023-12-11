@@ -7,7 +7,7 @@ import {DateEntityTool} from "../../../model/DateEntity";
 import React, {useContext, useEffect, useMemo, useState} from "react";
 import ImageSlider from "../ImageSlider";
 import JurPersonMap, {JurPersonMapProps} from "./JurPersonMap";
-import {ServiceContext} from "../../serviceContext";
+import {ServiceContext} from "../../../serviceContext";
 import {LitmusServiceContext} from "../../App";
 import JurPersonProcessor from "../../../service/jurPersonProcessing/JurPersonProcessor";
 import Loader from "../../loader/Loader";

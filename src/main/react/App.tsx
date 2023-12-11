@@ -14,7 +14,7 @@ import {buildUrl} from "../util/pureFunctions";
 import LoginPage from "./login/LoginPage";
 import NotificationCenter from "./notifications/NotificationCenter";
 import {ErrorBoundary} from "react-error-boundary";
-import serviceContext from "./serviceContext";
+import serviceContext from "../serviceContext";
 import appConfig from "../config/appConfig";
 import RootScreen from "./RootScreen";
 import {Entity} from "../model/Entity";

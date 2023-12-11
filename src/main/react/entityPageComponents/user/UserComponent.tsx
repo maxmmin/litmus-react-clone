@@ -6,7 +6,7 @@ import {JurPerson} from "../../../model/jurPerson/JurPerson";
 import Loader from "../../loader/Loader";
 import {EntitiesPaginator, LocalPager} from "../../../util/pageDataUtils";
 import "../../assets/styles/entityPage/userPage.scss"
-import {ServiceContext} from "../../serviceContext";
+import {ServiceContext} from "../../../serviceContext";
 import {LitmusServiceContext} from "../../App";
 import ManagePanel from "../manage/ManagePanel";
 import UserApiService from "../../../service/api/user/UserApiService";
