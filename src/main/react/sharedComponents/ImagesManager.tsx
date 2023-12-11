@@ -26,7 +26,7 @@ type ImageComponentProps = {
 export function ImageComponent ({image, cssAnchor = "", remove, selectAsMain}: ImageComponentProps) {
     return (
         <div className={`uploaded-image form-control ${image.error ? 'is-invalid': ''} ${cssAnchor}`}>
-            <div className="uploaded-image__info">{image.file.name}</div>
+            <div className="uploaded-image__info no-scrollbar">{image.file.name}</div>
             <div className="uploaded-image__actions-block">
                 <div className="uploaded-image__action uploaded-image__action_set-main-wrapper"
                     onClick={e=>selectAsMain(image.fileKey)}

@@ -161,6 +161,10 @@ img {
   text-decoration: none;
 }
 
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 @import "header";
 @import "homePage";
 @import "signInPage";

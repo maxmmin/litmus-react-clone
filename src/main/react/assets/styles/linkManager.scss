@@ -40,6 +40,14 @@
   border-radius: 25px;
   width: fit-content;
   padding: 5px 15px;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+.links-manager__link-container-inner {
+  max-width: 100%;
+  overflow: auto;
+
 }
 
 .links-manager__link {

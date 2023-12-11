@@ -23,7 +23,9 @@ export default function SourcesManager ({sourceManager}: SourceManagerProps) {
             <div className="links-manager__links-container">
                 {links.map(link =>
                     <div className={"links-manager__link-container"}>
-                        <a href={link} className="links-manager__link">{link}</a>
+                        <div className="links-manager__link-container-inner no-scrollbar">
+                            <a href={link} className="links-manager__link">{link}</a>
+                        </div>
                     </div>
                 )}
             </div>
