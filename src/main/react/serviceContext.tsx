@@ -123,6 +123,8 @@ import MetadataDtoMapper from "../service/dtoMappers/metadata/MetadataDtoMapper"
 import MetadataDtoMapperImpl from "../service/dtoMappers/metadata/MetadataDtoMapperImpl";
 import UserShortDtoMapper from "../service/dtoMappers/user/UserShortDtoMapper";
 import UserShortDtoMapperImpl from "../service/dtoMappers/user/UserShortDtoMapperImpl";
+import LinkValidator from "../service/validation/link/LinkValidator";
+import SimpleLinkValidator from "../service/validation/link/SimpleLinkValidator";
 
 type Mappers = {
     user: {
@@ -302,7 +304,7 @@ const creationContext: CreationContext = {
     validation: {
         person: personCreationValidationService,
         jurPerson: jurPersonCreationValidationService,
-        user: userCreationValidationService
+        user: userCreationValidationService,
     },
     formDataBuilder: formDataBuilder
 }
@@ -370,6 +372,9 @@ export type ServiceContext = {
         personMapTool: PersonMapTool,
         jurPersonMapTool: JurPersonMapTool,
         mapUtil: MapUtil
+    },
+    validation: {
+        link: LinkValidator
     }
 }
 
@@ -430,6 +435,9 @@ const serviceContext: ServiceContext = {
         mapUtil: mapUtil,
         personMapTool: new BasicPersonMapTool(mapUtil, mapPainter, ripePersonRelationshipsUtil),
         jurPersonMapTool: new BasicJurPersonMapTool(mapUtil, mapPainter, ripeJurPersonUtil)
+    },
+    validation: {
+        link: new SimpleLinkValidator()
     }
 }
 

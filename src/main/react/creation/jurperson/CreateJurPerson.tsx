@@ -16,6 +16,7 @@ import getFullName from "../../../util/functional/getFullName";
 import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
 import {Images} from "../../../model/Media";
 import getBundledImages from "../../../util/functional/getBundledImages";
+import SourcesManager from "../SourcesManager";
 
 
 const getShortInfo = (person: Human&{id: number}): string => `${person.id}: ${getFullName(person)}`
@@ -161,6 +162,10 @@ const CreateJurPerson = () => {
                 />
             </Form.Group>
 
+            <Form.Group className="mb-3 creation-input-group__item creation-input-group__item_long">
+                <Form.Label>Використані джерела</Form.Label>
+                <SourcesManager sourceManager={creationStateManager}/>
+            </Form.Group>
         </>
 )
 }

@@ -122,7 +122,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
                     personCreationStateManager.removeRelationship(relationship);
 
                 }}>
-                    <CrossIcon className={"create-relation__remove-btn-icon"} color={"grey"}/>
+                    <CrossIcon className={"create-relation__remove-btn-icon rotate45"} color={"grey"}/>
                 </button>
             </div>
         </div>
