@@ -7,12 +7,12 @@ import {
 import MediaEntityCreationStateManager from "../MediaEntityCreationStateManager";
 import ImageStateManager from "../../../media/ImageStateManager";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
-import SourceInEntityStateManager from "../SourceInEntityStateManager";
+import SourceContainableEntityStateManager from "../SourceContainableEntityStateManager";
 
 class CreationPassportData {
 }
 
-interface PersonCreationStateManager extends MediaEntityCreationStateManager<PreProcessedPerson,PersonCreationParams,PersonValidationObject>, ImageStateManager, SourceInEntityStateManager, GeoStateManager {
+interface PersonCreationStateManager extends MediaEntityCreationStateManager<PreProcessedPerson,PersonCreationParams,PersonValidationObject>, ImageStateManager, SourceContainableEntityStateManager, GeoStateManager {
     setRelationshipValidationErrors(relObject: RelationShipValidationObject): void;
 
     getRelationshipValidationErrors (rel: RelationshipCreationParams): RelationShipValidationObject;

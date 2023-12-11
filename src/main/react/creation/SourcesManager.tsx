@@ -1,39 +1,52 @@
 import LinkSaver from "./LinkSaver";
 import "../assets/styles/linkManager.scss";
 import {useAppSelector} from "../../redux/hooks";
-import SourceInEntityStateManager from "../../service/stateManagers/creation/SourceInEntityStateManager";
+import SourceContainableEntityStateManager from "../../service/stateManagers/creation/SourceContainableEntityStateManager";
 import {CrossIcon} from "../assets/icons";
-
-export interface LinkStateManager {
-    setLinks(links: string[]): void;
-    getLinks(): string[];
-}
+import InputError from "../sharedComponents/InputError";
 
 type SourceManagerProps = {
-    sourceManager: SourceInEntityStateManager
+    sourceManager: SourceContainableEntityStateManager
 }
 
 export default function SourcesManager ({sourceManager}: SourceManagerProps) {
 
     const links = useAppSelector(()=>sourceManager.getSources());
 
+    const linksErrors = useAppSelector(()=>sourceManager.getValidationSourcesErrors())
+
     return (
         <div className={"links-manager-wrapper"}>
-            <LinkSaver saveLink={link => sourceManager.appendSource(link)}/>
+            <LinkSaver validationEnabled={true} saveLink={link => sourceManager.appendSource(link)}/>
 
             <div className="links-manager__links-container">
-                {links.map(link =>
-                    <div className={"links-manager__link-container"}>
-                        <div className="links-manager__manager-link-wrapper no-scrollbar">
-                            <a href={link} className="links-manager__link">{link}</a>
-                        </div>
-                        <button onClick={e=>{
-                            e.preventDefault();
-                            sourceManager.removeSource(link)
-                        }} className="links-manager__remove-btn btn p-0">
-                            <CrossIcon color={"black"} className={"links-manager__remove-btn-icon rotate45"}/>
-                        </button>
-                    </div>
+                {links.map((link, i) => {
+                        const errIndex = linksErrors.findIndex(err => err.source === link);
+                        const hasError = errIndex > -1;
+
+                        return (
+                            <div key={i} className={"links-manger__link-container-wrapper"}>
+                                <div className={`links-manager__link-container ${hasError?"is-invalid":""}`}>
+                                    <div className="links-manager__manager-link-wrapper no-scrollbar">
+                                        <a href={link} className="links-manager__link">{link}</a>
+                                    </div>
+                                    <button onClick={e=>    {
+                                        e.preventDefault();
+                                        sourceManager.removeSource(link)
+
+                                        if (hasError) {
+                                            const newErrs = [...linksErrors];
+                                            newErrs.splice(errIndex, 1);
+                                            sourceManager.setValidationSourcesErrors(newErrs);
+                                        }
+                                    }} className="links-manager__remove-btn btn p-0">
+                                        <CrossIcon color={"black"} className={"links-manager__remove-btn-icon rotate45"}/>
+                                    </button>
+                                </div>
+                                <InputError error={linksErrors.find(obj =>obj.source===link)?.error}/>
+                            </div>
+                        )
+                    }
                 )}
             </div>
         </div>

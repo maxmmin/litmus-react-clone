@@ -7,5 +7,6 @@ export default interface JurPersonRequestDto extends Partial<MediaEntity> {
     edrpou?:  string,
     name?: string,
     ownerId?: number,
-    location?: GeoLocation
+    location?: GeoLocation,
+    sources?: string[]
 }

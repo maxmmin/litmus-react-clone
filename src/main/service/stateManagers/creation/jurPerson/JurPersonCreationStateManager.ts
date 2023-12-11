@@ -6,10 +6,10 @@ import {
 } from "../../../validation/jurPerson/JurPersonCreationValidationService";
 import {JurPersonCreationParams} from "../../../../redux/types/creation/JurPersonCreationState";
 import ImageStateManager from "../../../media/ImageStateManager";
-import SourceInEntityStateManager from "../SourceInEntityStateManager";
+import SourceContainableEntityStateManager from "../SourceContainableEntityStateManager";
 
 interface JurPersonCreationStateManager extends CreationStateManager<PreProcessedJurPerson, JurPersonCreationParams,
-    JurPersonValidationObject>,ImageStateManager, GeoStateManager, SourceInEntityStateManager {
+    JurPersonValidationObject>,ImageStateManager, GeoStateManager, SourceContainableEntityStateManager {
 }
 
 export default JurPersonCreationStateManager;

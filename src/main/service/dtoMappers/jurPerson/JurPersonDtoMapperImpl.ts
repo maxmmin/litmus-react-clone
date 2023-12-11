@@ -131,6 +131,10 @@ class JurPersonDtoMapperImpl implements JurPersonDtoMapper {
             dto.media = emergingEntity.media;
         }
 
+        if (emergingEntity.sources.length>0) {
+            dto.sources = emergingEntity.sources;
+        }
+
         return dto;
     }
 

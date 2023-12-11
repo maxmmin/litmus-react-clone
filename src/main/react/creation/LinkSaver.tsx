@@ -4,10 +4,11 @@ import {LitmusServiceContext} from "../App";
 
 
 type LinkSaverProps = {
-    saveLink(link: string): any
+    saveLink(link: string): any,
+    validationEnabled?: boolean
 }
 
-export default function LinkSaver ({saveLink}:LinkSaverProps) {
+export default function LinkSaver ({saveLink, validationEnabled = true}:LinkSaverProps) {
     const [link, setLink] = useState<string>("");
 
     const linkValidator = useContext(LitmusServiceContext).validation.link;
@@ -15,13 +16,15 @@ export default function LinkSaver ({saveLink}:LinkSaverProps) {
     const [error, setError] = useState<string|null>(null);
 
     useEffect(()=>{
-        if (link !== "") {
-            if (!linkValidator.isValid(link)) {
-                setError("Невалідна адреса джерела");
-            } else {
-                if (error) setError(null);
-            }
-        } else if (error) setError(null);
+        if (validationEnabled) {
+            if (link !== "") {
+                if (!linkValidator.isValid(link)) {
+                    setError("Невалідна адреса джерела");
+                } else {
+                    if (error) setError(null);
+                }
+            } else if (error) setError(null);
+        }
     }, [link])
     return (
         <div className={`link-saver-wrapper ${error?'is-invalid':''}`}>

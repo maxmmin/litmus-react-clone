@@ -8,6 +8,7 @@ import {
 } from "../../../validation/jurPerson/JurPersonCreationValidationService";
 import {JurPersonCreationParams} from "../../../../redux/types/creation/JurPersonCreationState";
 import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateManagerImpl";
+import SourceValidationObject from "../../../validation/validationModels/SourceValidationObject";
 
 class JurPersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<PreProcessedJurPerson,JurPersonCreationParams, JurPersonValidationObject>
                                     implements JurPersonCreationStateManager {
@@ -15,6 +16,14 @@ class JurPersonCreationStateManagerImpl extends MediaEntityCreationStateManagerI
         const dispatch: AppDispatch = store.dispatch;
         const getState = () => store.getState().creation.jurPerson!;
         super(dispatch, getState, CreationTypedAction.jurPerson);
+    }
+
+    getValidationSourcesErrors(): SourceValidationObject[] {
+        return this.getValidationErrors().sources;
+    }
+
+    setValidationSourcesErrors(errors: SourceValidationObject[]): void {
+        this.updateValidationErrors({sources: errors})
     }
 
     clearLocation(): void {

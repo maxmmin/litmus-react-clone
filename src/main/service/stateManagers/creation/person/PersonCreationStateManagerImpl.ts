@@ -14,6 +14,7 @@ import {
 import MediaEntityCreationStateManagerImpl from "../MediaEntityCreationStateManagerImpl";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
 import RelationshipsLinkObject from "../../../../util/person/RelationshipsLinkObject";
+import SourceValidationObject from "../../../validation/validationModels/SourceValidationObject";
 
 
 class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl<PreProcessedPerson,PersonCreationParams, PersonValidationObject> implements PersonCreationStateManager {
@@ -22,6 +23,16 @@ class PersonCreationStateManagerImpl extends MediaEntityCreationStateManagerImpl
         const getState = ()=>store.getState().creation.person!;
         super(dispatch, getState, CreationTypedAction.person);
     }
+
+    getValidationSourcesErrors(): SourceValidationObject[] {
+        return this.getValidationErrors().sources;
+    }
+
+    setValidationSourcesErrors(validationErrors: SourceValidationObject[]): void {
+        this.updateValidationErrors({sources: validationErrors})
+    }
+
+
 
     appendSource(source: string): number {
         const sources: string[] = [...this.getSources(), source];

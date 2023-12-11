@@ -160,6 +160,10 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
             dto.media = emergingPerson.media;
         }
 
+        if (emergingPerson.sources.length>0) {
+            dto.sources = emergingPerson.sources;
+        }
+
         return dto;
     }
 

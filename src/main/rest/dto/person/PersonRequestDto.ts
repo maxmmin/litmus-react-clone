@@ -23,5 +23,6 @@ export default interface PersonRequestDto extends Partial<MediaEntity>{
     sex?: Sex;
     passportData?: PassportDataRequestDto;
     dateOfBirth?: string;
-    location?: GeoLocation
+    location?: GeoLocation;
+    sources?: string[];
 }
