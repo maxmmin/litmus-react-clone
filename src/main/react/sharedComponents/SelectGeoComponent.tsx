@@ -2,7 +2,6 @@ import React, {Dispatch, SetStateAction, useContext, useEffect, useRef, useState
 import {GeoLocation} from "../../model/GeoLocation";
 import GeoCoordinates from "../../model/GeoCoordinates";
 import PlacesAutocomplete from "../creation/geo/PlacesAutocomplete";
-import {useAppSelector} from "../../redux/hooks";
 import 'ol/ol.css';
 import TileLayer from "ol/layer/Tile";
 import {OSM} from "ol/source";
@@ -11,11 +10,10 @@ import Map from 'ol/Map';
 import {FullScreen, Zoom} from "ol/control";
 import "../assets/styles/map.scss";
 import {LitmusServiceContext} from "../App";
-import {transform} from "ol/proj";
 import Popup from "ol-ext/overlay/Popup";
 import "../assets/styles/ol-ext-min.css";
 import {defaultMapPosition, transformToSource, transformToTarget} from "../../util/map/mapUtilites";
-
+import '../assets/styles/geo.scss'
 
 type LocationProps = {
     location: GeoLocation|null,

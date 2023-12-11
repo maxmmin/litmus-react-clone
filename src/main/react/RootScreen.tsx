@@ -1,3 +1,5 @@
+import './assets/styles/header.scss'
+
 import Header from "./header/Header";
 import {Outlet} from "react-router-dom";
 import {useAppSelector} from "../redux/hooks";

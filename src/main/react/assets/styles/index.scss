@@ -1,7 +1,12 @@
 @import 'colors';
 
-html, body, #root, .wrapper, .root-screen {
-  height: 100%;
+.wrapper {
+  min-height: 100vh;
+  padding: 0 20px 20px;
+}
+
+.root-screen {
+  min-height: 100%;
 }
 
 img, svg {
@@ -15,11 +20,6 @@ img, svg {
 
 .root-screen__content-wrapper {
   flex-grow: 1;
-  padding: 15px 0;
-}
-
-.wrapper {
-  padding: 0 20px 20px;
 }
 
 body {
@@ -165,10 +165,7 @@ img {
   display: none;
 }
 
-@import "header";
-@import "homePage";
-@import "signInPage";
-@import "loadingPage";
-@import "explorationPage";
-@import "creationPage";
-@import "geo";
+.loader-fullscreen-wrapper {
+  height: 100vh;
+  width: 100vw;
+}

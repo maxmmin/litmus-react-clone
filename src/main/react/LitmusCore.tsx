@@ -9,6 +9,8 @@ import AxiosApiManager from "../service/rest/AxiosApiManager";
 import {useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
 import NetworkErrPage from "./networkStatusPages/NetworkErrPage";
+import './assets/styles/loadingPage.scss'
+
 
 type Props = {
     children: ReactNode
@@ -103,7 +105,7 @@ const LitmusCore = ({children}: Props) => {
         }
     }, [authentication, networkStatus])
 
-    if (isRefreshing) return <Loader/>;
+    if (isRefreshing) return <div className="loader-fullscreen-wrapper"><Loader/></div>;
 
     if (networkStatus===NetworkStatus.NETWORK_ERR) {
         return <NetworkErrPage refresh={checkConnection}/>

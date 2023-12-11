@@ -4,16 +4,9 @@
   display: flex;
 }
 
-.btn.link-saver-btn {
-  background: $md-sys-color-outline-variant-light;
+.link-saver-btn {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
-}
-
-@media all and (pointer: fine) {
-  .btn.link-saver-btn:hover {
-    background: rgba($md-sys-color-outline-light, 0.6);
-  }
 }
 
 .form-control.link-saver-input {

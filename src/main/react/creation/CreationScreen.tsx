@@ -32,6 +32,7 @@ import {
     UserValidationObject
 } from "../../service/validation/human/user/UserCreationValidationService";
 import CoreEntity from "../../model/CoreEntity";
+import '../assets/styles/creationPage.scss'
 
 
 export type CreationModalSettings = {

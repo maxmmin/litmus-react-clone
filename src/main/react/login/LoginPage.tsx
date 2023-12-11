@@ -1,4 +1,6 @@
-import React, {useContext, useMemo, useRef} from 'react';
+import '../assets/styles/signInPage.scss'
+
+import React, {useContext, useRef} from 'react';
 import {useAppDispatch, useAppSelector} from "../../redux/hooks";
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';

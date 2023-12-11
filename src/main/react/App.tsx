@@ -1,11 +1,12 @@
 import {BrowserRouter, Route, Routes} from 'react-router-dom';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './assets/styles/index.scss';
+
 import React, {createContext} from 'react';
 import HomeScreen from "./home/HomeScreen";
 import PrivateComponent from "./authorization/PrivateComponent";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './assets/styles/index.scss';
-import Explore from "./exploration/ExplorationScreen";
+import ExplorationScreen from "./exploration/ExplorationScreen";
 import LitmusCore from "./LitmusCore";
 import Creation from "./creation/CreationScreen";
 import {Permission} from "../model/userIdentity/Role";
@@ -37,7 +38,7 @@ function App() {
                                 <Route path={appConfig.applicationMappings.root} element={<HomeScreen/>}/>
 
                                 <Route path={buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={
-                                    <Explore/>
+                                    <ExplorationScreen/>
                                 }/>
 
                                 <Route path={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],':id')} element={

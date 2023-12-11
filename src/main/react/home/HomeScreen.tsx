@@ -1,4 +1,5 @@
 import React from "react";
+import '../assets/styles/homePage.scss'
 import {AddUserIcon, SearchIcon, SetUpUser} from "../assets/icons";
 import PrivateComponentWrapper from "../authorization/PrivateComponentWrapper";
 import {NO_OUTPUT} from "../authorization/PrivateComponent";
