@@ -3,6 +3,7 @@ import Human from "../Human";
 import CoreEntity from "../../CoreEntity";
 import Person from "../person/Person";
 import {JurPerson} from "../../jurPerson/JurPerson";
+import MetadataContainable from "../../MetadataContainable";
 
 export type CreatedEntities = {
     persons: Person[],
@@ -10,10 +11,10 @@ export type CreatedEntities = {
     users: User[]
 }
 
-interface User extends Human, CoreEntity {
+interface User extends Human, CoreEntity, MetadataContainable {
     email: string;
     role: Role;
-    createdEntities: CreatedEntities
+    createdEntities: CreatedEntities,
 }
 
 export default User;

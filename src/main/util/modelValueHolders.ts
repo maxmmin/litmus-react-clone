@@ -13,3 +13,4 @@ export const blankPassportData: PassportData = Object.freeze({passportSerial: nu
 export const blankCreatedEntities: CreatedEntities = Object.freeze({persons: [], jurPersons: [], users: []})
 
 export const blankMetadata: Metadata = Object.freeze({updatedAt: 0, createdAt: 0, updatedBy: null, createdBy: null})
+

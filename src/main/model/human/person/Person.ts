@@ -5,17 +5,18 @@ import PassportData from "./PassportData";
 import Human from "../Human";
 import MediaEntity from "../../MediaEntity";
 import CoreEntity from "../../CoreEntity";
-import {NestedRelationshipsInfo, RelationshipsInfo} from "../../../rest/dto/person/PersonResponseDto";
+import {RelationshipsInfo} from "../../../rest/dto/person/PersonResponseDto";
 import {JurPerson} from "../../jurPerson/JurPerson";
 import {EmbedJurPersonResponseDto} from "../../../rest/dto/jurPerson/JurPersonResponseDto";
 import SourceContainableEntity from "../../SourceContainableEntity";
+import MetadataContainable, {Metadata} from "../../MetadataContainable";
 
-interface Person extends Human, MediaEntity, CoreEntity, SourceContainableEntity {
+interface Person extends Human, MediaEntity, CoreEntity, SourceContainableEntity, MetadataContainable {
     relationships: Relationship[],
     ownedJurPersons: JurPerson[],
     benOwnedJurPersons: JurPerson[],
     sex: Sex;
-    passportData: PassportData | null;
+    passportData: PassportData;
     dateOfBirth: DateEntity | null;
     location: GeoLocation | null;
 }

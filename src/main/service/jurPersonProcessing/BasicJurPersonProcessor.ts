@@ -8,7 +8,7 @@ import JurPersonDtoMapper from "../dtoMappers/jurPerson/JurPersonDtoMapper";
 import {RelatedPersonResponseDto} from "../../rest/dto/person/PersonResponseDto";
 import PersonProcessor from "../personProcessing/PersonProcessor";
 import JurPersonDtoMapperImpl from "../dtoMappers/jurPerson/JurPersonDtoMapperImpl";
-import {blankMetadata} from "../../util/modelValueHolders";
+import {blankMetadata, blankPassportData} from "../../util/modelValueHolders";
 
 export default class BasicJurPersonProcessor implements JurPersonProcessor {
 
@@ -37,7 +37,7 @@ export default class BasicJurPersonProcessor implements JurPersonProcessor {
             benOwnedJurPersons: [],
             dateOfBirth: null,
             location: null,
-            passportData: null,
+            passportData: {...blankPassportData},
             metadata: {...blankMetadata},
             sources: []
         }

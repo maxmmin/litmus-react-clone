@@ -65,7 +65,7 @@ export default class PersonDtoMapperImpl implements PersonDtoMapper {
         return {
             id: dto.id,
             media: {...blankMedia},
-            passportData: null,
+            passportData: {...blankPassportData},
             location: null,
             firstName: dto.firstName,
             middleName: dto.middleName,
