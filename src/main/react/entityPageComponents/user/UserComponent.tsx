@@ -22,12 +22,19 @@ import appConfig from "../../../config/appConfig";
 import {ApplicationError} from "../../../rest/ErrorResponse";
 import {HttpErrorParser} from "../../../error/BasicHttpError";
 import {JurPersonNavLink, PersonNavLink, UserNavLink} from "../../../util/navLinkBuilders";
+import MetadataContainable from "../../../model/MetadataContainable";
+import formatDate from "../../../util/functional/formatDate";
+import getFullName from "../../../util/functional/getFullName";
 
 type UserProps = {
     user: User
 }
 
 const createdEntitiesPageSize = 5;
+
+function compareCreationTime (a: MetadataContainable, b: MetadataContainable): number {
+    return b.metadata.createdAt-a.metadata.createdAt
+}
 
 export default function ({user}: UserProps) {
     const [isPending, setPending] = useState<boolean>(false);
@@ -50,12 +57,13 @@ export default function ({user}: UserProps) {
     const [personsIndex, setPersonsIndex] = useState(0);
     const [jurPersonsIndex, setJurPersonsIndex] = useState(0);
 
-    const usersPager: Ref<LocalPager<User>> = useRef<LocalPager<User>>(new LocalPager<User>(user.createdEntities.users,
+    const usersPager: Ref<LocalPager<User>> = useRef<LocalPager<User>>(new LocalPager<User>(user.createdEntities.users.sort(compareCreationTime),
         {pageSize: createdEntitiesPageSize, pageIndex: usersIndex}));
-    const personsPager: Ref<LocalPager<Person>> = useRef<LocalPager<Person>>(new LocalPager<Person>(user.createdEntities.persons,
+    const personsPager: Ref<LocalPager<Person>> = useRef<LocalPager<Person>>(new LocalPager<Person>(user.createdEntities.persons.sort(compareCreationTime),
         {pageSize: createdEntitiesPageSize, pageIndex: personsIndex}
     ));
-    const jurPersonsPager: Ref<LocalPager<JurPerson>> = useRef<LocalPager<JurPerson>>(new LocalPager<JurPerson>(user.createdEntities.jurPersons,
+    const jurPersonsPager: Ref<LocalPager<JurPerson>> = useRef<LocalPager<JurPerson>>(new LocalPager<JurPerson>(
+        user.createdEntities.jurPersons.sort(compareCreationTime),
         {pageSize: createdEntitiesPageSize, pageIndex: jurPersonsIndex}
     ));
 
@@ -170,7 +178,11 @@ export default function ({user}: UserProps) {
                             <p className={"created-entities__no-entities-label"}>Створених існуючих користувачів не знайдено</p>
                             :
                             <ul className={"created-entities_link-list"}>
-                                {usersPage.content.map(user=><li key={user.id}><UserNavLink user={user}/></li>)}
+                                {usersPage.content.map(user=><li key={user.id}>
+                                    <UserNavLink user={user}>
+                                        {`ID ${user.id}: ${user.email} - ${user.role.canonicalName.toLowerCase()} - ${formatDate(new Date(user.metadata.createdAt))}`}
+                                    </UserNavLink>
+                                </li>)}
                             </ul>
                         }
                     </section>
@@ -185,7 +197,10 @@ export default function ({user}: UserProps) {
                             <p className={"created-entities__no-entities-label"}>Створених існуючих осіб не знайдено</p>
                             :
                             <ul className={"created-entities_link-list"}>
-                                {personsPage.content.map(person=><li key={person.id}><PersonNavLink person={person}/></li>)}
+                                {personsPage.content.map(person=>
+                                    <li key={person.id}>
+                                        <PersonNavLink person={person}>{`ID ${person.id}: ${getFullName(person)} - ${formatDate(new Date(person.metadata.createdAt))}`}</PersonNavLink>
+                                    </li>)}
                             </ul>
                         }
                     </section>
@@ -199,7 +214,12 @@ export default function ({user}: UserProps) {
                             ?
                             <p className={"created-entities__no-entities-label"}>Створених існуючих юридичних осіб не знайдено</p>
                             :
-                            jurPersonsPage.content.map(jurPerson=><li key={jurPerson.id}><JurPersonNavLink jurPerson={jurPerson}/></li>)}
+                            jurPersonsPage.content.map(jurPerson=>
+                                <li key={jurPerson.id}>
+                                    <JurPersonNavLink jurPerson={jurPerson}>
+                                        {`ID ${jurPerson.id}: ${jurPerson.name} - ${formatDate(new Date(jurPerson.metadata.createdAt))}`}
+                                    </JurPersonNavLink>
+                                </li>)}
                     </section>
                 </section>
             </div>
