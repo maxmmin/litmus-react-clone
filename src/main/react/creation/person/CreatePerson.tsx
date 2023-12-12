@@ -21,8 +21,8 @@ import {LitmusServiceContext} from "../../App";
 import SimpleImagesManager from "../../sharedComponents/SimpleImagesManager";
 import {Images} from "../../../model/Media";
 import getBundledImages from "../../../util/functional/getBundledImages";
-import LinkSaver from "../LinkSaver";
 import SourcesManager from "../SourcesManager";
+import {RelationShipValidationObject} from "../../../service/validation/human/person/PersonCreationValidationService";
 
 const CreatePerson = () => {
     const [modalSettings, setModalSettings] = useState<CreationModalSettings>(null);
@@ -40,8 +40,19 @@ const CreatePerson = () => {
     const person = useAppSelector(state => state.creation.person?.emergingEntity)!
 
     if (!person) {
-        throw new Error("createPersonDto was null but it shouldn't be")
+        throw new Error("person was null but it shouldn't be")
     }
+
+    useEffect(() => {
+        if (validationErrors?.relationships) {
+            const filtered: RelationShipValidationObject[] = validationErrors
+                .relationships.filter(v => validationService.hasRelationshipVdObjectErrors(v));
+
+            if (filtered.length < validationErrors.relationships.length) {
+                creationStateManager.updateValidationErrors({relationships: filtered})
+            }
+        }
+    }, [validationErrors?.relationships]);
 
     const {firstName, middleName, lastName} = person;
 

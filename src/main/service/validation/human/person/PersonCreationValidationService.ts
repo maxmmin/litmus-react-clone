@@ -41,6 +41,7 @@ export type ServerPersonValidationObject = Omit<ValidationErrors<PersonCreationP
 
 export default interface PersonCreationValidationService extends HumanCreationValidationService<PersonCreationParams, PersonValidationObject, ServerPersonValidationObject> {
     validateRelationship(relationship: RelationshipCreationParams): RelationShipValidationObject;
+    hasRelationshipVdObjectErrors(validationObject: RelationShipValidationObject): boolean;
     validateRelationships(relationShips: RelationshipCreationParams[]): RelationShipValidationObject[];
     validatePassportData(passportData: PersonCreationParams["passportData"]): Pick<PersonValidationObject, keyof PassportData>;
     validateSex(sex: PersonCreationParams["sex"]): PersonValidationObject["sex"];

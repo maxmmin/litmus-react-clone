@@ -18,7 +18,6 @@ import getFullName from "../../../util/functional/getFullName";
 import {getRelationTypeFrom} from "../../../util/person/RelationshipsLinkObject";
 import SecuredImage from "../../sharedComponents/SecuredImage";
 
-
 type Props = {
     relationship: RelationshipCreationParams,
     validationService: PersonCreationValidationService,

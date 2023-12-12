@@ -13,7 +13,6 @@ import PassportData from "../../../../model/human/person/PassportData";
 import valueOrNull from "../../../../util/functional/valueOrNull";
 import {PersonCreationParams, RelationshipCreationParams} from "../../../coreServices/creation/PersonCreationService";
 import {checkNotEmpty} from "../../../../util/pureFunctions";
-import {ImageValidationObject} from "../../validationModels/ImageValidationObject";
 import getArrayValidationKeyIndex from "../../../../util/functional/validation/getArrayValidationKeyIndex";
 import extractImgErrorsFromServerObj from "../../../../util/functional/validation/extractImgErrorsFromServerObj";
 import extractSourceErrorsFromServerObj from "../../../../util/functional/validation/extractSourceErrorsFromServerObj";
@@ -46,7 +45,7 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
     }
 
     validateRelationships(relationships: RelationshipCreationParams[]): RelationShipValidationObject[] {
-        return relationships.map(this.validateRelationship);
+        return relationships.map(this.validateRelationship).filter(v=>this.hasRelationshipVdObjectErrors(v));
     }
 
     validateRelationship(relationship: RelationshipCreationParams): RelationShipValidationObject {
@@ -83,6 +82,10 @@ class PersonCreationValidationServiceImpl extends HumanCreationValidationService
         }
 
         return sexErr;
+    }
+
+    hasRelationshipVdObjectErrors(validationObject: RelationShipValidationObject): boolean {
+        return Boolean(validationObject.type||validationObject.note);
     }
 
 

@@ -10,8 +10,6 @@ import {CreationModalModes} from "../../redux/types/creation/CreationModalModes"
 import JurPersonCreationStateManager from "../../service/stateManagers/creation/jurPerson/JurPersonCreationStateManager";
 import PersonCreationStateManager from "../../service/stateManagers/creation/person/PersonCreationStateManager";
 import {HttpErrorParser} from "../../error/BasicHttpError";
-import {ApplicationError} from "../../rest/ErrorResponse";
-import {HttpStatus} from "../../rest/HttpStatus";
 import PersonDtoMapper from "../../service/dtoMappers/person/PersonDtoMapper";
 import JurPersonCreationStateManagerImpl
     from "../../service/stateManagers/creation/jurPerson/JurPersonCreationStateManagerImpl";
@@ -36,7 +34,7 @@ const whitelist: Array<CreationModalModes> = [CreationModalModes.SET_BEN_OWNER, 
 
 function ApplyPersonModal ({modalSettings, close}: Props) {
 
-    const [searchError, setSearchError] = useState<ApplicationError|null>(null);
+    const [searchError, setSearchError] = useState<string|null>(null);
 
     const [person, setPerson] = useState<Person|null>(null);
     /**
@@ -101,13 +99,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         let isIdValid = false;
 
         if (isNaN(id)) {
-            setSearchError({detail: "Невалідний ідентифікатор",
-                status: HttpStatus.UNKNOWN_ERROR,
-                error: null,
-                code: null,
-                type: null,
-                properties: null
-            });
+            setSearchError("Невалідний ідентифікатор");
         } else {
             setSearchError(null);
             isIdValid = true;
@@ -133,12 +125,12 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             const person: Person|null = personResponseDto?mapper.mapPreProcessedPersonWithLoss(mapper.mapSimpleDtoToEntity(personResponseDto)):null;
             setPerson(person)
             if (!person) {
-                throw new Error(`Особу з ідентифікатором ${id} не знайдено`)
+                setSearchError(`Особу з ідентифікатором ${id} не знайдено`)
             }
         } catch (e: unknown) {
             const err = HttpErrorParser.parseError(e);
             console.error(e)
-            setSearchError(err);
+            setSearchError(HttpErrorParser.getErrorDescription(err));
         }
 
         setPending(false)
@@ -183,13 +175,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                 const sourceRelObject = new RelationshipsLinkObject(store.getState().creation?.person?.emergingEntity.relationships);
 
                 if (sourceRelObject?.isPresent(relationship)) {
-                    const err: ApplicationError = {
-                        error: "Дана особа вже присутня в списку відносин",
-                        status: HttpStatus.UNKNOWN_ERROR,
-                        detail: null, properties: null, type: null,
-                        code: null
-                    }
-                    setSearchError(err);
+                    setSearchError("Дана особа вже присутня в списку відносин");
                     return;
                 }
 
@@ -265,7 +251,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                             </div>
 
                             {searchError?
-                                <p className="apply-person-modal__error-description">{searchError.error||searchError.detail||"Невідома помилка"}</p>
+                                <p className="apply-person-modal__error-description">{searchError}</p>
                                 :
                                 null
                             }
