@@ -9,7 +9,7 @@ import {RelationshipsInfo} from "../../../rest/dto/person/PersonResponseDto";
 import {JurPerson} from "../../jurPerson/JurPerson";
 import {EmbedJurPersonResponseDto} from "../../../rest/dto/jurPerson/JurPersonResponseDto";
 import SourceContainableEntity from "../../SourceContainableEntity";
-import MetadataContainable, {Metadata} from "../../MetadataContainable";
+import MetadataContainable from "../../MetadataContainable";
 
 interface Person extends Human, MediaEntity, CoreEntity, SourceContainableEntity, MetadataContainable {
     relationships: Relationship[],

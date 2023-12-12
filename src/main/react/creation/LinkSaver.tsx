@@ -25,7 +25,8 @@ export default function LinkSaver ({saveLink, validationEnabled = true}:LinkSave
                 }
             } else if (error) setError(null);
         }
-    }, [link])
+        // eslint-disable-next-line
+    }, [link, validationEnabled])
     return (
         <div className={`link-saver-wrapper ${error?'is-invalid':''}`}>
             <input type="text" value={link}

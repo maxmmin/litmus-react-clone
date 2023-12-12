@@ -2,10 +2,8 @@ import "../assets/styles/pageNotFound.scss"
 
 import {NavLink} from "react-router-dom";
 import appConfig from "../../config/appConfig";
-import {useLocation} from "react-router";
 
 export default function PageNotFound () {
-    const location = useLocation();
     return (
         <div className="page-not-found">
             <div className="page-not-found__content-block">

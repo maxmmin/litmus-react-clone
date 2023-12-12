@@ -1,7 +1,6 @@
 import {AsyncThunkAction} from "@reduxjs/toolkit";
 import store, {AppDispatch, LitmusAsyncThunkConfig} from "../../../redux/store";
 import RoleDtoMapper from "../../dtoMappers/user/RoleDtoMapper";
-import Role from "../../../model/userIdentity/Role";
 import ApplicationResourcesStateManager from "./ApplicationResourcesStateManager";
 import RoleDtoMapperImpl from "../../dtoMappers/user/RoleDtoMapperImpl";
 import ApplicationResources, {RoleMap} from "../../../redux/types/applicationResources/ApplicationResources";

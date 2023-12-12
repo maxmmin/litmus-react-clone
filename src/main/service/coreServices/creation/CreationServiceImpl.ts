@@ -77,7 +77,6 @@ class CreationServiceImpl<RequestDto,E,ResponseDto, C=E, V extends object=Valida
                     if (typeof validationResponse.detail === 'object'&&validationResponse.properties?.validationErrors) {
                         const validationErrors = this.mapServerValidationObject(emergingEntity,validationResponse.properties?.validationErrors);
                         this.creationStateManager.setValidationErrors(validationErrors);
-                        e = new ValidationError(validationErrors);
                     }
                 }
             }

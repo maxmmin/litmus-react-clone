@@ -2,7 +2,6 @@ import ApplicationResources, {RoleMap} from "../types/applicationResources/Appli
 import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {ApplicationResourcesAction} from "../actions/ApplicationResourcesAction";
-import Role from "../../model/userIdentity/Role";
 import CorsAnywhereProxyData from "../../service/api/nocorsproxy/CorsAnywhereProxyData";
 
 type ApplicationResourcesReducible = ApplicationResources|undefined;

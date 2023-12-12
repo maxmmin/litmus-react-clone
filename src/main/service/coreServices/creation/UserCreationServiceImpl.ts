@@ -19,13 +19,6 @@ class UserCreationServiceImpl
     extends CreationServiceImpl<UserRequestDto, User, UserResponseDto, UserCreationParams, UserValidationObject, ServerUserValidationObject>
     implements UserCreationService
     {
-    constructor(
-        apiService: UserCreationApiService,
-        creationStateManager: UserCreationStateManager,
-        mapper: UserDtoMapper,
-        validationService: UserCreationValidationService) {
-            super(apiService, creationStateManager, mapper, validationService);
-    }
 
     public static getInstance(apiService: UserCreationApiService = UserCreationApiServiceImpl.getInstance(),
                               stateManager: UserCreationStateManager = UserCreationStateManagerImpl.getInstance(),

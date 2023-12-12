@@ -35,7 +35,7 @@ class UserIdentityManagerImpl implements UserIdentityManager{
         return await this.dispatch(action).unwrap();
     };
 
-    public _retrieveIdentityThunk = createAsyncThunk<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig>(UserIdentityActions.RETRIEVE_IDENTITY, async ({}, {fulfillWithValue, rejectWithValue})=>{
+    public _retrieveIdentityThunk = createAsyncThunk<UserIdentity, RetrieveIdentityThunkArg, LitmusAsyncThunkConfig>(UserIdentityActions.RETRIEVE_IDENTITY, async (_, {fulfillWithValue, rejectWithValue})=>{
         try {
             const userIdentityDto: UserIdentityResponseDto = await this.identityService.retrieveIdentity();
             const userIdentity = this.userIdentityDtoMapper.map(userIdentityDto);
