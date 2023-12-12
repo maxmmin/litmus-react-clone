@@ -43,7 +43,7 @@ function HeaderMenu () {
             e.stopPropagation();
         }}>
             <Dropdown.Menu variant="light" align='start' >
-                <Link className='dropdown-item' to="/profile">Профіль</Link>
+                <Link className='dropdown-item' onClick={()=>appStateManager.headerMenuClose()} to={appConfig.applicationMappings.profile}>Профіль</Link>
                 <Link className='dropdown-item' to="/settings">Налаштування</Link>
 
                 <Dropdown.Divider />

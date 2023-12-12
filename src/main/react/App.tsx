@@ -22,6 +22,8 @@ import UserPage from "./entityPageComponents/user/UserPage";
 import PersonUrlPageWrapper from "./entityPageComponents/person/PersonPageUrlWrapper";
 import JurPersonUrlPageWrapper from "./entityPageComponents/jur-person/JurPersonUrlPageWrapper";
 import UserUrlPageWrapper from "./entityPageComponents/user/UserUrlPageWrapper";
+import Profile from "./Profile";
+import PrivateComponentWrapper from "./authorization/PrivateComponentWrapper";
 
 export const LitmusServiceContext = createContext(serviceContext);
 
@@ -37,6 +39,8 @@ function App() {
                                 <PrivateComponent mode={"NO_OUTPUT"} component={<RootScreen/>} requiredPermissions={[Permission.DATA_READ]}/>
                             }>
                                 <Route path={appConfig.applicationMappings.root} element={<HomeScreen/>}/>
+
+                                <Route path={appConfig.applicationMappings.profile} element={<Profile/>}/>
 
                                 <Route path={buildUrl(appConfig.applicationMappings.exploration.root, ':entityDomain')} element={
                                     <ExplorationScreen/>

@@ -88,6 +88,7 @@ const applicationRoot = "/"
 const applicationMappings = Object.freeze({
     signIn: "/sign-in",
     root: applicationRoot,
+    profile: buildUrl(applicationRoot, '/profile'),
     entityRoot: {
         [Entity.USER]: buildUrl(applicationRoot,"/users"),
         [Entity.PERSON]: buildUrl(applicationRoot,"/persons"),
