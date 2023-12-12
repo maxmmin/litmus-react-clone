@@ -18,9 +18,10 @@ import serviceContext from "../serviceContext";
 import appConfig from "../config/appConfig";
 import RootScreen from "./RootScreen";
 import {Entity} from "../model/Entity";
-import PersonPage from "./entityPageComponents/person/PersonPage";
-import JurPersonPage from "./entityPageComponents/jur-person/JurPersonPage";
 import UserPage from "./entityPageComponents/user/UserPage";
+import PersonUrlPageWrapper from "./entityPageComponents/person/PersonPageUrlWrapper";
+import JurPersonUrlPageWrapper from "./entityPageComponents/jur-person/JurPersonUrlPageWrapper";
+import UserUrlPageWrapper from "./entityPageComponents/user/UserUrlPageWrapper";
 
 export const LitmusServiceContext = createContext(serviceContext);
 
@@ -42,15 +43,15 @@ function App() {
                                 }/>
 
                                 <Route path={buildUrl(appConfig.applicationMappings.entityRoot[Entity.PERSON],':id')} element={
-                                    <PersonPage/>
+                                    <PersonUrlPageWrapper/>
                                 }/>
 
                                 <Route path={buildUrl(appConfig.applicationMappings.entityRoot[Entity.JUR_PERSON],':id')} element={
-                                    <JurPersonPage/>
+                                    <JurPersonUrlPageWrapper/>
                                 }/>
 
                                 <Route path={buildUrl(appConfig.applicationMappings.entityRoot[Entity.USER],':id')} element={
-                                    <UserPage/>
+                                    <UserUrlPageWrapper/>
                                 }/>
 
                                 <Route path={buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')} element={

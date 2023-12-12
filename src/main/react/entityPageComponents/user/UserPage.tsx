@@ -1,18 +1,16 @@
 import {useContext, useEffect, useState} from "react";
 import {LitmusServiceContext} from "../../App";
-import {useParams} from "react-router";
 import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
 import User from "../../../model/human/user/User";
 import UserComponent from "./UserComponent";
 import Loader from "../../loader/Loader";
+import {PageProps} from "../PageProps";
 
-export default function UserPage () {
+export default function UserPage ({id}: PageProps) {
     const context = useContext(LitmusServiceContext);
     const explorationApiService = context.exploration.apiService.user;
     const dtoMapper = context.mappers.user.default;
     const notificationManager = context.notification.manager;
-
-    const {id} = useParams<{id: string}>();
 
     const [isFetching, setFetching] = useState<boolean>(true);
 
@@ -21,22 +19,20 @@ export default function UserPage () {
     useEffect(()=>{
         if (!isFetching) setFetching(true);
 
-        if (id!==undefined&&!isNaN(+id)) {
-            explorationApiService.findById(+id)
-                .then(responseDto => {
-                    if (responseDto) {
-                        const foundUser = dtoMapper.mapToEntity(responseDto);
-                        console.log(foundUser)
-                        setUser(foundUser);
-                    }
-                })
-                .catch(err => {
-                    console.error(err)
-                    const error = new BasicHttpError(HttpErrorParser.parseError(err));
-                    notificationManager.error(error.getDescription())
-                })
-                .finally(()=>setFetching(false));
-        }
+        explorationApiService.findById(id)
+            .then(responseDto => {
+                if (responseDto) {
+                    const foundUser = dtoMapper.mapToEntity(responseDto);
+                    console.log(foundUser)
+                    setUser(foundUser);
+                }
+            })
+            .catch(err => {
+                console.error(err)
+                const error = new BasicHttpError(HttpErrorParser.parseError(err));
+                notificationManager.error(error.getDescription())
+            })
+            .finally(()=>setFetching(false));
     }, [id])
 
     return (

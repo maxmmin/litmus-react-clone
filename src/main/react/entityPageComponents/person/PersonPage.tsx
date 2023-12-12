@@ -5,15 +5,14 @@ import {BasicHttpError, HttpErrorParser} from "../../../error/BasicHttpError";
 import Loader from "../../loader/Loader";
 import PersonComponent from "./PersonComponent";
 import {useParams} from "react-router";
+import {PageProps} from "../PageProps";
 
 
-export default function PersonPage () {
+export default function PersonPage ({id}: PageProps) {
     const context = useContext(LitmusServiceContext);
     const explorationApiService = context.exploration.apiService.person;
     const dtoMapper = context.mappers.person;
     const notificationManager = context.notification.manager;
-
-    const {id} = useParams<{id: string}>();
 
     const [isFetching, setFetching] = useState<boolean>(true)
 
@@ -22,24 +21,20 @@ export default function PersonPage () {
     useEffect(()=>{
         if (!isFetching) setFetching(true);
 
-        if (id!==undefined&&!isNaN(+id)) {
-            explorationApiService.findByIdWithDepthOption(+id, 12)
-                .then(responseDto => {
-                    if (responseDto) {
-                        const foundPerson = dtoMapper.mapToEntity(responseDto);
-                        setPerson(foundPerson);
-                    }
-                })
-                .catch(err => {
-                    console.error(err)
-                    const error = new BasicHttpError(HttpErrorParser.parseError(err));
-                    notificationManager.error(error.getDescription())
-                })
-                .finally(()=>setFetching(false));
-        }
+        explorationApiService.findByIdWithDepthOption(id, 12)
+            .then(responseDto => {
+                if (responseDto) {
+                    const foundPerson = dtoMapper.mapToEntity(responseDto);
+                    setPerson(foundPerson);
+                }
+            })
+            .catch(err => {
+                console.error(err)
+                const error = new BasicHttpError(HttpErrorParser.parseError(err));
+                notificationManager.error(error.getDescription())
+            })
+            .finally(()=>setFetching(false));
     }, [id])
-
-    if (id===undefined) return <h1>Error. Invalid ID.</h1>
 
     return (
         <div className="entity-root-screen">
