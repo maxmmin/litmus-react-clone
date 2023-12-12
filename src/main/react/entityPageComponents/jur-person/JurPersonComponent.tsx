@@ -1,3 +1,5 @@
+import "../../assets/styles/entityPage/entityPage.scss";
+
 import {JurPerson, PreProcessedJurPerson} from "../../../model/jurPerson/JurPerson";
 import {buildImgUrl, buildUrl, hasLocation} from "../../../util/pureFunctions";
 import appConfig from "../../../config/appConfig";

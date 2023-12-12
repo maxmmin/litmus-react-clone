@@ -1,6 +1,7 @@
+import "../../assets/styles/entityPage/entityPage.scss";
+
 import Person, {PreProcessedPerson} from "../../../model/human/person/Person";
 import {buildImgUrl, hasLocation} from "../../../util/pureFunctions";
-import "../../assets/styles/entityPage/entityPage.scss";
 import "../../assets/styles/entityPage/personPage.scss";
 import ImageSlider from "../ImageSlider";
 import PersonMap, {PersonMapProps} from "./PersonMap";
@@ -15,7 +16,7 @@ import PersonMapTool from "../../../util/map/person/PersonMapTool";
 import {RelationsLabelsMetaData} from "../../../util/map/MapPainter";
 import {mapRelatedJurPerson, mapPossibleRelatedPerson} from "../mapFunctions";
 import ManagePanel from "../manage/ManagePanel";
-import {HttpErrorParser, noInfoMessage} from "../../../error/BasicHttpError";
+import {HttpErrorParser} from "../../../error/BasicHttpError";
 import {ApplicationError} from "../../../rest/ErrorResponse";
 import {useNavigate} from "react-router-dom";
 import {useLocation} from "react-router";

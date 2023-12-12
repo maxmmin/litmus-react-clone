@@ -7,10 +7,6 @@ $page-border-radius: 15px;
   margin: 0 auto;
 }
 
-.entity-root-screen {
-  height: 100%;
-}
-
 .entity-page-inner-wrapper {
   max-width: 800px;
   padding-top: 50px;
@@ -334,4 +330,13 @@ $page-border-radius: 15px;
   .related-entity-container__mobile-key_br {
     display: block;
   }
+}
+
+.entity-screen-loader {
+  position: absolute;
+  top: 0;
+  bottom: 10vh;
+  right: 0;
+  left: 0;
+  height: auto;
 }

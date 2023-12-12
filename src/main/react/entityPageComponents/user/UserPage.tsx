@@ -12,34 +12,32 @@ export default function UserPage ({id}: PageProps) {
     const dtoMapper = context.mappers.user.default;
     const notificationManager = context.notification.manager;
 
-    const [isFetching, setFetching] = useState<boolean>(true);
+    const [isFetching, setFetching] = useState<boolean>(false);
 
     const [user, setUser] = useState<User|null>(null)
 
     useEffect(()=>{
-        if (!isFetching) {
-            setFetching(true);
+        setFetching(true);
 
-            explorationApiService.findById(id)
-                .then(responseDto => {
-                    if (responseDto) {
-                        const foundUser = dtoMapper.mapToEntity(responseDto);
-                        console.log(foundUser)
-                        setUser(foundUser);
-                    }
-                })
-                .catch(err => {
-                    console.error(err)
-                    const error = new BasicHttpError(HttpErrorParser.parseError(err));
-                    notificationManager.error(error.getDescription())
-                })
-                .finally(()=>setFetching(false));
-        }
-    }, [id, isFetching])
+        explorationApiService.findById(id)
+            .then(responseDto => {
+                if (responseDto) {
+                    const foundUser = dtoMapper.mapToEntity(responseDto);
+                    console.log(foundUser)
+                    setUser(foundUser);
+                }
+            })
+            .catch(err => {
+                console.error(err)
+                const error = new BasicHttpError(HttpErrorParser.parseError(err));
+                notificationManager.error(error.getDescription())
+            })
+            .finally(()=>setFetching(false));
+    }, [id])
 
     return (
-        <div className="entity-root-screen">
-            {isFetching && <Loader/>}
+        <div className="entity-screen">
+            {isFetching && <Loader cssAnchor={"entity-screen-loader"}/>}
 
             {(!isFetching&&user) && <UserComponent user={user}/>}
         </div>

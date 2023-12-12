@@ -13,33 +13,31 @@ export default function JurPersonPage ({id}: PageProps) {
     const dtoMapper = context.mappers.jurPerson;
     const notificationManager = context.notification.manager;
 
-    const [isFetching, setFetching] = useState<boolean>(true)
+    const [isFetching, setFetching] = useState<boolean>(false)
 
     const [jurPerson,setJurPerson] = useState<PreProcessedJurPerson|null>(null);
 
     useEffect(()=>{
-        if (!isFetching) {
-            setFetching(true);
+        setFetching(true);
 
-            explorationApiService.findByIdWithDepthOption(id, 12)
-                .then(responseDto => {
-                    if (responseDto) {
-                        const foundPerson = dtoMapper.mapToEntity(responseDto);
-                        setJurPerson(foundPerson);
-                    }
-                })
-                .catch(err => {
-                    console.error(err)
-                    const error = new BasicHttpError(HttpErrorParser.parseError(err));
-                    notificationManager.error(error.getDescription())
-                })
-                .finally(()=>setFetching(false));
-        }
-    }, [id, isFetching])
+        explorationApiService.findByIdWithDepthOption(id, 12)
+            .then(responseDto => {
+                if (responseDto) {
+                    const foundPerson = dtoMapper.mapToEntity(responseDto);
+                    setJurPerson(foundPerson);
+                }
+            })
+            .catch(err => {
+                console.error(err)
+                const error = new BasicHttpError(HttpErrorParser.parseError(err));
+                notificationManager.error(error.getDescription())
+            })
+            .finally(()=>setFetching(false));
+    }, [id])
 
     return (
-        <div className="entity-root-screen">
-            {isFetching && <Loader/>}
+        <div className="entity-screen">
+            {isFetching && <Loader cssAnchor={"entity-screen-loader"}/>}
 
             {(!isFetching&&jurPerson) && <JurPersonComponent rawJurPerson={jurPerson}/>}
         </div>

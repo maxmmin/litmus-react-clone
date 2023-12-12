@@ -1,4 +1,6 @@
-import React, {Ref, useContext, useEffect, useMemo, useRef, useState} from "react";
+import "../../assets/styles/entityPage/entityPage.scss";
+
+import React, {Ref, useContext, useMemo, useRef, useState} from "react";
 import User from "../../../model/human/user/User";
 import PagedData from "../../../rest/PagedData";
 import Person from "../../../model/human/person/Person";
