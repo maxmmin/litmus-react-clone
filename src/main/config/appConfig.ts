@@ -32,8 +32,8 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
 const personsRoot = buildUrl(apiRoot, entityDomains.PERSON);
 
 const relativeApiPaths = {
-    getByFullName: buildUrl(backendUrl, "/find/full-name"),
-    findByIdList: buildUrl(backendUrl, "/find/id-list")
+    getByFullName:  "/find/full-name",
+    findByIdList: "/find/id-list"
 }
 
 const jpRoot = buildUrl(apiRoot, entityDomains.JUR_PERSON)

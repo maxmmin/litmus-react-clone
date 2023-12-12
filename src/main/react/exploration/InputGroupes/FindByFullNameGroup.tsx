@@ -29,7 +29,7 @@ const FindByFullNameGroup = () => {
             <Form.Group className="mb-3">
                 <Form.Label>Прізвище</Form.Label>
                 <input required={true} autoComplete={"new-password"} value={lastName} onChange={e=>{
-                    stateManager.updateParams({lastName: e.currentTarget.value})
+                    stateManager.updateParams({lastName: e.currentTarget.value.trim()})
                 }} className={`last-name form-control`}  type="text" placeholder="Введіть прізвище"
                 onKeyDown={keyPressHandler}
                 />
@@ -38,7 +38,7 @@ const FindByFullNameGroup = () => {
             <Form.Group className="mb-3">
                 <Form.Label>Ім'я</Form.Label>
                 <input autoComplete={"new-password"} value={firstName}  onChange={e=>{
-                    stateManager.updateParams({firstName: e.currentTarget.value})
+                    stateManager.updateParams({firstName: e.currentTarget.value.trim()})
                 }} className={`first-name form-control`} type="text" placeholder="Введіть ім'я"
                        onKeyDown={keyPressHandler}
                 />
@@ -47,7 +47,7 @@ const FindByFullNameGroup = () => {
             <Form.Group className="mb-3">
                 <Form.Label>Ім'я по-батькові</Form.Label>
                 <input autoComplete={"new-password"} value={middleName}  onChange={e=>{
-                    stateManager.updateParams({middleName: e.currentTarget.value})
+                    stateManager.updateParams({middleName: e.currentTarget.value.trim()})
                 }} className={`middle-name form-control`} type="text" placeholder="Введіть ім'я по-батькові"
                 onKeyDown={keyPressHandler}
                 />

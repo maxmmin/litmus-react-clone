@@ -18,3 +18,9 @@
   flex-shrink: 1;
   flex-grow: 1;
 }
+
+@media all and (max-width: 576px) {
+  .created-entities__heading-container {
+    flex-direction: column;
+  }
+}

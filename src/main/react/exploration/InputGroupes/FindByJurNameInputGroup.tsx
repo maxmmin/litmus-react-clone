@@ -15,7 +15,7 @@ export default function () {
         <Form.Group className="mb-3">
             <Form.Label>Назва</Form.Label>
             <input required={true} autoComplete={"new-password"} onChange={e=>{
-                stateManager.updateParams({name: e.currentTarget.value});
+                stateManager.updateParams({name: e.currentTarget.value.trimStart()});
             }} className={`id form-control`} value={name} type="text" placeholder="Введіть назву"
                    onKeyDown={keyPressHandler}
             />

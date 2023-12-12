@@ -14,7 +14,7 @@ export default function FindByEmail () {
             <Form.Group className="mb-3">
                 <Form.Label>Email</Form.Label>
                 <input required={true} autoComplete={"new-password"} onChange={e=>{
-                    stateManager.updateParams({email: e.currentTarget.value});
+                    stateManager.updateParams({email: e.currentTarget.value.trim()});
                 }} className={`id form-control`} value={email} type="text" placeholder="Введіть email"
                        onKeyDown={keyPressHandler}
                 />
