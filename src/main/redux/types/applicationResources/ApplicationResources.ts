@@ -5,5 +5,5 @@ export type RoleMap = Record<string, Role>
 
 export default interface ApplicationResources  {
     roles: RoleMap|null
-    corsAnywhereProxiesData: CorsAnywhereProxyData[]|null
+    corsAnywhereProxies: CorsAnywhereProxyData[]|null
 }

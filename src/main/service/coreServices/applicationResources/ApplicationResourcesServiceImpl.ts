@@ -13,6 +13,9 @@ import ApplicationResourcesApiServiceImpl from "../../api/appResources/Applicati
 import RoleDtoMapperImpl from "../../dtoMappers/user/RoleDtoMapperImpl";
 import serializableDeepCopy from "../../../util/functional/serializableDeepCopy";
 import CorsAnywhereProxyData from "../../api/nocorsproxy/CorsAnywhereProxyData";
+import ApplicationResources, {RoleMap} from "../../../redux/types/applicationResources/ApplicationResources";
+import ApplicationResourcesResponseDto from "../../../rest/dto/ApplicationResourcesResponseDto";
+import buildRoleMap from "../../../util/functional/buildRoleMap";
 
 
 export default class ApplicationResourcesServiceImpl implements ApplicationResourcesService {
@@ -33,18 +36,18 @@ export default class ApplicationResourcesServiceImpl implements ApplicationResou
     }
 
     protected readonly _retrieveRolesThunk =
-        createAsyncThunk<Role[],ThunkArg, LitmusAsyncThunkConfig>(ApplicationResourcesAction.RETRIEVE_ROLES,
+        createAsyncThunk<RoleMap,ThunkArg, LitmusAsyncThunkConfig>(ApplicationResourcesAction.RETRIEVE_ROLES,
             async (meta, {rejectWithValue, fulfillWithValue})=>{
                 try {
-                    const rolesDtoList: Role[] = (await this.apiService.fetchRoles()).map(dto=>this.roleMapper.map(dto));
-                    return fulfillWithValue(rolesDtoList, {notify: false})
+                    const roles: Role[] = (await this.apiService.fetchRoles()).map(dto=>this.roleMapper.map(dto));
+                    return fulfillWithValue(buildRoleMap(roles), {notify: false})
                 } catch (e) {
                     console.error(e);
                     return rejectWithValue(serializableDeepCopy(e), {notify: true})
                 }
         });
 
-    public async loadRoles (): Promise<Role[]> {
+    public async loadRoles (): Promise<RoleMap> {
         return this.stateManager.retrieveRoles(this._retrieveRolesThunk({globalPending: true}))
     }
 
@@ -63,5 +66,26 @@ export default class ApplicationResourcesServiceImpl implements ApplicationResou
     loadCorsAnywhereProxiesList(): Promise<CorsAnywhereProxyData[]> {
         return this.stateManager.retrieveCorsAnywhereProxiesData(this._retrieveCorsAnywhereProxiesListThunk({globalPending: true}))
     }
+
+    protected readonly _retrieveAppResources =
+        createAsyncThunk<ApplicationResources,ThunkArg, LitmusAsyncThunkConfig>(ApplicationResourcesAction.RETRIEVE_CONTEXT,
+            async (meta, {rejectWithValue, fulfillWithValue})=>{
+                try {
+                    const resourcesResponseDto: ApplicationResourcesResponseDto = await this.apiService.fetchAppResources();
+                    const resources: ApplicationResources = {
+                        ...resourcesResponseDto,
+                        roles: buildRoleMap(resourcesResponseDto.roles.map(r => this.roleMapper.map(r)))
+                    }
+                    return fulfillWithValue(resources, {notify: false})
+                } catch (e) {
+                    console.error(e);
+                    return rejectWithValue(serializableDeepCopy(e), {notify: true})
+                }
+            });
+
+    loadAll(): Promise<ApplicationResources> {
+        return this.stateManager.retrieveAppResources(this._retrieveAppResources({globalPending: true}))
+    }
+
 
 }

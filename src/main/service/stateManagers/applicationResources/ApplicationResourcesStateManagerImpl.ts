@@ -4,7 +4,7 @@ import RoleDtoMapper from "../../dtoMappers/user/RoleDtoMapper";
 import Role from "../../../model/userIdentity/Role";
 import ApplicationResourcesStateManager from "./ApplicationResourcesStateManager";
 import RoleDtoMapperImpl from "../../dtoMappers/user/RoleDtoMapperImpl";
-import ApplicationResources from "../../../redux/types/applicationResources/ApplicationResources";
+import ApplicationResources, {RoleMap} from "../../../redux/types/applicationResources/ApplicationResources";
 import CorsAnywhereProxyData from "../../api/nocorsproxy/CorsAnywhereProxyData";
 
 export default class ApplicationResourcesStateManagerImpl implements ApplicationResourcesStateManager {
@@ -24,15 +24,15 @@ export default class ApplicationResourcesStateManagerImpl implements Application
             return this.getAppResources().roles;
       }
 
-      getCorsAnywhereProxiesData(): ApplicationResources["corsAnywhereProxiesData"] {
-            return this.getAppResources().corsAnywhereProxiesData;
+      getCorsAnywhereProxiesData(): ApplicationResources["corsAnywhereProxies"] {
+            return this.getAppResources().corsAnywhereProxies;
       }
 
       public static getInstance(dtoMapper: RoleDtoMapper = RoleDtoMapperImpl.getInstance()): ApplicationResourcesStateManagerImpl {
           return new ApplicationResourcesStateManagerImpl(dtoMapper);
       }
 
-      public retrieveRoles (thunk: AsyncThunkAction<Role[], unknown, LitmusAsyncThunkConfig>): Promise<Role[]> {
+      public retrieveRoles (thunk: AsyncThunkAction<RoleMap, unknown, LitmusAsyncThunkConfig>): Promise<RoleMap> {
           return this.dispatch(thunk).unwrap()
       }
 
@@ -40,5 +40,8 @@ export default class ApplicationResourcesStateManagerImpl implements Application
             return this.dispatch(thunk).unwrap();
       }
 
+      public retrieveAppResources (thunk: AsyncThunkAction<ApplicationResources, unknown, LitmusAsyncThunkConfig>): Promise<ApplicationResources> {
+            return this.dispatch(thunk).unwrap()
+      }
 
 }

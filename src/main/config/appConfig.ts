@@ -69,6 +69,7 @@ const serverMappings = Object.freeze({
     },
     csrfToken: buildUrl(backendUrl, '/csrf-token'),
     config: {
+        root: apiConfigRoot,
         roles: buildUrl(apiConfigRoot, '/roles'),
         corsAnywhereProxiesList: buildUrl(apiConfigRoot, '/cors-anywhere-proxies')
     }

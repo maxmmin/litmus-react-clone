@@ -10,6 +10,7 @@ import {useNavigate} from "react-router-dom";
 import {AxiosError} from "axios";
 import NetworkErrPage from "./networkStatusPages/NetworkErrPage";
 import './assets/styles/loadingPage.scss'
+import isAppResourcesContextInitialized from "../util/functional/isAppResourcesContextInitialized";
 
 
 type Props = {
@@ -59,23 +60,17 @@ const LitmusCore = ({children}: Props) => {
 
     const appResourcesService = serviceContext.applicationResources.service;
 
-    const resources = useAppSelector(state => state.appResources)
+    const resources = useAppSelector(state => state.appResources!)
+
 
     useEffect(()=>{
-        if (authentication?.isAuthenticated&&networkStatus===NetworkStatus.ONLINE&&!resources?.roles) {
-            appResourcesService.loadRoles().then(()=>{
-                console.log('roles were successfully loaded')
+        if (!isAppResourcesContextInitialized(resources)&&authentication?.isAuthenticated&&networkStatus===NetworkStatus.ONLINE) {
+            appResourcesService.loadAll().then(context=>{
+                console.info('resources where successfully loaded');
+                console.info(context)
             });
         }
-    }, [networkStatus, resources?.roles, authentication])
-
-    useEffect(()=>{
-        if (authentication?.isAuthenticated&&networkStatus===NetworkStatus.ONLINE&&!resources?.corsAnywhereProxiesData) {
-            appResourcesService.loadCorsAnywhereProxiesList().then(()=>{
-                console.log('cors anywhere proxies list was successfully loaded')
-            });
-        }
-    }, [networkStatus, resources?.corsAnywhereProxiesData, authentication])
+    }, [networkStatus, authentication])
 
     useEffect(()=>{
         if (authentication?.isAuthenticated) {
