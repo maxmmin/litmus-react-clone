@@ -31,7 +31,7 @@ export default class CorsAnywhereProxyServiceImpl implements CorsAnywhereProxySe
         let success: boolean = false;
 
         const promises: Promise<AxiosResponse<D>>[] = this.appResourcesManager.getCorsAnywhereProxiesData()!.map(async proxyData => {
-            const formedUrl: string = checkNotEmpty(proxyData.proxyUrlPrefix)+req.url;
+            const formedUrl: string = checkNotEmpty(proxyData.proxyUrlPrefix)+encodeURIComponent(checkNotEmpty(req.url));
 
             const config = {...req, url: formedUrl, axiosRetry: {retryCondition: () => !success}}
             if (proxyData.isApiKeyProtected) {
