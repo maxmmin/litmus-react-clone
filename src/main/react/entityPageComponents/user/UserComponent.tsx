@@ -90,7 +90,7 @@ export default function ({user}: UserProps) {
 
     const currentUser = useAppSelector(state => checkNotEmpty(state.userIdentity));
 
-    if (isPending||!usersPage||!personsPage||!jurPersonsPage) return <Loader/>
+    if (isPending||!usersPage||!personsPage||!jurPersonsPage) return <Loader cssAnchor={"entity-screen-loader"}/>
 
     return (
         <div className={"entity-page-wrapper entity-page-wrapper_user"}>

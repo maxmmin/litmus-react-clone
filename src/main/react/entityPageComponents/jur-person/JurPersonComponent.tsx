@@ -115,7 +115,7 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
 
 
 
-    if (isPending) return <Loader/>
+    if (isPending) return <Loader cssAnchor={"entity-screen-loader"}/>
 
     if (!jurPerson) throw new Error("no person was loaded");
 
