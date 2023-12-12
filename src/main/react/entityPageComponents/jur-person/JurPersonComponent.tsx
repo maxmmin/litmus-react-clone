@@ -26,6 +26,7 @@ import ManagePanel from "../manage/ManagePanel";
 import {useLocation} from "react-router";
 import {useNavigate} from "react-router-dom";
 import SecuredImage from "../../sharedComponents/SecuredImage";
+import UsedSources from "../UsedSources";
 
 function getRelatedGeoIconCssAnchor(jurPerson: JurPerson, person: Person, defaultAnchor: string = ""): string {
     if (jurPerson.location) {
@@ -327,6 +328,11 @@ export default function JurPersonComponent({rawJurPerson}: {rawJurPerson: PrePro
                         }
                     </section>
                 }
+
+                <section className="entity-page__used-sources">
+                    <h4 className="used-sources__title">Використані джерела</h4>
+                    {jurPerson.sources.length>0 ? <UsedSources sources={jurPerson.sources}/> : "Інформація про використані джерела відсутня"}
+                </section>
             </div>
         </div>
     )

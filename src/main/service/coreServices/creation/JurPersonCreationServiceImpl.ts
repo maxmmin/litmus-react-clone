@@ -33,11 +33,11 @@ class JurPersonCreationServiceImpl extends CreationServiceImpl<JurPersonRequestD
 
     async createEntity(): Promise<PreProcessedJurPerson> {
         const media = this.creationStateManager.getCreationParams().media;
-
-        const sources = this.creationStateManager.getCreationParams().sources;
-        if (sources.length > 0) sources.forEach(source => this.genArchiver.archive(source));
+        const jurPersonSources = new Set(this.creationStateManager.getCreationParams().sources);
 
         const createdJurPerson: PreProcessedJurPerson = await super.defaultCreate();
+
+        if (jurPersonSources.size > 0) jurPersonSources.forEach(source => this.genArchiver.archive(source));
 
         const linkedFiles: string[] = getFilesFromMedia(media);
         linkedFiles.forEach(file=>this.fileService.removeFile(file))

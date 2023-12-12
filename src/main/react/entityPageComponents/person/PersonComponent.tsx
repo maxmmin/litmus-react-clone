@@ -21,6 +21,7 @@ import {useNavigate} from "react-router-dom";
 import {useLocation} from "react-router";
 import appConfig from "../../../config/appConfig";
 import {Permission} from "../../../model/userIdentity/Role";
+import UsedSources from "../UsedSources";
 
 type PersonProps = {
     rawPerson: PreProcessedPerson
@@ -247,6 +248,11 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
                         }
                     </section>
                 }
+
+                <section className="entity-page__used-sources">
+                    <h4 className="used-sources__title">Використані джерела</h4>
+                    {person.sources.length>0 ? <UsedSources sources={person.sources}/> : "Інформація про використані джерела відсутня"}
+                </section>
             </div>
         </div>
     )

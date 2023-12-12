@@ -251,6 +251,32 @@ $page-border-radius: 15px;
   cursor: auto;
 }
 
+.used-sources-container {
+  display: flex;
+  margin-top: 20px;
+  column-gap: 20px;
+  row-gap: 10px;
+  flex-wrap: wrap;
+}
+
+.used-source-container {
+  background: $md-sys-color-primary-container-light;
+  border: 2px solid $md-sys-color-primary-light;
+  max-width: 100%;
+  padding: 5px 10px;
+  border-radius: 25px;
+}
+
+.used-source-container-inner {
+  max-width: 100%;
+  overflow: auto;
+}
+
+.used-source {
+  word-break: keep-all;
+  white-space: nowrap;
+}
+
 @media all and (pointer: fine) {
   .manage-entity-container__action-btn:hover {
     background: $md-sys-color-primary-container-light;

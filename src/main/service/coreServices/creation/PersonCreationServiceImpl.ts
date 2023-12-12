@@ -35,11 +35,11 @@ class PersonCreationServiceImpl
 
     async createEntity(): Promise<PreProcessedPerson> {
         const media = this.creationStateManager.getCreationParams().media;
-
-        const sources = this.creationStateManager.getCreationParams().sources;
-        if (sources.length > 0) sources.forEach(source => this.genArchiver.archive(source));
+        const sources = new Set(this.creationStateManager.getCreationParams().sources);
 
         const createdPerson: PreProcessedPerson = await super.defaultCreate();
+
+        if (sources.size > 0) sources.forEach(source => this.genArchiver.archive(source));
 
         const linkedFiles: string[] = getFilesFromMedia(media);
         linkedFiles.forEach(file=>this.fileService.removeFile(file))
