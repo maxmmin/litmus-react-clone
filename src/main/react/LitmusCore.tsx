@@ -67,7 +67,7 @@ const LitmusCore = ({children}: Props) => {
                 console.log('roles were successfully loaded')
             });
         }
-    }, [networkStatus, resources?.roles])
+    }, [networkStatus, resources?.roles, authentication])
 
     useEffect(()=>{
         if (authentication?.isAuthenticated&&networkStatus===NetworkStatus.ONLINE&&!resources?.corsAnywhereProxiesData) {
@@ -75,7 +75,7 @@ const LitmusCore = ({children}: Props) => {
                 console.log('cors anywhere proxies list was successfully loaded')
             });
         }
-    }, [networkStatus, resources?.corsAnywhereProxiesData])
+    }, [networkStatus, resources?.corsAnywhereProxiesData, authentication])
 
     useEffect(()=>{
         if (authentication?.isAuthenticated) {
@@ -85,7 +85,7 @@ const LitmusCore = ({children}: Props) => {
         } else {
             navigate(appConfig.applicationMappings.signIn);
         }
-    },[authentication, networkStatus, userIdentityManager, resources])
+    },[authentication, networkStatus, userIdentityManager, resources?.roles])
 
     async function checkConnection(): Promise<void> {
         appStateManager.enablePending();

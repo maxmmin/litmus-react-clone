@@ -22,7 +22,6 @@ const NO_OUTPUT: ForbiddenOutputMode = "NO_OUTPUT"
 export {ERROR_PAGE, NO_OUTPUT}
 
 const PrivateComponent = ({component, mode, requiredPermissions}: Props) => {
-
     const user = useAppSelector(state => state.userIdentity)
 
     const isAuthorized: boolean = useMemo(()=>{
