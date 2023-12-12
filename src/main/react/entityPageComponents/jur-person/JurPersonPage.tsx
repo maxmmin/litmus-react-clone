@@ -18,24 +18,24 @@ export default function JurPersonPage ({id}: PageProps) {
     const [jurPerson,setJurPerson] = useState<PreProcessedJurPerson|null>(null);
 
     useEffect(()=>{
-        if (!isFetching) setFetching(true);
+        if (!isFetching) {
+            setFetching(true);
 
-        explorationApiService.findByIdWithDepthOption(id, 12)
-            .then(responseDto => {
-                if (responseDto) {
-                    const foundPerson = dtoMapper.mapToEntity(responseDto);
-                    setJurPerson(foundPerson);
-                }
-            })
-            .catch(err => {
-                console.error(err)
-                const error = new BasicHttpError(HttpErrorParser.parseError(err));
-                notificationManager.error(error.getDescription())
-            })
-            .finally(()=>setFetching(false));
-    }, [id])
-
-    if (id===undefined) return <h1>Error. Invalid ID.</h1>
+            explorationApiService.findByIdWithDepthOption(id, 12)
+                .then(responseDto => {
+                    if (responseDto) {
+                        const foundPerson = dtoMapper.mapToEntity(responseDto);
+                        setJurPerson(foundPerson);
+                    }
+                })
+                .catch(err => {
+                    console.error(err)
+                    const error = new BasicHttpError(HttpErrorParser.parseError(err));
+                    notificationManager.error(error.getDescription())
+                })
+                .finally(()=>setFetching(false));
+        }
+    }, [id, isFetching])
 
     return (
         <div className="entity-root-screen">

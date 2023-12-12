@@ -17,23 +17,25 @@ export default function UserPage ({id}: PageProps) {
     const [user, setUser] = useState<User|null>(null)
 
     useEffect(()=>{
-        if (!isFetching) setFetching(true);
+        if (!isFetching) {
+            setFetching(true);
 
-        explorationApiService.findById(id)
-            .then(responseDto => {
-                if (responseDto) {
-                    const foundUser = dtoMapper.mapToEntity(responseDto);
-                    console.log(foundUser)
-                    setUser(foundUser);
-                }
-            })
-            .catch(err => {
-                console.error(err)
-                const error = new BasicHttpError(HttpErrorParser.parseError(err));
-                notificationManager.error(error.getDescription())
-            })
-            .finally(()=>setFetching(false));
-    }, [id])
+            explorationApiService.findById(id)
+                .then(responseDto => {
+                    if (responseDto) {
+                        const foundUser = dtoMapper.mapToEntity(responseDto);
+                        console.log(foundUser)
+                        setUser(foundUser);
+                    }
+                })
+                .catch(err => {
+                    console.error(err)
+                    const error = new BasicHttpError(HttpErrorParser.parseError(err));
+                    notificationManager.error(error.getDescription())
+                })
+                .finally(()=>setFetching(false));
+        }
+    }, [id, isFetching])
 
     return (
         <div className="entity-root-screen">

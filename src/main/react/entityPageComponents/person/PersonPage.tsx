@@ -19,21 +19,23 @@ export default function PersonPage ({id}: PageProps) {
     const [person,setPerson] = useState<PreProcessedPerson|null>(null);
 
     useEffect(()=>{
-        if (!isFetching) setFetching(true);
+        if (!isFetching) {
+            setFetching(true);
 
-        explorationApiService.findByIdWithDepthOption(id, 12)
-            .then(responseDto => {
-                if (responseDto) {
-                    const foundPerson = dtoMapper.mapToEntity(responseDto);
-                    setPerson(foundPerson);
-                }
-            })
-            .catch(err => {
-                console.error(err)
-                const error = new BasicHttpError(HttpErrorParser.parseError(err));
-                notificationManager.error(error.getDescription())
-            })
-            .finally(()=>setFetching(false));
+            explorationApiService.findByIdWithDepthOption(id, 12)
+                .then(responseDto => {
+                    if (responseDto) {
+                        const foundPerson = dtoMapper.mapToEntity(responseDto);
+                        setPerson(foundPerson);
+                    }
+                })
+                .catch(err => {
+                    console.error(err)
+                    const error = new BasicHttpError(HttpErrorParser.parseError(err));
+                    notificationManager.error(error.getDescription())
+                })
+                .finally(()=>setFetching(false));
+        }
     }, [id])
 
     return (
