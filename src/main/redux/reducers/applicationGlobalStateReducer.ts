@@ -23,7 +23,9 @@ const applicationGlobalStateReducer: Reducer<AppStateReducible, Action<String>> 
         }
 
         case AppStateAction.REFRESH_OFF: {
-            return { ...prevState, pendingActions: prevState.pendingActions-1}
+            const newPendingActionsCount = prevState.pendingActions-1;
+            if (newPendingActionsCount < 0) throw new Error("invalid pending actions count")
+            return { ...prevState, pendingActions: newPendingActionsCount}
         }
 
         case AppStateAction.HEADER_MENU_TOGGLE: {

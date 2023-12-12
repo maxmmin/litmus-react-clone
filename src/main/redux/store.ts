@@ -75,6 +75,7 @@ const rootReducer: typeof _rootReducer = (state, action) => {
         const resources = state?.appResources;
         return {
             ...defaultStoreState,
+            appState: {...initialAppState, pendingActions: state!.appState!.pendingActions},
             appResources: resources
         }
     } else {
