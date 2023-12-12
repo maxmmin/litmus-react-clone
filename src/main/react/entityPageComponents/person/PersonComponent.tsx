@@ -82,7 +82,7 @@ export default function PersonComponent ({rawPerson}: PersonProps) {
         } else return null;
     }, [person])
 
-    if (isPending) return <Loader/>
+    if (isPending) return <Loader cssAnchor={"entity-screen-loader"}/>
 
     if (!person) throw new Error("no person was loaded");
 
