@@ -1,0 +1,14 @@
+@import "colors";
+
+.page-not-found {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+}
+
+.page-not-found__content-block {
+  height: min-content;
+}
+

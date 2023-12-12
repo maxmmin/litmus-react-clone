@@ -29,6 +29,7 @@ export default function LinkSaver ({saveLink, validationEnabled = true}:LinkSave
     return (
         <div className={`link-saver-wrapper ${error?'is-invalid':''}`}>
             <input type="text" value={link}
+                   placeholder={"Введіть URL"}
                    onInput={e=>setLink(e.currentTarget.value)}
                    className={`link-saver-input form-control ${error?'is-invalid':''}`}
                    autoComplete={"new-password"} />

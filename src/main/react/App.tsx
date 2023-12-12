@@ -24,6 +24,7 @@ import JurPersonUrlPageWrapper from "./entityPageComponents/jur-person/JurPerson
 import UserUrlPageWrapper from "./entityPageComponents/user/UserUrlPageWrapper";
 import Profile from "./Profile";
 import PrivateComponentWrapper from "./authorization/PrivateComponentWrapper";
+import PageNotFound from "./networkStatusPages/PageNotFound";
 
 export const LitmusServiceContext = createContext(serviceContext);
 
@@ -61,10 +62,11 @@ function App() {
                                 <Route path={buildUrl(appConfig.applicationMappings.creation.root, ':entityDomain')} element={
                                     <Creation/>
                                 }/>
-
                             </Route>
 
                             <Route path={appConfig.applicationMappings.signIn} element={<LoginPage/>}/>
+
+                            <Route path={"*"} element={<PageNotFound/>}/>
                         </Routes>
                     </div>
                 </LitmusCore>
