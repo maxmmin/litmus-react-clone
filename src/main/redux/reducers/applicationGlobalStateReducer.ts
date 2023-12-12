@@ -11,7 +11,7 @@ import {FulfilledThunkAction, PossiblePendingThunkAction, RejectedThunkAction} f
 import {ApplicationError} from "../../rest/ErrorResponse";
 import {BasicHttpError, HttpErrorParser} from "../../error/BasicHttpError";
 
-export const initialAppState: AppState = {isRefreshing: false, isHeaderMenuOpened: false, notifications: [], securedImgHandling: false}
+export const initialAppState: AppState = {pendingActions: 0, isHeaderMenuOpened: false, notifications: [], securedImgHandling: false}
 
 
 
@@ -19,11 +19,11 @@ const applicationGlobalStateReducer: Reducer<AppStateReducible, Action<String>> 
 
     switch (action.type) {
         case AppStateAction.REFRESH_ON: {
-            return {...prevState, isRefreshing: true}
+            return {...prevState, pendingActions: prevState.pendingActions+1}
         }
 
         case AppStateAction.REFRESH_OFF: {
-            return { ...prevState, isRefreshing: false}
+            return { ...prevState, pendingActions: prevState.pendingActions-1}
         }
 
         case AppStateAction.HEADER_MENU_TOGGLE: {
@@ -68,14 +68,14 @@ const applicationGlobalStateReducer: Reducer<AppStateReducible, Action<String>> 
             const metaAction = action as PossiblePendingThunkAction;
 
             if (isActionPending(action)&&metaAction?.meta?.arg.globalPending) {
-                    return  {...prevState, isRefreshing: true}
+                    return  {...prevState, pendingActions: prevState.pendingActions+1}
             }
 
             else if (isActionFulfilled(action)||isActionRejected(action)) {
                 let state = prevState;
 
-                if (prevState.isRefreshing&&metaAction.meta?.arg.globalPending) {
-                    state = {...prevState, isRefreshing: false};
+                if (metaAction.meta?.arg.globalPending) {
+                    state = {...prevState, pendingActions: prevState.pendingActions-1};
                 }
 
                 if (isActionFulfilled(action)) {

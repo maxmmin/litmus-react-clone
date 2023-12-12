@@ -3,11 +3,13 @@ import {Reducer} from "react";
 import {PayloadAction} from "@reduxjs/toolkit";
 import {ApplicationResourcesAction} from "../actions/ApplicationResourcesAction";
 import Role from "../../model/userIdentity/Role";
+import CorsAnywhereProxyData from "../../service/api/nocorsproxy/CorsAnywhereProxyData";
 
 type ApplicationResourcesReducible = ApplicationResources|undefined;
 
 export const initialApplicationResources: ApplicationResources = {
-    roles: null
+    roles: null,
+    corsAnywhereProxiesData: null
 }
 
 const applicationResourcesReducer: Reducer<ApplicationResourcesReducible, PayloadAction<unknown>> = (prevState=initialApplicationResources,
@@ -21,6 +23,11 @@ const applicationResourcesReducer: Reducer<ApplicationResourcesReducible, Payloa
             })
             return {...prevState, roles: roleMap}
         }
+
+        case ((`${ApplicationResourcesAction.RETRIEVE_CORS_ANYWHERE_PROXIES}/fulfilled`)): {
+            return {...prevState, corsAnywhereProxiesData: (action.payload as CorsAnywhereProxyData[])}
+        }
+
         default: return prevState;
     }
 }

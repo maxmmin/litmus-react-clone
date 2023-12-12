@@ -43,7 +43,7 @@ async function testConnection (): Promise<NetworkStatus> {
 const LitmusCore = ({children}: Props) => {
     const [networkStatus, setNetworkStatus] = useState<NetworkStatus>(NetworkStatus.INITIAL);
 
-    const isRefreshing = useAppSelector(state => state.appState?.isRefreshing);
+    const isRefreshing = useAppSelector(state => state.appState!.pendingActions>0);
 
     const serviceContext = useContext(LitmusServiceContext);
 
@@ -63,11 +63,19 @@ const LitmusCore = ({children}: Props) => {
 
     useEffect(()=>{
         if (networkStatus===NetworkStatus.ONLINE&&!resources?.roles) {
-            appResourcesService.retrieveRoles().then(()=>{
+            appResourcesService.loadRoles().then(()=>{
                 console.log('roles were successfully loaded')
             });
         }
     }, [networkStatus, resources?.roles])
+
+    useEffect(()=>{
+        if (networkStatus===NetworkStatus.ONLINE&&!resources?.corsAnywhereProxiesData) {
+            appResourcesService.loadCorsAnywhereProxiesList().then(()=>{
+                console.log('cors anywhere proxies list was successfully loaded')
+            });
+        }
+    }, [networkStatus, resources?.corsAnywhereProxiesData])
 
     useEffect(()=>{
         if (networkStatus===NetworkStatus.ONLINE&&resources?.roles) {

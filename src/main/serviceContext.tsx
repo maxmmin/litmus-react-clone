@@ -129,6 +129,8 @@ import GeneralWebArchiver from "./service/api/webArch/general/GeneralWebArchiver
 import WayBackMachineArchiver from "./service/api/webArch/wayback/WayBackMachineArchiver";
 import SimpleWayBackMachineArchiver from "./service/api/webArch/wayback/SimpleWayBackMachineArchiver";
 import GeneralWebArchiverImpl from "./service/api/webArch/general/GeneralWebArchiverImpl";
+import CorsAnywhereProxyService from "./service/api/nocorsproxy/CorsAnywhereProxyService";
+import CorsAnywhereProxyServiceImpl from "./service/api/nocorsproxy/CorsAnywhereProxyServiceImpl";
 
 type Mappers = {
     user: {
@@ -287,9 +289,10 @@ const personCreationValidationService = new PersonCreationValidationServiceImpl(
 const jurPersonCreationValidationService = new JurPersonCreationValidationServiceImpl();
 const userCreationValidationService = new UserCreationValidationServiceImpl();
 
-const geocodingService = new BingGeocodingService(appConfig.geoApiKey);
+const geocodingService = new BingGeocodingService(appConfig.bingGeoApiKey);
 
-const wayBackArchiver: WayBackMachineArchiver = new SimpleWayBackMachineArchiver();
+const corsAnywhereProxyService: CorsAnywhereProxyService = new CorsAnywhereProxyServiceImpl(applicationResourcesStateManager);
+const wayBackArchiver: WayBackMachineArchiver = new SimpleWayBackMachineArchiver(corsAnywhereProxyService);
 
 const webArchContext: WebArchContext = {
     wayBack: wayBackArchiver,
@@ -392,7 +395,8 @@ export type ServiceContext = {
     },
     validation: {
         link: LinkValidator
-    }
+    },
+    corsAnywhereProxyService: CorsAnywhereProxyService
 }
 
 const relationshipsResponseDtoScanner: PreprocessedPersonRelationsScanner = PreprocessedPersonRelationsScannerImpl.getInstance();
@@ -457,7 +461,8 @@ const serviceContext: ServiceContext = {
     },
     validation: {
         link: new SimpleLinkValidator()
-    }
+    },
+    corsAnywhereProxyService:corsAnywhereProxyService
 }
 
 export default serviceContext;

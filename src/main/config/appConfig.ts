@@ -4,7 +4,7 @@ import backendOptionsData, {BackendOptions} from "./backendOptionsData";
 
 type AppConfig = {
     backendOptions: BackendOptions,
-    geoApiKey: string,
+    bingGeoApiKey: string,
     entityDomains: Readonly<Record<Entity, string>>,
     serverMappings: Readonly<typeof serverMappings>,
     applicationMappings: Readonly<typeof applicationMappings>
@@ -17,9 +17,11 @@ type AppConfig = {
 const backendOptions: BackendOptions = backendOptionsData;
 
 const backendUrl = backendOptions.url;
-const apiRoot = `/api`
-const authApiRoot = `/auth`
-const geoApiKEy = "AplsM3q0nzBnkkYGFC3NOXLr_XIeqbG2NQRxONopsPIeneujRujL86u_PWQC5hfh";
+
+const apiRoot = buildUrl(backendUrl, `/api`)
+const authApiRoot = buildUrl(backendUrl, `/auth`)
+
+const bingGeoApiKEy = "AplsM3q0nzBnkkYGFC3NOXLr_XIeqbG2NQRxONopsPIeneujRujL86u_PWQC5hfh";
 
 const entityDomains: AppConfig['entityDomains'] = Object.freeze({
     [Entity.USER]: "users",
@@ -30,21 +32,23 @@ const entityDomains: AppConfig['entityDomains'] = Object.freeze({
 const personsRoot = buildUrl(apiRoot, entityDomains.PERSON);
 
 const relativeApiPaths = {
-    getByFullName: "/find/full-name",
-    findByIdList: "/find/id-list"
+    getByFullName: buildUrl(backendUrl, "/find/full-name"),
+    findByIdList: buildUrl(backendUrl, "/find/id-list")
 }
 
 const jpRoot = buildUrl(apiRoot, entityDomains.JUR_PERSON)
 
 const usrRoot = buildUrl(apiRoot, entityDomains.USER);
 
+const apiConfigRoot = buildUrl(apiRoot, "/config")
+
 const serverMappings = Object.freeze({
     apiHost: backendUrl,
-    apiRoot: apiRoot,
-    mediaRootUrl: buildUrl(backendUrl, apiRoot, '/media'),
+    apiRoot: buildUrl(apiRoot),
+    mediaRootUrl: buildUrl(apiRoot, '/media'),
     sharedApiPaths: relativeApiPaths,
     users: {
-        root: usrRoot,
+        root: buildUrl(usrRoot),
         getByEmail: buildUrl(usrRoot, '/email')
     },
     persons: {
@@ -63,9 +67,10 @@ const serverMappings = Object.freeze({
         signIn: buildUrl(authApiRoot, "/sign-in"),
         getCurrentUser: buildUrl(authApiRoot)
     },
-    csrfToken: '/csrf-token',
+    csrfToken: buildUrl(backendUrl, '/csrf-token'),
     config: {
-        roles: buildUrl(authApiRoot, '/roles')
+        roles: buildUrl(apiConfigRoot, '/roles'),
+        corsAnywhereProxiesList: buildUrl(apiConfigRoot, '/cors-anywhere-proxies')
     }
 })
 
@@ -115,7 +120,7 @@ const paramsConfig: ParamsConfig = {
 
 const appConfig: AppConfig = {
     backendOptions: backendOptionsData,
-    geoApiKey: geoApiKEy,
+    bingGeoApiKey: bingGeoApiKEy,
     entityDomains: entityDomains,
     serverMappings: serverMappings,
     applicationMappings: applicationMappings,

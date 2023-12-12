@@ -12,6 +12,7 @@ import ApplicationResourcesStateManagerImpl
 import ApplicationResourcesApiServiceImpl from "../../api/appResources/ApplicationResourcesApiServiceImpl";
 import RoleDtoMapperImpl from "../../dtoMappers/user/RoleDtoMapperImpl";
 import serializableDeepCopy from "../../../util/functional/serializableDeepCopy";
+import CorsAnywhereProxyData from "../../api/nocorsproxy/CorsAnywhereProxyData";
 
 
 export default class ApplicationResourcesServiceImpl implements ApplicationResourcesService {
@@ -43,7 +44,24 @@ export default class ApplicationResourcesServiceImpl implements ApplicationResou
                 }
         });
 
-    public async retrieveRoles (): Promise<Role[]> {
+    public async loadRoles (): Promise<Role[]> {
         return this.stateManager.retrieveRoles(this._retrieveRolesThunk({globalPending: true}))
     }
+
+    protected readonly _retrieveCorsAnywhereProxiesListThunk =
+        createAsyncThunk<CorsAnywhereProxyData[],ThunkArg, LitmusAsyncThunkConfig>(ApplicationResourcesAction.RETRIEVE_CORS_ANYWHERE_PROXIES,
+            async (meta, {rejectWithValue, fulfillWithValue})=>{
+                try {
+                    const corsAnywhereProxyData: CorsAnywhereProxyData[] = await this.apiService.fetchCorsAnywhereProxiesList();
+                    return fulfillWithValue(corsAnywhereProxyData, {notify: false})
+                } catch (e) {
+                    console.error(e);
+                    return rejectWithValue(serializableDeepCopy(e), {notify: true})
+                }
+            });
+
+    loadCorsAnywhereProxiesList(): Promise<CorsAnywhereProxyData[]> {
+        return this.stateManager.retrieveCorsAnywhereProxiesData(this._retrieveCorsAnywhereProxiesListThunk({globalPending: true}))
+    }
+
 }

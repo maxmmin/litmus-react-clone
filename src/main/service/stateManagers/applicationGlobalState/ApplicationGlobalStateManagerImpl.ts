@@ -19,7 +19,7 @@ class ApplicationGlobalStateManagerImpl implements ApplicationGlobalStateManager
     }
 
     isPending(): boolean {
-        return checkNotEmpty(store.getState().appState?.isRefreshing);
+        return store.getState().appState!.pendingActions>0;
     }
 
     disableSecuredImgHandling(): void {
