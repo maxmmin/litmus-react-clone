@@ -1,12 +1,11 @@
 @import 'colors';
 
-.wrapper {
+.wrapper, .root-screen {
   min-height: 100vh;
-  padding: 0 20px 20px;
 }
 
 .root-screen {
-  min-height: 100%;
+  padding: 0 20px 20px;
 }
 
 img, svg {

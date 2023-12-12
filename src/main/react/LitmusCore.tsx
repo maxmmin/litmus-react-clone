@@ -62,7 +62,7 @@ const LitmusCore = ({children}: Props) => {
     const resources = useAppSelector(state => state.appResources)
 
     useEffect(()=>{
-        if (networkStatus===NetworkStatus.ONLINE&&!resources?.roles) {
+        if (authentication?.isAuthenticated&&networkStatus===NetworkStatus.ONLINE&&!resources?.roles) {
             appResourcesService.loadRoles().then(()=>{
                 console.log('roles were successfully loaded')
             });
@@ -70,7 +70,7 @@ const LitmusCore = ({children}: Props) => {
     }, [networkStatus, resources?.roles])
 
     useEffect(()=>{
-        if (networkStatus===NetworkStatus.ONLINE&&!resources?.corsAnywhereProxiesData) {
+        if (authentication?.isAuthenticated&&networkStatus===NetworkStatus.ONLINE&&!resources?.corsAnywhereProxiesData) {
             appResourcesService.loadCorsAnywhereProxiesList().then(()=>{
                 console.log('cors anywhere proxies list was successfully loaded')
             });
@@ -78,12 +78,12 @@ const LitmusCore = ({children}: Props) => {
     }, [networkStatus, resources?.corsAnywhereProxiesData])
 
     useEffect(()=>{
-        if (networkStatus===NetworkStatus.ONLINE&&resources?.roles) {
-            if (authentication?.isAuthenticated) {
+        if (authentication?.isAuthenticated) {
+            if (networkStatus===NetworkStatus.ONLINE&&resources?.roles) {
                 userIdentityManager.retrieveIdentity(true).then(u=>console.log('User data retrieved:\n'+JSON.stringify(u)));
-            } else {
-                navigate(appConfig.applicationMappings.signIn);
             }
+        } else {
+            navigate(appConfig.applicationMappings.signIn);
         }
     },[authentication, networkStatus, userIdentityManager, resources])
 
