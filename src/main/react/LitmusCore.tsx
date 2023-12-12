@@ -108,7 +108,7 @@ const LitmusCore = ({children}: Props) => {
         }
     }, [authentication, networkStatus])
 
-    if (isRefreshing) return <div className="loader-fullscreen-wrapper"><Loader/></div>;
+    if (isRefreshing) return <Loader cssAnchor={"fullscreen"}/>;
 
     if (networkStatus===NetworkStatus.NETWORK_ERR) {
         return <NetworkErrPage refresh={checkConnection}/>

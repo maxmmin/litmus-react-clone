@@ -15,7 +15,7 @@ const root = ReactDOM.createRoot(
 
 root.render(
     <Provider store={store}>
-        <PersistGate loading={<Loader/>} persistor={persistor}>
+        <PersistGate loading={<Loader cssAnchor={"fullscreen"}/>} persistor={persistor}>
             <App/>
         </PersistGate>
     </Provider>
