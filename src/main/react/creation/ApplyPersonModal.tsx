@@ -41,10 +41,11 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
      * state of modal input pending
      */
     const [pending, setPending] = useState<boolean>(false);
-    /**
-     * requestTimerId stores the id of pending timer for remove this timer when component unmounts
-     */
-    const [requestTimerId, setRequestTimerId] = useState<NodeJS.Timeout|null>(null)
+    const [input, setInput] = useState<string>("");
+
+    const serviceContext = useContext(LitmusServiceContext);
+    const personApiService = serviceContext.exploration.apiService.person;
+    const personDtoMapper = serviceContext.mappers.person;
 
     useEffect(() => {
         if (modalSettings) {
@@ -69,11 +70,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
         }
     }, [modalSettings])
 
-    const serviceContext = useContext(LitmusServiceContext);
-    const personApiService = serviceContext.exploration.apiService.person;
-    const personDtoMapper = serviceContext.mappers.person;
-
-    const onInputHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    useEffect(() => {
         if (person) {
             setPerson(null)
         }
@@ -82,18 +79,12 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             setPending(false)
         }
 
-        if (requestTimerId) {
-            window.clearTimeout(requestTimerId)
-            setRequestTimerId(null)
-        }
-
-        if (e.currentTarget.value==="") {
+        if (input==="") {
             setSearchError(null);
             return;
         }
 
-        const stringId = e.currentTarget.value;
-        const id = +stringId;
+        const id = +input;
 
         // local variable to know if new input valid before setState work
         let isIdValid = false;
@@ -105,35 +96,47 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
             isIdValid = true;
         }
 
+        let requestTimerId: NodeJS.Timeout|null = null;
+        let abortController: AbortController = new AbortController();
+
         if (isIdValid) {
-            // TODO: Maybe write additional checkup for core, add global error handler and Authentication error: 05/09
             setPending(true)
-            const timerID = setTimeout(()=>fetchPerson(id, personDtoMapper),250)
-            setRequestTimerId(timerID)
+            requestTimerId = setTimeout(()=>fetchPerson(id, personDtoMapper, abortController.signal),250)
         }
 
-    }
+        return () => {
+            if (requestTimerId !== null) {
+                window.clearTimeout(requestTimerId);
+            }
+            abortController.abort();
+        }
+    }, [input])
 
-
-    const fetchPerson = async (id: number, mapper: PersonDtoMapper) => {
+    const fetchPerson = async (id: number, mapper: PersonDtoMapper, signal: AbortSignal) => {
         const personService: PersonExplorationApiService = personApiService;
 
         setPending(true)
 
         try {
             const personResponseDto: PersonSimpleResponseDto|null = await personService.findSimpleById(id);
-            const person: Person|null = personResponseDto?mapper.mapPreProcessedPersonWithLoss(mapper.mapSimpleDtoToEntity(personResponseDto)):null;
-            setPerson(person)
-            if (!person) {
-                setSearchError(`Особу з ідентифікатором ${id} не знайдено`)
+            if (!signal.aborted) {
+                const person: Person|null = personResponseDto?mapper.mapPreProcessedPersonWithLoss(mapper.mapSimpleDtoToEntity(personResponseDto)):null;
+                setPerson(person)
+                if (!person) {
+                    setSearchError(`Особу з ідентифікатором ${id} не знайдено`)
+                }
             }
         } catch (e: unknown) {
-            const err = HttpErrorParser.parseError(e);
-            console.error(e)
-            setSearchError(HttpErrorParser.getErrorDescription(err));
+            if (!signal.aborted) {
+                const err = HttpErrorParser.parseError(e);
+                console.error(e);
+                setSearchError(HttpErrorParser.getErrorDescription(err));
+            }
+        } finally {
+            if (!signal.aborted) {
+                setPending(false);
+            }
         }
-
-        setPending(false)
     }
 
     const handleClose = () => {
@@ -230,7 +233,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                                     placeholder="Example: 43"
                                     autoFocus
                                     className={`${searchError?'is-invalid':''} ${person?'is-valid':''}`}
-                                    onInput={onInputHandler}
+                                    onInput={e=>setInput(e.currentTarget.value)}
                                     defaultValue={person?.id}
                                     onKeyDown={e => {
                                         if (e.key==="Enter") {
