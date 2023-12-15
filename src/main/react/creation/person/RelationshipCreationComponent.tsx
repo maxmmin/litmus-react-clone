@@ -117,7 +117,7 @@ const RelationshipCreationComponent = ({relationship, validationService, stateMa
             </div>
 
             <div className="create-relation__remove-btn-wrapper">
-                <button className="create-relation__remove-btn" onClick={()=>{
+                <button type={"button"} className="create-relation__remove-btn" onClick={()=>{
                     personCreationStateManager.removeRelationship(relationship);
 
                 }}>
