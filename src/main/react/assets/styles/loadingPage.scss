@@ -15,3 +15,17 @@
   width: 50px;
   height: 50px;
 }
+
+.input__loader-container {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  position: absolute;
+  right: 10px;
+  top: 0;
+}
+
+.input__loader-container .application-loader {
+  width: 20px;
+  height: 20px;
+}

@@ -64,20 +64,6 @@
   font-size: 13px;
 }
 
-.apply-person__loader-container {
-  height: 100%;
-  display: flex;
-  align-items: center;
-  position: absolute;
-  right: 10px;
-  top: 0;
-}
-
-.apply-person__loader-container .application-loader {
-  width: 20px;
-  height: 20px;
-}
-
 .jur-person-creation__input.owner, .jur-person-creation__input.ben-owner, .jur-person-creation__input.address {
   text-align: start;
 }
