@@ -141,8 +141,6 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const handleClose = () => {
         close()
-        setPerson(null)
-        setSearchError(null)
     };
 
     const applyPerson = () => {
@@ -234,7 +232,7 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
                                     autoFocus
                                     className={`${searchError?'is-invalid':''} ${person?'is-valid':''}`}
                                     onInput={e=>setInput(e.currentTarget.value)}
-                                    defaultValue={person?.id}
+                                    value={input}
                                     onKeyDown={e => {
                                         if (e.key==="Enter") {
                                             e.preventDefault()
