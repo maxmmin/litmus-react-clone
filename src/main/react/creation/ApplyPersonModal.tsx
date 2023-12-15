@@ -141,6 +141,8 @@ function ApplyPersonModal ({modalSettings, close}: Props) {
 
     const handleClose = () => {
         close()
+        setInput("")
+        setPerson(null)
     };
 
     const applyPerson = () => {
