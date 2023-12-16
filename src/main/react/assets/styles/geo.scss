@@ -11,9 +11,26 @@
 
 }
 
+.map-loader-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: rgba(white, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.application-loader.map-loader {
+
+}
+
 .modal__map-wrapper {
   margin-top: 20px;
   width: 100%;
+  position: relative;
   height: 500px;
 }
 

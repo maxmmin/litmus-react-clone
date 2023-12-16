@@ -1,7 +1,11 @@
 import {Spinner} from "react-bootstrap";
 
-const LoaderSpinner = () => {
-    return <Spinner animation="border" className={"application-loader"}/>
+type Props = {
+    cssAnchor?: string
+}
+
+const LoaderSpinner = ({cssAnchor=""}: Props) => {
+    return <Spinner animation="border" className={"application-loader "+cssAnchor}/>
 }
 
 export default LoaderSpinner

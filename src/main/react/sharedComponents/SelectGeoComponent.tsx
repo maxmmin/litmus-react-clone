@@ -14,6 +14,8 @@ import Popup from "ol-ext/overlay/Popup";
 import "../assets/styles/ol-ext-min.css";
 import {defaultMapPosition, transformToSource, transformToTarget} from "../../util/map/mapUtilites";
 import '../assets/styles/geo.scss'
+import Loader from "../loader/Loader";
+import LoaderSpinner from "../loader/LoaderSpinner";
 
 type LocationProps = {
     location: GeoLocation|null,
@@ -28,12 +30,13 @@ const SelectGeoComponent = ({location, setLocation}: LocationProps) => {
 
 type MapLocationProps = {
     coordinates: GeoCoordinates|null,
-    setLocation: (coordinates: GeoCoordinates)=>void
+    setLocation: (coordinates: GeoCoordinates)=>any
 }
 
 const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
     const mapTargetElement = useRef<HTMLDivElement>(null)
     const [map, setMap] = useState<Map | undefined>();
+    const [pending, setPending] = useState<boolean>(false);
 
     const [locationPopup, _] = useState(new Popup({
         popupClass: "user-select-location-popup",
@@ -81,7 +84,12 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
 
                 const sourceCoordinates = transformToSource(coordinates);
 
-                setLocation(sourceCoordinates);
+                const data = setLocation(sourceCoordinates);
+
+                if (data instanceof Promise) {
+                    setPending(true);
+                    data.finally(()=>setPending(false))
+                }
             })
 
             olMap.addOverlay(locationPopup);
@@ -91,7 +99,6 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
             console.log("map has been initialized")
 
         }},
-
 [mapTargetElement, locationPopup])
 
     useEffect(()=>{
@@ -106,8 +113,19 @@ const MapComponent = ({coordinates, setLocation}: MapLocationProps) => {
         }
     }, [coordinates, map])
 
+    useEffect(() => {
+        if (map) {
+            map.dispose();
+        }
+    }, []);
+
     return (
         <div className="map" ref={mapTargetElement}>
+            {pending &&
+                <div className={"map-loader-container"}>
+                    <LoaderSpinner cssAnchor={"map-loader"}/>
+                </div>
+            }
         </div>
     )
 }
