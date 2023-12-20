@@ -60,7 +60,7 @@ class UserCreationValidationServiceImpl extends HumanCreationValidationServiceIm
         } else return "Поле обов'язкове до заповнення";
     }
 
-    mapServerValidationErrors(response: ServerUserValidationObject): UserValidationObject {
+    mapServerValidationErrors(_model: UserCreationParams, response: ServerUserValidationObject): UserValidationObject {
         return {
             lastName: valueOrNull(response.lastName),
             middleName: valueOrNull(response.middleName),
