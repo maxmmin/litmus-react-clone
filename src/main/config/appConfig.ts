@@ -49,7 +49,7 @@ const serverMappings = Object.freeze({
     sharedApiPaths: relativeApiPaths,
     users: {
         root: buildUrl(usrRoot),
-        getByEmail: buildUrl(usrRoot, '/email')
+        getByEmail: buildUrl(usrRoot, '/find/email')
     },
     persons: {
         root: personsRoot,
