@@ -80,9 +80,15 @@ class HttpErrorParser {
         return msg;
     }
 
+    private static isAxiosError(error: unknown): error is AxiosError {
+        if (error instanceof AxiosError) {
+            return true;
+        } else return typeof error === "object" && error !== null && error.hasOwnProperty("name") && (error as AxiosError).name === "AxiosError";
+    }
+
     static parseError(error: unknown): ApplicationError {
         let errResponse: ErrorResponse;
-        if (error instanceof AxiosError) {
+        if (this.isAxiosError(error)) {
             errResponse = HttpErrorParser.parseAxiosError(error);
         } else errResponse = this.getErrorResponse(error);
 
