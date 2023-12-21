@@ -15,6 +15,8 @@ class UserExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<UserR
         super(appConfig.serverMappings.users.root);
     }
 
+
+
     public static getInstance (): UserExplorationApiServiceImpl {
         return new UserExplorationApiServiceImpl();
     }
@@ -41,6 +43,10 @@ class UserExplorationApiServiceImpl extends HumanExplorationApiServiceImpl<UserR
             }
         );
         return Object.keys(response.data).length>0?response.data:null;
+    }
+
+    async findCurrentUser(): Promise<UserResponseDto> {
+        return (await this.apiInstance.get<UserResponseDto>(appConfig.serverMappings.profile)).data;
     }
 
 

@@ -51,6 +51,7 @@ const serverMappings = Object.freeze({
         root: buildUrl(usrRoot),
         getByEmail: buildUrl(usrRoot, '/find/email')
     },
+    profile: buildUrl(apiRoot, '/profile'),
     persons: {
         root: personsRoot,
         getByFullName: buildUrl(personsRoot, relativeApiPaths.getByFullName),

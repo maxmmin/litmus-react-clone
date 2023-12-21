@@ -5,6 +5,7 @@ import {UserShortResponseDto} from "../../../../rest/dto/user/UserShortResponseD
 
 interface UserExplorationApiService extends HumanExplorationApiService<UserResponseDto, UserSimpleResponseDto, UserShortResponseDto> {
     findByEmail(email: string): Promise<UserResponseDto|null>
+    findCurrentUser(): Promise<UserResponseDto>
     findSimpleByEmail(email: string): Promise<UserSimpleResponseDto|null>
 }
 
