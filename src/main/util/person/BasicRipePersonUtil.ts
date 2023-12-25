@@ -49,19 +49,19 @@ export default class BasicRipePersonUtil implements RipePersonUtil{
                 let locationCounter: number = 0;
 
                 for (let innerCounter=0;innerCounter<relatedRelationships.length; innerCounter++) {
-                    if (locationCounter>1) break;
+                    if (locationCounter>0) break;
                     const innerRelatedPerson = relatedRelationships[innerCounter].to;
                     if (hasLocation(innerRelatedPerson)) {
                         if (relatedPersons.includes(innerRelatedPerson)) locationCounter++;
                     }
                 }
 
-                if (locationCounter<2) {
+                if (locationCounter<1) {
                     const isLinkedByJurPerson = this.isLinkedByJurPerson(related, relatedPersons);
                     if (isLinkedByJurPerson) locationCounter++;
                 }
 
-                if (locationCounter<2) {
+                if (locationCounter<1) {
                     relatedPersons.splice(counter,1);
                     changed = true;
                 }
