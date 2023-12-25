@@ -109,7 +109,7 @@ export default class BasicJurPersonProcessor implements JurPersonProcessor {
 
     async bindShared(preProcessedJurPerson: PreProcessedJurPerson, limitDepth: number): Promise<JurPerson> {
         const virtualRootPerson = this.setupVirtualPerson(preProcessedJurPerson);
-        const person: Person = await this.personProcessor.bindAll(virtualRootPerson, limitDepth);
+        const person: Person = await this.personProcessor.bindShared(virtualRootPerson, limitDepth);
         return this.processVirtualPersonData(person, preProcessedJurPerson);
     }
 
