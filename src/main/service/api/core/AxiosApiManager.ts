@@ -67,7 +67,7 @@ class AxiosApiManager {
                         return Promise.reject(err);
                     }
 
-                    return await globalInstance(config);
+                    return await noAuthHandlerApiInstance(config);
                 }
 
                 return Promise.reject(err);
